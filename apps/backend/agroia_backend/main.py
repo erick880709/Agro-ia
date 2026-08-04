@@ -55,7 +55,9 @@ register_error_handlers(app)
 
 # ── Placeholder routers ──
 # Estos serán poblados por builder al generar cada módulo de dominio:
-# app.include_router(recomendaciones_router, prefix="/api/v1")
+from agroia_backend.api.recomendaciones import router as recomendaciones_router
+
+app.include_router(recomendaciones_router)
 # app.include_router(catalogo_router, prefix="/api/v1")
 # app.include_router(usuarios_router, prefix="/api/v1")
 # app.include_router(dashboards_router, prefix="/api/v1")
