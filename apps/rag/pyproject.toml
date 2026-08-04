@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "agroia-rag"
+version = "0.1.0"
+description = "RAG Agent Service AgroIA — OpenAI GPT-4 + pgvector + MiniLM embeddings"
+authors = ["AgroIA Team"]
+package-mode = true
+
+[tool.poetry.dependencies]
+python = "^3.11"
+agroia-shared = {path = "../shared", develop = true}
+fastapi = "^0.115"
+uvicorn = {extras = ["standard"], version = "^0.34"}
+openai = "^1.55"
+sentence-transformers = "^3.2"
+pgvector = "^0.3"
+numpy = "^2.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
+ruff = "^0.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

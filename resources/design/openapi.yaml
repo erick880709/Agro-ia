@@ -1,0 +1,98 @@
+openapi: "3.1.0"
+info:
+  title: AgroIA API
+  description: API de AgroInteligente Colombia — Plataforma de diagnóstico agronómico inteligente
+  version: "0.1.0"
+  contact:
+    name: AgroIA Team
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Desarrollo local
+  - url: https://api.agroia.co/api/v1
+    description: Producción
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Token JWT RS256 emitido por el Auth Service
+
+  schemas:
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          description: Código de error único
+          example: VALIDATION_ERROR
+        message:
+          type: string
+          description: Mensaje descriptivo en español
+          example: El campo 'email' es requerido
+
+    PaginationMeta:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        page_size:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          example: 150
+        total_pages:
+          type: integer
+          example: 8
+
+  responses:
+    "400":
+      description: Solicitud inválida
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    "401":
+      description: No autenticado
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    "403":
+      description: Acceso denegado
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    "404":
+      description: No encontrado
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    "409":
+      description: Conflicto
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    "500":
+      description: Error interno
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+paths: {}
+# Builder agregará paths incrementalmente al generar cada recurso de dominio.
+# Ejemplo de primer path que agregará builder:
+#
+# /recomendaciones:
+#   post:
+#     summary: Solicitar análisis de aptitud
+#     ...

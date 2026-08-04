@@ -27,3 +27,22 @@ Thumbs.db
 # Env
 .env
 .env.local
+
+# Poetry
+poetry.lock
+
+# Keys (JWT, TLS)
+keys/
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+# Docker override
+docker-compose.override.yml
+
+# Obsidian vault workspace cache
+obsidian-vault/.obsidian/workspace.json
+obsidian-vault/.obsidian/plugins/
+obsidian-vault/.trash/

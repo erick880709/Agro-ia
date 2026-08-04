@@ -1,0 +1,35 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# ── Instalar dependencias del sistema ──
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential libpq-dev curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# ── Instalar Poetry ──
+RUN pip install --no-cache-dir poetry==1.8.4
+
+# ── Copiar dependencias ──
+COPY apps/shared/pyproject.toml apps/shared/poetry.lock* /app/apps/shared/
+COPY apps/shared/ /app/apps/shared/
+COPY apps/backend/pyproject.toml apps/backend/poetry.lock* /app/apps/backend/
+
+# ── Instalar dependencias del proyecto ──
+WORKDIR /app/apps/shared
+RUN poetry install --no-interaction --no-ansi --no-root
+
+WORKDIR /app/apps/backend
+RUN poetry install --no-interaction --no-ansi --no-root
+
+# ── Copiar código fuente ──
+COPY apps/ /app/apps/
+COPY .env /app/.env
+
+# ── Health check ──
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8000/api/v1/health || exit 1
+
+# ── Ejecutar ──
+EXPOSE 8000
+CMD ["poetry", "run", "uvicorn", "agroia_backend.main:app", "--host", "0.0.0.0", "--port", "8000"]

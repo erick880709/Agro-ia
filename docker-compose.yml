@@ -1,0 +1,121 @@
+version: "3.9"
+
+services:
+  # ── Base de datos ──
+  postgres:
+    image: pgvector/pgvector:pg15
+    container_name: agroia-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-agroia}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-agroia_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-agroia}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agroia"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ── Redis ──
+  redis:
+    image: redis:7-alpine
+    container_name: agroia-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ── RabbitMQ ──
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: agroia-rabbitmq
+    ports:
+      - "5672:5672"    # AMQP
+      - "15672:15672"  # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Backend principal ──
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: agroia-backend
+    ports:
+      - "8000:8000"
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./apps:/app/apps
+
+  # ── Auth Service
+  auth:
+    build:
+      context: .
+      dockerfile: apps/auth/Dockerfile
+    container_name: agroia-auth
+    ports:
+      - "8001:8000"
+    env_file: .env
+    depends_on:
+      - postgres
+
+  # ── ML Inference Service
+  ml:
+    build:
+      context: .
+      dockerfile: apps/ml/Dockerfile
+    container_name: agroia-ml
+    ports:
+      - "8002:8000"
+    env_file: .env
+    depends_on:
+      - postgres
+      - backend
+
+  # ── RAG Agent Service
+  rag:
+    build:
+      context: .
+      dockerfile: apps/rag/Dockerfile
+    container_name: agroia-rag
+    ports:
+      - "8003:8000"
+    env_file: .env
+    depends_on:
+      - postgres
+      - backend
+
+  # ── IoT Ingestion Service
+  iot:
+    build:
+      context: .
+      dockerfile: apps/iot/Dockerfile
+    container_name: agroia-iot
+    ports:
+      - "8004:8000"
+    env_file: .env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      - postgres
+
+volumes:
+  postgres_data:

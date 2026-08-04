@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "agroia-iot"
+version = "0.1.0"
+description = "IoT Ingestion Service AgroIA — consumidor RabbitMQ para sensores LoRaWAN"
+authors = ["AgroIA Team"]
+package-mode = true
+
+[tool.poetry.dependencies]
+python = "^3.11"
+agroia-shared = {path = "../shared", develop = true}
+fastapi = "^0.115"
+uvicorn = {extras = ["standard"], version = "^0.34"}
+aio-pika = "^9.4"
+paho-mqtt = "^2.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
+ruff = "^0.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

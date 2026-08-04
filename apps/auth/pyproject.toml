@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "agroia-auth"
+version = "0.1.0"
+description = "Servicio de autenticación AgroIA — JWT + OAuth2 + RBAC"
+authors = ["AgroIA Team"]
+package-mode = true
+
+[tool.poetry.dependencies]
+python = "^3.11"
+agroia-shared = {path = "../shared", develop = true}
+fastapi = "^0.115"
+uvicorn = {extras = ["standard"], version = "^0.34"}
+python-jose = {extras = ["cryptography"], version = "^3.3"}
+passlib = {extras = ["bcrypt","argon2"], version = "^1.7"}
+python-multipart = "^0.0.12"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
+pytest-asyncio = "^0.24"
+ruff = "^0.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
