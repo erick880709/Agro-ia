@@ -1,0 +1,1 @@
+"""AgroIA Auth SQL package."""
