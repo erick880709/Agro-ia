@@ -46,3 +46,15 @@ docker-compose.override.yml
 obsidian-vault/.obsidian/workspace.json
 obsidian-vault/.obsidian/plugins/
 obsidian-vault/.trash/
+
+# Datasets — excluir archivos grandes (>10MB) y datasets de imágenes
+datasets/**/*.png
+datasets/**/*.jpg
+datasets/**/*.jpeg
+datasets/**/*.tif
+datasets/**/*.tiff
+datasets/**/*.h5
+datasets/**/*.hdf5
+datasets/**/*.pkl
+datasets/**/*.parquet
+datasets/plantvillage/
