@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  # ── MLflow Tracking Server (local) ──
+  mlflow:
+    image: python:3.11-slim
+    container_name: agroia-mlflow
+    working_dir: /mlflow
+    command: >
+      sh -c "pip install mlflow==2.17.0 psycopg2-binary boto3 &&
+             mlflow server
+               --backend-store-uri sqlite:///mlflow.db
+               --default-artifact-root /mlflow/artifacts
+               --host 0.0.0.0
+               --port 5000"
+    ports:
+      - "5000:5000"
+    volumes:
+      - mlflow_data:/mlflow
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  mlflow_data:

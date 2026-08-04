@@ -88,11 +88,63 @@ components:
           schema:
             $ref: "#/components/schemas/Error"
 
-paths: {}
-# Builder agregará paths incrementalmente al generar cada recurso de dominio.
-# Ejemplo de primer path que agregará builder:
-#
-# /recomendaciones:
-#   post:
-#     summary: Solicitar análisis de aptitud
-#     ...
+paths:
+  /recomendaciones/analyze:
+    post:
+      summary: Analizar aptitud del suelo
+      description: Pipeline completo — datos de suelo → ML → reglas → discordancia → respuesta
+      tags: [Recomendaciones]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [finca_id]
+              properties:
+                finca_id:
+                  type: string
+                  format: uuid
+                  description: UUID de la finca a analizar
+                cultivo_id:
+                  type: string
+                  format: uuid
+                  description: UUID del cultivo objetivo (opcional)
+      responses:
+        "200":
+          description: Recomendación generada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecommendResponse"
+        "422":
+          $ref: "#/components/responses/422"
+
+  /recomendaciones/historial/{finca_id}:
+    get:
+      summary: Historial de recomendaciones por finca
+      tags: [Recomendaciones]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: finca_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: Lista paginada de recomendaciones
