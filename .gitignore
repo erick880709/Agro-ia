@@ -1,0 +1,29 @@
+# Graphify
+graphify-out/cost.json
+graphify-out/cache/
+# graphify-out/cache/    # descomenta si quieres mantener el repo ligero
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+*.egg
+
+# Angular / Node
+node_modules/
+dist/
+.angular/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local

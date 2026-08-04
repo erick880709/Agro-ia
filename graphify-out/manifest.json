@@ -1,0 +1,972 @@
+{
+  ".github/skills/docx/scripts/__init__.py": {
+    "mtime": 1784319626.7746222,
+    "ast_hash": "68b329da9893e34099c7d8ad5cb9c940",
+    "semantic_hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  ".github/skills/docx/scripts/accept_changes.py": {
+    "mtime": 1784319626.7769625,
+    "ast_hash": "ddbb446842e4c03d128aa950c2d9cde4",
+    "semantic_hash": "ddbb446842e4c03d128aa950c2d9cde4"
+  },
+  ".github/skills/docx/scripts/comment.py": {
+    "mtime": 1784319626.7961736,
+    "ast_hash": "395d53e6f7465ef684ff28205dc5f9d6",
+    "semantic_hash": "395d53e6f7465ef684ff28205dc5f9d6"
+  },
+  ".github/skills/docx/scripts/office/helpers/__init__.py": {
+    "mtime": 1784319626.8660333,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  ".github/skills/docx/scripts/office/helpers/merge_runs.py": {
+    "mtime": 1784319626.8770711,
+    "ast_hash": "50d4546be7e221a5fd8620eea68d50d9",
+    "semantic_hash": "50d4546be7e221a5fd8620eea68d50d9"
+  },
+  ".github/skills/docx/scripts/office/helpers/simplify_redlines.py": {
+    "mtime": 1784319626.8819134,
+    "ast_hash": "27067501a5bad066bd22891d8b6ee040",
+    "semantic_hash": "27067501a5bad066bd22891d8b6ee040"
+  },
+  ".github/skills/docx/scripts/office/pack.py": {
+    "mtime": 1784319626.8053064,
+    "ast_hash": "20d61f93e874fd961122dd0da9de7898",
+    "semantic_hash": "20d61f93e874fd961122dd0da9de7898"
+  },
+  ".github/skills/docx/scripts/office/soffice.py": {
+    "mtime": 1784319626.8253152,
+    "ast_hash": "080c37e6f18963f350dda51d922c9f06",
+    "semantic_hash": "080c37e6f18963f350dda51d922c9f06"
+  },
+  ".github/skills/docx/scripts/office/unpack.py": {
+    "mtime": 1784319626.8346422,
+    "ast_hash": "345c1b6a0ea7ca37e2019c2491db5fd9",
+    "semantic_hash": "345c1b6a0ea7ca37e2019c2491db5fd9"
+  },
+  ".github/skills/docx/scripts/office/validate.py": {
+    "mtime": 1784319626.8395488,
+    "ast_hash": "8421ee005384755f5a748557abd6cf6c",
+    "semantic_hash": "8421ee005384755f5a748557abd6cf6c"
+  },
+  ".github/skills/docx/scripts/office/validators/__init__.py": {
+    "mtime": 1784319627.2327633,
+    "ast_hash": "9577920dc811fff9762a96d4095d95e5",
+    "semantic_hash": "9577920dc811fff9762a96d4095d95e5"
+  },
+  ".github/skills/docx/scripts/office/validators/base.py": {
+    "mtime": 1784319627.25393,
+    "ast_hash": "47f1babbdf882862aae88ba4127fc9fe",
+    "semantic_hash": "47f1babbdf882862aae88ba4127fc9fe"
+  },
+  ".github/skills/docx/scripts/office/validators/docx.py": {
+    "mtime": 1784319627.2650044,
+    "ast_hash": "dae6866b59e1066a69f7695fb106c798",
+    "semantic_hash": "dae6866b59e1066a69f7695fb106c798"
+  },
+  ".github/skills/docx/scripts/office/validators/pptx.py": {
+    "mtime": 1784319627.2667117,
+    "ast_hash": "95836f2ecb3e53862b1d166d0a11e255",
+    "semantic_hash": "95836f2ecb3e53862b1d166d0a11e255"
+  },
+  ".github/skills/docx/scripts/office/validators/redlining.py": {
+    "mtime": 1784319627.2796986,
+    "ast_hash": "b2306b0d59975cfbb1325a6c2de3a771",
+    "semantic_hash": "b2306b0d59975cfbb1325a6c2de3a771"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude-plugin/marketplace.json": {
+    "mtime": 1784492210.1982715,
+    "ast_hash": "3de937ffb6f1ae1d56e24782df4908a4",
+    "semantic_hash": "3de937ffb6f1ae1d56e24782df4908a4"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude-plugin/plugin.json": {
+    "mtime": 1784492210.21287,
+    "ast_hash": "eecc86ad81dc3057e77cd4d402f12465",
+    "semantic_hash": "eecc86ad81dc3057e77cd4d402f12465"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/brand/scripts/extract-colors.cjs": {
+    "mtime": 1784492210.3835099,
+    "ast_hash": "267ef00a878b8c0cec252443796c6122",
+    "semantic_hash": "267ef00a878b8c0cec252443796c6122"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/brand/scripts/inject-brand-context.cjs": {
+    "mtime": 1784492210.4006045,
+    "ast_hash": "72ab4372fcdb90d68b5cb09b912e34f4",
+    "semantic_hash": "72ab4372fcdb90d68b5cb09b912e34f4"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/brand/scripts/sync-brand-to-tokens.cjs": {
+    "mtime": 1784492210.4123137,
+    "ast_hash": "0bd6e8f1cb486753d11da715a548650a",
+    "semantic_hash": "0bd6e8f1cb486753d11da715a548650a"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/brand/scripts/tests/test_sync_brand_to_tokens.py": {
+    "mtime": 1784492210.4451592,
+    "ast_hash": "1cc075890cd68fa5c5f7463b9e1a4618",
+    "semantic_hash": "1cc075890cd68fa5c5f7463b9e1a4618"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/brand/scripts/validate-asset.cjs": {
+    "mtime": 1784492210.4237306,
+    "ast_hash": "8217a1364af59e1acfb95d71fd41df1e",
+    "semantic_hash": "8217a1364af59e1acfb95d71fd41df1e"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/scripts/embed-tokens.cjs": {
+    "mtime": 1784492210.643122,
+    "ast_hash": "d50aed608ed2c44c64c006b1fd915663",
+    "semantic_hash": "d50aed608ed2c44c64c006b1fd915663"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/scripts/fetch-background.py": {
+    "mtime": 1784492210.659633,
+    "ast_hash": "3269f2ebc8024e55b65008108910f3d4",
+    "semantic_hash": "3269f2ebc8024e55b65008108910f3d4"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/scripts/generate-slide.py": {
+    "mtime": 1784492210.6810002,
+    "ast_hash": "622d80cd7d9696f269e2da6b063754f7",
+    "semantic_hash": "622d80cd7d9696f269e2da6b063754f7"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/scripts/generate-tokens.cjs": {
+    "mtime": 1784492210.6940792,
+    "ast_hash": "a9a15066eeca1f70bd2edb90c645c9eb",
+    "semantic_hash": "a9a15066eeca1f70bd2edb90c645c9eb"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/scripts/html-token-validator.py": {
+    "mtime": 1784492210.7140775,
+    "ast_hash": "1d18dae9d3d916137c50df5ec7e65039",
+    "semantic_hash": "1d18dae9d3d916137c50df5ec7e65039"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/scripts/search-slides.py": {
+    "mtime": 1784492210.734959,
+    "ast_hash": "bc70c45549014b579fb2a27f3acf3d2e",
+    "semantic_hash": "bc70c45549014b579fb2a27f3acf3d2e"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/scripts/slide-token-validator.py": {
+    "mtime": 1784492210.7548177,
+    "ast_hash": "ee5d76c06903f98a460a8661e150c5d3",
+    "semantic_hash": "ee5d76c06903f98a460a8661e150c5d3"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/scripts/slide_search_core.py": {
+    "mtime": 1784492210.771977,
+    "ast_hash": "994ab50455710fce437399e86df23286",
+    "semantic_hash": "994ab50455710fce437399e86df23286"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/scripts/tests/test_validate_tokens.py": {
+    "mtime": 1784492210.8150752,
+    "ast_hash": "32a9d34bbfa0041852963c189ea0ee5c",
+    "semantic_hash": "32a9d34bbfa0041852963c189ea0ee5c"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/scripts/validate-tokens.cjs": {
+    "mtime": 1784492210.7845223,
+    "ast_hash": "ebb5e5897d942f59ecd76bf710d06dff",
+    "semantic_hash": "ebb5e5897d942f59ecd76bf710d06dff"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json": {
+    "mtime": 1784492210.8349874,
+    "ast_hash": "a5771c378d6fea057242eeebe83a7747",
+    "semantic_hash": "a5771c378d6fea057242eeebe83a7747"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/core.py": {
+    "mtime": 1784492211.2005758,
+    "ast_hash": "9fcf192c150e285ab6176a9bbacd475b",
+    "semantic_hash": "9fcf192c150e285ab6176a9bbacd475b"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py": {
+    "mtime": 1784492211.2145846,
+    "ast_hash": "5662ddd34b366544e6541686ec9c8d22",
+    "semantic_hash": "5662ddd34b366544e6541686ec9c8d22"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/render-html.py": {
+    "mtime": 1784492211.2280352,
+    "ast_hash": "6fe3ce567110811670f05f40d386b48f",
+    "semantic_hash": "6fe3ce567110811670f05f40d386b48f"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/search.py": {
+    "mtime": 1784492211.2433865,
+    "ast_hash": "21a63380316bd899c49302e1b9a59191",
+    "semantic_hash": "21a63380316bd899c49302e1b9a59191"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/icon/generate.py": {
+    "mtime": 1784492211.264399,
+    "ast_hash": "b142cc490fdf8a45bcf95bfe972284df",
+    "semantic_hash": "b142cc490fdf8a45bcf95bfe972284df"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/logo/core.py": {
+    "mtime": 1784492211.2847905,
+    "ast_hash": "b8ea226dde31603e5a5e790641334055",
+    "semantic_hash": "b8ea226dde31603e5a5e790641334055"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/logo/generate.py": {
+    "mtime": 1784492211.302459,
+    "ast_hash": "6f973ff8ea948cb774340703c8b51b54",
+    "semantic_hash": "6f973ff8ea948cb774340703c8b51b54"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/logo/search.py": {
+    "mtime": 1784492211.319003,
+    "ast_hash": "56aa8e1e15479f304a7e4709a767c98b",
+    "semantic_hash": "56aa8e1e15479f304a7e4709a767c98b"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-styling/scripts/shadcn_add.py": {
+    "mtime": 1784492212.547173,
+    "ast_hash": "4eb5eb020e3b45a8f73f4a371abbdbe1",
+    "semantic_hash": "4eb5eb020e3b45a8f73f4a371abbdbe1"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-styling/scripts/tailwind_config_gen.py": {
+    "mtime": 1784492212.5640068,
+    "ast_hash": "cafc602e66323d217188d319c9a0412e",
+    "semantic_hash": "cafc602e66323d217188d319c9a0412e"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-styling/scripts/tests/coverage-ui.json": {
+    "mtime": 1784492212.5816016,
+    "ast_hash": "42c486def8b180c1e72b1e7b865b9607",
+    "semantic_hash": "42c486def8b180c1e72b1e7b865b9607"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-styling/scripts/tests/test_shadcn_add.py": {
+    "mtime": 1784492212.60729,
+    "ast_hash": "b988db86bf66d891a0d21baa71c6d27a",
+    "semantic_hash": "b988db86bf66d891a0d21baa71c6d27a"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-styling/scripts/tests/test_tailwind_config_gen.py": {
+    "mtime": 1784492212.6215148,
+    "ast_hash": "f5d99288827b293f4b6fdb86b8b56229",
+    "semantic_hash": "f5d99288827b293f4b6fdb86b8b56229"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py": {
+    "mtime": 1784492213.2097793,
+    "ast_hash": "41d488b60b5bfb818c4b17413f7477c3",
+    "semantic_hash": "41d488b60b5bfb818c4b17413f7477c3"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/design_system.py": {
+    "mtime": 1784492213.2241406,
+    "ast_hash": "c17f639b44756832e7c556bc65ba2d1d",
+    "semantic_hash": "c17f639b44756832e7c556bc65ba2d1d"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/search.py": {
+    "mtime": 1784492213.2392108,
+    "ast_hash": "10012353bb7d92c645ea7ab245e461e6",
+    "semantic_hash": "10012353bb7d92c645ea7ab245e461e6"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py": {
+    "mtime": 1784492213.2748663,
+    "ast_hash": "136d8ec87735cf5b77d70ad0adea59c0",
+    "semantic_hash": "136d8ec87735cf5b77d70ad0adea59c0"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/validate_data.py": {
+    "mtime": 1784492213.252711,
+    "ast_hash": "9ea4300a8385a7377457dd6d1ee99224",
+    "semantic_hash": "9ea4300a8385a7377457dd6d1ee99224"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.releaserc.json": {
+    "mtime": 1784492210.11829,
+    "ast_hash": "68ccbb0ef217cc375bdadfede1566906",
+    "semantic_hash": "68ccbb0ef217cc375bdadfede1566906"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py": {
+    "mtime": 1784492214.0242872,
+    "ast_hash": "41d488b60b5bfb818c4b17413f7477c3",
+    "semantic_hash": "41d488b60b5bfb818c4b17413f7477c3"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py": {
+    "mtime": 1784492214.0410345,
+    "ast_hash": "c17f639b44756832e7c556bc65ba2d1d",
+    "semantic_hash": "c17f639b44756832e7c556bc65ba2d1d"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/search.py": {
+    "mtime": 1784492214.0556564,
+    "ast_hash": "10012353bb7d92c645ea7ab245e461e6",
+    "semantic_hash": "10012353bb7d92c645ea7ab245e461e6"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py": {
+    "mtime": 1784492214.0929756,
+    "ast_hash": "136d8ec87735cf5b77d70ad0adea59c0",
+    "semantic_hash": "136d8ec87735cf5b77d70ad0adea59c0"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/validate_data.py": {
+    "mtime": 1784492214.072311,
+    "ast_hash": "9ea4300a8385a7377457dd6d1ee99224",
+    "semantic_hash": "9ea4300a8385a7377457dd6d1ee99224"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/brand/scripts/extract-colors.cjs": {
+    "mtime": 1784492214.2533824,
+    "ast_hash": "267ef00a878b8c0cec252443796c6122",
+    "semantic_hash": "267ef00a878b8c0cec252443796c6122"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/brand/scripts/inject-brand-context.cjs": {
+    "mtime": 1784492214.2641528,
+    "ast_hash": "72ab4372fcdb90d68b5cb09b912e34f4",
+    "semantic_hash": "72ab4372fcdb90d68b5cb09b912e34f4"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/brand/scripts/sync-brand-to-tokens.cjs": {
+    "mtime": 1784492214.2752833,
+    "ast_hash": "0bd6e8f1cb486753d11da715a548650a",
+    "semantic_hash": "0bd6e8f1cb486753d11da715a548650a"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/brand/scripts/tests/test_sync_brand_to_tokens.py": {
+    "mtime": 1784492214.3192089,
+    "ast_hash": "1cc075890cd68fa5c5f7463b9e1a4618",
+    "semantic_hash": "1cc075890cd68fa5c5f7463b9e1a4618"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/brand/scripts/validate-asset.cjs": {
+    "mtime": 1784492214.2890809,
+    "ast_hash": "8217a1364af59e1acfb95d71fd41df1e",
+    "semantic_hash": "8217a1364af59e1acfb95d71fd41df1e"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/scripts/embed-tokens.cjs": {
+    "mtime": 1784492214.5377235,
+    "ast_hash": "d50aed608ed2c44c64c006b1fd915663",
+    "semantic_hash": "d50aed608ed2c44c64c006b1fd915663"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/scripts/fetch-background.py": {
+    "mtime": 1784492214.5541608,
+    "ast_hash": "3269f2ebc8024e55b65008108910f3d4",
+    "semantic_hash": "3269f2ebc8024e55b65008108910f3d4"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/scripts/generate-slide.py": {
+    "mtime": 1784492214.5739634,
+    "ast_hash": "622d80cd7d9696f269e2da6b063754f7",
+    "semantic_hash": "622d80cd7d9696f269e2da6b063754f7"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/scripts/generate-tokens.cjs": {
+    "mtime": 1784492214.5817387,
+    "ast_hash": "a9a15066eeca1f70bd2edb90c645c9eb",
+    "semantic_hash": "a9a15066eeca1f70bd2edb90c645c9eb"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/scripts/html-token-validator.py": {
+    "mtime": 1784492214.5988896,
+    "ast_hash": "1d18dae9d3d916137c50df5ec7e65039",
+    "semantic_hash": "1d18dae9d3d916137c50df5ec7e65039"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/scripts/search-slides.py": {
+    "mtime": 1784492214.6168873,
+    "ast_hash": "bc70c45549014b579fb2a27f3acf3d2e",
+    "semantic_hash": "bc70c45549014b579fb2a27f3acf3d2e"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/scripts/slide-token-validator.py": {
+    "mtime": 1784492214.6339777,
+    "ast_hash": "ee5d76c06903f98a460a8661e150c5d3",
+    "semantic_hash": "ee5d76c06903f98a460a8661e150c5d3"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/scripts/slide_search_core.py": {
+    "mtime": 1784492214.6488347,
+    "ast_hash": "994ab50455710fce437399e86df23286",
+    "semantic_hash": "994ab50455710fce437399e86df23286"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/scripts/tests/test_validate_tokens.py": {
+    "mtime": 1784492214.6835587,
+    "ast_hash": "32a9d34bbfa0041852963c189ea0ee5c",
+    "semantic_hash": "32a9d34bbfa0041852963c189ea0ee5c"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/scripts/validate-tokens.cjs": {
+    "mtime": 1784492214.6597776,
+    "ast_hash": "ebb5e5897d942f59ecd76bf710d06dff",
+    "semantic_hash": "ebb5e5897d942f59ecd76bf710d06dff"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json": {
+    "mtime": 1784492214.702571,
+    "ast_hash": "a5771c378d6fea057242eeebe83a7747",
+    "semantic_hash": "a5771c378d6fea057242eeebe83a7747"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design/scripts/cip/core.py": {
+    "mtime": 1784492215.0270834,
+    "ast_hash": "9fcf192c150e285ab6176a9bbacd475b",
+    "semantic_hash": "9fcf192c150e285ab6176a9bbacd475b"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design/scripts/cip/generate.py": {
+    "mtime": 1784492215.0419173,
+    "ast_hash": "5662ddd34b366544e6541686ec9c8d22",
+    "semantic_hash": "5662ddd34b366544e6541686ec9c8d22"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design/scripts/cip/render-html.py": {
+    "mtime": 1784492215.0581045,
+    "ast_hash": "6fe3ce567110811670f05f40d386b48f",
+    "semantic_hash": "6fe3ce567110811670f05f40d386b48f"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design/scripts/cip/search.py": {
+    "mtime": 1784492215.0727737,
+    "ast_hash": "21a63380316bd899c49302e1b9a59191",
+    "semantic_hash": "21a63380316bd899c49302e1b9a59191"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design/scripts/icon/generate.py": {
+    "mtime": 1784492215.0956764,
+    "ast_hash": "b142cc490fdf8a45bcf95bfe972284df",
+    "semantic_hash": "b142cc490fdf8a45bcf95bfe972284df"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design/scripts/logo/core.py": {
+    "mtime": 1784492215.1206849,
+    "ast_hash": "b8ea226dde31603e5a5e790641334055",
+    "semantic_hash": "b8ea226dde31603e5a5e790641334055"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design/scripts/logo/generate.py": {
+    "mtime": 1784492215.1342616,
+    "ast_hash": "6f973ff8ea948cb774340703c8b51b54",
+    "semantic_hash": "6f973ff8ea948cb774340703c8b51b54"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design/scripts/logo/search.py": {
+    "mtime": 1784492215.1564968,
+    "ast_hash": "56aa8e1e15479f304a7e4709a767c98b",
+    "semantic_hash": "56aa8e1e15479f304a7e4709a767c98b"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/ui-styling/scripts/shadcn_add.py": {
+    "mtime": 1784492215.50246,
+    "ast_hash": "4eb5eb020e3b45a8f73f4a371abbdbe1",
+    "semantic_hash": "4eb5eb020e3b45a8f73f4a371abbdbe1"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/ui-styling/scripts/tailwind_config_gen.py": {
+    "mtime": 1784492215.5195363,
+    "ast_hash": "cafc602e66323d217188d319c9a0412e",
+    "semantic_hash": "cafc602e66323d217188d319c9a0412e"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/ui-styling/scripts/tests/coverage-ui.json": {
+    "mtime": 1784492215.5391197,
+    "ast_hash": "42c486def8b180c1e72b1e7b865b9607",
+    "semantic_hash": "42c486def8b180c1e72b1e7b865b9607"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/ui-styling/scripts/tests/test_shadcn_add.py": {
+    "mtime": 1784492215.5685856,
+    "ast_hash": "b988db86bf66d891a0d21baa71c6d27a",
+    "semantic_hash": "b988db86bf66d891a0d21baa71c6d27a"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/ui-styling/scripts/tests/test_tailwind_config_gen.py": {
+    "mtime": 1784492215.58412,
+    "ast_hash": "f5d99288827b293f4b6fdb86b8b56229",
+    "semantic_hash": "f5d99288827b293f4b6fdb86b8b56229"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/agent.json": {
+    "mtime": 1784492215.6348948,
+    "ast_hash": "af4095e00f70d7bc097b3339c26a1dd6",
+    "semantic_hash": "af4095e00f70d7bc097b3339c26a1dd6"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/augment.json": {
+    "mtime": 1784492215.6454136,
+    "ast_hash": "5eb707f366058856774899ec1410ccef",
+    "semantic_hash": "5eb707f366058856774899ec1410ccef"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/claude.json": {
+    "mtime": 1784492215.6554134,
+    "ast_hash": "b88aafb1af84ec312c03c02cbeeac1e8",
+    "semantic_hash": "b88aafb1af84ec312c03c02cbeeac1e8"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/codebuddy.json": {
+    "mtime": 1784492215.6678433,
+    "ast_hash": "d666f609c498ead69511f7248f1b191b",
+    "semantic_hash": "d666f609c498ead69511f7248f1b191b"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/codewhale.json": {
+    "mtime": 1784492215.6795654,
+    "ast_hash": "4494d86a36c578fb74c78c45a04b3494",
+    "semantic_hash": "4494d86a36c578fb74c78c45a04b3494"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/codex.json": {
+    "mtime": 1784492215.6886036,
+    "ast_hash": "0a8e13884b11db80739bd918f96eff4d",
+    "semantic_hash": "0a8e13884b11db80739bd918f96eff4d"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/continue.json": {
+    "mtime": 1784492215.7016308,
+    "ast_hash": "8fda02fd3c631cdf0279be34ff456d9e",
+    "semantic_hash": "8fda02fd3c631cdf0279be34ff456d9e"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/copilot.json": {
+    "mtime": 1784492215.7136946,
+    "ast_hash": "a85c5d98cb6b1ca9b2d7e1ae8f1e4b1a",
+    "semantic_hash": "a85c5d98cb6b1ca9b2d7e1ae8f1e4b1a"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/cursor.json": {
+    "mtime": 1784492215.723234,
+    "ast_hash": "6c68dc1fd77af13b14ecd4ab9f4ce744",
+    "semantic_hash": "6c68dc1fd77af13b14ecd4ab9f4ce744"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/droid.json": {
+    "mtime": 1784492215.7342882,
+    "ast_hash": "c544fd4c27fe9360812c7da5c01cef6e",
+    "semantic_hash": "c544fd4c27fe9360812c7da5c01cef6e"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/gemini.json": {
+    "mtime": 1784492215.7449865,
+    "ast_hash": "4ee03c19f6fb2052ad7bda6c69fdebf3",
+    "semantic_hash": "4ee03c19f6fb2052ad7bda6c69fdebf3"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/kilocode.json": {
+    "mtime": 1784492215.757294,
+    "ast_hash": "5dd6f0e9e26c29d800cbb922371a33f1",
+    "semantic_hash": "5dd6f0e9e26c29d800cbb922371a33f1"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/kiro.json": {
+    "mtime": 1784492215.7669804,
+    "ast_hash": "31f23dc6d00323e4e406b1e2abf83a30",
+    "semantic_hash": "31f23dc6d00323e4e406b1e2abf83a30"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/opencode.json": {
+    "mtime": 1784492215.7894225,
+    "ast_hash": "0dfef731b6c0fb5c3dedf49ba58e51d7",
+    "semantic_hash": "0dfef731b6c0fb5c3dedf49ba58e51d7"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/qoder.json": {
+    "mtime": 1784492215.8000665,
+    "ast_hash": "237b81c6bdfce7132f4e85197eb196e8",
+    "semantic_hash": "237b81c6bdfce7132f4e85197eb196e8"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/roocode.json": {
+    "mtime": 1784492215.8115928,
+    "ast_hash": "b937fe6d766ab287e993b48d2e51d99e",
+    "semantic_hash": "b937fe6d766ab287e993b48d2e51d99e"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/trae.json": {
+    "mtime": 1784492215.8197627,
+    "ast_hash": "06e8b6b23c667d48694c83b113469523",
+    "semantic_hash": "06e8b6b23c667d48694c83b113469523"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/warp.json": {
+    "mtime": 1784492215.835478,
+    "ast_hash": "6f532e622e73338e5fa1be2e76c6b978",
+    "semantic_hash": "6f532e622e73338e5fa1be2e76c6b978"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/templates/platforms/windsurf.json": {
+    "mtime": 1784492215.8460395,
+    "ast_hash": "750ba15f3a2c1c47430972dac2371a0d",
+    "semantic_hash": "750ba15f3a2c1c47430972dac2371a0d"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/package.json": {
+    "mtime": 1784492213.421647,
+    "ast_hash": "d5c11d99b65f86f87f391e0a96194acb",
+    "semantic_hash": "d5c11d99b65f86f87f391e0a96194acb"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/playwright.config.ts": {
+    "mtime": 1784492213.4309137,
+    "ast_hash": "94d56003e711499db51f5f2ae2618c5b",
+    "semantic_hash": "94d56003e711499db51f5f2ae2618c5b"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/scripts/build.mjs": {
+    "mtime": 1784492215.8621333,
+    "ast_hash": "72d4bce0962a9305a42e34194388d64d",
+    "semantic_hash": "72d4bce0962a9305a42e34194388d64d"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/scripts/sync-assets.mjs": {
+    "mtime": 1784492215.8777099,
+    "ast_hash": "16dca76d40b4c9debc7d665a03f3267c",
+    "semantic_hash": "16dca76d40b4c9debc7d665a03f3267c"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/src/commands/init.ts": {
+    "mtime": 1784492215.9145896,
+    "ast_hash": "d3184a356c2f38c2fa0ac36174799bfa",
+    "semantic_hash": "d3184a356c2f38c2fa0ac36174799bfa"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/src/commands/uninstall.ts": {
+    "mtime": 1784492215.9255166,
+    "ast_hash": "930997b5f2c35a5a2f185c25962809f8",
+    "semantic_hash": "930997b5f2c35a5a2f185c25962809f8"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/src/commands/update.ts": {
+    "mtime": 1784492215.9304311,
+    "ast_hash": "2a929064a859d7a7a27bcfc2ea7fe9b5",
+    "semantic_hash": "2a929064a859d7a7a27bcfc2ea7fe9b5"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/src/commands/versions.ts": {
+    "mtime": 1784492215.945002,
+    "ast_hash": "51e8244986844ae6485ec522fe67c822",
+    "semantic_hash": "51e8244986844ae6485ec522fe67c822"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/src/index.ts": {
+    "mtime": 1784492215.8978164,
+    "ast_hash": "51913a48ae8bbf127d76214b8b6d6983",
+    "semantic_hash": "51913a48ae8bbf127d76214b8b6d6983"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/src/types/index.ts": {
+    "mtime": 1784492215.9621193,
+    "ast_hash": "a2e7909d4a1386164e476dd1746af9f1",
+    "semantic_hash": "a2e7909d4a1386164e476dd1746af9f1"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/src/utils/detect.ts": {
+    "mtime": 1784492215.9786634,
+    "ast_hash": "41267f11bac87ab8f399117008016e75",
+    "semantic_hash": "41267f11bac87ab8f399117008016e75"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/src/utils/extract.ts": {
+    "mtime": 1784492215.988513,
+    "ast_hash": "2495c966ada37d327a2ee93bda8572dd",
+    "semantic_hash": "2495c966ada37d327a2ee93bda8572dd"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/src/utils/github.ts": {
+    "mtime": 1784492215.9987519,
+    "ast_hash": "7bda7a6cb1a5fad7b244172c5d30233d",
+    "semantic_hash": "7bda7a6cb1a5fad7b244172c5d30233d"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/src/utils/logger.ts": {
+    "mtime": 1784492216.006618,
+    "ast_hash": "bc78a1b3ed004e8f9505878f02011c28",
+    "semantic_hash": "bc78a1b3ed004e8f9505878f02011c28"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/src/utils/template.ts": {
+    "mtime": 1784492216.0191655,
+    "ast_hash": "10636237d938a0fecaaa1aa69324630f",
+    "semantic_hash": "10636237d938a0fecaaa1aa69324630f"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/tests/e2e/preview.spec.ts": {
+    "mtime": 1784492216.0398731,
+    "ast_hash": "4d5a9da9b31c62b2348b412d356ceef1",
+    "semantic_hash": "4d5a9da9b31c62b2348b412d356ceef1"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/tsconfig.json": {
+    "mtime": 1784492213.4474428,
+    "ast_hash": "d9454be94ab6e33951661584b593f129",
+    "semantic_hash": "d9454be94ab6e33951661584b593f129"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/scripts/smoke-domains.sh": {
+    "mtime": 1784492216.1837485,
+    "ast_hash": "7935a94019c5fee1c4901551c0ffcbed",
+    "semantic_hash": "7935a94019c5fee1c4901551c0ffcbed"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/scripts/smoke-stacks.sh": {
+    "mtime": 1784492216.2026942,
+    "ast_hash": "b19907710d5cd910b8370231ac8416f1",
+    "semantic_hash": "b19907710d5cd910b8370231ac8416f1"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/scripts/sync-release-version.mjs": {
+    "mtime": 1784492216.2128441,
+    "ast_hash": "3f9e4b3668cd8559aca43ae3f9d5b047",
+    "semantic_hash": "3f9e4b3668cd8559aca43ae3f9d5b047"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/scripts/validate-csv.py": {
+    "mtime": 1784492216.2285275,
+    "ast_hash": "f071badf8938ceeff963c2f77b9059d9",
+    "semantic_hash": "f071badf8938ceeff963c2f77b9059d9"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/skill.json": {
+    "mtime": 1784492210.185048,
+    "ast_hash": "315679601b53a43849dc0fd11d2e14a4",
+    "semantic_hash": "315679601b53a43849dc0fd11d2e14a4"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py": {
+    "mtime": 1784492216.8035424,
+    "ast_hash": "41d488b60b5bfb818c4b17413f7477c3",
+    "semantic_hash": "41d488b60b5bfb818c4b17413f7477c3"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py": {
+    "mtime": 1784492216.8220303,
+    "ast_hash": "c17f639b44756832e7c556bc65ba2d1d",
+    "semantic_hash": "c17f639b44756832e7c556bc65ba2d1d"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/search.py": {
+    "mtime": 1784492216.83986,
+    "ast_hash": "10012353bb7d92c645ea7ab245e461e6",
+    "semantic_hash": "10012353bb7d92c645ea7ab245e461e6"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py": {
+    "mtime": 1784492216.8691163,
+    "ast_hash": "136d8ec87735cf5b77d70ad0adea59c0",
+    "semantic_hash": "136d8ec87735cf5b77d70ad0adea59c0"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/validate_data.py": {
+    "mtime": 1784492216.8542984,
+    "ast_hash": "9ea4300a8385a7377457dd6d1ee99224",
+    "semantic_hash": "9ea4300a8385a7377457dd6d1ee99224"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/agent.json": {
+    "mtime": 1784492216.9192388,
+    "ast_hash": "af4095e00f70d7bc097b3339c26a1dd6",
+    "semantic_hash": "af4095e00f70d7bc097b3339c26a1dd6"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/augment.json": {
+    "mtime": 1784492216.9297984,
+    "ast_hash": "5eb707f366058856774899ec1410ccef",
+    "semantic_hash": "5eb707f366058856774899ec1410ccef"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/claude.json": {
+    "mtime": 1784492216.9395769,
+    "ast_hash": "b88aafb1af84ec312c03c02cbeeac1e8",
+    "semantic_hash": "b88aafb1af84ec312c03c02cbeeac1e8"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/codebuddy.json": {
+    "mtime": 1784492216.9488838,
+    "ast_hash": "d666f609c498ead69511f7248f1b191b",
+    "semantic_hash": "d666f609c498ead69511f7248f1b191b"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/codewhale.json": {
+    "mtime": 1784492216.9583309,
+    "ast_hash": "4494d86a36c578fb74c78c45a04b3494",
+    "semantic_hash": "4494d86a36c578fb74c78c45a04b3494"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/codex.json": {
+    "mtime": 1784492216.9685848,
+    "ast_hash": "0a8e13884b11db80739bd918f96eff4d",
+    "semantic_hash": "0a8e13884b11db80739bd918f96eff4d"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/continue.json": {
+    "mtime": 1784492216.9768865,
+    "ast_hash": "8fda02fd3c631cdf0279be34ff456d9e",
+    "semantic_hash": "8fda02fd3c631cdf0279be34ff456d9e"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/copilot.json": {
+    "mtime": 1784492216.984917,
+    "ast_hash": "a85c5d98cb6b1ca9b2d7e1ae8f1e4b1a",
+    "semantic_hash": "a85c5d98cb6b1ca9b2d7e1ae8f1e4b1a"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/cursor.json": {
+    "mtime": 1784492216.990956,
+    "ast_hash": "6c68dc1fd77af13b14ecd4ab9f4ce744",
+    "semantic_hash": "6c68dc1fd77af13b14ecd4ab9f4ce744"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/droid.json": {
+    "mtime": 1784492217.0042307,
+    "ast_hash": "c544fd4c27fe9360812c7da5c01cef6e",
+    "semantic_hash": "c544fd4c27fe9360812c7da5c01cef6e"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/gemini.json": {
+    "mtime": 1784492217.009198,
+    "ast_hash": "4ee03c19f6fb2052ad7bda6c69fdebf3",
+    "semantic_hash": "4ee03c19f6fb2052ad7bda6c69fdebf3"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/kilocode.json": {
+    "mtime": 1784492217.0175984,
+    "ast_hash": "5dd6f0e9e26c29d800cbb922371a33f1",
+    "semantic_hash": "5dd6f0e9e26c29d800cbb922371a33f1"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/kiro.json": {
+    "mtime": 1784492217.0303712,
+    "ast_hash": "31f23dc6d00323e4e406b1e2abf83a30",
+    "semantic_hash": "31f23dc6d00323e4e406b1e2abf83a30"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/opencode.json": {
+    "mtime": 1784492217.038062,
+    "ast_hash": "0dfef731b6c0fb5c3dedf49ba58e51d7",
+    "semantic_hash": "0dfef731b6c0fb5c3dedf49ba58e51d7"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/qoder.json": {
+    "mtime": 1784492217.0493667,
+    "ast_hash": "237b81c6bdfce7132f4e85197eb196e8",
+    "semantic_hash": "237b81c6bdfce7132f4e85197eb196e8"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/roocode.json": {
+    "mtime": 1784492217.05482,
+    "ast_hash": "b937fe6d766ab287e993b48d2e51d99e",
+    "semantic_hash": "b937fe6d766ab287e993b48d2e51d99e"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/trae.json": {
+    "mtime": 1784492217.0660665,
+    "ast_hash": "06e8b6b23c667d48694c83b113469523",
+    "semantic_hash": "06e8b6b23c667d48694c83b113469523"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/warp.json": {
+    "mtime": 1784492217.0771844,
+    "ast_hash": "6f532e622e73338e5fa1be2e76c6b978",
+    "semantic_hash": "6f532e622e73338e5fa1be2e76c6b978"
+  },
+  ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/templates/platforms/windsurf.json": {
+    "mtime": 1784492217.0870981,
+    "ast_hash": "750ba15f3a2c1c47430972dac2371a0d",
+    "semantic_hash": "750ba15f3a2c1c47430972dac2371a0d"
+  },
+  ".github/skills/pdf/scripts/check_bounding_boxes.py": {
+    "mtime": 1784319627.4223566,
+    "ast_hash": "f221feb172d30a7ab90583b17ce7b4b0",
+    "semantic_hash": "f221feb172d30a7ab90583b17ce7b4b0"
+  },
+  ".github/skills/pdf/scripts/check_fillable_fields.py": {
+    "mtime": 1784319627.4381146,
+    "ast_hash": "f4ac456f3f0450da2fff366725e095ba",
+    "semantic_hash": "f4ac456f3f0450da2fff366725e095ba"
+  },
+  ".github/skills/pdf/scripts/convert_pdf_to_images.py": {
+    "mtime": 1784319627.4381146,
+    "ast_hash": "0c65904b96ebb8af6f15851dbb6da239",
+    "semantic_hash": "0c65904b96ebb8af6f15851dbb6da239"
+  },
+  ".github/skills/pdf/scripts/create_validation_image.py": {
+    "mtime": 1784319627.4537985,
+    "ast_hash": "858ffa552d1963e1d46e0391d45d518d",
+    "semantic_hash": "858ffa552d1963e1d46e0391d45d518d"
+  },
+  ".github/skills/pdf/scripts/extract_form_field_info.py": {
+    "mtime": 1784319627.4696481,
+    "ast_hash": "0b70a14d41ead20e387bd87f007d6b66",
+    "semantic_hash": "0b70a14d41ead20e387bd87f007d6b66"
+  },
+  ".github/skills/pdf/scripts/extract_form_structure.py": {
+    "mtime": 1784319627.4787939,
+    "ast_hash": "1fa3730b44fd5511fc986887842962dd",
+    "semantic_hash": "1fa3730b44fd5511fc986887842962dd"
+  },
+  ".github/skills/pdf/scripts/fill_fillable_fields.py": {
+    "mtime": 1784319627.4856007,
+    "ast_hash": "85f9da2696f510337ed36030d13e1c5e",
+    "semantic_hash": "85f9da2696f510337ed36030d13e1c5e"
+  },
+  ".github/skills/pdf/scripts/fill_pdf_form_with_annotations.py": {
+    "mtime": 1784319627.5012538,
+    "ast_hash": "f9d6c389c69edf3494a995c48c6739ab",
+    "semantic_hash": "f9d6c389c69edf3494a995c48c6739ab"
+  },
+  ".github/skills/pptx/scripts/__init__.py": {
+    "mtime": 1784319627.5497036,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  ".github/skills/pptx/scripts/add_slide.py": {
+    "mtime": 1784319627.5497036,
+    "ast_hash": "e01e791c85fbfaabc1ea76ecc85b512a",
+    "semantic_hash": "e01e791c85fbfaabc1ea76ecc85b512a"
+  },
+  ".github/skills/pptx/scripts/clean.py": {
+    "mtime": 1784319627.5652106,
+    "ast_hash": "802144f24fd71f6893f19e6bff48ac45",
+    "semantic_hash": "802144f24fd71f6893f19e6bff48ac45"
+  },
+  ".github/skills/pptx/scripts/office/helpers/__init__.py": {
+    "mtime": 1784319627.6826487,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  ".github/skills/pptx/scripts/office/helpers/merge_runs.py": {
+    "mtime": 1784319627.6935222,
+    "ast_hash": "50d4546be7e221a5fd8620eea68d50d9",
+    "semantic_hash": "50d4546be7e221a5fd8620eea68d50d9"
+  },
+  ".github/skills/pptx/scripts/office/helpers/simplify_redlines.py": {
+    "mtime": 1784319627.7065368,
+    "ast_hash": "27067501a5bad066bd22891d8b6ee040",
+    "semantic_hash": "27067501a5bad066bd22891d8b6ee040"
+  },
+  ".github/skills/pptx/scripts/office/pack.py": {
+    "mtime": 1784319627.6275072,
+    "ast_hash": "20d61f93e874fd961122dd0da9de7898",
+    "semantic_hash": "20d61f93e874fd961122dd0da9de7898"
+  },
+  ".github/skills/pptx/scripts/office/soffice.py": {
+    "mtime": 1784319627.64241,
+    "ast_hash": "080c37e6f18963f350dda51d922c9f06",
+    "semantic_hash": "080c37e6f18963f350dda51d922c9f06"
+  },
+  ".github/skills/pptx/scripts/office/unpack.py": {
+    "mtime": 1784319627.655319,
+    "ast_hash": "345c1b6a0ea7ca37e2019c2491db5fd9",
+    "semantic_hash": "345c1b6a0ea7ca37e2019c2491db5fd9"
+  },
+  ".github/skills/pptx/scripts/office/validate.py": {
+    "mtime": 1784319627.6681056,
+    "ast_hash": "8421ee005384755f5a748557abd6cf6c",
+    "semantic_hash": "8421ee005384755f5a748557abd6cf6c"
+  },
+  ".github/skills/pptx/scripts/office/validators/__init__.py": {
+    "mtime": 1784319628.038885,
+    "ast_hash": "9577920dc811fff9762a96d4095d95e5",
+    "semantic_hash": "9577920dc811fff9762a96d4095d95e5"
+  },
+  ".github/skills/pptx/scripts/office/validators/base.py": {
+    "mtime": 1784319628.0549562,
+    "ast_hash": "47f1babbdf882862aae88ba4127fc9fe",
+    "semantic_hash": "47f1babbdf882862aae88ba4127fc9fe"
+  },
+  ".github/skills/pptx/scripts/office/validators/docx.py": {
+    "mtime": 1784319628.0695033,
+    "ast_hash": "dae6866b59e1066a69f7695fb106c798",
+    "semantic_hash": "dae6866b59e1066a69f7695fb106c798"
+  },
+  ".github/skills/pptx/scripts/office/validators/pptx.py": {
+    "mtime": 1784319628.074075,
+    "ast_hash": "95836f2ecb3e53862b1d166d0a11e255",
+    "semantic_hash": "95836f2ecb3e53862b1d166d0a11e255"
+  },
+  ".github/skills/pptx/scripts/office/validators/redlining.py": {
+    "mtime": 1784319628.0895927,
+    "ast_hash": "b2306b0d59975cfbb1325a6c2de3a771",
+    "semantic_hash": "b2306b0d59975cfbb1325a6c2de3a771"
+  },
+  ".github/skills/pptx/scripts/rezip.py": {
+    "mtime": 1784319627.595776,
+    "ast_hash": "72c4f36aded7535ce558b1e7bbe6963f",
+    "semantic_hash": "72c4f36aded7535ce558b1e7bbe6963f"
+  },
+  ".github/skills/pptx/scripts/thumbnail.py": {
+    "mtime": 1784319627.6118174,
+    "ast_hash": "23ba48fadfd072a5f75c29e0624727d3",
+    "semantic_hash": "23ba48fadfd072a5f75c29e0624727d3"
+  },
+  ".github/skills/ranger/scripts/ensure-qa-dependencies.mjs": {
+    "mtime": 1784319628.165451,
+    "ast_hash": "0109197d1378ad7851a312ad97c66752",
+    "semantic_hash": "0109197d1378ad7851a312ad97c66752"
+  },
+  ".github/skills/ranger/scripts/ensure-test-user.mjs": {
+    "mtime": 1784319628.1814964,
+    "ast_hash": "5da9f7c23ee397ef178dcb871a10c6f4",
+    "semantic_hash": "5da9f7c23ee397ef178dcb871a10c6f4"
+  },
+  ".github/skills/ranger/scripts/generate-execution-report.mjs": {
+    "mtime": 1784319628.1897774,
+    "ast_hash": "86936a858a2e02378fa0ce4163b6bb60",
+    "semantic_hash": "86936a858a2e02378fa0ce4163b6bb60"
+  },
+  ".github/skills/ranger/scripts/organize-evidence.mjs": {
+    "mtime": 1784319628.1973357,
+    "ast_hash": "593c9e266dd2746a8739d71255582d2e",
+    "semantic_hash": "593c9e266dd2746a8739d71255582d2e"
+  },
+  ".github/skills/ranger/scripts/playwright.config.template.ts": {
+    "mtime": 1784319628.2064478,
+    "ast_hash": "d9420031a9c21d1e4a524a66a9c216de",
+    "semantic_hash": "d9420031a9c21d1e4a524a66a9c216de"
+  },
+  ".github/skills/xlsx/scripts/office/helpers/__init__.py": {
+    "mtime": 1784319628.3401923,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  ".github/skills/xlsx/scripts/office/helpers/merge_runs.py": {
+    "mtime": 1784319628.351826,
+    "ast_hash": "50d4546be7e221a5fd8620eea68d50d9",
+    "semantic_hash": "50d4546be7e221a5fd8620eea68d50d9"
+  },
+  ".github/skills/xlsx/scripts/office/helpers/simplify_redlines.py": {
+    "mtime": 1784319628.3666496,
+    "ast_hash": "27067501a5bad066bd22891d8b6ee040",
+    "semantic_hash": "27067501a5bad066bd22891d8b6ee040"
+  },
+  ".github/skills/xlsx/scripts/office/pack.py": {
+    "mtime": 1784319628.277676,
+    "ast_hash": "20d61f93e874fd961122dd0da9de7898",
+    "semantic_hash": "20d61f93e874fd961122dd0da9de7898"
+  },
+  ".github/skills/xlsx/scripts/office/soffice.py": {
+    "mtime": 1784319628.2959473,
+    "ast_hash": "080c37e6f18963f350dda51d922c9f06",
+    "semantic_hash": "080c37e6f18963f350dda51d922c9f06"
+  },
+  ".github/skills/xlsx/scripts/office/unpack.py": {
+    "mtime": 1784319628.3082633,
+    "ast_hash": "345c1b6a0ea7ca37e2019c2491db5fd9",
+    "semantic_hash": "345c1b6a0ea7ca37e2019c2491db5fd9"
+  },
+  ".github/skills/xlsx/scripts/office/validate.py": {
+    "mtime": 1784319628.3198097,
+    "ast_hash": "8421ee005384755f5a748557abd6cf6c",
+    "semantic_hash": "8421ee005384755f5a748557abd6cf6c"
+  },
+  ".github/skills/xlsx/scripts/office/validators/__init__.py": {
+    "mtime": 1784319628.7044108,
+    "ast_hash": "9577920dc811fff9762a96d4095d95e5",
+    "semantic_hash": "9577920dc811fff9762a96d4095d95e5"
+  },
+  ".github/skills/xlsx/scripts/office/validators/base.py": {
+    "mtime": 1784319628.7244122,
+    "ast_hash": "47f1babbdf882862aae88ba4127fc9fe",
+    "semantic_hash": "47f1babbdf882862aae88ba4127fc9fe"
+  },
+  ".github/skills/xlsx/scripts/office/validators/docx.py": {
+    "mtime": 1784319628.7363362,
+    "ast_hash": "dae6866b59e1066a69f7695fb106c798",
+    "semantic_hash": "dae6866b59e1066a69f7695fb106c798"
+  },
+  ".github/skills/xlsx/scripts/office/validators/pptx.py": {
+    "mtime": 1784319628.7477894,
+    "ast_hash": "95836f2ecb3e53862b1d166d0a11e255",
+    "semantic_hash": "95836f2ecb3e53862b1d166d0a11e255"
+  },
+  ".github/skills/xlsx/scripts/office/validators/redlining.py": {
+    "mtime": 1784319628.7579117,
+    "ast_hash": "b2306b0d59975cfbb1325a6c2de3a771",
+    "semantic_hash": "b2306b0d59975cfbb1325a6c2de3a771"
+  },
+  ".github/skills/xlsx/scripts/recalc.py": {
+    "mtime": 1784319628.2675354,
+    "ast_hash": "530f1af38e5857df10c661d2356d179d",
+    "semantic_hash": "530f1af38e5857df10c661d2356d179d"
+  }
+}
