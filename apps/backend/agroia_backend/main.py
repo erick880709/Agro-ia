@@ -58,10 +58,12 @@ register_error_handlers(app)
 from agroia_backend.api.recomendaciones import router as recomendaciones_router
 from agroia_backend.api.catalogo import router as catalogo_router
 from agroia_backend.api.iot import router as iot_router
+from agroia_backend.api.dashboard import router as dashboard_router
 
 app.include_router(recomendaciones_router)
 app.include_router(catalogo_router)
 app.include_router(iot_router)
+app.include_router(dashboard_router)
 # app.include_router(catalogo_router, prefix="/api/v1")
 # app.include_router(usuarios_router, prefix="/api/v1")
 # app.include_router(dashboards_router, prefix="/api/v1")
