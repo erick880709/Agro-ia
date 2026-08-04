@@ -23,6 +23,8 @@ from agroia_backend.services.rules_engine import (
     RulesResult,
 )
 
+from agroia_backend.services import catalogo_service
+
 __all__ = [
     # Data adapters
     "ALL_SOIL_VARIABLES",
@@ -42,4 +44,6 @@ __all__ = [
     "generate_justification",
     "translate_soil_condition",
     "estimate_cost",
+    # Catalog
+    "catalogo_service",
 ]

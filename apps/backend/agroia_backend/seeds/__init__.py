@@ -1,0 +1,1 @@
+"""AgroIA Backend seeds package."""
