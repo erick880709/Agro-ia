@@ -22,3 +22,6 @@ app = FastAPI(title="AgroIA RAG Agent", version="0.1.0", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 app.include_router(health_router, prefix="/api/v1")
 register_error_handlers(app)
+
+from agroia_rag.api.chat import router as rag_router
+app.include_router(rag_router)
