@@ -1,0 +1,148 @@
+name: AgroIA CI/CD Pipeline
+
+on:
+  push:
+    branches: [master, main, develop]
+  pull_request:
+    branches: [master, main]
+  schedule:
+    - cron: "0 6 1 * *"  # Primer día de cada mes: SAST/DAST
+
+env:
+  PYTHON_VERSION: "3.11"
+  POETRY_VERSION: "1.8.4"
+
+jobs:
+  # ═══════════════════════════════════════════════
+  # Lint & Type Check
+  # ═══════════════════════════════════════════════
+  lint:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Poetry
+        run: pip install poetry==${{ env.POETRY_VERSION }}
+
+      - name: Install dependencies (shared)
+        working-directory: apps/shared
+        run: poetry install --no-interaction
+
+      - name: Lint (shared)
+        working-directory: apps/shared
+        run: poetry run ruff check .
+
+      - name: Install dependencies (backend)
+        working-directory: apps/backend
+        run: poetry install --no-interaction
+
+      - name: Lint (backend)
+        working-directory: apps/backend
+        run: poetry run ruff check .
+
+  # ═══════════════════════════════════════════════
+  # Tests
+  # ═══════════════════════════════════════════════
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    services:
+      postgres:
+        image: pgvector/pgvector:pg15
+        env:
+          POSTGRES_USER: agroia
+          POSTGRES_PASSWORD: agroia_test
+          POSTGRES_DB: agroia_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Poetry
+        run: pip install poetry==${{ env.POETRY_VERSION }}
+
+      - name: Install dependencies
+        working-directory: apps/backend
+        run: poetry install --no-interaction
+
+      - name: Wait for PostgreSQL
+        run: until pg_isready -h localhost -U agroia; do sleep 2; done
+
+      - name: Run migrations
+        working-directory: apps/backend
+        run: poetry run alembic upgrade head
+        env:
+          DATABASE_URL: postgresql+asyncpg://agroia:agroia_test@localhost:5432/agroia_test
+
+      - name: Run tests
+        working-directory: apps/backend
+        run: poetry run pytest tests/ -v --cov=agroia_backend --cov-report=xml
+        env:
+          DATABASE_URL: postgresql+asyncpg://agroia:agroia_test@localhost:5432/agroia_test
+
+  # ═══════════════════════════════════════════════
+  # SAST — Static Analysis (mensual, día 1)
+  # ═══════════════════════════════════════════════
+  sast:
+    name: SAST — Análisis estático de seguridad
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bandit — Python security scanner
+        run: |
+          pip install bandit
+          bandit -r apps/ -f json -o bandit-report.json || true
+
+      - name: Safety — Dependency vulnerability check
+        run: |
+          pip install safety
+          safety check --json --output safety-report.json || true
+
+      - name: Upload SAST reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: sast-reports
+          path: "*-report.json"
+
+  # ═══════════════════════════════════════════════
+  # Build Docker images
+  # ═══════════════════════════════════════════════
+  build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build backend
+        run: docker build -t agroia-backend:latest -f apps/backend/Dockerfile .
+
+      - name: Build auth
+        run: docker build -t agroia-auth:latest -f apps/auth/Dockerfile .
+
+      - name: Build ML
+        run: docker build -t agroia-ml:latest -f apps/ml/Dockerfile .
+
+      - name: Build RAG
+        run: docker build -t agroia-rag:latest -f apps/rag/Dockerfile .
+
+      - name: Build IoT
+        run: docker build -t agroia-iot:latest -f apps/iot/Dockerfile .
