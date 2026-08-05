@@ -8,14 +8,16 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import DateTime, Enum, Float, ForeignKey, func
+import enum
+
+from sqlalchemy import DateTime, Float, ForeignKey, String, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from agroia.database import Base
 
 
-class TexturaSuelo(str, Enum):
+class TexturaSuelo(str, enum.Enum):
     ARENA = "Arena"
     LIMO = "Limo"
     ARCILLA = "Arcilla"
@@ -63,7 +65,6 @@ class SensorReading(Base):
     materia_organica: Mapped[float | None] = mapped_column(Float, nullable=True, comment="%")
     cic: Mapped[float | None] = mapped_column(Float, nullable=True, comment="meq/100g")
     textura: Mapped[TexturaSuelo | None] = mapped_column(
-        Enum(TexturaSuelo, name="textura_suelo_enum", schema="agroia"),
         nullable=True,
     )
     humedad: Mapped[float | None] = mapped_column(Float, nullable=True, comment="%")
@@ -74,10 +75,10 @@ class SensorReading(Base):
 
     # ── Estado del dato ──
     sensor_id: Mapped[str | None] = mapped_column(
-        ForeignKey, server_default=None, nullable=True, comment="ID del dispositivo LoRaWAN"
+        String(100), nullable=True, comment="ID del dispositivo LoRaWAN"
     )
     calidad: Mapped[str | None] = mapped_column(
-        ForeignKey, server_default=None, nullable=True,
+        String(50), nullable=True,
         comment="Indicador de calidad: OK, out_of_range, frozen, gap"
     )
     created_at: Mapped[datetime] = mapped_column(

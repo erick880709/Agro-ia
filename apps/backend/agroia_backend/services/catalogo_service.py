@@ -128,7 +128,7 @@ async def crear_ficha(db: AsyncSession, cultivo_id: str, **kwargs) -> FichaTecni
 
     ficha = FichaTecnica(
         id=uuid.uuid4(),
-        cultivo_id=cultivo_id,
+        cultivo_id=uuid.UUID(cultivo_id) if isinstance(cultivo_id, str) else cultivo_id,
         estado=EstadoFicha.BORRADOR,
         **kwargs,
     )
@@ -158,7 +158,7 @@ async def actualizar_ficha(db: AsyncSession, ficha_id: str, **kwargs) -> FichaTe
 
 # ── Flujo de publicación ──
 
-async def enviar_a_revision(db: AsyncSession, ficha_id: str, admin_id: str) -> FichaTecnica:
+async def enviar_a_revision(db: AsyncSession, ficha_id: str) -> FichaTecnica:
     """Envía una ficha a revisión (Borrador → En Revisión)."""
     ficha = await obtener_ficha(db, ficha_id)
 
@@ -167,13 +167,12 @@ async def enviar_a_revision(db: AsyncSession, ficha_id: str, admin_id: str) -> F
 
     ficha.estado = EstadoFicha.EN_REVISION
     ficha.fecha_envio_revision = datetime.utcnow()
-    ficha.creado_por = uuid.UUID(admin_id)
     await db.flush()
     logger.info("ficha_enviada_revision", ficha_id=ficha_id)
     return ficha
 
 
-async def aprobar_ficha(db: AsyncSession, ficha_id: str, tecnico_id: str) -> FichaTecnica:
+async def aprobar_ficha(db: AsyncSession, ficha_id: str) -> FichaTecnica:
     """Aprueba una ficha (En Revisión → Publicado)."""
     ficha = await obtener_ficha(db, ficha_id)
 
@@ -182,16 +181,15 @@ async def aprobar_ficha(db: AsyncSession, ficha_id: str, tecnico_id: str) -> Fic
 
     now = datetime.utcnow()
     ficha.estado = EstadoFicha.PUBLICADO
-    ficha.revisado_por = uuid.UUID(tecnico_id)
     ficha.fecha_revision = now
     ficha.fecha_ultima_revision = now
     await db.flush()
-    logger.info("ficha_aprobada", ficha_id=ficha_id, tecnico_id=tecnico_id)
+    logger.info("ficha_aprobada", ficha_id=ficha_id)
     return ficha
 
 
 async def rechazar_ficha(
-    db: AsyncSession, ficha_id: str, tecnico_id: str, notas: str
+    db: AsyncSession, ficha_id: str, notas: str | None = None
 ) -> FichaTecnica:
     """Rechaza una ficha (En Revisión → Borrador) con notas de corrección."""
     ficha = await obtener_ficha(db, ficha_id)
@@ -201,11 +199,10 @@ async def rechazar_ficha(
 
     now = datetime.utcnow()
     ficha.estado = EstadoFicha.BORRADOR
-    ficha.revisado_por = uuid.UUID(tecnico_id)
     ficha.fecha_revision = now
     ficha.notas_revision = notas
     await db.flush()
-    logger.info("ficha_rechazada", ficha_id=ficha_id, tecnico_id=tecnico_id)
+    logger.info("ficha_rechazada", ficha_id=ficha_id)
     return ficha
 
 

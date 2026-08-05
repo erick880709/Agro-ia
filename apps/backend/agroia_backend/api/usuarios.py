@@ -3,8 +3,10 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from agroia.database import get_db
 from agroia.logging import get_logger
 
 logger = get_logger(__name__)
@@ -27,6 +29,11 @@ class UserResponse(BaseModel):
     email_verificado: bool
     consentimiento_datos: bool
 
+    @field_validator("id", mode="before")
+    @classmethod
+    def coerce_id(cls, v: object) -> str:
+        return str(v)
+
 class MembershipResponse(BaseModel):
     id: str
     plan: str
@@ -34,6 +41,11 @@ class MembershipResponse(BaseModel):
     fecha_inicio: str
     fecha_vencimiento: str
     fincas_permitidas: int
+
+    @field_validator("id", mode="before")
+    @classmethod
+    def coerce_id(cls, v: object) -> str:
+        return str(v)
 
 
 # ── Endpoints ──
@@ -105,7 +117,7 @@ async def listar_usuarios(
 
 
 @router.put("/admin/usuarios/{user_id}/rol")
-async def cambiar_rol(user_id: str, rol: str = Query(..., regex="^(Admin|Cliente|Tecnico|Investigador)$")):
+async def cambiar_rol(user_id: str, rol: str = Query(..., pattern="^(Admin|Cliente|Tecnico|Investigador)$")):
     """Cambia el rol de un usuario (solo Admin)."""
     logger.info("role_changed", user_id=user_id, new_rol=rol)
     return {"status": "updated", "user_id": user_id, "rol": rol}

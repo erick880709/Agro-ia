@@ -1,11 +1,11 @@
 """Modelo Recomendacion — resultado de un análisis de aptitud de suelo."""
 
+import enum
 import uuid
 from datetime import datetime
 from typing import Optional
 
-from geoalchemy2 import Geometry
-from sqlalchemy import DateTime, Enum, Float, ForeignKey, String, Text, func
+from sqlalchemy import DateTime, Float, ForeignKey, String, Text, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -14,14 +14,14 @@ from agroia_backend.models import TenantMixin, TimestampMixin
 
 # ── Enums ──
 
-class ClasificacionUPRA(str, Enum):
+class ClasificacionUPRA(str, enum.Enum):
     ALTA = "Alta"
     MEDIA = "Media"
     BAJA = "Baja"
     NO_APTA = "NoApta"
 
 
-class EstadoRecomendacion(str, Enum):
+class EstadoRecomendacion(str, enum.Enum):
     PUBLICADA = "Publicada"
     ADVERTENCIA = "Advertencia"
     BLOQUEADA = "Bloqueada"
@@ -45,7 +45,6 @@ class Recomendacion(Base, TenantMixin, TimestampMixin):
         UUID(as_uuid=True), ForeignKey("agroia.cultivos.id"), nullable=False, index=True
     )
     clasificacion_upra: Mapped[ClasificacionUPRA] = mapped_column(
-        Enum(ClasificacionUPRA, name="clasificacion_upra_enum", schema="agroia"),
         nullable=False,
     )
     confianza: Mapped[float] = mapped_column(
@@ -55,7 +54,6 @@ class Recomendacion(Base, TenantMixin, TimestampMixin):
         JSONB, nullable=False, comment="Variables que influyeron, riesgos, beneficios, costo, impacto"
     )
     estado: Mapped[EstadoRecomendacion] = mapped_column(
-        Enum(EstadoRecomendacion, name="estado_recomendacion_enum", schema="agroia"),
         nullable=False,
         default=EstadoRecomendacion.PUBLICADA,
     )

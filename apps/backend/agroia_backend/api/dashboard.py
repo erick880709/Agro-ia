@@ -1,8 +1,10 @@
 """API endpoints del dashboard y reportes PDF."""
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import HTMLResponse
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from agroia.database import get_db
 from agroia.logging import get_logger
 
 logger = get_logger(__name__)
@@ -10,7 +12,7 @@ router = APIRouter(prefix="/api/v1", tags=["dashboard"])
 
 
 @router.get("/dashboard/{finca_id}")
-async def dashboard_finca(finca_id: str, modo: str = Query("agricultor", regex="^(agricultor|experto)$")):
+async def dashboard_finca(finca_id: str, modo: str = Query("agricultor", pattern="^(agricultor|experto)$")):
     """Dashboard completo de una finca.
 
     Args:
@@ -96,7 +98,7 @@ async def generar_reporte_pdf(finca_id: str):
 
 
 @router.get("/dashboard/{finca_id}/export")
-async def exportar_datos(finca_id: str, format: str = Query("json", regex="^(csv|json|excel)$")):
+async def exportar_datos(finca_id: str, format: str = Query("json", pattern="^(csv|json|excel)$")):
     """Exporta datos del dashboard en CSV, JSON o Excel."""
     from agroia_backend.services.dashboard_service import get_dashboard_data
 

@@ -16,11 +16,12 @@ class Settings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         case_sensitive=False,
+        extra="ignore",
     )
 
     # ── Base de datos ──
-    database_url: str = "postgresql+asyncpg://agroia:agroia_dev@localhost:5432/agroia"
-    database_url_sync: str = "postgresql://agroia:agroia_dev@localhost:5432/agroia"
+    database_url: str = "postgresql+asyncpg://agroia:agroia_dev@localhost:5434/agroia"
+    database_url_sync: str = "postgresql://agroia:agroia_dev@localhost:5434/agroia"
 
     # ── Redis ──
     redis_url: str = "redis://localhost:6379/0"

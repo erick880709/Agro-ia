@@ -2,9 +2,11 @@
 
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from agroia.database import get_db
 from agroia.logging import get_logger
 
 logger = get_logger(__name__)
@@ -69,23 +71,21 @@ async def ingest_sensor_data(message: SensorMessage):
 
 
 @router.get("/sensores/{finca_id}/status")
-async def sensor_status(finca_id: str):
+async def sensor_status(finca_id: str, db: AsyncSession = Depends(get_db)):
     """Consulta el estado de los sensores de una finca."""
     from datetime import datetime, timezone
 
-    from sqlalchemy import desc, func, select
+    from sqlalchemy import func, select
 
-    from agroia.database import async_session_factory
     from agroia_backend.models.sensor_reading import SensorReading
 
-    async with async_session_factory() as session:
-        stmt = (
-            select(SensorReading.sensor_id, func.max(SensorReading.ts).label("last_ts"))
-            .where(SensorReading.finca_id == finca_id)
-            .group_by(SensorReading.sensor_id)
-        )
-        result = await session.execute(stmt)
-        rows = result.all()
+    stmt = (
+        select(SensorReading.sensor_id, func.max(SensorReading.ts).label("last_ts"))
+        .where(SensorReading.finca_id == finca_id)
+        .group_by(SensorReading.sensor_id)
+    )
+    result = await db.execute(stmt)
+    rows = result.all()
 
     now = datetime.now(timezone.utc)
     sensores = []

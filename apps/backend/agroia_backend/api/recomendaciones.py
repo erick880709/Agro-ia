@@ -1,11 +1,12 @@
 """API endpoints del motor de recomendaciones."""
 
-import uuid
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from agroia.database import get_db
 from agroia.errors import InsufficientDataError
 from agroia.logging import get_logger
 from agroia_backend.services.orchestrator import (
@@ -38,14 +39,14 @@ class RecommendResponse(BaseModel):
 # ── Endpoints ──
 
 @router.post("/analyze", response_model=RecommendResponse)
-async def analizar_aptitud(request: RecommendRequest):
+async def analizar_aptitud(request: RecommendRequest, db: AsyncSession = Depends(get_db)):
     """Analiza la aptitud del suelo de una finca para un cultivo.
 
     Pipeline completo: datos de suelo → ML → reglas → discordancia → respuesta.
     Tiempo objetivo: < 5s (p95).
     """
     orch = RecommendationOrchestrator(
-        db_session=None,  # TODO: inyectar desde DI container (Fase 2)
+        db_session=db,
     )
     try:
         result = await orch.analyze(
@@ -78,9 +79,25 @@ async def historial_recomendaciones(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     cultivo_id: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
 ):
     """Historial de recomendaciones de una finca."""
+    from sqlalchemy import select, func
+    from agroia_backend.models.recomendacion import Recomendacion
+
+    stmt = select(Recomendacion).where(Recomendacion.finca_id == finca_id)
+    count_stmt = select(func.count()).select_from(Recomendacion).where(Recomendacion.finca_id == finca_id)
+    if cultivo_id:
+        stmt = stmt.where(Recomendacion.cultivo_id == cultivo_id)
+        count_stmt = count_stmt.where(Recomendacion.cultivo_id == cultivo_id)
+
+    total = (await db.execute(count_stmt)).scalar() or 0
+    stmt = stmt.offset((page - 1) * page_size).limit(page_size).order_by(Recomendacion.created_at.desc())
+    result = await db.execute(stmt)
+    items = result.scalars().all()
+
     return {
-        "data": [],
-        "meta": {"page": page, "page_size": page_size, "total": 0, "total_pages": 0},
+        "data": [{"id": str(r.id), "cultivo_id": str(r.cultivo_id), "clasificacion_upra": r.clasificacion_upra.value if r.clasificacion_upra else None,
+                  "confianza": r.confianza, "estado": r.estado.value if r.estado else None, "created_at": str(r.created_at)} for r in items],
+        "meta": {"page": page, "page_size": page_size, "total": total, "total_pages": max(1, (total + page_size - 1) // page_size)},
     }

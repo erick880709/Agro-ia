@@ -1,10 +1,11 @@
 """Modelo Cultivo — catálogo de cultivos con fichas técnicas."""
 
+import enum
 import uuid
 from datetime import datetime, timedelta
 from typing import Optional
 
-from sqlalchemy import Boolean, DateTime, Enum, Float, ForeignKey, Integer, String, Text, func
+from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, Text, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -13,13 +14,13 @@ from agroia_backend.models import TimestampMixin
 
 # ── Enums ──
 
-class EstadoFicha(str, Enum):
+class EstadoFicha(str, enum.Enum):
     BORRADOR = "Borrador"
     EN_REVISION = "EnRevision"
     PUBLICADO = "Publicado"
 
 
-class TipoFuente(str, Enum):
+class TipoFuente(str, enum.Enum):
     NACIONAL = "Nacional"
     INTERNACIONAL = "Internacional"
 
@@ -51,9 +52,7 @@ class Cultivo(Base, TimestampMixin):
     fichas_tecnicas: Mapped[list["FichaTecnica"]] = relationship(
         "FichaTecnica", back_populates="cultivo"
     )
-    recomendaciones: Mapped[list["Recomendacion"]] = relationship(
-        "Recomendacion", backref="cultivo_rel"
-    )
+    # recomendaciones relationship deferred — defined in recomendacion.py via backref
 
     def __repr__(self) -> str:
         return f"<Cultivo {self.nombre}>"
@@ -80,12 +79,10 @@ class FichaTecnica(Base, TimestampMixin):
         index=True,
     )
     estado: Mapped[EstadoFicha] = mapped_column(
-        Enum(EstadoFicha, name="estado_ficha_enum", schema="agroia"),
         nullable=False,
         default=EstadoFicha.BORRADOR,
     )
     tipo_fuente: Mapped[TipoFuente] = mapped_column(
-        Enum(TipoFuente, name="tipo_fuente_enum", schema="agroia"),
         nullable=False,
         default=TipoFuente.NACIONAL,
     )

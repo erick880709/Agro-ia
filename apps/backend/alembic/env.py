@@ -21,7 +21,7 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 config.set_main_option(
     "sqlalchemy.url",
-    "postgresql://agroia:agroia_dev@localhost:5432/agroia",
+    "postgresql://agroia:agroia_dev@localhost:5434/agroia",
 )
 
 

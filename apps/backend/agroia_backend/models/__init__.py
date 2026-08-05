@@ -8,7 +8,6 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
-from geoalchemy2 import Geometry
 from sqlalchemy import (
     Boolean,
     DateTime,
