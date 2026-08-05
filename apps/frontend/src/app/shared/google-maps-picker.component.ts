@@ -5,7 +5,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 export interface LocationData {
   lat: number;
@@ -24,12 +23,12 @@ export interface LocationData {
     <mat-card class="map-card">
       <mat-card-header>
         <mat-card-title>📍 Ubicación de la Finca</mat-card-title>
-        <mat-card-subtitle>Arrastra el pin o busca una dirección en Colombia</mat-card-subtitle>
+        <mat-card-subtitle>Coordenadas GPS de tu predio agrícola</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="search-row">
           <mat-form-field appearance="outline" class="search-field">
-            <mat-label>Buscar dirección o lugar</mat-label>
+            <mat-label>Buscar dirección o lugar en Colombia</mat-label>
             <input matInput [(ngModel)]="searchAddress" placeholder="Ej: Armenia, Quindío, Colombia"
                    (keyup.enter)="geocode()">
             <mat-icon matPrefix>search</mat-icon>
@@ -39,43 +38,35 @@ export interface LocationData {
           </button>
         </div>
 
-        <div class="map-container">
-          <iframe
-            [src]="mapUrl"
-            width="100%"
-            height="350"
-            style="border:0; border-radius: 8px;"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="Mapa de ubicación de la finca">
-          </iframe>
-        </div>
-
-        @if (selectedCoords.lat && selectedCoords.lon) {
-          <div class="coords-display">
-            <div class="coord-item">
+        <div class="location-display">
+          <div class="location-icon">🗺️</div>
+          <div class="location-details">
+            <div class="coord-row">
               <mat-icon>pin_drop</mat-icon>
-              <span><strong>Lat:</strong> {{ selectedCoords.lat.toFixed(6) }}</span>
+              <span><strong>Latitud:</strong> {{ selectedCoords.lat.toFixed(6) }}</span>
             </div>
-            <div class="coord-item">
+            <div class="coord-row">
               <mat-icon>pin_drop</mat-icon>
-              <span><strong>Lon:</strong> {{ selectedCoords.lon.toFixed(6) }}</span>
+              <span><strong>Longitud:</strong> {{ selectedCoords.lon.toFixed(6) }}</span>
             </div>
             @if (selectedCoords.altitud) {
-              <div class="coord-item">
+              <div class="coord-row">
                 <mat-icon>terrain</mat-icon>
                 <span><strong>Altitud:</strong> {{ selectedCoords.altitud }} msnm</span>
               </div>
             }
             @if (selectedCoords.departamento) {
-              <div class="coord-item">
+              <div class="coord-row">
                 <mat-icon>location_city</mat-icon>
-                <span>{{ selectedCoords.municipio }}, {{ selectedCoords.departamento }}</span>
+                <span>{{ selectedCoords.departamento }}</span>
               </div>
             }
+            <a [href]="'https://www.google.com/maps?q=' + selectedCoords.lat + ',' + selectedCoords.lon" 
+               target="_blank" class="maps-link">
+              <mat-icon>open_in_new</mat-icon> Ver en Google Maps
+            </a>
           </div>
-        }
+        </div>
 
         @if (climaData) {
           <div class="climate-preview">
@@ -107,14 +98,21 @@ export interface LocationData {
   styles: [
     `
       .map-card { margin-bottom: 16px; }
-      .search-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+      .search-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 16px; }
       .search-field { flex: 1; }
-      .map-container { margin-bottom: 12px; }
-      .coords-display {
-        display: flex; flex-wrap: wrap; gap: 16px; padding: 12px;
-        background: #e8f5e9; border-radius: 8px; margin-bottom: 12px;
+      .location-display {
+        display: flex; gap: 16px; padding: 20px;
+        background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        border-radius: 12px; align-items: center;
       }
-      .coord-item { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; }
+      .location-icon { font-size: 3rem; }
+      .location-details { flex: 1; }
+      .coord-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 0.95rem; }
+      .maps-link {
+        display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+        color: #1565c0; text-decoration: none; font-weight: 500;
+      }
+      .maps-link:hover { text-decoration: underline; }
       .climate-preview {
         padding: 12px; background: #e3f2fd; border-radius: 8px;
       }
@@ -135,12 +133,7 @@ export class GoogleMapsPickerComponent {
   selectedCoords: LocationData = { lat: this.lat, lon: this.lon };
   climaData: any = null;
 
-  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
-
-  get mapUrl(): SafeResourceUrl {
-    const url = `https://www.google.com/maps/embed/v1/place?q=${this.selectedCoords.lat},${this.selectedCoords.lon}&zoom=14&maptype=satellite&language=es`;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-  }
+  constructor(private http: HttpClient) {}
 
   geocode(): void {
     if (!this.searchAddress.trim()) return;
