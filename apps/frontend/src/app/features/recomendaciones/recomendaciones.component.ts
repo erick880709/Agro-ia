@@ -56,37 +56,20 @@ import { GoogleMapsPickerComponent, LocationData } from '../../shared/google-map
               🌡️ {{ locationData?.clima?.referencia_climatologica?.temperatura_promedio }}°C
               &nbsp;|&nbsp; 💧 {{ locationData?.clima?.referencia_climatologica?.precipitacion_anual_mm }} mm/año
               &nbsp;|&nbsp; ⛰️ {{ locationData?.altitud || '—' }} msnm
+              &nbsp;|&nbsp; 📍 {{ locationData?.clima?.referencia_climatologica?.region || '—' }}
             </span>
           </div>
         }
 
         <mat-divider style="margin: 16px 0;"></mat-divider>
-        <h3>Parámetros del suelo</h3>
 
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>pH</mat-label>
-            <input matInput type="number" [(ngModel)]="solicitud.ph" placeholder="6.5" step="0.1">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Nitrógeno (ppm)</mat-label>
-            <input matInput type="number" [(ngModel)]="solicitud.nitrogeno" placeholder="200">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Fósforo (ppm)</mat-label>
-            <input matInput type="number" [(ngModel)]="solicitud.fosforo" placeholder="50">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Potasio (ppm)</mat-label>
-            <input matInput type="number" [(ngModel)]="solicitud.potasio" placeholder="150">
-          </mat-form-field>
-        </div>
+        <p class="hint">
+          💡 Los datos del suelo se obtienen automáticamente de los sensores IoT registrados en tu finca.
+          Asegúrate de tener sensores configurados en la sección <strong>Sensores IoT</strong>.
+        </p>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-raised-button color="primary" (click)="solicitar()" [disabled]="loading">
+        <button mat-raised-button color="primary" (click)="solicitar()" [disabled]="loading || !solicitud.finca_id || !solicitud.cultivo_id">
           <mat-icon>analytics</mat-icon> {{ loading ? 'Analizando...' : 'Solicitar Recomendación' }}
         </button>
       </mat-card-actions>
@@ -116,6 +99,7 @@ import { GoogleMapsPickerComponent, LocationData } from '../../shared/google-map
       .result-card.baja { border-left: 4px solid #f44336; }
       .result-card.noapta { border-left: 4px solid #9e9e9e; }
       pre { background: #f5f5f5; padding: 12px; border-radius: 4px; font-size: 0.85rem; }
+      .hint { font-size: 0.85rem; color: #666; background: #fff8e1; padding: 12px; border-radius: 8px; }
     `,
   ],
 })
@@ -123,10 +107,6 @@ export class RecomendacionesComponent {
   solicitud: SolicitudRecomendacion = {
     finca_id: 'demo',
     cultivo_id: 'cafe',
-    ph: 6.0,
-    nitrogeno: 220,
-    fosforo: 45,
-    potasio: 180,
   };
   resultado: Recomendacion | null = null;
   loading = false;

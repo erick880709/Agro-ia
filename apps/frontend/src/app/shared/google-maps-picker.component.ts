@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 export interface LocationData {
   lat: number;
@@ -134,11 +135,11 @@ export class GoogleMapsPickerComponent {
   selectedCoords: LocationData = { lat: this.lat, lon: this.lon };
   climaData: any = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
 
-  get mapUrl(): string {
-    const key = ''; // Google Maps Embed API funciona sin key para vistas básicas
-    return `https://www.google.com/maps/embed/v1/place?q=${this.selectedCoords.lat},${this.selectedCoords.lon}&zoom=14&maptype=satellite&language=es`;
+  get mapUrl(): SafeResourceUrl {
+    const url = `https://www.google.com/maps/embed/v1/place?q=${this.selectedCoords.lat},${this.selectedCoords.lon}&zoom=14&maptype=satellite&language=es`;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   geocode(): void {
