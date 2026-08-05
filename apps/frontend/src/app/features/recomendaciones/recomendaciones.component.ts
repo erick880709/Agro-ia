@@ -10,6 +10,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { JsonPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RecomendacionesService, Recomendacion, SolicitudRecomendacion } from '../../core/services/recomendaciones.service';
+import { GoogleMapsPickerComponent, LocationData } from '../../shared/google-maps-picker.component';
 
 @Component({
   selector: 'app-recomendaciones',
@@ -18,9 +19,15 @@ import { RecomendacionesService, Recomendacion, SolicitudRecomendacion } from '.
     MatCardModule, MatFormFieldModule, MatSelectModule,
     MatInputModule, MatButtonModule, MatIconModule,
     MatSliderModule, MatDividerModule, FormsModule, JsonPipe,
+    GoogleMapsPickerComponent,
   ],
   template: `
     <h1>Solicitar Recomendación</h1>
+
+    <!-- Mapa de ubicación -->
+    <app-google-maps-picker
+      (locationSelected)="onLocationSelected($event)">
+    </app-google-maps-picker>
 
     <mat-card style="max-width: 700px;">
       <mat-card-content>
@@ -41,6 +48,17 @@ import { RecomendacionesService, Recomendacion, SolicitudRecomendacion } from '.
             </mat-select>
           </mat-form-field>
         </div>
+
+        @if (locationData?.clima) {
+          <div class="climate-banner">
+            <mat-icon>wb_sunny</mat-icon>
+            <span>
+              🌡️ {{ locationData?.clima?.referencia_climatologica?.temperatura_promedio }}°C
+              &nbsp;|&nbsp; 💧 {{ locationData?.clima?.referencia_climatologica?.precipitacion_anual_mm }} mm/año
+              &nbsp;|&nbsp; ⛰️ {{ locationData?.altitud || '—' }} msnm
+            </span>
+          </div>
+        }
 
         <mat-divider style="margin: 16px 0;"></mat-divider>
         <h3>Parámetros del suelo</h3>
@@ -112,8 +130,13 @@ export class RecomendacionesComponent {
   };
   resultado: Recomendacion | null = null;
   loading = false;
+  locationData: LocationData | null = null;
 
   constructor(private service: RecomendacionesService) {}
+
+  onLocationSelected(data: LocationData): void {
+    this.locationData = data;
+  }
 
   solicitar(): void {
     this.loading = true;

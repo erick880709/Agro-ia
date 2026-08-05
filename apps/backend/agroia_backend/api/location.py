@@ -1,0 +1,106 @@
+"""API endpoints de geolocalización, clima IDEAM y mapas."""
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from agroia.database import get_db
+from agroia.logging import get_logger
+from agroia_backend.services.external_apis import (
+    enrich_location_data,
+    fetch_gis_location,
+    fetch_gis_elevation,
+    fetch_ideam_historical,
+    fetch_ideam_climate_offline,
+)
+
+logger = get_logger(__name__)
+router = APIRouter(prefix="/api/v1/location", tags=["geolocalización"])
+
+
+@router.get("/enrich")
+async def enriquecer_ubicacion(
+    lat: float = Query(..., ge=-90, le=90, description="Latitud (WGS84)"),
+    lon: float = Query(..., ge=-180, le=180, description="Longitud (WGS84)"),
+    address: Optional[str] = Query(None, description="Dirección para geocodificar (opcional)"),
+):
+    """Enriquece coordenadas con datos de clima, suelo, NDVI y GIS.
+    
+    Consulta múltiples APIs externas en paralelo:
+    - IDEAM: datos climáticos históricos y de referencia
+    - Google Maps: geocodificación inversa y elevación
+    - IGAC: datos edafológicos (placeholder)
+    - Copernicus: NDVI (placeholder)
+    """
+    try:
+        data = await enrich_location_data(lat, lon, address)
+        # Agregar datos históricos del IDEAM
+        ideam_hist = await fetch_ideam_historical(lat, lon, months=6)
+        data["clima_historico"] = ideam_hist
+        return {
+            "status": "ok",
+            "ubicacion": {"lat": lat, "lon": lon},
+            **data,
+        }
+    except Exception as e:
+        logger.error("enrich_location_error", lat=lat, lon=lon, error=str(e))
+        raise HTTPException(status_code=500, detail={"code": "EXTERNAL_API_ERROR", "message": str(e)})
+
+
+@router.get("/climate")
+async def datos_clima(
+    lat: float = Query(..., ge=-90, le=90),
+    lon: float = Query(..., ge=-180, le=180),
+):
+    """Obtiene datos climáticos actuales e históricos del IDEAM.
+    
+    Si la API del IDEAM no está disponible, retorna datos climatológicos
+    de referencia del Atlas Climatológico de Colombia (1981-2010).
+    """
+    try:
+        historico = await fetch_ideam_historical(lat, lon, months=12)
+        referencia = await fetch_ideam_climate_offline(lat, lon)
+        return {
+            "status": "ok",
+            "referencia_climatologica": referencia,
+            "historico": historico,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail={"code": "CLIMATE_ERROR", "message": str(e)})
+
+
+@router.get("/geocode")
+async def geocodificar(
+    address: str = Query(..., min_length=3, description="Dirección o lugar en Colombia"),
+):
+    """Convierte una dirección en coordenadas usando Google Maps Geocoding.
+    
+    Si la API de Google Maps no está configurada, retorna error.
+    """
+    result = await fetch_gis_location(address)
+    if result is None:
+        raise HTTPException(
+            status_code=502,
+            detail={"code": "GEOCODING_UNAVAILABLE", "message": "Servicio de geocodificación no disponible. Configure GOOGLE_MAPS_API_KEY."},
+        )
+    return {"status": "ok", **result}
+
+
+@router.get("/elevation")
+async def altitud(
+    lat: float = Query(..., ge=-90, le=90),
+    lon: float = Query(..., ge=-180, le=180),
+):
+    """Obtiene la altitud para coordenadas usando Google Maps Elevation API."""
+    result = await fetch_gis_elevation(lat, lon)
+    if result is None:
+        # Fallback: estimar por región climática
+        offline = await fetch_ideam_climate_offline(lat, lon)
+        return {
+            "status": "ok",
+            "fuente": "IDEAM (estimación por región)",
+            "lat": lat,
+            "lon": lon,
+            "altitud_estimada_msnm": offline.get("altitud_estimada_msnm"),
+        }
+    return {"status": "ok", **result}
