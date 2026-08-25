@@ -1,6 +1,6 @@
 ---
 title: "cip/core.py"
-tags: [agroia, community, code, rationale]
+tags: [agroia, community, rationale, code]
 community_id: 371
 node_count: 9
 ---
@@ -28,17 +28,17 @@ node_count: 9
 ## 🌐 Comunidades conectadas
 
 - [[BM25|BM25]] (31 nodos)
-- [[scripts⁄design_system.py|scripts/design_system.py]] (29 nodos)
-- [[scripts⁄design_system.py|scripts/design_system.py]] (28 nodos)
+- [[scripts⁄design_system.py|scripts/design_system.py]] (31 nodos)
 - [[search|search]] (27 nodos)
 - [[DesignSystemGenerator|DesignSystemGenerator]] (22 nodos)
-- [[DesignSystemGenerator|DesignSystemGenerator]] (22 nodos)
+- [[scripts⁄design_system.py|scripts/design_system.py]] (20 nodos)
 - [[scripts⁄design_system.py|scripts/design_system.py]] (20 nodos)
 - [[BM25|BM25]] (17 nodos)
 - [[BM25|BM25]] (17 nodos)
-- [[assets⁄scripts⁄tests⁄test_core.py|assets/scripts/tests/test_core.py]] (14 nodos)
+- [[skills⁄ui-ux-pro-max⁄scripts⁄tests⁄test_core.py|skills/ui-ux-pro-max/scripts/tests/test_core.py]] (14 nodos)
 - [[search|search]] (11 nodos)
 - [[search|search]] (11 nodos)
 - [[search|search]] (11 nodos)
-- [[src⁄ui-ux-pro-max⁄scripts⁄tests⁄test_core.py|src/ui-ux-pro-max/scripts/tests/test_core.py]] (8 nodos)
+- [[src⁄ui-ux-pro-max⁄scripts⁄tests⁄test_core.py|src/ui-ux-pro-max/scripts/tests/test_core.py]] (10 nodos)
+- [[detect_domain|detect_domain]] (7 nodos)
 - [[detect_domain|detect_domain]] (7 nodos)

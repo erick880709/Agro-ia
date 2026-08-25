@@ -58,3 +58,6 @@ datasets/**/*.hdf5
 datasets/**/*.pkl
 datasets/**/*.parquet
 datasets/plantvillage/
+
+# Datasets descargados (sin_nombre.csv supera el limite de 100 MB de GitHub)
+datasets/agrosavia/

@@ -1,9 +1,10 @@
 """Modelo ReglaAgronomica — reglas del sistema experto."""
 
+import enum
 import uuid
 from typing import Optional
 
-from sqlalchemy import Boolean, Enum, Float, ForeignKey, Integer, String, Text, func
+from sqlalchemy import Boolean, Float, ForeignKey, Integer, String, Text, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -11,14 +12,14 @@ from agroia.database import Base
 from agroia_backend.models import TimestampMixin
 
 
-class PrioridadRegla(str, Enum):
+class PrioridadRegla(str, enum.Enum):
     CRITICA = "Critica"
     ALTA = "Alta"
     MEDIA = "Media"
     BAJA = "Baja"
 
 
-class VariableSuelo(str, Enum):
+class VariableSuelo(str, enum.Enum):
     PH = "pH"
     N = "N"
     P = "P"
@@ -55,7 +56,6 @@ class ReglaAgronomica(Base, TimestampMixin):
         comment="NULL = regla universal para todos los cultivos",
     )
     variable: Mapped[VariableSuelo] = mapped_column(
-        Enum(VariableSuelo, name="variable_suelo_enum", schema="agroia"),
         nullable=False,
     )
     umbral_min: Mapped[float | None] = mapped_column(Float, nullable=True)
@@ -64,7 +64,6 @@ class ReglaAgronomica(Base, TimestampMixin):
         Text, nullable=False, comment="Recomendación correctiva"
     )
     prioridad: Mapped[PrioridadRegla] = mapped_column(
-        Enum(PrioridadRegla, name="prioridad_regla_enum", schema="agroia"),
         nullable=False,
         default=PrioridadRegla.MEDIA,
     )

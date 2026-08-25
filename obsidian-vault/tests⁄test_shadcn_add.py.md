@@ -1,6 +1,6 @@
 ---
 title: "tests/test_shadcn_add.py"
-tags: [agroia, community, code, rationale]
+tags: [agroia, community, rationale, code]
 community_id: 49
 node_count: 16
 ---

@@ -1,24 +1,21 @@
 ---
 title: "RF-003: Roles y Permisos de Usuario"
 tags: [agroia, community, document]
-community_id: 408
-node_count: 7
+community_id: 733
+node_count: 4
 ---
 
 # RF-003: Roles y Permisos de Usuario
 
-> **7 nodos** | Tipos: document
+> **4 nodos** | Tipos: document
 
 ## 📄 Archivos principales
 
-- `resources/functional/requests/RF-003-roles-y-permisos.md` (7 símbolos)
+- `obsidian-vault/RF-003∶ Roles y Permisos de Usuario.md` (4 símbolos)
 
 ## 🔗 Nodos clave
 
-- **RF-003-roles-y-permisos.md** `[document]` _RF-003-roles-y-permisos.md_
-- **RF-003: Roles y Permisos de Usuario** `[document]` _RF-003-roles-y-permisos.md_
-- **Descripción** `[document]` _RF-003-roles-y-permisos.md_
-- **Actores involucrados** `[document]` _RF-003-roles-y-permisos.md_
-- **Criterios de aceptación** `[document]` _RF-003-roles-y-permisos.md_
-- **Dependencias / relacionados** `[document]` _RF-003-roles-y-permisos.md_
-- **Notas del analista** `[document]` _RF-003-roles-y-permisos.md_
+- **RF-003∶ Roles y Permisos de Usuario.md** `[document]` _RF-003∶ Roles y Permisos de Usuario.md_
+- **RF-003: Roles y Permisos de Usuario** `[document]` _RF-003∶ Roles y Permisos de Usuario.md_
+- **📄 Archivos principales** `[document]` _RF-003∶ Roles y Permisos de Usuario.md_
+- **🔗 Nodos clave** `[document]` _RF-003∶ Roles y Permisos de Usuario.md_

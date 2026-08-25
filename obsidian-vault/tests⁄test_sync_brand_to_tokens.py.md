@@ -1,6 +1,6 @@
 ---
 title: "tests/test_sync_brand_to_tokens.py"
-tags: [agroia, community, code, rationale]
+tags: [agroia, community, rationale, code]
 community_id: 150
 node_count: 3
 ---

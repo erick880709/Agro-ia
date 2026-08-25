@@ -31,7 +31,7 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 | IoT | RabbitMQ + LoRaWAN consumer |
 | DB | PostgreSQL 15 + PostGIS + pgvector + TimescaleDB |
 | Cache | Redis |
-| Frontend | Angular 21 (pendiente) |
+| Frontend | **SPA web integrada** en `http://localhost:8000/` (`apps/frontend-web/`) + Angular 21 (`apps/frontend/`, mock, pendiente de conectar) |
 | Infra | Docker + GitHub Actions |
 
 ## 📁 Estructura
@@ -68,11 +68,47 @@ curl localhost:8000/api/v1/health
 
 ## ⬜ Pendiente
 
-- [ ] Frontend Angular 21 (6 pantallas HU-01 a HU-06)
+- [ ] Conectar el frontend Angular 21 (`apps/frontend/`) a las APIs (hoy usa mock data)
 - [ ] Despliegue en AWS EKS (post-MVP)
 - [ ] Pruebas de usabilidad con agricultores (mes 3 del piloto)
 - [ ] Validación legal Cenicafé (licencia CC BY-NC-ND)
 - [ ] Cobertura LoRaWAN en fincas piloto Quindío
+
+## 🧠 Motor de recomendaciones — Sistema Experto activo (2026-08-25)
+
+Los 2 casos de uso del motor están operativos vía sistema experto determinístico
+(reglas UPRA/Cenicafé/AGROSAVIA); el ML (baseline India) queda en modo sombra.
+
+| Caso de uso | Implementación | Endpoint |
+|-------------|----------------|----------|
+| UC1: sin cultivo → ¿qué sembrar? | `AptitudService` puntúa cultivos con reglas y sugiere top-5 con ajustes | `POST /api/v1/recomendaciones/analyze` sin `cultivo_id` |
+| UC2: con cultivo → ¿qué falta/sobra? | `RulesEngine` evalúa 23 reglas y devuelve DEFICIT/EXCESO + acción | `POST /api/v1/recomendaciones/analyze` con `cultivo_id` |
+
+- Carga de conocimiento: `make seed-reglas` (23 reglas: 5 cultivos colombianos + universales).
+- RNF-010: actualizar conocimiento sin reentrenar = editar reglas en BD.
+- ML shadow mode: se cablea cuando existan datos colombianos etiquetados
+  (el dataset AGROSAVIA actual es de forrajes, no sirve para aptitud de cultivos).
+
+## 👥 Roles y permisos por finca (2026-08-25)
+
+- **Administrador**: todas las funciones + registrar fincas + crear usuarios.
+- **Agrónomo**: todas las funciones de análisis; no registra fincas ni crea usuarios.
+- **Cliente** (solo lectura): ve únicamente los reportes de las fincas a las que
+  fue asociado (`fincas_usuarios`); no carga archivos ni genera análisis.
+- Acceso por finca aplicado en: `/fincas`, `/iot/lecturas`, `/iot/sensores/status`,
+  `/recomendaciones/historial` y `/dashboard`.
+- Usuarios demo: `admin@agroia.co`, `agronomo@agroia.co`, clientes con fincas asignadas.
+
+## 📄 Reportes de análisis (2026-08-25)
+
+- `POST /api/v1/reportes/generar` con tipo: **siembra** (UC1), **cultivo** (UC2) o **completo** (UC1+UC2).
+- El reporte se genera como **HTML** (estilo informe de laboratorio) y se guarda como **PDF**
+  desde el navegador (botón "Guardar PDF" integrado).
+- Incluye la sección **"En palabras del campo"**: explicación en lenguaje campesino
+  (qué significa cada medición y qué hacer en el terreno), con nota de honestidad
+  sobre calibración y confianza.
+- Datos de origen: tramas JSON del sensor (`POST /api/v1/iot/sensor`) o carga de archivo.
+- Acceso por rol: cliente solo reportes de sus fincas.
 
 ---
 

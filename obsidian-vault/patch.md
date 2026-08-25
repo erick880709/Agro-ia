@@ -1,6 +1,6 @@
 ---
 title: "patch"
-tags: [agroia, community, code, rationale]
+tags: [agroia, community, rationale, code]
 community_id: 86
 node_count: 10
 ---

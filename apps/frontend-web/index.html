@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgroIA · AgroInteligente Colombia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <!-- ============ PANTALLA DE AUTENTICACIÓN ============ -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <div class="login-brand">🌱 AgroIA</div>
+      <p class="muted" style="text-align:center">AgroInteligente Colombia · Inicia sesión para continuar</p>
+      <form id="form-login">
+        <label class="field">
+          <span>Email</span>
+          <input id="l-email" type="email" required placeholder="correo@ejemplo.co" />
+        </label>
+        <label class="field">
+          <span>Contraseña</span>
+          <input id="l-password" type="password" required placeholder="••••••••" />
+        </label>
+        <button type="submit" class="btn btn-primary" id="login-btn" style="width:100%">Entrar</button>
+      </form>
+      <div id="login-msg"></div>
+      <div class="demo-accounts">
+        <p class="muted">Cuentas de prueba (un clic):</p>
+        <button class="chip demo-login" data-email="admin@agroia.co" data-pass="Admin123!">👑 Administrador</button>
+        <button class="chip demo-login" data-email="agronomo@agroia.co" data-pass="Agronomo123!">🧑‍🌾 Agrónomo</button>
+        <button class="chip demo-login" data-email="maria.cliente@agroia.co" data-pass="Cliente123!">👤 Cliente (María)</button>
+        <button class="chip demo-login" data-email="clientedemo@agroia.co" data-pass="Cliente123!">🌱 Cliente (Finca Demo)</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">🌱</span>
+      <div>
+        <h1>AgroIA</h1>
+        <p>AgroInteligente Colombia · Diagnóstico agronómico</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="user-box">
+        <span id="user-info">👤 …</span>
+        <button id="logout-btn" class="btn-ghost-sm" title="Cerrar sesión">Salir</button>
+      </div>
+      <div class="pills" id="status-pills">
+        <span class="pill" id="pill-api">API …</span>
+        <span class="pill" id="pill-db">BD …</span>
+        <span class="pill" id="pill-iot">IoT …</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-tab="inicio">🏠 Inicio</button>
+    <button class="tab" data-tab="sensores">📡 Sensores IoT</button>
+    <button class="tab" data-tab="carga">📂 Cargar archivo</button>
+    <button class="tab" data-tab="recomendaciones">🧪 Recomendaciones</button>
+    <button class="tab" data-tab="historial">📜 Historial</button>
+    <button class="tab" data-tab="reportes">📄 Reportes</button>
+    <button class="tab" data-tab="fincas">🏡 Fincas</button>
+    <button class="tab" data-tab="usuarios">👥 Usuarios</button>
+    <button class="tab" data-tab="catalogo">🌾 Catálogo</button>
+  </nav>
+
+  <main>
+    <!-- ============ INICIO ============ -->
+    <section id="view-inicio" class="view active">
+      <div class="grid-kpis" id="kpis"></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h2>📍 Finca de análisis</h2>
+          <label class="field">
+            <span>Finca</span>
+            <select id="finca-select"></select>
+          </label>
+          <p class="muted" id="finca-detail"></p>
+        </div>
+        <div class="card">
+          <h2>⚡ Acciones rápidas</h2>
+          <div class="quick-actions">
+            <button class="btn" data-roles="admin,agronomo" onclick="goTab('carga')">📂 Cargar archivo de mediciones</button>
+            <button class="btn" data-roles="admin,agronomo" onclick="goTab('recomendaciones')">🧪 Generar recomendación</button>
+            <button class="btn" onclick="goTab('sensores')">📡 Ver sensores</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>📊 Últimas lecturas de la finca</h2>
+        <div id="dashboard-lecturas"></div>
+      </div>
+    </section>
+
+    <!-- ============ SENSORES ============ -->
+    <section id="view-sensores" class="view">
+      <div class="card" id="sensor-sim-card">
+        <h2>🔗 API de sensores — simulador de trama</h2>
+        <p class="muted">
+          El sensor envía su trama a <code>POST /api/sensor</code> con este formato (tal como la
+          envía el firmware: variables en la raíz con <code>device_id</code>). Pega una trama y pruébala:
+        </p>
+        <textarea id="sim-trama" class="sim-trama" rows="9" spellcheck="false"></textarea>
+        <button class="btn" id="sim-enviar">📡 Enviar trama</button>
+        <div id="sim-msg"></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h2>🔌 Dispositivos registrados</h2>
+          <div id="dispositivos"></div>
+        </div>
+        <div class="card">
+          <h2>🟢 Estado de conexión</h2>
+          <div id="sensor-status"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>📈 Historial de lecturas</h2>
+        <div id="lecturas"></div>
+      </div>
+    </section>
+
+    <!-- ============ CARGA ============ -->
+    <section id="view-carga" class="view">
+      <div class="card">
+        <h2>📂 Carga manual de mediciones <span class="muted">(cuando el sensor pierde conexión)</span></h2>
+        <p class="muted">
+          Adjunta un archivo <b>CSV</b>, <b>TXT</b> o <b>JSON</b> con las mediciones. La aplicación lo lee,
+          normaliza las unidades (µS/cm → dS/m), persiste la lectura y genera la recomendación al instante.
+        </p>
+        <form id="form-carga" class="form-grid">
+          <label class="field">
+            <span>Archivo (CSV / TXT / JSON)</span>
+            <input type="file" id="carga-file" accept=".csv,.txt,.json" required />
+          </label>
+          <label class="field">
+            <span>Finca (relaciona la carga con el predio)</span>
+            <select id="carga-finca"><option value="">— Auto (según dispositivo) —</option></select>
+          </label>
+          <label class="field">
+            <span>Dispositivo (opcional — se usa el único registrado si se omite)</span>
+            <input type="text" id="carga-device" placeholder="esp32-npk-001" />
+          </label>
+          <label class="field">
+            <span>Cultivo sembrado (opcional — sin selección se recomienda qué sembrar)</span>
+            <select id="carga-cultivo"><option value="">— Sin cultivo (UC1) —</option></select>
+          </label>
+          <button type="submit" class="btn btn-primary" id="carga-btn">⬆️ Cargar y analizar</button>
+        </form>
+        <div class="example-files">
+          <span class="muted">Archivos de ejemplo:</span>
+          <button class="chip" onclick="cargarEjemplo('csv')">mediciones.csv</button>
+          <button class="chip" onclick="cargarEjemplo('txt')">mediciones.txt</button>
+          <button class="chip" onclick="cargarEjemplo('json')">mediciones.json</button>
+        </div>
+      </div>
+      <div id="carga-resultado"></div>
+    </section>
+
+    <!-- ============ RECOMENDACIONES ============ -->
+    <section id="view-recomendaciones" class="view">
+      <div class="card">
+        <h2>🧪 Motor de recomendaciones (sistema experto UPRA / Cenicafé / AGROSAVIA)</h2>
+        <form id="form-analyze" class="form-grid">
+          <label class="field">
+            <span>Finca</span>
+            <select id="reco-finca"></select>
+          </label>
+          <label class="field">
+            <span>Cultivo (vacío = ¿qué me conviene sembrar?)</span>
+            <select id="reco-cultivo"><option value="">— Sin cultivo (UC1) —</option></select>
+          </label>
+          <button type="submit" class="btn btn-primary">🧪 Analizar suelo</button>
+        </form>
+      </div>
+      <div id="reco-resultado"></div>
+    </section>
+
+    <!-- ============ HISTORIAL ============ -->
+    <section id="view-historial" class="view">
+      <div class="card">
+        <h2>📜 Historial de recomendaciones</h2>
+        <div id="historial"></div>
+      </div>
+    </section>
+
+    <!-- ============ REPORTES ============ -->
+    <section id="view-reportes" class="view">
+      <div class="card">
+        <h2>📄 Reportes de análisis de suelo</h2>
+        <p class="muted">
+          Generados con los datos de los sensores (API JSON o carga de archivo) y las
+          recomendaciones del motor (sistema experto UPRA/Cenicafé/AGROSAVIA).
+          El reporte se genera como <b>HTML</b> y puede guardarse como <b>PDF</b> desde su vista.
+        </p>
+        <form id="form-reporte" class="form-grid">
+          <label class="field">
+            <span>Finca</span>
+            <select id="repo-finca"></select>
+          </label>
+          <label class="field">
+            <span>Tipo de reporte</span>
+            <select id="repo-tipo">
+              <option value="siembra">🌱 Recomendación de siembra</option>
+              <option value="cultivo">🌾 Recomendación para el cultivo sembrado</option>
+              <option value="completo" selected>📊 Reporte completo</option>
+            </select>
+          </label>
+          <label class="field" id="repo-cultivo-wrap" style="display:none">
+            <span>Cultivo sembrado</span>
+            <select id="repo-cultivo"><option value="">— Auto (top del ranking) —</option></select>
+          </label>
+          <button type="submit" class="btn btn-primary" id="reporte-btn">📄 Generar reporte</button>
+        </form>
+      </div>
+      <div class="card" id="reporte-preview-card" style="display:none">
+        <h2>Vista previa</h2>
+        <div class="reporte-acciones">
+          <button class="btn" id="reporte-abrir">🔗 Abrir en pestaña nueva</button>
+          <button class="btn btn-ghost" id="reporte-descargar">⬇ Descargar HTML</button>
+          <span class="muted">Para PDF: abre el reporte y usa el botón «🖨 Guardar PDF» (imprimir → guardar como PDF).</span>
+        </div>
+        <iframe id="reporte-iframe" class="reporte-iframe" title="Vista previa del reporte"></iframe>
+      </div>
+    </section>
+
+    <!-- ============ FINCAS (solo administrador registra) ============ -->
+    <section id="view-fincas" class="view">
+      <div class="grid-2">
+        <div class="card" id="finca-form-card">
+          <h2>🏡 Registrar finca <span class="muted">(solo administrador)</span></h2>
+          <form id="form-finca" class="form-grid">
+            <label class="field">
+              <span>Nombre de la finca *</span>
+              <input id="f-nombre" required minlength="2" maxlength="200" />
+            </label>
+            <label class="field">
+              <span>Departamento *</span>
+              <select id="f-departamento" required></select>
+            </label>
+            <label class="field">
+              <span>Municipio *</span>
+              <select id="f-municipio" required></select>
+            </label>
+            <label class="field" id="f-municipio-otro-wrap" style="display:none">
+              <span>Municipio (especifique)</span>
+              <input id="f-municipio-otro" />
+            </label>
+            <label class="field">
+              <span>Ubicación coordenadas Google * <small>(enlace de Maps o "lat, lng")</small></span>
+              <input id="f-coordenadas" required placeholder="4.5339, -75.6811 o https://maps.app.goo.gl/…" />
+            </label>
+            <label class="field">
+              <span>Propietario *</span>
+              <input id="f-propietario" required minlength="2" />
+            </label>
+            <label class="field">
+              <span>Teléfono de contacto *</span>
+              <input id="f-telefono" required minlength="7" maxlength="50" />
+            </label>
+            <label class="field">
+              <span>Email de contacto</span>
+              <input id="f-email" type="email" />
+            </label>
+            <label class="field">
+              <span>Área (hectáreas) — opcional</span>
+              <input id="f-area" type="number" min="0" step="0.01" />
+            </label>
+            <label class="field">
+              <span>Largo del terreno (m) — opcional</span>
+              <input id="f-largo" type="number" min="0" step="0.01" />
+            </label>
+            <label class="field">
+              <span>Ancho del terreno (m) — opcional</span>
+              <input id="f-ancho" type="number" min="0" step="0.01" />
+            </label>
+            <button type="submit" class="btn btn-primary" id="finca-btn">💾 Guardar finca</button>
+          </form>
+          <div id="finca-msg"></div>
+        </div>
+        <div class="card">
+          <h2>🗂️ Fincas registradas</h2>
+          <div id="fincas-lista"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CATÁLOGO ============ -->
+    <section id="view-catalogo" class="view">
+      <div class="card">
+        <h2>🌾 Catálogo de cultivos <span class="muted" id="catalogo-count"></span></h2>
+        <input type="search" id="catalogo-search" class="search" placeholder="Buscar cultivo…" />
+        <div id="catalogo" class="grid-catalogo"></div>
+      </div>
+    </section>
+
+    <!-- ============ USUARIOS (solo administrador) ============ -->
+    <section id="view-usuarios" class="view">
+      <div class="grid-2">
+        <div class="card">
+          <h2>👥 Crear usuario <span class="muted">(solo administrador)</span></h2>
+          <form id="form-usuario" class="form-grid">
+            <label class="field">
+              <span>Nombre *</span>
+              <input id="u-nombre" required minlength="2" />
+            </label>
+            <label class="field">
+              <span>Email *</span>
+              <input id="u-email" type="email" required />
+            </label>
+            <label class="field">
+              <span>Contraseña * (mín. 8)</span>
+              <input id="u-password" type="password" required minlength="8" />
+            </label>
+            <label class="field">
+              <span>Rol</span>
+              <select id="u-rol">
+                <option value="Cliente">Cliente</option>
+                <option value="Tecnico">Técnico</option>
+                <option value="Investigador">Investigador</option>
+              </select>
+            </label>
+            <div class="field" style="grid-column: 1 / -1">
+              <span>Fincas a las que tendrá acceso (reportes)</span>
+              <div class="multi-select" id="u-fincas-ms">
+                <button type="button" class="ms-trigger" id="u-fincas-trigger">Seleccionar fincas…</button>
+                <div class="ms-panel" id="u-fincas-panel"></div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" id="usuario-btn">💾 Guardar usuario</button>
+          </form>
+          <div id="usuario-msg"></div>
+        </div>
+        <div class="card">
+          <h2>🗂️ Usuarios registrados</h2>
+          <div id="usuarios-lista"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    AgroIA v0.1.0 · Motor: sistema experto (reglas UPRA/Cenicafé/AGROSAVIA) · ML en modo sombra
+  </footer>
+
+  <script src="/departamentos.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

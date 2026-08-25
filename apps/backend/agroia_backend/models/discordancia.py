@@ -1,9 +1,10 @@
 """Modelo Discordancia — conflicto ML vs reglas agronómicas."""
 
+import enum
 import uuid
 from datetime import datetime
 
-from sqlalchemy import DateTime, Enum, ForeignKey, String, Text, func
+from sqlalchemy import DateTime, ForeignKey, String, Text, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -11,7 +12,7 @@ from agroia.database import Base
 from agroia_backend.models import TenantMixin, TimestampMixin
 
 
-class EstadoDiscordancia(str, Enum):
+class EstadoDiscordancia(str, enum.Enum):
     PENDIENTE = "Pendiente"
     REVISADA = "Revisada"
     BLOQUEADA = "Bloqueada"
@@ -42,7 +43,6 @@ class Discordancia(Base, TenantMixin, TimestampMixin):
         Text, nullable=False, comment="Descripción del conflicto ML vs reglas"
     )
     estado: Mapped[EstadoDiscordancia] = mapped_column(
-        Enum(EstadoDiscordancia, name="estado_discordancia_enum", schema="agroia"),
         nullable=False,
         default=EstadoDiscordancia.PENDIENTE,
     )

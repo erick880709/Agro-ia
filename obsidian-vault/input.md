@@ -1,7 +1,7 @@
 ---
 title: "input"
 tags: [agroia, community, code]
-community_id: 108
+community_id: 598
 node_count: 8
 ---
 

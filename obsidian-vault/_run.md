@@ -1,6 +1,6 @@
 ---
 title: "_run"
-tags: [agroia, community, code, rationale]
+tags: [agroia, community, rationale, code]
 community_id: 104
 node_count: 7
 ---

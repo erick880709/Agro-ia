@@ -1,6 +1,6 @@
 ---
 title: "main"
-tags: [agroia, community, code, rationale]
+tags: [agroia, community, rationale, code]
 community_id: 151
 node_count: 3
 ---

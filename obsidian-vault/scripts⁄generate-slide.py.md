@@ -1,6 +1,6 @@
 ---
 title: "scripts/generate-slide.py"
-tags: [agroia, community, code, rationale]
+tags: [agroia, community, rationale, code]
 community_id: 25
 node_count: 20
 ---

@@ -12,7 +12,7 @@ from starlette.status import (
     HTTP_403_FORBIDDEN,
     HTTP_404_NOT_FOUND,
     HTTP_409_CONFLICT,
-    HTTP_422_UNPROCESSABLE_CONTENT,
+    HTTP_422_UNPROCESSABLE_ENTITY,
     HTTP_500_INTERNAL_SERVER_ERROR,
 )
 
@@ -75,11 +75,11 @@ class InsufficientDataError(AgroIAError):
 
 ERROR_MAP = {
     NotFoundError: HTTP_404_NOT_FOUND,
-    ValidationError: HTTP_422_UNPROCESSABLE_CONTENT,
+    ValidationError: HTTP_422_UNPROCESSABLE_ENTITY,
     UnauthorizedError: HTTP_401_UNAUTHORIZED,
     ForbiddenError: HTTP_403_FORBIDDEN,
     ConflictError: HTTP_409_CONFLICT,
-    InsufficientDataError: HTTP_422_UNPROCESSABLE_CONTENT,
+    InsufficientDataError: HTTP_422_UNPROCESSABLE_ENTITY,
 }
 
 

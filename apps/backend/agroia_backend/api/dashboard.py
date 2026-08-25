@@ -1,6 +1,8 @@
 """API endpoints del dashboard y reportes PDF."""
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from typing import Optional
+
+from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from fastapi.responses import HTMLResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -12,14 +14,23 @@ router = APIRouter(prefix="/api/v1", tags=["dashboard"])
 
 
 @router.get("/dashboard/{finca_id}")
-async def dashboard_finca(finca_id: str, modo: str = Query("agricultor", pattern="^(agricultor|experto)$")):
+async def dashboard_finca(
+    finca_id: str,
+    modo: str = Query("agricultor", pattern="^(agricultor|experto)$"),
+    db: AsyncSession = Depends(get_db),
+    x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
+    x_user_email: Optional[str] = Header(None, alias="X-User-Email"),
+):
     """Dashboard completo de una finca.
 
     Args:
         finca_id: UUID de la finca
         modo: 'agricultor' (coloquial, semáforos) o 'experto' (datos crudos, métricas)
     """
+    from agroia_backend.services.acceso import verificar_acceso_finca
     from agroia_backend.services.dashboard_service import get_dashboard_data
+
+    await verificar_acceso_finca(db, x_user_role, x_user_email, finca_id)
 
     try:
         data = await get_dashboard_data(finca_id)

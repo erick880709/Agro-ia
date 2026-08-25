@@ -1,23 +1,21 @@
 ---
 title: "RNF-005: Seguridad — Cumplimiento OWASP y Protección de Datos"
 tags: [agroia, community, document]
-community_id: 444
-node_count: 6
+community_id: 757
+node_count: 4
 ---
 
 # RNF-005: Seguridad — Cumplimiento OWASP y Protección de Datos
 
-> **6 nodos** | Tipos: document
+> **4 nodos** | Tipos: document
 
 ## 📄 Archivos principales
 
-- `resources/architecture/definitions/RNF-005-seguridad-owasp-datos.md` (6 símbolos)
+- `obsidian-vault/RNF-005∶ Seguridad — Cumplimiento OWASP y Protección de Datos.md` (4 símbolos)
 
 ## 🔗 Nodos clave
 
-- **RNF-005-seguridad-owasp-datos.md** `[document]` _RNF-005-seguridad-owasp-datos.md_
-- **RNF-005: Seguridad — Cumplimiento OWASP y Protección de Datos** `[document]` _RNF-005-seguridad-owasp-datos.md_
-- **Descripción** `[document]` _RNF-005-seguridad-owasp-datos.md_
-- **Criterio medible / restricción concreta** `[document]` _RNF-005-seguridad-owasp-datos.md_
-- **Impacto en la arquitectura** `[document]` _RNF-005-seguridad-owasp-datos.md_
-- **Notas del analista** `[document]` _RNF-005-seguridad-owasp-datos.md_
+- **RNF-005∶ Seguridad — Cumplimiento OWASP y Protección de Datos.md** `[document]` _RNF-005∶ Seguridad — Cumplimiento OWASP y Protección de Datos.md_
+- **RNF-005: Seguridad — Cumplimiento OWASP y Protección de Datos** `[document]` _RNF-005∶ Seguridad — Cumplimiento OWASP y Protección de Datos.md_
+- **📄 Archivos principales** `[document]` _RNF-005∶ Seguridad — Cumplimiento OWASP y Protección de Datos.md_
+- **🔗 Nodos clave** `[document]` _RNF-005∶ Seguridad — Cumplimiento OWASP y Protección de Datos.md_

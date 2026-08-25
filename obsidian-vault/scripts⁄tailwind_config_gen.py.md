@@ -1,6 +1,6 @@
 ---
 title: "scripts/tailwind_config_gen.py"
-tags: [agroia, community, code, rationale]
+tags: [agroia, community, rationale, code]
 community_id: 33
 node_count: 18
 ---

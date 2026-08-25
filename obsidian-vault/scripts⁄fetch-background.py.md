@@ -1,6 +1,6 @@
 ---
 title: "scripts/fetch-background.py"
-tags: [agroia, community, code, rationale]
+tags: [agroia, community, rationale, code]
 community_id: 32
 node_count: 18
 ---

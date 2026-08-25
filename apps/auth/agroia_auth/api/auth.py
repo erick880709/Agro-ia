@@ -28,6 +28,10 @@ class TokenResponse(BaseModel):
     expires_in: int = 3600
 
 
+class RefreshRequest(BaseModel):
+    refresh_token: str = Field(..., description="Refresh token JWT válido")
+
+
 @router.post("/login", response_model=TokenResponse)
 async def login(body: LoginRequest):
     """Autentica un usuario y retorna JWT access + refresh tokens."""
@@ -56,16 +60,16 @@ async def register(body: RegisterRequest):
 
 
 @router.post("/refresh", response_model=TokenResponse)
-async def refresh_token(refresh_token: str = Field(...)):
+async def refresh_token(body: RefreshRequest):
     """Renueva un access token usando un refresh token válido."""
     from agroia_auth.auth_service import create_access_token, decode_token
 
     try:
-        payload = decode_token(refresh_token)
+        payload = decode_token(body.refresh_token)
         if payload.get("type") != "refresh":
             raise HTTPException(status_code=401, detail={"code": "UNAUTHORIZED", "message": "Token inválido"})
         access = create_access_token(payload["sub"], "tenant-id", "Cliente")
-        return TokenResponse(access_token=access, refresh_token=refresh_token)
+        return TokenResponse(access_token=access, refresh_token=body.refresh_token)
     except Exception:
         raise HTTPException(status_code=401, detail={"code": "UNAUTHORIZED", "message": "Refresh token inválido o expirado"})
 

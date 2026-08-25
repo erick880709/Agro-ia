@@ -1,24 +1,21 @@
 ---
 title: "RF-015: Dashboard de Usuario"
 tags: [agroia, community, document]
-community_id: 420
-node_count: 7
+community_id: 745
+node_count: 4
 ---
 
 # RF-015: Dashboard de Usuario
 
-> **7 nodos** | Tipos: document
+> **4 nodos** | Tipos: document
 
 ## 📄 Archivos principales
 
-- `resources/functional/requests/RF-015-dashboard-usuario.md` (7 símbolos)
+- `obsidian-vault/RF-015∶ Dashboard de Usuario.md` (4 símbolos)
 
 ## 🔗 Nodos clave
 
-- **RF-015-dashboard-usuario.md** `[document]` _RF-015-dashboard-usuario.md_
-- **RF-015: Dashboard de Usuario** `[document]` _RF-015-dashboard-usuario.md_
-- **Descripción** `[document]` _RF-015-dashboard-usuario.md_
-- **Actores involucrados** `[document]` _RF-015-dashboard-usuario.md_
-- **Criterios de aceptación** `[document]` _RF-015-dashboard-usuario.md_
-- **Dependencias / relacionados** `[document]` _RF-015-dashboard-usuario.md_
-- **Notas del analista** `[document]` _RF-015-dashboard-usuario.md_
+- **RF-015∶ Dashboard de Usuario.md** `[document]` _RF-015∶ Dashboard de Usuario.md_
+- **RF-015: Dashboard de Usuario** `[document]` _RF-015∶ Dashboard de Usuario.md_
+- **📄 Archivos principales** `[document]` _RF-015∶ Dashboard de Usuario.md_
+- **🔗 Nodos clave** `[document]` _RF-015∶ Dashboard de Usuario.md_

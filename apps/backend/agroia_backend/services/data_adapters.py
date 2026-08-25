@@ -14,7 +14,10 @@ from agroia_backend.models.sensor_reading import SensorReading, TexturaSuelo
 logger = get_logger(__name__)
 
 # ── Variables bloqueantes vs no bloqueantes ──
-VARIABLES_BLOQUEANTES = {"ph", "nitrogeno", "fosforo", "potasio", "materia_organica", "conductividad_electrica"}
+# Relajado (2026-08-25, brecha G3): los sensores ESP32 solo entregan pH + CE
+# de forma confiable. Se permite recomendación parcial con advertencia
+# cuando faltan materia orgánica, NPK u otras variables no bloqueantes.
+VARIABLES_BLOQUEANTES = {"ph", "conductividad_electrica"}
 VARIABLES_NO_BLOQUEANTES = {"boro", "sodio"}  # y micronutrientes restantes
 ALL_SOIL_VARIABLES = [
     "ph", "nitrogeno", "fosforo", "potasio",

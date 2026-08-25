@@ -1,6 +1,6 @@
 ---
 title: "search"
-tags: [agroia, community, code, rationale]
+tags: [agroia, community, rationale, code]
 community_id: 89
 node_count: 11
 ---
@@ -31,9 +31,10 @@ node_count: 11
 
 ## 🌐 Comunidades conectadas
 
-- [[scripts⁄design_system.py|scripts/design_system.py]] (28 nodos)
 - [[DesignSystemGenerator|DesignSystemGenerator]] (22 nodos)
-- [[DesignSystemGenerator|DesignSystemGenerator]] (22 nodos)
+- [[scripts⁄design_system.py|scripts/design_system.py]] (21 nodos)
+- [[scripts⁄design_system.py|scripts/design_system.py]] (20 nodos)
 - [[scripts⁄core.py|scripts/core.py]] (14 nodos)
+- [[src⁄ui-ux-pro-max⁄scripts⁄tests⁄test_core.py|src/ui-ux-pro-max/scripts/tests/test_core.py]] (10 nodos)
 - [[cip⁄core.py|cip/core.py]] (9 nodos)
-- [[src⁄ui-ux-pro-max⁄scripts⁄tests⁄test_core.py|src/ui-ux-pro-max/scripts/tests/test_core.py]] (8 nodos)
+- [[detect_domain|detect_domain]] (7 nodos)

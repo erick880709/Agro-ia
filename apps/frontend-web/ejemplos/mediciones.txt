@@ -1,0 +1,8 @@
+device_id=esp32-npk-001
+ph=7.1
+nitrogen=1
+phosphorus=3
+potassium=7
+conductivity=44
+humedad_ambiental=84.7
+temperatura_ambiental=22.6

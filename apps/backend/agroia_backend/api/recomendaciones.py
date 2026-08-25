@@ -2,17 +2,20 @@
 
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia.database import get_db
 from agroia.errors import InsufficientDataError
 from agroia.logging import get_logger
+from agroia_backend.services.aptitud import AptitudService
+from agroia_backend.services.data_adapters import SueloAdapter
 from agroia_backend.services.orchestrator import (
     RecommendationOrchestrator,
     RecommendationRequest,
 )
+from agroia_backend.services.rules_engine import RulesEngine
 
 logger = get_logger(__name__)
 router = APIRouter(prefix="/api/v1/recomendaciones", tags=["recomendaciones"])
@@ -34,19 +37,122 @@ class RecommendResponse(BaseModel):
     advertencia: Optional[str] = None
     discordancia: Optional[dict] = None
     tiempo_respuesta_ms: float
+    sugerencias_cultivos: Optional[list[dict]] = None
+    modo: str = "analizar_cultivo"
+
+
+# ── Persistencia del historial ──
+
+CLASIFICACION_A_ENUM = {
+    "Apta": "ALTA",
+    "Alta": "ALTA",
+    "Moderadamente apta": "MEDIA",
+    "Media": "MEDIA",
+    "Marginalmente apta": "BAJA",
+    "Baja": "BAJA",
+    "No apta": "NO_APTA",
+    "NoApta": "NO_APTA",
+}
+
+
+async def _persistir_recomendacion(
+    db: AsyncSession, request: RecommendRequest, result
+) -> None:
+    """Persiste el análisis en el historial de la finca (UC1 y UC2).
+
+    Un fallo aquí no rompe la respuesta del análisis: se registra en logs.
+    """
+    import uuid as uuid_mod
+
+    from sqlalchemy import select
+
+    from agroia_backend.models.finca import Finca
+    from agroia_backend.models.recomendacion import Recomendacion
+
+    try:
+        finca_uuid = uuid_mod.UUID(request.finca_id)
+
+        # UC2: cultivo solicitado. UC1: cultivo top sugerido.
+        cultivo_uuid = None
+        if request.cultivo_id:
+            cultivo_uuid = uuid_mod.UUID(request.cultivo_id)
+        elif result.sugerencias_cultivos:
+            top = result.sugerencias_cultivos[0]
+            if top.get("cultivo_id"):
+                cultivo_uuid = uuid_mod.UUID(top["cultivo_id"])
+
+        if cultivo_uuid is None:
+            logger.warning(
+                "recomendacion_sin_cultivo_para_historial",
+                finca_id=request.finca_id,
+            )
+            return
+
+        finca = (
+            await db.execute(select(Finca).where(Finca.id == finca_uuid))
+        ).scalar_one_or_none()
+        if finca is None:
+            logger.warning(
+                "finca_no_encontrada_para_historial", finca_id=request.finca_id
+            )
+            return
+
+        estado = "ADVERTENCIA" if result.confianza < 0.8 else "PUBLICADA"
+
+        db.add(Recomendacion(
+            finca_id=finca_uuid,
+            cultivo_id=cultivo_uuid,
+            tenant_id=finca.tenant_id,
+            clasificacion_upra=CLASIFICACION_A_ENUM.get(
+                result.clasificacion_upra, "BAJA"
+            ),
+            confianza=result.confianza,
+            justificacion=result.justificacion or {},
+            estado=estado,
+        ))
+        await db.commit()
+        logger.info(
+            "recomendacion_persistida",
+            finca_id=request.finca_id,
+            cultivo_id=str(cultivo_uuid),
+        )
+    except Exception as e:
+        await db.rollback()
+        logger.error(
+            "recomendacion_no_persistida",
+            error=str(e),
+            finca_id=request.finca_id,
+        )
 
 
 # ── Endpoints ──
 
 @router.post("/analyze", response_model=RecommendResponse)
-async def analizar_aptitud(request: RecommendRequest, db: AsyncSession = Depends(get_db)):
-    """Analiza la aptitud del suelo de una finca para un cultivo.
+async def analizar_aptitud(
+    request: RecommendRequest,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
+):
+    """Analiza la aptitud del suelo de una finca.
 
-    Pipeline completo: datos de suelo → ML → reglas → discordancia → respuesta.
+    Dos casos de uso:
+      - Sin `cultivo_id` (UC1): recomienda los cultivos más aptos para sembrar.
+      - Con `cultivo_id` (UC2): diagnostica qué falta/sobra al suelo para ese
+        cultivo y devuelve las acciones correctivas (sistema experto UPRA/Cenicafé).
+
     Tiempo objetivo: < 5s (p95).
     """
+    from agroia_backend.services.acceso import exigir_no_cliente, verificar_acceso_finca
+
+    exigir_no_cliente(x_user_role)
+    await verificar_acceso_finca(db, x_user_role, None, request.finca_id)
+
+    rules_engine = RulesEngine(db)
     orch = RecommendationOrchestrator(
         db_session=db,
+        soil_adapter=SueloAdapter(db),
+        rules_engine=rules_engine,
+        aptitud_service=AptitudService(db, rules_engine),
     )
     try:
         result = await orch.analyze(
@@ -55,6 +161,7 @@ async def analizar_aptitud(request: RecommendRequest, db: AsyncSession = Depends
                 cultivo_id=request.cultivo_id,
             )
         )
+        await _persistir_recomendacion(db, request, result)
         return RecommendResponse(
             cultivo=result.cultivo,
             clasificacion_upra=result.clasificacion_upra,
@@ -64,6 +171,8 @@ async def analizar_aptitud(request: RecommendRequest, db: AsyncSession = Depends
             advertencia=result.advertencia,
             discordancia=result.discordancia,
             tiempo_respuesta_ms=result.tiempo_respuesta_ms,
+            sugerencias_cultivos=result.sugerencias_cultivos,
+            modo=result.modo,
         )
     except InsufficientDataError as e:
         raise HTTPException(status_code=422, detail={
@@ -72,28 +181,11 @@ async def analizar_aptitud(request: RecommendRequest, db: AsyncSession = Depends
             "missing_variables": e.missing_vars,
         })
     except Exception as e:
-        logger.warning("orchestrator_fallback", error=str(e), finca_id=request.finca_id)
-        # Fallback: respuesta simulada mientras los adaptadores no están cableados
-        return RecommendResponse(
-            cultivo=request.cultivo_id or "cafe",
-            clasificacion_upra="Alta",
-            confianza=0.85,
-            recomendaciones=[
-                {"tipo": "fertilizacion", "mensaje": "Aplicar NPK 15-15-15 a razón de 50 kg/ha", "prioridad": "alta"},
-                {"tipo": "ph", "mensaje": "El pH está en rango óptimo (5.5-6.5). No requiere corrección.", "prioridad": "media"},
-                {"tipo": "riego", "mensaje": "Mantener humedad del suelo entre 60-80% de capacidad de campo.", "prioridad": "media"},
-            ],
-            justificacion={
-                "ph": {"valor": 6.2, "rango_optimo": "5.5-6.5", "cumple": True},
-                "nitrogeno": {"valor": 220, "rango_optimo": "200-400", "cumple": True},
-                "fosforo": {"valor": 45, "rango_optimo": "30-75", "cumple": True},
-                "potasio": {"valor": 180, "rango_optimo": "100-300", "cumple": True},
-                "materia_organica": {"valor": 12, "rango_optimo": "8-20", "cumple": True},
-            },
-            advertencia="⚠️ Modo simulación: los adaptadores de suelo, ML y reglas no están cableados. Esta respuesta es ilustrativa.",
-            discordancia=None,
-            tiempo_respuesta_ms=150.0,
-        )
+        logger.exception("orchestrator_unexpected_error", error=str(e), finca_id=request.finca_id)
+        raise HTTPException(status_code=500, detail={
+            "code": "INTERNAL_ERROR",
+            "message": "Error interno al procesar la recomendación. Revise los logs del servicio.",
+        })
 
 
 @router.get("/historial/{finca_id}")
@@ -103,10 +195,16 @@ async def historial_recomendaciones(
     page_size: int = Query(20, ge=1, le=100),
     cultivo_id: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
+    x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
+    x_user_email: Optional[str] = Header(None, alias="X-User-Email"),
 ):
     """Historial de recomendaciones de una finca."""
     from sqlalchemy import select, func
+
     from agroia_backend.models.recomendacion import Recomendacion
+    from agroia_backend.services.acceso import verificar_acceso_finca
+
+    await verificar_acceso_finca(db, x_user_role, x_user_email, finca_id)
 
     stmt = select(Recomendacion).where(Recomendacion.finca_id == finca_id)
     count_stmt = select(func.count()).select_from(Recomendacion).where(Recomendacion.finca_id == finca_id)

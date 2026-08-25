@@ -1,6 +1,6 @@
 ---
 title: "logo/generate.py"
-tags: [agroia, community, code, rationale]
+tags: [agroia, community, rationale, code]
 community_id: 94
 node_count: 10
 ---

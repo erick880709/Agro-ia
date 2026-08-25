@@ -46,6 +46,26 @@ class Finca(Base, TenantMixin, TimestampMixin):
     municipio: Mapped[Optional[str]] = mapped_column(
         String(100), nullable=True
     )
+    # ── Registro de finca (rol administrador) ──
+    coordenadas_google: Mapped[Optional[str]] = mapped_column(
+        String(500), nullable=True,
+        comment="Enlace de Google Maps o 'lat,lng' del predio"
+    )
+    propietario: Mapped[Optional[str]] = mapped_column(
+        String(200), nullable=True, comment="Nombre del propietario"
+    )
+    contacto_telefono: Mapped[Optional[str]] = mapped_column(
+        String(50), nullable=True, comment="Teléfono de contacto"
+    )
+    contacto_email: Mapped[Optional[str]] = mapped_column(
+        String(255), nullable=True, comment="Email de contacto"
+    )
+    largo_metros: Mapped[Optional[float]] = mapped_column(
+        Float, nullable=True, comment="Largo del terreno en metros (opcional)"
+    )
+    ancho_metros: Mapped[Optional[float]] = mapped_column(
+        Float, nullable=True, comment="Ancho del terreno en metros (opcional)"
+    )
 
     def __repr__(self) -> str:
         return f"<Finca {self.nombre}>"

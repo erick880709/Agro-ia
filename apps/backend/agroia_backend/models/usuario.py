@@ -3,11 +3,12 @@
 Usuarios con 4 roles RBAC, consentimiento Ley 1581, y planes de membresía.
 """
 
+import enum
 import uuid
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import Boolean, DateTime, Enum, Float, ForeignKey, Integer, String, func
+from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -15,20 +16,21 @@ from agroia.database import Base
 from agroia_backend.models import TenantMixin, TimestampMixin
 
 
-class RolUsuario(str, Enum):
+class RolUsuario(str, enum.Enum):
     ADMIN = "Admin"
+    AGRONOMO = "Agronomo"
     CLIENTE = "Cliente"
     TECNICO = "Tecnico"
     INVESTIGADOR = "Investigador"
 
 
-class PlanMembresia(str, Enum):
+class PlanMembresia(str, enum.Enum):
     MENSUAL = "Mensual"
     SEMESTRAL = "Semestral"
     ANUAL = "Anual"
 
 
-class EstadoMembresia(str, Enum):
+class EstadoMembresia(str, enum.Enum):
     ACTIVA = "Activa"
     VENCIDA = "Vencida"
     CANCELADA = "Cancelada"
@@ -49,7 +51,6 @@ class Usuario(Base, TenantMixin, TimestampMixin):
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     nombre: Mapped[str] = mapped_column(String(200), nullable=False)
     rol: Mapped[RolUsuario] = mapped_column(
-        Enum(RolUsuario, name="rol_usuario_enum", schema="agroia"),
         nullable=False,
         default=RolUsuario.CLIENTE,
     )
@@ -82,11 +83,9 @@ class Membresia(Base, TenantMixin, TimestampMixin):
         UUID(as_uuid=True), ForeignKey("agroia.usuarios.id"), nullable=False, unique=True, index=True
     )
     plan: Mapped[PlanMembresia] = mapped_column(
-        Enum(PlanMembresia, name="plan_membresia_enum", schema="agroia"),
         nullable=False,
     )
     estado: Mapped[EstadoMembresia] = mapped_column(
-        Enum(EstadoMembresia, name="estado_membresia_enum", schema="agroia"),
         nullable=False,
         default=EstadoMembresia.ACTIVA,
     )

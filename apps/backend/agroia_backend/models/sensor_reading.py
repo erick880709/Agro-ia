@@ -73,6 +73,14 @@ class SensorReading(Base):
         Float, nullable=True, comment="dS/m"
     )
 
+    # ── Ambientales (telemetría del sensor, NO variables de suelo) ──
+    humedad_ambiental: Mapped[float | None] = mapped_column(
+        Float, nullable=True, comment="% humedad relativa ambiente (DHT22)"
+    )
+    temperatura_ambiental: Mapped[float | None] = mapped_column(
+        Float, nullable=True, comment="°C temperatura ambiente"
+    )
+
     # ── Estado del dato ──
     sensor_id: Mapped[str | None] = mapped_column(
         String(100), nullable=True, comment="ID del dispositivo LoRaWAN"

@@ -27,4 +27,4 @@ node_count: 9
 
 ## 🌐 Comunidades conectadas
 
-- [[cli⁄package.json|cli/package.json]] (12 nodos)
+- [[package.json|package.json]] (12 nodos)

@@ -1,7 +1,7 @@
 ---
 title: "DesignSystemGenerator"
-tags: [agroia, community, code, rationale]
-community_id: 26
+tags: [agroia, community, rationale, code]
+community_id: 21
 node_count: 22
 ---
 
@@ -11,8 +11,8 @@ node_count: 22
 
 ## 📄 Archivos principales
 
-- `.github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py` (19 símbolos)
-- `.github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py` (3 símbolos)
+- `.github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/design_system.py` (19 símbolos)
+- `.github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py` (3 símbolos)
 
 ## 🔗 Nodos clave
 
@@ -35,8 +35,18 @@ node_count: 22
 
 ## 🌐 Comunidades conectadas
 
-- [[scripts⁄design_system.py|scripts/design_system.py]] (28 nodos)
-- [[DesignSystemGenerator|DesignSystemGenerator]] (22 nodos)
+- [[BM25|BM25]] (31 nodos)
+- [[scripts⁄design_system.py|scripts/design_system.py]] (31 nodos)
+- [[scripts⁄design_system.py|scripts/design_system.py]] (20 nodos)
+- [[scripts⁄design_system.py|scripts/design_system.py]] (20 nodos)
+- [[BM25|BM25]] (17 nodos)
+- [[BM25|BM25]] (17 nodos)
+- [[scripts⁄design_system.py|scripts/design_system.py]] (15 nodos)
+- [[skills⁄ui-ux-pro-max⁄scripts⁄tests⁄test_core.py|skills/ui-ux-pro-max/scripts/tests/test_core.py]] (14 nodos)
 - [[search|search]] (11 nodos)
+- [[search|search]] (11 nodos)
+- [[search|search]] (11 nodos)
+- [[src⁄ui-ux-pro-max⁄scripts⁄tests⁄test_core.py|src/ui-ux-pro-max/scripts/tests/test_core.py]] (10 nodos)
 - [[cip⁄core.py|cip/core.py]] (9 nodos)
-- [[src⁄ui-ux-pro-max⁄scripts⁄tests⁄test_core.py|src/ui-ux-pro-max/scripts/tests/test_core.py]] (8 nodos)
+- [[detect_domain|detect_domain]] (7 nodos)
+- [[detect_domain|detect_domain]] (7 nodos)

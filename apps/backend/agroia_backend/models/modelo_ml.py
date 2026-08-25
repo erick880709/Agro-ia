@@ -1,8 +1,9 @@
 """Modelo ModeloML — registro de modelos entrenados en MLflow."""
 
+import enum
 import uuid
 
-from sqlalchemy import Boolean, DateTime, Enum, Float, Integer, String, Text, func
+from sqlalchemy import Boolean, DateTime, Float, Integer, String, Text, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -10,7 +11,7 @@ from agroia.database import Base
 from agroia_backend.models import TimestampMixin
 
 
-class StageModelo(str, Enum):
+class StageModelo(str, enum.Enum):
     STAGING = "Staging"
     PRODUCTION = "Production"
     ARCHIVED = "Archived"
@@ -40,7 +41,6 @@ class ModeloML(Base, TimestampMixin):
         String(100), nullable=True, comment="Run ID en MLflow"
     )
     stage: Mapped[StageModelo] = mapped_column(
-        Enum(StageModelo, name="stage_modelo_enum", schema="agroia"),
         nullable=False,
         default=StageModelo.STAGING,
     )

@@ -1,7 +1,7 @@
 ---
 title: "Estructura de Carpetas Base para Proyecto de Triaje ML"
 tags: [agroia, community, document]
-community_id: 487
+community_id: 548
 node_count: 4
 ---
 
@@ -11,11 +11,11 @@ node_count: 4
 
 ## 📄 Archivos principales
 
-- `.github/skills/builder/references/estructura-carpetas-base.md` (4 símbolos)
+- `obsidian-vault/Estructura de Carpetas Base para Proyecto de Triaje ML.md` (4 símbolos)
 
 ## 🔗 Nodos clave
 
-- **estructura-carpetas-base.md** `[document]` _estructura-carpetas-base.md_
-- **Estructura de Carpetas Base para Proyecto de Triaje ML** `[document]` _estructura-carpetas-base.md_
-- **1. Raíz del proyecto** `[document]` _estructura-carpetas-base.md_
-- **2. Reglas de nombramiento para `builder`** `[document]` _estructura-carpetas-base.md_
+- **Estructura de Carpetas Base para Proyecto de Triaje ML.md** `[document]` _Estructura de Carpetas Base para Proyecto de Triaje ML.md_
+- **Estructura de Carpetas Base para Proyecto de Triaje ML** `[document]` _Estructura de Carpetas Base para Proyecto de Triaje ML.md_
+- **📄 Archivos principales** `[document]` _Estructura de Carpetas Base para Proyecto de Triaje ML.md_
+- **🔗 Nodos clave** `[document]` _Estructura de Carpetas Base para Proyecto de Triaje ML.md_

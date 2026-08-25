@@ -1,7 +1,7 @@
 ---
 title: "detect_domain"
-tags: [agroia, community, code, rationale]
-community_id: 112
+tags: [agroia, community, rationale, code]
+community_id: 113
 node_count: 7
 ---
 
@@ -11,8 +11,8 @@ node_count: 7
 
 ## 📄 Archivos principales
 
-- `.github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py` (5 símbolos)
-- `.github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py` (2 símbolos)
+- `.github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py` (5 símbolos)
+- `.github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py` (2 símbolos)
 
 ## 🔗 Nodos clave
 
@@ -28,6 +28,6 @@ node_count: 7
 
 - [[DesignSystemGenerator|DesignSystemGenerator]] (22 nodos)
 - [[scripts⁄core.py|scripts/core.py]] (14 nodos)
-- [[assets⁄scripts⁄tests⁄test_core.py|assets/scripts/tests/test_core.py]] (14 nodos)
 - [[search|search]] (11 nodos)
+- [[src⁄ui-ux-pro-max⁄scripts⁄tests⁄test_core.py|src/ui-ux-pro-max/scripts/tests/test_core.py]] (10 nodos)
 - [[cip⁄core.py|cip/core.py]] (9 nodos)

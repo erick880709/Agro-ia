@@ -12,6 +12,28 @@ from agroia_backend.models.regla_agronomica import PrioridadRegla, VariableSuelo
 
 logger = get_logger(__name__)
 
+# ── Mapeo VariableSuelo (valor de la regla) → clave en SoilData.to_dict() ──
+VARIABLE_KEY_MAP = {
+    "pH": "ph",
+    "N": "nitrogeno",
+    "P": "fosforo",
+    "K": "potasio",
+    "Ca": "calcio",
+    "Mg": "magnesio",
+    "S": "azufre",
+    "Fe": "hierro",
+    "Mn": "manganeso",
+    "Zn": "zinc",
+    "Cu": "cobre",
+    "B": "boro",
+    "MO": "materia_organica",
+    "CIC": "cic",
+    "textura": "textura",
+    "humedad": "humedad",
+    "temperatura_suelo": "temperatura_suelo",
+    "CE": "conductividad_electrica",
+}
+
 
 @dataclass
 class RuleViolation:
@@ -103,7 +125,10 @@ class RulesEngine:
 
         for rule in rules:
             var_name = rule["variable"]
-            value = soil_data.get(var_name)
+            # Las reglas usan valores del enum VariableSuelo (ej. "pH", "N");
+            # SoilData.to_dict() usa claves en español (ej. "ph", "nitrogeno").
+            key = VARIABLE_KEY_MAP.get(var_name, var_name)
+            value = soil_data.get(key)
 
             # Si no hay dato para esta variable, omitir la regla
             if value is None:

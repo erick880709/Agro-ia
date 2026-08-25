@@ -96,3 +96,6 @@ obsidian-update: ## Regenera el vault de Obsidian
 
 seed: ## Carga datos semilla (cultivos)
 	cd apps/backend && poetry run python -m agroia_backend.seeds.cultivos
+
+seed-reglas: ## Carga reglas agronómicas del sistema experto (UC1+UC2)
+	cd apps/backend && poetry run python ../../load_seeds.py

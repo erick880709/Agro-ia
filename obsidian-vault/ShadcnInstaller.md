@@ -1,6 +1,6 @@
 ---
 title: "ShadcnInstaller"
-tags: [agroia, community, code, rationale]
+tags: [agroia, community, rationale, code]
 community_id: 47
 node_count: 16
 ---

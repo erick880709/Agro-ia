@@ -1,7 +1,7 @@
 ---
 title: "scripts/core.py"
-tags: [agroia, community, code, rationale]
-community_id: 61
+tags: [agroia, community, rationale, code]
+community_id: 92
 node_count: 14
 ---
 
@@ -35,4 +35,5 @@ node_count: 14
 
 - [[BM25|BM25]] (17 nodos)
 - [[search|search]] (11 nodos)
-- [[src⁄ui-ux-pro-max⁄scripts⁄tests⁄test_core.py|src/ui-ux-pro-max/scripts/tests/test_core.py]] (8 nodos)
+- [[src⁄ui-ux-pro-max⁄scripts⁄tests⁄test_core.py|src/ui-ux-pro-max/scripts/tests/test_core.py]] (10 nodos)
+- [[detect_domain|detect_domain]] (7 nodos)
