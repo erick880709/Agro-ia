@@ -235,6 +235,18 @@ async function arrancarAplicacion() {
   document.getElementById('repo-tipo').addEventListener('change', aplicarTipoReporte);
   document.getElementById('reporte-abrir').addEventListener('click', abrirReporte);
   document.getElementById('reporte-descargar').addEventListener('click', descargarReporteHtml);
+  document.getElementById('form-chat').addEventListener('submit', enviarChat);
+  document.getElementById('repo-finca').addEventListener('change', e => {
+    state.fincaId = e.target.value || null;
+    renderChat();
+  });
+  document.querySelectorAll('.chat-sugerencias .chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.getElementById('chat-input').value = chip.dataset.pregunta || '';
+      document.getElementById('form-chat').requestSubmit();
+    });
+  });
+  renderChat();
   document.getElementById('sim-enviar').addEventListener('click', enviarTramaSimulada);
   document.getElementById('sim-trama').value = JSON.stringify({
     device_id: 'esp32-npk-001',
@@ -905,6 +917,93 @@ function descargarReporteHtml() {
   a.download = 'reporte-agroia.html';
   a.click();
   URL.revokeObjectURL(a.href);
+}
+
+/* ─────────────────────────── chat asesor agronómico ─────────────────────────── */
+
+const chatHistorial = {}; // finca_id → [{rol, contenido}]
+let chatFincaActual = null;
+let chatModo = null; // 'llm' | 'experto-local'
+
+function chatFincaId() {
+  const sel = document.getElementById('repo-finca');
+  return (sel && sel.value) || state.fincaId || null;
+}
+
+function renderChat() {
+  const div = document.getElementById('chat-mensajes');
+  const nota = document.getElementById('chat-nota');
+  const fid = chatFincaId();
+  chatFincaActual = fid;
+  const hist = fid ? (chatHistorial[fid] || []) : [];
+  if (!hist.length) {
+    div.innerHTML =
+      '<div class="chat-msg chat-bot">👋 ¡Hola! Soy su asesor agronómico. ' +
+      'Seleccione una finca y pregúnteme lo que necesite: cómo abonar, qué sembrar, ' +
+      'qué significa cada medición del reporte…</div>';
+    nota.textContent = fid
+      ? 'Las respuestas usan la lectura de suelo y las reglas UPRA/Cenicafé/AGROSAVIA de la finca seleccionada.'
+      : 'Seleccione una finca para poder consultar al asesor.';
+    return;
+  }
+  div.innerHTML = hist.map(m =>
+    `<div class="chat-msg ${m.rol === 'user' ? 'chat-user' : 'chat-bot'}">${esc(m.contenido)}</div>`
+  ).join('');
+  nota.textContent = fid
+    ? (chatModo === 'llm'
+      ? 'Respuestas del modelo de lenguaje con el contexto real de la finca (lectura + reglas UPRA/Cenicafé/AGROSAVIA).'
+      : 'Respuestas del sistema experto local basadas en los datos de la finca y las reglas UPRA/Cenicafé/AGROSAVIA.')
+    : '';
+  div.scrollTop = div.scrollHeight;
+}
+
+async function enviarChat(e) {
+  e.preventDefault();
+  const input = document.getElementById('chat-input');
+  const btn = document.getElementById('chat-btn');
+  if (btn.disabled) return; // evita dobles envíos
+  const mensaje = (input.value || '').trim();
+  const fid = chatFincaId();
+
+  if (!fid) {
+    alert('Selecciona una finca para consultar al asesor.');
+    return;
+  }
+  if (!mensaje) return;
+
+  btn.disabled = true;
+  const hist = chatHistorial[fid] || (chatHistorial[fid] = []);
+  hist.push({ rol: 'user', contenido: mensaje });
+  input.value = '';
+  renderChat();
+
+  const div = document.getElementById('chat-mensajes');
+  div.insertAdjacentHTML('beforeend',
+    '<div class="chat-msg chat-bot chat-typing">El experto está revisando su suelo… 🌱</div>');
+  div.scrollTop = div.scrollHeight;
+
+  btn.disabled = true;
+  try {
+    const r = await api('/chat/consultar', {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({
+        finca_id: fid,
+        mensaje,
+        historial: hist.slice(-7, -1),
+      }),
+    });
+    hist.push({ rol: 'assistant', contenido: r.respuesta });
+    chatModo = r.modo || 'experto-local';
+  } catch (err) {
+    hist.push({
+      rol: 'assistant',
+      contenido: 'Hubo un problema al consultar: ' + err.message,
+    });
+  } finally {
+    btn.disabled = false;
+    renderChat();
+  }
 }
 
 /* ─────────────────────────── simulador de sensor ─────────────────────────── */

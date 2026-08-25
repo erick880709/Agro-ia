@@ -34,6 +34,7 @@ import agroia_backend.models.usuario  # noqa: F401
 
 from agroia_backend.api.auth import router as auth_router
 from agroia_backend.api.catalogo import router as catalogo_router
+from agroia_backend.api.chat import router as chat_router
 from agroia_backend.api.dashboard import router as dashboard_router
 from agroia_backend.api.fincas import router as fincas_router
 from agroia_backend.api.iot import router as iot_router
@@ -83,6 +84,7 @@ register_error_handlers(app)
 # ── Routers por dominio ──
 app.include_router(recomendaciones_router)
 app.include_router(catalogo_router)
+app.include_router(chat_router)
 app.include_router(iot_router)
 app.include_router(dashboard_router)
 app.include_router(usuarios_router)

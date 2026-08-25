@@ -228,6 +228,26 @@
         </div>
         <iframe id="reporte-iframe" class="reporte-iframe" title="Vista previa del reporte"></iframe>
       </div>
+      <div class="card" id="chat-card">
+        <h2>💬 Asesor agronómico (chat)</h2>
+        <p class="muted">
+          Converse con nuestro experto agronómico sobre el reporte: cómo abonar,
+          cómo sembrar, qué significa cada medición y qué hacer en su terreno.
+        </p>
+        <div class="chat-sugerencias">
+          <button class="chip" data-pregunta="¿Cómo está mi suelo?">¿Cómo está mi suelo?</button>
+          <button class="chip" data-pregunta="¿Qué abono debo aplicar?">¿Qué abono debo aplicar?</button>
+          <button class="chip" data-pregunta="¿Qué me conviene sembrar?">¿Qué me conviene sembrar?</button>
+          <button class="chip" data-pregunta="Explícame el reporte">Explícame el reporte</button>
+        </div>
+        <div id="chat-mensajes" class="chat-mensajes" aria-live="polite"></div>
+        <form id="form-chat" class="chat-form">
+          <input id="chat-input" type="text" maxlength="2000" autocomplete="off"
+                 placeholder="Escriba su pregunta… (ej. ¿cada cuánto abono el café?)">
+          <button type="submit" class="btn btn-primary" id="chat-btn">Enviar</button>
+        </form>
+        <p class="muted" id="chat-nota"></p>
+      </div>
     </section>
 
     <!-- ============ FINCAS (solo administrador registra) ============ -->

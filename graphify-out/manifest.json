@@ -3765,8 +3765,8 @@
     "semantic_hash": ""
   },
   "apps/shared/agroia/database.py": {
-    "mtime": 1787698076.6805024,
-    "ast_hash": "470d2fb33bfe979466e0bf902c5d9af8",
+    "mtime": 1787700442.3226507,
+    "ast_hash": "b5a4beeae73ef7dc2cdfdbe060f50bf4",
     "semantic_hash": ""
   },
   "apps/shared/agroia/errors.py": {
@@ -3990,8 +3990,8 @@
     "semantic_hash": ""
   },
   "apps/backend/alembic/env.py": {
-    "mtime": 1787698076.6727722,
-    "ast_hash": "ea4e071a0cdb8142007b46bd3ecf6ab5",
+    "mtime": 1787700442.3147001,
+    "ast_hash": "3124c9f7ef539bc4030808b8617e3a6e",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/001_recomendaciones.py": {
@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787695575.193926,
-    "ast_hash": "8b3d3fdb61a84a3a5bc67e1a794c9f3a",
+    "mtime": 1787700811.6075597,
+    "ast_hash": "3256d8217dda5ad7a7914a38d2c941c4",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4270,8 +4270,8 @@
     "semantic_hash": ""
   },
   "load_seeds.py": {
-    "mtime": 1787698076.6839235,
-    "ast_hash": "1dfae37af9d47b11248f4e81cbbf60fc",
+    "mtime": 1787700442.3273869,
+    "ast_hash": "ecda57d821fd074367814128c18014ca",
     "semantic_hash": ""
   },
   "migrate.py": {
@@ -4595,8 +4595,8 @@
     "semantic_hash": ""
   },
   "scripts/seed_demo_integral.py": {
-    "mtime": 1787698111.91224,
-    "ast_hash": "60d7c27f327ca29bf3e3ba9b68cbf28d",
+    "mtime": 1787700442.3147001,
+    "ast_hash": "d3023f152e449bc91ac9f5fafb83d18a",
     "semantic_hash": ""
   },
   "scripts/sync_columns.py": {
@@ -4655,8 +4655,18 @@
     "semantic_hash": ""
   },
   "scripts/seed_cloud.py": {
-    "mtime": 1787698076.6727722,
-    "ast_hash": "3a06255ae8863b203f5df4efad8e9e39",
+    "mtime": 1787700442.319858,
+    "ast_hash": "78021f58ea8b75fa62ad09477d570a34",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/004_crear_enums.py": {
+    "mtime": 1787700394.0501435,
+    "ast_hash": "1296d14a3165f43ef994977fc6eaccc2",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/005_fix_enum_values.py": {
+    "mtime": 1787700548.1336052,
+    "ast_hash": "272bb1027fe8fbf909002c1f3f49f5cd",
     "semantic_hash": ""
   }
 }
