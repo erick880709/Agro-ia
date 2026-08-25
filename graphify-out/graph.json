@@ -4,204 +4,6 @@
   "graph": {},
   "nodes": [
     {
-      "label": "env.py",
-      "file_type": "code",
-      "source_file": "apps/backend/alembic/env.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_env",
-      "community": 550,
-      "community_name": "env.py",
-      "norm_label": "env.py"
-    },
-    {
-      "label": "run_migrations_offline()",
-      "file_type": "code",
-      "source_file": "apps/backend/alembic/env.py",
-      "source_location": "L37",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_env_run_migrations_offline",
-      "community": 550,
-      "community_name": "env.py",
-      "norm_label": "run_migrations_offline()"
-    },
-    {
-      "label": "do_run_migrations()",
-      "file_type": "code",
-      "source_file": "apps/backend/alembic/env.py",
-      "source_location": "L51",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_env_do_run_migrations",
-      "community": 550,
-      "community_name": "env.py",
-      "norm_label": "do_run_migrations()"
-    },
-    {
-      "label": "Connection",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "connection",
-      "community": 550,
-      "community_name": "env.py",
-      "norm_label": "connection"
-    },
-    {
-      "label": "run_async_migrations()",
-      "file_type": "code",
-      "source_file": "apps/backend/alembic/env.py",
-      "source_location": "L64",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_env_run_async_migrations",
-      "community": 550,
-      "community_name": "env.py",
-      "norm_label": "run_async_migrations()"
-    },
-    {
-      "label": "run_migrations_online()",
-      "file_type": "code",
-      "source_file": "apps/backend/alembic/env.py",
-      "source_location": "L76",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_env_run_migrations_online",
-      "community": 550,
-      "community_name": "env.py",
-      "norm_label": "run_migrations_online()"
-    },
-    {
-      "label": "Alembic environment configuration for AgroIA backend.",
-      "file_type": "rationale",
-      "source_file": "apps/backend/alembic/env.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_env_rationale_1",
-      "community": 550,
-      "community_name": "env.py",
-      "norm_label": "alembic environment configuration for agroia backend."
-    },
-    {
-      "label": "Run migrations in 'offline' mode (generate SQL without DB connection).",
-      "file_type": "rationale",
-      "source_file": "apps/backend/alembic/env.py",
-      "source_location": "L38",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_env_rationale_38",
-      "community": 550,
-      "community_name": "env.py",
-      "norm_label": "run migrations in 'offline' mode (generate sql without db connection)."
-    },
-    {
-      "label": "Ejecuta migraciones con motor async (URL asyncpg).",
-      "file_type": "rationale",
-      "source_file": "apps/backend/alembic/env.py",
-      "source_location": "L65",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_env_rationale_65",
-      "community": 550,
-      "community_name": "env.py",
-      "norm_label": "ejecuta migraciones con motor async (url asyncpg)."
-    },
-    {
-      "label": "Run migrations in 'online' mode (connected to DB).",
-      "file_type": "rationale",
-      "source_file": "apps/backend/alembic/env.py",
-      "source_location": "L77",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_env_rationale_77",
-      "community": 550,
-      "community_name": "env.py",
-      "norm_label": "run migrations in 'online' mode (connected to db)."
-    },
-    {
-      "label": "003_dispositivos_iot.py",
-      "file_type": "code",
-      "source_file": "apps/backend/alembic/versions/003_dispositivos_iot.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_versions_003_dispositivos_iot",
-      "community": 824,
-      "community_name": "003_dispositivos_iot.py",
-      "norm_label": "003_dispositivos_iot.py"
-    },
-    {
-      "label": "upgrade()",
-      "file_type": "code",
-      "source_file": "apps/backend/alembic/versions/003_dispositivos_iot.py",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_versions_003_dispositivos_iot_upgrade",
-      "community": 824,
-      "community_name": "003_dispositivos_iot.py",
-      "norm_label": "upgrade()"
-    },
-    {
-      "label": "downgrade()",
-      "file_type": "code",
-      "source_file": "apps/backend/alembic/versions/003_dispositivos_iot.py",
-      "source_location": "L64",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_versions_003_dispositivos_iot_downgrade",
-      "community": 824,
-      "community_name": "003_dispositivos_iot.py",
-      "norm_label": "downgrade()"
-    },
-    {
-      "label": "003_infra_fincas.py",
-      "file_type": "code",
-      "source_file": "apps/backend/alembic/versions/003_infra_fincas.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_versions_003_infra_fincas",
-      "community": 828,
-      "community_name": "003_infra_fincas.py",
-      "norm_label": "003_infra_fincas.py"
-    },
-    {
-      "label": "_crear_enum()",
-      "file_type": "code",
-      "source_file": "apps/backend/alembic/versions/003_infra_fincas.py",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_versions_003_infra_fincas_crear_enum",
-      "community": 828,
-      "community_name": "003_infra_fincas.py",
-      "norm_label": "_crear_enum()"
-    },
-    {
-      "label": "ENUM",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "enum",
-      "community": 828,
-      "community_name": "003_infra_fincas.py",
-      "norm_label": "enum"
-    },
-    {
-      "label": "upgrade()",
-      "file_type": "code",
-      "source_file": "apps/backend/alembic/versions/003_infra_fincas.py",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_versions_003_infra_fincas_upgrade",
-      "community": 828,
-      "community_name": "003_infra_fincas.py",
-      "norm_label": "upgrade()"
-    },
-    {
-      "label": "downgrade()",
-      "file_type": "code",
-      "source_file": "apps/backend/alembic/versions/003_infra_fincas.py",
-      "source_location": "L169",
-      "_origin": "ast",
-      "id": "apps_backend_alembic_versions_003_infra_fincas_downgrade",
-      "community": 828,
-      "community_name": "003_infra_fincas.py",
-      "norm_label": "downgrade()"
-    },
-    {
       "label": "agroia-backend",
       "file_type": "code",
       "type": "package",
@@ -211,9 +13,221 @@
       "version": "0.1.0",
       "_origin": "ast",
       "id": "pkg_agroia_backend",
-      "community": 810,
-      "community_name": "agroia-backend",
+      "community": 607,
+      "community_name": "agroia-shared",
       "norm_label": "agroia-backend"
+    },
+    {
+      "label": "agroia-shared",
+      "file_type": "code",
+      "type": "package",
+      "ecosystem": "python",
+      "source_file": "apps/shared/pyproject.toml",
+      "source_location": "L1",
+      "version": "0.1.0",
+      "_origin": "ast",
+      "id": "pkg_agroia_shared",
+      "community": 607,
+      "community_name": "agroia-shared",
+      "norm_label": "agroia-shared"
+    },
+    {
+      "label": "env.py",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/env.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 550,
+      "community_name": "env.py",
+      "norm_label": "env.py",
+      "id": "apps_backend_alembic_env"
+    },
+    {
+      "label": "run_migrations_offline()",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/env.py",
+      "source_location": "L37",
+      "_origin": "ast",
+      "community": 550,
+      "community_name": "env.py",
+      "norm_label": "run_migrations_offline()",
+      "id": "apps_backend_alembic_env_run_migrations_offline"
+    },
+    {
+      "label": "do_run_migrations()",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/env.py",
+      "source_location": "L51",
+      "_origin": "ast",
+      "community": 550,
+      "community_name": "env.py",
+      "norm_label": "do_run_migrations()",
+      "id": "apps_backend_alembic_env_do_run_migrations"
+    },
+    {
+      "label": "Connection",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 550,
+      "community_name": "env.py",
+      "norm_label": "connection",
+      "id": "connection"
+    },
+    {
+      "label": "run_async_migrations()",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/env.py",
+      "source_location": "L64",
+      "_origin": "ast",
+      "community": 550,
+      "community_name": "env.py",
+      "norm_label": "run_async_migrations()",
+      "id": "apps_backend_alembic_env_run_async_migrations"
+    },
+    {
+      "label": "run_migrations_online()",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/env.py",
+      "source_location": "L76",
+      "_origin": "ast",
+      "community": 550,
+      "community_name": "env.py",
+      "norm_label": "run_migrations_online()",
+      "id": "apps_backend_alembic_env_run_migrations_online"
+    },
+    {
+      "label": "Alembic environment configuration for AgroIA backend.",
+      "file_type": "rationale",
+      "source_file": "apps/backend/alembic/env.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 550,
+      "community_name": "env.py",
+      "norm_label": "alembic environment configuration for agroia backend.",
+      "id": "apps_backend_alembic_env_rationale_1"
+    },
+    {
+      "label": "Run migrations in 'offline' mode (generate SQL without DB connection).",
+      "file_type": "rationale",
+      "source_file": "apps/backend/alembic/env.py",
+      "source_location": "L38",
+      "_origin": "ast",
+      "community": 550,
+      "community_name": "env.py",
+      "norm_label": "run migrations in 'offline' mode (generate sql without db connection).",
+      "id": "apps_backend_alembic_env_rationale_38"
+    },
+    {
+      "label": "Ejecuta migraciones con motor async (URL asyncpg).",
+      "file_type": "rationale",
+      "source_file": "apps/backend/alembic/env.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "community": 550,
+      "community_name": "env.py",
+      "norm_label": "ejecuta migraciones con motor async (url asyncpg).",
+      "id": "apps_backend_alembic_env_rationale_65"
+    },
+    {
+      "label": "Run migrations in 'online' mode (connected to DB).",
+      "file_type": "rationale",
+      "source_file": "apps/backend/alembic/env.py",
+      "source_location": "L77",
+      "_origin": "ast",
+      "community": 550,
+      "community_name": "env.py",
+      "norm_label": "run migrations in 'online' mode (connected to db).",
+      "id": "apps_backend_alembic_env_rationale_77"
+    },
+    {
+      "label": "003_dispositivos_iot.py",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/versions/003_dispositivos_iot.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 824,
+      "community_name": "003_dispositivos_iot.py",
+      "norm_label": "003_dispositivos_iot.py",
+      "id": "apps_backend_alembic_versions_003_dispositivos_iot"
+    },
+    {
+      "label": "upgrade()",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/versions/003_dispositivos_iot.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 824,
+      "community_name": "003_dispositivos_iot.py",
+      "norm_label": "upgrade()",
+      "id": "apps_backend_alembic_versions_003_dispositivos_iot_upgrade"
+    },
+    {
+      "label": "downgrade()",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/versions/003_dispositivos_iot.py",
+      "source_location": "L64",
+      "_origin": "ast",
+      "community": 824,
+      "community_name": "003_dispositivos_iot.py",
+      "norm_label": "downgrade()",
+      "id": "apps_backend_alembic_versions_003_dispositivos_iot_downgrade"
+    },
+    {
+      "label": "003_infra_fincas.py",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/versions/003_infra_fincas.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "003_infra_fincas.py",
+      "norm_label": "003_infra_fincas.py",
+      "id": "apps_backend_alembic_versions_003_infra_fincas"
+    },
+    {
+      "label": "_crear_enum()",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/versions/003_infra_fincas.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "003_infra_fincas.py",
+      "norm_label": "_crear_enum()",
+      "id": "apps_backend_alembic_versions_003_infra_fincas_crear_enum"
+    },
+    {
+      "label": "ENUM",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "003_infra_fincas.py",
+      "norm_label": "enum",
+      "id": "enum"
+    },
+    {
+      "label": "upgrade()",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/versions/003_infra_fincas.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "003_infra_fincas.py",
+      "norm_label": "upgrade()",
+      "id": "apps_backend_alembic_versions_003_infra_fincas_upgrade"
+    },
+    {
+      "label": "downgrade()",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/versions/003_infra_fincas.py",
+      "source_location": "L169",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "003_infra_fincas.py",
+      "norm_label": "downgrade()",
+      "id": "apps_backend_alembic_versions_003_infra_fincas_downgrade"
     },
     {
       "label": "agroia_backend/api/auth.py",
@@ -7540,20 +7554,6 @@
       "community_name": "database.py",
       "norm_label": "# todo: conectar a rabbitmq en produccion",
       "id": "apps_iot_agroia_iot_consumer_rationale_163"
-    },
-    {
-      "label": "agroia-shared",
-      "file_type": "code",
-      "type": "package",
-      "ecosystem": "python",
-      "source_file": "apps/shared/pyproject.toml",
-      "source_location": "L1",
-      "version": "0.1.0",
-      "_origin": "ast",
-      "community": 607,
-      "community_name": "agroia-shared",
-      "norm_label": "agroia-shared",
-      "id": "pkg_agroia_shared"
     },
     {
       "label": "download_colombia.py",
@@ -21025,8 +21025,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 61,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "skills/ui-ux-pro-max/scripts/core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core"
     },
@@ -21113,8 +21113,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L237",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 61,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_load_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_load_csv"
     },
@@ -21124,8 +21124,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L251",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 61,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_get_bm25()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_get_bm25"
     },
@@ -21135,8 +21135,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L267",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 61,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_search_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_search_csv"
     },
@@ -21146,8 +21146,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L292",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 61,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_suggest_terms()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_suggest_terms"
     },
@@ -21157,8 +21157,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L323",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 61,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_load_product_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_load_product_keywords"
     },
@@ -21168,8 +21168,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L347",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 61,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_domain_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_domain_keywords"
     },
@@ -21180,7 +21180,7 @@
       "source_location": "L377",
       "_origin": "ast",
       "community": 111,
-      "community_name": "detect_domain",
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "detect_domain()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_detect_domain"
     },
@@ -21201,8 +21201,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L442",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 61,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "search_stack()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_search_stack"
     },
@@ -21278,8 +21278,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L238",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 61,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "load csv and return list of dicts, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_238"
     },
@@ -21289,8 +21289,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L252",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 61,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "fitted bm25 index for this file+columns, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_252"
     },
@@ -21300,8 +21300,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L268",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 61,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "core search function using bm25. returns (results, bm25_or_none).",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_268"
     },
@@ -21311,8 +21311,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L293",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 61,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "nearest known vocabulary terms for a query that returned 0 hits, so the caller...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_293"
     },
@@ -21323,7 +21323,7 @@
       "source_location": "L378",
       "_origin": "ast",
       "community": 111,
-      "community_name": "detect_domain",
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "auto-detect the most relevant domain from query. matches are weighted by...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_378"
     },
@@ -21344,8 +21344,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L443",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 61,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "search stack-specific guidelines",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_443"
     },
@@ -21872,8 +21872,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 51,
-      "community_name": "skills/ui-ux-pro-max/scripts/design_system.py",
+      "community": 111,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core"
     },
@@ -21982,8 +21982,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 61,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": ".test_every_stack_file_exists_and_is_searchable()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testsearchdomains_test_every_stack_file_exists_and_is_searchable"
     },
@@ -21994,7 +21994,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "community": 111,
-      "community_name": "detect_domain",
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "testdomaindetection",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection"
     },
@@ -22005,7 +22005,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "community": 111,
-      "community_name": "detect_domain",
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_style_keywords_route_to_style()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection_test_style_keywords_route_to_style"
     },
@@ -22016,7 +22016,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "community": 111,
-      "community_name": "detect_domain",
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_accessibility_keywords_route_to_ux()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection_test_accessibility_keywords_route_to_ux"
     },
@@ -22027,7 +22027,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "community": 111,
-      "community_name": "detect_domain",
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_ambiguous_query_returns_runner_up()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection_test_ambiguous_query_returns_runner_up"
     },
@@ -22038,7 +22038,7 @@
       "source_location": "L91",
       "_origin": "ast",
       "community": 111,
-      "community_name": "detect_domain",
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_empty_query_falls_back_to_style()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection_test_empty_query_falls_back_to_style"
     },
@@ -22048,8 +22048,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L95",
       "_origin": "ast",
-      "community": 51,
-      "community_name": "skills/ui-ux-pro-max/scripts/design_system.py",
+      "community": 111,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "testpersistence",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testpersistence"
     },
@@ -22059,8 +22059,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 51,
-      "community_name": "skills/ui-ux-pro-max/scripts/design_system.py",
+      "community": 111,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_persist_then_skip_then_force()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testpersistence_test_persist_then_skip_then_force"
     },
@@ -22070,8 +22070,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 51,
-      "community_name": "skills/ui-ux-pro-max/scripts/design_system.py",
+      "community": 111,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_persist_writes_only_under_output_dir()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testpersistence_test_persist_writes_only_under_output_dir"
     },
@@ -22169,8 +22169,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 61,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "assets/scripts/core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core"
     },
@@ -22257,8 +22257,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L237",
       "_origin": "ast",
-      "community": 61,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "_load_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_load_csv"
     },
@@ -22268,8 +22268,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L251",
       "_origin": "ast",
-      "community": 61,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "_get_bm25()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_get_bm25"
     },
@@ -22279,8 +22279,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L267",
       "_origin": "ast",
-      "community": 61,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "_search_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_search_csv"
     },
@@ -22290,8 +22290,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L292",
       "_origin": "ast",
-      "community": 61,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "_suggest_terms()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_suggest_terms"
     },
@@ -22301,8 +22301,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L323",
       "_origin": "ast",
-      "community": 61,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "_load_product_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_load_product_keywords"
     },
@@ -22312,8 +22312,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L347",
       "_origin": "ast",
-      "community": 61,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "_domain_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_domain_keywords"
     },
@@ -22345,8 +22345,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L442",
       "_origin": "ast",
-      "community": 61,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "search_stack()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_search_stack"
     },
@@ -22422,8 +22422,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L238",
       "_origin": "ast",
-      "community": 61,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "load csv and return list of dicts, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_238"
     },
@@ -22433,8 +22433,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L252",
       "_origin": "ast",
-      "community": 61,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "fitted bm25 index for this file+columns, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_252"
     },
@@ -22444,8 +22444,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L268",
       "_origin": "ast",
-      "community": 61,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "core search function using bm25. returns (results, bm25_or_none).",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_268"
     },
@@ -22455,8 +22455,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L293",
       "_origin": "ast",
-      "community": 61,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "nearest known vocabulary terms for a query that returned 0 hits, so the caller...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_293"
     },
@@ -22488,8 +22488,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L443",
       "_origin": "ast",
-      "community": 61,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "search stack-specific guidelines",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_443"
     },
@@ -22664,8 +22664,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L528",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "format_markdown()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_format_markdown"
     },
@@ -22675,8 +22675,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L668",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "generate_design_system()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_generate_design_system"
     },
@@ -22686,8 +22686,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L710",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "safe_slug()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_safe_slug"
     },
@@ -22697,8 +22697,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L721",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "persist_design_system()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_persist_design_system"
     },
@@ -22708,8 +22708,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L792",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "format_master_md()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_format_master_md"
     },
@@ -22895,8 +22895,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L529",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "format design system as markdown.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_529"
     },
@@ -22906,8 +22906,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L672",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "main entry point for design system generation. args: query: search query (e.g.,...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_672"
     },
@@ -22917,8 +22917,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L711",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "slugify a name into a single safe path segment. only [a-z0-9_-] survives; every...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_711"
     },
@@ -22928,8 +22928,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L723",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "persist design system to design-system/<project>/ folder using master +...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_723"
     },
@@ -22939,8 +22939,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L793",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "format design system as master.md with hierarchical override logic.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_793"
     },
@@ -23016,8 +23016,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "assets/scripts/tests/test_core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core"
     },
@@ -23126,8 +23126,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 61,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": ".test_every_stack_file_exists_and_is_searchable()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core_testsearchdomains_test_every_stack_file_exists_and_is_searchable"
     },
@@ -23192,8 +23192,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L95",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "testpersistence",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core_testpersistence"
     },
@@ -23203,8 +23203,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": ".test_persist_then_skip_then_force()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core_testpersistence_test_persist_then_skip_then_force"
     },
@@ -23214,8 +23214,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": ".test_persist_writes_only_under_output_dir()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core_testpersistence_test_persist_writes_only_under_output_dir"
     },
@@ -97346,16 +97346,64 @@
   ],
   "links": [
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "depends_on",
+      "context": "dependency",
       "confidence": "EXTRACTED",
-      "source_file": "apps/backend/alembic/env.py",
-      "source_location": "L8",
+      "confidence_score": 1.0,
+      "source_file": "apps/backend/pyproject.toml",
+      "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "apps_backend_alembic_env",
-      "target": "apps_shared_agroia_database",
-      "confidence_score": 1.0
+      "source": "pkg_agroia_backend",
+      "target": "pkg_agroia_shared"
+    },
+    {
+      "relation": "depends_on",
+      "context": "dependency",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/auth/pyproject.toml",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "pkg_agroia_auth",
+      "target": "pkg_agroia_shared"
+    },
+    {
+      "relation": "depends_on",
+      "context": "dependency",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/iot/pyproject.toml",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "pkg_agroia_iot",
+      "target": "pkg_agroia_shared"
+    },
+    {
+      "relation": "depends_on",
+      "context": "dependency",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/ml/pyproject.toml",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "pkg_agroia_ml",
+      "target": "pkg_agroia_shared"
+    },
+    {
+      "relation": "depends_on",
+      "context": "dependency",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/rag/pyproject.toml",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "pkg_agroia_rag",
+      "target": "pkg_agroia_shared"
     },
     {
       "relation": "contains",
@@ -97364,9 +97412,9 @@
       "source_location": "L51",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_env",
-      "target": "apps_backend_alembic_env_do_run_migrations",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_env_do_run_migrations"
     },
     {
       "relation": "contains",
@@ -97375,9 +97423,9 @@
       "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_env",
-      "target": "apps_backend_alembic_env_run_async_migrations",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_env_run_async_migrations"
     },
     {
       "relation": "contains",
@@ -97386,9 +97434,9 @@
       "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_env",
-      "target": "apps_backend_alembic_env_run_migrations_offline",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_env_run_migrations_offline"
     },
     {
       "relation": "contains",
@@ -97397,9 +97445,21 @@
       "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_env",
-      "target": "apps_backend_alembic_env_run_migrations_online",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_env_run_migrations_online"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/alembic/env.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_alembic_env",
+      "target": "apps_shared_agroia_database"
     },
     {
       "relation": "imports",
@@ -97409,9 +97469,9 @@
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_env",
-      "target": "asyncio",
-      "confidence_score": 1.0
+      "target": "asyncio"
     },
     {
       "relation": "rationale_for",
@@ -97420,9 +97480,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_env_rationale_1",
-      "target": "apps_backend_alembic_env",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_env"
     },
     {
       "relation": "rationale_for",
@@ -97431,9 +97491,9 @@
       "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_env_rationale_38",
-      "target": "apps_backend_alembic_env_run_migrations_offline",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_env_run_migrations_offline"
     },
     {
       "relation": "references",
@@ -97443,9 +97503,9 @@
       "source_location": "L51",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_env_do_run_migrations",
-      "target": "connection",
-      "confidence_score": 1.0
+      "target": "connection"
     },
     {
       "relation": "indirect_call",
@@ -97455,9 +97515,9 @@
       "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 0.5,
       "source": "apps_backend_alembic_env_run_async_migrations",
-      "target": "apps_backend_alembic_env_do_run_migrations",
-      "confidence_score": 0.5
+      "target": "apps_backend_alembic_env_do_run_migrations"
     },
     {
       "relation": "rationale_for",
@@ -97466,9 +97526,9 @@
       "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_env_rationale_65",
-      "target": "apps_backend_alembic_env_run_async_migrations",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_env_run_async_migrations"
     },
     {
       "relation": "calls",
@@ -97478,9 +97538,9 @@
       "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_env_run_migrations_online",
-      "target": "apps_backend_alembic_env_run_async_migrations",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_env_run_async_migrations"
     },
     {
       "relation": "rationale_for",
@@ -97489,9 +97549,9 @@
       "source_location": "L77",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_env_rationale_77",
-      "target": "apps_backend_alembic_env_run_migrations_online",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_env_run_migrations_online"
     },
     {
       "relation": "contains",
@@ -97500,9 +97560,9 @@
       "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_versions_003_dispositivos_iot",
-      "target": "apps_backend_alembic_versions_003_dispositivos_iot_downgrade",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_versions_003_dispositivos_iot_downgrade"
     },
     {
       "relation": "contains",
@@ -97511,9 +97571,9 @@
       "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_versions_003_dispositivos_iot",
-      "target": "apps_backend_alembic_versions_003_dispositivos_iot_upgrade",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_versions_003_dispositivos_iot_upgrade"
     },
     {
       "relation": "contains",
@@ -97522,9 +97582,9 @@
       "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_versions_003_infra_fincas",
-      "target": "apps_backend_alembic_versions_003_infra_fincas_crear_enum",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_versions_003_infra_fincas_crear_enum"
     },
     {
       "relation": "contains",
@@ -97533,9 +97593,9 @@
       "source_location": "L169",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_versions_003_infra_fincas",
-      "target": "apps_backend_alembic_versions_003_infra_fincas_downgrade",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_versions_003_infra_fincas_downgrade"
     },
     {
       "relation": "contains",
@@ -97544,9 +97604,9 @@
       "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_versions_003_infra_fincas",
-      "target": "apps_backend_alembic_versions_003_infra_fincas_upgrade",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_versions_003_infra_fincas_upgrade"
     },
     {
       "relation": "references",
@@ -97556,9 +97616,9 @@
       "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_versions_003_infra_fincas_crear_enum",
-      "target": "enum",
-      "confidence_score": 1.0
+      "target": "enum"
     },
     {
       "relation": "calls",
@@ -97568,9 +97628,9 @@
       "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_alembic_versions_003_infra_fincas_upgrade",
-      "target": "apps_backend_alembic_versions_003_infra_fincas_crear_enum",
-      "confidence_score": 1.0
+      "target": "apps_backend_alembic_versions_003_infra_fincas_crear_enum"
     },
     {
       "relation": "contains",
@@ -115071,54 +115131,6 @@
       "confidence_score": 1.0,
       "source": "apps_iot_agroia_iot_consumer_rationale_172",
       "target": "apps_iot_agroia_iot_consumer_iotingestionconsumer_stop"
-    },
-    {
-      "relation": "depends_on",
-      "context": "dependency",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/auth/pyproject.toml",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "pkg_agroia_auth",
-      "target": "pkg_agroia_shared"
-    },
-    {
-      "relation": "depends_on",
-      "context": "dependency",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/iot/pyproject.toml",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "pkg_agroia_iot",
-      "target": "pkg_agroia_shared"
-    },
-    {
-      "relation": "depends_on",
-      "context": "dependency",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/ml/pyproject.toml",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "pkg_agroia_ml",
-      "target": "pkg_agroia_shared"
-    },
-    {
-      "relation": "depends_on",
-      "context": "dependency",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/rag/pyproject.toml",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "pkg_agroia_rag",
-      "target": "pkg_agroia_shared"
     },
     {
       "relation": "contains",
@@ -216423,5 +216435,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "299cf6c5b57b1c667a7947c64130bfcae024d5e1"
+  "built_at_commit": "3a4e68d2088d4ba99ce78edaf453511797e0e6cd"
 }

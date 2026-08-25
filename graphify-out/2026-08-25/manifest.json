@@ -3700,8 +3700,8 @@
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
-    "mtime": 1787665156.7439616,
-    "ast_hash": "c1dcaa88a273a0619ae9545b93e4b6b4",
+    "mtime": 1787693049.310813,
+    "ast_hash": "acf6cd93c238e6cbcfb73bb506d6b241",
     "semantic_hash": ""
   },
   "apps/backend/tests/test_health.py": {
@@ -3990,8 +3990,8 @@
     "semantic_hash": ""
   },
   "apps/backend/alembic/env.py": {
-    "mtime": 1787691942.3166049,
-    "ast_hash": "c45029a99ec5c91d4ef54c442bb2430e",
+    "mtime": 1787693049.310813,
+    "ast_hash": "f2a39525252ddfe385ac093c66180d97",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/001_recomendaciones.py": {
@@ -4575,8 +4575,8 @@
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/003_dispositivos_iot.py": {
-    "mtime": 1787691942.407776,
-    "ast_hash": "40cb302eb18f9ffdd2b34730fb5ff831",
+    "mtime": 1787693193.991657,
+    "ast_hash": "5ab06d7f7d80554bde2956f338c54981",
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
@@ -4642,6 +4642,11 @@
   "tests/fixtures/mediciones.txt": {
     "mtime": 1787679947.7220848,
     "ast_hash": "d881eddaeb04ec9f19e01e96c8bfb57d",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/003_infra_fincas.py": {
+    "mtime": 1787693187.9023213,
+    "ast_hash": "d7ae08d69611463bb42a869bbab44c06",
     "semantic_hash": ""
   }
 }

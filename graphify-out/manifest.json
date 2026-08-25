@@ -3700,8 +3700,8 @@
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
-    "mtime": 1787693049.310813,
-    "ast_hash": "acf6cd93c238e6cbcfb73bb506d6b241",
+    "mtime": 1787693531.1023104,
+    "ast_hash": "9b4f66711ef5d924fdbe7b35efc0e6da",
     "semantic_hash": ""
   },
   "apps/backend/tests/test_health.py": {
@@ -3790,8 +3790,8 @@
     "semantic_hash": ""
   },
   "apps/shared/pyproject.toml": {
-    "mtime": 1785886797.5521245,
-    "ast_hash": "7eba2718fdd76d0c91ced1e7a76b8645",
+    "mtime": 1787693531.1023104,
+    "ast_hash": "04f0f93151250dbded51fb6a8648043c",
     "semantic_hash": ""
   },
   "docker/init-db.sql": {

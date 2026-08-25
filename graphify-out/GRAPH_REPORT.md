@@ -1,16 +1,16 @@
 # Graph Report - Agro-ia  (2026-08-25)
 
 ## Corpus Check
-- 871 files · ~522,594 words
+- 871 files · ~522,612 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 8846 nodes · 10615 edges · 862 communities (734 shown, 128 thin omitted)
+- 8846 nodes · 10616 edges · 860 communities (733 shown, 127 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 266 edges (avg confidence: 0.51)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `299cf6c5`
+- Built from commit: `3a4e68d2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -76,7 +76,7 @@
 - card
 - assets/skills/brand/scripts/extract-colors.cjs
 - assets/skills/brand/scripts/validate-asset.cjs
-- assets/scripts/core.py
+- skills/ui-ux-pro-max/scripts/core.py
 - usuarios.py
 - get_field_info
 - get_soffice_env
@@ -107,7 +107,6 @@
 - search
 - .claude/skills/design/scripts/logo/generate.py
 - .claude/skills/design-system/scripts/generate-tokens.cjs
-- assets/scripts/tests/test_core.py
 - ._base_config
 - assets/skills/design/scripts/logo/generate.py
 - assets/skills/design-system/scripts/generate-tokens.cjs
@@ -126,7 +125,7 @@
 - input
 - radius
 - ensure-test-user.mjs
-- detect_domain
+- skills/ui-ux-pro-max/scripts/tests/test_core.py
 - detect_domain
 - detect_domain
 - app.js
@@ -807,7 +806,6 @@
 - 🏷️ Tags del Grafo
 - environment.ts
 - validate_colombia.py
-- agroia-backend
 - agroia_auth/api/auth.py
 - Injectable
 - Datasets para AgroIA
@@ -886,7 +884,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (862 total, 128 thin omitted)
+## Communities (860 total, 127 thin omitted)
 
 ### Community 0 - "init.ts"
 Cohesion: 0.06
@@ -1033,16 +1031,16 @@ Cohesion: 0.20
 Nodes (12): $type, $value, bg, bg, padding, shadow, card, bg (+4 more)
 
 ### Community 36 - "BM25"
-Cohesion: 0.10
-Nodes (21): BM25, _domain_keywords(), _get_bm25(), _load_csv(), _load_product_keywords(), _normalize(), Apply synonym substitution before tokenizing., BM25 ranking algorithm for text search (+13 more)
-
-### Community 37 - "BM25"
 Cohesion: 0.15
 Nodes (9): BM25, _normalize(), Apply synonym substitution before tokenizing., BM25 ranking algorithm for text search, Lowercase, normalize synonyms, split, remove punctuation, filter stopwords, Build BM25 index from documents, Score all documents against query, All indexed terms, for suggestion/typo-recovery purposes. (+1 more)
 
+### Community 37 - "BM25"
+Cohesion: 0.10
+Nodes (21): BM25, _domain_keywords(), _get_bm25(), _load_csv(), _load_product_keywords(), _normalize(), Apply synonym substitution before tokenizing., BM25 ranking algorithm for text search (+13 more)
+
 ### Community 38 - "assets/scripts/design_system.py"
-Cohesion: 0.15
-Nodes (16): ansi_ljust(), _detect_page_type(), format_ascii_box(), format_page_override_md(), _generate_intelligent_overrides(), hex_to_ansi(), Format a page-specific override file with intelligent AI-generated content., Generate intelligent overrides based on page type using layered search. Uses… (+8 more)
+Cohesion: 0.09
+Nodes (27): ansi_ljust(), _detect_page_type(), format_ascii_box(), format_markdown(), format_master_md(), format_page_override_md(), generate_design_system(), _generate_intelligent_overrides() (+19 more)
 
 ### Community 39 - "BM25"
 Cohesion: 0.15
@@ -1093,8 +1091,8 @@ Cohesion: 0.12
 Nodes (9): Test adding components that are already installed., Test adding components in dry run mode., Test ShadcnInstaller class., Test adding all components without config., Test listing installed components without config., Test listing installed components when none exist., Test initialization with default project root., Test getting installed components when files exist. (+1 more)
 
 ### Community 51 - "skills/ui-ux-pro-max/scripts/design_system.py"
-Cohesion: 0.10
-Nodes (25): ansi_ljust(), _detect_page_type(), format_ascii_box(), format_markdown(), format_master_md(), format_page_override_md(), generate_design_system(), _generate_intelligent_overrides() (+17 more)
+Cohesion: 0.12
+Nodes (24): ansi_ljust(), _detect_page_type(), format_ascii_box(), format_markdown(), format_master_md(), format_page_override_md(), generate_design_system(), _generate_intelligent_overrides() (+16 more)
 
 ### Community 52 - "keywords"
 Cohesion: 0.13
@@ -1132,7 +1130,7 @@ Nodes (11): calculateCompliance(), colorDistance(), displayPalette(), extractHex
 Cohesion: 0.25
 Nodes (13): checkManifest(), formatBytes(), formatOutput(), fs, main(), parseFilename(), path, RULES (+5 more)
 
-### Community 61 - "assets/scripts/core.py"
+### Community 61 - "skills/ui-ux-pro-max/scripts/core.py"
 Cohesion: 0.21
 Nodes (12): _domain_keywords(), _get_bm25(), _load_csv(), _load_product_keywords(), Load CSV and return list of dicts, with mtime-based caching., Fitted BM25 index for this file+columns, with mtime-based caching., Core search function using BM25. Returns (results, bm25_or_none)., Nearest known vocabulary terms for a query that returned 0 hits, so the caller… (+4 more)
 
@@ -1256,10 +1254,6 @@ Nodes (9): enhance_prompt(), generate_batch(), generate_logo(), load_env(), main
 Cohesion: 0.36
 Nodes (9): flattenTokens(), fs, generateCSS(), generateTailwind(), main(), parseArgs(), path, resolveReference() (+1 more)
 
-### Community 92 - "assets/scripts/tests/test_core.py"
-Cohesion: 0.18
-Nodes (11): format_markdown(), format_master_md(), generate_design_system(), persist_design_system(), Format design system as markdown., Main entry point for design system generation. Args: query: Search query (e.g.,…, Slugify a name into a single safe path segment. Only [a-z0-9_-] survives; every…, Persist design system to design-system/<project>/ folder using Master +… (+3 more)
-
 ### Community 93 - "._base_config"
 Cohesion: 0.22
 Nodes (6): Any, Path, Initialize generator. Args: typescript: If True, generate .ts config, else .js…, Determine default output path., Create base configuration structure., Get default content paths for framework.
@@ -1328,9 +1322,9 @@ Nodes (14): $type, $value, $type, $value, $type, $value, primitive, radius (+6 m
 Cohesion: 0.46
 Nodes (7): generateEmail(), generatePassword(), main(), parseArgs(), readEnvFile(), seedViaApi(), upsertEnvFile()
 
-### Community 111 - "detect_domain"
-Cohesion: 0.43
-Nodes (3): detect_domain(), Auto-detect the most relevant domain from query. Matches are weighted by…, TestDomainDetection
+### Community 111 - "skills/ui-ux-pro-max/scripts/tests/test_core.py"
+Cohesion: 0.25
+Nodes (4): detect_domain(), Auto-detect the most relevant domain from query. Matches are weighted by…, TestDomainDetection, TestPersistence
 
 ### Community 112 - "detect_domain"
 Cohesion: 0.43
@@ -2941,8 +2935,8 @@ Cohesion: 0.04
 Nodes (94): cargar_archivo_sensor(), DispositivoRegistro, Esp32SensorMessage, ingest_esp32_sensor(), ingest_sensor_data(), BaseModel, post, API endpoints para ingesta IoT y estado de sensores. (+86 more)
 
 ### Community 607 - "agroia-shared"
-Cohesion: 0.40
-Nodes (5): agroia-auth, agroia-iot, agroia-ml, agroia-rag, agroia-shared
+Cohesion: 0.33
+Nodes (6): agroia-auth, agroia-backend, agroia-iot, agroia-ml, agroia-rag, agroia-shared
 
 ### Community 608 - "10. Conceptos Transversales"
 Cohesion: 0.33
@@ -3751,17 +3745,17 @@ Nodes (3): secondary-foreground, $type, $value
 ## Knowledge Gaps
 - **4147 isolated node(s):** `agroia-backend`, `🎯 Objetivo`, `📊 Estado por épica`, `🏗️ Stack`, `📁 Estructura` (+4142 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **128 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **127 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `primitive` connect `radius` to `.claude/skills/design-system/templates/design-tokens-starter.json`, `gray`, `fontSize`, `spacing`, `duration`?**
   _High betweenness centrality (0.001) - this node is a cross-community bridge._
-- **Why does `InsufficientDataError` connect `iot.py` to `catalogo.py`?**
+- **Why does `aplicar_calibracion()` connect `tmp_reporte_esp32.py` to `integration_test.py`?**
   _High betweenness centrality (0.001) - this node is a cross-community bridge._
-- **Why does `BM25` connect `BM25` to `BM25`, `BM25`, `search`, `BM25`, `detect_domain`, `detect_domain`, `search`, `search`, `skills/ui-ux-pro-max/scripts/design_system.py`, `detect_domain`, `DesignSystemGenerator`, `DesignSystemGenerator`, `search`, `DesignSystemGenerator`, `assets/scripts/tests/test_core.py`, `src/ui-ux-pro-max/scripts/tests/test_core.py`?**
-  _High betweenness centrality (0.000) - this node is a cross-community bridge._
+- **Why does `process_sensor_message()` connect `tmp_reporte_esp32.py` to `database.py`, `iot.py`?**
+  _High betweenness centrality (0.001) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `TailwindConfigGenerator` (e.g. with `TestGeneratedConfigIsValidJs` and `TestTailwindConfigGenerator`) actually correct?**
   _`TailwindConfigGenerator` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `ShadcnInstaller` (e.g. with `TestShadcnInstaller` and `TestShadcnInstaller`) actually correct?**
