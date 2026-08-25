@@ -1,6 +1,6 @@
 # AgroIA — Estado del Proyecto
 
-> **Fecha:** 2026-08-25 | **Versión:** 0.1.0 | **Pipeline:** janus → epicureo → archi → genesis → builder | **CI:** 🟢 verde | **Deploy:** Render blueprint listo (`render.yaml`)
+> **Fecha:** 2026-08-25 | **Versión:** 0.1.0 | **Pipeline:** janus → epicureo → archi → genesis → builder | **CI:** 🟢 verde | **Producción:** 🌐 https://agroia-backend.onrender.com (Render Free + Neon)
 
 ## 🎯 Objetivo
 
@@ -36,14 +36,18 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 
 ## 🚀 Despliegue gratuito (Render + Neon/Supabase)
 
-**Estado:** `render.yaml` (blueprint) listo en la raíz; CI en verde (Lint ✓, Tests ✓, Build Docker ✓).
+**Estado:** ✅ **EN PRODUCCIÓN** — https://agroia-backend.onrender.com (Render Web Service Free + Neon Postgres Free). CI en verde; auto-deploy en cada push a `master`.
 
-### Pasos
+### Cómo está montado
 
-1. Crear cuenta en [Render](https://render.com) (login con GitHub).
-2. Crear Postgres gratis con pgvector en [Neon](https://neon.tech) o [Supabase](https://supabase.com) (ambos con tier gratuito permanente; el Postgres de Render solo es gratis 30 días).
-3. En Render: **New + → Blueprint** → seleccionar `erick880709/Agro-ia` → pegar la URL de Neon en `DATABASE_URL` (formato `postgresql+asyncpg://...`).
-4. El blueprint levanta el web service en plan **Free** ($0): Docker + migraciones automáticas (`alembic upgrade head`) + health check en `/api/v1/health`. Cada push a `master` redeploya automáticamente.
+- **Render Blueprint** (`render.yaml`): web service Docker desde `apps/backend/Dockerfile`, health check `/api/v1/health`, migraciones `alembic upgrade head` automáticas al arrancar el contenedor (Render free no permite `preDeployCommand`).
+- **Neon** (`agroia`): Postgres free con SSL. El backend normaliza la URL (`sslmode=require` → `ssl=require`, solo asyncpg) y pone `agroia` en el `search_path` de cada conexión.
+- **Datos sembrados**: 30 cultivos, 23 reglas, usuarios (admin/agrónomo/cliente), 4 fincas y finca demo integral con lecturas. Scripts: `load_seeds.py`, `scripts/seed_cloud.py`, `scripts/seed_demo_integral.py` (apuntan a `DATABASE_URL`).
+
+### Migraciones destacadas
+
+- `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).
+- `005_fix_enum_values` — renombra valores de enums creados por 003 (valores → nombres de miembro: `Admin` → `ADMIN`).
 
 ### Límites del tier gratuito (validados 2026-08-25)
 
