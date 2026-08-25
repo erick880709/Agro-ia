@@ -6,10 +6,8 @@ con los datos disponibles.
 """
 
 from datetime import datetime, timedelta
-from typing import Optional
 
 import httpx
-
 from agroia.config import get_settings
 from agroia.logging import get_logger
 
@@ -147,7 +145,7 @@ async def fetch_ideam_historical(lat: float, lon: float, months: int = 12) -> di
 
 async def fetch_ideam_climate(
     lat: float, lon: float, dataset_id: str | None = None
-) -> Optional[dict]:
+) -> dict | None:
     """Obtiene datos climáticos del IDEAM para una ubicación.
 
     Args:
@@ -194,7 +192,7 @@ async def fetch_ideam_climate(
 # Google Maps GIS — Geolocalización (on-demand)
 # ═══════════════════════════════════════════════════════════════
 
-async def fetch_gis_location(address: str) -> Optional[dict]:
+async def fetch_gis_location(address: str) -> dict | None:
     """Geocodifica una dirección usando Google Maps Geocoding API.
 
     Args:
@@ -232,7 +230,7 @@ async def fetch_gis_location(address: str) -> Optional[dict]:
         return None
 
 
-async def fetch_gis_elevation(lat: float, lon: float) -> Optional[dict]:
+async def fetch_gis_elevation(lat: float, lon: float) -> dict | None:
     """Obtiene altitud para coordenadas usando Google Maps Elevation API."""
     if not settings.google_maps_api_key:
         return None
@@ -263,7 +261,7 @@ async def fetch_gis_elevation(lat: float, lon: float) -> Optional[dict]:
 # IGAC — Datos edafológicos (bajo demanda, shapefiles)
 # ═══════════════════════════════════════════════════════════════
 
-async def fetch_igac_soil_data(lat: float, lon: float) -> Optional[dict]:
+async def fetch_igac_soil_data(lat: float, lon: float) -> dict | None:
     """Obtiene datos edafológicos del IGAC para una coordenada.
 
     Nota: IGAC expone shapefiles vía WFS/Geoserver. Este conector
@@ -287,7 +285,7 @@ async def fetch_igac_soil_data(lat: float, lon: float) -> Optional[dict]:
 # Copernicus / Sentinel-2 — NDVI (cada 5 días)
 # ═══════════════════════════════════════════════════════════════
 
-async def fetch_copernicus_ndvi(lat: float, lon: float) -> Optional[dict]:
+async def fetch_copernicus_ndvi(lat: float, lon: float) -> dict | None:
     """Obtiene el índice NDVI más reciente de Copernicus/Sentinel-2.
 
     Nota: Copernicus requiere autenticación OAuth2. Para desarrollo

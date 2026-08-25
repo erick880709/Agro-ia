@@ -8,15 +8,14 @@ activo de la sesión demo.
 
 import re
 import uuid as uuid_mod
-from typing import Optional
 
+from agroia.database import get_db
+from agroia.logging import get_logger
 from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from agroia.database import get_db
-from agroia.logging import get_logger
 from agroia_backend.models.finca import Finca
 
 logger = get_logger(__name__)
@@ -29,7 +28,7 @@ _RE_LATLNG_URL = re.compile(r"(-?\d+(?:\.\d+)?)[,\s]+(-?\d+(?:\.\d+)?)")
 _RE_PAR = re.compile(r"^(-?\d+(?:\.\d+)?)[,\s]+(-?\d+(?:\.\d+)?)$")
 
 
-def _extraer_coordenadas(texto: str) -> tuple[Optional[float], Optional[float]]:
+def _extraer_coordenadas(texto: str) -> tuple[float | None, float | None]:
     """Extrae (lat, lng) de un enlace de Google Maps o de texto 'lat, lng'."""
     if not texto:
         return None, None
@@ -50,15 +49,15 @@ class FincaCreate(BaseModel):
     coordenadas_google: str = Field(..., max_length=500, description="Enlace de Google Maps o 'lat, lng'")
     propietario: str = Field(..., min_length=2, max_length=200)
     contacto_telefono: str = Field(..., min_length=7, max_length=50)
-    contacto_email: Optional[str] = Field(None, max_length=255)
-    area_hectareas: Optional[float] = Field(None, ge=0, le=1_000_000)
-    largo_metros: Optional[float] = Field(None, ge=0)
-    ancho_metros: Optional[float] = Field(None, ge=0)
-    altitud_msnm: Optional[float] = None
+    contacto_email: str | None = Field(None, max_length=255)
+    area_hectareas: float | None = Field(None, ge=0, le=1_000_000)
+    largo_metros: float | None = Field(None, ge=0)
+    ancho_metros: float | None = Field(None, ge=0)
+    altitud_msnm: float | None = None
 
     @field_validator("contacto_email")
     @classmethod
-    def _email(cls, v: Optional[str]) -> Optional[str]:
+    def _email(cls, v: str | None) -> str | None:
         if v and "@" not in v:
             raise ValueError("Email de contacto inválido")
         return v
@@ -85,10 +84,10 @@ def _finca_a_dict(f: Finca) -> dict:
 
 @router.get("/fincas")
 async def listar_fincas(
-    search: Optional[str] = Query(None),
+    search: str | None = Query(None),
     db: AsyncSession = Depends(get_db),
-    x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
-    x_user_email: Optional[str] = Header(None, alias="X-User-Email"),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
 ):
     """Lista las fincas visibles para el rol actual.
 
@@ -114,7 +113,7 @@ async def listar_fincas(
 async def registrar_finca(
     body: FincaCreate,
     db: AsyncSession = Depends(get_db),
-    x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
 ):
     """Registra una finca. Solo disponible para el rol administrador."""
     rol = (x_user_role or "").strip().lower()

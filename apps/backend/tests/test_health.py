@@ -1,7 +1,7 @@
 """Tests del health check del backend."""
 import pytest
-from httpx import ASGITransport, AsyncClient
 from agroia_backend.main import app
+from httpx import ASGITransport, AsyncClient
 
 
 @pytest.mark.asyncio

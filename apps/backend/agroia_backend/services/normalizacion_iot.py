@@ -58,7 +58,6 @@ MAPA_CAMPOS = {
     "azufre": "azufre",
     "hierro": "hierro",
     "manganeso": "manganeso",
-    "zinc": "zinc",
     "cobre": "cobre",
     "boro": "boro",
     "materia_organica": "materia_organica",

@@ -7,7 +7,6 @@ invoca modelos ML → aplica reglas → detecta discordancia → ensambla respue
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Optional
 
 from agroia.errors import InsufficientDataError
 from agroia.logging import get_logger
@@ -22,8 +21,8 @@ SLA_DISCORDANCIA_DIAS = 10
 class RecommendationRequest:
     """Solicitud de análisis de aptitud."""
     finca_id: str
-    cultivo_id: Optional[str] = None
-    tenant_id: Optional[str] = None
+    cultivo_id: str | None = None
+    tenant_id: str | None = None
 
 
 @dataclass
@@ -34,8 +33,8 @@ class RecommendationResult:
     confianza: float
     recomendaciones: list[dict] = field(default_factory=list)
     justificacion: dict = field(default_factory=dict)
-    advertencia: Optional[str] = None
-    discordancia: Optional[dict] = None
+    advertencia: str | None = None
+    discordancia: dict | None = None
     tiempo_respuesta_ms: float = 0.0
     sugerencias_cultivos: list[dict] = field(default_factory=list)
     modo: str = "analizar_cultivo"
@@ -107,7 +106,7 @@ class RecommendationOrchestrator:
         return await self._analizar_cultivo(request, soil_dict, t_start, advertencia_datos)
 
     async def _recomendar_cultivos(
-        self, soil_dict: dict, t_start: datetime, advertencia_datos: Optional[str] = None
+        self, soil_dict: dict, t_start: datetime, advertencia_datos: str | None = None
     ) -> "RecommendationResult":
         """UC1: puntúa todos los cultivos y recomienda los más aptos."""
         if self.aptitud is None:
@@ -160,7 +159,7 @@ class RecommendationOrchestrator:
         request: RecommendationRequest,
         soil_dict: dict,
         t_start: datetime,
-        advertencia_datos: Optional[str] = None,
+        advertencia_datos: str | None = None,
     ) -> "RecommendationResult":
         """UC2: evalúa el suelo contra las reglas del cultivo sembrado."""
         from sqlalchemy import select
@@ -299,8 +298,8 @@ class RecommendationOrchestrator:
 
     @staticmethod
     def _combinar_advertencias(
-        principal: Optional[str], datos: Optional[str]
-    ) -> Optional[str]:
+        principal: str | None, datos: str | None
+    ) -> str | None:
         """Combina la advertencia del análisis con las de calidad de datos."""
         if principal and datos:
             return f"{principal} {datos}"

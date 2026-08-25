@@ -9,14 +9,13 @@ Estrategia: Monolito modular con routers por dominio.
 import os
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-
 from agroia.config import get_settings
 from agroia.errors import register_error_handlers
 from agroia.health import router as health_router
 from agroia.logging import get_logger, setup_logging
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 # ── Registro de modelos en Base.metadata ──
 # Estos imports garantizan que SQLAlchemy conozca todas las tablas al
@@ -32,6 +31,17 @@ import agroia_backend.models.recomendacion  # noqa: F401
 import agroia_backend.models.regla_agronomica  # noqa: F401
 import agroia_backend.models.sensor_reading  # noqa: F401
 import agroia_backend.models.usuario  # noqa: F401
+
+from agroia_backend.api.auth import router as auth_router
+from agroia_backend.api.catalogo import router as catalogo_router
+from agroia_backend.api.dashboard import router as dashboard_router
+from agroia_backend.api.fincas import router as fincas_router
+from agroia_backend.api.iot import router as iot_router
+from agroia_backend.api.location import router as location_router
+from agroia_backend.api.recomendaciones import router as recomendaciones_router
+from agroia_backend.api.reportes import router as reportes_router
+from agroia_backend.api.sensor_api import router as sensor_api_router
+from agroia_backend.api.usuarios import router as usuarios_router
 
 settings = get_settings()
 setup_logging()
@@ -70,19 +80,7 @@ app.include_router(health_router, prefix="/api/v1")
 register_error_handlers(app)
 
 
-# ── Placeholder routers ──
-# Estos serán poblados por builder al generar cada módulo de dominio:
-from agroia_backend.api.recomendaciones import router as recomendaciones_router
-from agroia_backend.api.catalogo import router as catalogo_router
-from agroia_backend.api.iot import router as iot_router
-from agroia_backend.api.dashboard import router as dashboard_router
-from agroia_backend.api.usuarios import router as usuarios_router
-from agroia_backend.api.location import router as location_router
-from agroia_backend.api.fincas import router as fincas_router
-from agroia_backend.api.auth import router as auth_router
-from agroia_backend.api.reportes import router as reportes_router
-from agroia_backend.api.sensor_api import router as sensor_api_router
-
+# ── Routers por dominio ──
 app.include_router(recomendaciones_router)
 app.include_router(catalogo_router)
 app.include_router(iot_router)

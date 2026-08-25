@@ -7,7 +7,7 @@ _SALT = "agroia:"
 
 
 def hash_password(password: str) -> str:
-    return hashlib.sha256(f"{_SALT}{password}".encode("utf-8")).hexdigest()
+    return hashlib.sha256(f"{_SALT}{password}".encode()).hexdigest()
 
 
 def verify_password(password: str, password_hash: str) -> bool:

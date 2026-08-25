@@ -4,9 +4,6 @@ Precarga ~30 cultivos: 5 prioritarios colombianos + ~25 internacionales.
 Ejecutar UNA sola vez: python -m agroia_backend.seeds.cultivos
 """
 
-import json
-import uuid
-from datetime import datetime
 
 # ── Cultivos prioritarios colombianos (fuente nacional, ficha completa) ──
 CULTIVOS_COLOMBIA = [

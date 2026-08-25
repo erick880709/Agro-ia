@@ -5,15 +5,13 @@ el estado de calibración NPK del dispositivo (brecha G4).
 """
 
 import uuid
-
 from datetime import datetime
-from typing import Optional
 
+from agroia.database import Base
 from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
-from agroia.database import Base
 from agroia_backend.models import TimestampMixin
 
 
@@ -36,7 +34,7 @@ class DispositivoIoT(Base, TimestampMixin):
         nullable=False,
         index=True,
     )
-    nombre: Mapped[Optional[str]] = mapped_column(
+    nombre: Mapped[str | None] = mapped_column(
         String(200), nullable=True, comment="Nombre amigable del dispositivo"
     )
     activo: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
@@ -46,19 +44,19 @@ class DispositivoIoT(Base, TimestampMixin):
         Boolean, nullable=False, default=False,
         comment="True cuando NPK fue calibrado contra análisis de laboratorio",
     )
-    factores_calibracion: Mapped[Optional[dict]] = mapped_column(
+    factores_calibracion: Mapped[dict | None] = mapped_column(
         JSONB, nullable=True,
         comment="Factores multiplicativos por variable: {\"nitrogeno\": 1.2, ...}",
     )
 
     # ── Telemetría del dispositivo ──
-    ultima_transmision: Mapped[Optional[datetime]] = mapped_column(
+    ultima_transmision: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
-    rssi: Mapped[Optional[int]] = mapped_column(
+    rssi: Mapped[int | None] = mapped_column(
         Integer, nullable=True, comment="dBm de la última transmisión"
     )
-    uptime_s: Mapped[Optional[int]] = mapped_column(
+    uptime_s: Mapped[int | None] = mapped_column(
         Integer, nullable=True, comment="Segundos desde el último reinicio"
     )
 

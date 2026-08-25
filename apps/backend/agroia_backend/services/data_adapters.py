@@ -6,10 +6,10 @@ NDVI y GIS, abstrayendo la fuente de almacenamiento subyacente.
 
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Optional
 
 from agroia.logging import get_logger
-from agroia_backend.models.sensor_reading import SensorReading, TexturaSuelo
+
+from agroia_backend.models.sensor_reading import SensorReading
 
 logger = get_logger(__name__)
 
@@ -33,25 +33,25 @@ class SoilData:
     """Datos de suelo normalizados para el motor de recomendaciones."""
     finca_id: str
     ts: datetime
-    ph: Optional[float] = None
-    nitrogeno: Optional[float] = None
-    fosforo: Optional[float] = None
-    potasio: Optional[float] = None
-    calcio: Optional[float] = None
-    magnesio: Optional[float] = None
-    azufre: Optional[float] = None
-    hierro: Optional[float] = None
-    manganeso: Optional[float] = None
-    zinc: Optional[float] = None
-    cobre: Optional[float] = None
-    boro: Optional[float] = None
-    materia_organica: Optional[float] = None
-    cic: Optional[float] = None
-    textura: Optional[str] = None
-    humedad: Optional[float] = None
-    temperatura_suelo: Optional[float] = None
-    conductividad_electrica: Optional[float] = None
-    calidad: Optional[str] = "OK"
+    ph: float | None = None
+    nitrogeno: float | None = None
+    fosforo: float | None = None
+    potasio: float | None = None
+    calcio: float | None = None
+    magnesio: float | None = None
+    azufre: float | None = None
+    hierro: float | None = None
+    manganeso: float | None = None
+    zinc: float | None = None
+    cobre: float | None = None
+    boro: float | None = None
+    materia_organica: float | None = None
+    cic: float | None = None
+    textura: str | None = None
+    humedad: float | None = None
+    temperatura_suelo: float | None = None
+    conductividad_electrica: float | None = None
+    calidad: str | None = "OK"
     missing_blocking: list[str] = field(default_factory=list)
     missing_non_blocking: list[str] = field(default_factory=list)
 
@@ -128,9 +128,9 @@ class SueloAdapter:
     def __init__(self, db_session):
         self.db = db_session
 
-    async def get_latest(self, finca_id: str, max_age_hours: int = 24) -> Optional[SoilData]:
+    async def get_latest(self, finca_id: str, max_age_hours: int = 24) -> SoilData | None:
         """Obtiene la lectura más reciente para una finca (máx. 24h de antigüedad)."""
-        from sqlalchemy import select, desc
+        from sqlalchemy import desc, select
 
         cutoff = datetime.utcnow() - timedelta(hours=max_age_hours)
         stmt = (

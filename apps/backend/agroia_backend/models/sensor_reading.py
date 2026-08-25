@@ -4,17 +4,14 @@ Usa TimescaleDB hypertable para series temporales.
 No tiene tenant_id — los datos de sensor se asocian vía finca_id.
 """
 
+import enum
 import uuid
 from datetime import datetime
-from typing import Optional
 
-import enum
-
+from agroia.database import Base
 from sqlalchemy import DateTime, Float, ForeignKey, String, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
-
-from agroia.database import Base
 
 
 class TexturaSuelo(str, enum.Enum):

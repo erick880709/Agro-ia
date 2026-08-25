@@ -7,18 +7,16 @@ de revisión periódica cada 12 meses.
 
 import uuid
 from datetime import datetime
-from typing import Optional
-
-from sqlalchemy import func, select, or_
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia.errors import NotFoundError, ValidationError
 from agroia.logging import get_logger
+from sqlalchemy import func, or_, select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from agroia_backend.models.cultivo import (
     Cultivo,
     EstadoFicha,
     FichaTecnica,
-    TipoFuente,
 )
 
 logger = get_logger(__name__)
@@ -213,7 +211,7 @@ async def obtener_fichas_para_recomendaciones(db: AsyncSession) -> list[FichaTec
     (fuente nacional, estado Publicado, sin etiqueta internacional)."""
     stmt = select(FichaTecnica).where(
         FichaTecnica.estado == EstadoFicha.PUBLICADO,
-        FichaTecnica.etiqueta_internacional == False,
+        FichaTecnica.etiqueta_internacional.is_(False),
     )
     result = await db.execute(stmt)
     return result.scalars().all()
@@ -236,7 +234,7 @@ async def obtener_fichas_vencidas_revision_periodica(db: AsyncSession) -> list[F
     stmt = select(FichaTecnica).where(
         FichaTecnica.estado == EstadoFicha.PUBLICADO,
         or_(
-            FichaTecnica.fecha_ultima_revision == None,
+            FichaTecnica.fecha_ultima_revision.is_(None),
             FichaTecnica.fecha_ultima_revision < cutoff,
         )
     )

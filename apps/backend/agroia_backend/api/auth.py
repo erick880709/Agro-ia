@@ -4,14 +4,13 @@ Login real contra los hashes de `usuarios.password_hash`. El Auth Service
 (JWT/OAuth2) reemplazará este endpoint cuando se despliegue.
 """
 
-from typing import Optional
 
+from agroia.database import async_session_factory
+from agroia.logging import get_logger
 from fastapi import APIRouter, Header, HTTPException
 from pydantic import BaseModel, EmailStr
 from sqlalchemy import select
 
-from agroia.database import async_session_factory
-from agroia.logging import get_logger
 from agroia_backend.models.usuario import Usuario
 from agroia_backend.services.auth_utils import verify_password
 
@@ -27,7 +26,7 @@ class LoginRequest(BaseModel):
 @router.post("/login")
 async def login(
     body: LoginRequest,
-    x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
 ):
     """Valida email/contraseña y devuelve los datos de sesión del usuario."""
     email = body.email.lower()

@@ -2,15 +2,17 @@
 
 import enum
 import uuid
-from datetime import datetime
-from typing import Optional
+from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, Float, ForeignKey, String, Text, func
+from agroia.database import Base
+from sqlalchemy import Float, ForeignKey
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from agroia.database import Base
 from agroia_backend.models import TenantMixin, TimestampMixin
+
+if TYPE_CHECKING:
+    from agroia_backend.models.discordancia import Discordancia
 
 # ── Enums ──
 
@@ -57,7 +59,7 @@ class Recomendacion(Base, TenantMixin, TimestampMixin):
         nullable=False,
         default=EstadoRecomendacion.PUBLICADA,
     )
-    tecnico_id: Mapped[Optional[uuid.UUID]] = mapped_column(
+    tecnico_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True),
         ForeignKey("agroia.usuarios.id"),
         nullable=True,

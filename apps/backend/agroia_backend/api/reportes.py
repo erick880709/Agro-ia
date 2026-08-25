@@ -8,16 +8,15 @@ Tipos:
 
 import uuid as uuid_mod
 from dataclasses import asdict
-from typing import Optional
 
+from agroia.database import get_db
+from agroia.errors import InsufficientDataError
+from agroia.logging import get_logger
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from agroia.database import get_db
-from agroia.errors import InsufficientDataError
-from agroia.logging import get_logger
 from agroia_backend.models.dispositivo_iot import DispositivoIoT
 from agroia_backend.models.finca import Finca
 from agroia_backend.models.sensor_reading import SensorReading
@@ -38,15 +37,15 @@ router = APIRouter(prefix="/api/v1/reportes", tags=["reportes"])
 class ReporteRequest(BaseModel):
     finca_id: str = Field(..., description="UUID de la finca a reportar")
     tipo: str = Field("completo", pattern="^(siembra|cultivo|completo)$")
-    cultivo_id: Optional[str] = Field(None, description="UUID del cultivo sembrado (obligatorio en tipo 'cultivo')")
+    cultivo_id: str | None = Field(None, description="UUID del cultivo sembrado (obligatorio en tipo 'cultivo')")
 
 
 @router.post("/generar")
 async def generar_reporte(
     body: ReporteRequest,
     db: AsyncSession = Depends(get_db),
-    x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
-    x_user_email: Optional[str] = Header(None, alias="X-User-Email"),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
 ):
     """Genera el HTML del reporte según el tipo solicitado."""
     await verificar_acceso_finca(db, x_user_role, x_user_email, body.finca_id)

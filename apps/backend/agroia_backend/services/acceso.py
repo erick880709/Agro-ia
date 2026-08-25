@@ -10,7 +10,6 @@ El rol viaja en `X-User-Role` y el email en `X-User-Email` (sesión demo).
 """
 
 import uuid
-from typing import Optional
 
 from fastapi import HTTPException
 from sqlalchemy import select
@@ -22,11 +21,11 @@ from agroia_backend.models.usuario import Usuario
 ROLES_TOTALES = {"admin", "agronomo", "investigador", "tecnico"}
 
 
-def _normalizar(rol: Optional[str]) -> str:
+def _normalizar(rol: str | None) -> str:
     return (rol or "").strip().lower()
 
 
-async def get_usuario(db, email: Optional[str]) -> Optional[Usuario]:
+async def get_usuario(db, email: str | None) -> Usuario | None:
     """Busca el usuario por email (sesión demo)."""
     email = (email or "").strip().lower()
     if not email:
@@ -37,8 +36,8 @@ async def get_usuario(db, email: Optional[str]) -> Optional[Usuario]:
 
 
 async def fincas_permitidas_ids(
-    db, rol: Optional[str], email: Optional[str]
-) -> Optional[list[uuid.UUID]]:
+    db, rol: str | None, email: str | None
+) -> list[uuid.UUID] | None:
     """Devuelve los IDs de fincas visibles o None si tiene acceso total."""
     r = _normalizar(rol)
     if r in ROLES_TOTALES:
@@ -68,7 +67,7 @@ async def fincas_permitidas_ids(
 
 
 async def verificar_acceso_finca(
-    db, rol: Optional[str], email: Optional[str], finca_id: str
+    db, rol: str | None, email: str | None, finca_id: str
 ) -> None:
     """Lanza 403 si el usuario actual no puede ver la finca indicada."""
     r = _normalizar(rol)
@@ -89,7 +88,7 @@ async def verificar_acceso_finca(
         })
 
 
-def exigir_no_cliente(rol: Optional[str]) -> None:
+def exigir_no_cliente(rol: str | None) -> None:
     """Bloquea acciones de escritura para el rol cliente."""
     if _normalizar(rol) == "cliente":
         raise HTTPException(status_code=403, detail={

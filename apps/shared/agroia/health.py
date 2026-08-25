@@ -4,7 +4,7 @@ Verifica que el servicio esté vivo y que sus dependencias críticas
 (base de datos) respondan.
 """
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from pydantic import BaseModel
 
 router = APIRouter(tags=["health"])

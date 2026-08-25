@@ -1,5 +1,6 @@
 """AgroIA Backend services package."""
 
+from agroia_backend.services import catalogo_service
 from agroia_backend.services.data_adapters import (
     ALL_SOIL_VARIABLES,
     VARIABLES_BLOQUEANTES,
@@ -18,12 +19,10 @@ from agroia_backend.services.orchestrator import (
     RecommendationResult,
 )
 from agroia_backend.services.rules_engine import (
-    RuleViolation,
     RulesEngine,
     RulesResult,
+    RuleViolation,
 )
-
-from agroia_backend.services import catalogo_service
 
 __all__ = [
     # Data adapters

@@ -2,13 +2,17 @@
 
 import enum
 import uuid
+from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, DateTime, Float, Integer, String, Text, func
+from agroia.database import Base
+from sqlalchemy import Boolean, Float, Integer, String, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from agroia.database import Base
 from agroia_backend.models import TimestampMixin
+
+if TYPE_CHECKING:
+    from agroia_backend.models.metrica_modelo import MetricaModelo
 
 
 class StageModelo(str, enum.Enum):

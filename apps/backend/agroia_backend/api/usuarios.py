@@ -1,15 +1,14 @@
 """API endpoints de usuarios y membresías."""
 
 import uuid as uuid_mod
-from typing import Optional
 
+from agroia.database import get_db
+from agroia.logging import get_logger
 from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from pydantic import BaseModel, EmailStr, Field, field_validator
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from agroia.database import get_db
-from agroia.logging import get_logger
 from agroia_backend.models.finca import Finca
 from agroia_backend.models.finca_usuario import FincaUsuario
 from agroia_backend.models.usuario import RolUsuario, Usuario
@@ -87,7 +86,7 @@ async def perfil_usuario():
 
 
 @router.put("/usuarios/me")
-async def actualizar_perfil(nombre: Optional[str] = None, email: Optional[EmailStr] = None):
+async def actualizar_perfil(nombre: str | None = None, email: EmailStr | None = None):
     """Actualiza datos del perfil."""
     return {"status": "updated", "nombre": nombre, "email": email}
 
@@ -112,8 +111,8 @@ async def ver_membresia():
 async def listar_usuarios(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
-    rol: Optional[str] = None,
-    search: Optional[str] = None,
+    rol: str | None = None,
+    search: str | None = None,
 ):
     """Lista usuarios (solo Admin)."""
     return {
@@ -162,7 +161,7 @@ def _hash_password(password: str) -> str:
 async def crear_usuario(
     body: UsuarioCreate,
     db: AsyncSession = Depends(get_db),
-    x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
 ):
     """Crea un usuario (cliente) relacionado a una o más fincas. Solo Admin."""
     rol = (x_user_role or "").strip().lower()
@@ -231,7 +230,7 @@ async def crear_usuario(
 @router.get("/usuarios", response_model=list[UsuarioAdminResponse])
 async def listar_usuarios_reales(
     db: AsyncSession = Depends(get_db),
-    x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
 ):
     """Lista usuarios con sus fincas relacionadas. Solo Admin."""
     rol = (x_user_role or "").strip().lower()
@@ -252,7 +251,7 @@ async def listar_usuarios_reales(
                 select(FincaUsuario).where(FincaUsuario.usuario_id == u.id)
             )
         ).scalars().all()
-        finca_ids = [l.finca_id for l in links]
+        finca_ids = [link.finca_id for link in links]
         fincas = []
         if finca_ids:
             fincas = (

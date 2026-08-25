@@ -1,14 +1,13 @@
 """API endpoints del motor de recomendaciones."""
 
-from typing import Optional
-
-from fastapi import APIRouter, Depends, Header, HTTPException, Query
-from pydantic import BaseModel, Field
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia.database import get_db
 from agroia.errors import InsufficientDataError
 from agroia.logging import get_logger
+from fastapi import APIRouter, Depends, Header, HTTPException, Query
+from pydantic import BaseModel, Field
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from agroia_backend.services.aptitud import AptitudService
 from agroia_backend.services.data_adapters import SueloAdapter
 from agroia_backend.services.orchestrator import (
@@ -25,7 +24,7 @@ router = APIRouter(prefix="/api/v1/recomendaciones", tags=["recomendaciones"])
 
 class RecommendRequest(BaseModel):
     finca_id: str = Field(..., description="UUID de la finca a analizar")
-    cultivo_id: Optional[str] = Field(None, description="UUID del cultivo objetivo (opcional, para sugerir el mejor)")
+    cultivo_id: str | None = Field(None, description="UUID del cultivo objetivo (opcional, para sugerir el mejor)")
 
 
 class RecommendResponse(BaseModel):
@@ -34,10 +33,10 @@ class RecommendResponse(BaseModel):
     confianza: float
     recomendaciones: list[dict]
     justificacion: dict
-    advertencia: Optional[str] = None
-    discordancia: Optional[dict] = None
+    advertencia: str | None = None
+    discordancia: dict | None = None
     tiempo_respuesta_ms: float
-    sugerencias_cultivos: Optional[list[dict]] = None
+    sugerencias_cultivos: list[dict] | None = None
     modo: str = "analizar_cultivo"
 
 
@@ -131,7 +130,7 @@ async def _persistir_recomendacion(
 async def analizar_aptitud(
     request: RecommendRequest,
     db: AsyncSession = Depends(get_db),
-    x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
 ):
     """Analiza la aptitud del suelo de una finca.
 
@@ -193,13 +192,13 @@ async def historial_recomendaciones(
     finca_id: str,
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
-    cultivo_id: Optional[str] = None,
+    cultivo_id: str | None = None,
     db: AsyncSession = Depends(get_db),
-    x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
-    x_user_email: Optional[str] = Header(None, alias="X-User-Email"),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
 ):
     """Historial de recomendaciones de una finca."""
-    from sqlalchemy import select, func
+    from sqlalchemy import func, select
 
     from agroia_backend.models.recomendacion import Recomendacion
     from agroia_backend.services.acceso import verificar_acceso_finca

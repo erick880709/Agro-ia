@@ -20,14 +20,13 @@ finca disponible (para sensores recién instalados sin registro previo).
 """
 
 from datetime import datetime, timezone
-from typing import Optional
 
+from agroia.database import async_session_factory
+from agroia.logging import get_logger
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 
-from agroia.database import async_session_factory
-from agroia.logging import get_logger
 from agroia_backend.models.dispositivo_iot import DispositivoIoT
 from agroia_backend.models.finca import Finca
 
@@ -39,22 +38,22 @@ class SensorFrame(BaseModel, extra="allow"):
     """Trama tal como la envía el firmware del sensor."""
 
     device_id: str = Field(..., description="ID del dispositivo (ej. esp32-npk-001)")
-    humidity: Optional[float] = Field(None, description="% HR ambiente (DHT22)")
-    temperature: Optional[float] = Field(None, description="°C ambiente")
-    conductivity: Optional[float] = Field(None, description="µS/cm")
-    ph: Optional[float] = Field(None, description="0-14")
-    nitrogen: Optional[float] = Field(None, description="ppm")
-    phosphorus: Optional[float] = Field(None, description="ppm")
-    potassium: Optional[float] = Field(None, description="ppm")
-    rssi: Optional[int] = Field(None, description="dBm de la señal")
-    uptime_s: Optional[int] = Field(None, description="Segundos desde encendido")
+    humidity: float | None = Field(None, description="% HR ambiente (DHT22)")
+    temperature: float | None = Field(None, description="°C ambiente")
+    conductivity: float | None = Field(None, description="µS/cm")
+    ph: float | None = Field(None, description="0-14")
+    nitrogen: float | None = Field(None, description="ppm")
+    phosphorus: float | None = Field(None, description="ppm")
+    potassium: float | None = Field(None, description="ppm")
+    rssi: int | None = Field(None, description="dBm de la señal")
+    uptime_s: int | None = Field(None, description="Segundos desde encendido")
 
 
 @router.post("/sensor", status_code=202)
 async def ingesta_sensor(frame: SensorFrame):
     """Recibe una trama del sensor y la procesa en el pipeline de AgroIA."""
-    from apps.iot.agroia_iot.consumer import process_sensor_message
     from agroia_backend.services.normalizacion_iot import normalizar_trama
+    from apps.iot.agroia_iot.consumer import process_sensor_message
 
     def _a_entero(v):
         try:
@@ -84,7 +83,6 @@ async def ingesta_sensor(frame: SensorFrame):
                     "code": "NO_FINCAS",
                     "message": "No hay fincas registradas para asociar el sensor.",
                 })
-            import uuid as uuid_mod
 
             dispositivo = DispositivoIoT(
                 finca_id=finca.id,

@@ -3,13 +3,17 @@
 import enum
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, ForeignKey, String, Text, func
+from agroia.database import Base
+from sqlalchemy import DateTime, ForeignKey, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from agroia.database import Base
 from agroia_backend.models import TenantMixin, TimestampMixin
+
+if TYPE_CHECKING:
+    from agroia_backend.models.recomendacion import Recomendacion
 
 
 class EstadoDiscordancia(str, enum.Enum):

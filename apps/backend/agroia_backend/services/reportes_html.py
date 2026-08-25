@@ -252,7 +252,7 @@ def _seccion_uc1(a) -> str:
         f"""<div class="rank">
           <div class="pos">{i + 1}</div>
           <div class="crop"><b>{esc(s.get("icono") or "")} {esc(s.get("cultivo"))}</b>
-          <span>{_badge_clasificacion(s.get("clasificacion"))} · {esc(str((s.get("reglas_especificas") or "")))} reglas</span></div>
+          <span>{_badge_clasificacion(s.get("clasificacion"))} · {esc(str(s.get("reglas_especificas") or ""))} reglas</span></div>
           <div class="scorebar"><i style="width:{min(100.0, float(s.get("score") or 0))}%"></i></div>
           <div class="score">{_num(s.get("score"), 1)} · {((s.get("confianza") or 0) * 100):.0f}%</div>
         </div>"""

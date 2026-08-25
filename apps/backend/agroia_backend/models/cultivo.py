@@ -3,13 +3,12 @@
 import enum
 import uuid
 from datetime import datetime, timedelta
-from typing import Optional
 
-from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, Text, func
+from agroia.database import Base
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from agroia.database import Base
 from agroia_backend.models import TimestampMixin
 
 # ── Enums ──

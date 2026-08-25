@@ -5,11 +5,11 @@ Define qué fincas puede observar cada usuario (cliente) para sus reportes.
 
 import uuid
 
+from agroia.database import Base
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
-from agroia.database import Base
 from agroia_backend.models import TimestampMixin
 
 

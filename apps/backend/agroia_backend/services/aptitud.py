@@ -52,7 +52,7 @@ class AptitudService:
         stmt = (
             select(Cultivo, func.count(ReglaAgronomica.id))
             .join(ReglaAgronomica, ReglaAgronomica.cultivo_id == Cultivo.id)
-            .where(Cultivo.activo == True, ReglaAgronomica.activa == True)  # noqa: E712
+            .where(Cultivo.activo.is_(True), ReglaAgronomica.activa.is_(True))
             .group_by(Cultivo.id)
         )
         result = await self.db.execute(stmt)

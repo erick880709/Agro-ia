@@ -7,7 +7,6 @@ y qué hacer en su terreno.
 
 from html import escape as esc
 
-
 # ── Traducciones por variable ──
 # clave: qué_es, exceso, deficit, ok (las acciones en lenguaje campesino)
 _EXPLICACIONES = {

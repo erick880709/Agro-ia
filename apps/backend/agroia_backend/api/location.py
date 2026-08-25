@@ -1,17 +1,14 @@
 """API endpoints de geolocalización, clima IDEAM y mapas."""
-from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from agroia.database import get_db
 from agroia.logging import get_logger
+from fastapi import APIRouter, HTTPException, Query
+
 from agroia_backend.services.external_apis import (
     enrich_location_data,
-    fetch_gis_location,
     fetch_gis_elevation,
-    fetch_ideam_historical,
+    fetch_gis_location,
     fetch_ideam_climate_offline,
+    fetch_ideam_historical,
 )
 
 logger = get_logger(__name__)
@@ -22,7 +19,7 @@ router = APIRouter(prefix="/api/v1/location", tags=["geolocalización"])
 async def enriquecer_ubicacion(
     lat: float = Query(..., ge=-90, le=90, description="Latitud (WGS84)"),
     lon: float = Query(..., ge=-180, le=180, description="Longitud (WGS84)"),
-    address: Optional[str] = Query(None, description="Dirección para geocodificar (opcional)"),
+    address: str | None = Query(None, description="Dirección para geocodificar (opcional)"),
 ):
     """Enriquece coordenadas con datos de clima, suelo, NDVI y GIS.
     

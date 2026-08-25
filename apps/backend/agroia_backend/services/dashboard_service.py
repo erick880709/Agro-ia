@@ -4,11 +4,10 @@ Agrega datos de múltiples fuentes para el dashboard por finca
 y genera reportes PDF con WeasyPrint usando plantilla HTML/CSS.
 """
 
-import json
 from datetime import datetime, timedelta
-from typing import Optional
 
 from agroia.logging import get_logger
+
 from agroia_backend.models.sensor_reading import SensorReading
 
 logger = get_logger(__name__)
@@ -34,7 +33,7 @@ async def get_dashboard_data(finca_id: str) -> dict:
         Dict con: finca, ultima_recomendacion, series_sensores, kpis, alertas, clima
     """
     from agroia.database import async_session_factory
-    from sqlalchemy import desc, func, select
+    from sqlalchemy import desc, select
 
     from agroia_backend.models.recomendacion import Recomendacion
 

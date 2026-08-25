@@ -1,13 +1,20 @@
 """API endpoints para ingesta IoT y estado de sensores."""
 
-from typing import Optional
-
-from fastapi import APIRouter, Depends, File, Form, Header, HTTPException, Query, UploadFile
-from pydantic import BaseModel, Field
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia.database import get_db
 from agroia.logging import get_logger
+from fastapi import (
+    APIRouter,
+    Depends,
+    File,
+    Form,
+    Header,
+    HTTPException,
+    Query,
+    UploadFile,
+)
+from pydantic import BaseModel, Field
+from sqlalchemy.ext.asyncio import AsyncSession
 
 logger = get_logger(__name__)
 router = APIRouter(prefix="/api/v1/iot", tags=["iot"])
@@ -19,37 +26,37 @@ class SensorMessage(BaseModel):
     """Mensaje entrante de un sensor IoT LoRaWAN."""
     device_id: str = Field(..., description="ID único del dispositivo LoRaWAN")
     finca_id: str = Field(..., description="UUID de la finca asociada")
-    timestamp: Optional[str] = Field(None, description="ISO 8601 timestamp de la medición")
+    timestamp: str | None = Field(None, description="ISO 8601 timestamp de la medición")
     payload: dict = Field(..., description="Variables de suelo medidas (JSON dinámico)")
 
 
 class SensorStatus(BaseModel):
     finca_id: str
     device_id: str
-    last_transmission: Optional[str] = None
-    hours_since_last: Optional[float] = None
+    last_transmission: str | None = None
+    hours_since_last: float | None = None
     status: str  # "online", "offline", "datos_desactualizados"
 
 
 class Esp32SensorMessage(BaseModel, extra="allow"):
     """Trama cruda del firmware ESP32 (variables en la raíz, sin finca_id)."""
     device_id: str = Field(..., description="ID del dispositivo (ej. esp32-npk-001)")
-    ph: Optional[float] = None
-    nitrogen: Optional[float] = None
-    phosphorus: Optional[float] = None
-    potassium: Optional[float] = None
-    conductivity: Optional[float] = Field(None, description="µS/cm")
-    humidity: Optional[float] = Field(None, description="% HR ambiente")
-    temperature: Optional[float] = Field(None, description="°C ambiente")
-    rssi: Optional[int] = None
-    uptime_s: Optional[int] = None
+    ph: float | None = None
+    nitrogen: float | None = None
+    phosphorus: float | None = None
+    potassium: float | None = None
+    conductivity: float | None = Field(None, description="µS/cm")
+    humidity: float | None = Field(None, description="% HR ambiente")
+    temperature: float | None = Field(None, description="°C ambiente")
+    rssi: int | None = None
+    uptime_s: int | None = None
 
 
 class DispositivoRegistro(BaseModel):
     """Registro de un dispositivo IoT asociado a una finca."""
     device_id: str = Field(..., description="ID único del firmware")
     finca_id: str = Field(..., description="UUID de la finca asociada")
-    nombre: Optional[str] = None
+    nombre: str | None = None
     npk_calibrado: bool = Field(
         False, description="True si NPK fue calibrado contra laboratorio"
     )
@@ -102,12 +109,11 @@ async def ingest_esp32_sensor(body: Esp32SensorMessage):
     `finca_id`) y lo normaliza al formato interno usando el registro de
     dispositivos (`device_id` → finca).
     """
+    from agroia.database import async_session_factory
     from sqlalchemy import select
 
     from agroia_backend.models.dispositivo_iot import DispositivoIoT
     from agroia_backend.services.normalizacion_iot import normalizar_trama
-
-    from agroia.database import async_session_factory
 
     async with async_session_factory() as session:
         dispositivo = (
@@ -157,10 +163,10 @@ async def ingest_esp32_sensor(body: Esp32SensorMessage):
 @router.post("/carga", status_code=200)
 async def cargar_archivo_sensor(
     file: UploadFile = File(..., description="Archivo CSV, TXT o JSON con mediciones del sensor"),
-    device_id: Optional[str] = Form(None, description="ID del dispositivo (opcional si el archivo lo incluye)"),
-    finca_id: Optional[str] = Form(None, description="UUID de la finca a relacionar (opcional; permite cargar datos sin dispositivo)"),
-    cultivo_id: Optional[str] = Form(None, description="UUID del cultivo sembrado para diagnóstico UC2 (opcional)"),
-    x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
+    device_id: str | None = Form(None, description="ID del dispositivo (opcional si el archivo lo incluye)"),
+    finca_id: str | None = Form(None, description="UUID de la finca a relacionar (opcional; permite cargar datos sin dispositivo)"),
+    cultivo_id: str | None = Form(None, description="UUID del cultivo sembrado para diagnóstico UC2 (opcional)"),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
 ):
     """Carga manual de mediciones cuando se pierde la conexión con los sensores.
 
@@ -177,12 +183,17 @@ async def cargar_archivo_sensor(
     import uuid as uuid_mod
     from dataclasses import asdict
 
-    from sqlalchemy import select
-
     from agroia.database import async_session_factory
     from agroia.errors import InsufficientDataError
+    from sqlalchemy import select
+
+    from agroia_backend.api.recomendaciones import (
+        RecommendRequest,
+        _persistir_recomendacion,
+    )
     from agroia_backend.models.dispositivo_iot import DispositivoIoT
     from agroia_backend.models.finca import Finca
+    from agroia_backend.services.acceso import exigir_no_cliente
     from agroia_backend.services.aptitud import AptitudService
     from agroia_backend.services.carga_archivo import (
         decodificar_contenido,
@@ -195,11 +206,6 @@ async def cargar_archivo_sensor(
         RecommendationRequest,
     )
     from agroia_backend.services.rules_engine import RulesEngine
-    from agroia_backend.api.recomendaciones import (
-        RecommendRequest,
-        _persistir_recomendacion,
-    )
-    from agroia_backend.services.acceso import exigir_no_cliente
 
     exigir_no_cliente(x_user_role)
 
@@ -351,9 +357,9 @@ async def registrar_dispositivo(body: DispositivoRegistro):
     """Registra un dispositivo IoT y lo asocia a una finca (brecha G1)."""
     import uuid as uuid_mod
 
+    from agroia.database import async_session_factory
     from sqlalchemy import select
 
-    from agroia.database import async_session_factory
     from agroia_backend.models.dispositivo_iot import DispositivoIoT
 
     async with async_session_factory() as session:
@@ -392,9 +398,9 @@ async def registrar_dispositivo(body: DispositivoRegistro):
 @router.get("/dispositivos")
 async def listar_dispositivos():
     """Lista los dispositivos IoT registrados con su telemetría."""
+    from agroia.database import async_session_factory
     from sqlalchemy import select
 
-    from agroia.database import async_session_factory
     from agroia_backend.models.dispositivo_iot import DispositivoIoT
 
     async with async_session_factory() as session:
@@ -425,15 +431,15 @@ async def ultimas_lecturas(
     finca_id: str,
     limite: int = Query(10, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
-    x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
-    x_user_email: Optional[str] = Header(None, alias="X-User-Email"),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
 ):
     """Últimas lecturas de sensores de una finca (para monitoreo en pantalla)."""
     import uuid as uuid_mod
 
+    from agroia.database import async_session_factory
     from sqlalchemy import select
 
-    from agroia.database import async_session_factory
     from agroia_backend.models.sensor_reading import SensorReading
     from agroia_backend.services.acceso import verificar_acceso_finca
 
@@ -486,8 +492,8 @@ async def ultimas_lecturas(
 async def sensor_status(
     finca_id: str,
     db: AsyncSession = Depends(get_db),
-    x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
-    x_user_email: Optional[str] = Header(None, alias="X-User-Email"),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
 ):
     """Consulta el estado de los sensores de una finca."""
     from datetime import datetime, timezone
@@ -533,7 +539,7 @@ async def sensor_status(
 async def enrich_location(
     lat: float = Query(..., ge=-90, le=90),
     lon: float = Query(..., ge=-180, le=180),
-    address: Optional[str] = None,
+    address: str | None = None,
 ):
     """Enriquece una ubicación con datos de APIs externas (IDEAM, GIS, IGAC, Copernicus)."""
     from agroia_backend.services.external_apis import enrich_location_data

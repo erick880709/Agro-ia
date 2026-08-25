@@ -7,13 +7,11 @@ a respuestas HTTP estructuradas con el formato estándar de AgroIA.
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from starlette.status import (
-    HTTP_400_BAD_REQUEST,
     HTTP_401_UNAUTHORIZED,
     HTTP_403_FORBIDDEN,
     HTTP_404_NOT_FOUND,
     HTTP_409_CONFLICT,
     HTTP_422_UNPROCESSABLE_ENTITY,
-    HTTP_500_INTERNAL_SERVER_ERROR,
 )
 
 

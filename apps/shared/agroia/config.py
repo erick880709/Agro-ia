@@ -58,7 +58,7 @@ class Settings(BaseSettings):
     environment: str = "development"
 
 
-@lru_cache()
+@lru_cache
 def get_settings() -> Settings:
     """Retorna la configuración cacheada (singleton)."""
     return Settings()

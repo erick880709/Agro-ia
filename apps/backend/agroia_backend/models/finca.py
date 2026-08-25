@@ -1,12 +1,11 @@
 """Modelo Finca — predio agrícola del usuario."""
 import uuid
-from typing import Optional
-
-from sqlalchemy import Float, ForeignKey, String
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from agroia.database import Base
+from sqlalchemy import Float, ForeignKey, String
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column
+
 from agroia_backend.models import TenantMixin, TimestampMixin
 
 
@@ -26,44 +25,44 @@ class Finca(Base, TenantMixin, TimestampMixin):
         index=True,
     )
     nombre: Mapped[str] = mapped_column(String(200), nullable=False)
-    latitud: Mapped[Optional[float]] = mapped_column(
+    latitud: Mapped[float | None] = mapped_column(
         Float, nullable=True,
         comment="Latitud GPS (WGS84)"
     )
-    longitud: Mapped[Optional[float]] = mapped_column(
+    longitud: Mapped[float | None] = mapped_column(
         Float, nullable=True,
         comment="Longitud GPS (WGS84)"
     )
-    area_hectareas: Mapped[Optional[float]] = mapped_column(
+    area_hectareas: Mapped[float | None] = mapped_column(
         Float, nullable=True, comment="Área total en hectáreas"
     )
-    altitud_msnm: Mapped[Optional[float]] = mapped_column(
+    altitud_msnm: Mapped[float | None] = mapped_column(
         Float, nullable=True, comment="Altitud en metros sobre el nivel del mar"
     )
-    departamento: Mapped[Optional[str]] = mapped_column(
+    departamento: Mapped[str | None] = mapped_column(
         String(100), nullable=True
     )
-    municipio: Mapped[Optional[str]] = mapped_column(
+    municipio: Mapped[str | None] = mapped_column(
         String(100), nullable=True
     )
     # ── Registro de finca (rol administrador) ──
-    coordenadas_google: Mapped[Optional[str]] = mapped_column(
+    coordenadas_google: Mapped[str | None] = mapped_column(
         String(500), nullable=True,
         comment="Enlace de Google Maps o 'lat,lng' del predio"
     )
-    propietario: Mapped[Optional[str]] = mapped_column(
+    propietario: Mapped[str | None] = mapped_column(
         String(200), nullable=True, comment="Nombre del propietario"
     )
-    contacto_telefono: Mapped[Optional[str]] = mapped_column(
+    contacto_telefono: Mapped[str | None] = mapped_column(
         String(50), nullable=True, comment="Teléfono de contacto"
     )
-    contacto_email: Mapped[Optional[str]] = mapped_column(
+    contacto_email: Mapped[str | None] = mapped_column(
         String(255), nullable=True, comment="Email de contacto"
     )
-    largo_metros: Mapped[Optional[float]] = mapped_column(
+    largo_metros: Mapped[float | None] = mapped_column(
         Float, nullable=True, comment="Largo del terreno en metros (opcional)"
     )
-    ancho_metros: Mapped[Optional[float]] = mapped_column(
+    ancho_metros: Mapped[float | None] = mapped_column(
         Float, nullable=True, comment="Ancho del terreno en metros (opcional)"
     )
 

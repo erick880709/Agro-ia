@@ -1,15 +1,13 @@
 """API endpoints del catálogo de cultivos y fichas técnicas."""
 
-import uuid as _uuid
-from typing import Optional
-
-from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel, Field, field_validator
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia.database import get_db
 from agroia.errors import NotFoundError, ValidationError
 from agroia.logging import get_logger
+from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel, Field, field_validator
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from agroia_backend.models.cultivo import EstadoFicha, TipoFuente
 from agroia_backend.services import catalogo_service as svc
 
@@ -20,17 +18,17 @@ router = APIRouter(prefix="/api/v1/catalogo", tags=["catálogo"])
 
 class CultivoCreate(BaseModel):
     nombre: str = Field(..., min_length=2, max_length=100)
-    nombre_cientifico: Optional[str] = None
-    descripcion: Optional[str] = None
-    icono: Optional[str] = None
+    nombre_cientifico: str | None = None
+    descripcion: str | None = None
+    icono: str | None = None
 
 
 class CultivoResponse(BaseModel):
     id: str
     nombre: str
-    nombre_cientifico: Optional[str] = None
-    descripcion: Optional[str] = None
-    icono: Optional[str] = None
+    nombre_cientifico: str | None = None
+    descripcion: str | None = None
+    icono: str | None = None
     activo: bool
     model_config = {"from_attributes": True}
 
@@ -50,9 +48,9 @@ class FichaCreate(BaseModel):
 
 
 class FichaUpdate(BaseModel):
-    fuente: Optional[str] = None
-    umbrales: Optional[dict] = None
-    datos_economicos: Optional[dict] = None
+    fuente: str | None = None
+    umbrales: dict | None = None
+    datos_economicos: dict | None = None
 
 
 class FichaResponse(BaseModel):
@@ -64,9 +62,9 @@ class FichaResponse(BaseModel):
     etiqueta_internacional: bool
     umbrales: dict
     datos_economicos: dict
-    fecha_envio_revision: Optional[str] = None
-    fecha_ultima_revision: Optional[str] = None
-    notas_revision: Optional[str] = None
+    fecha_envio_revision: str | None = None
+    fecha_ultima_revision: str | None = None
+    notas_revision: str | None = None
     model_config = {"from_attributes": True}
 
     @field_validator("id", "cultivo_id", mode="before")
@@ -81,7 +79,7 @@ class FichaResponse(BaseModel):
 async def listar_cultivos(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
-    search: Optional[str] = None,
+    search: str | None = None,
     db: AsyncSession = Depends(get_db),
 ):
     """Lista cultivos paginados con búsqueda."""
@@ -114,8 +112,8 @@ async def crear_cultivo(body: CultivoCreate, db: AsyncSession = Depends(get_db))
 
 @router.get("/fichas")
 async def listar_fichas(
-    cultivo_id: Optional[str] = None,
-    estado: Optional[str] = None,
+    cultivo_id: str | None = None,
+    estado: str | None = None,
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
@@ -179,7 +177,7 @@ async def aprobar_ficha(ficha_id: str, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/fichas/{ficha_id}/rechazar", response_model=FichaResponse)
-async def rechazar_ficha(ficha_id: str, notas: Optional[str] = None, db: AsyncSession = Depends(get_db)):
+async def rechazar_ficha(ficha_id: str, notas: str | None = None, db: AsyncSession = Depends(get_db)):
     """Rechaza una ficha (En Revisión → Borrador)."""
     try:
         return await svc.rechazar_ficha(db, ficha_id, notas)

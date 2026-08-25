@@ -6,14 +6,13 @@ igual que una trama en vivo.
 """
 
 import json
-from typing import Optional
 
 from agroia.logging import get_logger
 
 logger = get_logger(__name__)
 
 
-def _es_flotante(texto: str) -> Optional[float]:
+def _es_flotante(texto: str) -> float | None:
     """Convierte texto a float aceptando decimal español (7,1) e inglés (7.1)."""
     t = (texto or "").strip()
     if not t:
@@ -47,14 +46,14 @@ def _pares_a_frame(pares: list[tuple[str, str]]) -> dict:
     return frame
 
 
-def _extraer_device_id(pares: list[tuple[str, str]]) -> Optional[str]:
+def _extraer_device_id(pares: list[tuple[str, str]]) -> str | None:
     for clave, valor in pares:
         if _normalizar_clave(clave) in ("device_id", "deviceid", "id_dispositivo"):
             return str(valor).strip() or None
     return None
 
 
-def _parsear_csv(texto: str) -> tuple[dict, Optional[str]]:
+def _parsear_csv(texto: str) -> tuple[dict, str | None]:
     import csv
     import io
 
@@ -84,7 +83,7 @@ def _parsear_csv(texto: str) -> tuple[dict, Optional[str]]:
     return _pares_a_frame(pares), _extraer_device_id(pares)
 
 
-def _parsear_txt(texto: str) -> tuple[dict, Optional[str]]:
+def _parsear_txt(texto: str) -> tuple[dict, str | None]:
     pares = []
     for linea in texto.splitlines():
         linea = linea.strip()
@@ -100,7 +99,7 @@ def _parsear_txt(texto: str) -> tuple[dict, Optional[str]]:
     return _pares_a_frame(pares), _extraer_device_id(pares)
 
 
-def parsear_archivo_sensor(contenido: str) -> tuple[dict, Optional[str], str]:
+def parsear_archivo_sensor(contenido: str) -> tuple[dict, str | None, str]:
     """Detecta el formato del archivo y devuelve la trama cruda normalizada.
 
     Args:

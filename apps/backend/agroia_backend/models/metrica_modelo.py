@@ -2,12 +2,15 @@
 
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
 
+from agroia.database import Base
 from sqlalchemy import DateTime, Float, ForeignKey, String, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from agroia.database import Base
+if TYPE_CHECKING:
+    from agroia_backend.models.modelo_ml import ModeloML
 
 
 class MetricaModelo(Base):

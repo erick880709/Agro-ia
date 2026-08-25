@@ -5,10 +5,8 @@ Determinístico, trazable y versionado. Las reglas se cachean en Redis.
 """
 
 from dataclasses import dataclass
-from typing import Optional
 
 from agroia.logging import get_logger
-from agroia_backend.models.regla_agronomica import PrioridadRegla, VariableSuelo
 
 logger = get_logger(__name__)
 
@@ -39,9 +37,9 @@ VARIABLE_KEY_MAP = {
 class RuleViolation:
     """Una violación detectada por el motor de reglas."""
     variable: str
-    valor_actual: Optional[float]
-    umbral_min: Optional[float]
-    umbral_max: Optional[float]
+    valor_actual: float | None
+    umbral_min: float | None
+    umbral_max: float | None
     accion: str
     prioridad: str
     fuente: str
@@ -75,13 +73,13 @@ class RulesEngine:
         self._rules_cache: list[dict] = []
         self._cache_version: int = 0
 
-    async def load_rules(self, cultivo_id: Optional[str] = None) -> list[dict]:
+    async def load_rules(self, cultivo_id: str | None = None) -> list[dict]:
         """Carga reglas activas desde BD, filtrando por cultivo si se especifica."""
         from sqlalchemy import select
 
         from agroia_backend.models.regla_agronomica import ReglaAgronomica
 
-        stmt = select(ReglaAgronomica).where(ReglaAgronomica.activa == True)
+        stmt = select(ReglaAgronomica).where(ReglaAgronomica.activa.is_(True))
         if cultivo_id:
             stmt = stmt.where(
                 (ReglaAgronomica.cultivo_id == cultivo_id)
@@ -107,7 +105,7 @@ class RulesEngine:
         ]
 
     async def evaluate(
-        self, soil_data: dict, cultivo_id: Optional[str] = None
+        self, soil_data: dict, cultivo_id: str | None = None
     ) -> RulesResult:
         """Evalúa datos de suelo contra las reglas activas.
 

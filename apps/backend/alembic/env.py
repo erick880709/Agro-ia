@@ -2,16 +2,15 @@
 
 from logging.config import fileConfig
 
-from alembic import context
-from sqlalchemy import engine_from_config, pool
-
 # ── Importar todos los modelos para que Alembic los detecte ──
 from agroia.database import Base
-from agroia_backend.models.recomendacion import Recomendacion  # noqa: F401
 from agroia_backend.models.discordancia import Discordancia  # noqa: F401
-from agroia_backend.models.regla_agronomica import ReglaAgronomica  # noqa: F401
-from agroia_backend.models.modelo_ml import ModeloML  # noqa: F401
 from agroia_backend.models.metrica_modelo import MetricaModelo  # noqa: F401
+from agroia_backend.models.modelo_ml import ModeloML  # noqa: F401
+from agroia_backend.models.recomendacion import Recomendacion  # noqa: F401
+from agroia_backend.models.regla_agronomica import ReglaAgronomica  # noqa: F401
+from alembic import context
+from sqlalchemy import engine_from_config, pool
 
 # ── Alembic Config ──
 config = context.config
