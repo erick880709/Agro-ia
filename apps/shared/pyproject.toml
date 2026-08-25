@@ -3,7 +3,7 @@ name = "agroia-shared"
 version = "0.1.0"
 description = "Utilidades compartidas para los microservicios de AgroIA"
 authors = ["AgroIA Team"]
-package-mode = false
+packages = [{ include = "agroia" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"

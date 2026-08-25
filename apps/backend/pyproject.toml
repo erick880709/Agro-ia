@@ -3,10 +3,11 @@ name = "agroia-backend"
 version = "0.1.0"
 description = "Servicio principal de negocio AgroIA — recomendaciones, catálogo, dashboards"
 authors = ["AgroIA Team"]
-package-mode = false
+packages = [{ include = "agroia_backend" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+agroia-shared = { path = "../shared", develop = true }
 fastapi = "^0.115"
 uvicorn = {extras = ["standard"], version = "^0.34"}
 pydantic = {extras = ["email"], version = "^2.0"}

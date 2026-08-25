@@ -24,7 +24,7 @@ RUN poetry install --no-interaction --no-ansi --no-root
 
 # ── Copiar código fuente ──
 COPY apps/ /app/apps/
-COPY .env /app/.env
+COPY .env.example /app/.env
 
 # ── Health check ──
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
