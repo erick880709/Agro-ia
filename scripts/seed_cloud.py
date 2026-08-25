@@ -18,7 +18,6 @@ Crea (idempotente, no duplica):
 import asyncio
 import sys
 import uuid
-from datetime import datetime, timezone
 
 if sys.platform == "win32":
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
