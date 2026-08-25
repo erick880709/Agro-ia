@@ -5,7 +5,7 @@ Cierra las brechas de ingesta IoT:
   - Columnas humedad_ambiental / temperatura_ambiental en sensor_readings.
 
 Revision ID: 003_dispositivos_iot
-Down revision: 002_catalogo_cultivos
+Down revision: 003_infra_fincas
 """
 
 from collections.abc import Sequence
@@ -15,7 +15,7 @@ from alembic import op
 from sqlalchemy.dialects import postgresql
 
 revision: str = "003_dispositivos_iot"
-down_revision: str | None = "002_catalogo_cultivos"
+down_revision: str | None = "003_infra_fincas"
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 

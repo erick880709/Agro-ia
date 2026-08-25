@@ -1,5 +1,7 @@
 """Alembic environment configuration for AgroIA backend."""
 
+import asyncio
+import os
 from logging.config import fileConfig
 
 # ── Importar todos los modelos para que Alembic los detecte ──
@@ -10,7 +12,9 @@ from agroia_backend.models.modelo_ml import ModeloML  # noqa: F401
 from agroia_backend.models.recomendacion import Recomendacion  # noqa: F401
 from agroia_backend.models.regla_agronomica import ReglaAgronomica  # noqa: F401
 from alembic import context
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import pool, text
+from sqlalchemy.engine import Connection
+from sqlalchemy.ext.asyncio import async_engine_from_config
 
 # ── Alembic Config ──
 config = context.config
@@ -18,9 +22,15 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 target_metadata = Base.metadata
+
+# La URL se toma del entorno (DATABASE_URL); por defecto la BD local de
+# desarrollo. El CI la inyecta con el servicio PostgreSQL del job.
 config.set_main_option(
     "sqlalchemy.url",
-    "postgresql://agroia:agroia_dev@localhost:5434/agroia",
+    os.getenv(
+        "DATABASE_URL",
+        "postgresql+asyncpg://agroia:agroia_dev@localhost:5434/agroia",
+    ),
 )
 
 
@@ -38,21 +48,34 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
-def run_migrations_online() -> None:
-    """Run migrations in 'online' mode (connected to DB)."""
-    connectable = engine_from_config(
+def do_run_migrations(connection: Connection) -> None:
+    # El schema 'agroia' puede no existir en bases recién creadas (CI).
+    connection.execute(text("CREATE SCHEMA IF NOT EXISTS agroia"))
+    connection.commit()
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        version_table_schema="agroia",
+    )
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+async def run_async_migrations() -> None:
+    """Ejecuta migraciones con motor async (URL asyncpg)."""
+    connectable = async_engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
-    with connectable.connect() as connection:
-        context.configure(
-            connection=connection,
-            target_metadata=target_metadata,
-            version_table_schema="agroia",
-        )
-        with context.begin_transaction():
-            context.run_migrations()
+    async with connectable.connect() as connection:
+        await connection.run_sync(do_run_migrations)
+    await connectable.dispose()
+
+
+def run_migrations_online() -> None:
+    """Run migrations in 'online' mode (connected to DB)."""
+    asyncio.run(run_async_migrations())
 
 
 if context.is_offline_mode():

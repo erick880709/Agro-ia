@@ -3695,13 +3695,13 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/main.py": {
-    "mtime": 1785901452.6258733,
-    "ast_hash": "47f03cd1b751d287a4b6419fc9894765",
+    "mtime": 1787688805.8480258,
+    "ast_hash": "9bddcb4523af1c3b4a46a0623079d21f",
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
-    "mtime": 1785886905.148324,
-    "ast_hash": "5ea643d1989c30ca7fab51578842c6ef",
+    "mtime": 1787665156.7439616,
+    "ast_hash": "c1dcaa88a273a0619ae9545b93e4b6b4",
     "semantic_hash": ""
   },
   "apps/backend/tests/test_health.py": {
@@ -3770,8 +3770,8 @@
     "semantic_hash": ""
   },
   "apps/shared/agroia/errors.py": {
-    "mtime": 1785887314.9763415,
-    "ast_hash": "361660da7e243cd1bc5726024fe89749",
+    "mtime": 1787665103.604508,
+    "ast_hash": "5335e93e1d8367922c42b0f134096679",
     "semantic_hash": ""
   },
   "apps/shared/agroia/health.py": {
@@ -3810,8 +3810,8 @@
     "semantic_hash": ""
   },
   "docker-compose.yml": {
-    "mtime": 1785888520.8207242,
-    "ast_hash": "c94300d5499d69431dbf6317726f0472",
+    "mtime": 1787667185.4604876,
+    "ast_hash": "b9e696999c24b68615bcdcc19e49a0d5",
     "semantic_hash": ""
   },
   "resources/architecture/overview.md": {
@@ -3925,8 +3925,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/recomendaciones.py": {
-    "mtime": 1785901925.6978674,
-    "ast_hash": "9e6a96347acf20fc81ebbf7e20caf21f",
+    "mtime": 1787684134.3703723,
+    "ast_hash": "214ced7e608876170c2a0bb6819ce6fc",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/__init__.py": {
@@ -3960,8 +3960,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/sensor_reading.py": {
-    "mtime": 1785887235.261935,
-    "ast_hash": "3183c18662fd80c4d1e3725ff078e71f",
+    "mtime": 1787665864.745259,
+    "ast_hash": "d7394a45a040a778a363e6d88d4c134e",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/__init__.py": {
@@ -3970,8 +3970,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/data_adapters.py": {
-    "mtime": 1785884815.7637973,
-    "ast_hash": "317a58a9ffdedba09e502ffce3f1fec4",
+    "mtime": 1787665864.7476287,
+    "ast_hash": "6baf3b5a3f349815219904bed21f9bdc",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/justification.py": {
@@ -3980,13 +3980,13 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/orchestrator.py": {
-    "mtime": 1785884846.6379406,
-    "ast_hash": "41409a64ffa2fae0f4916f86eeee697a",
+    "mtime": 1787665971.4987824,
+    "ast_hash": "d5f0bc58ab0401a0e9b3e9e6155e1aec",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/rules_engine.py": {
-    "mtime": 1785884846.6379406,
-    "ast_hash": "059689d5b1fcf19dc6a1006ca26ee5d0",
+    "mtime": 1787664996.3935432,
+    "ast_hash": "e65c333fb33cb7fd10a64f9ae777708f",
     "semantic_hash": ""
   },
   "apps/backend/alembic/env.py": {
@@ -4070,8 +4070,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/iot.py": {
-    "mtime": 1785900623.2365131,
-    "ast_hash": "2c4fe4752b20b10abe008934e4fdd68c",
+    "mtime": 1787684134.3703723,
+    "ast_hash": "acde1d94d7472623de388a1d0c0036f7",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/external_apis.py": {
@@ -4080,8 +4080,8 @@
     "semantic_hash": ""
   },
   "apps/iot/agroia_iot/consumer.py": {
-    "mtime": 1785885758.6366892,
-    "ast_hash": "29840721e4e3e7b78091895ed95b03f1",
+    "mtime": 1787665890.9520845,
+    "ast_hash": "df104777e076ae9d8fc074efc711c860",
     "semantic_hash": ""
   },
   "apps/auth/agroia_auth/api/__init__.py": {
@@ -4090,8 +4090,8 @@
     "semantic_hash": ""
   },
   "apps/auth/agroia_auth/api/auth.py": {
-    "mtime": 1785885865.6028893,
-    "ast_hash": "807b08c7aa21de4808429bf52c77a134",
+    "mtime": 1787665197.6360853,
+    "ast_hash": "33ee9d4ec466af1eb62e37c987fa3b2d",
     "semantic_hash": ""
   },
   "apps/auth/agroia_auth/auth_service.py": {
@@ -4115,8 +4115,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/dashboard.py": {
-    "mtime": 1785900578.6461606,
-    "ast_hash": "37b0c694e2a9d8d5b12ee5000bc96ab7",
+    "mtime": 1787684134.3723826,
+    "ast_hash": "54e018ca8e7839661bc3d70f55240184",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/dashboard_service.py": {
@@ -4150,28 +4150,28 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/usuarios.py": {
-    "mtime": 1785900578.6461606,
-    "ast_hash": "3306214a9682837e289b700ddae6e6ce",
+    "mtime": 1787684711.6712904,
+    "ast_hash": "4555948827003990bd15dc95aa88c139",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/usuario.py": {
-    "mtime": 1785887191.8148508,
-    "ast_hash": "494a1eb0b2655697ea4e7f95a6311334",
+    "mtime": 1787683012.6781507,
+    "ast_hash": "d200a6211b020931a323454250ebf0fb",
     "semantic_hash": ""
   },
   "tests/integration_test.py": {
-    "mtime": 1785886337.183354,
-    "ast_hash": "76528ed14bfb025ea6fef57333c3c78e",
+    "mtime": 1787665985.537332,
+    "ast_hash": "8d8e0ee049fa307ce5307c4fd45648a1",
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1785886337.183354,
-    "ast_hash": "0e08a30cf27e01b75b8c6e35b8284789",
+    "mtime": 1787688543.6505325,
+    "ast_hash": "10251b9ebc831004a8288de8175c639a",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
-    "mtime": 1785888668.3263817,
-    "ast_hash": "f1d383c6bc1fb698951f6469a1735727",
+    "mtime": 1787683012.6781507,
+    "ast_hash": "fd48d73ccab1a8f96d645fdd6c4cf476",
     "semantic_hash": ""
   },
   "apps/frontend/angular.json": {
@@ -4270,13 +4270,13 @@
     "semantic_hash": ""
   },
   "load_seeds.py": {
-    "mtime": 1785888796.4817743,
-    "ast_hash": "2972cdbdfdcce493fe1d2eff95fc7479",
+    "mtime": 1787664996.4034193,
+    "ast_hash": "71455db4ab4cdc5afeaf24bb732fb885",
     "semantic_hash": ""
   },
   "migrate.py": {
-    "mtime": 1785888620.348738,
-    "ast_hash": "2ea64c7b5e0dba32119118fd924b108b",
+    "mtime": 1787684039.3016646,
+    "ast_hash": "92b02b6cad7705b61614a6e72d4c6e31",
     "semantic_hash": ""
   },
   "apps/frontend/README.md": {
@@ -4502,6 +4502,146 @@
   "apps/frontend/src/app/shared/google-maps-picker.component.ts": {
     "mtime": 1785902621.360958,
     "ast_hash": "e192a2fd7b760367592361bb2a8814cd",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/auth.py": {
+    "mtime": 1787684711.6812308,
+    "ast_hash": "0a4e5142bfb6e028986345937fcda978",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/fincas.py": {
+    "mtime": 1787684091.9779556,
+    "ast_hash": "c5b0f8f943398e32b3f37550629d9bf2",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/reportes.py": {
+    "mtime": 1787686056.8027525,
+    "ast_hash": "6c2a0f2722abbd64038296cffea3bda5",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/sensor_api.py": {
+    "mtime": 1787688883.881038,
+    "ast_hash": "6cc278dfac50f3833e5e2724459d7ebe",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/models/dispositivo_iot.py": {
+    "mtime": 1787665855.276786,
+    "ast_hash": "3e70bf1b907fa35765b953c3b64eeffa",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/models/finca_usuario.py": {
+    "mtime": 1787684029.1496027,
+    "ast_hash": "0bef6cd6a646b8400912816767217b75",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/seeds/reglas.py": {
+    "mtime": 1787664996.3901775,
+    "ast_hash": "f15dab511380e3cb7192a495a25fd02d",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/acceso.py": {
+    "mtime": 1787684029.1551347,
+    "ast_hash": "854a521d067b2a9588adaa19440df24a",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/aptitud.py": {
+    "mtime": 1787665262.0081997,
+    "ast_hash": "50442bb23c7ff01c197eac78e2c5c168",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/auth_utils.py": {
+    "mtime": 1787684711.6753519,
+    "ast_hash": "d8f0111fe7b2cb7b1940b5e9cfa6a609",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/carga_archivo.py": {
+    "mtime": 1787679950.8087428,
+    "ast_hash": "4fc380e9530063d5c406e885e4912988",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/lenguaje_campesino.py": {
+    "mtime": 1787688360.450621,
+    "ast_hash": "f5e6ec7453f0ec5f1687fc45287042ae",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/normalizacion_iot.py": {
+    "mtime": 1787665855.280921,
+    "ast_hash": "57b61263bd09860d797353c8264264cd",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/reportes_html.py": {
+    "mtime": 1787688379.6199567,
+    "ast_hash": "32400a9d94ab4a14e3b09391360dada3",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/003_dispositivos_iot.py": {
+    "mtime": 1787665855.2819214,
+    "ast_hash": "235e3fb9654ba5033a8638b5c8b95fdf",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/app.js": {
+    "mtime": 1787688812.7235124,
+    "ast_hash": "5dff2fbb6beeead738ed7ef4952feceb",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/departamentos.js": {
+    "mtime": 1787683248.0743845,
+    "ast_hash": "ad3ae1c285bd267bef1b1f822bc9a139",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/ejemplos/mediciones.json": {
+    "mtime": 1787680419.814024,
+    "ast_hash": "d05d461ef9397e34e52d1ba9615d7736",
+    "semantic_hash": ""
+  },
+  "scripts/seed_demo_integral.py": {
+    "mtime": 1787687595.0032752,
+    "ast_hash": "76b95a99cf28cc9ae2ca9aa4caaf3d42",
+    "semantic_hash": ""
+  },
+  "scripts/sync_columns.py": {
+    "mtime": 1787670501.357237,
+    "ast_hash": "67a6132613dc57133912d7849448e2c1",
+    "semantic_hash": ""
+  },
+  "tests/fixtures/mediciones.json": {
+    "mtime": 1787679947.726302,
+    "ast_hash": "f5afdafe32c66aef0f5335a589c56231",
+    "semantic_hash": ""
+  },
+  "tests/tmp_reporte_esp32.py": {
+    "mtime": 1787666116.8987715,
+    "ast_hash": "6b3c6e6c95c9a2e2f666b381009e535c",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/ejemplos/mediciones.txt": {
+    "mtime": 1787680419.809648,
+    "ast_hash": "d72ab0bde7d506dce47d863912addba5",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/index.html": {
+    "mtime": 1787688812.7227242,
+    "ast_hash": "f20d0abf64d2e932c1332374cd9b332b",
+    "semantic_hash": ""
+  },
+  "reports/reporte_esp32-npk-001.html": {
+    "mtime": 1787666305.8103702,
+    "ast_hash": "4d79b35979c4c3cf8761055f54f03ce3",
+    "semantic_hash": ""
+  },
+  "reports/test_reporte_completo.html": {
+    "mtime": 1787686166.0926268,
+    "ast_hash": "b6d32122607363700c74a74b22e8c796",
+    "semantic_hash": ""
+  },
+  "reports/test_reporte_demo_integral.html": {
+    "mtime": 1787688463.2196493,
+    "ast_hash": "2684841d8c9f94b3c57631f36db4500a",
+    "semantic_hash": ""
+  },
+  "tests/fixtures/mediciones.txt": {
+    "mtime": 1787679947.7220848,
+    "ast_hash": "d881eddaeb04ec9f19e01e96c8bfb57d",
     "semantic_hash": ""
   }
 }
