@@ -3700,8 +3700,8 @@
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
-    "mtime": 1787693531.1023104,
-    "ast_hash": "9b4f66711ef5d924fdbe7b35efc0e6da",
+    "mtime": 1787694786.652424,
+    "ast_hash": "eb0554f0c86adf7e784f0ca04b23809e",
     "semantic_hash": ""
   },
   "apps/backend/tests/test_health.py": {

@@ -1,6 +1,6 @@
 # AgroIA — Estado del Proyecto
 
-> **Fecha:** 2026-08-04 | **Versión:** 0.1.0 | **Pipeline:** janus → epicureo → archi → genesis → builder
+> **Fecha:** 2026-08-25 | **Versión:** 0.1.0 | **Pipeline:** janus → epicureo → archi → genesis → builder | **CI:** 🟢 verde | **Deploy:** Render blueprint listo (`render.yaml`)
 
 ## 🎯 Objetivo
 
@@ -33,6 +33,32 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 | Cache | Redis |
 | Frontend | **SPA web integrada** en `http://localhost:8000/` (`apps/frontend-web/`) + Angular 21 (`apps/frontend/`, mock, pendiente de conectar) |
 | Infra | Docker + GitHub Actions |
+
+## 🚀 Despliegue gratuito (Render + Neon/Supabase)
+
+**Estado:** `render.yaml` (blueprint) listo en la raíz; CI en verde (Lint ✓, Tests ✓, Build Docker ✓).
+
+### Pasos
+
+1. Crear cuenta en [Render](https://render.com) (login con GitHub).
+2. Crear Postgres gratis con pgvector en [Neon](https://neon.tech) o [Supabase](https://supabase.com) (ambos con tier gratuito permanente; el Postgres de Render solo es gratis 30 días).
+3. En Render: **New + → Blueprint** → seleccionar `erick880709/Agro-ia` → pegar la URL de Neon en `DATABASE_URL` (formato `postgresql+asyncpg://...`).
+4. El blueprint levanta el web service en plan **Free** ($0): Docker + migraciones automáticas (`alembic upgrade head`) + health check en `/api/v1/health`. Cada push a `master` redeploya automáticamente.
+
+### Límites del tier gratuito (validados 2026-08-25)
+
+| Servicio | Gratis | Notas |
+|----------|--------|-------|
+| Render Web Service Free | $0 | 512 MB RAM / 0.1 CPU; **se duerme tras ~15 min sin tráfico** (cold start ~1 min). Usar [UptimeRobot](https://uptimerobot.com) gratis para pinguear cada 10 min y mantenerlo despierto |
+| Neon Postgres Free | $0 | 0.5 GB, scale-to-zero, pgvector ✓ |
+| Supabase Postgres Free | $0 | 500 MB, pgvector ✓ (alternativa) |
+| Render Redis Free | $0 | 25 MB — opcional: el backend funciona sin Redis |
+| RabbitMQ | — | Sin tier gratuito viable; solo lo usa el servicio IoT (opcional) |
+
+### Notas técnicas
+
+- El backend sirve el frontend estático (`apps/frontend-web/`) en la raíz y escucha en `$PORT` (soportado en el Dockerfile).
+- La app completa (IoT, ML, RAG, Redis, RabbitMQ) sigue disponible localmente vía `docker-compose.yml`.
 
 ## 📁 Estructura
 
