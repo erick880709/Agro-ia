@@ -26,10 +26,15 @@ RUN poetry install --no-interaction --no-ansi --no-root
 COPY apps/ /app/apps/
 COPY .env.example /app/.env
 
+# ── Python path para que alembic/uvicorn encuentren agroia y agroia_backend ──
+ENV PYTHONPATH="/app/apps/shared:/app/apps/backend"
+
 # ── Health check ──
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD curl -f "http://localhost:${PORT:-8000}/api/v1/health" || exit 1
 
-# ── Ejecutar (escucha en $PORT para plataformas cloud como Render) ──
+# ── Ejecutar: migraciones automáticas y luego la API ──
+# (Render free tier no permite preDeployCommand, por eso las migraciones
+#  corren aquí de forma idempotente en cada arranque).
 EXPOSE 8000
-CMD ["sh", "-c", "poetry run uvicorn agroia_backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["sh", "-c", "cd /app/apps/backend && poetry run alembic upgrade head && exec poetry run uvicorn agroia_backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

@@ -13,7 +13,6 @@ services:
     dockerContext: .
     dockerfilePath: ./apps/backend/Dockerfile
     healthCheckPath: /api/v1/health
-    preDeployCommand: cd /app/apps/backend && poetry run alembic upgrade head
     envVars:
       - key: DATABASE_URL
         sync: false # Pegar la URL de Neon/Supabase (postgresql+asyncpg://...) en el dashboard
