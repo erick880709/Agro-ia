@@ -22,6 +22,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from agroia.config import get_settings
+from agroia.database import normalize_asyncpg_url
 from agroia_backend.models.dispositivo_iot import DispositivoIoT
 from agroia_backend.models.finca import Finca  # noqa: F401 (registra la tabla en metadata)
 from agroia_backend.models.sensor_reading import SensorReading, TexturaSuelo
@@ -66,7 +67,7 @@ LECTURAS = [
 
 async def main() -> None:
     settings = get_settings()
-    engine = create_async_engine(settings.database_url, echo=False)
+    engine = create_async_engine(normalize_asyncpg_url(settings.database_url), echo=False)
     factory = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
     async with factory() as session:
@@ -99,32 +100,32 @@ async def main() -> None:
         # ── Lecturas ──
         ahora = datetime.now(timezone.utc)
         insertadas = 0
-        for l in LECTURAS:
+        for lect in LECTURAS:
             lectura = SensorReading(
                 finca_id=FINCA_ID,
-                ts=ahora - timedelta(days=l["dias_atras"], minutes=l["dias_atras"] * 7),
+                ts=ahora - timedelta(days=lect["dias_atras"], minutes=lect["dias_atras"] * 7),
                 sensor_id=DEVICE_ID,
-                ph=l["ph"],
-                nitrogeno=l["nitrogeno"],
-                fosforo=l["fosforo"],
-                potasio=l["potasio"],
-                calcio=l["calcio"],
-                magnesio=l["magnesio"],
-                azufre=l["azufre"],
-                hierro=l["hierro"],
-                manganeso=l["manganeso"],
-                zinc=l["zinc"],
-                cobre=l["cobre"],
-                boro=l["boro"],
-                materia_organica=l["materia_organica"],
-                cic=l["cic"],
-                textura=l["textura"],
-                humedad=l["humedad"],
-                temperatura_suelo=l["temperatura_suelo"],
-                conductividad_electrica=l["conductividad_electrica"],
-                humedad_ambiental=l["humedad_ambiental"],
-                temperatura_ambiental=l["temperatura_ambiental"],
-                calidad=l["calidad"],
+                ph=lect["ph"],
+                nitrogeno=lect["nitrogeno"],
+                fosforo=lect["fosforo"],
+                potasio=lect["potasio"],
+                calcio=lect["calcio"],
+                magnesio=lect["magnesio"],
+                azufre=lect["azufre"],
+                hierro=lect["hierro"],
+                manganeso=lect["manganeso"],
+                zinc=lect["zinc"],
+                cobre=lect["cobre"],
+                boro=lect["boro"],
+                materia_organica=lect["materia_organica"],
+                cic=lect["cic"],
+                textura=lect["textura"],
+                humedad=lect["humedad"],
+                temperatura_suelo=lect["temperatura_suelo"],
+                conductividad_electrica=lect["conductividad_electrica"],
+                humedad_ambiental=lect["humedad_ambiental"],
+                temperatura_ambiental=lect["temperatura_ambiental"],
+                calidad=lect["calidad"],
             )
             session.add(lectura)
             insertadas += 1

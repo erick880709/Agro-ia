@@ -11,6 +11,7 @@ sys.path.insert(0, "apps/backend")
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from agroia.config import get_settings
+from agroia.database import normalize_asyncpg_url
 
 from agroia_backend.models.cultivo import Cultivo, FichaTecnica, EstadoFicha, TipoFuente
 from agroia_backend.models.recomendacion import Recomendacion  # noqa: F401 (needed for relationship)
@@ -24,7 +25,7 @@ import uuid
 
 # Use async engine directly
 settings = get_settings()
-engine = create_async_engine(settings.database_url, echo=False)
+engine = create_async_engine(normalize_asyncpg_url(settings.database_url), echo=False)
 factory = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 

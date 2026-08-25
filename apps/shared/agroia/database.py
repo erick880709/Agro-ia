@@ -11,9 +11,21 @@ from agroia.config import get_settings
 
 settings = get_settings()
 
+
+def normalize_asyncpg_url(url: str) -> str:
+    """Adapta URLs de Postgres externos (Neon/Supabase) al driver asyncpg.
+
+    asyncpg no acepta el parámetro `sslmode` (es exclusivo de libpq); usa
+    `ssl` con el modo como valor (p. ej. ssl=require).
+    """
+    if url.startswith("postgresql+asyncpg://") and "sslmode=" in url:
+        return url.replace("sslmode=require", "ssl=require")
+    return url
+
+
 # Engine asíncrono para PostgreSQL
 engine = create_async_engine(
-    settings.database_url,
+    normalize_asyncpg_url(settings.database_url),
     echo=settings.environment == "development",
     pool_size=10,
     max_overflow=20,

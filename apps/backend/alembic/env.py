@@ -25,13 +25,14 @@ target_metadata = Base.metadata
 
 # La URL se toma del entorno (DATABASE_URL); por defecto la BD local de
 # desarrollo. El CI la inyecta con el servicio PostgreSQL del job.
-config.set_main_option(
-    "sqlalchemy.url",
-    os.getenv(
-        "DATABASE_URL",
-        "postgresql+asyncpg://agroia:agroia_dev@localhost:5434/agroia",
-    ),
+_database_url = os.getenv(
+    "DATABASE_URL",
+    "postgresql+asyncpg://agroia:agroia_dev@localhost:5434/agroia",
 )
+# asyncpg no acepta `sslmode` (Neon/Supabase); convertir a `ssl=require`.
+if _database_url.startswith("postgresql+asyncpg://") and "sslmode=" in _database_url:
+    _database_url = _database_url.replace("sslmode=require", "ssl=require")
+config.set_main_option("sqlalchemy.url", _database_url)
 
 
 def run_migrations_offline() -> None:

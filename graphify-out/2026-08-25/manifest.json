@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787688543.6505325,
-    "ast_hash": "10251b9ebc831004a8288de8175c639a",
+    "mtime": 1787695575.193926,
+    "ast_hash": "8b3d3fdb61a84a3a5bc67e1a794c9f3a",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4647,6 +4647,16 @@
   "apps/backend/alembic/versions/003_infra_fincas.py": {
     "mtime": 1787693187.9023213,
     "ast_hash": "d7ae08d69611463bb42a869bbab44c06",
+    "semantic_hash": ""
+  },
+  "render.yaml": {
+    "mtime": 1787695557.5783863,
+    "ast_hash": "fbb4393c68765b6bf06c38215450da05",
+    "semantic_hash": ""
+  },
+  "scripts/seed_cloud.py": {
+    "mtime": 1787696665.2517095,
+    "ast_hash": "b90ccdf362b8dcb0fa8d577af7741ee2",
     "semantic_hash": ""
   }
 }
