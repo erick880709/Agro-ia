@@ -38,6 +38,13 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 
 **Estado:** ✅ **EN PRODUCCIÓN** — https://agroia-backend.onrender.com (Render Web Service Free + Neon Postgres Free). CI en verde; auto-deploy en cada push a `master`.
 
+### Chat asesor agronómico (2026-08-25)
+
+- `POST /api/v1/chat/consultar` — chat en la pantalla de reportes, disponible para admin/agrónomo/cliente (acceso limitado a sus fincas).
+- **Modo LLM**: con `OPENAI_API_KEY` configurada en Render, responde un modelo con prompt de sistema de "experto agrónomo colombiano 30+ años" + contexto real (lectura de suelo, reglas UPRA/Cenicafé/AGROSAVIA, ficha técnica, análisis UC1/UC2, historial).
+- **Modo experto local** (sin key, el que corre hoy): motor determinista que detecta la intención (abono, siembra, pH, nutriente específico, riego, reporte, saludo) y responde con las reglas y la lectura de la finca.
+- Implementación: `services/agronomo_chat.py`, `api/chat.py`, panel `#chat-card` en `apps/frontend-web`.
+
 ### Cómo está montado
 
 - **Render Blueprint** (`render.yaml`): web service Docker desde `apps/backend/Dockerfile`, health check `/api/v1/health`, migraciones `alembic upgrade head` automáticas al arrancar el contenedor (Render free no permite `preDeployCommand`).
