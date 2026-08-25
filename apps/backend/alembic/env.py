@@ -52,6 +52,9 @@ def run_migrations_offline() -> None:
 def do_run_migrations(connection: Connection) -> None:
     # El schema 'agroia' puede no existir en bases recién creadas (CI).
     connection.execute(text("CREATE SCHEMA IF NOT EXISTS agroia"))
+    # Los casts de tipos enum de SQLAlchemy no van calificados; poner el
+    # schema agroia en el search_path (necesario en Neon/Supabase).
+    connection.execute(text("SET search_path TO public, agroia"))
     connection.commit()
     context.configure(
         connection=connection,

@@ -29,7 +29,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from agroia.config import get_settings
-from agroia.database import normalize_asyncpg_url
+from agroia.database import configure_search_path, normalize_asyncpg_url
 from agroia_backend.models.finca import Finca
 from agroia_backend.models.finca_usuario import FincaUsuario
 from agroia_backend.models.usuario import RolUsuario, Usuario
@@ -102,6 +102,7 @@ FINCAS = [
 async def main() -> None:
     settings = get_settings()
     engine = create_async_engine(normalize_asyncpg_url(settings.database_url), echo=False)
+    configure_search_path(engine)
     factory = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
     async with factory() as session:

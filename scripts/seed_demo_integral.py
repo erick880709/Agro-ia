@@ -22,7 +22,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from agroia.config import get_settings
-from agroia.database import normalize_asyncpg_url
+from agroia.database import configure_search_path, normalize_asyncpg_url
 from agroia_backend.models.dispositivo_iot import DispositivoIoT
 from agroia_backend.models.finca import Finca  # noqa: F401 (registra la tabla en metadata)
 from agroia_backend.models.sensor_reading import SensorReading, TexturaSuelo
@@ -68,6 +68,7 @@ LECTURAS = [
 async def main() -> None:
     settings = get_settings()
     engine = create_async_engine(normalize_asyncpg_url(settings.database_url), echo=False)
+    configure_search_path(engine)
     factory = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
     async with factory() as session:

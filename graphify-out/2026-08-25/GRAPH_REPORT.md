@@ -1,16 +1,16 @@
 # Graph Report - Agro-ia  (2026-08-25)
 
 ## Corpus Check
-- 872 files · ~523,523 words
+- 872 files · ~523,518 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 8853 nodes · 10626 edges · 862 communities (735 shown, 127 thin omitted)
+- 8853 nodes · 10625 edges · 861 communities (734 shown, 127 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 266 edges (avg confidence: 0.51)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0cd9cc92`
+- Built from commit: `2a7b0dad`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -146,7 +146,6 @@
 - skills/ui-ux-pro-max/scripts/validate_data.py
 - assets/scripts/validate_data.py
 - Tailwind CSS Utility Reference
-- consumer.py
 - reportes_html.py
 - Tailwind CSS Utility Reference
 - validate_file
@@ -886,7 +885,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (862 total, 127 thin omitted)
+## Communities (861 total, 127 thin omitted)
 
 ### Community 0 - "init.ts"
 Cohesion: 0.06
@@ -1403,10 +1402,6 @@ Nodes (3): _check_file(), main(), _read_rows()
 ### Community 130 - "Tailwind CSS Utility Reference"
 Cohesion: 0.05
 Nodes (43): Arbitrary Values, Aspect Ratio, Background Colors, Border Color, Border Radius, Border Style, Border Width, Borders (+35 more)
-
-### Community 131 - "consumer.py"
-Cohesion: 0.12
-Nodes (13): aplicar_calibracion(), Normalización de tramas IoT (ESP32/LoRaWAN) al formato canónico. Cierra la…, Aplica factores de calibración NPK por dispositivo (brecha G4). Solo se invoca…, get_dispositivo(), IoTIngestionConsumer, process_sensor_message(), Consumidor RabbitMQ para ingesta de datos IoT (LoRaWAN). Escucha la cola…, Consumidor RabbitMQ para el servicio IoT. (+5 more)
 
 ### Community 132 - "reportes_html.py"
 Cohesion: 0.20
@@ -2729,8 +2724,8 @@ Cohesion: 0.50
 Nodes (3): 📄 Archivos principales, Extracting a screen inventory from a PRD, 🔗 Nodos clave
 
 ### Community 550 - "load_seeds.py"
-Cohesion: 0.06
-Nodes (28): Seed data para reglas agronómicas del sistema experto (UC1 + UC2). Fuentes:…, do_run_migrations(), Alembic environment configuration for AgroIA backend., Run migrations in 'offline' mode (generate SQL without DB connection)., Ejecuta migraciones con motor async (URL asyncpg)., Run migrations in 'online' mode (connected to DB)., run_async_migrations(), run_migrations_offline() (+20 more)
+Cohesion: 0.04
+Nodes (41): Seed data para reglas agronómicas del sistema experto (UC1 + UC2). Fuentes:…, aplicar_calibracion(), Normalización de tramas IoT (ESP32/LoRaWAN) al formato canónico. Cierra la…, Aplica factores de calibración NPK por dispositivo (brecha G4). Solo se invoca…, do_run_migrations(), Alembic environment configuration for AgroIA backend., Run migrations in 'offline' mode (generate SQL without DB connection)., Ejecuta migraciones con motor async (URL asyncpg). (+33 more)
 
 ### Community 551 - "Formato de Runbook de Pruebas en Markdown"
 Cohesion: 0.50

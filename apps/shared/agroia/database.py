@@ -4,6 +4,7 @@ Provee el engine, session factory y la base declarativa compartida.
 Soporta PostGIS y pgvector como extensiones.
 """
 
+from sqlalchemy import event
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
@@ -23,6 +24,23 @@ def normalize_asyncpg_url(url: str) -> str:
     return url
 
 
+def configure_search_path(engine) -> None:
+    """Pone el schema `agroia` en el search_path de cada conexión.
+
+    Los casts de tipos enum que genera SQLAlchemy no van calificados con
+    schema (p. ej. ::rolusuario), así que dependen del search_path. En bases
+    externas (Neon/Supabase) el usuario no se llama `agroia`, por lo que el
+    schema no se resuelve por defecto.
+    """
+    @event.listens_for(engine.sync_engine, "connect")
+    def _set_search_path(dbapi_connection, _connection_record):
+        cursor = dbapi_connection.cursor()
+        try:
+            cursor.execute("SET search_path TO public, agroia")
+        finally:
+            cursor.close()
+
+
 # Engine asíncrono para PostgreSQL
 engine = create_async_engine(
     normalize_asyncpg_url(settings.database_url),
@@ -31,6 +49,7 @@ engine = create_async_engine(
     max_overflow=20,
     pool_pre_ping=True,
 )
+configure_search_path(engine)
 
 # Factory de sesiones asíncronas
 async_session_factory = async_sessionmaker(
