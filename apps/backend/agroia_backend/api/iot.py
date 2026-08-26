@@ -494,6 +494,8 @@ async def ultimas_lecturas(
                 "id": str(r.id),
                 "sensor_id": r.sensor_id,
                 "ts": r.ts.isoformat() if r.ts else None,
+                "pos_x": r.pos_x,
+                "pos_y": r.pos_y,
                 "ph": r.ph,
                 "nitrogeno": r.nitrogeno,
                 "fosforo": r.fosforo,
