@@ -5,7 +5,6 @@ normaliza las 18 variables de suelo y las persiste en PostgreSQL+TimescaleDB.
 """
 
 import asyncio
-import json
 from datetime import datetime, timezone
 
 from agroia.config import get_settings
@@ -83,10 +82,18 @@ async def process_sensor_message(message: dict) -> bool:
             calidad = "npk_no_calibrado" if "npk_sin_calibrar" in advertencias else "OK"
 
         # ── Crear lectura de sensor ──
+        def _a_flotante(v):
+            try:
+                return float(v) if v not in (None, "") else None
+            except (TypeError, ValueError):
+                return None
+
         reading = SensorReading(
             finca_id=finca_id,
             ts=ts,
             sensor_id=device_id,
+            pos_x=_a_flotante(message.get("pos_x", raw.get("pos_x"))),
+            pos_y=_a_flotante(message.get("pos_y", raw.get("pos_y"))),
             ph=payload.get("ph"),
             nitrogeno=payload.get("nitrogeno"),
             fosforo=payload.get("fosforo"),

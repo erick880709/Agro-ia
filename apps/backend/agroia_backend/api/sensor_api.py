@@ -47,6 +47,8 @@ class SensorFrame(BaseModel, extra="allow"):
     potassium: float | None = Field(None, description="ppm")
     rssi: int | None = Field(None, description="dBm de la señal")
     uptime_s: int | None = Field(None, description="Segundos desde encendido")
+    pos_x: float | None = Field(None, description="Posición X de la toma en el lote (metros, muestreo en cuadrícula)")
+    pos_y: float | None = Field(None, description="Posición Y de la toma en el lote (metros, muestreo en cuadrícula)")
 
 
 @router.post("/sensor", status_code=202)
@@ -103,6 +105,8 @@ async def ingesta_sensor(frame: SensorFrame):
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "rssi": _a_entero(frame.rssi),
             "uptime_s": _a_entero(frame.uptime_s),
+            "pos_x": frame.pos_x,
+            "pos_y": frame.pos_y,
             "payload": payload,
         })
         if not success:

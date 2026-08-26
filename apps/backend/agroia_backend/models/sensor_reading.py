@@ -82,6 +82,14 @@ class SensorReading(Base):
     sensor_id: Mapped[str | None] = mapped_column(
         String(100), nullable=True, comment="ID del dispositivo LoRaWAN"
     )
+    pos_x: Mapped[float | None] = mapped_column(
+        Float, nullable=True,
+        comment="Posición X de la toma en el lote (metros desde la esquina, muestreo en cuadrícula)",
+    )
+    pos_y: Mapped[float | None] = mapped_column(
+        Float, nullable=True,
+        comment="Posición Y de la toma en el lote (metros desde la esquina, muestreo en cuadrícula)",
+    )
     calidad: Mapped[str | None] = mapped_column(
         String(50), nullable=True,
         comment="Indicador de calidad: OK, out_of_range, frozen, gap"

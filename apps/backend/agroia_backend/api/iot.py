@@ -212,7 +212,7 @@ async def cargar_archivo_sensor(
     contenido = await file.read()
     texto = decodificar_contenido(contenido)
     try:
-        frame, device_archivo, formato = parsear_archivo_sensor(texto)
+        frames, device_archivo, formato = parsear_archivo_sensor(texto)
     except ValueError as e:
         raise HTTPException(status_code=422, detail={
             "code": "ARCHIVO_INVALIDO",
@@ -225,9 +225,26 @@ async def cargar_archivo_sensor(
         except (TypeError, ValueError):
             return None
 
-    dispositivo_id = device_id or device_archivo
-    rssi = _a_entero(frame.get("rssi"))
-    uptime_s = _a_entero(frame.get("uptime_s"))
+    def _a_flotante(v):
+        try:
+            return float(v) if v not in (None, "") else None
+        except (TypeError, ValueError):
+            return None
+
+    def _posicion(frame: dict, eje: str):
+        claves = {
+            "x": ("pos_x", "x", "coordenada_x", "punto_x", "columna"),
+            "y": ("pos_y", "y", "coordenada_y", "punto_y", "fila"),
+        }[eje]
+        for clave in claves:
+            if clave in frame and frame[clave] not in (None, ""):
+                return _a_flotante(frame[clave])
+        return None
+
+    frame_primero = frames[0]
+    dispositivo_id = device_id or device_archivo or frame_primero.get("device_id")
+    rssi = _a_entero(frame_primero.get("rssi"))
+    uptime_s = _a_entero(frame_primero.get("uptime_s"))
 
     async with async_session_factory() as db:
         # ── Resolver finca (form > dispositivo) ──
@@ -288,23 +305,30 @@ async def cargar_archivo_sensor(
         finca_final = str(finca.id) if finca else str(dispositivo.finca_id)
         device_final = dispositivo.device_id if dispositivo else None
 
-        # ── Normalizar y persistir igual que una trama en vivo ──
-        payload, advertencias = normalizar_trama(frame)
+        # ── Normalizar y persistir cada muestra (cuadrícula) ──
         from apps.iot.agroia_iot.consumer import process_sensor_message
 
-        success = await process_sensor_message({
-            "device_id": device_final,
-            "finca_id": finca_final,
-            "timestamp": None,
-            "rssi": rssi,
-            "uptime_s": uptime_s,
-            "payload": payload,
-        })
-        if not success:
-            raise HTTPException(status_code=422, detail={
-                "code": "INGEST_ERROR",
-                "message": "Error al procesar el archivo. Revise los logs.",
+        variables_recibidas: set[str] = set()
+        numero_muestras = 0
+        for frame in frames:
+            payload, advertencias = normalizar_trama(frame)
+            success = await process_sensor_message({
+                "device_id": device_final,
+                "finca_id": finca_final,
+                "timestamp": None,
+                "rssi": rssi,
+                "uptime_s": uptime_s,
+                "pos_x": _posicion(frame, "x"),
+                "pos_y": _posicion(frame, "y"),
+                "payload": payload,
             })
+            if not success:
+                raise HTTPException(status_code=422, detail={
+                    "code": "INGEST_ERROR",
+                    "message": "Error al procesar el archivo. Revise los logs.",
+                })
+            variables_recibidas.update(payload.keys())
+            numero_muestras += 1
 
         # ── Ejecutar el mismo motor de recomendaciones que /analyze ──
         rules_engine = RulesEngine(db)
@@ -346,7 +370,8 @@ async def cargar_archivo_sensor(
         "formato": formato,
         "device_id": device_final,
         "finca_id": finca_final,
-        "variables_recibidas": sorted(payload.keys()),
+        "numero_muestras": numero_muestras,
+        "variables_recibidas": sorted(variables_recibidas),
         "advertencias_ingesta": advertencias,
         "analisis": asdict(resultado),
     }

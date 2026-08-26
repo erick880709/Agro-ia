@@ -135,6 +135,8 @@ async def generar_reporte(
             "area_hectareas": finca.area_hectareas,
             "latitud": finca.latitud,
             "longitud": finca.longitud,
+            "largo_metros": finca.largo_metros,
+            "ancho_metros": finca.ancho_metros,
         },
         lectura={
             "ts": lectura.ts.isoformat() if lectura.ts else None,
@@ -158,6 +160,8 @@ async def generar_reporte(
         tipo=body.tipo,
         uc1=asdict(uc1) if uc1 else None,
         uc2=asdict(uc2) if uc2 else None,
+        muestras=await _muestras_geo(db, finca_uuid),
+        umbrales=_umbrales_de_analisis(uc1, uc2),
     )
 
     titulo = {
@@ -168,3 +172,55 @@ async def generar_reporte(
 
     logger.info("reporte_generado", finca_id=body.finca_id, tipo=body.tipo, rol=(x_user_role or "?"))
     return {"titulo": titulo, "tipo": body.tipo, "html": html}
+
+
+# ── Helpers del mapa de calor (muestreo en cuadrícula) ──
+
+_VAR_ATRIBUTOS = [
+    "ph", "nitrogeno", "fosforo", "potasio", "calcio", "magnesio", "azufre",
+    "hierro", "manganeso", "zinc", "cobre", "boro", "materia_organica", "cic",
+    "humedad", "temperatura_suelo", "conductividad_electrica",
+]
+
+
+async def _muestras_geo(db: AsyncSession, finca_uuid) -> list[dict]:
+    """Lecturas recientes con posición (x, y) para pintar el mapa de calor."""
+    lecturas = (
+        await db.execute(
+            select(SensorReading)
+            .where(
+                SensorReading.finca_id == finca_uuid,
+                SensorReading.pos_x.isnot(None),
+                SensorReading.pos_y.isnot(None),
+            )
+            .order_by(SensorReading.ts.desc())
+            .limit(400)
+        )
+    ).scalars().all()
+    muestras = []
+    for r in lecturas:
+        muestra = {"pos_x": r.pos_x, "pos_y": r.pos_y}
+        for attr in _VAR_ATRIBUTOS:
+            valor = getattr(r, attr, None)
+            if valor is not None:
+                muestra[attr] = float(valor)
+        muestras.append(muestra)
+    return muestras
+
+
+def _umbrales_de_analisis(uc1, uc2) -> dict:
+    """Rangos ideales por variable (símbolo → (min, max)) desde el análisis."""
+    umbrales: dict[str, tuple[float, float]] = {}
+    fuente = (uc2.recomendaciones if uc2 else []) or (uc1.recomendaciones if uc1 else [])
+    for rec in fuente:
+        variable = str(rec.get("variable") or "").strip()
+        rango = str(rec.get("rango_ideal") or "")
+        nums = [n for n in rango.replace("[", "").replace("]", "").split("-") if n.strip()]
+        try:
+            minimo = float(nums[0]) if nums else None
+            maximo = float(nums[1]) if len(nums) > 1 else None
+        except ValueError:
+            continue
+        if minimo is not None or maximo is not None:
+            umbrales[variable] = (minimo, maximo)
+    return umbrales

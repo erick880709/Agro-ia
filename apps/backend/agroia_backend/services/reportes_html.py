@@ -105,6 +105,14 @@ _CSS = """
   /* ── Lenguaje de campo ── */
   .field-talk { background: linear-gradient(180deg, rgba(135,169,92,.06), transparent); }
   .field-talk .block-title { color: var(--moss); }
+  .heatmap .heat-var { margin-bottom: 18px; }
+  .heatmap .heat-title { font-weight: 600; margin-bottom: 6px; }
+  .heat-legend { display: flex; align-items: center; gap: 8px; font-size: .78rem; color: var(--muted); margin-bottom: 8px; }
+  .heat-legend .chip { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+  .heat-grid { display: grid; gap: 2px; max-width: 560px; margin-bottom: 4px; }
+  .heat-cell { aspect-ratio: 1.6 / 1; display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: .68rem; border-radius: 3px; }
+  .heat-cell:hover { outline: 2px solid var(--moss); }
   .ft-intro { font-family: var(--serif); font-size: 1.08rem; margin-bottom: 16px; }
   .ft-sub { font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--moss); margin: 16px 0 8px; }
   .ft-para { font-size: .92rem; }
@@ -269,6 +277,156 @@ def _seccion_uc1(a) -> str:
   </section>"""
 
 
+# ── Mapa de calor del lote (muestreo en cuadrícula) ──
+
+_VAR_HEAT = [
+    ("ph", "pH", ""),
+    ("nitrogeno", "N", "ppm"),
+    ("fosforo", "P", "ppm"),
+    ("potasio", "K", "ppm"),
+    ("calcio", "Ca", "ppm"),
+    ("magnesio", "Mg", "ppm"),
+    ("azufre", "S", "ppm"),
+    ("hierro", "Fe", "ppm"),
+    ("manganeso", "Mn", "ppm"),
+    ("zinc", "Zn", "ppm"),
+    ("cobre", "Cu", "ppm"),
+    ("boro", "B", "ppm"),
+    ("materia_organica", "MO", "%"),
+    ("cic", "CIC", "meq/100g"),
+    ("humedad", "Humedad", "%"),
+    ("temperatura_suelo", "T suelo", "°C"),
+    ("conductividad_electrica", "CE", "dS/m"),
+]
+
+_VERDE = "#2e7d32"
+_AMBAR = "#f9a825"
+_ROJO = "#c62828"
+_GRIS = "#eceff1"
+
+
+def _hex_a_rgb(h: str) -> tuple[int, int, int]:
+    h = h.lstrip("#")
+    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+
+
+def _mezclar(c1: str, c2: str, t: float) -> str:
+    a, b = _hex_a_rgb(c1), _hex_a_rgb(c2)
+    t = max(0.0, min(1.0, t))
+    return "#%02x%02x%02x" % tuple(round(a[i] + (b[i] - a[i]) * t) for i in range(3))
+
+
+def _color_por_estado(valor: float, minimo: float | None, maximo: float | None) -> str:
+    """Verde dentro del ideal, ámbar cerca, rojo fuera. Sin rango: gradiente."""
+    if minimo is None and maximo is None:
+        return ""
+    lo = minimo if minimo is not None else float("-inf")
+    hi = maximo if maximo is not None else float("inf")
+    if lo <= valor <= hi:
+        return _VERDE
+    margen = (hi - lo) * 0.25 if minimo is not None and maximo is not None else 0
+    if (minimo is not None and lo - margen <= valor < lo) or (
+        maximo is not None and hi < valor <= hi + margen
+    ):
+        return _AMBAR
+    return _ROJO
+
+
+def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> str:
+    """Mapa de calor del lote: una cuadrícula por variable con sus muestras (x, y)."""
+    if not muestras or len(muestras) < 2:
+        return ""
+    xs = sorted({m["pos_x"] for m in muestras if m.get("pos_x") is not None})
+    ys = sorted({m["pos_y"] for m in muestras if m.get("pos_y") is not None})
+    if len(xs) < 2 and len(ys) < 2:
+        return ""
+    # Mapa (x, y) → muestra (la más reciente si hay varias en el mismo punto)
+    celdas: dict[tuple[float, float], dict] = {}
+    for m in muestras:
+        clave = (m["pos_x"], m["pos_y"])
+        if clave not in celdas:
+            celdas[clave] = m
+
+    variables = []
+    for attr, simbolo, unidad in _VAR_HEAT:
+        valores = [m[attr] for m in celdas.values() if m.get(attr) is not None]
+        if len(valores) >= 2:
+            variables.append((attr, simbolo, unidad))
+
+    if not variables:
+        return ""
+
+    umbrales = umbrales or {}
+    bloques = []
+    for attr, simbolo, unidad in variables:
+        rango = umbrales.get(simbolo) or umbrales.get(simbolo.lower())
+        valores = [m[attr] for m in celdas.values() if m.get(attr) is not None]
+        vmin, vmax = min(valores), max(valores)
+
+        def _color(valor):
+            if rango:
+                return _color_por_estado(valor, rango[0], rango[1])
+            if vmax == vmin:
+                return _mezclar("#64b5f6", "#e53935", 0.5)
+            return _mezclar("#64b5f6", "#e53935", (valor - vmin) / (vmax - vmin))
+
+        filas = []
+        for y in reversed(ys):  # fila superior = y mayor
+            celdas_fila = []
+            for x in xs:
+                m = celdas.get((x, y))
+                valor = m.get(attr) if m else None
+                if valor is None:
+                    bg, fg, texto = _GRIS, "#90a4ae", "·"
+                else:
+                    bg = _color(valor)
+                    texto = _num(valor, 1)
+                    # texto oscuro sobre fondos claros (ámbar/gradiente azul), blanco sobre oscuros
+                    r, g, b = _hex_a_rgb(bg)
+                    fg = "#263238" if (r * 0.299 + g * 0.587 + b * 0.114) > 150 else "#ffffff"
+                celdas_fila.append(
+                    f'<div class="heat-cell" style="background:{bg};color:{fg}">{esc(texto)}</div>'
+                )
+            filas.append("".join(celdas_fila))
+
+        if rango:
+            lo = "—" if (rango[0] is None) else _num(rango[0], 1)
+            hi = "—" if (rango[1] is None) else _num(rango[1], 1)
+            leyenda = (
+                f'<div class="heat-legend"><span class="chip" style="background:{_VERDE}"></span>dentro del ideal'
+                f'<span class="chip" style="background:{_AMBAR}"></span>cerca'
+                f'<span class="chip" style="background:{_ROJO}"></span>fuera'
+                f'<span class="mono" style="color:var(--muted)">· ideal {lo}–{hi} {esc(unidad)}</span></div>'
+            )
+        else:
+            leyenda = (
+                f'<div class="heat-legend"><span class="chip" style="background:#64b5f6"></span>'
+                f'{_num(vmin, 1)} <span style="flex:1;height:8px;border-radius:4px;'
+                f'background:linear-gradient(90deg,#64b5f6,#f9a825,#e53935)"></span>'
+                f'{_num(vmax, 1)} {esc(unidad)}</div>'
+            )
+        grid = (
+            f'<div class="heat-grid" style="grid-template-columns:repeat({len(xs)},1fr)">'
+            + "".join(filas)
+            + "</div>"
+        )
+        bloques.append(
+            f'<div class="heat-var"><div class="heat-title">🌡️ {esc(simbolo)}'
+            f'{" · " + esc(unidad) if unidad else ""}</div>{leyenda}{grid}</div>'
+        )
+
+    return f"""
+  <section class="block heatmap">
+    <div class="block-head"><span class="block-num">M</span>
+      <div><div class="block-title">Mapa de calor del lote</div>
+      <div class="block-sub">Muestreo en cuadrícula · {len(xs)} × {len(ys)} tomas ({len(celdas)} puntos)</div></div>
+    </div>
+    <p class="muted">Cada celda es una toma de muestra en la posición (x, y) del lote;
+    los colores muestran la variación de cada parámetro del suelo entre puntos.</p>
+    {''.join(bloques)}
+  </section>"""
+
+
 def generar_reporte_html(
     *,
     finca: dict,
@@ -277,6 +435,8 @@ def generar_reporte_html(
     tipo: str,
     uc1: dict | None,
     uc2: dict | None,
+    muestras: list | None = None,
+    umbrales: dict | None = None,
 ) -> str:
     """Construye el documento HTML completo del reporte."""
     fecha = datetime.now(timezone.utc).astimezone().strftime("%d/%m/%Y %H:%M")
@@ -291,6 +451,9 @@ def generar_reporte_html(
         secciones += _seccion_uc2(uc2)
     if tipo in ("siembra", "completo"):
         secciones += _seccion_uc1(uc1)
+
+    # Mapa de calor del lote (muestreo en cuadrícula con posiciones x, y)
+    seccion_mapa = _seccion_mapa_calor(muestras, umbrales)
 
     # Explicación en lenguaje campesino (siempre que haya análisis)
     explicacion_campo = generar_explicacion_campesina(uc1=uc1, uc2=uc2, lectura=lectura)
@@ -347,6 +510,7 @@ def generar_reporte_html(
     {_telemetria(lectura, dispositivo, finca)}
   </section>
   {secciones}
+  {seccion_mapa}
   {explicacion_campo}
   <section class="block">
     <div class="block-head"><span class="block-num">04</span>

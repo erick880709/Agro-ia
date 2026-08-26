@@ -53,7 +53,7 @@ def _extraer_device_id(pares: list[tuple[str, str]]) -> str | None:
     return None
 
 
-def _parsear_csv(texto: str) -> tuple[dict, str | None]:
+def _parsear_csv(texto: str) -> tuple[list[dict], str | None]:
     import csv
     import io
 
@@ -68,22 +68,26 @@ def _parsear_csv(texto: str) -> tuple[dict, str | None]:
     if not filas:
         raise ValueError("El archivo CSV no tiene filas con datos.")
 
-    # Forma ancha: cabecera de variables + fila(s) de datos
+    # Forma ancha: cabecera de variables + una o varias filas de datos.
+    # Con varias filas se interpreta como muestreo en cuadrícula (x, y + variables).
     if len(filas[0]) > 2:
         cabecera = filas[0]
-        fila_datos = filas[1] if len(filas) > 1 else []
-        pares = [
-            (cabecera[i], fila_datos[i])
-            for i in range(min(len(cabecera), len(fila_datos)))
-        ]
-        return _pares_a_frame(pares), _extraer_device_id(pares)
+        frames = []
+        for fila_datos in filas[1:]:
+            pares = [
+                (cabecera[i], fila_datos[i])
+                for i in range(min(len(cabecera), len(fila_datos)))
+            ]
+            frames.append(_pares_a_frame(pares))
+        device = _extraer_device_id([(c, "") for c in cabecera])
+        return frames, device
 
     # Forma pares: variable,valor (una o varias filas)
     pares = [(f[0], f[1]) if len(f) > 1 else (f[0], "") for f in filas]
-    return _pares_a_frame(pares), _extraer_device_id(pares)
+    return [_pares_a_frame(pares)], _extraer_device_id(pares)
 
 
-def _parsear_txt(texto: str) -> tuple[dict, str | None]:
+def _parsear_txt(texto: str) -> tuple[list[dict], str | None]:
     pares = []
     for linea in texto.splitlines():
         linea = linea.strip()
@@ -96,17 +100,19 @@ def _parsear_txt(texto: str) -> tuple[dict, str | None]:
                 break
     if not pares:
         raise ValueError("El archivo TXT no tiene pares clave=valor reconocibles.")
-    return _pares_a_frame(pares), _extraer_device_id(pares)
+    return [_pares_a_frame(pares)], _extraer_device_id(pares)
 
 
-def parsear_archivo_sensor(contenido: str) -> tuple[dict, str | None, str]:
-    """Detecta el formato del archivo y devuelve la trama cruda normalizada.
+def parsear_archivo_sensor(contenido: str) -> tuple[list[dict], str | None, str]:
+    """Detecta el formato del archivo y devuelve la(s) trama(s) cruda(s).
 
     Args:
         contenido: texto decodificado del archivo.
 
     Returns:
-        (frame, device_id_archivo, formato) donde formato ∈ {"json","csv","txt"}.
+        (frames, device_id_archivo, formato) donde formato ∈ {"json","csv","txt"}
+        y `frames` es una lista (una trama por muestra; los archivos con
+        varias filas/objetos representan el muestreo en cuadrícula del lote).
     """
     texto = contenido.strip()
     if not texto:
@@ -115,18 +121,26 @@ def parsear_archivo_sensor(contenido: str) -> tuple[dict, str | None, str]:
     if texto.startswith("{") or texto.startswith("["):
         data = json.loads(texto)
         if isinstance(data, list):
-            data = data[0] if data else {}
+            if not data:
+                raise ValueError("El JSON está vacío.")
+            frames = [
+                {_normalizar_clave(str(k)): v for k, v in item.items()}
+                for item in data if isinstance(item, dict)
+            ]
+            if not frames:
+                raise ValueError("El JSON debe ser una lista de objetos con variables del sensor.")
+            return frames, frames[0].get("device_id"), "json"
         if not isinstance(data, dict):
             raise ValueError("El JSON debe ser un objeto con variables del sensor.")
         frame = {_normalizar_clave(str(k)): v for k, v in data.items()}
-        return frame, frame.get("device_id"), "json"
+        return [frame], frame.get("device_id"), "json"
 
     if "," in texto or ";" in texto:
-        frame, device = _parsear_csv(texto)
-        return frame, device, "csv"
+        frames, device = _parsear_csv(texto)
+        return frames, device, "csv"
 
-    frame, device = _parsear_txt(texto)
-    return frame, device, "txt"
+    frames, device = _parsear_txt(texto)
+    return frames, device, "txt"
 
 
 def decodificar_contenido(raw: bytes) -> str:

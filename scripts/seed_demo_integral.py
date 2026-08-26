@@ -134,6 +134,82 @@ async def main() -> None:
         await session.commit()
         print(f"✅ {insertadas} lecturas simuladas insertadas (18 variables cada una)")
 
+        # ── Cuadrícula de muestreo 3×3 para el mapa de calor del lote ──
+        # (250 m × 100 m → posiciones x: 20/125/230, y: 10/50/90)
+        ya_geo = (
+            await session.execute(
+                select(SensorReading)
+                .where(
+                    SensorReading.finca_id == FINCA_ID,
+                    SensorReading.pos_x.isnot(None),
+                )
+                .limit(1)
+            )
+        ).scalars().first()
+        if ya_geo is not None:
+            print("ℹ️ Ya existen muestras georreferenciadas; se omite la cuadrícula.")
+        else:
+            cuadricula = []
+            # gradientes simples por posición (col, fila) para pintar el mapa
+            for fila, y in enumerate([90.0, 50.0, 10.0]):
+                for col, x in enumerate([20.0, 125.0, 230.0]):
+                    t = (col + fila) / 4.0  # 0.0 → 1.0 según la posición
+                    cuadricula.append({
+                        "pos_x": x, "pos_y": y,
+                        "ph": round(5.6 + t * 1.1, 2),                 # 5.6 → 6.7
+                        "nitrogeno": round(210 - t * 80, 1),           # 250 → 170
+                        "fosforo": round(20 + t * 16, 1),              # 20 → 36
+                        "potasio": round(75 + t * 40, 1),              # 75 → 115
+                        "calcio": round(1450 + t * 450, 0),            # 1450 → 1900
+                        "magnesio": round(240 + t * 140, 0),           # 240 → 380
+                        "azufre": round(14 + t * 15, 1),               # 14 → 29
+                        "hierro": round(60 + t * 30, 1),
+                        "manganeso": round(22 + t * 12, 1),
+                        "zinc": round(3.2 + t * 2.6, 2),
+                        "cobre": round(1.6 + t * 1.2, 2),
+                        "boro": round(0.4 + t * 0.5, 2),
+                        "materia_organica": round(7.0 + t * 8.0, 1),   # 7 → 15
+                        "cic": round(13.5 + t * 8.5, 1),               # 13.5 → 22
+                        "humedad": round(25 + t * 18, 1),              # 25 → 43
+                        "temperatura_suelo": round(18.0 + t * 4.5, 1),
+                        "conductividad_electrica": round(0.4 + t * 0.45, 2),
+                        "humedad_ambiental": round(68 + t * 15, 1),
+                        "temperatura_ambiental": round(19.5 + t * 3.0, 1),
+                    })
+            n_geo = 0
+            for g in cuadricula:
+                session.add(SensorReading(
+                    finca_id=FINCA_ID,
+                    ts=ahora - timedelta(minutes=3),
+                    sensor_id=DEVICE_ID,
+                    pos_x=g["pos_x"],
+                    pos_y=g["pos_y"],
+                    ph=g["ph"],
+                    nitrogeno=g["nitrogeno"],
+                    fosforo=g["fosforo"],
+                    potasio=g["potasio"],
+                    calcio=g["calcio"],
+                    magnesio=g["magnesio"],
+                    azufre=g["azufre"],
+                    hierro=g["hierro"],
+                    manganeso=g["manganeso"],
+                    zinc=g["zinc"],
+                    cobre=g["cobre"],
+                    boro=g["boro"],
+                    materia_organica=g["materia_organica"],
+                    cic=g["cic"],
+                    textura=TexturaSuelo.ARCILLA,
+                    humedad=g["humedad"],
+                    temperatura_suelo=g["temperatura_suelo"],
+                    conductividad_electrica=g["conductividad_electrica"],
+                    humedad_ambiental=g["humedad_ambiental"],
+                    temperatura_ambiental=g["temperatura_ambiental"],
+                    calidad="OK",
+                ))
+                n_geo += 1
+            await session.commit()
+            print(f"✅ Cuadrícula 3×3 insertada ({n_geo} muestras con posición x,y para el mapa de calor)")
+
     await engine.dispose()
 
 
