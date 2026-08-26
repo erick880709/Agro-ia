@@ -3695,8 +3695,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/main.py": {
-    "mtime": 1787707890.2184849,
-    "ast_hash": "bb2c5c92e989e681c8e43ade53206395",
+    "mtime": 1787708559.6184285,
+    "ast_hash": "249e85ff69b53d96a951e2c9347e4055",
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
@@ -3765,8 +3765,8 @@
     "semantic_hash": ""
   },
   "apps/shared/agroia/database.py": {
-    "mtime": 1787700442.3226507,
-    "ast_hash": "b5a4beeae73ef7dc2cdfdbe060f50bf4",
+    "mtime": 1787708540.7905383,
+    "ast_hash": "a878c1499d815e6733c922793bfa8561",
     "semantic_hash": ""
   },
   "apps/shared/agroia/errors.py": {
@@ -4080,8 +4080,8 @@
     "semantic_hash": ""
   },
   "apps/iot/agroia_iot/consumer.py": {
-    "mtime": 1787702996.7087338,
-    "ast_hash": "95f4c8ca9bdffcf6c13dc32b1b9f3118",
+    "mtime": 1787708552.9737263,
+    "ast_hash": "999557bc647df3e20f2877ed26bc066b",
     "semantic_hash": ""
   },
   "apps/auth/agroia_auth/api/__init__.py": {
@@ -4727,11 +4727,6 @@
   "apps/backend/alembic/versions/008_reparar_enums_sensor.py": {
     "mtime": 1787707445.0401697,
     "ast_hash": "5789e2335563fdc2a8e6b60b89c86002",
-    "semantic_hash": ""
-  },
-  "apps/backend/agroia_backend/api/debug_db.py": {
-    "mtime": 1787708339.079563,
-    "ast_hash": "748f7c2be7a270df28738fb4d1e03544",
     "semantic_hash": ""
   }
 }

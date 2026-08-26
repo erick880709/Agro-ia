@@ -100,6 +100,59 @@ refleja en el mapa de calor del reporte.</p>
 <p>Cada trama representa <strong>una toma de muestra en un punto del lote</strong>. Si se
 incluyen las coordenadas <code>pos_x</code> y <code>pos_y</code> (posición del punto dentro del
 terreno), la plataforma pinta el <strong>mapa de calor por parámetro</strong> en el reporte.</p>
+<h3 id="body-de-prueba-copie-y-pegue">🧪 Body de prueba — copie y pegue</h3>
+<pre><code class="language-json">{
+  &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
+  &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
+  &quot;pos_x&quot;: 20.0,
+  &quot;pos_y&quot;: 50.0,
+  &quot;ph&quot;: 6.1,
+  &quot;conductivity&quot;: 620,
+  &quot;nitrogen&quot;: 260,
+  &quot;phosphorus&quot;: 28,
+  &quot;potassium&quot;: 95,
+  &quot;soil_humidity&quot;: 31.0,
+  &quot;soil_temperature&quot;: 19.5,
+  &quot;humidity&quot;: 72.0,
+  &quot;temperature&quot;: 21.2,
+  &quot;rssi&quot;: -45,
+  &quot;uptime_s&quot;: 604800
+}
+</code></pre>
+<blockquote>
+<p>El <code>finca_id</code> del ejemplo es la <strong>finca de demostración</strong> que ya existe en
+producción, así que puede pegar el body tal cual y recibirá <code>202 Accepted</code>.
+Para probar con <strong>su</strong> finca, reemplace <code>finca_id</code> por el ID que muestra la
+plataforma (pestaña Fincas → botón «📋 Copiar» en la tarjeta de la finca).</p>
+</blockquote>
+<p><strong>Prueba rápida — bash (macOS / Linux):</strong></p>
+<pre><code class="language-bash">curl -X POST https://agroia-backend.onrender.com/api/sensor \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;pos_x&quot;:20.0,&quot;pos_y&quot;:50.0,&quot;ph&quot;:6.1,&quot;conductivity&quot;:620,&quot;nitrogen&quot;:260,&quot;phosphorus&quot;:28,&quot;potassium&quot;:95,&quot;soil_humidity&quot;:31.0,&quot;soil_temperature&quot;:19.5,&quot;humidity&quot;:72.0,&quot;temperature&quot;:21.2,&quot;rssi&quot;:-45,&quot;uptime_s&quot;:604800}'
+</code></pre>
+<p><strong>Prueba rápida — PowerShell (Windows):</strong></p>
+<pre><code class="language-powershell">$body = '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;pos_x&quot;:20.0,&quot;pos_y&quot;:50.0,&quot;ph&quot;:6.1,&quot;conductivity&quot;:620,&quot;nitrogen&quot;:260,&quot;phosphorus&quot;:28,&quot;potassium&quot;:95,&quot;soil_humidity&quot;:31.0,&quot;soil_temperature&quot;:19.5,&quot;humidity&quot;:72.0,&quot;temperature&quot;:21.2,&quot;rssi&quot;:-45,&quot;uptime_s&quot;:604800}'
+Invoke-RestMethod -Uri &quot;https://agroia-backend.onrender.com/api/sensor&quot; -Method Post -ContentType &quot;application/json&quot; -Body $body
+</code></pre>
+<p><strong>Respuesta esperada:</strong></p>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;accepted&quot;,
+  &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
+  &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
+  &quot;auto_registrado&quot;: false,
+  &quot;variables_recibidas&quot;: [&quot;conductividad_electrica&quot;, &quot;fosforo&quot;, &quot;humedad&quot;, &quot;humedad_ambiental&quot;, &quot;nitrogeno&quot;, &quot;ph&quot;, &quot;potasio&quot;, &quot;temperatura_ambiental&quot;, &quot;temperatura_suelo&quot;],
+  &quot;advertencias&quot;: [&quot;npk_sin_calibrar&quot;],
+  &quot;recibida_en&quot;: &quot;2026-08-25T22:00:00+00:00&quot;
+}
+</code></pre>
+<ul>
+<li>El <code>device_id</code> del ejemplo ya está registrado en producción, por lo que
+  <code>auto_registrado</code> será <code>false</code>. Si usa un <code>device_id</code> nuevo, la plataforma lo
+  auto-registrará contra la finca indicada en <code>finca_id</code> y responderá
+  <code>auto_registrado: true</code>.</li>
+<li><code>advertencias: ["npk_sin_calibrar"]</code> es normal mientras el sensor no tenga
+  calibración NPK de laboratorio (sección 6).</li>
+</ul>
 <hr />
 <h2 id="2-formato-de-la-trama-json">2. Formato de la trama (JSON)</h2>
 <pre><code class="language-json">{
@@ -353,17 +406,18 @@ están fuera del ideal en cada punto.</p>
   &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
   &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
   &quot;auto_registrado&quot;: false,
-  &quot;variables_recibidas&quot;: [&quot;ph&quot;, &quot;nitrogeno&quot;, &quot;potasio&quot;, &quot;fosforo&quot;, &quot;conductividad_electrica&quot;, ...],
+  &quot;variables_recibidas&quot;: [&quot;conductividad_electrica&quot;, &quot;fosforo&quot;, &quot;nitrogeno&quot;, &quot;ph&quot;, &quot;potasio&quot;],
   &quot;advertencias&quot;: [],
   &quot;recibida_en&quot;: &quot;2026-08-25T22:00:00+00:00&quot;
 }
 </code></pre>
 <ul>
 <li><code>auto_registrado: true</code> → el <code>device_id</code> no existía y quedó asociado a la
-  <strong>primera finca</strong> registrada. Para asociarlo a la finca correcta use el
-  endpoint de registro de dispositivos (sección 7).</li>
+  finca indicada en <code>finca_id</code> (o a la primera finca si la trama no lo traía).</li>
 <li><code>advertencias</code> → por ejemplo <code>["npk_sin_calibrar"]</code> cuando N/P/K no están
   calibrados contra laboratorio.</li>
+<li><code>variables_recibidas</code> usa los <strong>nombres canónicos en español</strong> (ej.
+  <code>conductividad_electrica</code>, <code>fosforo</code>, <code>nitrogeno</code>).</li>
 </ul>
 <h3 id="errores">Errores</h3>
 <table>
