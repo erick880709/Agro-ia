@@ -54,6 +54,13 @@ logger = get_logger(__name__)
 async def lifespan(app: FastAPI):
     """Ciclo de vida de la aplicación."""
     logger.info("backend_starting", environment=settings.environment)
+    # Auto-reparación de tipos enum (BDs externas reiniciadas/restauradas)
+    from agroia_backend.services.asegurar_enums import asegurar_enums
+
+    try:
+        await asegurar_enums()
+    except Exception as e:  # noqa: BLE001 — no bloquear el arranque
+        logger.error("asegurar_enums_fallo", error=str(e))
     yield
     logger.info("backend_stopping")
 
