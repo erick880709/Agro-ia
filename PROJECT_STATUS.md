@@ -54,6 +54,15 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - Ingesta con posición: `POST /api/sensor` acepta `pos_x`/`pos_y`; la carga de archivo acepta columnas `x,y` (o `pos_x,pos_y`) con varias filas (una por toma) en CSV ancho o JSON array de muestras.
 - Modelo: `sensor_readings.pos_x/pos_y` (migración `006_posiciones_muestreo`); demo sembrada con cuadrícula 3×3 (`seed_demo_integral.py`).
 
+### Relación finca ↔ sensor en la trama (2026-08-26)
+
+- `POST /api/sensor` acepta `finca_id` en la trama: la medición y el dispositivo quedan asociados a esa finca (422 `FINCA_NOT_FOUND` si no existe; si el dispositivo ya estaba en otra finca, se reasocia automáticamente).
+- Orden de resolución: `finca_id` de la trama → finca registrada del `device_id` → auto-registro a la primera finca (solo si el dispositivo es desconocido).
+- La UI muestra el **ID de la finca con botón «Copiar»** al crearla y en la tarjeta de cada finca (pestaña Fincas), para configurarlo en el firmware.
+- Import del consumidor IoT portable en dev y en el contenedor (`services/puente_iot.py` + `PYTHONPATH` con `/app/apps/iot`).
+- Migración `008_reparar_enums_sensor`: auto-repara tipos enum (p. ej. `texturasuelo`) y la columna `textura` en BDs ya existentes.
+- `search_path` garantizado por conexión con `server_settings` de asyncpg (además del listener) y `SET LOCAL` en el consumidor.
+
 ### Cómo está montado
 
 - **Render Blueprint** (`render.yaml`): web service Docker desde `apps/backend/Dockerfile`, health check `/api/v1/health`, migraciones `alembic upgrade head` automáticas al arrancar el contenedor (Render free no permite `preDeployCommand`).
