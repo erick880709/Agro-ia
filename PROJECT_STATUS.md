@@ -50,7 +50,8 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 ### Mapa de calor del lote (2026-08-25)
 
 - El reporte incluye la sección **«M» — Mapa de calor del lote** con **selector de parámetro**: pestañas «🧭 Resumen» (todas las variables a la vez — cada punto se pinta según cuántas variables están fuera de su rango), una pestaña por variable (independiente) y «📋 Ver todos» (apilados, para imprimir).
-- Colores por variable: verde (dentro del ideal), ámbar (cerca), rojo (fuera); sin rango ideal usa gradiente azul→rojo con leyenda min/máx.
+- **Regla de intensidad por parámetro**: cada variable usa su propia escala min→max del lote; la celda más intensa (verde oscuro) = valor más alto y la más clara = valor más bajo. La leyenda muestra el gradiente con min/max y el rango ideal de referencia.
+- **PDF / impresión**: vía `@media print` el reporte muestra **cada matriz por parámetro apilada** (sin pestañas y sin la vista unificada); la vista unificada «Resumen» es solo para la aplicación.
 - Ingesta con posición: `POST /api/sensor` acepta `pos_x`/`pos_y`; la carga de archivo acepta columnas `x,y` (o `pos_x,pos_y`) con varias filas (una por toma) en CSV ancho o JSON array de muestras.
 - Modelo: `sensor_readings.pos_x/pos_y` (migración `006_posiciones_muestreo`); demo sembrada con cuadrícula 3×3 (`seed_demo_integral.py`).
 

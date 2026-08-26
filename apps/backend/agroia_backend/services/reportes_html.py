@@ -309,6 +309,9 @@ _VERDE = "#2e7d32"
 _AMBAR = "#f9a825"
 _ROJO = "#c62828"
 _GRIS = "#eceff1"
+# Rampa de intensidad por valor: más intenso = valor más alto (cada parámetro)
+_VERDE_CLARO = "#e8f5e9"
+_VERDE_INTENSO = "#1b5e20"
 
 
 def _hex_a_rgb(h: str) -> tuple[int, int, int]:
@@ -320,22 +323,6 @@ def _mezclar(c1: str, c2: str, t: float) -> str:
     a, b = _hex_a_rgb(c1), _hex_a_rgb(c2)
     t = max(0.0, min(1.0, t))
     return "#%02x%02x%02x" % tuple(round(a[i] + (b[i] - a[i]) * t) for i in range(3))
-
-
-def _color_por_estado(valor: float, minimo: float | None, maximo: float | None) -> str:
-    """Verde dentro del ideal, ámbar cerca, rojo fuera. Sin rango: gradiente."""
-    if minimo is None and maximo is None:
-        return ""
-    lo = minimo if minimo is not None else float("-inf")
-    hi = maximo if maximo is not None else float("inf")
-    if lo <= valor <= hi:
-        return _VERDE
-    margen = (hi - lo) * 0.25 if minimo is not None and maximo is not None else 0
-    if (minimo is not None and lo - margen <= valor < lo) or (
-        maximo is not None and hi < valor <= hi + margen
-    ):
-        return _AMBAR
-    return _ROJO
 
 
 def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> str:
@@ -428,6 +415,9 @@ def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> s
     )
 
     # ── Mapas por parámetro (independientes) ──
+    # Regla de color: intensidad = valor del parámetro. Cada parámetro se
+    # normaliza con su propio mínimo y máximo del lote: la celda más clara
+    # es el valor más bajo y la más intensa el valor más alto.
     bloques = []
     for attr, simbolo, unidad in variables:
         rango = _rango(simbolo)
@@ -435,11 +425,10 @@ def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> s
         vmin, vmax = min(valores), max(valores)
 
         def _color(valor):
-            if rango:
-                return _color_por_estado(valor, rango[0], rango[1])
             if vmax == vmin:
-                return _mezclar("#64b5f6", "#e53935", 0.5)
-            return _mezclar("#64b5f6", "#e53935", (valor - vmin) / (vmax - vmin))
+                return _mezclar(_VERDE_CLARO, _VERDE_INTENSO, 0.5)
+            t = (valor - vmin) / (vmax - vmin)
+            return _mezclar(_VERDE_CLARO, _VERDE_INTENSO, t)
 
         filas = []
         for y in reversed(ys):
@@ -453,22 +442,21 @@ def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> s
                     fila.append(_celda(_color(valor), _num(valor, 1)))
             filas.append("".join(fila))
 
+        nota_ideal = ""
         if rango:
             lo = "—" if (rango[0] is None) else _num(rango[0], 1)
             hi = "—" if (rango[1] is None) else _num(rango[1], 1)
-            leyenda = (
-                f'<div class="heat-legend"><span class="chip" style="background:{_VERDE}"></span>dentro del ideal'
-                f'<span class="chip" style="background:{_AMBAR}"></span>cerca'
-                f'<span class="chip" style="background:{_ROJO}"></span>fuera'
-                f'<span class="mono" style="color:var(--muted)">· ideal {lo}–{hi} {esc(unidad)}</span></div>'
+            nota_ideal = (
+                f'<span class="mono" style="color:var(--muted)">· ideal {lo}–{hi} {esc(unidad)}</span>'
             )
-        else:
-            leyenda = (
-                f'<div class="heat-legend"><span class="chip" style="background:#64b5f6"></span>'
-                f'{_num(vmin, 1)} <span style="flex:1;height:8px;border-radius:4px;'
-                f'background:linear-gradient(90deg,#64b5f6,#f9a825,#e53935)"></span>'
-                f'{_num(vmax, 1)} {esc(unidad)}</div>'
-            )
+        leyenda = (
+            f'<div class="heat-legend"><span class="chip" style="background:{_VERDE_CLARO}"></span>'
+            f'{_num(vmin, 1)} <span style="flex:1;height:8px;border-radius:4px;'
+            f'background:linear-gradient(90deg,{_VERDE_CLARO},{_VERDE_INTENSO})"></span>'
+            f'{_num(vmax, 1)} {esc(unidad)}{nota_ideal}</div>'
+            f'<div class="heat-legend"><span class="mono" style="color:var(--muted)">'
+            f'más intenso = valor más alto · menos intenso = valor más bajo</span></div>'
+        )
         bloques.append(
             f'<div class="heat-var hidden" data-var="{esc(str(simbolo).lower())}">'
             f'<div class="heat-title">🌡️ {esc(simbolo)}'
@@ -508,7 +496,18 @@ def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> s
       <div class="block-sub">Muestreo en cuadrícula · {len(xs)} × {len(ys)} tomas ({len(celdas)} puntos) · seleccione el parámetro a observar</div></div>
     </div>
     <p class="muted">Cada celda es una toma de muestra en la posición (x, y) del lote.
+    La intensidad del color indica el valor del parámetro: más intenso = valor más alto,
+    menos intenso = valor más bajo (cada parámetro usa su propia escala).
     Use los botones para ver un parámetro por separado o todos a la vez.</p>
+    <style>
+    /* PDF / impresión: cada matriz por parámetro, sin pestañas ni vista unificada
+       (la vista unificada «Resumen» es solo para la aplicación) */
+    @media print {{
+      .heatmap .heat-tabs {{ display: none !important; }}
+      .heatmap .heat-var {{ display: block !important; }}
+      .heatmap .heat-var[data-var="__resumen__"] {{ display: none !important; }}
+    }}
+    </style>
     {pestañas}
     {bloque_resumen}
     {''.join(bloques)}

@@ -2535,17 +2535,17 @@
     "semantic_hash": ""
   },
   "obsidian-vault/.obsidian/app.json": {
-    "mtime": 1785889342.0471153,
+    "mtime": 1787710293.6841142,
     "ast_hash": "9372940b97875bb2e9b77d56c8f4617c",
     "semantic_hash": ""
   },
   "obsidian-vault/.obsidian/core-plugins.json": {
-    "mtime": 1785889341.8493142,
+    "mtime": 1787710293.3785152,
     "ast_hash": "ae4bff5587277b5691e13a0c3de6579d",
     "semantic_hash": ""
   },
   "obsidian-vault/.obsidian/graph.json": {
-    "mtime": 1785899826.425,
+    "mtime": 1787710295.216,
     "ast_hash": "445c37ae80a949c4ee88fa6664b61f8f",
     "semantic_hash": ""
   },
@@ -3800,7 +3800,7 @@
     "semantic_hash": ""
   },
   "obsidian-vault/.obsidian/appearance.json": {
-    "mtime": 1785889342.1049013,
+    "mtime": 1787710293.7743564,
     "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
     "semantic_hash": ""
   },
@@ -4070,8 +4070,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/iot.py": {
-    "mtime": 1787709696.2671318,
-    "ast_hash": "c0ab5707205f4f6ba141212e94426329",
+    "mtime": 1787711050.520236,
+    "ast_hash": "2ffc6dec2bae4736d118d750d9198888",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/external_apis.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787706636.2770834,
-    "ast_hash": "b07e99df5d3b34a3f6984dd41bda2008",
+    "mtime": 1787711098.0407586,
+    "ast_hash": "d612a60414df4a2ddcfe219344e3e36f",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787701615.2119958,
-    "ast_hash": "564e95b576871551b7fe84c0c68b5a54",
+    "mtime": 1787711105.8417537,
+    "ast_hash": "05f28fcb539a586b3fb99530abec36f0",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4730,7 +4730,7 @@
     "semantic_hash": ""
   },
   "scripts/vigilar_sensor.py": {
-    "mtime": 1787709759.3658013,
+    "mtime": 1787709898.659997,
     "ast_hash": "27d36a0bc3fe9d36410c58580812c95b",
     "semantic_hash": ""
   }
