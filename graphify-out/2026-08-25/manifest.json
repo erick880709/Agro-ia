@@ -4723,5 +4723,10 @@
     "mtime": 1787706985.8585994,
     "ast_hash": "951c9294441337c7f64e1551319822f4",
     "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/008_reparar_enums_sensor.py": {
+    "mtime": 1787707445.0401697,
+    "ast_hash": "5789e2335563fdc2a8e6b60b89c86002",
+    "semantic_hash": ""
   }
 }

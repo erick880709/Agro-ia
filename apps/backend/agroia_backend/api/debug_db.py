@@ -55,4 +55,94 @@ async def debug_types():
         "columna_textura_tipo": col_textura,
         "alembic_version": version,
         "enums_agroia": enums_agroia,
+        "orm_insert_test": await _orm_insert_test(),
+        "pool_probe": await _pool_probe(),
     }
+
+
+async def _pool_probe():
+    """Prueba 8 sesiones del pool: search_path + INSERT ORM por sesión."""
+    import asyncio
+
+    from datetime import datetime, timezone
+    from uuid import uuid4
+
+    from sqlalchemy import select, text
+
+    from agroia_backend.models.finca import Finca
+    from agroia_backend.models.sensor_reading import SensorReading
+
+    async def una(n: int):
+        async with async_session_factory() as db:
+            sp = (await db.execute(text("SHOW search_path"))).scalar()
+            finca = (await db.execute(select(Finca).limit(1))).scalars().first()
+            if finca is None:
+                return {"n": n, "sp": sp, "ok": False, "error": "sin fincas"}
+            try:
+                db.add(
+                    SensorReading(
+                        id=uuid4(),
+                        finca_id=finca.id,
+                        ts=datetime.now(timezone.utc),
+                        ph=6.5,
+                        sensor_id=f"debug-pool-{n}",
+                        calidad="debug",
+                    )
+                )
+                await db.flush()
+                ok = True
+                error = None
+            except Exception as e:  # noqa: BLE001
+                ok = False
+                error = f"{type(e).__name__}: {str(e)[:200]}"
+            await db.rollback()
+            return {"n": n, "sp": sp, "ok": ok, "error": error}
+
+    return await asyncio.gather(*(una(i) for i in range(8)))
+
+
+async def _orm_insert_test():
+    """Inserta una lectura de sensor vía ORM y la revierte (solo diagnóstico)."""
+    from datetime import datetime, timezone
+    from uuid import uuid4
+
+    from sqlalchemy import select
+
+    from agroia_backend.models.dispositivo_iot import DispositivoIoT
+    from agroia_backend.models.finca import Finca
+    from agroia_backend.models.sensor_reading import SensorReading, TexturaSuelo
+
+    async with async_session_factory() as db:
+        finca = (await db.execute(select(Finca).limit(1))).scalars().first()
+        if finca is None:
+            return "sin fincas"
+        try:
+            db.add(
+                SensorReading(
+                    id=uuid4(),
+                    finca_id=finca.id,
+                    ts=datetime.now(timezone.utc),
+                    ph=6.5,
+                    nitrogeno=100.0,
+                    textura=TexturaSuelo.LIMO,
+                    sensor_id="debug-test",
+                    calidad="debug",
+                )
+            )
+            await db.flush()
+            ok = True
+            error = None
+        except Exception as e:  # noqa: BLE001
+            ok = False
+            error = f"{type(e).__name__}: {e}"
+        await db.rollback()
+        # reportar dispositivos/fincas para contexto
+        dispositivos = (await db.execute(select(DispositivoIoT))).scalars().all()
+        return {
+            "ok": ok,
+            "error": error,
+            "dispositivos": [
+                {"device_id": d.device_id, "finca_id": str(d.finca_id)}
+                for d in dispositivos[:10]
+            ],
+        }

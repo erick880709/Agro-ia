@@ -4,15 +4,81 @@
   "graph": {},
   "nodes": [
     {
+      "label": "008_reparar_enums_sensor.py",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/versions/008_reparar_enums_sensor.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_backend_alembic_versions_008_reparar_enums_sensor",
+      "community": 835,
+      "community_name": "008_reparar_enums_sensor.py",
+      "norm_label": "008_reparar_enums_sensor.py"
+    },
+    {
+      "label": "_tipo_existe()",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/versions/008_reparar_enums_sensor.py",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "apps_backend_alembic_versions_008_reparar_enums_sensor_tipo_existe",
+      "community": 835,
+      "community_name": "008_reparar_enums_sensor.py",
+      "norm_label": "_tipo_existe()"
+    },
+    {
+      "label": "upgrade()",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/versions/008_reparar_enums_sensor.py",
+      "source_location": "L84",
+      "_origin": "ast",
+      "id": "apps_backend_alembic_versions_008_reparar_enums_sensor_upgrade",
+      "community": 835,
+      "community_name": "008_reparar_enums_sensor.py",
+      "norm_label": "upgrade()"
+    },
+    {
+      "label": "downgrade()",
+      "file_type": "code",
+      "source_file": "apps/backend/alembic/versions/008_reparar_enums_sensor.py",
+      "source_location": "L144",
+      "_origin": "ast",
+      "id": "apps_backend_alembic_versions_008_reparar_enums_sensor_downgrade",
+      "community": 835,
+      "community_name": "008_reparar_enums_sensor.py",
+      "norm_label": "downgrade()"
+    },
+    {
+      "label": "Migration 008 \u2014 Auto-reparaci\u00f3n de tipos enum y columna `textura`. En bases ya\u2026",
+      "file_type": "rationale",
+      "source_file": "apps/backend/alembic/versions/008_reparar_enums_sensor.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "apps_backend_alembic_versions_008_reparar_enums_sensor_rationale_1",
+      "community": 835,
+      "community_name": "008_reparar_enums_sensor.py",
+      "norm_label": "migration 008 \u2014 auto-reparacion de tipos enum y columna `textura`. en bases ya..."
+    },
+    {
+      "label": "Sin cambios destructivos: la reparaci\u00f3n no se revierte.",
+      "file_type": "rationale",
+      "source_file": "apps/backend/alembic/versions/008_reparar_enums_sensor.py",
+      "source_location": "L145",
+      "_origin": "ast",
+      "id": "apps_backend_alembic_versions_008_reparar_enums_sensor_rationale_145",
+      "community": 835,
+      "community_name": "008_reparar_enums_sensor.py",
+      "norm_label": "sin cambios destructivos: la reparacion no se revierte."
+    },
+    {
       "label": "iot.py",
       "file_type": "code",
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot",
       "community": 56,
       "community_name": "logging.py",
-      "norm_label": "iot.py"
+      "norm_label": "iot.py",
+      "id": "apps_backend_agroia_backend_api_iot"
     },
     {
       "label": "SensorMessage",
@@ -20,10 +86,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L25",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_sensormessage",
       "community": 815,
       "community_name": "get",
-      "norm_label": "sensormessage"
+      "norm_label": "sensormessage",
+      "id": "apps_backend_agroia_backend_api_iot_sensormessage"
     },
     {
       "label": "BaseModel",
@@ -31,10 +97,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_py_basemodel",
       "community": 815,
       "community_name": "get",
-      "norm_label": "basemodel"
+      "norm_label": "basemodel",
+      "id": "apps_backend_agroia_backend_api_iot_py_basemodel"
     },
     {
       "label": "SensorStatus",
@@ -42,10 +108,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L33",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_sensorstatus",
       "community": 815,
       "community_name": "get",
-      "norm_label": "sensorstatus"
+      "norm_label": "sensorstatus",
+      "id": "apps_backend_agroia_backend_api_iot_sensorstatus"
     },
     {
       "label": "Esp32SensorMessage",
@@ -53,10 +119,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L41",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_esp32sensormessage",
       "community": 815,
       "community_name": "get",
-      "norm_label": "esp32sensormessage"
+      "norm_label": "esp32sensormessage",
+      "id": "apps_backend_agroia_backend_api_iot_esp32sensormessage"
     },
     {
       "label": "DispositivoRegistro",
@@ -64,10 +130,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L55",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_dispositivoregistro",
       "community": 815,
       "community_name": "get",
-      "norm_label": "dispositivoregistro"
+      "norm_label": "dispositivoregistro",
+      "id": "apps_backend_agroia_backend_api_iot_dispositivoregistro"
     },
     {
       "label": "post",
@@ -75,10 +141,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_py_post",
       "community": 815,
       "community_name": "get",
-      "norm_label": "post"
+      "norm_label": "post",
+      "id": "apps_backend_agroia_backend_api_iot_py_post"
     },
     {
       "label": "ingest_sensor_data()",
@@ -86,10 +152,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L68",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_ingest_sensor_data",
       "community": 815,
       "community_name": "get",
-      "norm_label": "ingest_sensor_data()"
+      "norm_label": "ingest_sensor_data()",
+      "id": "apps_backend_agroia_backend_api_iot_ingest_sensor_data"
     },
     {
       "label": "ingest_esp32_sensor()",
@@ -97,10 +163,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L105",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_ingest_esp32_sensor",
       "community": 815,
       "community_name": "get",
-      "norm_label": "ingest_esp32_sensor()"
+      "norm_label": "ingest_esp32_sensor()",
+      "id": "apps_backend_agroia_backend_api_iot_ingest_esp32_sensor"
     },
     {
       "label": "cargar_archivo_sensor()",
@@ -108,10 +174,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L164",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_cargar_archivo_sensor",
       "community": 815,
       "community_name": "get",
-      "norm_label": "cargar_archivo_sensor()"
+      "norm_label": "cargar_archivo_sensor()",
+      "id": "apps_backend_agroia_backend_api_iot_cargar_archivo_sensor"
     },
     {
       "label": "UploadFile",
@@ -119,10 +185,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "uploadfile",
       "community": 815,
       "community_name": "get",
-      "norm_label": "uploadfile"
+      "norm_label": "uploadfile",
+      "id": "uploadfile"
     },
     {
       "label": "registrar_dispositivo()",
@@ -130,10 +196,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L381",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_registrar_dispositivo",
       "community": 815,
       "community_name": "get",
-      "norm_label": "registrar_dispositivo()"
+      "norm_label": "registrar_dispositivo()",
+      "id": "apps_backend_agroia_backend_api_iot_registrar_dispositivo"
     },
     {
       "label": "get",
@@ -141,10 +207,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "get",
       "community": 815,
       "community_name": "get",
-      "norm_label": "get"
+      "norm_label": "get",
+      "id": "get"
     },
     {
       "label": "listar_dispositivos()",
@@ -152,10 +218,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L424",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_listar_dispositivos",
       "community": 815,
       "community_name": "get",
-      "norm_label": "listar_dispositivos()"
+      "norm_label": "listar_dispositivos()",
+      "id": "apps_backend_agroia_backend_api_iot_listar_dispositivos"
     },
     {
       "label": "ultimas_lecturas()",
@@ -163,10 +229,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L455",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_ultimas_lecturas",
       "community": 815,
       "community_name": "get",
-      "norm_label": "ultimas_lecturas()"
+      "norm_label": "ultimas_lecturas()",
+      "id": "apps_backend_agroia_backend_api_iot_ultimas_lecturas"
     },
     {
       "label": "AsyncSession",
@@ -174,10 +240,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "asyncsession",
       "community": 815,
       "community_name": "get",
-      "norm_label": "asyncsession"
+      "norm_label": "asyncsession",
+      "id": "asyncsession"
     },
     {
       "label": "sensor_status()",
@@ -185,10 +251,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L517",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_sensor_status",
       "community": 815,
       "community_name": "get",
-      "norm_label": "sensor_status()"
+      "norm_label": "sensor_status()",
+      "id": "apps_backend_agroia_backend_api_iot_sensor_status"
     },
     {
       "label": "enrich_location()",
@@ -196,10 +262,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L564",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_enrich_location",
       "community": 815,
       "community_name": "get",
-      "norm_label": "enrich_location()"
+      "norm_label": "enrich_location()",
+      "id": "apps_backend_agroia_backend_api_iot_enrich_location"
     },
     {
       "label": "API endpoints para ingesta IoT y estado de sensores.",
@@ -207,10 +273,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_rationale_1",
       "community": 56,
       "community_name": "logging.py",
-      "norm_label": "api endpoints para ingesta iot y estado de sensores."
+      "norm_label": "api endpoints para ingesta iot y estado de sensores.",
+      "id": "apps_backend_agroia_backend_api_iot_rationale_1"
     },
     {
       "label": "Mensaje entrante de un sensor IoT LoRaWAN.",
@@ -218,10 +284,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_rationale_26",
       "community": 815,
       "community_name": "get",
-      "norm_label": "mensaje entrante de un sensor iot lorawan."
+      "norm_label": "mensaje entrante de un sensor iot lorawan.",
+      "id": "apps_backend_agroia_backend_api_iot_rationale_26"
     },
     {
       "label": "Trama cruda del firmware ESP32 (variables en la ra\u00edz, sin finca_id).",
@@ -229,10 +295,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_rationale_42",
       "community": 815,
       "community_name": "get",
-      "norm_label": "trama cruda del firmware esp32 (variables en la raiz, sin finca_id)."
+      "norm_label": "trama cruda del firmware esp32 (variables en la raiz, sin finca_id).",
+      "id": "apps_backend_agroia_backend_api_iot_rationale_42"
     },
     {
       "label": "Registro de un dispositivo IoT asociado a una finca.",
@@ -240,10 +306,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L56",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_rationale_56",
       "community": 815,
       "community_name": "get",
-      "norm_label": "registro de un dispositivo iot asociado a una finca."
+      "norm_label": "registro de un dispositivo iot asociado a una finca.",
+      "id": "apps_backend_agroia_backend_api_iot_rationale_56"
     },
     {
       "label": "Recibe datos de un sensor IoT y los encola para procesamiento. En producci\u00f3n,\u2026",
@@ -251,10 +317,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L69",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_rationale_69",
       "community": 815,
       "community_name": "get",
-      "norm_label": "recibe datos de un sensor iot y los encola para procesamiento. en produccion,..."
+      "norm_label": "recibe datos de un sensor iot y los encola para procesamiento. en produccion,...",
+      "id": "apps_backend_agroia_backend_api_iot_rationale_69"
     },
     {
       "label": "Endpoint de compatibilidad para tramas crudas del firmware ESP32 (brecha G1).\u2026",
@@ -262,10 +328,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L106",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_rationale_106",
       "community": 815,
       "community_name": "get",
-      "norm_label": "endpoint de compatibilidad para tramas crudas del firmware esp32 (brecha g1)...."
+      "norm_label": "endpoint de compatibilidad para tramas crudas del firmware esp32 (brecha g1)....",
+      "id": "apps_backend_agroia_backend_api_iot_rationale_106"
     },
     {
       "label": "Carga manual de mediciones cuando se pierde la conexi\u00f3n con los sensores. Lee\u2026",
@@ -273,10 +339,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L171",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_rationale_171",
       "community": 815,
       "community_name": "get",
-      "norm_label": "carga manual de mediciones cuando se pierde la conexion con los sensores. lee..."
+      "norm_label": "carga manual de mediciones cuando se pierde la conexion con los sensores. lee...",
+      "id": "apps_backend_agroia_backend_api_iot_rationale_171"
     },
     {
       "label": "Registra un dispositivo IoT y lo asocia a una finca (brecha G1).",
@@ -284,10 +350,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L382",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_rationale_382",
       "community": 815,
       "community_name": "get",
-      "norm_label": "registra un dispositivo iot y lo asocia a una finca (brecha g1)."
+      "norm_label": "registra un dispositivo iot y lo asocia a una finca (brecha g1).",
+      "id": "apps_backend_agroia_backend_api_iot_rationale_382"
     },
     {
       "label": "Lista los dispositivos IoT registrados con su telemetr\u00eda.",
@@ -295,10 +361,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L425",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_rationale_425",
       "community": 815,
       "community_name": "get",
-      "norm_label": "lista los dispositivos iot registrados con su telemetria."
+      "norm_label": "lista los dispositivos iot registrados con su telemetria.",
+      "id": "apps_backend_agroia_backend_api_iot_rationale_425"
     },
     {
       "label": "\u00daltimas lecturas de sensores de una finca (para monitoreo en pantalla).",
@@ -306,10 +372,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L462",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_rationale_462",
       "community": 815,
       "community_name": "get",
-      "norm_label": "ultimas lecturas de sensores de una finca (para monitoreo en pantalla)."
+      "norm_label": "ultimas lecturas de sensores de una finca (para monitoreo en pantalla).",
+      "id": "apps_backend_agroia_backend_api_iot_rationale_462"
     },
     {
       "label": "Consulta el estado de los sensores de una finca.",
@@ -317,10 +383,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L523",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_rationale_523",
       "community": 815,
       "community_name": "get",
-      "norm_label": "consulta el estado de los sensores de una finca."
+      "norm_label": "consulta el estado de los sensores de una finca.",
+      "id": "apps_backend_agroia_backend_api_iot_rationale_523"
     },
     {
       "label": "Enriquece una ubicaci\u00f3n con datos de APIs externas (IDEAM, GIS, IGAC,\u2026",
@@ -328,10 +394,10 @@
       "source_file": "apps/backend/agroia_backend/api/iot.py",
       "source_location": "L569",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_iot_rationale_569",
       "community": 815,
       "community_name": "get",
-      "norm_label": "enriquece una ubicacion con datos de apis externas (ideam, gis, igac,..."
+      "norm_label": "enriquece una ubicacion con datos de apis externas (ideam, gis, igac,...",
+      "id": "apps_backend_agroia_backend_api_iot_rationale_569"
     },
     {
       "label": "sensor_api.py",
@@ -339,10 +405,10 @@
       "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_sensor_api",
       "community": 56,
       "community_name": "logging.py",
-      "norm_label": "sensor_api.py"
+      "norm_label": "sensor_api.py",
+      "id": "apps_backend_agroia_backend_api_sensor_api"
     },
     {
       "label": "SensorFrame",
@@ -350,10 +416,10 @@
       "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
       "source_location": "L37",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_sensor_api_sensorframe",
       "community": 875,
       "community_name": "ingesta_sensor",
-      "norm_label": "sensorframe"
+      "norm_label": "sensorframe",
+      "id": "apps_backend_agroia_backend_api_sensor_api_sensorframe"
     },
     {
       "label": "BaseModel",
@@ -361,10 +427,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_sensor_api_py_basemodel",
       "community": 875,
       "community_name": "ingesta_sensor",
-      "norm_label": "basemodel"
+      "norm_label": "basemodel",
+      "id": "apps_backend_agroia_backend_api_sensor_api_py_basemodel"
     },
     {
       "label": "post",
@@ -372,10 +438,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_sensor_api_py_post",
       "community": 875,
       "community_name": "ingesta_sensor",
-      "norm_label": "post"
+      "norm_label": "post",
+      "id": "apps_backend_agroia_backend_api_sensor_api_py_post"
     },
     {
       "label": "ingesta_sensor()",
@@ -383,10 +449,10 @@
       "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
       "source_location": "L63",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_sensor_api_ingesta_sensor",
       "community": 875,
       "community_name": "ingesta_sensor",
-      "norm_label": "ingesta_sensor()"
+      "norm_label": "ingesta_sensor()",
+      "id": "apps_backend_agroia_backend_api_sensor_api_ingesta_sensor"
     },
     {
       "label": "API de ingesta para sensores f\u00edsicos (ESP32/LoRaWAN). Este es el endpoint que\u2026",
@@ -394,10 +460,10 @@
       "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_sensor_api_rationale_1",
       "community": 56,
       "community_name": "logging.py",
-      "norm_label": "api de ingesta para sensores fisicos (esp32/lorawan). este es el endpoint que..."
+      "norm_label": "api de ingesta para sensores fisicos (esp32/lorawan). este es el endpoint que...",
+      "id": "apps_backend_agroia_backend_api_sensor_api_rationale_1"
     },
     {
       "label": "Trama tal como la env\u00eda el firmware del sensor.",
@@ -405,10 +471,10 @@
       "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
       "source_location": "L38",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_sensor_api_rationale_38",
       "community": 875,
       "community_name": "ingesta_sensor",
-      "norm_label": "trama tal como la envia el firmware del sensor."
+      "norm_label": "trama tal como la envia el firmware del sensor.",
+      "id": "apps_backend_agroia_backend_api_sensor_api_rationale_38"
     },
     {
       "label": "Recibe una trama del sensor y la procesa en el pipeline de AgroIA.",
@@ -416,10 +482,10 @@
       "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
       "source_location": "L64",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_sensor_api_rationale_64",
       "community": 875,
       "community_name": "ingesta_sensor",
-      "norm_label": "recibe una trama del sensor y la procesa en el pipeline de agroia."
+      "norm_label": "recibe una trama del sensor y la procesa en el pipeline de agroia.",
+      "id": "apps_backend_agroia_backend_api_sensor_api_rationale_64"
     },
     {
       "label": "puente_iot.py",
@@ -427,10 +493,10 @@
       "source_file": "apps/backend/agroia_backend/services/puente_iot.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_puente_iot",
       "community": 56,
       "community_name": "logging.py",
-      "norm_label": "puente_iot.py"
+      "norm_label": "puente_iot.py",
+      "id": "apps_backend_agroia_backend_services_puente_iot"
     },
     {
       "label": "Puente hacia el consumidor IoT de `apps/iot` que funciona en ambos entornos. En\u2026",
@@ -438,10 +504,10 @@
       "source_file": "apps/backend/agroia_backend/services/puente_iot.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_puente_iot_rationale_1",
       "community": 56,
       "community_name": "logging.py",
-      "norm_label": "puente hacia el consumidor iot de `apps/iot` que funciona en ambos entornos. en..."
+      "norm_label": "puente hacia el consumidor iot de `apps/iot` que funciona en ambos entornos. en...",
+      "id": "apps_backend_agroia_backend_services_puente_iot_rationale_1"
     },
     {
       "label": "BaseModel",
@@ -17516,8 +17582,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 837,
-      "community_name": "0",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "0",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_spacing_0"
     },
@@ -17527,8 +17593,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 837,
-      "community_name": "0",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_0_value"
     },
@@ -17538,8 +17604,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 837,
-      "community_name": "0",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_0_type"
     },
@@ -17582,8 +17648,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 838,
-      "community_name": "2",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "2",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_spacing_2"
     },
@@ -17593,8 +17659,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 838,
-      "community_name": "2",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_2_value"
     },
@@ -17604,8 +17670,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 838,
-      "community_name": "2",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_2_type"
     },
@@ -17714,8 +17780,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 839,
-      "community_name": "6",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "6",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_spacing_6"
     },
@@ -17725,8 +17791,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 839,
-      "community_name": "6",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_6_value"
     },
@@ -17736,8 +17802,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 839,
-      "community_name": "6",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_6_type"
     },
@@ -17747,8 +17813,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 840,
-      "community_name": "8",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "8",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_spacing_8"
     },
@@ -17758,8 +17824,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 840,
-      "community_name": "8",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_8_value"
     },
@@ -17769,8 +17835,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 840,
-      "community_name": "8",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_8_type"
     },
@@ -17923,8 +17989,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 832,
-      "community_name": "sm",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "sm",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_fontsize_sm"
     },
@@ -17934,8 +18000,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 832,
-      "community_name": "sm",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_sm_value"
     },
@@ -17945,8 +18011,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 832,
-      "community_name": "sm",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_sm_type"
     },
@@ -17989,8 +18055,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 107,
-      "community_name": "radius",
+      "community": 42,
+      "community_name": "fontSize",
       "norm_label": "lg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_fontsize_lg"
     },
@@ -18000,8 +18066,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 107,
-      "community_name": "radius",
+      "community": 42,
+      "community_name": "fontSize",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_lg_value"
     },
@@ -18011,8 +18077,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 107,
-      "community_name": "radius",
+      "community": 42,
+      "community_name": "fontSize",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_lg_type"
     },
@@ -18165,8 +18231,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 836,
-      "community_name": "none",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "none",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_radius_none"
     },
@@ -18176,8 +18242,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 836,
-      "community_name": "none",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_none_value"
     },
@@ -18187,8 +18253,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 836,
-      "community_name": "none",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_none_type"
     },
@@ -18198,8 +18264,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L64",
       "_origin": "ast",
-      "community": 832,
-      "community_name": "sm",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "sm",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_radius_sm"
     },
@@ -18242,8 +18308,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 835,
-      "community_name": "md",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "md",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_radius_md"
     },
@@ -18253,8 +18319,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 835,
-      "community_name": "md",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_md_value"
     },
@@ -18264,8 +18330,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 835,
-      "community_name": "md",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_md_type"
     },
@@ -18275,8 +18341,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 107,
-      "community_name": "radius",
+      "community": 42,
+      "community_name": "fontSize",
       "norm_label": "lg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_radius_lg"
     },
@@ -18341,8 +18407,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L72",
       "_origin": "ast",
-      "community": 836,
-      "community_name": "none",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "none",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_shadow_none"
     },
@@ -18352,8 +18418,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 832,
-      "community_name": "sm",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "sm",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_shadow_sm"
     },
@@ -18374,8 +18440,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 835,
-      "community_name": "md",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "md",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_shadow_md"
     },
@@ -18385,8 +18451,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L76",
       "_origin": "ast",
-      "community": 107,
-      "community_name": "radius",
+      "community": 42,
+      "community_name": "fontSize",
       "norm_label": "lg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_shadow_lg"
     },
@@ -18594,8 +18660,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 843,
-      "community_name": "primary",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "primary",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_color_primary"
     },
@@ -18605,8 +18671,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 843,
-      "community_name": "primary",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_primary_value"
     },
@@ -18616,8 +18682,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 843,
-      "community_name": "primary",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_primary_type"
     },
@@ -18660,8 +18726,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L90",
       "_origin": "ast",
-      "community": 860,
-      "community_name": "primary-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "primary-foreground",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_color_primary_foreground"
     },
@@ -18671,8 +18737,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L90",
       "_origin": "ast",
-      "community": 860,
-      "community_name": "primary-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_primary_foreground_value"
     },
@@ -18682,8 +18748,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L90",
       "_origin": "ast",
-      "community": 860,
-      "community_name": "primary-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_primary_foreground_type"
     },
@@ -18726,8 +18792,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L92",
       "_origin": "ast",
-      "community": 864,
-      "community_name": "secondary-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "secondary-foreground",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_color_secondary_foreground"
     },
@@ -18737,8 +18803,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L92",
       "_origin": "ast",
-      "community": 864,
-      "community_name": "secondary-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_secondary_foreground_value"
     },
@@ -18748,8 +18814,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L92",
       "_origin": "ast",
-      "community": 864,
-      "community_name": "secondary-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_secondary_foreground_type"
     },
@@ -18759,8 +18825,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L93",
       "_origin": "ast",
-      "community": 842,
-      "community_name": "muted",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "muted",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_color_muted"
     },
@@ -18770,8 +18836,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L93",
       "_origin": "ast",
-      "community": 842,
-      "community_name": "muted",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_muted_value"
     },
@@ -18781,8 +18847,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L93",
       "_origin": "ast",
-      "community": 842,
-      "community_name": "muted",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_muted_type"
     },
@@ -18858,8 +18924,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 841,
-      "community_name": "destructive-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "destructive-foreground",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_color_destructive_foreground"
     },
@@ -18869,8 +18935,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 841,
-      "community_name": "destructive-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_destructive_foreground_value"
     },
@@ -18880,8 +18946,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 841,
-      "community_name": "destructive-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_destructive_foreground_type"
     },
@@ -18891,8 +18957,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L97",
       "_origin": "ast",
-      "community": 620,
-      "community_name": "$type",
+      "community": 35,
+      "community_name": "card",
       "norm_label": "border",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_color_border"
     },
@@ -18902,8 +18968,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L97",
       "_origin": "ast",
-      "community": 620,
-      "community_name": "$type",
+      "community": 35,
+      "community_name": "card",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_border_value"
     },
@@ -18913,8 +18979,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L97",
       "_origin": "ast",
-      "community": 620,
-      "community_name": "$type",
+      "community": 35,
+      "community_name": "card",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_border_type"
     },
@@ -18924,8 +18990,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L98",
       "_origin": "ast",
-      "community": 863,
-      "community_name": "ring",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "ring",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_color_ring"
     },
@@ -18935,8 +19001,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L98",
       "_origin": "ast",
-      "community": 863,
-      "community_name": "ring",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_ring_value"
     },
@@ -18946,8 +19012,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L98",
       "_origin": "ast",
-      "community": 863,
-      "community_name": "ring",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_ring_type"
     },
@@ -19056,8 +19122,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L107",
       "_origin": "ast",
-      "community": 35,
-      "community_name": "card",
+      "community": 115,
+      "community_name": "button",
       "norm_label": "bg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_button_bg"
     },
@@ -19067,8 +19133,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L107",
       "_origin": "ast",
-      "community": 35,
-      "community_name": "card",
+      "community": 115,
+      "community_name": "button",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_bg_value"
     },
@@ -19078,8 +19144,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L107",
       "_origin": "ast",
-      "community": 35,
-      "community_name": "card",
+      "community": 115,
+      "community_name": "button",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_bg_type"
     },
@@ -19221,8 +19287,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L112",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "radius",
+      "community": 108,
+      "community_name": "input",
       "norm_label": "radius",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_button_radius"
     },
@@ -19232,8 +19298,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L112",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "radius",
+      "community": 108,
+      "community_name": "input",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_radius_value"
     },
@@ -19243,8 +19309,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L112",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "radius",
+      "community": 108,
+      "community_name": "input",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_radius_type"
     },
@@ -19298,8 +19364,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L116",
       "_origin": "ast",
-      "community": 35,
-      "community_name": "card",
+      "community": 115,
+      "community_name": "button",
       "norm_label": "bg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_input_bg"
     },
@@ -19309,8 +19375,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L117",
       "_origin": "ast",
-      "community": 620,
-      "community_name": "$type",
+      "community": 35,
+      "community_name": "card",
       "norm_label": "border",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_input_border"
     },
@@ -19375,8 +19441,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L121",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "radius",
+      "community": 108,
+      "community_name": "input",
       "norm_label": "radius",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_input_radius"
     },
@@ -19397,8 +19463,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L124",
       "_origin": "ast",
-      "community": 35,
-      "community_name": "card",
+      "community": 115,
+      "community_name": "button",
       "norm_label": "bg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_card_bg"
     },
@@ -19408,8 +19474,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L125",
       "_origin": "ast",
-      "community": 620,
-      "community_name": "$type",
+      "community": 35,
+      "community_name": "card",
       "norm_label": "border",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_card_border"
     },
@@ -19485,8 +19551,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L128",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "radius",
+      "community": 108,
+      "community_name": "input",
       "norm_label": "radius",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_card_radius"
     },
@@ -19760,8 +19826,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "search",
+      "community": 62,
+      "community_name": ".claude/skills/design/scripts/cip/generate.py",
       "norm_label": ".claude/skills/design/scripts/cip/generate.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_scripts_cip_generate"
     },
@@ -19771,8 +19837,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "search",
+      "community": 62,
+      "community_name": ".claude/skills/design/scripts/cip/generate.py",
       "norm_label": "load_logo_image()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_scripts_cip_generate_load_logo_image"
     },
@@ -19782,8 +19848,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py",
       "source_location": "L69",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "search",
+      "community": 62,
+      "community_name": ".claude/skills/design/scripts/cip/generate.py",
       "norm_label": "load_env()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_scripts_cip_generate_load_env"
     },
@@ -19793,8 +19859,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py",
       "source_location": "L89",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "search",
+      "community": 62,
+      "community_name": ".claude/skills/design/scripts/cip/generate.py",
       "norm_label": "build_cip_prompt()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_scripts_cip_generate_build_cip_prompt"
     },
@@ -19804,8 +19870,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py",
       "source_location": "L186",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "search",
+      "community": 62,
+      "community_name": ".claude/skills/design/scripts/cip/generate.py",
       "norm_label": "generate_with_nano_banana()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_scripts_cip_generate_generate_with_nano_banana"
     },
@@ -19815,8 +19881,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py",
       "source_location": "L286",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "search",
+      "community": 62,
+      "community_name": ".claude/skills/design/scripts/cip/generate.py",
       "norm_label": "generate_cip_set()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_scripts_cip_generate_generate_cip_set"
     },
@@ -19826,8 +19892,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py",
       "source_location": "L341",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "search",
+      "community": 62,
+      "community_name": ".claude/skills/design/scripts/cip/generate.py",
       "norm_label": "check_logo_required()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_scripts_cip_generate_check_logo_required"
     },
@@ -19837,8 +19903,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py",
       "source_location": "L370",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "search",
+      "community": 62,
+      "community_name": ".claude/skills/design/scripts/cip/generate.py",
       "norm_label": "main()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_scripts_cip_generate_main"
     },
@@ -19848,8 +19914,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "search",
+      "community": 62,
+      "community_name": ".claude/skills/design/scripts/cip/generate.py",
       "norm_label": "load logo image using pil for gemini image editing",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_scripts_cip_generate_rationale_37"
     },
@@ -19859,8 +19925,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py",
       "source_location": "L70",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "search",
+      "community": 62,
+      "community_name": ".claude/skills/design/scripts/cip/generate.py",
       "norm_label": "load environment variables from .env files",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_scripts_cip_generate_rationale_70"
     },
@@ -19870,8 +19936,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py",
       "source_location": "L90",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "search",
+      "community": 62,
+      "community_name": ".claude/skills/design/scripts/cip/generate.py",
       "norm_label": "build an optimized prompt for cip mockup generation args: deliverable: type of...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_scripts_cip_generate_rationale_90"
     },
@@ -19881,8 +19947,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py",
       "source_location": "L187",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "search",
+      "community": 62,
+      "community_name": ".claude/skills/design/scripts/cip/generate.py",
       "norm_label": "generate image using gemini nano banana (native image generation) supports two...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_scripts_cip_generate_rationale_187"
     },
@@ -19892,8 +19958,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py",
       "source_location": "L287",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "search",
+      "community": 62,
+      "community_name": ".claude/skills/design/scripts/cip/generate.py",
       "norm_label": "generate a complete cip set for a brand args: brand_name: brand name to...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_scripts_cip_generate_rationale_287"
     },
@@ -19903,8 +19969,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design/scripts/cip/generate.py",
       "source_location": "L342",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "search",
+      "community": 62,
+      "community_name": ".claude/skills/design/scripts/cip/generate.py",
       "norm_label": "check if logo is required and suggest logo-design skill if not provided...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_scripts_cip_generate_rationale_342"
     },
@@ -22708,8 +22774,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "skills/ui-ux-pro-max/scripts/core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core"
     },
@@ -22785,8 +22851,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L224",
       "_origin": "ast",
-      "community": 81,
-      "community_name": "search",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": ".vocabulary()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_bm25_vocabulary"
     },
@@ -22796,8 +22862,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L237",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_load_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_load_csv"
     },
@@ -22807,8 +22873,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L251",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_get_bm25()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_get_bm25"
     },
@@ -22818,8 +22884,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L267",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_search_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_search_csv"
     },
@@ -22829,8 +22895,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L292",
       "_origin": "ast",
-      "community": 81,
-      "community_name": "search",
+      "community": 92,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_suggest_terms()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_suggest_terms"
     },
@@ -22840,8 +22906,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L323",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_load_product_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_load_product_keywords"
     },
@@ -22851,8 +22917,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L347",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_domain_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_domain_keywords"
     },
@@ -22862,8 +22928,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L377",
       "_origin": "ast",
-      "community": 371,
-      "community_name": "BM25",
+      "community": 832,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "detect_domain()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_detect_domain"
     },
@@ -22884,8 +22950,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L442",
       "_origin": "ast",
-      "community": 81,
-      "community_name": "search",
+      "community": 92,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "search_stack()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_search_stack"
     },
@@ -22950,8 +23016,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L225",
       "_origin": "ast",
-      "community": 81,
-      "community_name": "search",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": "all indexed terms, for suggestion/typo-recovery purposes.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_225"
     },
@@ -22961,8 +23027,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L238",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "load csv and return list of dicts, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_238"
     },
@@ -22972,8 +23038,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L252",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "fitted bm25 index for this file+columns, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_252"
     },
@@ -22983,8 +23049,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L268",
       "_origin": "ast",
-      "community": 36,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "core search function using bm25. returns (results, bm25_or_none).",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_268"
     },
@@ -22994,8 +23060,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L293",
       "_origin": "ast",
-      "community": 81,
-      "community_name": "search",
+      "community": 92,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "nearest known vocabulary terms for a query that returned 0 hits, so the caller...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_293"
     },
@@ -23005,8 +23071,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L378",
       "_origin": "ast",
-      "community": 371,
-      "community_name": "BM25",
+      "community": 832,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "auto-detect the most relevant domain from query. matches are weighted by...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_378"
     },
@@ -23027,8 +23093,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L443",
       "_origin": "ast",
-      "community": 81,
-      "community_name": "search",
+      "community": 92,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": "search stack-specific guidelines",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_443"
     },
@@ -23555,8 +23621,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 51,
-      "community_name": "skills/ui-ux-pro-max/scripts/design_system.py",
+      "community": 832,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core"
     },
@@ -23665,8 +23731,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 81,
-      "community_name": "search",
+      "community": 92,
+      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
       "norm_label": ".test_every_stack_file_exists_and_is_searchable()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testsearchdomains_test_every_stack_file_exists_and_is_searchable"
     },
@@ -23676,8 +23742,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L78",
       "_origin": "ast",
-      "community": 371,
-      "community_name": "BM25",
+      "community": 832,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "testdomaindetection",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection"
     },
@@ -23687,8 +23753,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L79",
       "_origin": "ast",
-      "community": 371,
-      "community_name": "BM25",
+      "community": 832,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_style_keywords_route_to_style()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection_test_style_keywords_route_to_style"
     },
@@ -23698,8 +23764,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L82",
       "_origin": "ast",
-      "community": 371,
-      "community_name": "BM25",
+      "community": 832,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_accessibility_keywords_route_to_ux()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection_test_accessibility_keywords_route_to_ux"
     },
@@ -23709,8 +23775,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L85",
       "_origin": "ast",
-      "community": 371,
-      "community_name": "BM25",
+      "community": 832,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_ambiguous_query_returns_runner_up()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection_test_ambiguous_query_returns_runner_up"
     },
@@ -23720,8 +23786,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L91",
       "_origin": "ast",
-      "community": 371,
-      "community_name": "BM25",
+      "community": 832,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_empty_query_falls_back_to_style()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection_test_empty_query_falls_back_to_style"
     },
@@ -23731,8 +23797,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L95",
       "_origin": "ast",
-      "community": 51,
-      "community_name": "skills/ui-ux-pro-max/scripts/design_system.py",
+      "community": 832,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "testpersistence",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testpersistence"
     },
@@ -23742,8 +23808,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 51,
-      "community_name": "skills/ui-ux-pro-max/scripts/design_system.py",
+      "community": 832,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_persist_then_skip_then_force()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testpersistence_test_persist_then_skip_then_force"
     },
@@ -23753,8 +23819,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 51,
-      "community_name": "skills/ui-ux-pro-max/scripts/design_system.py",
+      "community": 832,
+      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_persist_writes_only_under_output_dir()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testpersistence_test_persist_writes_only_under_output_dir"
     },
@@ -23852,8 +23918,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 62,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "assets/scripts/core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core"
     },
@@ -23940,8 +24006,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L237",
       "_origin": "ast",
-      "community": 62,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "_load_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_load_csv"
     },
@@ -23951,8 +24017,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L251",
       "_origin": "ast",
-      "community": 62,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "_get_bm25()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_get_bm25"
     },
@@ -23962,8 +24028,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L267",
       "_origin": "ast",
-      "community": 62,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "_search_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_search_csv"
     },
@@ -23973,8 +24039,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L292",
       "_origin": "ast",
-      "community": 62,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "_suggest_terms()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_suggest_terms"
     },
@@ -23984,8 +24050,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L323",
       "_origin": "ast",
-      "community": 62,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "_load_product_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_load_product_keywords"
     },
@@ -23995,8 +24061,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L347",
       "_origin": "ast",
-      "community": 62,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "_domain_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_domain_keywords"
     },
@@ -24028,8 +24094,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L442",
       "_origin": "ast",
-      "community": 62,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "search_stack()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_search_stack"
     },
@@ -24105,8 +24171,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L238",
       "_origin": "ast",
-      "community": 62,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "load csv and return list of dicts, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_238"
     },
@@ -24116,8 +24182,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L252",
       "_origin": "ast",
-      "community": 62,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "fitted bm25 index for this file+columns, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_252"
     },
@@ -24127,8 +24193,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L268",
       "_origin": "ast",
-      "community": 62,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "core search function using bm25. returns (results, bm25_or_none).",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_268"
     },
@@ -24138,8 +24204,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L293",
       "_origin": "ast",
-      "community": 62,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "nearest known vocabulary terms for a query that returned 0 hits, so the caller...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_293"
     },
@@ -24171,8 +24237,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L443",
       "_origin": "ast",
-      "community": 62,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": "search stack-specific guidelines",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_443"
     },
@@ -24347,8 +24413,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L528",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "format_markdown()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_format_markdown"
     },
@@ -24358,8 +24424,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L668",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "generate_design_system()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_generate_design_system"
     },
@@ -24369,8 +24435,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L710",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "safe_slug()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_safe_slug"
     },
@@ -24380,8 +24446,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L721",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "persist_design_system()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_persist_design_system"
     },
@@ -24391,8 +24457,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L792",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "format_master_md()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_format_master_md"
     },
@@ -24578,8 +24644,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L529",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "format design system as markdown.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_529"
     },
@@ -24589,8 +24655,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L672",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "main entry point for design system generation. args: query: search query (e.g.,...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_672"
     },
@@ -24600,8 +24666,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L711",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "slugify a name into a single safe path segment. only [a-z0-9_-] survives; every...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_711"
     },
@@ -24611,8 +24677,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L723",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "persist design system to design-system/<project>/ folder using master +...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_723"
     },
@@ -24622,8 +24688,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L793",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "format design system as master.md with hierarchical override logic.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_793"
     },
@@ -24699,8 +24765,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "assets/scripts/tests/test_core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core"
     },
@@ -24809,8 +24875,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 62,
-      "community_name": "assets/scripts/core.py",
+      "community": 37,
+      "community_name": "BM25",
       "norm_label": ".test_every_stack_file_exists_and_is_searchable()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core_testsearchdomains_test_every_stack_file_exists_and_is_searchable"
     },
@@ -24875,8 +24941,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L95",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": "testpersistence",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core_testpersistence"
     },
@@ -24886,8 +24952,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": ".test_persist_then_skip_then_force()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core_testpersistence_test_persist_then_skip_then_force"
     },
@@ -24897,8 +24963,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "assets/scripts/tests/test_core.py",
+      "community": 38,
+      "community_name": "assets/scripts/design_system.py",
       "norm_label": ".test_persist_writes_only_under_output_dir()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core_testpersistence_test_persist_writes_only_under_output_dir"
     },
@@ -35264,8 +35330,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 620,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "src/ui-ux-pro-max/scripts/core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core"
     },
@@ -35352,8 +35418,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L237",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 620,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_load_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_load_csv"
     },
@@ -35363,8 +35429,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L251",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 620,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_get_bm25()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_get_bm25"
     },
@@ -35374,8 +35440,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L267",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 620,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_search_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_search_csv"
     },
@@ -35385,8 +35451,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L292",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 620,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_suggest_terms()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_suggest_terms"
     },
@@ -35396,8 +35462,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L323",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 620,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_load_product_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_load_product_keywords"
     },
@@ -35407,8 +35473,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L347",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 620,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_domain_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_domain_keywords"
     },
@@ -35440,8 +35506,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L442",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 620,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "search_stack()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_search_stack"
     },
@@ -35517,8 +35583,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L238",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 620,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "load csv and return list of dicts, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_238"
     },
@@ -35528,8 +35594,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L252",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 620,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "fitted bm25 index for this file+columns, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_252"
     },
@@ -35539,8 +35605,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L268",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 620,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "core search function using bm25. returns (results, bm25_or_none).",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_268"
     },
@@ -35550,8 +35616,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L293",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 620,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "nearest known vocabulary terms for a query that returned 0 hits, so the caller...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_293"
     },
@@ -35583,8 +35649,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L443",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 620,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "search stack-specific guidelines",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_443"
     },
@@ -35605,8 +35671,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L69",
       "_origin": "ast",
-      "community": 26,
-      "community_name": "DesignSystemGenerator",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "_resolve_dial()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_resolve_dial"
     },
@@ -35759,8 +35825,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L528",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 810,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "format_markdown()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_format_markdown"
     },
@@ -35770,8 +35836,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L668",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 810,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "generate_design_system()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_generate_design_system"
     },
@@ -35781,8 +35847,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L710",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 810,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "safe_slug()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_safe_slug"
     },
@@ -35792,8 +35858,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L721",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 810,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "persist_design_system()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_persist_design_system"
     },
@@ -35803,8 +35869,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L792",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 810,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "format_master_md()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_format_master_md"
     },
@@ -35847,8 +35913,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L70",
       "_origin": "ast",
-      "community": 26,
-      "community_name": "DesignSystemGenerator",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "bucket a 1-10 dial value into its tier config. returns none if value is none.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_70"
     },
@@ -35990,8 +36056,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L529",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 810,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "format design system as markdown.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_529"
     },
@@ -36001,8 +36067,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L672",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 810,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "main entry point for design system generation. args: query: search query (e.g.,...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_672"
     },
@@ -36012,8 +36078,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L711",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 810,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "slugify a name into a single safe path segment. only [a-z0-9_-] survives; every...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_711"
     },
@@ -36023,8 +36089,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L723",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 810,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "persist design system to design-system/<project>/ folder using master +...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_723"
     },
@@ -36034,8 +36100,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L793",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 810,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "format design system as master.md with hierarchical override logic.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_793"
     },
@@ -36111,8 +36177,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 810,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core"
     },
@@ -36221,8 +36287,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 620,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": ".test_every_stack_file_exists_and_is_searchable()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core_testsearchdomains_test_every_stack_file_exists_and_is_searchable"
     },
@@ -36287,8 +36353,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L95",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 810,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "testpersistence",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core_testpersistence"
     },
@@ -36298,8 +36364,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 810,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_persist_then_skip_then_force()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core_testpersistence_test_persist_then_skip_then_force"
     },
@@ -36309,8 +36375,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 810,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_persist_writes_only_under_output_dir()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core_testpersistence_test_persist_writes_only_under_output_dir"
     },
@@ -99029,6 +99095,205 @@
   ],
   "links": [
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/alembic/versions/008_reparar_enums_sensor.py",
+      "source_location": "L144",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "apps_backend_alembic_versions_008_reparar_enums_sensor",
+      "target": "apps_backend_alembic_versions_008_reparar_enums_sensor_downgrade",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/alembic/versions/008_reparar_enums_sensor.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "apps_backend_alembic_versions_008_reparar_enums_sensor",
+      "target": "apps_backend_alembic_versions_008_reparar_enums_sensor_tipo_existe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/alembic/versions/008_reparar_enums_sensor.py",
+      "source_location": "L84",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "apps_backend_alembic_versions_008_reparar_enums_sensor",
+      "target": "apps_backend_alembic_versions_008_reparar_enums_sensor_upgrade",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/alembic/versions/008_reparar_enums_sensor.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "apps_backend_alembic_versions_008_reparar_enums_sensor_rationale_1",
+      "target": "apps_backend_alembic_versions_008_reparar_enums_sensor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/alembic/versions/008_reparar_enums_sensor.py",
+      "source_location": "L89",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "apps_backend_alembic_versions_008_reparar_enums_sensor_upgrade",
+      "target": "apps_backend_alembic_versions_008_reparar_enums_sensor_tipo_existe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/alembic/versions/008_reparar_enums_sensor.py",
+      "source_location": "L145",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "apps_backend_alembic_versions_008_reparar_enums_sensor_rationale_145",
+      "target": "apps_backend_alembic_versions_008_reparar_enums_sensor_downgrade",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/iot.py",
+      "source_location": "L164",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_iot",
+      "target": "apps_backend_agroia_backend_api_iot_cargar_archivo_sensor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/iot.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_iot",
+      "target": "apps_backend_agroia_backend_api_iot_dispositivoregistro"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/iot.py",
+      "source_location": "L564",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_iot",
+      "target": "apps_backend_agroia_backend_api_iot_enrich_location"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/iot.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_iot",
+      "target": "apps_backend_agroia_backend_api_iot_esp32sensormessage"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/iot.py",
+      "source_location": "L105",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_iot",
+      "target": "apps_backend_agroia_backend_api_iot_ingest_esp32_sensor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/iot.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_iot",
+      "target": "apps_backend_agroia_backend_api_iot_ingest_sensor_data"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/iot.py",
+      "source_location": "L424",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_iot",
+      "target": "apps_backend_agroia_backend_api_iot_listar_dispositivos"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/iot.py",
+      "source_location": "L381",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_iot",
+      "target": "apps_backend_agroia_backend_api_iot_registrar_dispositivo"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/iot.py",
+      "source_location": "L517",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_iot",
+      "target": "apps_backend_agroia_backend_api_iot_sensor_status"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/iot.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_iot",
+      "target": "apps_backend_agroia_backend_api_iot_sensormessage"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/iot.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_iot",
+      "target": "apps_backend_agroia_backend_api_iot_sensorstatus"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/iot.py",
+      "source_location": "L455",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_iot",
+      "target": "apps_backend_agroia_backend_api_iot_ultimas_lecturas"
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -99036,9 +99301,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot",
-      "target": "apps_shared_agroia_database",
-      "confidence_score": 1.0
+      "target": "apps_shared_agroia_database"
     },
     {
       "relation": "imports_from",
@@ -99048,141 +99313,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot",
-      "target": "apps_shared_agroia_logging",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/iot.py",
-      "source_location": "L164",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_iot",
-      "target": "apps_backend_agroia_backend_api_iot_cargar_archivo_sensor",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/iot.py",
-      "source_location": "L55",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_iot",
-      "target": "apps_backend_agroia_backend_api_iot_dispositivoregistro",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/iot.py",
-      "source_location": "L564",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_iot",
-      "target": "apps_backend_agroia_backend_api_iot_enrich_location",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/iot.py",
-      "source_location": "L41",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_iot",
-      "target": "apps_backend_agroia_backend_api_iot_esp32sensormessage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/iot.py",
-      "source_location": "L105",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_iot",
-      "target": "apps_backend_agroia_backend_api_iot_ingest_esp32_sensor",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/iot.py",
-      "source_location": "L68",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_iot",
-      "target": "apps_backend_agroia_backend_api_iot_ingest_sensor_data",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/iot.py",
-      "source_location": "L424",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_iot",
-      "target": "apps_backend_agroia_backend_api_iot_listar_dispositivos",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/iot.py",
-      "source_location": "L381",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_iot",
-      "target": "apps_backend_agroia_backend_api_iot_registrar_dispositivo",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/iot.py",
-      "source_location": "L517",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_iot",
-      "target": "apps_backend_agroia_backend_api_iot_sensor_status",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/iot.py",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_iot",
-      "target": "apps_backend_agroia_backend_api_iot_sensormessage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/iot.py",
-      "source_location": "L33",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_iot",
-      "target": "apps_backend_agroia_backend_api_iot_sensorstatus",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/iot.py",
-      "source_location": "L455",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_iot",
-      "target": "apps_backend_agroia_backend_api_iot_ultimas_lecturas",
-      "confidence_score": 1.0
+      "target": "apps_shared_agroia_logging"
     },
     {
       "relation": "imports_from",
@@ -99192,9 +99325,9 @@
       "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot",
-      "target": "fastapi",
-      "confidence_score": 1.0
+      "target": "fastapi"
     },
     {
       "relation": "rationale_for",
@@ -99203,9 +99336,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_rationale_1",
-      "target": "apps_backend_agroia_backend_api_iot",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot"
     },
     {
       "relation": "references",
@@ -99215,9 +99348,9 @@
       "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_ingest_sensor_data",
-      "target": "apps_backend_agroia_backend_api_iot_sensormessage",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_sensormessage"
     },
     {
       "relation": "rationale_for",
@@ -99226,9 +99359,9 @@
       "source_location": "L26",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_rationale_26",
-      "target": "apps_backend_agroia_backend_api_iot_sensormessage",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_sensormessage"
     },
     {
       "relation": "inherits",
@@ -99237,9 +99370,9 @@
       "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_sensormessage",
-      "target": "apps_backend_agroia_backend_api_iot_py_basemodel",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_py_basemodel"
     },
     {
       "relation": "inherits",
@@ -99248,9 +99381,9 @@
       "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_dispositivoregistro",
-      "target": "apps_backend_agroia_backend_api_iot_py_basemodel",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_py_basemodel"
     },
     {
       "relation": "inherits",
@@ -99259,9 +99392,9 @@
       "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_esp32sensormessage",
-      "target": "apps_backend_agroia_backend_api_iot_py_basemodel",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_py_basemodel"
     },
     {
       "relation": "inherits",
@@ -99270,9 +99403,9 @@
       "source_location": "L33",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_sensorstatus",
-      "target": "apps_backend_agroia_backend_api_iot_py_basemodel",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_py_basemodel"
     },
     {
       "relation": "references",
@@ -99282,9 +99415,9 @@
       "source_location": "L105",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_ingest_esp32_sensor",
-      "target": "apps_backend_agroia_backend_api_iot_esp32sensormessage",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_esp32sensormessage"
     },
     {
       "relation": "rationale_for",
@@ -99293,9 +99426,9 @@
       "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_rationale_42",
-      "target": "apps_backend_agroia_backend_api_iot_esp32sensormessage",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_esp32sensormessage"
     },
     {
       "relation": "rationale_for",
@@ -99304,9 +99437,9 @@
       "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_rationale_56",
-      "target": "apps_backend_agroia_backend_api_iot_dispositivoregistro",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_dispositivoregistro"
     },
     {
       "relation": "references",
@@ -99316,9 +99449,9 @@
       "source_location": "L381",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_registrar_dispositivo",
-      "target": "apps_backend_agroia_backend_api_iot_dispositivoregistro",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_dispositivoregistro"
     },
     {
       "relation": "references",
@@ -99328,9 +99461,9 @@
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_cargar_archivo_sensor",
-      "target": "apps_backend_agroia_backend_api_iot_py_post",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_py_post"
     },
     {
       "relation": "references",
@@ -99340,9 +99473,9 @@
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_ingest_esp32_sensor",
-      "target": "apps_backend_agroia_backend_api_iot_py_post",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_py_post"
     },
     {
       "relation": "references",
@@ -99352,9 +99485,9 @@
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_ingest_sensor_data",
-      "target": "apps_backend_agroia_backend_api_iot_py_post",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_py_post"
     },
     {
       "relation": "references",
@@ -99364,9 +99497,9 @@
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_registrar_dispositivo",
-      "target": "apps_backend_agroia_backend_api_iot_py_post",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_py_post"
     },
     {
       "relation": "rationale_for",
@@ -99375,9 +99508,9 @@
       "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_rationale_69",
-      "target": "apps_backend_agroia_backend_api_iot_ingest_sensor_data",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_ingest_sensor_data"
     },
     {
       "relation": "rationale_for",
@@ -99386,9 +99519,9 @@
       "source_location": "L106",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_rationale_106",
-      "target": "apps_backend_agroia_backend_api_iot_ingest_esp32_sensor",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_ingest_esp32_sensor"
     },
     {
       "relation": "calls",
@@ -99398,9 +99531,9 @@
       "source_location": "L245",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_cargar_archivo_sensor",
-      "target": "get",
-      "confidence_score": 1.0
+      "target": "get"
     },
     {
       "relation": "references",
@@ -99410,9 +99543,9 @@
       "source_location": "L164",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_cargar_archivo_sensor",
-      "target": "uploadfile",
-      "confidence_score": 1.0
+      "target": "uploadfile"
     },
     {
       "relation": "rationale_for",
@@ -99421,9 +99554,9 @@
       "source_location": "L171",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_rationale_171",
-      "target": "apps_backend_agroia_backend_api_iot_cargar_archivo_sensor",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_cargar_archivo_sensor"
     },
     {
       "relation": "rationale_for",
@@ -99432,9 +99565,9 @@
       "source_location": "L382",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_rationale_382",
-      "target": "apps_backend_agroia_backend_api_iot_registrar_dispositivo",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_registrar_dispositivo"
     },
     {
       "relation": "calls",
@@ -99468,9 +99601,9 @@
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_enrich_location",
-      "target": "get",
-      "confidence_score": 1.0
+      "target": "get"
     },
     {
       "relation": "references",
@@ -99480,9 +99613,9 @@
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_listar_dispositivos",
-      "target": "get",
-      "confidence_score": 1.0
+      "target": "get"
     },
     {
       "relation": "references",
@@ -99492,9 +99625,9 @@
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_sensor_status",
-      "target": "get",
-      "confidence_score": 1.0
+      "target": "get"
     },
     {
       "relation": "references",
@@ -99504,9 +99637,9 @@
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_ultimas_lecturas",
-      "target": "get",
-      "confidence_score": 1.0
+      "target": "get"
     },
     {
       "relation": "rationale_for",
@@ -99515,9 +99648,9 @@
       "source_location": "L425",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_rationale_425",
-      "target": "apps_backend_agroia_backend_api_iot_listar_dispositivos",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_listar_dispositivos"
     },
     {
       "relation": "rationale_for",
@@ -99526,9 +99659,9 @@
       "source_location": "L462",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_rationale_462",
-      "target": "apps_backend_agroia_backend_api_iot_ultimas_lecturas",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_ultimas_lecturas"
     },
     {
       "relation": "references",
@@ -99538,9 +99671,9 @@
       "source_location": "L455",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_ultimas_lecturas",
-      "target": "asyncsession",
-      "confidence_score": 1.0
+      "target": "asyncsession"
     },
     {
       "relation": "references",
@@ -99574,9 +99707,9 @@
       "source_location": "L517",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_sensor_status",
-      "target": "asyncsession",
-      "confidence_score": 1.0
+      "target": "asyncsession"
     },
     {
       "relation": "references",
@@ -99597,9 +99730,9 @@
       "source_location": "L523",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_rationale_523",
-      "target": "apps_backend_agroia_backend_api_iot_sensor_status",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_sensor_status"
     },
     {
       "relation": "rationale_for",
@@ -99608,9 +99741,31 @@
       "source_location": "L569",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_iot_rationale_569",
-      "target": "apps_backend_agroia_backend_api_iot_enrich_location",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_iot_enrich_location"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_sensor_api",
+      "target": "apps_backend_agroia_backend_api_sensor_api_ingesta_sensor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_sensor_api",
+      "target": "apps_backend_agroia_backend_api_sensor_api_sensorframe"
     },
     {
       "relation": "imports_from",
@@ -99620,9 +99775,9 @@
       "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_sensor_api",
-      "target": "apps_shared_agroia_database",
-      "confidence_score": 1.0
+      "target": "apps_shared_agroia_database"
     },
     {
       "relation": "imports_from",
@@ -99632,31 +99787,9 @@
       "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_sensor_api",
-      "target": "apps_shared_agroia_logging",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
-      "source_location": "L63",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_sensor_api",
-      "target": "apps_backend_agroia_backend_api_sensor_api_ingesta_sensor",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
-      "source_location": "L37",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_sensor_api",
-      "target": "apps_backend_agroia_backend_api_sensor_api_sensorframe",
-      "confidence_score": 1.0
+      "target": "apps_shared_agroia_logging"
     },
     {
       "relation": "imports_from",
@@ -99666,9 +99799,9 @@
       "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_sensor_api",
-      "target": "datetime",
-      "confidence_score": 1.0
+      "target": "datetime"
     },
     {
       "relation": "imports_from",
@@ -99678,9 +99811,9 @@
       "source_location": "L26",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_sensor_api",
-      "target": "fastapi",
-      "confidence_score": 1.0
+      "target": "fastapi"
     },
     {
       "relation": "rationale_for",
@@ -99689,9 +99822,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_sensor_api_rationale_1",
-      "target": "apps_backend_agroia_backend_api_sensor_api",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_sensor_api"
     },
     {
       "relation": "references",
@@ -99701,9 +99834,9 @@
       "source_location": "L63",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_sensor_api_ingesta_sensor",
-      "target": "apps_backend_agroia_backend_api_sensor_api_sensorframe",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_sensor_api_sensorframe"
     },
     {
       "relation": "rationale_for",
@@ -99712,9 +99845,9 @@
       "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_sensor_api_rationale_38",
-      "target": "apps_backend_agroia_backend_api_sensor_api_sensorframe",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_sensor_api_sensorframe"
     },
     {
       "relation": "inherits",
@@ -99723,9 +99856,9 @@
       "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_sensor_api_sensorframe",
-      "target": "apps_backend_agroia_backend_api_sensor_api_py_basemodel",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_sensor_api_py_basemodel"
     },
     {
       "relation": "references",
@@ -99735,9 +99868,9 @@
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_sensor_api_ingesta_sensor",
-      "target": "apps_backend_agroia_backend_api_sensor_api_py_post",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_sensor_api_py_post"
     },
     {
       "relation": "rationale_for",
@@ -99746,9 +99879,9 @@
       "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_sensor_api_rationale_64",
-      "target": "apps_backend_agroia_backend_api_sensor_api_ingesta_sensor",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_sensor_api_ingesta_sensor"
     },
     {
       "relation": "imports_from",
@@ -99758,9 +99891,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_puente_iot",
-      "target": "apps_iot_agroia_iot_consumer",
-      "confidence_score": 1.0
+      "target": "apps_iot_agroia_iot_consumer"
     },
     {
       "relation": "rationale_for",
@@ -99769,9 +99902,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_puente_iot_rationale_1",
-      "target": "apps_backend_agroia_backend_services_puente_iot",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_puente_iot"
     },
     {
       "relation": "inherits",
@@ -219169,5 +219302,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "4055af525286e43dc44f1350efa53e73ab667253"
+  "built_at_commit": "e4a0eacfb3e4c1a93abaceb1e73d3af178aa50fa"
 }
