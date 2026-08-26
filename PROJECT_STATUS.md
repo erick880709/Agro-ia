@@ -45,6 +45,13 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Modo experto local** (sin key, el que corre hoy): motor determinista que detecta la intención (abono, siembra, pH, nutriente específico, riego, reporte, saludo) y responde con las reglas y la lectura de la finca.
 - Implementación: `services/agronomo_chat.py`, `api/chat.py`, panel `#chat-card` en `apps/frontend-web`.
 
+### Mapa de calor del lote (2026-08-25)
+
+- El reporte incluye la sección **«M» — Mapa de calor del lote**: una cuadrícula por variable de suelo pintada con las tomas de muestreo en posición (x, y).
+- Colores: verde (dentro del rango ideal), ámbar (cerca), rojo (fuera); sin rango ideal usa gradiente azul→rojo con leyenda min/máx.
+- Ingesta con posición: `POST /api/sensor` acepta `pos_x`/`pos_y`; la carga de archivo acepta columnas `x,y` (o `pos_x,pos_y`) con varias filas (una por toma) en CSV ancho o JSON array de muestras.
+- Modelo: `sensor_readings.pos_x/pos_y` (migración `006_posiciones_muestreo`); demo sembrada con cuadrícula 3×3 (`seed_demo_integral.py`).
+
 ### Cómo está montado
 
 - **Render Blueprint** (`render.yaml`): web service Docker desde `apps/backend/Dockerfile`, health check `/api/v1/health`, migraciones `alembic upgrade head` automáticas al arrancar el contenedor (Render free no permite `preDeployCommand`).
