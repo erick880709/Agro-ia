@@ -39,14 +39,17 @@ PROMPT_SISTEMA_EXPERTO = (
     "(lectura de suelo, reglas agronómicas, ficha técnica y análisis).\n"
     "2. NUNCA inventes valores, umbrales ni dosis. Si el contexto no tiene el "
     "dato, dilo con honestidad y sugiere consultar al técnico o a la UMATA.\n"
-    "3. Si el usuario es campesino/cliente, usa lenguaje del campo: sencillo, "
-    "coloquial, sin tecnicismos, con ejemplos prácticos ('echarle cal a la "
-    "tierra', 'abonar en dos tandas').\n"
-    "4. Si el usuario es agrónomo o administrador, puedes usar lenguaje técnico "
-    "y citar la fuente de cada umbral (UPRA, Cenicafé, AGROSAVIA).\n"
-    "5. Sé concreto y práctico: qué hacer, cuánto (según el contexto), cuándo y "
-    "cómo. Da respuestas paso a paso.\n"
-    "6. Responde en español colombiano, con calidez y respeto.\n"
+    "3. Sé DETALLADO y práctico: explica el qué, el porqué, el cómo y el cuándo. "
+    "Da pasos numerados y consejos de cómo se hace en el campo.\n"
+    "4. Lenguaje según la persona: con campesinos y trabajadores de finca usa "
+    "palabras sencillas del campo (evita 'ppm', 'conductividad eléctrica', "
+    "'CIC'; di 'la medida de cuánto nutriente hay', 'las sales de la tierra', "
+    "'la despensa del suelo') y explica cada término la primera vez. Con "
+    "agrónomos o administradores puedes incluir números y unidades.\n"
+    "5. Sé concreto: qué hacer, cuánto (según el contexto), cuándo y cómo, "
+    "paso a paso.\n"
+    "6. Responde en español colombiano, con calidez, respeto y ejemplos "
+    "cercanos al campo.\n"
     "7. Al final de respuestas técnicas, recuerda que el análisis es automático "
     "y que el técnico de confianza puede afinar la recomendación."
 )
@@ -230,6 +233,88 @@ _RULE_VAR = {
 # símbolo del motor ("P", "K") → clave interna
 _VAR_MOTOR = {simbolo.lower(): clave for clave, simbolo in _RULE_VAR.items()}
 
+# Explicación sencilla por variable: (nombre, qué_es)
+_DETALLE_VARIABLE = {
+    "ph": ("la acidez de la tierra",
+           "El pH dice si la tierra está 'agria' (ácida) o 'amarga' (alcalina). "
+           "Las plantas comen bien cuando la tierra no está ni muy agria ni muy amarga."),
+    "nitrogeno": ("el nitrógeno, la 'comida verde'",
+                  "El nitrógeno es el abono que pone verdes las hojas y hace crecer la planta."),
+    "fosforo": ("el fósforo",
+                "El fósforo es el que agarra la raíz, ayuda a florecer y a llenar bien el fruto."),
+    "potasio": ("el potasio",
+                "El potasio da fuerza al tallo, llena el fruto y lo pone dulce."),
+    "calcio": ("el calcio", "El calcio evita que el fruto se raje o se pudra por la punta."),
+    "magnesio": ("el magnesio", "El magnesio ayuda a que las hojas se pinten de un verde parejo."),
+    "azufre": ("el azufre", "El azufre mejora el sabor y ayuda a la planta a aprovechar el abono."),
+    "hierro": ("el hierro", "El hierro evita que las hojas nuevas nazcan amarillas."),
+    "manganeso": ("el manganeso", "El manganeso es un ayudante en pequeñitas cantidades para que la planta respire bien."),
+    "zinc": ("el zinc", "El zinc ayuda a que la planta crezca pareja y no se enane."),
+    "cobre": ("el cobre", "El cobre ayuda a la planta en cantidades muy pequeñas."),
+    "boro": ("el boro", "El boro ayuda a que cuaje la flor y no se caiga."),
+    "materia_organica": ("la materia orgánica, la 'vida' del suelo",
+                         "La materia orgánica es el compost, la hojarasca y el estiércol maduro: "
+                         "es la comida que mantiene viva la tierra."),
+    "cic": ("la CIC, la 'despensa' del suelo",
+            "La CIC es la despensa de la tierra: cuánta comida puede guardar para la planta sin que se la lleve la lluvia."),
+    "humedad": ("la humedad, el agua de la tierra",
+                "La humedad dice si la tierra tiene suficiente agua para que la planta beba."),
+    "conductividad_electrica": ("las sales de la tierra",
+                                "Este número dice cuánta sal tiene la tierra; si hay mucha, quema las plantas."),
+    "textura": ("la textura, lo suelta o apretada que está la tierra",
+                "La textura dice si la tierra es arenosa (suelta), limosa o arcillosa (apretada)."),
+}
+
+# Consejos prácticos por estado (para dar el 'cómo y cuándo')
+_COMO_CUANDO = {
+    "DEFICIT": ("Aplíquelo en dos o tres tandas y no todo de un solo golpe, repartido por todo el lote, "
+                "de preferencia cuando empiecen las lluvias o después de un riego."),
+    "EXCESO": ("No le eche más por ahora; deje descansar la tierra una temporada y, si son sales, "
+               "riegue seguido para lavarlas poco a poco."),
+    "OK": ("Está en su punto: manténgalo así con abonos orgánicos maduros y un análisis cada 6 meses."),
+}
+
+# Consejos específicos por variable (más precisos que el genérico)
+_COMO_CUANDO_VAR = {
+    "humedad": {
+        "DEFICIT": ("Riegue de mañana temprano o al caer la tarde, poca agua y seguido, "
+                    "sin encharcar; el riego por goteo rinde más."),
+        "EXCESO": ("Deje de regar unos días, revise que el suelo drene bien y evite el encharcamiento."),
+    },
+    "ph": {
+        "DEFICIT": ("Si la tierra está agria (ácida), endulcela con cal dolomita o cal agrícola al voleo, "
+                    "de preferencia un mes antes de sembrar, y revuélvala con el suelo."),
+        "EXCESO": ("Si la tierra está amarga (alcalina), rebájela con yeso agrícola o abonos ácidos, "
+                   "repartidos parejos y mezclados con el suelo."),
+    },
+    "conductividad_electrica": {
+        "EXCESO": ("Riegue seguido para lavar las sales poco a poco y use los abonos en poca cantidad."),
+    },
+    "materia_organica": {
+        "DEFICIT": ("Eche compost, estiércol maduro o gallinaza reposada y déjela descomponer; "
+                    "la tierra queda más suelta y guarda mejor el agua."),
+    },
+}
+
+
+def _consejo_estado(clave: str, estado: str) -> str:
+    """Consejo de 'cómo y cuándo' específico por variable, con genérico de respaldo."""
+    especifico = _COMO_CUANDO_VAR.get(clave, {}).get(estado)
+    return especifico or _COMO_CUANDO.get(estado, "")
+
+
+def _accion_sin_duplicado(nombre: str, accion: str | None) -> str:
+    """Quita la palabra repetida cuando la acción empieza con el nombre
+    (p. ej. nombre 'el fósforo' y acción 'Fósforo: 100-200 kg/ha...')."""
+    a = (accion or "").strip()
+    if not a or ":" not in a:
+        return a
+    cabeza = a.split(":", 1)[0].strip().lower()
+    palabras_nombre = set(re.findall(r"[a-záéíóúñ]+", (nombre or "").lower()))
+    if cabeza in palabras_nombre:
+        return a.split(":", 1)[1].strip()
+    return a
+
 
 def _nombre_rec(rec: dict) -> str:
     """Nombre amigable para una recomendación del motor (variable 'P' → 'el fósforo')."""
@@ -256,64 +341,110 @@ def _respuesta_variable(mensaje: str, ctx: dict) -> str | None:
     clave = _alias_detectado(texto)
     if clave is None:
         return None
-    nombre = _NOMBRE_VARIABLE.get(clave, clave.replace("_", " "))
+    detalle = _DETALLE_VARIABLE.get(clave)
+    nombre = detalle[0] if detalle else _NOMBRE_VARIABLE.get(clave, clave.replace("_", " "))
+    que_es = detalle[1] if detalle else ""
+    rol = (ctx.get("rol") or "cliente").lower()
+    sencillo = rol == "cliente"
+
     for rec in ctx["recomendaciones"]:
         var = str(rec.get("variable") or "").lower()
         if clave == "ph" and "ph" in var:
-            return (
-                f"Sobre la acidez de su tierra: su lectura de pH fue "
-                f"{rec.get('valor_actual')} y lo ideal es {rec.get('rango_ideal') or 'según el cultivo'}. "
-                f"Estado: {rec.get('estado')}. Recomendación: {rec.get('accion')}"
-            )
+            rec = dict(rec)
+            rec["variable"] = "ph"
+            break
         if var == clave or var == clave.replace("_", ""):
+            break
+    else:
+        rec = None
+
+    # Sin recomendación específica: buscar regla equivalente
+    if rec is None:
+        simbolo = _RULE_VAR.get(clave, clave).lower()
+        for regla in ctx["reglas"]:
+            vregla = str(getattr(regla.variable, "value", regla.variable)).lower()
+            if vregla == simbolo:
+                rango = (f" entre {regla.umbral_min} y {regla.umbral_max}"
+                         if regla.umbral_min is not None or regla.umbral_max is not None
+                         else "")
+                lectura = ctx.get("lectura") or {}
+                valor = lectura.get(clave)
+                partes = []
+                if sencillo and que_es:
+                    partes.append(que_es)
+                if valor is not None:
+                    partes.append(f"Su tierra marcó {valor}.")
+                partes.append(
+                    f"Lo bueno es mantenerlo{rango}. "
+                    f"Recomendación: {regla.accion}"
+                )
+                return " ".join(partes)
+        lectura = ctx.get("lectura") or {}
+        valor = lectura.get(clave)
+        if valor is not None:
+            base = que_es + " " if sencillo and que_es else f"Sobre {nombre}: "
             return (
-                f"Sobre {nombre}: su lectura fue {rec.get('valor_actual')} "
-                f"y lo ideal es {rec.get('rango_ideal') or 'según el cultivo'}. "
-                f"Estado: {rec.get('estado')}. Qué hacer: {rec.get('accion')}"
+                f"{base}Su última lectura fue {valor}. "
+                "El rango ideal depende del cultivo; revise el reporte generado o "
+                "consulte al técnico de su zona para interpretarlo bien."
             )
-    # Sin recomendación específica: usar reglas (comparación por símbolo exacto)
-    simbolo = _RULE_VAR.get(clave, clave).lower()
-    for regla in ctx["reglas"]:
-        vregla = str(getattr(regla.variable, "value", regla.variable)).lower()
-        if vregla == simbolo:
-            rango = (f" entre {regla.umbral_min} y {regla.umbral_max}"
-                     if regla.umbral_min is not None or regla.umbral_max is not None
-                     else "")
-            return (
-                f"Sobre {nombre}: la recomendación agronómica es mantenerlo{rango}. "
-                f"{regla.accion}"
-            )
-    # Sin regla: reportar la lectura cruda si existe
-    lectura = ctx.get("lectura") or {}
-    valor = lectura.get(clave)
-    if valor is not None:
         return (
-            f"Sobre {nombre}: su última lectura fue {valor}. "
-            "El rango ideal depende del cultivo; revise el reporte generado o "
-            "consulte al técnico de su zona para interpretarlo bien."
+            f"Para {nombre} no tengo una lectura ni una regla específica en el contexto de "
+            "esta finca. Le sugiero consultar al técnico o a la UMATA más cercana."
         )
-    return (
-        f"Para {nombre} no tengo una lectura ni una regla específica en el contexto de "
-        "esta finca. Le sugiero consultar al técnico o a la UMATA más cercana."
-    )
+
+    # ── Hay recomendación del motor: respuesta detallada ──
+    estado = str(rec.get("estado") or "").upper()
+    valor = rec.get("valor_actual")
+    rango = rec.get("rango_ideal")
+    accion = _accion_sin_duplicado(nombre, rec.get("accion"))
+    como = _consejo_estado(clave, estado)
+
+    partes = []
+    if sencillo and que_es:
+        partes.append(que_es)
+    if estado == "DEFICIT":
+        partes.append(f"A su tierra le está faltando {nombre}: la lectura fue {valor} y lo bueno está {rango}.")
+    elif estado == "EXCESO":
+        partes.append(f"Su tierra tiene {nombre} de más: la lectura fue {valor} y lo bueno está {rango}.")
+    else:
+        partes.append(f"{nombre.title()} está bien: la lectura fue {valor} y lo bueno está {rango}.")
+    if accion:
+        partes.append(f"Qué hacer: {accion}.")
+    if como:
+        partes.append(f"Cómo y cuándo: {como}")
+    if sencillo:
+        partes.append(
+            "Si no está seguro de las cantidades, muéstrele este análisis al técnico o a la "
+            "UMATA de su zona; con gusto le ayudan a calcular la dosis justa para su lote."
+        )
+    else:
+        partes.append(
+            "Recuerde que la dosis exacta depende del cultivo y de la etapa; este análisis "
+            "es una guía y el técnico de confianza puede afinarla."
+        )
+    return " ".join(partes)
 
 
 def _respuesta_local(mensaje: str, ctx: dict) -> str:
     """Motor determinista: responde con reglas + lectura, sin LLM."""
     texto = mensaje.lower()
+    rol = (ctx.get("rol") or "cliente").lower()
 
     # ── Saludos / cortesía ──
     if re.search(r"^(hola|buenas|buenos dias|buenos días|buenas tardes|quién eres|quien eres|hey|saludos)", texto):
         return (
-            "¡Muy buenas! 👋 Soy su asesor agronómico de AgroIA. "
-            "Puedo explicarle el reporte de su finca, decirle cómo abonar, qué sembrar "
-            "y cómo cuidar su cultivo. Pregúnteme con confianza, por ejemplo: "
-            "«¿qué abono debo aplicar?» o «¿qué me conviene sembrar?»."
+            "¡Muy buenas! 👋 Soy su asesor agronómico de AgroIA y estoy aquí para ayudarle "
+            "con su finca, hablando claro y sin enredos. Puedo explicarle el reporte del suelo, "
+            "decirle qué abono echar, qué conviene sembrar, cuánto regar y cómo cuidar su "
+            "cultivo paso a paso. Pregúnteme con confianza, por ejemplo: "
+            "«¿qué abono debo aplicar?», «¿qué me conviene sembrar?» o «¿cómo está mi tierra?»."
         )
     if re.search(r"(gracias|muy amable|quedo atento)", texto):
         return (
-            "¡Con mucho gusto! 🌱 Recuerde que este consejo es automático y que el técnico "
-            "de su zona puede afinar la recomendación. ¡Que la tierra le pague bien!"
+            "¡Con mucho gusto! 🌱 Aquí estaré para lo que necesite. Recuerde que este consejo "
+            "es automático y que el técnico o la UMATA de su zona pueden afinar la recomendación. "
+            "¡Que la tierra le pague bien!"
         )
 
     # ── Pregunta por una variable específica ──
@@ -326,18 +457,27 @@ def _respuesta_local(mensaje: str, ctx: dict) -> str:
         sugerencias = ctx["sugerencias"] or []
         if sugerencias:
             top = sugerencias[0]
-            linea = (
-                f"Según el análisis de su suelo, lo que mejor le va es {top.get('cultivo')} "
-                f"(aptitud {top.get('clasificacion') or top.get('aptitud') or '—'}). "
-            )
+            nombre = top.get("cultivo")
             otros = [s.get("cultivo") for s in sugerencias[1:3]]
-            if otros:
-                linea += f"También se podrían dar: {', '.join(otros)}. "
-            linea += "Antes de sembrar, corrija lo que el reporte marca en rojo y prepare bien el terreno."
-            return linea
+            partes = [
+                f"Según el análisis de su suelo, lo que mejor le va es {nombre}. "
+                + (f"También se podrían dar: {', '.join(otros)}. " if otros else ""),
+                "Para que le vaya bien, le recomiendo este orden:",
+                "1. Corrija primero lo que el reporte marca en rojo (el pH o el nutriente que esté fallando).",
+                "2. Prepare bien el terreno: una pasada de arado o azadón, saque piedras y terrones grandes.",
+                "3. Siembre con semilla o plántula sana, en el tiempo de lluvias o asegurando riego.",
+                "4. Abone en tandas pequeñas durante el crecimiento, no todo de un golpe.",
+            ]
+            if rol != "cliente":
+                partes.append(
+                    f"Para más precisión, revise la ficha técnica del {nombre} en el catálogo: "
+                    "allí están los umbrales y las fuentes (UPRA/Cenicafé/AGROSAVIA)."
+                )
+            return " ".join(partes)
         return (
             "Para recomendarle qué sembrar necesito la lectura de suelo de su finca. "
-            "Genere primero el reporte o cargue una lectura de sensor."
+            "Genere primero el reporte o cargue una lectura de sensor, y con gusto le digo "
+            "qué cultivo se acomoda mejor a su tierra."
         )
 
     # ── Abonar / fertilizar (general) ──
@@ -345,33 +485,64 @@ def _respuesta_local(mensaje: str, ctx: dict) -> str:
         recs = ctx["recomendaciones"] or []
         if not recs:
             return (
-                "No tengo lecturas de suelo de esta finca para recomendar abonos. "
-                "Cargue una lectura de sensor o un archivo de mediciones y con gusto le digo qué aplicar."
+                "No tengo lecturas de suelo de esta finca para recomendarle abonos. "
+                "Cargue una lectura de sensor o un archivo de mediciones, y con gusto le digo "
+                "qué necesita su tierra y cómo aplicarlo."
             )
         principales = [r for r in recs if str(r.get("estado") or "").upper() in ("DEFICIT", "EXCESO")][:4]
         if not principales:
-            return ("Su suelo está bien nutrido por ahora; no es necesario abonar de más. "
-                    "Mantenga la materia orgánica y haga un análisis cada 6 meses.")
-        partes = ["Le cuento qué necesita su tierra:"]
-        for r in principales:
-            partes.append(f"• {_nombre_rec(r)}: {r.get('accion')}")
+            return (
+                "Su suelo está bien nutrido por ahora; no es necesario abonar de más, porque "
+                "echar abono de sobra también daña. Siga así: mantenga la materia orgánica "
+                "(compost o estiércol maduro) y repita el análisis cada 6 meses."
+            )
+        partes = ["Le cuento qué necesita su tierra y cómo ayudarla:"]
+        for i, r in enumerate(principales, 1):
+            nombre = _nombre_rec(r)
+            var = str(r.get("variable") or "").lower().strip()
+            clave = _VAR_MOTOR.get(var, var)
+            estado = str(r.get("estado") or "").upper()
+            como = _consejo_estado(clave, estado)
+            accion = _accion_sin_duplicado(nombre, r.get("accion"))
+            partes.append(f"{i}. {nombre.title()}: {accion}. {como}")
         partes.append(
-            "Recuerde abonar en dos o tres tandas y no todo de un golpe, y preferir "
-            "abonos orgánicos maduros cuando sea posible."
+            "Consejo general: el abono rinde más repartido en dos o tres tandas que todo de "
+            "un solo golpe, y siempre pegado a la zona de la raíz o al voleo antes de un riego."
         )
+        if rol == "cliente":
+            partes.append(
+                "Si le quedan dudas con las cantidades, lleve este análisis a la UMATA o a la "
+                "agropecuaria de confianza y allá le calculan la dosis exacta para su lote."
+            )
         return " ".join(partes)
 
     # ── Reporte / explicación general ──
     if re.search(r"(reporte|explic|resum|análisis|analisis|cómo está|como esta)", texto):
         clas = ctx["clasificacion"] or "sin clasificar"
         recs = ctx["recomendaciones"] or []
-        resumen = (
-            f"Su suelo está clasificado como {clas}. "
-            f"{'Las recomendaciones principales del reporte son: ' if recs else 'No hay recomendaciones todavía.'}"
-        )
-        for r in recs[:4]:
-            resumen += f" • {_nombre_rec(r)}: {r.get('accion')}"
-        if not recs:
+        if rol == "cliente":
+            if "no apta" in clas.lower():
+                resumen = (
+                    f"Hablando claro: hoy su tierra no está cómoda para ese cultivo ({clas}). "
+                )
+            elif "apta" in clas.lower():
+                resumen = (
+                    f"Le tengo buenas noticias: su tierra se acomoda bien al cultivo ({clas}). "
+                )
+            else:
+                resumen = f"Su tierra se puede arreglar para ese cultivo ({clas}). "
+        else:
+            resumen = f"El motor clasificó el suelo como {clas}. "
+        if recs:
+            resumen += "Esto es lo más importante del reporte: "
+            for r in recs[:3]:
+                resumen += f" {_nombre_rec(r).title()}: {r.get('accion')}."
+            resumen += (
+                " En el reporte completo verá el mapa de calor del lote, que le muestra en "
+                "colores dónde está bien y dónde hay que corregir, y la sección «En palabras "
+                "del campo» con la explicación sencilla de cada medición."
+            )
+        else:
             resumen += " Genere el reporte con una lectura de sensor para ver el detalle."
         return resumen
 
@@ -380,15 +551,22 @@ def _respuesta_local(mensaje: str, ctx: dict) -> str:
     if recs:
         criticas = [r for r in recs if str(r.get("prioridad") or "").lower() == "critica"]
         if criticas:
-            base = f"Le doy un panorama general de su suelo: lo más urgente es {_nombre_rec(criticas[0])}: {criticas[0].get('accion')} "
+            base = (
+                f"Le doy un panorama general de su suelo. Lo primero que le recomiendo atender "
+                f"es {_nombre_rec(criticas[0])}: {criticas[0].get('accion')} "
+            )
         else:
-            base = "Le doy un panorama general de su suelo: no hay urgencias críticas. "
-        base += ("Puedo responderle con detalle sobre: cómo abonar, qué sembrar, el pH, "
-                 "el riego o cualquier nutriente en particular (nitrógeno, fósforo, potasio, calcio…).")
+            base = "Le doy un panorama general de su suelo: no hay urgencias críticas, vamos bien. "
+        base += (
+            "Si quiere, puedo contarle con detalle: cómo abonar, qué sembrar, cómo está la "
+            "acidez (el pH), el riego, o cualquier nutriente en particular (nitrógeno, fósforo, "
+            "potasio, calcio…). Solo dígame de cuál quiere saber."
+        )
         return base
     return (
         "Todavía no tengo lecturas de suelo de esta finca para aconsejarlo. "
-        "Genere primero el reporte (o cargue una lectura de sensor) y vuelva a preguntarme."
+        "Genere primero el reporte (o cargue una lectura de sensor) y vuelva a preguntarme: "
+        "aquí estaré para explicarle todo paso a paso."
     )
 
 
@@ -449,4 +627,5 @@ def contexto_resumido(ctx: dict) -> dict:
         "sugerencias": ctx.get("sugerencias") or [],
         "clasificacion": ctx.get("clasificacion"),
         "lectura": lectura_vals,
+        "rol": ctx.get("rol") or "cliente",
     }

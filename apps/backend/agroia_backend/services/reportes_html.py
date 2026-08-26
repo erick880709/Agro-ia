@@ -106,6 +106,12 @@ _CSS = """
   .field-talk { background: linear-gradient(180deg, rgba(135,169,92,.06), transparent); }
   .field-talk .block-title { color: var(--moss); }
   .heatmap .heat-var { margin-bottom: 18px; }
+  .heatmap .heat-var.hidden { display: none; }
+  .heat-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .heat-tab { font-family: var(--mono); font-size: .72rem; letter-spacing: .04em;
+    padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line);
+    background: #fff; color: var(--text); cursor: pointer; }
+  .heat-tab.active { background: var(--moss); color: #fff; border-color: var(--moss); }
   .heatmap .heat-title { font-weight: 600; margin-bottom: 6px; }
   .heat-legend { display: flex; align-items: center; gap: 8px; font-size: .78rem; color: var(--muted); margin-bottom: 8px; }
   .heat-legend .chip { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
@@ -333,7 +339,13 @@ def _color_por_estado(valor: float, minimo: float | None, maximo: float | None) 
 
 
 def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> str:
-    """Mapa de calor del lote: una cuadrícula por variable con sus muestras (x, y)."""
+    """Mapa de calor del lote: un solo mapa con selector de parámetro.
+
+    - «Resumen» (por defecto): todas las variables a la vez — cada punto se
+      pinta según cuántas variables están fuera de su rango ideal.
+    - Botones por parámetro: se observa cada variable de manera independiente.
+    - «Ver todos»: despliega los mapas uno debajo del otro (útil para imprimir).
+    """
     if not muestras or len(muestras) < 2:
         return ""
     xs = sorted({m["pos_x"] for m in muestras if m.get("pos_x") is not None})
@@ -357,9 +369,68 @@ def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> s
         return ""
 
     umbrales = umbrales or {}
+
+    def _rango(simbolo):
+        return umbrales.get(simbolo) or umbrales.get(simbolo.lower())
+
+    def _celda(bg: str, texto: str) -> str:
+        r, g, b = _hex_a_rgb(bg)
+        fg = "#263238" if (r * 0.299 + g * 0.587 + b * 0.114) > 150 else "#ffffff"
+        return f'<div class="heat-cell" style="background:{bg};color:{fg}">{esc(texto)}</div>'
+
+    def _grid(celdas_fila: list[str]) -> str:
+        return (
+            f'<div class="heat-grid" style="grid-template-columns:repeat({len(xs)},1fr)">'
+            + "".join(celdas_fila)
+            + "</div>"
+        )
+
+    # ── Mapa resumen: todas las variables a la vez ──
+    filas_resumen = []
+    for y in reversed(ys):  # fila superior = y mayor
+        fila = []
+        for x in xs:
+            m = celdas.get((x, y))
+            if m is None:
+                fila.append(_celda(_GRIS, "·"))
+                continue
+            fuera = dentro = 0
+            for attr, simbolo, _unidad in variables:
+                rango = _rango(simbolo)
+                valor = m.get(attr)
+                if rango is None or valor is None:
+                    continue
+                lo = rango[0] if rango[0] is not None else float("-inf")
+                hi = rango[1] if rango[1] is not None else float("inf")
+                if lo <= valor <= hi:
+                    dentro += 1
+                else:
+                    fuera += 1
+            total = fuera + dentro
+            if total == 0:
+                fila.append(_celda(_GRIS, "·"))
+            else:
+                prop = fuera / total
+                bg = _mezclar(_VERDE, _ROJO, prop)
+                fila.append(_celda(bg, f"{fuera}/{total}"))
+        filas_resumen.append("".join(fila))
+
+    leyenda_resumen = (
+        f'<div class="heat-legend"><span class="chip" style="background:{_VERDE}"></span>todo en orden'
+        f'<span class="chip" style="background:{_mezclar(_VERDE, _ROJO, 0.5)}"></span>algunas variables fuera'
+        f'<span class="chip" style="background:{_ROJO}"></span>muchas variables fuera'
+        '<span class="mono" style="color:var(--muted)">· cada celda muestra: variables fuera del ideal / variables con regla</span></div>'
+    )
+    bloque_resumen = (
+        f'<div class="heat-var" data-var="__resumen__">'
+        f'<div class="heat-title">🧭 Resumen del lote (todas las variables a la vez)</div>'
+        f'{leyenda_resumen}{_grid(filas_resumen)}</div>'
+    )
+
+    # ── Mapas por parámetro (independientes) ──
     bloques = []
     for attr, simbolo, unidad in variables:
-        rango = umbrales.get(simbolo) or umbrales.get(simbolo.lower())
+        rango = _rango(simbolo)
         valores = [m[attr] for m in celdas.values() if m.get(attr) is not None]
         vmin, vmax = min(valores), max(valores)
 
@@ -371,23 +442,16 @@ def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> s
             return _mezclar("#64b5f6", "#e53935", (valor - vmin) / (vmax - vmin))
 
         filas = []
-        for y in reversed(ys):  # fila superior = y mayor
-            celdas_fila = []
+        for y in reversed(ys):
+            fila = []
             for x in xs:
                 m = celdas.get((x, y))
                 valor = m.get(attr) if m else None
                 if valor is None:
-                    bg, fg, texto = _GRIS, "#90a4ae", "·"
+                    fila.append(_celda(_GRIS, "·"))
                 else:
-                    bg = _color(valor)
-                    texto = _num(valor, 1)
-                    # texto oscuro sobre fondos claros (ámbar/gradiente azul), blanco sobre oscuros
-                    r, g, b = _hex_a_rgb(bg)
-                    fg = "#263238" if (r * 0.299 + g * 0.587 + b * 0.114) > 150 else "#ffffff"
-                celdas_fila.append(
-                    f'<div class="heat-cell" style="background:{bg};color:{fg}">{esc(texto)}</div>'
-                )
-            filas.append("".join(celdas_fila))
+                    fila.append(_celda(_color(valor), _num(valor, 1)))
+            filas.append("".join(fila))
 
         if rango:
             lo = "—" if (rango[0] is None) else _num(rango[0], 1)
@@ -405,25 +469,50 @@ def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> s
                 f'background:linear-gradient(90deg,#64b5f6,#f9a825,#e53935)"></span>'
                 f'{_num(vmax, 1)} {esc(unidad)}</div>'
             )
-        grid = (
-            f'<div class="heat-grid" style="grid-template-columns:repeat({len(xs)},1fr)">'
-            + "".join(filas)
-            + "</div>"
-        )
         bloques.append(
-            f'<div class="heat-var"><div class="heat-title">🌡️ {esc(simbolo)}'
-            f'{" · " + esc(unidad) if unidad else ""}</div>{leyenda}{grid}</div>'
+            f'<div class="heat-var hidden" data-var="{esc(str(simbolo).lower())}">'
+            f'<div class="heat-title">🌡️ {esc(simbolo)}'
+            f'{" · " + esc(unidad) if unidad else ""}</div>{leyenda}{_grid(filas)}</div>'
         )
+
+    pestañas = (
+        '<div class="heat-tabs">'
+        '<button type="button" class="heat-tab active" data-var="__resumen__">🧭 Resumen</button>'
+        + "".join(
+            f'<button type="button" class="heat-tab" data-var="{esc(str(simbolo).lower())}">{esc(simbolo)}</button>'
+            for _attr, simbolo, _unidad in variables
+        )
+        + '<button type="button" class="heat-tab" data-var="__todos__">📋 Ver todos</button>'
+        "</div>"
+    )
+
+    script = """
+<script>
+(function () {
+  var tabs = document.querySelectorAll('.heatmap .heat-tab');
+  var vars = document.querySelectorAll('.heatmap .heat-var');
+  function verMapa(v) {
+    tabs.forEach(function (b) { b.classList.toggle('active', b.dataset.var === v); });
+    vars.forEach(function (el) {
+      el.classList.toggle('hidden', v !== '__todos__' && el.dataset.var !== v);
+    });
+  }
+  tabs.forEach(function (b) { b.addEventListener('click', function () { verMapa(b.dataset.var); }); });
+})();
+</script>"""
 
     return f"""
   <section class="block heatmap">
     <div class="block-head"><span class="block-num">M</span>
       <div><div class="block-title">Mapa de calor del lote</div>
-      <div class="block-sub">Muestreo en cuadrícula · {len(xs)} × {len(ys)} tomas ({len(celdas)} puntos)</div></div>
+      <div class="block-sub">Muestreo en cuadrícula · {len(xs)} × {len(ys)} tomas ({len(celdas)} puntos) · seleccione el parámetro a observar</div></div>
     </div>
-    <p class="muted">Cada celda es una toma de muestra en la posición (x, y) del lote;
-    los colores muestran la variación de cada parámetro del suelo entre puntos.</p>
+    <p class="muted">Cada celda es una toma de muestra en la posición (x, y) del lote.
+    Use los botones para ver un parámetro por separado o todos a la vez.</p>
+    {pestañas}
+    {bloque_resumen}
     {''.join(bloques)}
+    {script}
   </section>"""
 
 

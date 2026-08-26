@@ -163,6 +163,7 @@ async def consultar_chat(
         "sugerencias": sugerencias,
         "clasificacion": (uc2.clasificacion_upra if uc2 else (uc1.clasificacion_upra if uc1 else None)),
         "lectura": lectura,
+        "rol": x_user_role or "cliente",
     }
 
     contexto_texto = await construir_contexto(

@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787702399.371122,
-    "ast_hash": "319dd7ab20426667474ed3f198331fa3",
+    "mtime": 1787703367.2056313,
+    "ast_hash": "856f12598e78b7178d9c1bf02ace09ce",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4570,7 +4570,7 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/reportes_html.py": {
-    "mtime": 1787702953.7407,
+    "mtime": 1787703379.323822,
     "ast_hash": "87b107c25f9a6dcd64bc52f4d18c9526",
     "semantic_hash": ""
   },
