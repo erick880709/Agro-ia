@@ -3695,8 +3695,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/main.py": {
-    "mtime": 1787704618.6472702,
-    "ast_hash": "249e85ff69b53d96a951e2c9347e4055",
+    "mtime": 1787707890.2184849,
+    "ast_hash": "bb2c5c92e989e681c8e43ade53206395",
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
@@ -4727,6 +4727,11 @@
   "apps/backend/alembic/versions/008_reparar_enums_sensor.py": {
     "mtime": 1787707445.0401697,
     "ast_hash": "5789e2335563fdc2a8e6b60b89c86002",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/debug_db.py": {
+    "mtime": 1787707885.0755336,
+    "ast_hash": "ff39e96b70a32a9fcb995d42b2fcddeb",
     "semantic_hash": ""
   }
 }

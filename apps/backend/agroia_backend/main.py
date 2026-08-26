@@ -37,7 +37,6 @@ from agroia_backend.api.auth import router as auth_router
 from agroia_backend.api.catalogo import router as catalogo_router
 from agroia_backend.api.chat import router as chat_router
 from agroia_backend.api.dashboard import router as dashboard_router
-from agroia_backend.api.debug_db import router as debug_router  # TEMPORAL
 from agroia_backend.api.fincas import router as fincas_router
 from agroia_backend.api.iot import router as iot_router
 from agroia_backend.api.location import router as location_router
@@ -78,9 +77,6 @@ app.add_middleware(
 
 # ── Health check ──
 app.include_router(health_router, prefix="/api/v1")
-
-# TEMPORAL: diagnóstico de tipos enum (eliminar)
-app.include_router(debug_router)
 
 # ── Error handlers ──
 register_error_handlers(app)

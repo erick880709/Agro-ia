@@ -7,6 +7,7 @@ normaliza las 18 variables de suelo y las persiste en PostgreSQL+TimescaleDB.
 import asyncio
 from datetime import datetime, timezone
 
+import sqlalchemy as sa
 from agroia.config import get_settings
 from agroia.database import async_session_factory
 from agroia.logging import get_logger
@@ -118,6 +119,11 @@ async def process_sensor_message(message: dict) -> bool:
         )
 
         async with async_session_factory() as session:
+            # Red de seguridad: los casts de enum de SQLAlchemy no van
+            # calificados; garantizar el search_path en esta transacción.
+            await session.execute(
+                sa.text("SET LOCAL search_path TO public, agroia")
+            )
             session.add(reading)
 
             # ── Actualizar telemetría del dispositivo ──

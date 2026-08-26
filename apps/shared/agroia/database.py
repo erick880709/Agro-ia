@@ -48,6 +48,10 @@ engine = create_async_engine(
     pool_size=10,
     max_overflow=20,
     pool_pre_ping=True,
+    # `server_settings` es el mecanismo nativo de asyncpg para fijar el
+    # search_path en CADA conexión nueva (el event listener de arriba no
+    # siempre alcanza a ejecutarse en todas las conexiones del pool).
+    connect_args={"server_settings": {"search_path": "public, agroia"}},
 )
 configure_search_path(engine)
 

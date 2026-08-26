@@ -4730,8 +4730,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/debug_db.py": {
-    "mtime": 1787707885.0755336,
-    "ast_hash": "ff39e96b70a32a9fcb995d42b2fcddeb",
+    "mtime": 1787708339.079563,
+    "ast_hash": "748f7c2be7a270df28738fb4d1e03544",
     "semantic_hash": ""
   }
 }
