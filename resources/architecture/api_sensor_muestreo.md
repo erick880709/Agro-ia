@@ -1,0 +1,295 @@
+# AgroIA — Documentación del Servicio de Ingesta de Sensores (muestreo por puntos)
+
+> Guía para el equipo del sensor (firmware ESP32/LoRaWAN) y para el personal de
+> campo: cómo enviar la trama de datos de cada punto de muestreo y cómo se
+> refleja en el mapa de calor del reporte.
+
+---
+
+## 1. Resumen
+
+| Elemento | Valor |
+|---|---|
+| Endpoint | `POST /api/sensor` |
+| Producción | `https://agroia-backend.onrender.com/api/sensor` |
+| Local (desarrollo) | `http://localhost:8000/api/sensor` |
+| Método / Content-Type | `POST` · `application/json` |
+| Respuesta exitosa | `202 Accepted` |
+| Autenticación | No usa token; el sensor se identifica con `device_id` (debe estar registrado o se auto-registra) |
+| Latencia del free tier | La primera petición tras inactividad puede tardar ~50 s (el servicio se "despierta") |
+
+Cada trama representa **una toma de muestra en un punto del lote**. Si se
+incluyen las coordenadas `pos_x` y `pos_y` (posición del punto dentro del
+terreno), la plataforma pinta el **mapa de calor por parámetro** en el reporte.
+
+---
+
+## 2. Formato de la trama (JSON)
+
+```json
+{
+  "device_id": "esp32-npk-001",
+  "pos_x": 20.0,
+  "pos_y": 50.0,
+  "humidity": 72.0,
+  "temperature": 21.2,
+  "conductivity": 620,
+  "ph": 6.1,
+  "nitrogen": 260,
+  "phosphorus": 28,
+  "potassium": 95,
+  "rssi": -45,
+  "uptime_s": 604800
+}
+```
+
+### Campos
+
+| Campo | Tipo | Obligatorio | Unidad | Descripción |
+|---|---|---|---|---|
+| `device_id` | string | ✅ | — | ID único del sensor (ej. `esp32-npk-001`). Si no está registrado, se auto-registra contra la primera finca disponible |
+| `pos_x` | float | ❌ (necesario para el mapa de calor) | metros | Posición X del punto de toma dentro del lote, medida desde una esquina |
+| `pos_y` | float | ❌ (necesario para el mapa de calor) | metros | Posición Y del punto de toma dentro del lote |
+| `ph` | float | ❌ | 0–14 | pH del suelo |
+| `conductivity` | float | ❌ | µS/cm | Conductividad eléctrica (el servidor la convierte a dS/m) |
+| `nitrogen` | float | ❌ | ppm | Nitrógeno (N) |
+| `phosphorus` | float | ❌ | ppm | Fósforo (P) |
+| `potassium` | float | ❌ | ppm | Potasio (K) |
+| `humidity` | float | ❌ | % | Humedad relativa **ambiente** (DHT22). Para humedad del **suelo** use `soil_humidity` |
+| `temperature` | float | ❌ | °C | Temperatura **ambiente**. Para temperatura del **suelo** use `soil_temperature` |
+| `rssi` | int | ❌ | dBm | Señal del enlace de radio |
+| `uptime_s` | int | ❌ | s | Segundos desde encendido del sensor |
+
+- Se aceptan campos extra (no rompen la trama).
+- El servidor normaliza y persiste las 18 variables de suelo canónicas
+  (nitrógeno, fósforo, potasio, calcio, magnesio, azufre, hierro, manganeso,
+  zinc, cobre, boro, materia orgánica, CIC, textura, humedad del suelo,
+  temperatura del suelo, conductividad, pH + ambientales).
+- **NPK sin calibrar**: si el dispositivo no tiene `npk_calibrado`, los valores
+  N/P/K se marcan como "sin calibrar" y el reporte lo advierte.
+
+### Alias aceptados por variable (por si el firmware cambia de nombres)
+
+`n`→nitrógeno, `p`→fósforo, `k`→potasio, `ce`/`ec`→conductividad, `mo`→materia
+orgánica, `soil_humidity`→humedad del suelo, `soil_temperature`→temperatura del
+suelo, etc. El mapa completo está en `services/normalizacion_iot.py::MAPA_CAMPOS`.
+
+> Importante: `humidity` y `temperature` se registran como telemetría
+> **ambiental** del sensor. Si el sensor mide el suelo, enviar
+> `soil_humidity` y `soil_temperature` para alimentar el mapa de calor y el
+> motor de recomendaciones.
+
+---
+
+## 3. Ejemplo de envío
+
+### curl (prueba rápida)
+
+```bash
+curl -X POST https://agroia-backend.onrender.com/api/sensor \
+  -H "Content-Type: application/json" \
+  -d '{
+    "device_id": "esp32-npk-001",
+    "pos_x": 20.0, "pos_y": 50.0,
+    "ph": 6.1, "conductivity": 620,
+    "nitrogen": 260, "phosphorus": 28, "potassium": 95,
+    "humidity": 72.0, "temperature": 21.2,
+    "rssi": -45, "uptime_s": 604800
+  }'
+```
+
+### ESP32 (Arduino / ESP-IDF) — referencia
+
+```cpp
+// Ejemplo con HTTPClient (ESP32 Arduino core)
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <ArduinoJson.h>
+
+const char* API_URL = "https://agroia-backend.onrender.com/api/sensor";
+const char* DEVICE_ID = "esp32-npk-001";
+
+void enviarMedicion(float posX, float posY, float ph, float ceUsCm,
+                    float nPpm, float pPpm, float kPpm,
+                    float hrAmb, float tempAmb, int rssi) {
+  if (WiFi.status() != WL_CONNECTED) return;
+
+  StaticJsonDocument<512> doc;
+  doc["device_id"]  = DEVICE_ID;
+  doc["pos_x"]      = posX;      // metros dentro del lote
+  doc["pos_y"]      = posY;
+  doc["ph"]         = ph;
+  doc["conductivity"] = ceUsCm;  // µS/cm
+  doc["nitrogen"]   = nPpm;      // ppm
+  doc["phosphorus"] = pPpm;
+  doc["potassium"]  = kPpm;
+  doc["humidity"]   = hrAmb;     // %
+  doc["temperature"]= tempAmb;   // °C
+  doc["rssi"]       = rssi;
+  doc["uptime_s"]   = millis() / 1000;
+
+  String body;
+  serializeJson(doc, body);
+
+  HTTPClient http;
+  http.begin(API_URL);
+  http.addHeader("Content-Type", "application/json");
+  int code = http.POST(body);
+  // 202 = aceptada; 4xx = revisar detalle en la respuesta JSON
+  http.end();
+}
+```
+
+---
+
+## 4. Muestreo en cuadrícula (cómo tomar los puntos)
+
+Para que el mapa de calor sea representativo:
+
+1. Divida el lote como una **matriz** (ej. 3×3, 4×3 según el tamaño).
+2. Defina una esquina del lote como origen `(0, 0)`.
+3. Mida las coordenadas de cada punto en **metros** (`pos_x`, `pos_y`).
+4. En cada punto tome la muestra y envíe una trama con esas coordenadas.
+5. Envíe todas las tramas en una sola jornada de muestreo (mismo día) para que
+   el reporte compare puntos comparables.
+
+Ejemplo de cuadrícula 3×3 en un lote de 250 × 100 m:
+
+```
+(0,100) ─────────────── (250,100)
+  │  x=20   x=125  x=230   │
+  │ y=90   y=90   y=90     │
+  │  ●──────●──────●       │
+  │  │      │      │       │
+  │ y=50   y=50   y=50     │
+  │  ●──────●──────●       │
+  │  │      │      │       │
+  │ y=10   y=10   y=10     │
+  │  ●──────●──────●       │
+(0,0) ───────────────── (250,0)
+```
+
+> El reporte muestra una celda por punto: verde = dentro del rango ideal,
+> ámbar = cerca, rojo = fuera; y una vista «Resumen» con cuántas variables
+> están fuera del ideal en cada punto.
+
+---
+
+## 5. Respuesta del servidor
+
+### Éxito — `202 Accepted`
+
+```json
+{
+  "status": "accepted",
+  "device_id": "esp32-npk-001",
+  "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
+  "auto_registrado": false,
+  "variables_recibidas": ["ph", "nitrogeno", "potasio", "fosforo", "conductividad_electrica", ...],
+  "advertencias": [],
+  "recibida_en": "2026-08-25T22:00:00+00:00"
+}
+```
+
+- `auto_registrado: true` → el `device_id` no existía y quedó asociado a la
+  **primera finca** registrada. Para asociarlo a la finca correcta use el
+  endpoint de registro de dispositivos (sección 7).
+- `advertencias` → por ejemplo `["npk_sin_calibrar"]` cuando N/P/K no están
+  calibrados contra laboratorio.
+
+### Errores
+
+| HTTP | `code` | Significado |
+|---|---|---|
+| `422` | `NO_FINCAS` | No hay fincas registradas y el dispositivo es desconocido (no se pudo auto-registrar) |
+| `422` | `INGEST_ERROR` | Error interno al persistir la trama |
+| `422` | (validación) | `device_id` ausente o campos con tipo incorrecto |
+
+---
+
+## 6. Calibración NPK
+
+Si el sensor NPK fue calibrado contra un laboratorio, regístrelo así y la
+plataforma aplica los **factores de calibración** a cada trama:
+
+```json
+POST /api/v1/iot/dispositivos
+{
+  "device_id": "esp32-npk-001",
+  "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
+  "nombre": "Sensor cuadrícula lote 1",
+  "npk_calibrado": true
+}
+```
+
+---
+
+## 7. Registro de dispositivos (evitar auto-registro a la finca equivocada)
+
+```bash
+curl -X POST https://agroia-backend.onrender.com/api/v1/iot/dispositivos \
+  -H "Content-Type: application/json" \
+  -d '{"device_id":"esp32-npk-001","finca_id":"UUID_DE_LA_FINCA","nombre":"Sensor 1","npk_calibrado":false}'
+```
+
+El `finca_id` se obtiene del administrador de la plataforma (pestaña Fincas).
+
+---
+
+## 8. Carga por archivo (alternativa sin conexión)
+
+Cuando el sensor no tiene señal, las tramas pueden exportarse a un archivo y
+subirse manualmente: `POST /api/v1/iot/carga` (multipart: `file` + `finca_id`
+opcional). Formatos aceptados:
+
+### CSV ancho con varias filas (una fila = un punto de muestreo)
+
+```csv
+x,y,ph,conductividad,n,p,k,humedad,temperatura
+20,90,5.6,410,250,20,75,25,18.0
+125,90,5.9,470,230,24,85,29,18.8
+230,90,6.2,530,210,28,95,33,19.6
+20,50,5.9,480,225,23,83,28,18.5
+125,50,6.2,540,205,27,93,32,19.3
+230,50,6.4,600,185,31,103,36,20.1
+20,10,6.2,550,195,26,91,31,19.2
+125,10,6.4,610,175,30,101,35,20.0
+230,10,6.7,670,155,34,111,39,20.8
+```
+
+(Se aceptan también los nombres `pos_x,pos_y`, `coordenada_x,coordenada_y`,
+`columna,fila`.)
+
+### JSON — lista de tramas (una por punto)
+
+```json
+[
+  {"device_id":"esp32-npk-001","x":20,"y":90,"ph":5.6,"conductivity":410,"nitrogen":250},
+  {"device_id":"esp32-npk-001","x":125,"y":90,"ph":5.9,"conductivity":470,"nitrogen":230}
+]
+```
+
+Respuesta: `{status:"accepted", numero_muestras: 9, variables_recibidas:[...], analisis:{...}}`.
+La carga ejecuta el análisis al instante y deja las muestras listas para el reporte.
+
+---
+
+## 9. Dónde se ve el resultado
+
+1. **Reporte** (`Reportes → Generar reporte`): sección **«M — Mapa de calor del
+   lote»** con pestañas por parámetro (pH, N, P, K, humedad…) y vista
+   «🧭 Resumen» con todas las variables a la vez.
+2. **Chat agronómico**: el asesor usa esas mismas lecturas con posición para
+   responder "¿cómo está el lote por sectores?".
+3. **Historial / sensores**: cada lectura queda en la serie temporal de la finca.
+
+---
+
+## 10. Notas operativas
+
+- Envíe cada punto con **reloj UTC o sin zona**; el servidor marca la recepción.
+- Free tier: si el servicio está dormido, la primera trama puede tardar ~50 s;
+  las siguientes son inmediatas. Use reintentos (timeout ≥ 60 s) en el firmware.
+- No envíe más de ~1 trama/segundo por dispositivo.
+- Un `device_id` siempre reporta contra su finca registrada; para cambiar de
+  finca, re-regístrelo con el nuevo `finca_id`.
