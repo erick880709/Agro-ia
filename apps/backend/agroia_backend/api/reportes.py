@@ -125,6 +125,29 @@ async def generar_reporte(
             "missing_variables": e.missing_vars,
         })
 
+    muestras_geo = await _muestras_geo(db, finca_uuid)
+
+    # ── Clima del día de la muestra (IDEAM) ──
+    # Solo si la finca tiene coordenadas de Google; si no, la sección se omite.
+    clima = None
+    if finca.coordenadas_google:
+        from agroia_backend.api.fincas import _extraer_coordenadas
+        from agroia_backend.services.external_apis import fetch_ideam_clima_fecha
+
+        lat, lng = _extraer_coordenadas(finca.coordenadas_google)
+        if lat is not None and lng is not None:
+            fecha_muestreo = None
+            if muestras_geo:
+                con_fecha = [m["ts"] for m in muestras_geo if m.get("ts")]
+                if con_fecha:
+                    fecha_muestreo = max(con_fecha)[:10]
+            fecha_muestreo = fecha_muestreo or (lectura.ts.date().isoformat() if lectura.ts else None)
+            if fecha_muestreo:
+                try:
+                    clima = await fetch_ideam_clima_fecha(lat, lng, fecha_muestreo)
+                except Exception as e:  # noqa: BLE001
+                    logger.warning("clima_ideam_no_disponible", error=str(e))
+
     html = generar_reporte_html(
         finca={
             "nombre": finca.nombre,
@@ -137,6 +160,7 @@ async def generar_reporte(
             "longitud": finca.longitud,
             "largo_metros": finca.largo_metros,
             "ancho_metros": finca.ancho_metros,
+            "coordenadas_google": finca.coordenadas_google,
         },
         lectura={
             "ts": lectura.ts.isoformat() if lectura.ts else None,
@@ -160,8 +184,9 @@ async def generar_reporte(
         tipo=body.tipo,
         uc1=asdict(uc1) if uc1 else None,
         uc2=asdict(uc2) if uc2 else None,
-        muestras=await _muestras_geo(db, finca_uuid),
+        muestras=muestras_geo,
         umbrales=_umbrales_de_analisis(uc1, uc2),
+        clima=clima,
     )
 
     titulo = {
@@ -200,6 +225,8 @@ async def _muestras_geo(db: AsyncSession, finca_uuid) -> list[dict]:
     muestras = []
     for r in lecturas:
         muestra = {"pos_x": r.pos_x, "pos_y": r.pos_y}
+        if r.ts:
+            muestra["ts"] = r.ts.isoformat()
         for attr in _VAR_ATRIBUTOS:
             valor = getattr(r, attr, None)
             if valor is not None:

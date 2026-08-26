@@ -125,6 +125,8 @@ _CSS = """
   .plano-stat { background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px;
     padding: 8px 14px; font-size: .82rem; }
   .plano-stat b { display: block; font-family: var(--mono); font-size: 1.05rem; color: var(--moss); }
+  .clima-muestra { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--line);
+    border-radius: 10px; background: rgba(135,169,92,.07); }
   .ft-intro { font-family: var(--serif); font-size: 1.08rem; margin-bottom: 16px; }
   .ft-sub { font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--moss); margin: 16px 0 8px; }
   .ft-para { font-size: .92rem; }
@@ -569,12 +571,15 @@ def _perimetro_poligono(pts: list[tuple[float, float]]) -> float:
     return total
 
 
-def _seccion_plano_lote(muestras: list[dict] | None, finca: dict | None) -> str:
+def _seccion_plano_lote(muestras: list[dict] | None, finca: dict | None, clima: dict | None = None) -> str:
     """Plano del lote: dibujo de los puntos de muestreo (pos_x, pos_y).
 
     - Los puntos (0, 0) se omiten (sensor sin posición real).
     - La silueta del lote es el cierre convexo de los puntos y de ella se
       estiman el perímetro y el área.
+    - Incluye la fecha de la toma y, si la finca tiene coordenadas de
+      Google, el clima del día de la muestra (IDEAM). Sin coordenadas,
+      la sección de clima se omite.
     """
     if not muestras:
         return ""
@@ -595,11 +600,35 @@ def _seccion_plano_lote(muestras: list[dict] | None, finca: dict | None) -> str:
     def _fmt_area(v: float) -> str:
         return f"{v:,.0f}".replace(",", ".")
 
+    def _fecha_legible(ts: str) -> str:
+        try:
+            from datetime import datetime
+
+            return datetime.fromisoformat(str(ts).replace("Z", "+00:00")).strftime("%d/%m/%Y %H:%M")
+        except (ValueError, TypeError):
+            return str(ts)[:10]
+
+    # Fechas de la toma de muestras (para el plano y las estadísticas)
+    fechas = sorted({str(m["ts"])[:10] for m in muestras if m.get("ts")})
+    fecha_stat = ""
+    if fechas:
+        if len(fechas) == 1:
+            fecha_stat = (
+                f'<div class="plano-stat"><b>{fechas[0][8:10]}/{fechas[0][5:7]}/{fechas[0][:4]}</b>'
+                'fecha de la toma de muestras</div>'
+            )
+        else:
+            fecha_stat = (
+                f'<div class="plano-stat"><b>{fechas[0][8:10]}/{fechas[0][5:7]}/{fechas[0][:4]} → '
+                f'{fechas[-1][8:10]}/{fechas[-1][5:7]}/{fechas[-1][:4]}</b>rango de fechas de toma</div>'
+            )
+
     stats = (
         '<div class="plano-stats">'
         f'<div class="plano-stat"><b>{_fmt_area(perimetro)} m</b>perímetro estimado</div>'
         f'<div class="plano-stat"><b>{_fmt_area(area_m2)} m²</b>área estimada ({_num(area_m2 / 10000, 3)} ha)</div>'
         f'<div class="plano-stat"><b>{len(puntos)}</b>puntos de muestreo</div>'
+        f'{fecha_stat}'
     )
     area_reg = (finca or {}).get("area_hectareas")
     if area_reg:
@@ -681,11 +710,15 @@ def _seccion_plano_lote(muestras: list[dict] | None, finca: dict | None) -> str:
             f'<polygon points="{pts_hull}" fill="rgba(135,169,92,.22)" '
             'stroke="#6f8f4f" stroke-width="2"/>'
         )
-    # Puntos de muestreo
+    # Puntos de muestreo (con la fecha de la toma en el tooltip)
     for i, (x, y) in enumerate(sorted(puntos), start=1):
+        m = next((s for s in muestras if s.get("pos_x") == x and s.get("pos_y") == y), None)
+        titulo = f'x={x:g} m, y={y:g} m' + (
+            f' · toma {_fecha_legible(m["ts"])}' if m and m.get("ts") else ""
+        )
         partes_svg.append(
             f'<circle cx="{X(x):.1f}" cy="{Y(y):.1f}" r="4.2" fill="#2e5d34" '
-            'stroke="#fff" stroke-width="1.4"/>'
+            'stroke="#fff" stroke-width="1.4"><title>' + titulo + "</title></circle>"
         )
         partes_svg.append(
             f'<text x="{X(x) + 7:.1f}" y="{Y(y) - 6:.1f}" font-size="8.5" fill="#37474f">'
@@ -702,18 +735,102 @@ def _seccion_plano_lote(muestras: list[dict] | None, finca: dict | None) -> str:
         '<p class="muted">Los puntos con posición (0, 0) se omiten: '
         'corresponden a tramas del sensor sin coordenada real del punto de toma.</p>'
     )
+
+    # ── Clima del día de la muestra (solo si la finca tiene coordenadas) ──
+    clima_html = ""
+    if clima:
+        clima_html = _bloque_clima_muestra(clima, fechas)
+
     return f"""
   <section class="block plano-lote">
     <div class="block-head"><span class="block-num">N</span>
       <div><div class="block-title">Plano del lote — puntos de muestreo</div>
       <div class="block-sub">Forma estimada del lote a partir de las coordenadas (x, y) de cada toma</div></div>
     </div>
-    <p class="muted">Cada punto numerado es un sitio donde se tomó una muestra. La silueta verde
-    es la forma del lote que encierran los puntos; de ella se estiman el perímetro y el área.</p>
+    <p class="muted">Cada punto numerado es un sitio donde se tomó una muestra (pase el cursor para ver su fecha).
+    La silueta verde es la forma del lote que encierran los puntos; de ella se estiman el perímetro y el área.</p>
     {stats}
     {svg}
+    {clima_html}
     {nota_cero}
   </section>"""
+
+
+def _bloque_clima_muestra(clima: dict, fechas: list[str]) -> str:
+    """Bloque de clima del día de la muestra (IDEAM) + notas para recomendaciones."""
+    tmin = clima.get("temperatura_min")
+    tmax = clima.get("temperatura_max")
+    tprom = clima.get("temperatura_promedio")
+    precip = clima.get("precipitacion_estimada_mm", clima.get("precipitacion"))
+    hum = clima.get("humedad_relativa", clima.get("humedad"))
+    fuente = clima.get("fuente") or "IDEAM"
+    fecha_txt = ""
+    if fechas:
+        fecha_txt = f'{fechas[-1][8:10]}/{fechas[-1][5:7]}/{fechas[-1][:4]}'
+
+    def _tile(valor, unidad, etiqueta):
+        if valor is None:
+            return ""
+        return f'<div class="plano-stat"><b>{_num(valor, 1)} {esc(unidad)}</b>{esc(etiqueta)}</div>'
+
+    tiles = (
+        '<div class="plano-stats">'
+        + _tile(tmin, "°C", "temperatura mínima")
+        + _tile(tmax, "°C", "temperatura máxima")
+        + _tile(tprom, "°C", "temperatura promedio")
+        + _tile(precip, "mm/mes", "precipitación estimada")
+        + _tile(hum, "%", "humedad relativa")
+        + "</div>"
+    )
+
+    notas = []
+    try:
+        p = float(precip) if precip is not None else 0.0
+    except (TypeError, ValueError):
+        p = 0.0
+    try:
+        h = float(hum) if hum is not None else 0.0
+    except (TypeError, ValueError):
+        h = 0.0
+    try:
+        t = float(tprom) if tprom is not None else 20.0
+    except (TypeError, ValueError):
+        t = 20.0
+    if p >= 200:
+        notas.append(
+            "Mes de la toma con lluvias altas: el suelo pudo estar húmedo y los nutrientes "
+            "móviles (N, K) pudieron lavarse; considere fraccionar la fertilización."
+        )
+    elif p <= 60:
+        notas.append(
+            "Mes de la toma seco: la lectura refleja el suelo sin agua reciente; "
+            "interprete la conductividad y humedad con cautela."
+        )
+    if h >= 80:
+        notas.append(
+            "Humedad relativa alta: mayor riesgo de enfermedades fúngicas; "
+            "vigile el cultivo y evite riegos excesivos."
+        )
+    if t < 10 or t > 32:
+        notas.append(
+            f"Temperatura promedio de {_num(t, 1)} °C fuera del rango confortable para la "
+            "mayoría de cultivos de la zona; tenga en cuenta el estrés térmico."
+        )
+    if not notas:
+        notas.append(
+            "Condiciones climáticas del mes dentro de lo normal para la zona: "
+            "las recomendaciones del reporte aplican sin ajustes por clima."
+        )
+
+    lista_notas = "".join(f"<li>{n}</li>" for n in notas)
+    return f"""
+    <div class="clima-muestra">
+      <div class="heat-title">🌦️ Clima del día de la muestra{f' — {esc(fecha_txt)}' if fecha_txt else ''}</div>
+      {tiles}
+      <p class="muted">Fuente: {esc(fuente)}</p>
+      <div class="heat-title">Cómo usar estos datos en las recomendaciones</div>
+      <ul class="warnings">{lista_notas}</ul>
+    </div>"""
 
 
 def generar_reporte_html(
@@ -726,6 +843,7 @@ def generar_reporte_html(
     uc2: dict | None,
     muestras: list | None = None,
     umbrales: dict | None = None,
+    clima: dict | None = None,
 ) -> str:
     """Construye el documento HTML completo del reporte."""
     fecha = datetime.now(timezone.utc).astimezone().strftime("%d/%m/%Y %H:%M")
@@ -744,8 +862,8 @@ def generar_reporte_html(
     # Mapa de calor del lote (muestreo en cuadrícula con posiciones x, y)
     seccion_mapa = _seccion_mapa_calor(muestras, umbrales)
 
-    # Plano del lote (puntos de muestreo + silueta + perímetro/área)
-    seccion_plano = _seccion_plano_lote(muestras, finca)
+    # Plano del lote (puntos de muestreo + silueta + perímetro/área + clima)
+    seccion_plano = _seccion_plano_lote(muestras, finca, clima)
 
     # Explicación en lenguaje campesino (siempre que haya análisis)
     explicacion_campo = generar_explicacion_campesina(uc1=uc1, uc2=uc2, lectura=lectura)

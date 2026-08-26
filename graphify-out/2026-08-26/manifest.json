@@ -3695,8 +3695,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/main.py": {
-    "mtime": 1787708559.6184285,
-    "ast_hash": "249e85ff69b53d96a951e2c9347e4055",
+    "mtime": 1787748799.846471,
+    "ast_hash": "25942b7cfdd3bfbd64a440e8253f3eaf",
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
@@ -4762,6 +4762,11 @@
   "reports/reporte_prod_final.html": {
     "mtime": 1787747897.9051135,
     "ast_hash": "5759741b080b66d3a266236bd0276bb5",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/asegurar_enums.py": {
+    "mtime": 1787748799.8482885,
+    "ast_hash": "de4e26dc5d0dfcb39bfc6fe947be6945",
     "semantic_hash": ""
   }
 }

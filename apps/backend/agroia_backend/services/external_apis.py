@@ -188,6 +188,44 @@ async def fetch_ideam_climate(
         return None
 
 
+async def fetch_ideam_clima_fecha(lat: float, lon: float, fecha: str) -> dict:
+    """Clima del día de la muestra (fecha en formato ISO o YYYY-MM-DD).
+
+    1) API IDEAM (estación cercana) si está configurada y responde.
+    2) Fallback: climatología de referencia del IDEAM (Atlas 1981-2010)
+       ajustada al mes de la fecha de la muestra.
+    """
+    api = await fetch_ideam_climate(lat, lon)
+    if api and (api.get("temperatura") is not None or api.get("precipitacion") is not None):
+        api["fuente"] = "IDEAM (estación cercana)"
+        api["fecha"] = fecha
+        return api
+
+    offline = await fetch_ideam_climate_offline(lat, lon)
+    try:
+        d = datetime.fromisoformat(str(fecha).replace("Z", "+00:00"))
+    except (ValueError, TypeError):
+        d = datetime.utcnow()
+    mes = d.month
+    # Dos temporadas de lluvia (abr-may, oct-nov) y dos secas (ene-feb, jul-ago)
+    rain_factor = 1.5 if mes in (4, 5, 10, 11) else 0.5 if mes in (1, 2, 7, 8) else 1.0
+    estacional = 1.0 + (0.10 if mes in (12, 1, 2) else -0.08 if mes in (6, 7, 8) else 0.0)
+    return {
+        "fuente": "IDEAM — Atlas Climatológico 1981-2010 (referencia del mes)",
+        "region": offline.get("region"),
+        "fecha": fecha,
+        "temperatura_min": round(offline["temperatura_min"] * estacional, 0),
+        "temperatura_max": round(offline["temperatura_max"] * estacional, 0),
+        "temperatura_promedio": round(offline["temperatura_promedio"] * estacional, 1),
+        "precipitacion_estimada_mm": round(offline["precipitacion_mensual_estimada"] * rain_factor, 0),
+        "humedad_relativa": offline["humedad_relativa"],
+        "nota": (
+            "Referencia climatológica del mes de la muestra; "
+            "configure IDEAM_API_KEY para datos observados del día."
+        ),
+    }
+
+
 # ═══════════════════════════════════════════════════════════════
 # Google Maps GIS — Geolocalización (on-demand)
 # ═══════════════════════════════════════════════════════════════
