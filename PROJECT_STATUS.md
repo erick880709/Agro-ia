@@ -51,7 +51,8 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 
 - El reporte incluye la sección **«M» — Mapa de calor del lote** con **selector de parámetro**: pestañas «🧭 Resumen» (todas las variables a la vez — cada punto se pinta según cuántas variables están fuera de su rango), una pestaña por variable (independiente) y «📋 Ver todos» (apilados, para imprimir).
 - **Regla de intensidad por parámetro**: cada variable usa su propia escala min→max del lote; la celda más intensa (verde oscuro) = valor más alto y la más clara = valor más bajo. La leyenda muestra el gradiente con min/max y el rango ideal de referencia.
-- **PDF / impresión**: vía `@media print` el reporte muestra **cada matriz por parámetro apilada** (sin pestañas y sin la vista unificada); la vista unificada «Resumen» es solo para la aplicación.
+- **PDF / impresión**: vía `@media print` el reporte muestra **cada matriz por parámetro apilada** (sin pestañas y sin la vista unificada); la vista unificada «Resumen» es solo para la aplicación. Cada matriz usa `break-inside: avoid`.
+- **Plano del lote (sección N)**: dibujo SVG de los puntos de muestreo (`pos_x`/`pos_y`; los puntos (0,0) se omiten), silueta del lote como cierre convexo y estimación de **perímetro (m) y área (m²/ha)**; se compara con el área registrada de la finca. Demo sembrada con `demo-lote-forma` (13 puntos en local y producción).
 - Ingesta con posición: `POST /api/sensor` acepta `pos_x`/`pos_y`; la carga de archivo acepta columnas `x,y` (o `pos_x,pos_y`) con varias filas (una por toma) en CSV ancho o JSON array de muestras.
 - Modelo: `sensor_readings.pos_x/pos_y` (migración `006_posiciones_muestreo`); demo sembrada con cuadrícula 3×3 (`seed_demo_integral.py`).
 
@@ -68,6 +69,7 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 
 - **Render Blueprint** (`render.yaml`): web service Docker desde `apps/backend/Dockerfile`, health check `/api/v1/health`, migraciones `alembic upgrade head` automáticas al arrancar el contenedor (Render free no permite `preDeployCommand`).
 - **Neon** (`agroia`): Postgres free con SSL. El backend normaliza la URL (`sslmode=require` → `ssl=require`, solo asyncpg) y pone `agroia` en el `search_path` de cada conexión.
+- **Auto-reparación de enums al arranque** (`services/asegurar_enums.py`): si la BD externa fue reiniciada/restaurada después de las migraciones, la API recrea los tipos enum faltantes en cada arranque (además de las migraciones `008_reparar_enums_sensor` y `009_reparar_enums_2`).
 - **Datos sembrados**: 30 cultivos, 23 reglas, usuarios (admin/agrónomo/cliente), 4 fincas y finca demo integral con lecturas. Scripts: `load_seeds.py`, `scripts/seed_cloud.py`, `scripts/seed_demo_integral.py` (apuntan a `DATABASE_URL`).
 
 ### Migraciones destacadas

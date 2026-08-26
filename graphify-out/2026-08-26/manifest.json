@@ -4753,5 +4753,15 @@
     "mtime": 1787747759.802459,
     "ast_hash": "ca421935f95e8219b48c99d59a0d4b5f",
     "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/009_reparar_enums_2.py": {
+    "mtime": 1787748318.5315328,
+    "ast_hash": "614ecc4764ff7b2bc74e416946ef0779",
+    "semantic_hash": ""
+  },
+  "reports/reporte_prod_final.html": {
+    "mtime": 1787747897.9051135,
+    "ast_hash": "5759741b080b66d3a266236bd0276bb5",
+    "semantic_hash": ""
   }
 }
