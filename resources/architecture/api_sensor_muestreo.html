@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroIA · Documentación del Servicio de Ingesta de Sensores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600;9..144,900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --moss:#1e5c2e; --moss-soft:#eef6ef; --line:#e3e9e4; --muted:#5a725e;
+  --amber:#f9a825; --text:#1d3322; }
+* { box-sizing: border-box; }
+body { margin:0; font-family:'IBM Plex Sans',system-ui,Segoe UI,sans-serif;
+  color:var(--text); background:#f6f9f6; line-height:1.6; }
+.sheet { max-width:860px; margin:0 auto; padding:48px 40px 72px; background:#fff; }
+header.specimen { display:flex; justify-content:space-between; align-items:flex-end;
+  border-bottom:1px solid var(--line); padding-bottom:18px; margin-bottom:28px; }
+.brand { font-family:Fraunces,Georgia,serif; font-size:1.6rem; font-weight:600; }
+.brand em { color:var(--moss); font-style:normal; }
+.kicker { font-family:Consolas,monospace; font-size:.7rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--muted); }
+h1 { font-family:Fraunces,Georgia,serif; font-size:1.9rem; line-height:1.2; }
+h2 { font-family:Fraunces,Georgia,serif; font-size:1.3rem; margin-top:2.2em;
+  border-bottom:1px solid var(--line); padding-bottom:6px; color:var(--moss); }
+h3 { font-size:1.05rem; margin-top:1.6em; }
+p, li { font-size:.95rem; }
+code { font-family:Consolas,monospace; font-size:.85em; background:var(--moss-soft);
+  padding:2px 6px; border-radius:4px; }
+pre { background:#102318; color:#e8f5e9; padding:16px 18px; border-radius:8px;
+  overflow-x:auto; font-size:.85rem; }
+pre code { background:none; color:inherit; padding:0; }
+table { border-collapse:collapse; width:100%; margin:16px 0; font-size:.88rem; }
+th { background:var(--moss); color:#fff; text-align:left; padding:8px 10px; }
+td { border:1px solid var(--line); padding:8px 10px; vertical-align:top; }
+tr:nth-child(even) td { background:#fbfdfb; }
+blockquote { margin:16px 0; padding:10px 16px; border-left:4px solid var(--moss);
+  background:var(--moss-soft); border-radius:0 8px 8px 0; }
+blockquote p { margin:.3em 0; }
+hr { border:none; border-top:1px solid var(--line); margin:2em 0; }
+a { color:var(--moss); }
+footer { text-align:center; color:var(--muted); font-size:.8rem; padding:24px; }
+@media print { body { background:#fff; } .sheet { max-width:none; padding:0; } }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <header class="specimen">
+    <div>
+      <div class="brand">Agro<em>IA</em></div>
+      <div class="kicker">Documentación técnica · servicio de ingesta de sensores</div>
+    </div>
+    <div class="kicker">AgroInteligente Colombia · v0.1.0</div>
+  </header>
+  <h1 id="agroia-documentacion-del-servicio-de-ingesta-de-sensores-muestreo-por-puntos">AgroIA — Documentación del Servicio de Ingesta de Sensores (muestreo por puntos)</h1>
+<blockquote>
+<p>Guía para el equipo del sensor (firmware ESP32/LoRaWAN) y para el personal de
+campo: cómo enviar la trama de datos de cada punto de muestreo y cómo se
+refleja en el mapa de calor del reporte.</p>
+</blockquote>
+<hr />
+<h2 id="1-resumen">1. Resumen</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Endpoint</td>
+<td><code>POST /api/sensor</code></td>
+</tr>
+<tr>
+<td>Producción</td>
+<td><code>https://agroia-backend.onrender.com/api/sensor</code></td>
+</tr>
+<tr>
+<td>Local (desarrollo)</td>
+<td><code>http://localhost:8000/api/sensor</code></td>
+</tr>
+<tr>
+<td>Método / Content-Type</td>
+<td><code>POST</code> · <code>application/json</code></td>
+</tr>
+<tr>
+<td>Respuesta exitosa</td>
+<td><code>202 Accepted</code></td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>No usa token; el sensor se identifica con <code>device_id</code> (debe estar registrado o se auto-registra)</td>
+</tr>
+<tr>
+<td>Latencia del free tier</td>
+<td>La primera petición tras inactividad puede tardar ~50 s (el servicio se "despierta")</td>
+</tr>
+</tbody>
+</table>
+<p>Cada trama representa <strong>una toma de muestra en un punto del lote</strong>. Si se
+incluyen las coordenadas <code>pos_x</code> y <code>pos_y</code> (posición del punto dentro del
+terreno), la plataforma pinta el <strong>mapa de calor por parámetro</strong> en el reporte.</p>
+<hr />
+<h2 id="2-formato-de-la-trama-json">2. Formato de la trama (JSON)</h2>
+<pre><code class="language-json">{
+  &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
+  &quot;pos_x&quot;: 20.0,
+  &quot;pos_y&quot;: 50.0,
+  &quot;humidity&quot;: 72.0,
+  &quot;temperature&quot;: 21.2,
+  &quot;conductivity&quot;: 620,
+  &quot;ph&quot;: 6.1,
+  &quot;nitrogen&quot;: 260,
+  &quot;phosphorus&quot;: 28,
+  &quot;potassium&quot;: 95,
+  &quot;rssi&quot;: -45,
+  &quot;uptime_s&quot;: 604800
+}
+</code></pre>
+<h3 id="campos">Campos</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo</th>
+<th>Obligatorio</th>
+<th>Unidad</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>device_id</code></td>
+<td>string</td>
+<td>✅</td>
+<td>—</td>
+<td>ID único del sensor (ej. <code>esp32-npk-001</code>). Si no está registrado, se auto-registra contra la primera finca disponible</td>
+</tr>
+<tr>
+<td><code>pos_x</code></td>
+<td>float</td>
+<td>❌ (necesario para el mapa de calor)</td>
+<td>metros</td>
+<td>Posición X del punto de toma dentro del lote, medida desde una esquina</td>
+</tr>
+<tr>
+<td><code>pos_y</code></td>
+<td>float</td>
+<td>❌ (necesario para el mapa de calor)</td>
+<td>metros</td>
+<td>Posición Y del punto de toma dentro del lote</td>
+</tr>
+<tr>
+<td><code>ph</code></td>
+<td>float</td>
+<td>❌</td>
+<td>0–14</td>
+<td>pH del suelo</td>
+</tr>
+<tr>
+<td><code>conductivity</code></td>
+<td>float</td>
+<td>❌</td>
+<td>µS/cm</td>
+<td>Conductividad eléctrica (el servidor la convierte a dS/m)</td>
+</tr>
+<tr>
+<td><code>nitrogen</code></td>
+<td>float</td>
+<td>❌</td>
+<td>ppm</td>
+<td>Nitrógeno (N)</td>
+</tr>
+<tr>
+<td><code>phosphorus</code></td>
+<td>float</td>
+<td>❌</td>
+<td>ppm</td>
+<td>Fósforo (P)</td>
+</tr>
+<tr>
+<td><code>potassium</code></td>
+<td>float</td>
+<td>❌</td>
+<td>ppm</td>
+<td>Potasio (K)</td>
+</tr>
+<tr>
+<td><code>humidity</code></td>
+<td>float</td>
+<td>❌</td>
+<td>%</td>
+<td>Humedad relativa <strong>ambiente</strong> (DHT22). Para humedad del <strong>suelo</strong> use <code>soil_humidity</code></td>
+</tr>
+<tr>
+<td><code>temperature</code></td>
+<td>float</td>
+<td>❌</td>
+<td>°C</td>
+<td>Temperatura <strong>ambiente</strong>. Para temperatura del <strong>suelo</strong> use <code>soil_temperature</code></td>
+</tr>
+<tr>
+<td><code>rssi</code></td>
+<td>int</td>
+<td>❌</td>
+<td>dBm</td>
+<td>Señal del enlace de radio</td>
+</tr>
+<tr>
+<td><code>uptime_s</code></td>
+<td>int</td>
+<td>❌</td>
+<td>s</td>
+<td>Segundos desde encendido del sensor</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Se aceptan campos extra (no rompen la trama).</li>
+<li>El servidor normaliza y persiste las 18 variables de suelo canónicas
+  (nitrógeno, fósforo, potasio, calcio, magnesio, azufre, hierro, manganeso,
+  zinc, cobre, boro, materia orgánica, CIC, textura, humedad del suelo,
+  temperatura del suelo, conductividad, pH + ambientales).</li>
+<li><strong>NPK sin calibrar</strong>: si el dispositivo no tiene <code>npk_calibrado</code>, los valores
+  N/P/K se marcan como "sin calibrar" y el reporte lo advierte.</li>
+</ul>
+<h3 id="alias-aceptados-por-variable-por-si-el-firmware-cambia-de-nombres">Alias aceptados por variable (por si el firmware cambia de nombres)</h3>
+<p><code>n</code>→nitrógeno, <code>p</code>→fósforo, <code>k</code>→potasio, <code>ce</code>/<code>ec</code>→conductividad, <code>mo</code>→materia
+orgánica, <code>soil_humidity</code>→humedad del suelo, <code>soil_temperature</code>→temperatura del
+suelo, etc. El mapa completo está en <code>services/normalizacion_iot.py::MAPA_CAMPOS</code>.</p>
+<blockquote>
+<p>Importante: <code>humidity</code> y <code>temperature</code> se registran como telemetría
+<strong>ambiental</strong> del sensor. Si el sensor mide el suelo, enviar
+<code>soil_humidity</code> y <code>soil_temperature</code> para alimentar el mapa de calor y el
+motor de recomendaciones.</p>
+</blockquote>
+<hr />
+<h2 id="3-ejemplo-de-envio">3. Ejemplo de envío</h2>
+<h3 id="curl-prueba-rapida">curl (prueba rápida)</h3>
+<pre><code class="language-bash">curl -X POST https://agroia-backend.onrender.com/api/sensor \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{
+    &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
+    &quot;pos_x&quot;: 20.0, &quot;pos_y&quot;: 50.0,
+    &quot;ph&quot;: 6.1, &quot;conductivity&quot;: 620,
+    &quot;nitrogen&quot;: 260, &quot;phosphorus&quot;: 28, &quot;potassium&quot;: 95,
+    &quot;humidity&quot;: 72.0, &quot;temperature&quot;: 21.2,
+    &quot;rssi&quot;: -45, &quot;uptime_s&quot;: 604800
+  }'
+</code></pre>
+<h3 id="esp32-arduino-esp-idf-referencia">ESP32 (Arduino / ESP-IDF) — referencia</h3>
+<pre><code class="language-cpp">// Ejemplo con HTTPClient (ESP32 Arduino core)
+#include &lt;WiFi.h&gt;
+#include &lt;HTTPClient.h&gt;
+#include &lt;ArduinoJson.h&gt;
+
+const char* API_URL = &quot;https://agroia-backend.onrender.com/api/sensor&quot;;
+const char* DEVICE_ID = &quot;esp32-npk-001&quot;;
+
+void enviarMedicion(float posX, float posY, float ph, float ceUsCm,
+                    float nPpm, float pPpm, float kPpm,
+                    float hrAmb, float tempAmb, int rssi) {
+  if (WiFi.status() != WL_CONNECTED) return;
+
+  StaticJsonDocument&lt;512&gt; doc;
+  doc[&quot;device_id&quot;]  = DEVICE_ID;
+  doc[&quot;pos_x&quot;]      = posX;      // metros dentro del lote
+  doc[&quot;pos_y&quot;]      = posY;
+  doc[&quot;ph&quot;]         = ph;
+  doc[&quot;conductivity&quot;] = ceUsCm;  // µS/cm
+  doc[&quot;nitrogen&quot;]   = nPpm;      // ppm
+  doc[&quot;phosphorus&quot;] = pPpm;
+  doc[&quot;potassium&quot;]  = kPpm;
+  doc[&quot;humidity&quot;]   = hrAmb;     // %
+  doc[&quot;temperature&quot;]= tempAmb;   // °C
+  doc[&quot;rssi&quot;]       = rssi;
+  doc[&quot;uptime_s&quot;]   = millis() / 1000;
+
+  String body;
+  serializeJson(doc, body);
+
+  HTTPClient http;
+  http.begin(API_URL);
+  http.addHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+  int code = http.POST(body);
+  // 202 = aceptada; 4xx = revisar detalle en la respuesta JSON
+  http.end();
+}
+</code></pre>
+<hr />
+<h2 id="4-muestreo-en-cuadricula-como-tomar-los-puntos">4. Muestreo en cuadrícula (cómo tomar los puntos)</h2>
+<p>Para que el mapa de calor sea representativo:</p>
+<ol>
+<li>Divida el lote como una <strong>matriz</strong> (ej. 3×3, 4×3 según el tamaño).</li>
+<li>Defina una esquina del lote como origen <code>(0, 0)</code>.</li>
+<li>Mida las coordenadas de cada punto en <strong>metros</strong> (<code>pos_x</code>, <code>pos_y</code>).</li>
+<li>En cada punto tome la muestra y envíe una trama con esas coordenadas.</li>
+<li>Envíe todas las tramas en una sola jornada de muestreo (mismo día) para que
+   el reporte compare puntos comparables.</li>
+</ol>
+<p>Ejemplo de cuadrícula 3×3 en un lote de 250 × 100 m:</p>
+<pre><code>(0,100) ─────────────── (250,100)
+  │  x=20   x=125  x=230   │
+  │ y=90   y=90   y=90     │
+  │  ●──────●──────●       │
+  │  │      │      │       │
+  │ y=50   y=50   y=50     │
+  │  ●──────●──────●       │
+  │  │      │      │       │
+  │ y=10   y=10   y=10     │
+  │  ●──────●──────●       │
+(0,0) ───────────────── (250,0)
+</code></pre>
+<blockquote>
+<p>El reporte muestra una celda por punto: verde = dentro del rango ideal,
+ámbar = cerca, rojo = fuera; y una vista «Resumen» con cuántas variables
+están fuera del ideal en cada punto.</p>
+</blockquote>
+<hr />
+<h2 id="5-respuesta-del-servidor">5. Respuesta del servidor</h2>
+<h3 id="exito-202-accepted">Éxito — <code>202 Accepted</code></h3>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;accepted&quot;,
+  &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
+  &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
+  &quot;auto_registrado&quot;: false,
+  &quot;variables_recibidas&quot;: [&quot;ph&quot;, &quot;nitrogeno&quot;, &quot;potasio&quot;, &quot;fosforo&quot;, &quot;conductividad_electrica&quot;, ...],
+  &quot;advertencias&quot;: [],
+  &quot;recibida_en&quot;: &quot;2026-08-25T22:00:00+00:00&quot;
+}
+</code></pre>
+<ul>
+<li><code>auto_registrado: true</code> → el <code>device_id</code> no existía y quedó asociado a la
+  <strong>primera finca</strong> registrada. Para asociarlo a la finca correcta use el
+  endpoint de registro de dispositivos (sección 7).</li>
+<li><code>advertencias</code> → por ejemplo <code>["npk_sin_calibrar"]</code> cuando N/P/K no están
+  calibrados contra laboratorio.</li>
+</ul>
+<h3 id="errores">Errores</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP</th>
+<th><code>code</code></th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>422</code></td>
+<td><code>NO_FINCAS</code></td>
+<td>No hay fincas registradas y el dispositivo es desconocido (no se pudo auto-registrar)</td>
+</tr>
+<tr>
+<td><code>422</code></td>
+<td><code>INGEST_ERROR</code></td>
+<td>Error interno al persistir la trama</td>
+</tr>
+<tr>
+<td><code>422</code></td>
+<td>(validación)</td>
+<td><code>device_id</code> ausente o campos con tipo incorrecto</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-calibracion-npk">6. Calibración NPK</h2>
+<p>Si el sensor NPK fue calibrado contra un laboratorio, regístrelo así y la
+plataforma aplica los <strong>factores de calibración</strong> a cada trama:</p>
+<pre><code class="language-json">POST /api/v1/iot/dispositivos
+{
+  &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
+  &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
+  &quot;nombre&quot;: &quot;Sensor cuadrícula lote 1&quot;,
+  &quot;npk_calibrado&quot;: true
+}
+</code></pre>
+<hr />
+<h2 id="7-registro-de-dispositivos-evitar-auto-registro-a-la-finca-equivocada">7. Registro de dispositivos (evitar auto-registro a la finca equivocada)</h2>
+<pre><code class="language-bash">curl -X POST https://agroia-backend.onrender.com/api/v1/iot/dispositivos \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;UUID_DE_LA_FINCA&quot;,&quot;nombre&quot;:&quot;Sensor 1&quot;,&quot;npk_calibrado&quot;:false}'
+</code></pre>
+<p>El <code>finca_id</code> se obtiene del administrador de la plataforma (pestaña Fincas).</p>
+<hr />
+<h2 id="8-carga-por-archivo-alternativa-sin-conexion">8. Carga por archivo (alternativa sin conexión)</h2>
+<p>Cuando el sensor no tiene señal, las tramas pueden exportarse a un archivo y
+subirse manualmente: <code>POST /api/v1/iot/carga</code> (multipart: <code>file</code> + <code>finca_id</code>
+opcional). Formatos aceptados:</p>
+<h3 id="csv-ancho-con-varias-filas-una-fila-un-punto-de-muestreo">CSV ancho con varias filas (una fila = un punto de muestreo)</h3>
+<pre><code class="language-csv">x,y,ph,conductividad,n,p,k,humedad,temperatura
+20,90,5.6,410,250,20,75,25,18.0
+125,90,5.9,470,230,24,85,29,18.8
+230,90,6.2,530,210,28,95,33,19.6
+20,50,5.9,480,225,23,83,28,18.5
+125,50,6.2,540,205,27,93,32,19.3
+230,50,6.4,600,185,31,103,36,20.1
+20,10,6.2,550,195,26,91,31,19.2
+125,10,6.4,610,175,30,101,35,20.0
+230,10,6.7,670,155,34,111,39,20.8
+</code></pre>
+<p>(Se aceptan también los nombres <code>pos_x,pos_y</code>, <code>coordenada_x,coordenada_y</code>,
+<code>columna,fila</code>.)</p>
+<h3 id="json-lista-de-tramas-una-por-punto">JSON — lista de tramas (una por punto)</h3>
+<pre><code class="language-json">[
+  {&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;x&quot;:20,&quot;y&quot;:90,&quot;ph&quot;:5.6,&quot;conductivity&quot;:410,&quot;nitrogen&quot;:250},
+  {&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;x&quot;:125,&quot;y&quot;:90,&quot;ph&quot;:5.9,&quot;conductivity&quot;:470,&quot;nitrogen&quot;:230}
+]
+</code></pre>
+<p>Respuesta: <code>{status:"accepted", numero_muestras: 9, variables_recibidas:[...], analisis:{...}}</code>.
+La carga ejecuta el análisis al instante y deja las muestras listas para el reporte.</p>
+<hr />
+<h2 id="9-donde-se-ve-el-resultado">9. Dónde se ve el resultado</h2>
+<ol>
+<li><strong>Reporte</strong> (<code>Reportes → Generar reporte</code>): sección <strong>«M — Mapa de calor del
+   lote»</strong> con pestañas por parámetro (pH, N, P, K, humedad…) y vista
+   «🧭 Resumen» con todas las variables a la vez.</li>
+<li><strong>Chat agronómico</strong>: el asesor usa esas mismas lecturas con posición para
+   responder "¿cómo está el lote por sectores?".</li>
+<li><strong>Historial / sensores</strong>: cada lectura queda en la serie temporal de la finca.</li>
+</ol>
+<hr />
+<h2 id="10-notas-operativas">10. Notas operativas</h2>
+<ul>
+<li>Envíe cada punto con <strong>reloj UTC o sin zona</strong>; el servidor marca la recepción.</li>
+<li>Free tier: si el servicio está dormido, la primera trama puede tardar ~50 s;
+  las siguientes son inmediatas. Use reintentos (timeout ≥ 60 s) en el firmware.</li>
+<li>No envíe más de ~1 trama/segundo por dispositivo.</li>
+<li>Un <code>device_id</code> siempre reporta contra su finca registrada; para cambiar de
+  finca, re-regístrelo con el nuevo <code>finca_id</code>.</li>
+</ul>
+</div>
+<footer>AgroIA — AgroInteligente Colombia · Documentación generada desde
+  <code>resources/architecture/api_sensor_muestreo.md</code></footer>
+</body>
+</html>
