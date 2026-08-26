@@ -4070,8 +4070,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/iot.py": {
-    "mtime": 1787702841.0460851,
-    "ast_hash": "aa48575913a37d0389b22d008932713a",
+    "mtime": 1787706997.540469,
+    "ast_hash": "7b8bdb5e821953794d27c89595f90710",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/external_apis.py": {
@@ -4520,8 +4520,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/sensor_api.py": {
-    "mtime": 1787706608.8813014,
-    "ast_hash": "6040b38722133941d90a9f2698d607e3",
+    "mtime": 1787706985.8553581,
+    "ast_hash": "6f7e31267b55df17e2121ba5139334b7",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/dispositivo_iot.py": {
@@ -4717,6 +4717,11 @@
   "resources/architecture/api_sensor_muestreo.html": {
     "mtime": 1787706687.808128,
     "ast_hash": "6cdba8f2dfe412daa3228b8f393a1736",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/puente_iot.py": {
+    "mtime": 1787706985.8585994,
+    "ast_hash": "951c9294441337c7f64e1551319822f4",
     "semantic_hash": ""
   }
 }
