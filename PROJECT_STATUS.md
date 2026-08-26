@@ -40,10 +40,12 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 
 ### Chat asesor agronómico (2026-08-25)
 
-- `POST /api/v1/chat/consultar` — chat en la pantalla de reportes, disponible para admin/agrónomo/cliente (acceso limitado a sus fincas).
-- **Modo LLM**: con `OPENAI_API_KEY` configurada en Render, responde un modelo con prompt de sistema de "experto agrónomo colombiano 30+ años" + contexto real (lectura de suelo, reglas UPRA/Cenicafé/AGROSAVIA, ficha técnica, análisis UC1/UC2, historial).
-- **Modo experto local** (sin key, el que corre hoy): motor determinista que detecta la intención (abono, siembra, pH, nutriente específico, riego, reporte, saludo) y responde con las reglas y la lectura de la finca.
-- Implementación: `services/agronomo_chat.py`, `api/chat.py`, panel `#chat-card` en `apps/frontend-web`.
+- `POST /api/v1/chat/consultar` — capa conversacional especializada disponible para admin/agrónomo/cliente (acceso limitado a sus fincas).
+- **Orquestador agronómico** (`services/agronomo_chat.py::respuesta_orquestada`): detecta intención y enruta a herramientas (cálculo de encalado/fertilizante/riego en `agronomo_kb.py`), clima disponible (época del año + sensores; sin pronóstico inventado), diagnóstico diferencial de problemas, explicación del «por qué» del cultivo recomendado, o conversación general detallada por rol.
+- **Respuestas fundamentadas**: qué recomienda · por qué · datos usados · fuentes (Cenicafé/Agrosavia/UPRA/ICA/IDEAM) · qué falta · confianza (Alta/Media/Baja). Anti-alucinación: si falta un dato se declara explícitamente.
+- **Memoria de finca**: tabla `chat_memoria` (migración 007) + `GET /api/v1/chat/memoria/{finca_id}`.
+- **Modo LLM**: con `OPENAI_API_KEY` el LLM razona sobre el mismo contexto + base de conocimiento con fuentes; sin key corre el motor local determinista.
+- Documento de arquitectura y plan: `resources/architecture/plan_chat_agronomico.md`.
 
 ### Mapa de calor del lote (2026-08-25)
 
