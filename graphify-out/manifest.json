@@ -4075,8 +4075,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/external_apis.py": {
-    "mtime": 1787749710.555916,
-    "ast_hash": "72a6866b4ec1273361acd5805c6c9962",
+    "mtime": 1787750120.8948107,
+    "ast_hash": "cb68f46219684b831eab207dd3f035ea",
     "semantic_hash": ""
   },
   "apps/iot/agroia_iot/consumer.py": {
@@ -4515,8 +4515,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/reportes.py": {
-    "mtime": 1787749742.4691572,
-    "ast_hash": "1859616665a17ee4bfa1dad118aad45a",
+    "mtime": 1787750104.328647,
+    "ast_hash": "734eef5822629fd0a96f980e3453435a",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/sensor_api.py": {
