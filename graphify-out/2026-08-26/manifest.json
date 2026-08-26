@@ -4570,8 +4570,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/reportes_html.py": {
-    "mtime": 1787747497.2925415,
-    "ast_hash": "c0054642ad041ceb206c0dfa3e39e752",
+    "mtime": 1787712713.5592113,
+    "ast_hash": "4ba94cd1434cd98ff56cda4c5bdd1e65",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/003_dispositivos_iot.py": {
@@ -4737,21 +4737,6 @@
   "reports/test_heat_intensidad.html": {
     "mtime": 1787712824.181899,
     "ast_hash": "fb3fd03ddda3b2d0c4ece05daa24bd26",
-    "semantic_hash": ""
-  },
-  "reports/test_plano_lote.html": {
-    "mtime": 1787747585.1056156,
-    "ast_hash": "76caa7ce2792de9a2496a31b69498fa3",
-    "semantic_hash": ""
-  },
-  "reports/test_plano_lote_prod.html": {
-    "mtime": 1787747672.2027898,
-    "ast_hash": "24c0490fb1710e6df062020b0e05941e",
-    "semantic_hash": ""
-  },
-  "reports/plano_lote_preview.png": {
-    "mtime": 1787747759.802459,
-    "ast_hash": "ca421935f95e8219b48c99d59a0d4b5f",
     "semantic_hash": ""
   }
 }
