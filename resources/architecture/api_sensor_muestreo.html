@@ -104,6 +104,7 @@ terreno), la plataforma pinta el <strong>mapa de calor por parámetro</strong> e
 <h2 id="2-formato-de-la-trama-json">2. Formato de la trama (JSON)</h2>
 <pre><code class="language-json">{
   &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
+  &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
   &quot;pos_x&quot;: 20.0,
   &quot;pos_y&quot;: 50.0,
   &quot;humidity&quot;: 72.0,
@@ -117,6 +118,24 @@ terreno), la plataforma pinta el <strong>mapa de calor por parámetro</strong> e
   &quot;uptime_s&quot;: 604800
 }
 </code></pre>
+<h3 id="a-que-finca-corresponde-la-trama-resolucion">¿A qué finca corresponde la trama? (resolución)</h3>
+<p>El orden de resolución es el siguiente:</p>
+<ol>
+<li><strong><code>finca_id</code> en la trama</strong>: si se envía y la finca existe, la medición (y el
+   dispositivo) quedan asociados a esa finca. Si el dispositivo ya estaba en
+   otra finca, se reasocia automáticamente a la indicada.</li>
+<li><strong>Dispositivo registrado</strong>: si no se envía <code>finca_id</code>, se usa la finca que
+   tiene registrada el <code>device_id</code>.</li>
+<li><strong>Auto-registro</strong>: si el <code>device_id</code> es desconocido y no viene <code>finca_id</code>,
+   se asocia a la primera finca disponible (evite este caso: registre el
+   dispositivo o envíe siempre <code>finca_id</code>).</li>
+</ol>
+<blockquote>
+<p><strong>¿De dónde saco el ID de la finca?</strong> Al crear la finca en la plataforma
+(pestaña Fincas → formulario), el sistema muestra el <strong>ID de la finca</strong> con
+botón «Copiar». También aparece en la tarjeta de cada finca. Use ese ID como
+<code>finca_id</code> en la trama.</p>
+</blockquote>
 <h3 id="campos">Campos</h3>
 <table>
 <thead>
@@ -134,7 +153,14 @@ terreno), la plataforma pinta el <strong>mapa de calor por parámetro</strong> e
 <td>string</td>
 <td>✅</td>
 <td>—</td>
-<td>ID único del sensor (ej. <code>esp32-npk-001</code>). Si no está registrado, se auto-registra contra la primera finca disponible</td>
+<td>ID único del sensor (ej. <code>esp32-npk-001</code>)</td>
+</tr>
+<tr>
+<td><code>finca_id</code></td>
+<td>string</td>
+<td>❌ (recomendado)</td>
+<td>—</td>
+<td>UUID de la finca a la que corresponde la medición (se obtiene al crear la finca en la plataforma)</td>
 </tr>
 <tr>
 <td><code>pos_x</code></td>
@@ -241,6 +267,7 @@ motor de recomendaciones.</p>
   -H &quot;Content-Type: application/json&quot; \
   -d '{
     &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
+    &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
     &quot;pos_x&quot;: 20.0, &quot;pos_y&quot;: 50.0,
     &quot;ph&quot;: 6.1, &quot;conductivity&quot;: 620,
     &quot;nitrogen&quot;: 260, &quot;phosphorus&quot;: 28, &quot;potassium&quot;: 95,
@@ -256,6 +283,7 @@ motor de recomendaciones.</p>
 
 const char* API_URL = &quot;https://agroia-backend.onrender.com/api/sensor&quot;;
 const char* DEVICE_ID = &quot;esp32-npk-001&quot;;
+const char* FINCA_ID  = &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;; // ID de la finca
 
 void enviarMedicion(float posX, float posY, float ph, float ceUsCm,
                     float nPpm, float pPpm, float kPpm,
@@ -264,6 +292,7 @@ void enviarMedicion(float posX, float posY, float ph, float ceUsCm,
 
   StaticJsonDocument&lt;512&gt; doc;
   doc[&quot;device_id&quot;]  = DEVICE_ID;
+  doc[&quot;finca_id&quot;]   = FINCA_ID;   // finca a la que corresponde
   doc[&quot;pos_x&quot;]      = posX;      // metros dentro del lote
   doc[&quot;pos_y&quot;]      = posY;
   doc[&quot;ph&quot;]         = ph;
@@ -348,6 +377,11 @@ están fuera del ideal en cada punto.</p>
 <tbody>
 <tr>
 <td><code>422</code></td>
+<td><code>FINCA_NOT_FOUND</code></td>
+<td>El <code>finca_id</code> de la trama no corresponde a una finca registrada</td>
+</tr>
+<tr>
+<td><code>422</code></td>
 <td><code>NO_FINCAS</code></td>
 <td>No hay fincas registradas y el dispositivo es desconocido (no se pudo auto-registrar)</td>
 </tr>
@@ -403,8 +437,8 @@ opcional). Formatos aceptados:</p>
 <code>columna,fila</code>.)</p>
 <h3 id="json-lista-de-tramas-una-por-punto">JSON — lista de tramas (una por punto)</h3>
 <pre><code class="language-json">[
-  {&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;x&quot;:20,&quot;y&quot;:90,&quot;ph&quot;:5.6,&quot;conductivity&quot;:410,&quot;nitrogen&quot;:250},
-  {&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;x&quot;:125,&quot;y&quot;:90,&quot;ph&quot;:5.9,&quot;conductivity&quot;:470,&quot;nitrogen&quot;:230}
+  {&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;x&quot;:20,&quot;y&quot;:90,&quot;ph&quot;:5.6,&quot;conductivity&quot;:410,&quot;nitrogen&quot;:250},
+  {&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;x&quot;:125,&quot;y&quot;:90,&quot;ph&quot;:5.9,&quot;conductivity&quot;:470,&quot;nitrogen&quot;:230}
 ]
 </code></pre>
 <p>Respuesta: <code>{status:"accepted", numero_muestras: 9, variables_recibidas:[...], analisis:{...}}</code>.

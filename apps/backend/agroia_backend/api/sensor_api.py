@@ -38,6 +38,14 @@ class SensorFrame(BaseModel, extra="allow"):
     """Trama tal como la envía el firmware del sensor."""
 
     device_id: str = Field(..., description="ID del dispositivo (ej. esp32-npk-001)")
+    finca_id: str | None = Field(
+        None,
+        description=(
+            "UUID de la finca a la que pertenece la medición (opcional; si el "
+            "dispositivo ya está registrado se usa su finca, y si se envía, "
+            "se asocia a esta)."
+        ),
+    )
     humidity: float | None = Field(None, description="% HR ambiente (DHT22)")
     temperature: float | None = Field(None, description="°C ambiente")
     conductivity: float | None = Field(None, description="µS/cm")
@@ -66,6 +74,26 @@ async def ingesta_sensor(frame: SensorFrame):
     payload, advertencias = normalizar_trama(frame.model_dump())
 
     async with async_session_factory() as db:
+        # ── Resolver finca indicada en la trama (opcional) ──
+        finca_indicada = None
+        if frame.finca_id:
+            try:
+                finca_indicada = (
+                    await db.execute(
+                        select(Finca).where(Finca.id == frame.finca_id)
+                    )
+                ).scalar_one_or_none()
+            except Exception:
+                finca_indicada = None
+            if finca_indicada is None:
+                raise HTTPException(status_code=422, detail={
+                    "code": "FINCA_NOT_FOUND",
+                    "message": (
+                        f"La finca '{frame.finca_id}' indicada en la trama no está "
+                        "registrada. Verifique el ID de la finca."
+                    ),
+                })
+
         dispositivo = (
             await db.execute(
                 select(DispositivoIoT).where(
@@ -76,15 +104,19 @@ async def ingesta_sensor(frame: SensorFrame):
 
         auto_registrado = False
         if dispositivo is None:
-            # Sensor sin registro previo: se auto-registra a la primera finca
-            finca = (
-                await db.execute(select(Finca).order_by(Finca.created_at).limit(1))
-            ).scalars().first()
-            if finca is None:
-                raise HTTPException(status_code=422, detail={
-                    "code": "NO_FINCAS",
-                    "message": "No hay fincas registradas para asociar el sensor.",
-                })
+            # Sensor sin registro previo: se asocia a la finca de la trama
+            # (si viene) o a la primera finca disponible.
+            if finca_indicada is not None:
+                finca = finca_indicada
+            else:
+                finca = (
+                    await db.execute(select(Finca).order_by(Finca.created_at).limit(1))
+                ).scalars().first()
+                if finca is None:
+                    raise HTTPException(status_code=422, detail={
+                        "code": "NO_FINCAS",
+                        "message": "No hay fincas registradas para asociar el sensor.",
+                    })
 
             dispositivo = DispositivoIoT(
                 finca_id=finca.id,
@@ -98,6 +130,17 @@ async def ingesta_sensor(frame: SensorFrame):
             await db.refresh(dispositivo)
             auto_registrado = True
             logger.info("sensor_auto_registrado", device_id=frame.device_id, finca_id=str(finca.id))
+        elif finca_indicada is not None and dispositivo.finca_id != finca_indicada.id:
+            # El dispositivo ya existía pero la trama trae otra finca:
+            # se reasocia (p. ej. sensor movido de lote).
+            logger.info(
+                "sensor_finca_actualizada",
+                device_id=frame.device_id,
+                finca_anterior=str(dispositivo.finca_id),
+                finca_nueva=str(finca_indicada.id),
+            )
+            dispositivo.finca_id = finca_indicada.id
+            await db.commit()
 
         success = await process_sensor_message({
             "device_id": frame.device_id,

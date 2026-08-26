@@ -29,6 +29,7 @@ terreno), la plataforma pinta el **mapa de calor por parámetro** en el reporte.
 ```json
 {
   "device_id": "esp32-npk-001",
+  "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
   "pos_x": 20.0,
   "pos_y": 50.0,
   "humidity": 72.0,
@@ -43,11 +44,30 @@ terreno), la plataforma pinta el **mapa de calor por parámetro** en el reporte.
 }
 ```
 
+### ¿A qué finca corresponde la trama? (resolución)
+
+El orden de resolución es el siguiente:
+
+1. **`finca_id` en la trama**: si se envía y la finca existe, la medición (y el
+   dispositivo) quedan asociados a esa finca. Si el dispositivo ya estaba en
+   otra finca, se reasocia automáticamente a la indicada.
+2. **Dispositivo registrado**: si no se envía `finca_id`, se usa la finca que
+   tiene registrada el `device_id`.
+3. **Auto-registro**: si el `device_id` es desconocido y no viene `finca_id`,
+   se asocia a la primera finca disponible (evite este caso: registre el
+   dispositivo o envíe siempre `finca_id`).
+
+> **¿De dónde saco el ID de la finca?** Al crear la finca en la plataforma
+> (pestaña Fincas → formulario), el sistema muestra el **ID de la finca** con
+> botón «Copiar». También aparece en la tarjeta de cada finca. Use ese ID como
+> `finca_id` en la trama.
+
 ### Campos
 
 | Campo | Tipo | Obligatorio | Unidad | Descripción |
 |---|---|---|---|---|
-| `device_id` | string | ✅ | — | ID único del sensor (ej. `esp32-npk-001`). Si no está registrado, se auto-registra contra la primera finca disponible |
+| `device_id` | string | ✅ | — | ID único del sensor (ej. `esp32-npk-001`) |
+| `finca_id` | string | ❌ (recomendado) | — | UUID de la finca a la que corresponde la medición (se obtiene al crear la finca en la plataforma) |
 | `pos_x` | float | ❌ (necesario para el mapa de calor) | metros | Posición X del punto de toma dentro del lote, medida desde una esquina |
 | `pos_y` | float | ❌ (necesario para el mapa de calor) | metros | Posición Y del punto de toma dentro del lote |
 | `ph` | float | ❌ | 0–14 | pH del suelo |
@@ -90,6 +110,7 @@ curl -X POST https://agroia-backend.onrender.com/api/sensor \
   -H "Content-Type: application/json" \
   -d '{
     "device_id": "esp32-npk-001",
+    "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
     "pos_x": 20.0, "pos_y": 50.0,
     "ph": 6.1, "conductivity": 620,
     "nitrogen": 260, "phosphorus": 28, "potassium": 95,
@@ -108,6 +129,7 @@ curl -X POST https://agroia-backend.onrender.com/api/sensor \
 
 const char* API_URL = "https://agroia-backend.onrender.com/api/sensor";
 const char* DEVICE_ID = "esp32-npk-001";
+const char* FINCA_ID  = "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936"; // ID de la finca
 
 void enviarMedicion(float posX, float posY, float ph, float ceUsCm,
                     float nPpm, float pPpm, float kPpm,
@@ -116,6 +138,7 @@ void enviarMedicion(float posX, float posY, float ph, float ceUsCm,
 
   StaticJsonDocument<512> doc;
   doc["device_id"]  = DEVICE_ID;
+  doc["finca_id"]   = FINCA_ID;   // finca a la que corresponde
   doc["pos_x"]      = posX;      // metros dentro del lote
   doc["pos_y"]      = posY;
   doc["ph"]         = ph;
@@ -201,6 +224,7 @@ Ejemplo de cuadrícula 3×3 en un lote de 250 × 100 m:
 
 | HTTP | `code` | Significado |
 |---|---|---|
+| `422` | `FINCA_NOT_FOUND` | El `finca_id` de la trama no corresponde a una finca registrada |
 | `422` | `NO_FINCAS` | No hay fincas registradas y el dispositivo es desconocido (no se pudo auto-registrar) |
 | `422` | `INGEST_ERROR` | Error interno al persistir la trama |
 | `422` | (validación) | `device_id` ausente o campos con tipo incorrecto |
@@ -264,8 +288,8 @@ x,y,ph,conductividad,n,p,k,humedad,temperatura
 
 ```json
 [
-  {"device_id":"esp32-npk-001","x":20,"y":90,"ph":5.6,"conductivity":410,"nitrogen":250},
-  {"device_id":"esp32-npk-001","x":125,"y":90,"ph":5.9,"conductivity":470,"nitrogen":230}
+  {"device_id":"esp32-npk-001","finca_id":"8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936","x":20,"y":90,"ph":5.6,"conductivity":410,"nitrogen":250},
+  {"device_id":"esp32-npk-001","finca_id":"8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936","x":125,"y":90,"ph":5.9,"conductivity":470,"nitrogen":230}
 ]
 ```
 

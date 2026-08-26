@@ -418,3 +418,43 @@ tr:hover td { background: #f2f8f4; }
   border-radius: 8px;
   font-size: 0.95rem;
 }
+
+/* ─────────────────────────── id de finca para sensores ─────────────────────────── */
+
+.finca-id-box {
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px dashed #8fbd96;
+  border-radius: 8px;
+  background: #f2f8f2;
+}
+
+.finca-id-box code,
+.mono-id code {
+  font-family: "Cascadia Mono", Consolas, monospace;
+  background: #e6f0e7;
+  padding: 2px 6px;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+.finca-id-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0;
+  flex-wrap: wrap;
+}
+
+.finca-id-row {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-copiar {
+  padding: 2px 10px;
+  font-size: 0.8rem;
+}

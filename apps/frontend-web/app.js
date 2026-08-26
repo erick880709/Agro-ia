@@ -377,8 +377,34 @@ function renderFincasList() {
           ${f.largo_metros && f.ancho_metros ? `<span>Dimensiones: ${f.largo_metros} × ${f.ancho_metros} m</span>` : ''}
           ${link ? `<span>📍 <a href="${esc(link)}" target="_blank">Ver en Google Maps</a></span>` : ''}
         </div>
+        <div class="device-meta finca-id-row">
+          <span class="mono-id" title="ID de la finca (envíelo en la trama del sensor como finca_id)">ID: <code>${esc(f.id || '—')}</code></span>
+          <button type="button" class="btn btn-ghost btn-copiar" data-copiar="${esc(f.id || '')}">📋 Copiar</button>
+        </div>
       </div>`;
   }).join('');
+  div.querySelectorAll('.btn-copiar').forEach(b => {
+    b.addEventListener('click', () => copiarTexto(b.dataset.copiar || '', b));
+  });
+}
+
+function copiarTexto(texto, boton) {
+  const ok = () => {
+    if (!boton) return;
+    boton.textContent = '✅ Copiado';
+    setTimeout(() => { boton.textContent = '📋 Copiar'; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(texto).then(ok).catch(() => { ok(); });
+    return;
+  }
+  const ta = document.createElement('textarea');
+  ta.value = texto;
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch { /* sin soporte */ }
+  document.body.removeChild(ta);
+  ok();
 }
 
 async function enviarFinca(e) {
@@ -414,7 +440,21 @@ async function enviarFinca(e) {
   btn.textContent = '⏳ Guardando…';
   try {
     const r = await api('/fincas', { method: 'POST', headers: headers(), body: JSON.stringify(body) });
-    msg.innerHTML = okBanner(`Finca <b>${esc(r.finca.nombre)}</b> registrada con éxito. Ya aparece en Recomendaciones y Carga de archivo.`);
+    const finca = r.finca || {};
+    const fid = finca.id || '';
+    msg.innerHTML = okBanner(
+      `Finca <b>${esc(finca.nombre)}</b> registrada con éxito.`
+    ) + `
+    <div class="finca-id-box">
+      <div><b>ID de la finca (para el sensor):</b></div>
+      <div class="finca-id-line">
+        <code>${esc(fid)}</code>
+        <button type="button" class="btn btn-ghost" data-copiar="${esc(fid)}">📋 Copiar</button>
+      </div>
+      <p class="muted">Envíe este ID en cada trama del sensor como <code>finca_id</code>, o úselo para registrar el dispositivo en <code>POST /api/v1/iot/dispositivos</code>.</p>
+    </div>`;
+    const btnCopia = msg.querySelector('[data-copiar]');
+    if (btnCopia) btnCopia.addEventListener('click', () => copiarTexto(btnCopia.dataset.copiar || '', btnCopia));
     e.target.reset();
     await cargarFincas();
     renderFincasList();
