@@ -4,15 +4,224 @@
   "graph": {},
   "nodes": [
     {
+      "label": "PROJECT_STATUS.md",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "project_status",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "project_status.md"
+    },
+    {
+      "label": "AgroIA \u2014 Estado del Proyecto",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "project_status_agroia_estado_del_proyecto",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "agroia \u2014 estado del proyecto"
+    },
+    {
+      "label": "\ud83c\udfaf Objetivo",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "project_status_objetivo",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "\ud83c\udfaf objetivo"
+    },
+    {
+      "label": "\ud83d\udcca Estado por \u00e9pica",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "project_status_estado_por_\u00e9pica",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "\ud83d\udcca estado por epica"
+    },
+    {
+      "label": "\ud83c\udfd7\ufe0f Stack",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "project_status_stack",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "\ud83c\udfd7\ufe0f stack"
+    },
+    {
+      "label": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "project_status_despliegue_gratuito_render_neon_supabase",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "\ud83d\ude80 despliegue gratuito (render + neon/supabase)"
+    },
+    {
+      "label": "Chat asesor agron\u00f3mico (2026-08-25)",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L41",
+      "_origin": "ast",
+      "id": "project_status_chat_asesor_agron\u00f3mico_2026_08_25",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "chat asesor agronomico (2026-08-25)"
+    },
+    {
+      "label": "Mapa de calor del lote (2026-08-25)",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "project_status_mapa_de_calor_del_lote_2026_08_25",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "mapa de calor del lote (2026-08-25)"
+    },
+    {
+      "label": "Relaci\u00f3n finca \u2194 sensor en la trama (2026-08-26)",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L59",
+      "_origin": "ast",
+      "id": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "relacion finca \u2194 sensor en la trama (2026-08-26)"
+    },
+    {
+      "label": "C\u00f3mo est\u00e1 montado",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L68",
+      "_origin": "ast",
+      "id": "project_status_c\u00f3mo_est\u00e1_montado",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "como esta montado"
+    },
+    {
+      "label": "Migraciones destacadas",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "project_status_migraciones_destacadas",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "migraciones destacadas"
+    },
+    {
+      "label": "L\u00edmites del tier gratuito (validados 2026-08-25)",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L80",
+      "_origin": "ast",
+      "id": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "limites del tier gratuito (validados 2026-08-25)"
+    },
+    {
+      "label": "Notas t\u00e9cnicas",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L90",
+      "_origin": "ast",
+      "id": "project_status_notas_t\u00e9cnicas",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "notas tecnicas"
+    },
+    {
+      "label": "\ud83d\udcc1 Estructura",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L95",
+      "_origin": "ast",
+      "id": "project_status_estructura",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "\ud83d\udcc1 estructura"
+    },
+    {
+      "label": "\ud83d\ude80 Arranque r\u00e1pido",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L114",
+      "_origin": "ast",
+      "id": "project_status_arranque_r\u00e1pido",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "\ud83d\ude80 arranque rapido"
+    },
+    {
+      "label": "\u2b1c Pendiente",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L127",
+      "_origin": "ast",
+      "id": "project_status_pendiente",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "\u2b1c pendiente"
+    },
+    {
+      "label": "\ud83e\udde0 Motor de recomendaciones \u2014 Sistema Experto activo (2026-08-25)",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L135",
+      "_origin": "ast",
+      "id": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "\ud83e\udde0 motor de recomendaciones \u2014 sistema experto activo (2026-08-25)"
+    },
+    {
+      "label": "\ud83d\udc65 Roles y permisos por finca (2026-08-25)",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L150",
+      "_origin": "ast",
+      "id": "project_status_roles_y_permisos_por_finca_2026_08_25",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "\ud83d\udc65 roles y permisos por finca (2026-08-25)"
+    },
+    {
+      "label": "\ud83d\udcc4 Reportes de an\u00e1lisis (2026-08-25)",
+      "file_type": "document",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L160",
+      "_origin": "ast",
+      "id": "project_status_reportes_de_an\u00e1lisis_2026_08_25",
+      "community": 630,
+      "community_name": "AgroIA \u2014 Estado del Proyecto",
+      "norm_label": "\ud83d\udcc4 reportes de analisis (2026-08-25)"
+    },
+    {
       "label": "agroia_backend/main.py",
       "file_type": "code",
       "source_file": "apps/backend/agroia_backend/main.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_main",
       "community": 111,
       "community_name": "logging.py",
-      "norm_label": "agroia_backend/main.py"
+      "norm_label": "agroia_backend/main.py",
+      "id": "apps_backend_agroia_backend_main"
     },
     {
       "label": "lifespan()",
@@ -20,10 +229,10 @@
       "source_file": "apps/backend/agroia_backend/main.py",
       "source_location": "L54",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_main_lifespan",
       "community": 111,
       "community_name": "logging.py",
-      "norm_label": "lifespan()"
+      "norm_label": "lifespan()",
+      "id": "apps_backend_agroia_backend_main_lifespan"
     },
     {
       "label": "FastAPI",
@@ -31,10 +240,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "fastapi",
       "community": 111,
       "community_name": "logging.py",
-      "norm_label": "fastapi"
+      "norm_label": "fastapi",
+      "id": "fastapi"
     },
     {
       "label": "AgroIA Backend \u2014 Servicio principal de negocio. Expone la API REST para\u2026",
@@ -42,10 +251,10 @@
       "source_file": "apps/backend/agroia_backend/main.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_main_rationale_1",
       "community": 111,
       "community_name": "logging.py",
-      "norm_label": "agroia backend \u2014 servicio principal de negocio. expone la api rest para..."
+      "norm_label": "agroia backend \u2014 servicio principal de negocio. expone la api rest para...",
+      "id": "apps_backend_agroia_backend_main_rationale_1"
     },
     {
       "label": "Ciclo de vida de la aplicaci\u00f3n.",
@@ -53,10 +262,10 @@
       "source_file": "apps/backend/agroia_backend/main.py",
       "source_location": "L55",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_main_rationale_55",
       "community": 111,
       "community_name": "logging.py",
-      "norm_label": "ciclo de vida de la aplicacion."
+      "norm_label": "ciclo de vida de la aplicacion.",
+      "id": "apps_backend_agroia_backend_main_rationale_55"
     },
     {
       "label": "asegurar_enums.py",
@@ -64,10 +273,10 @@
       "source_file": "apps/backend/agroia_backend/services/asegurar_enums.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_asegurar_enums",
       "community": 111,
       "community_name": "logging.py",
-      "norm_label": "asegurar_enums.py"
+      "norm_label": "asegurar_enums.py",
+      "id": "apps_backend_agroia_backend_services_asegurar_enums"
     },
     {
       "label": "asegurar_enums()",
@@ -75,10 +284,10 @@
       "source_file": "apps/backend/agroia_backend/services/asegurar_enums.py",
       "source_location": "L36",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_asegurar_enums_asegurar_enums",
       "community": 111,
       "community_name": "logging.py",
-      "norm_label": "asegurar_enums()"
+      "norm_label": "asegurar_enums()",
+      "id": "apps_backend_agroia_backend_services_asegurar_enums_asegurar_enums"
     },
     {
       "label": "Asegura que los tipos enum existan en la BD al arrancar la aplicaci\u00f3n. Las\u2026",
@@ -86,10 +295,10 @@
       "source_file": "apps/backend/agroia_backend/services/asegurar_enums.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_asegurar_enums_rationale_1",
       "community": 111,
       "community_name": "logging.py",
-      "norm_label": "asegura que los tipos enum existan en la bd al arrancar la aplicacion. las..."
+      "norm_label": "asegura que los tipos enum existan en la bd al arrancar la aplicacion. las...",
+      "id": "apps_backend_agroia_backend_services_asegurar_enums_rationale_1"
     },
     {
       "label": "Crea los tipos enum faltantes. Retorna los nombres creados.",
@@ -97,10 +306,10 @@
       "source_file": "apps/backend/agroia_backend/services/asegurar_enums.py",
       "source_location": "L37",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_asegurar_enums_rationale_37",
       "community": 111,
       "community_name": "logging.py",
-      "norm_label": "crea los tipos enum faltantes. retorna los nombres creados."
+      "norm_label": "crea los tipos enum faltantes. retorna los nombres creados.",
+      "id": "apps_backend_agroia_backend_services_asegurar_enums_rationale_37"
     },
     {
       "label": "009_reparar_enums_2.py",
@@ -431,215 +640,6 @@
       "community_name": "reportes_html.py",
       "norm_label": "construye el documento html completo del reporte.",
       "id": "apps_backend_agroia_backend_services_reportes_html_rationale_730"
-    },
-    {
-      "label": "PROJECT_STATUS.md",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "project_status.md",
-      "id": "project_status"
-    },
-    {
-      "label": "AgroIA \u2014 Estado del Proyecto",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "agroia \u2014 estado del proyecto",
-      "id": "project_status_agroia_estado_del_proyecto"
-    },
-    {
-      "label": "\ud83c\udfaf Objetivo",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L5",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83c\udfaf objetivo",
-      "id": "project_status_objetivo"
-    },
-    {
-      "label": "\ud83d\udcca Estado por \u00e9pica",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L9",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83d\udcca estado por epica",
-      "id": "project_status_estado_por_\u00e9pica"
-    },
-    {
-      "label": "\ud83c\udfd7\ufe0f Stack",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L23",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83c\udfd7\ufe0f stack",
-      "id": "project_status_stack"
-    },
-    {
-      "label": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L37",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83d\ude80 despliegue gratuito (render + neon/supabase)",
-      "id": "project_status_despliegue_gratuito_render_neon_supabase"
-    },
-    {
-      "label": "Chat asesor agron\u00f3mico (2026-08-25)",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L41",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "chat asesor agronomico (2026-08-25)",
-      "id": "project_status_chat_asesor_agron\u00f3mico_2026_08_25"
-    },
-    {
-      "label": "Mapa de calor del lote (2026-08-25)",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L50",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "mapa de calor del lote (2026-08-25)",
-      "id": "project_status_mapa_de_calor_del_lote_2026_08_25"
-    },
-    {
-      "label": "Relaci\u00f3n finca \u2194 sensor en la trama (2026-08-26)",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L58",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "relacion finca \u2194 sensor en la trama (2026-08-26)",
-      "id": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26"
-    },
-    {
-      "label": "C\u00f3mo est\u00e1 montado",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L67",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "como esta montado",
-      "id": "project_status_c\u00f3mo_est\u00e1_montado"
-    },
-    {
-      "label": "Migraciones destacadas",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L73",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "migraciones destacadas",
-      "id": "project_status_migraciones_destacadas"
-    },
-    {
-      "label": "L\u00edmites del tier gratuito (validados 2026-08-25)",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L78",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "limites del tier gratuito (validados 2026-08-25)",
-      "id": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25"
-    },
-    {
-      "label": "Notas t\u00e9cnicas",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L88",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "notas tecnicas",
-      "id": "project_status_notas_t\u00e9cnicas"
-    },
-    {
-      "label": "\ud83d\udcc1 Estructura",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L93",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83d\udcc1 estructura",
-      "id": "project_status_estructura"
-    },
-    {
-      "label": "\ud83d\ude80 Arranque r\u00e1pido",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L112",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83d\ude80 arranque rapido",
-      "id": "project_status_arranque_r\u00e1pido"
-    },
-    {
-      "label": "\u2b1c Pendiente",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L125",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\u2b1c pendiente",
-      "id": "project_status_pendiente"
-    },
-    {
-      "label": "\ud83e\udde0 Motor de recomendaciones \u2014 Sistema Experto activo (2026-08-25)",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L133",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83e\udde0 motor de recomendaciones \u2014 sistema experto activo (2026-08-25)",
-      "id": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25"
-    },
-    {
-      "label": "\ud83d\udc65 Roles y permisos por finca (2026-08-25)",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L148",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83d\udc65 roles y permisos por finca (2026-08-25)",
-      "id": "project_status_roles_y_permisos_por_finca_2026_08_25"
-    },
-    {
-      "label": "\ud83d\udcc4 Reportes de an\u00e1lisis (2026-08-25)",
-      "file_type": "document",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L158",
-      "_origin": "ast",
-      "community": 630,
-      "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83d\udcc4 reportes de analisis (2026-08-25)",
-      "id": "project_status_reportes_de_an\u00e1lisis_2026_08_25"
     },
     {
       "label": "iot.py",
@@ -99403,51 +99403,201 @@
   ],
   "links": [
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/main.py",
-      "source_location": "L12",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "apps_backend_agroia_backend_main",
-      "target": "apps_shared_agroia_config",
+      "source": "project_status",
+      "target": "project_status_agroia_estado_del_proyecto",
       "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/main.py",
-      "source_location": "L13",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L114",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "apps_backend_agroia_backend_main",
-      "target": "apps_shared_agroia_errors",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_arranque_r\u00e1pido",
       "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/main.py",
-      "source_location": "L14",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "apps_backend_agroia_backend_main",
-      "target": "apps_shared_agroia_health",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_despliegue_gratuito_render_neon_supabase",
       "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/main.py",
-      "source_location": "L15",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "apps_backend_agroia_backend_main",
-      "target": "apps_shared_agroia_logging",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_estado_por_\u00e9pica",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_estructura",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L135",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_objetivo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L127",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_pendiente",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L160",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_reportes_de_an\u00e1lisis_2026_08_25",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L150",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_roles_y_permisos_por_finca_2026_08_25",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_stack",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_chat_asesor_agron\u00f3mico_2026_08_25",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L68",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_c\u00f3mo_est\u00e1_montado",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L80",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L50",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_mapa_de_calor_del_lote_2026_08_25",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_migraciones_destacadas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L90",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_notas_t\u00e9cnicas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26",
       "confidence_score": 1.0
     },
     {
@@ -99457,9 +99607,9 @@
       "source_location": "L54",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_main",
-      "target": "apps_backend_agroia_backend_main_lifespan",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_main_lifespan"
     },
     {
       "relation": "imports",
@@ -99469,9 +99619,57 @@
       "source_location": "L58",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_main",
-      "target": "apps_backend_agroia_backend_services_asegurar_enums_asegurar_enums",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_asegurar_enums_asegurar_enums"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/main.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_main",
+      "target": "apps_shared_agroia_config"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/main.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_main",
+      "target": "apps_shared_agroia_errors"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/main.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_main",
+      "target": "apps_shared_agroia_health"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/main.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_main",
+      "target": "apps_shared_agroia_logging"
     },
     {
       "relation": "imports_from",
@@ -99481,9 +99679,9 @@
       "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_main",
-      "target": "fastapi",
-      "confidence_score": 1.0
+      "target": "fastapi"
     },
     {
       "relation": "rationale_for",
@@ -99492,9 +99690,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_main_rationale_1",
-      "target": "apps_backend_agroia_backend_main",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_main"
     },
     {
       "relation": "imports_from",
@@ -99528,9 +99726,9 @@
       "source_location": "L54",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_main_lifespan",
-      "target": "fastapi",
-      "confidence_score": 1.0
+      "target": "fastapi"
     },
     {
       "relation": "rationale_for",
@@ -99539,9 +99737,9 @@
       "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_main_rationale_55",
-      "target": "apps_backend_agroia_backend_main_lifespan",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_main_lifespan"
     },
     {
       "relation": "imports_from",
@@ -99724,6 +99922,17 @@
       "target": "fastapi"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/services/asegurar_enums.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_services_asegurar_enums",
+      "target": "apps_backend_agroia_backend_services_asegurar_enums_asegurar_enums"
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -99731,9 +99940,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_asegurar_enums",
-      "target": "apps_shared_agroia_database",
-      "confidence_score": 1.0
+      "target": "apps_shared_agroia_database"
     },
     {
       "relation": "imports_from",
@@ -99743,20 +99952,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_asegurar_enums",
-      "target": "apps_shared_agroia_logging",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/services/asegurar_enums.py",
-      "source_location": "L36",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "apps_backend_agroia_backend_services_asegurar_enums",
-      "target": "apps_backend_agroia_backend_services_asegurar_enums_asegurar_enums",
-      "confidence_score": 1.0
+      "target": "apps_shared_agroia_logging"
     },
     {
       "relation": "rationale_for",
@@ -99765,9 +99963,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_asegurar_enums_rationale_1",
-      "target": "apps_backend_agroia_backend_services_asegurar_enums",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_asegurar_enums"
     },
     {
       "relation": "rationale_for",
@@ -99776,9 +99974,9 @@
       "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_asegurar_enums_rationale_37",
-      "target": "apps_backend_agroia_backend_services_asegurar_enums_asegurar_enums",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_asegurar_enums_asegurar_enums"
     },
     {
       "relation": "contains",
@@ -100423,204 +100621,6 @@
       "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_730",
       "target": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status",
-      "target": "project_status_agroia_estado_del_proyecto"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L112",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_arranque_r\u00e1pido"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L37",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_despliegue_gratuito_render_neon_supabase"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_estado_por_\u00e9pica"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L93",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_estructura"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L133",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_objetivo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L125",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_pendiente"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L158",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_reportes_de_an\u00e1lisis_2026_08_25"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L148",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_roles_y_permisos_por_finca_2026_08_25"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L23",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_stack"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L41",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_chat_asesor_agron\u00f3mico_2026_08_25"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L67",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_c\u00f3mo_est\u00e1_montado"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L78",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L50",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_mapa_de_calor_del_lote_2026_08_25"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L73",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_migraciones_destacadas"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L88",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_notas_t\u00e9cnicas"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L58",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26"
     },
     {
       "relation": "contains",
@@ -220114,5 +220114,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6f2964196676f5991526d173e1f5a554d6982da3"
+  "built_at_commit": "0e1ad498e642af523618f3b3b58c66b85af5ee32"
 }

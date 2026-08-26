@@ -4075,8 +4075,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/external_apis.py": {
-    "mtime": 1787691942.288972,
-    "ast_hash": "8e71ecf90c11de0b091e5c21a456ecb5",
+    "mtime": 1787749710.555916,
+    "ast_hash": "72a6866b4ec1273361acd5805c6c9962",
     "semantic_hash": ""
   },
   "apps/iot/agroia_iot/consumer.py": {
@@ -4515,8 +4515,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/reportes.py": {
-    "mtime": 1787702879.4777327,
-    "ast_hash": "afb89bcdc3a7bfd474328d3dbb76e384",
+    "mtime": 1787749742.4691572,
+    "ast_hash": "1859616665a17ee4bfa1dad118aad45a",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/sensor_api.py": {
@@ -4570,8 +4570,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/reportes_html.py": {
-    "mtime": 1787747497.2925415,
-    "ast_hash": "c0054642ad041ceb206c0dfa3e39e752",
+    "mtime": 1787749780.2931235,
+    "ast_hash": "5091c4854127528d22c8bd59d02a7cac",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/003_dispositivos_iot.py": {
@@ -4767,6 +4767,16 @@
   "apps/backend/agroia_backend/services/asegurar_enums.py": {
     "mtime": 1787748799.8482885,
     "ast_hash": "de4e26dc5d0dfcb39bfc6fe947be6945",
+    "semantic_hash": ""
+  },
+  "reports/test_plano_clima.html": {
+    "mtime": 1787749827.4545355,
+    "ast_hash": "d6751e3aa2753037b702b62859c77100",
+    "semantic_hash": ""
+  },
+  "reports/plano_clima_preview.png": {
+    "mtime": 1787749865.487394,
+    "ast_hash": "ae6f0a898a0dab89facab9c1f07f3900",
     "semantic_hash": ""
   }
 }

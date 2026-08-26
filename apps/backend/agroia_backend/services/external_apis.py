@@ -226,6 +226,24 @@ async def fetch_ideam_clima_fecha(lat: float, lon: float, fecha: str) -> dict:
     }
 
 
+async def resolver_enlace_google(enlace: str) -> str:
+    """Resuelve un enlace corto de Google Maps (goo.gl/maps.app.goo.gl)
+    siguiendo los redireccionamientos y retorna la URL final (que suele
+    contener las coordenadas). Si no se puede resolver, retorna el enlace.
+    """
+    try:
+        async with httpx.AsyncClient(timeout=TIMEOUT_GIS, follow_redirects=True) as client:
+            try:
+                resp = await client.head(enlace)
+            except httpx.HTTPError:
+                resp = await client.get(enlace)
+            final = str(resp.url)
+            return final if final and final != enlace else enlace
+    except Exception as e:  # noqa: BLE001
+        logger.warning("enlace_google_no_resuelto", error=str(e))
+        return enlace
+
+
 # ═══════════════════════════════════════════════════════════════
 # Google Maps GIS — Geolocalización (on-demand)
 # ═══════════════════════════════════════════════════════════════

@@ -128,13 +128,27 @@ async def generar_reporte(
     muestras_geo = await _muestras_geo(db, finca_uuid)
 
     # ── Clima del día de la muestra (IDEAM) ──
-    # Solo si la finca tiene coordenadas de Google; si no, la sección se omite.
+    # Solo si la finca tiene coordenadas útiles (enlace de Google, 'lat,lng'
+    # o latitud/longitud registradas); si no, la sección se omite.
     clima = None
-    if finca.coordenadas_google:
+    if finca.coordenadas_google or (finca.latitud is not None and finca.longitud is not None):
         from agroia_backend.api.fincas import _extraer_coordenadas
-        from agroia_backend.services.external_apis import fetch_ideam_clima_fecha
+        from agroia_backend.services.external_apis import (
+            fetch_ideam_clima_fecha,
+            resolver_enlace_google,
+        )
 
-        lat, lng = _extraer_coordenadas(finca.coordenadas_google)
+        lat = lng = None
+        if finca.coordenadas_google:
+            lat, lng = _extraer_coordenadas(finca.coordenadas_google)
+        if (lat is None or lng is None) and finca.latitud is not None and finca.longitud is not None:
+            lat, lng = float(finca.latitud), float(finca.longitud)
+        if (lat is None or lng is None) and finca.coordenadas_google and str(finca.coordenadas_google).startswith("http"):
+            try:
+                enlace_final = await resolver_enlace_google(finca.coordenadas_google)
+                lat, lng = _extraer_coordenadas(enlace_final)
+            except Exception as e:  # noqa: BLE001
+                logger.warning("enlace_google_no_resuelto", error=str(e))
         if lat is not None and lng is not None:
             fecha_muestreo = None
             if muestras_geo:
