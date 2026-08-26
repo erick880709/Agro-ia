@@ -20,6 +20,13 @@ import re
 from agroia.config import get_settings
 from agroia.logging import get_logger
 
+from agroia_backend.services.agronomo_kb import (
+    calcular_encalado,
+    calcular_fertilizante,
+    diagnostico_diferencial,
+    recomendar_riego,
+)
+
 settings = get_settings()
 logger = get_logger(__name__)
 
@@ -612,6 +619,309 @@ async def consultar_experto(*, mensaje: str, historial: list[dict], contexto: st
         return {"respuesta": None, "modo": "local"}
 
 
+# ═══════════════════════════════════════════════════════════════
+# Orquestador agronómico (capa especializada sobre el motor local)
+# ═══════════════════════════════════════════════════════════════
+
+def _rango_variable(recs: list[dict], clave: str) -> str | None:
+    for r in recs:
+        var = str(r.get("variable") or "").lower().strip()
+        clave_motor = _VAR_MOTOR.get(var, var)
+        if clave_motor == clave and r.get("rango_ideal"):
+            return str(r.get("rango_ideal"))
+    return None
+
+
+def _fundamentar(
+    *,
+    recomendacion: str,
+    por_que: str,
+    datos: list[str],
+    fuentes: list[str],
+    confianza: str,
+    falta: str | None = None,
+    sencillo: bool = False,
+) -> str:
+    """Formatea una respuesta fundamentada (qué, por qué, datos, fuentes, falta, confianza)."""
+    partes = [recomendacion, por_que]
+    if datos:
+        partes.append("Datos que utilicé: " + " · ".join(datos) + ".")
+    if fuentes:
+        partes.append("Fuentes: " + " · ".join(fuentes) + ".")
+    if falta:
+        partes.append(falta)
+    if sencillo:
+        partes.append(f"Mi confianza en esta respuesta es {confianza.lower()}.")
+    else:
+        partes.append(f"Confianza: {confianza}.")
+    return " ".join(partes)
+
+
+def _respuesta_clima(mensaje: str, ctx: dict) -> str:
+    """Preguntas de clima/época: responde con lo disponible, sin inventar."""
+    clima = ctx.get("clima") or {}
+    rol = (ctx.get("rol") or "cliente").lower()
+    sencillo = rol == "cliente"
+    partes = []
+    if clima.get("fecha"):
+        partes.append(f"Hoy es {clima['fecha']}.")
+    if clima.get("epoca_ano"):
+        partes.append(f"Su finca está en {clima['epoca_ano']}.")
+    sens = clima.get("sensores_ambientales") or {}
+    if sens.get("temperatura_ambiental") is not None:
+        partes.append(
+            f"El sensor de la finca marca {sens['temperatura_ambiental']} °C de temperatura ambiente."
+        )
+    texto = mensaje.lower()
+    if re.search(r"(fertiliz|abon|cal\b|encal)", texto):
+        partes.append(
+            "Para aplicar cal o abono, espere a que el suelo no esté encharcado: "
+            "en plena lluvia fuerte la cal se lava y el abono se pierde."
+        )
+    if re.search(r"(regar|riego|agua)", texto):
+        partes.append(
+            "Si hay lluvias, espacie el riego y revise que el suelo drene; "
+            "más vale poca agua y seguido que encharcar."
+        )
+    partes.append(clima.get("nota_pronostico") or "")
+    return _fundamentar(
+        recomendacion=" ".join(partes),
+        por_que=(
+            "Uso la época del año de la zona y los sensores de su finca; "
+            "no invento pronósticos si no hay fuente externa."
+        ),
+        datos=[str(d) for d in (clima.get("fecha"), clima.get("epoca_ano")) if d],
+        fuentes=["IDEAM — calendario climático de Colombia (referencia general)"],
+        confianza="Media" if clima.get("epoca_ano") else "Baja",
+        falta=(
+            "Para un pronóstico real de lluvia se necesita conectar la fuente externa (IDEAM_API_KEY)."
+            if clima.get("nota_pronostico") else None
+        ),
+        sencillo=sencillo,
+    )
+
+
+def _respuesta_porque_cultivo(ctx: dict) -> str:
+    """Explica POR QUÉ el motor recomendó el cultivo, con los datos reales."""
+    rol = (ctx.get("rol") or "cliente").lower()
+    sencillo = rol == "cliente"
+    sugerencias = ctx.get("sugerencias") or []
+    lectura = ctx.get("lectura") or {}
+    if not sugerencias:
+        return (
+            "Todavía no tengo la recomendación del motor para explicarle el porqué. "
+            "Genere el reporte o el análisis y vuelva a preguntarme."
+        )
+    top = sugerencias[0]
+    cultivo = top.get("cultivo")
+    clasificacion = top.get("clasificacion") or top.get("aptitud")
+    score = top.get("score")
+    datos = [f"cultivo recomendado: {cultivo}"]
+    if lectura.get("ph") is not None:
+        datos.append(f"pH del suelo: {lectura['ph']}")
+    if lectura.get("materia_organica") is not None:
+        datos.append(f"materia orgánica: {lectura['materia_organica']}%")
+    if lectura.get("humedad") is not None:
+        datos.append(f"humedad: {lectura['humedad']}%")
+
+    por_que = (
+        f"El motor comparó su suelo con los umbrales que {cultivo} necesita y encontró "
+        f"aptitud {clasificacion or 'favorable'}"
+        + (f" (puntaje {score:.1f})" if score is not None else "")
+        + ". "
+    )
+    ph = lectura.get("ph")
+    if ph is not None:
+        if 5.5 <= ph <= 6.5:
+            por_que += "Su pH está en la franja que este cultivo prefiere. "
+        elif ph < 5.5:
+            por_que += "El pH está agrio, pero se puede corregir con cal antes de sembrar. "
+        else:
+            por_que += "El pH está alto; hay que manejarlo para que el cultivo coma bien. "
+    mo = lectura.get("materia_organica")
+    if mo is not None:
+        por_que += f"La materia orgánica ({mo}%) " + ("le da buena base al suelo." if mo >= 5 else "está baja, pero se mejora con compost antes de sembrar. ")
+    return _fundamentar(
+        recomendacion=f"Le recomendamos {cultivo} con base en el análisis de SU finca.",
+        por_que=por_que,
+        datos=datos,
+        fuentes=["UPRA — aptitud por suelo y clima", "Cenicafé/Agrosavia — umbrales del cultivo"],
+        confianza="Media",
+        falta=(
+            "Para afinar, me faltan datos climáticos del sitio (IDEAM) y la altitud exacta del lote."
+            if sencillo else
+            "Para mayor precisión faltan: clima local (IDEAM), variedad y etapa del cultivo."
+        ),
+        sencillo=sencillo,
+    )
+
+
+def respuesta_orquestada(mensaje: str, ctx: dict) -> dict:
+    """Orquestador agronómico: intención → herramientas → respuesta fundamentada.
+
+    Devuelve {respuesta, fuentes, confianza, datos_utilizados, falta}.
+    Si la pregunta no encaja en una intención especializada, delega en el
+    motor conversacional general.
+    """
+    texto = mensaje.lower()
+    lectura = ctx.get("lectura") or {}
+    recs = ctx.get("recomendaciones") or []
+    cultivo = ctx.get("cultivo") or None
+    rol = (ctx.get("rol") or "cliente").lower()
+    sencillo = rol == "cliente"
+
+    vacio = {"respuesta": None, "fuentes": [], "confianza": None, "datos_utilizados": [], "falta": None}
+
+    # ── 1) Cálculo de encalado ──
+    if (re.search(r"\bcal\b", texto) and re.search(r"(cuánta|cuanta|cantidad|dosis|necesito|aplicar|cuánto|cuanto|echar)", texto)) \
+       or re.search(r"encala", texto):
+        r = calcular_encalado(
+            ph_actual=lectura.get("ph"),
+            textura=lectura.get("textura"),
+            materia_organica=lectura.get("materia_organica"),
+            cultivo=cultivo,
+        )
+        if not r["posible"]:
+            return {**vacio, "respuesta": (
+                f"No puedo calcular la dosis de cal con los datos actuales. Me falta: "
+                f"{', '.join(r['faltan'])}. Haga un análisis de suelo completo (pH, textura "
+                "y materia orgánica) y vuelva a preguntarme."
+            ), "falta": r["faltan"]}
+        datos = [
+            f"pH: {r.get('ph_actual')}",
+            f"pH objetivo: {r.get('ph_objetivo')}",
+            f"cultivo: {cultivo}",
+        ]
+        return {
+            "respuesta": _fundamentar(
+                recomendacion=r.get("mensaje") or "",
+                por_que=r.get("formula") or "La dosis se calcula según el pH actual, la textura y la materia orgánica.",
+                datos=datos,
+                fuentes=r.get("fuentes") or [],
+                confianza=r.get("confianza", "Media"),
+                falta=r.get("limitaciones"),
+                sencillo=sencillo,
+            ),
+            "fuentes": r.get("fuentes") or [],
+            "confianza": r.get("confianza", "Media"),
+            "datos_utilizados": datos,
+            "falta": r.get("limitaciones"),
+        }
+
+    # ── 2) Cálculo de fertilizante ──
+    if re.search(r"(cuánto|cuanto|cantidad|dosis|cuántos|cuantos)\b.{0,30}\b(fertilizante|abono|urea|dap|kcl|npk|gallinaza|compost)", texto):
+        r = calcular_fertilizante(recomendaciones=recs, lectura_vals=lectura, cultivo=cultivo)
+        if not r["posible"]:
+            return {**vacio, "respuesta": (
+                "No puedo calcular la dosis de fertilizante todavía. Me falta: "
+                f"{', '.join(r['faltan'])}. Genere primero el análisis del cultivo."
+            ), "falta": r["faltan"]}
+        resumen = r.get("mensaje", "")
+        if r.get("resultados"):
+            resumen += " " + " ".join(
+                f"{item['nutriente']}: {item['kg_ha']} kg/ha ({item['nota']})."
+                for item in r["resultados"]
+            )
+        datos = [f"cultivo: {cultivo}"] + [f"{i['nutriente']} ideal vs actual" for i in r.get("resultados", [])]
+        return {
+            "respuesta": _fundamentar(
+                recomendacion=resumen,
+                por_que="La dosis sale de la diferencia entre su lectura y el rango ideal que define el motor para el cultivo.",
+                datos=datos,
+                fuentes=r.get("fuentes", []),
+                confianza=r.get("confianza", "Media"),
+                falta=r.get("limitaciones"),
+                sencillo=sencillo,
+            ),
+            "fuentes": r.get("fuentes", []),
+            "confianza": r.get("confianza", "Media"),
+            "datos_utilizados": datos,
+            "falta": r.get("limitaciones"),
+        }
+
+    # ── 3) Riego ──
+    if re.search(r"(cada cuánto|cada cuanto|frecuencia|cuánta agua|cuanta agua|cuánto riego|cuanto riego|cómo riego|como riego|regar)", texto):
+        r = recomendar_riego(
+            textura=lectura.get("textura"),
+            humedad_actual=lectura.get("humedad"),
+            humedad_ideal=_rango_variable(recs, "humedad"),
+            clima=ctx.get("clima"),
+        )
+        if not r["posible"]:
+            return {**vacio, "respuesta": (
+                f"Para recomendarle riego con precisión me falta: {', '.join(r['faltan'])}."
+            ), "falta": r["faltan"]}
+        datos = [f"textura: {lectura.get('textura')}", f"humedad: {lectura.get('humedad')}%"]
+        return {
+            "respuesta": _fundamentar(
+                recomendacion=r["mensaje"],
+                por_que="La frecuencia depende de qué tan rápido suelta el agua cada tipo de suelo y de la humedad actual.",
+                datos=datos,
+                fuentes=r.get("fuentes", []),
+                confianza=r.get("confianza", "Media"),
+                falta=None if r.get("confianza") != "Baja" else "Sin lectura de humedad la recomendación es general.",
+                sencillo=sencillo,
+            ),
+            "fuentes": r.get("fuentes", []),
+            "confianza": r.get("confianza", "Media"),
+            "datos_utilizados": datos,
+        }
+
+    # ── 4) Clima / época ──
+    if re.search(r"(lluvia|clima|pronóstico|pronostico|esta semana|próxima semana|proxima semana|época|epoca del año|temporada)", texto):
+        return {
+            "respuesta": _respuesta_clima(mensaje, ctx),
+            "fuentes": ["IDEAM — calendario climático de Colombia (referencia general)"],
+            "confianza": "Media" if (ctx.get("clima") or {}).get("epoca_ano") else "Baja",
+            "datos_utilizados": [],
+        }
+
+    # ── 5) Diagnóstico de problemas ──
+    diag = diagnostico_diferencial(texto)
+    if diag.get("encontrado"):
+        causas = "\n".join(
+            f"{i}. {c['causa']}: {c['detalle']}"
+            for i, c in enumerate(diag["causas"], 1)
+        )
+        return {
+            "respuesta": _fundamentar(
+                recomendacion=(
+                    "Hay varias causas posibles; no me apresuro a culpar una sola:\n" + causas
+                ),
+                por_que=(
+                    "Un mismo síntoma puede venir de nutrición, agua, pH o enfermedades; "
+                    "por eso comparo las posibilidades y pido más pistas."
+                ),
+                datos=[],
+                fuentes=diag["fuentes"],
+                confianza="Baja",
+                falta=diag["solicitud_datos"],
+                sencillo=sencillo,
+            ),
+            "fuentes": diag["fuentes"],
+            "confianza": "Baja",
+            "datos_utilizados": [],
+            "falta": diag["solicitud_datos"],
+        }
+
+    # ── 6) ¿Por qué este cultivo? ──
+    if re.search(r"(por qué|porque|por que).{0,25}(recomiend|ese cultivo|café|cafe|plátano|platano|papa|este cultivo)", texto):
+        return {
+            "respuesta": _respuesta_porque_cultivo(ctx),
+            "fuentes": ["UPRA — aptitud por suelo y clima", "Cenicafé/Agrosavia — umbrales del cultivo"],
+            "confianza": "Media",
+            "datos_utilizados": [],
+        }
+
+    # ── 7) Conversacional general (motor detallado existente) ──
+    return {
+        "respuesta": _respuesta_local(mensaje, ctx),
+        "fuentes": ["UPRA/Cenicafé/Agrosavia — reglas del motor"],
+        "confianza": "Alta" if recs else "Baja",
+        "datos_utilizados": [],
+    }
+
+
 def contexto_resumido(ctx: dict) -> dict:
     """Extrae del contexto dict lo que necesita el motor local."""
     lectura_obj = ctx.get("lectura")
@@ -621,6 +931,9 @@ def contexto_resumido(ctx: dict) -> dict:
             valor = getattr(lectura_obj, attr, None)
             if valor is not None:
                 lectura_vals[attr] = valor
+        textura = getattr(lectura_obj, "textura", None)
+        if textura is not None:
+            lectura_vals["textura"] = getattr(textura, "value", str(textura))
     return {
         "recomendaciones": ctx.get("recomendaciones") or [],
         "reglas": ctx.get("reglas") or [],
@@ -628,4 +941,6 @@ def contexto_resumido(ctx: dict) -> dict:
         "clasificacion": ctx.get("clasificacion"),
         "lectura": lectura_vals,
         "rol": ctx.get("rol") or "cliente",
+        "clima": ctx.get("clima") or {},
+        "cultivo": ctx.get("cultivo"),
     }

@@ -924,6 +924,7 @@ function descargarReporteHtml() {
 const chatHistorial = {}; // finca_id → [{rol, contenido}]
 let chatFincaActual = null;
 let chatModo = null; // 'llm' | 'experto-local'
+let chatMeta = null; // {confianza, fuentes} de la última respuesta
 
 function chatFincaId() {
   const sel = document.getElementById('repo-finca');
@@ -949,10 +950,17 @@ function renderChat() {
   div.innerHTML = hist.map(m =>
     `<div class="chat-msg ${m.rol === 'user' ? 'chat-user' : 'chat-bot'}">${esc(m.contenido)}</div>`
   ).join('');
+  let extra = '';
+  if (chatMeta) {
+    const partes = [];
+    if (chatMeta.confianza) partes.push('Confianza: ' + chatMeta.confianza);
+    if (chatMeta.fuentes && chatMeta.fuentes.length) partes.push('Fuentes: ' + chatMeta.fuentes.join(' · '));
+    if (partes.length) extra = ' · ' + partes.join(' · ');
+  }
   nota.textContent = fid
-    ? (chatModo === 'llm'
+    ? ((chatModo === 'llm'
       ? 'Respuestas del modelo de lenguaje con el contexto real de la finca (lectura + reglas UPRA/Cenicafé/AGROSAVIA).'
-      : 'Respuestas del sistema experto local basadas en los datos de la finca y las reglas UPRA/Cenicafé/AGROSAVIA.')
+      : 'Respuestas del sistema experto local basadas en los datos de la finca y las reglas UPRA/Cenicafé/AGROSAVIA.') + extra)
     : '';
   div.scrollTop = div.scrollHeight;
 }
@@ -995,6 +1003,7 @@ async function enviarChat(e) {
     });
     hist.push({ rol: 'assistant', contenido: r.respuesta });
     chatModo = r.modo || 'experto-local';
+    chatMeta = { confianza: r.confianza, fuentes: r.fuentes };
   } catch (err) {
     hist.push({
       rol: 'assistant',

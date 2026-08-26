@@ -1,16 +1,16 @@
 # Graph Report - Agro-ia  (2026-08-25)
 
 ## Corpus Check
-- 877 files · ~529,728 words
+- 877 files · ~529,826 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 8919 nodes · 10609 edges · 851 communities (725 shown, 126 thin omitted)
+- 8920 nodes · 10610 edges · 866 communities (740 shown, 126 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 216 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3164686f`
+- Built from commit: `5035d216`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -827,6 +827,18 @@
 - Injectable
 - get
 - str
+- $type
+- radius
+- sm
+- md
+- none
+- 0
+- 2
+- 6
+- 8
+- destructive-foreground
+- muted
+- primary
 - Base
 - TenantMixin
 - TimestampMixin
@@ -843,8 +855,11 @@
 - Base
 - TenantMixin
 - TimestampMixin
+- primary-foreground
 - put
 - usuarios.py
+- ring
+- secondary-foreground
 - 005_fix_enum_values.py
 
 ## God Nodes (most connected - your core abstractions)
@@ -874,7 +889,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (851 total, 126 thin omitted)
+## Communities (866 total, 126 thin omitted)
 
 ### Community 0 - "init.ts"
 Cohesion: 0.06
@@ -929,8 +944,8 @@ Cohesion: 0.11
 Nodes (33): _can_merge(), _consolidate_text(), _find_elements(), _first_child_run(), _get_child(), _get_children(), _is_adjacent(), _is_run() (+25 more)
 
 ### Community 13 - "spacing"
-Cohesion: 0.06
-Nodes (34): $type, $value, $type, $value, $type, $value, $type, $value (+26 more)
+Cohesion: 0.09
+Nodes (22): $type, $value, $type, $value, $type, $value, $type, $value (+14 more)
 
 ### Community 14 - "spacing"
 Cohesion: 0.09
@@ -985,8 +1000,8 @@ Cohesion: 0.14
 Nodes (10): DesignSystemGenerator, Find matching reasoning rule for a category., Apply reasoning rules to search results., Select best matching result based on priority keywords., Extract results list from search result dict., Generate complete design system recommendation. variance/motion/density are…, Generates design system recommendations from aggregated searches., Load reasoning rules from CSV. (+2 more)
 
 ### Community 27 - "color"
-Cohesion: 0.05
-Nodes (37): $type, $value, background, destructive, destructive-foreground, foreground, muted, muted-foreground (+29 more)
+Cohesion: 0.11
+Nodes (19): $type, $value, background, destructive, foreground, muted-foreground, primary-hover, secondary (+11 more)
 
 ### Community 28 - "color"
 Cohesion: 0.11
@@ -1018,7 +1033,7 @@ Nodes (17): compilerOptions, allowSyntheticDefaultImports, declaration, esModule
 
 ### Community 35 - "card"
 Cohesion: 0.20
-Nodes (12): $type, $value, border, padding, shadow, border, card, border (+4 more)
+Nodes (12): $type, $value, bg, bg, padding, shadow, card, bg (+4 more)
 
 ### Community 36 - "BM25"
 Cohesion: 0.10
@@ -1045,8 +1060,8 @@ Cohesion: 0.20
 Nodes (15): apply_color(), apply_viewbox_size(), extract_svgs(), generate_batch(), generate_icon(), generate_sizes(), load_env(), main() (+7 more)
 
 ### Community 42 - "fontSize"
-Cohesion: 0.10
-Nodes (21): $type, $value, $type, $value, $type, $value, $type, $value (+13 more)
+Cohesion: 0.12
+Nodes (16): $type, $value, $type, $value, $type, $value, $type, $value (+8 more)
 
 ### Community 43 - "ShadcnInstaller"
 Cohesion: 0.23
@@ -1301,12 +1316,12 @@ Cohesion: 0.39
 Nodes (8): detectPackageManager(), installCommand(), main(), missingPackages(), PACKAGE_GROUPS, parseArgs(), readPackageJson(), run()
 
 ### Community 107 - "radius"
-Cohesion: 0.12
-Nodes (23): $type, $value, sm, $type, $value, $type, $value, $type (+15 more)
+Cohesion: 0.18
+Nodes (15): $type, $value, lg, $type, $value, $type, $value, primitive (+7 more)
 
 ### Community 108 - "input"
-Cohesion: 0.15
-Nodes (17): padding-x, padding-y, radius, radius, input, $type, $value, focus-ring (+9 more)
+Cohesion: 0.20
+Nodes (12): padding-x, padding-y, input, $type, $value, focus-ring, padding-x, padding-y (+4 more)
 
 ### Community 109 - "radius"
 Cohesion: 0.19
@@ -1333,8 +1348,8 @@ Cohesion: 0.12
 Nodes (54): abrirReporte(), actualizarTriggerFincas(), api(), aplicarRol(), aplicarSesion(), aplicarTipoReporte(), arrancarAplicacion(), badge() (+46 more)
 
 ### Community 115 - "button"
-Cohesion: 0.15
-Nodes (15): $type, $value, bg, fg, font-size, hover-bg, bg, button (+7 more)
+Cohesion: 0.20
+Nodes (10): fg, font-size, hover-bg, button, $type, $value, $type, $value (+2 more)
 
 ### Community 116 - "build.mjs"
 Cohesion: 0.33
@@ -3013,8 +3028,8 @@ Cohesion: 0.08
 Nodes (29): aplicar_calibracion(), normalizar_trama(), Normalización de tramas IoT (ESP32/LoRaWAN) al formato canónico. Cierra la…, Aplica factores de calibración NPK por dispositivo (brecha G4). Solo se invoca…, Convierte una trama cruda de sensor a payload canónico. Args: raw: diccionario…, Descarga datasets colombianos de AGROSAVIA, IDEAM y Cenicafé desde…, Busca datasets en datos.gov.co usando la API de descubrimiento., Descarga un dataset completo como CSV desde Socrata. (+21 more)
 
 ### Community 630 - "AgroIA — Estado del Proyecto"
-Cohesion: 0.12
-Nodes (16): AgroIA — Estado del Proyecto, 🚀 Arranque rápido, Chat asesor agronómico (2026-08-25), Cómo está montado, 🚀 Despliegue gratuito (Render + Neon/Supabase), 📊 Estado por épica, 📁 Estructura, Límites del tier gratuito (validados 2026-08-25) (+8 more)
+Cohesion: 0.11
+Nodes (17): AgroIA — Estado del Proyecto, 🚀 Arranque rápido, Chat asesor agronómico (2026-08-25), Cómo está montado, 🚀 Despliegue gratuito (Render + Neon/Supabase), 📊 Estado por épica, 📁 Estructura, Límites del tier gratuito (validados 2026-08-25) (+9 more)
 
 ### Community 631 - "destructive-foreground"
 Cohesion: 0.67
@@ -3688,16 +3703,76 @@ Nodes (4): 📄 Archivos principales, 🌐 Comunidades conectadas, 🔗 Nodos cl
 Cohesion: 0.50
 Nodes (3): _crear_enum(), upgrade(), ENUM
 
+### Community 832 - "$type"
+Cohesion: 0.60
+Nodes (5): $type, $value, border, border, border
+
+### Community 833 - "radius"
+Cohesion: 0.60
+Nodes (5): radius, radius, radius, $type, $value
+
+### Community 834 - "sm"
+Cohesion: 0.60
+Nodes (5): sm, sm, sm, $type, $value
+
+### Community 835 - "md"
+Cohesion: 0.67
+Nodes (4): $type, $value, md, md
+
+### Community 836 - "none"
+Cohesion: 0.67
+Nodes (4): $type, $value, none, none
+
+### Community 837 - "0"
+Cohesion: 0.67
+Nodes (3): $type, $value, 0
+
+### Community 838 - "2"
+Cohesion: 0.67
+Nodes (3): $type, $value, 2
+
+### Community 839 - "6"
+Cohesion: 0.67
+Nodes (3): $type, $value, 6
+
+### Community 840 - "8"
+Cohesion: 0.67
+Nodes (3): $type, $value, 8
+
+### Community 841 - "destructive-foreground"
+Cohesion: 0.67
+Nodes (3): destructive-foreground, $type, $value
+
+### Community 842 - "muted"
+Cohesion: 0.67
+Nodes (3): muted, $type, $value
+
+### Community 843 - "primary"
+Cohesion: 0.67
+Nodes (3): primary, $type, $value
+
+### Community 860 - "primary-foreground"
+Cohesion: 0.67
+Nodes (3): primary-foreground, $type, $value
+
 ### Community 862 - "usuarios.py"
 Cohesion: 0.04
 Nodes (74): login(), LoginRequest, BaseModel, post, Autenticación demo contra la tabla usuarios (MVP). Login real contra los hashes…, Valida email/contraseña y devuelve los datos de sesión del usuario., _extraer_coordenadas(), _finca_a_dict() (+66 more)
+
+### Community 863 - "ring"
+Cohesion: 0.67
+Nodes (3): ring, $type, $value
+
+### Community 864 - "secondary-foreground"
+Cohesion: 0.67
+Nodes (3): secondary-foreground, $type, $value
 
 ### Community 865 - "005_fix_enum_values.py"
 Cohesion: 0.53
 Nodes (5): _aplicar(), downgrade(), _labels(), Migration 005 — Alinear valores de 4 tipos enum con los nombres del modelo. La…, upgrade()
 
 ## Knowledge Gaps
-- **4153 isolated node(s):** `🎯 Objetivo`, `📊 Estado por épica`, `🏗️ Stack`, `Chat asesor agronómico (2026-08-25)`, `Cómo está montado` (+4148 more)
+- **4154 isolated node(s):** `🎯 Objetivo`, `📊 Estado por épica`, `🏗️ Stack`, `Chat asesor agronómico (2026-08-25)`, `Mapa de calor del lote (2026-08-25)` (+4149 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **126 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -3708,13 +3783,13 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.001) - this node is a cross-community bridge._
 - **Why does `AptitudService` connect `AptitudService` to `logging.py`, `catalogo.py`, `recomendaciones.py`?**
   _High betweenness centrality (0.001) - this node is a cross-community bridge._
+- **Why does `Usuario` connect `usuarios.py` to `database.py`?**
+  _High betweenness centrality (0.001) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `TailwindConfigGenerator` (e.g. with `TestGeneratedConfigIsValidJs` and `TestTailwindConfigGenerator`) actually correct?**
   _`TailwindConfigGenerator` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `ShadcnInstaller` (e.g. with `TestShadcnInstaller` and `TestShadcnInstaller`) actually correct?**
   _`ShadcnInstaller` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `🎯 Objetivo`, `📊 Estado por épica`, `🏗️ Stack` to the rest of the system?**
-  _4153 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _4154 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `init.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.06080246913580247 - nodes in this community are weakly interconnected._
-- **Should `BaseSchemaValidator` be split into smaller, more focused modules?**
-  _Cohesion score 0.051759834368530024 - nodes in this community are weakly interconnected._

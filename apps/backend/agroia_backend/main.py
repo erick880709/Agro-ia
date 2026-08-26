@@ -20,6 +20,7 @@ from fastapi.staticfiles import StaticFiles
 # ── Registro de modelos en Base.metadata ──
 # Estos imports garantizan que SQLAlchemy conozca todas las tablas al
 # resolver claves foráneas entre modelos (ej. dispositivos_iot → fincas).
+import agroia_backend.models.chat_memoria  # noqa: F401
 import agroia_backend.models.cultivo  # noqa: F401
 import agroia_backend.models.discordancia  # noqa: F401
 import agroia_backend.models.dispositivo_iot  # noqa: F401

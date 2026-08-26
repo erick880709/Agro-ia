@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787703367.2056313,
-    "ast_hash": "856f12598e78b7178d9c1bf02ace09ce",
+    "mtime": 1787704253.6156392,
+    "ast_hash": "fc5e4d52fa54efbf6d6e9cd709e34e0c",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4570,8 +4570,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/reportes_html.py": {
-    "mtime": 1787703379.323822,
-    "ast_hash": "87b107c25f9a6dcd64bc52f4d18c9526",
+    "mtime": 1787703774.7089548,
+    "ast_hash": "97d0a2b95edcf5b487e3f47ae3dfbebd",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/003_dispositivos_iot.py": {
@@ -4670,13 +4670,13 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/chat.py": {
-    "mtime": 1787701960.2741752,
-    "ast_hash": "3981d2bc0574f0db6d13602f8c97c276",
+    "mtime": 1787703921.5417051,
+    "ast_hash": "2adde7b21426d3a3c2c1c646d7e4b8a2",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/agronomo_chat.py": {
-    "mtime": 1787701960.2741752,
-    "ast_hash": "c9b4c9781f38a8e41ccb16ae83235b40",
+    "mtime": 1787704080.7087653,
+    "ast_hash": "a5e737b79fb9e53a3e4ef9dfd3504e01",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/006_posiciones_muestreo.py": {

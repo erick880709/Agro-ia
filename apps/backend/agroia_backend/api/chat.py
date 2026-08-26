@@ -8,6 +8,7 @@ con la key configurada, responde el LLM con el mismo contexto real.
 """
 
 import uuid as uuid_mod
+from datetime import datetime, timezone
 
 from agroia.database import get_db
 from agroia.errors import AgroIAError
@@ -17,6 +18,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from agroia_backend.models.chat_memoria import ChatMemoria
 from agroia_backend.models.cultivo import Cultivo, FichaTecnica
 from agroia_backend.models.finca import Finca
 from agroia_backend.models.regla_agronomica import ReglaAgronomica
@@ -26,7 +28,12 @@ from agroia_backend.services.agronomo_chat import (
     consultar_experto,
     construir_contexto,
     contexto_resumido,
-    _respuesta_local,
+    respuesta_orquestada,
+)
+from agroia_backend.services.agronomo_kb import (
+    contexto_climatico,
+    contexto_conocimiento,
+    resumen_climatico,
 )
 from agroia_backend.services.aptitud import AptitudService
 from agroia_backend.services.data_adapters import SueloAdapter
@@ -157,6 +164,13 @@ async def consultar_chat(
         recomendaciones = [dict(r) for r in (uc1.recomendaciones or [])]
     sugerencias = [dict(s) for s in (uc1.sugerencias_cultivos if uc1 else [])]
 
+    # ── Clima disponible (época del año + sensores ambientales; sin inventar) ──
+    clima = contexto_climatico(
+        finca=finca,
+        lectura=lectura,
+        fecha=datetime.now(timezone.utc),
+    )
+
     ctx = {
         "recomendaciones": recomendaciones,
         "reglas": list(reglas),
@@ -164,6 +178,8 @@ async def consultar_chat(
         "clasificacion": (uc2.clasificacion_upra if uc2 else (uc1.clasificacion_upra if uc1 else None)),
         "lectura": lectura,
         "rol": x_user_role or "cliente",
+        "clima": clima,
+        "cultivo": cultivo.nombre if cultivo else None,
     }
 
     contexto_texto = await construir_contexto(
@@ -174,6 +190,11 @@ async def consultar_chat(
         ficha=ficha,
         reglas=list(reglas),
         analisis=uc2 or uc1,
+    )
+    contexto_texto += (
+        "\n\nINFORMACIÓN CLIMÁTICA DISPONIBLE:\n" + resumen_climatico(clima)
+        + "\n\nBASE DE CONOCIMIENTO AGRONÓMICO (general, con fuentes):\n"
+        + contexto_conocimiento()
     )
 
     resultado = await consultar_experto(
@@ -186,9 +207,30 @@ async def consultar_chat(
     if resultado["modo"] == "llm" and resultado["respuesta"]:
         respuesta = resultado["respuesta"]
         modo = "llm"
+        fuentes = ["Base de conocimiento AgroIA (Agrosavia/Cenicafé/UPRA/ICA/IDEAM)"]
+        confianza = None
+        falta = None
+        datos_utilizados = ["contexto de la finca", "análisis del motor", "clima disponible"]
     else:
-        respuesta = _respuesta_local(body.mensaje, contexto_resumido(ctx))
+        orquestado = respuesta_orquestada(body.mensaje, contexto_resumido(ctx))
+        respuesta = orquestado["respuesta"] or ""
         modo = "experto-local"
+        fuentes = orquestado.get("fuentes") or []
+        confianza = orquestado.get("confianza")
+        falta = orquestado.get("falta")
+        datos_utilizados = orquestado.get("datos_utilizados") or []
+
+    # ── Memoria de finca (el usuario puede volver después) ──
+    db.add(ChatMemoria(
+        finca_id=finca_uuid,
+        usuario_email=x_user_email,
+        rol=x_user_role,
+        pregunta=body.mensaje,
+        respuesta=respuesta,
+        fuentes="; ".join(fuentes) if fuentes else None,
+        confianza=confianza,
+    ))
+    await db.commit()
 
     return {
         "respuesta": respuesta,
@@ -197,8 +239,52 @@ async def consultar_chat(
         "cultivo_id": str(cultivo_uuid) if cultivo_uuid else None,
         "cultivo": cultivo.nombre if cultivo else None,
         "clasificacion_upra": ctx["clasificacion"],
+        "fuentes": fuentes,
+        "confianza": confianza,
+        "datos_utilizados": datos_utilizados,
+        "falta": falta,
+        "clima": resumen_climatico(clima),
         "nota": (
             "Respuesta generada por el sistema experto local."
             if modo == "experto-local" else None
         ),
+    }
+
+
+@router.get("/memoria/{finca_id}")
+async def memoria_chat(
+    finca_id: str,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+):
+    """Memoria conversacional de la finca (últimas consultas y respuestas)."""
+    await verificar_acceso_finca(db, x_user_role, x_user_email, finca_id)
+    try:
+        finca_uuid = uuid_mod.UUID(finca_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FINCA_INVALIDA", "message": "finca_id no es un UUID válido.",
+        })
+    registros = (
+        await db.execute(
+            select(ChatMemoria)
+            .where(ChatMemoria.finca_id == finca_uuid)
+            .order_by(ChatMemoria.ts.desc())
+            .limit(20)
+        )
+    ).scalars().all()
+    return {
+        "finca_id": finca_id,
+        "total": len(registros),
+        "registros": [
+            {
+                "pregunta": r.pregunta,
+                "respuesta": r.respuesta,
+                "fuentes": r.fuentes,
+                "confianza": r.confianza,
+                "ts": r.ts.isoformat() if r.ts else None,
+            }
+            for r in registros
+        ],
     }
