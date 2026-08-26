@@ -63,7 +63,7 @@ class SensorFrame(BaseModel, extra="allow"):
 async def ingesta_sensor(frame: SensorFrame):
     """Recibe una trama del sensor y la procesa en el pipeline de AgroIA."""
     from agroia_backend.services.normalizacion_iot import normalizar_trama
-    from apps.iot.agroia_iot.consumer import process_sensor_message
+    from agroia_backend.services.puente_iot import process_sensor_message
 
     def _a_entero(v):
         try:

@@ -27,7 +27,7 @@ COPY apps/ /app/apps/
 COPY .env.example /app/.env
 
 # ── Python path para que alembic/uvicorn encuentren agroia y agroia_backend ──
-ENV PYTHONPATH="/app/apps/shared:/app/apps/backend"
+ENV PYTHONPATH="/app/apps/shared:/app/apps/backend:/app/apps/iot"
 
 # ── Health check ──
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \

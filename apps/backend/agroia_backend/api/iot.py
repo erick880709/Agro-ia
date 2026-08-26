@@ -84,7 +84,7 @@ async def ingest_sensor_data(message: SensorMessage):
     )
 
     # Encolar en RabbitMQ (en producción) o procesar directamente (dev)
-    from apps.iot.agroia_iot.consumer import process_sensor_message
+    from agroia_backend.services.puente_iot import process_sensor_message
 
     success = await process_sensor_message({
         "device_id": message.device_id,
@@ -133,7 +133,7 @@ async def ingest_esp32_sensor(body: Esp32SensorMessage):
             ),
         })
 
-    from apps.iot.agroia_iot.consumer import process_sensor_message
+    from agroia_backend.services.puente_iot import process_sensor_message
 
     payload, advertencias = normalizar_trama(body.model_dump())
     success = await process_sensor_message({
@@ -306,7 +306,7 @@ async def cargar_archivo_sensor(
         device_final = dispositivo.device_id if dispositivo else None
 
         # ── Normalizar y persistir cada muestra (cuadrícula) ──
-        from apps.iot.agroia_iot.consumer import process_sensor_message
+        from agroia_backend.services.puente_iot import process_sensor_message
 
         variables_recibidas: set[str] = set()
         numero_muestras = 0

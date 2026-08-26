@@ -4,15 +4,48 @@
   "graph": {},
   "nodes": [
     {
+      "label": "md_to_html.py",
+      "file_type": "code",
+      "source_file": "scripts/md_to_html.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_md_to_html",
+      "community": 876,
+      "community_name": "md_to_html.py",
+      "norm_label": "md_to_html.py"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/md_to_html.py",
+      "source_location": "L47",
+      "_origin": "ast",
+      "id": "scripts_md_to_html_main",
+      "community": 876,
+      "community_name": "md_to_html.py",
+      "norm_label": "main()"
+    },
+    {
+      "label": "Convierte documentaci\u00f3n Markdown a HTML con el estilo AgroIA. Uso: python\u2026",
+      "file_type": "rationale",
+      "source_file": "scripts/md_to_html.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_md_to_html_rationale_1",
+      "community": 876,
+      "community_name": "md_to_html.py",
+      "norm_label": "convierte documentacion markdown a html con el estilo agroia. uso: python..."
+    },
+    {
       "label": "api_sensor_muestreo.md",
       "file_type": "document",
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "api_sensor_muestreo.md"
+      "norm_label": "api_sensor_muestreo.md",
+      "id": "resources_architecture_api_sensor_muestreo"
     },
     {
       "label": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
@@ -20,10 +53,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "agroia \u2014 documentacion del servicio de ingesta de sensores (muestreo por puntos)"
+      "norm_label": "agroia \u2014 documentacion del servicio de ingesta de sensores (muestreo por puntos)",
+      "id": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos"
     },
     {
       "label": "1. Resumen",
@@ -31,10 +64,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_1_resumen",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "1. resumen"
+      "norm_label": "1. resumen",
+      "id": "resources_architecture_api_sensor_muestreo_1_resumen"
     },
     {
       "label": "2. Formato de la trama (JSON)",
@@ -42,10 +75,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L27",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "2. formato de la trama (json)"
+      "norm_label": "2. formato de la trama (json)",
+      "id": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json"
     },
     {
       "label": "Campos",
@@ -53,10 +86,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L46",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_campos",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "campos"
+      "norm_label": "campos",
+      "id": "resources_architecture_api_sensor_muestreo_campos"
     },
     {
       "label": "Alias aceptados por variable (por si el firmware cambia de nombres)",
@@ -64,10 +97,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L71",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_alias_aceptados_por_variable_por_si_el_firmware_cambia_de_nombres",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "alias aceptados por variable (por si el firmware cambia de nombres)"
+      "norm_label": "alias aceptados por variable (por si el firmware cambia de nombres)",
+      "id": "resources_architecture_api_sensor_muestreo_alias_aceptados_por_variable_por_si_el_firmware_cambia_de_nombres"
     },
     {
       "label": "3. Ejemplo de env\u00edo",
@@ -75,10 +108,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L84",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_3_ejemplo_de_env\u00edo",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "3. ejemplo de envio"
+      "norm_label": "3. ejemplo de envio",
+      "id": "resources_architecture_api_sensor_muestreo_3_ejemplo_de_env\u00edo"
     },
     {
       "label": "curl (prueba r\u00e1pida)",
@@ -86,10 +119,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L86",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_curl_prueba_r\u00e1pida",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "curl (prueba rapida)"
+      "norm_label": "curl (prueba rapida)",
+      "id": "resources_architecture_api_sensor_muestreo_curl_prueba_r\u00e1pida"
     },
     {
       "label": "ESP32 (Arduino / ESP-IDF) \u2014 referencia",
@@ -97,10 +130,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L101",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_esp32_arduino_esp_idf_referencia",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "esp32 (arduino / esp-idf) \u2014 referencia"
+      "norm_label": "esp32 (arduino / esp-idf) \u2014 referencia",
+      "id": "resources_architecture_api_sensor_muestreo_esp32_arduino_esp_idf_referencia"
     },
     {
       "label": "4. Muestreo en cuadr\u00edcula (c\u00f3mo tomar los puntos)",
@@ -108,10 +141,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L145",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_4_muestreo_en_cuadr\u00edcula_c\u00f3mo_tomar_los_puntos",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "4. muestreo en cuadricula (como tomar los puntos)"
+      "norm_label": "4. muestreo en cuadricula (como tomar los puntos)",
+      "id": "resources_architecture_api_sensor_muestreo_4_muestreo_en_cuadr\u00edcula_c\u00f3mo_tomar_los_puntos"
     },
     {
       "label": "5. Respuesta del servidor",
@@ -119,10 +152,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L178",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_5_respuesta_del_servidor",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "5. respuesta del servidor"
+      "norm_label": "5. respuesta del servidor",
+      "id": "resources_architecture_api_sensor_muestreo_5_respuesta_del_servidor"
     },
     {
       "label": "\u00c9xito \u2014 `202 Accepted`",
@@ -130,10 +163,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L180",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_\u00e9xito_202_accepted",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "exito \u2014 `202 accepted`"
+      "norm_label": "exito \u2014 `202 accepted`",
+      "id": "resources_architecture_api_sensor_muestreo_\u00e9xito_202_accepted"
     },
     {
       "label": "Errores",
@@ -141,10 +174,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L200",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_errores",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "errores"
+      "norm_label": "errores",
+      "id": "resources_architecture_api_sensor_muestreo_errores"
     },
     {
       "label": "6. Calibraci\u00f3n NPK",
@@ -152,10 +185,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L210",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_6_calibraci\u00f3n_npk",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "6. calibracion npk"
+      "norm_label": "6. calibracion npk",
+      "id": "resources_architecture_api_sensor_muestreo_6_calibraci\u00f3n_npk"
     },
     {
       "label": "7. Registro de dispositivos (evitar auto-registro a la finca equivocada)",
@@ -163,10 +196,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L227",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_7_registro_de_dispositivos_evitar_auto_registro_a_la_finca_equivocada",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "7. registro de dispositivos (evitar auto-registro a la finca equivocada)"
+      "norm_label": "7. registro de dispositivos (evitar auto-registro a la finca equivocada)",
+      "id": "resources_architecture_api_sensor_muestreo_7_registro_de_dispositivos_evitar_auto_registro_a_la_finca_equivocada"
     },
     {
       "label": "8. Carga por archivo (alternativa sin conexi\u00f3n)",
@@ -174,10 +207,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L239",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_8_carga_por_archivo_alternativa_sin_conexi\u00f3n",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "8. carga por archivo (alternativa sin conexion)"
+      "norm_label": "8. carga por archivo (alternativa sin conexion)",
+      "id": "resources_architecture_api_sensor_muestreo_8_carga_por_archivo_alternativa_sin_conexi\u00f3n"
     },
     {
       "label": "CSV ancho con varias filas (una fila = un punto de muestreo)",
@@ -185,10 +218,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L245",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_csv_ancho_con_varias_filas_una_fila_un_punto_de_muestreo",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "csv ancho con varias filas (una fila = un punto de muestreo)"
+      "norm_label": "csv ancho con varias filas (una fila = un punto de muestreo)",
+      "id": "resources_architecture_api_sensor_muestreo_csv_ancho_con_varias_filas_una_fila_un_punto_de_muestreo"
     },
     {
       "label": "JSON \u2014 lista de tramas (una por punto)",
@@ -196,10 +229,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L263",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_json_lista_de_tramas_una_por_punto",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "json \u2014 lista de tramas (una por punto)"
+      "norm_label": "json \u2014 lista de tramas (una por punto)",
+      "id": "resources_architecture_api_sensor_muestreo_json_lista_de_tramas_una_por_punto"
     },
     {
       "label": "9. D\u00f3nde se ve el resultado",
@@ -207,10 +240,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L277",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_9_d\u00f3nde_se_ve_el_resultado",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "9. donde se ve el resultado"
+      "norm_label": "9. donde se ve el resultado",
+      "id": "resources_architecture_api_sensor_muestreo_9_d\u00f3nde_se_ve_el_resultado"
     },
     {
       "label": "10. Notas operativas",
@@ -218,10 +251,10 @@
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L288",
       "_origin": "ast",
-      "id": "resources_architecture_api_sensor_muestreo_10_notas_operativas",
       "community": 606,
       "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "10. notas operativas"
+      "norm_label": "10. notas operativas",
+      "id": "resources_architecture_api_sensor_muestreo_10_notas_operativas"
     },
     {
       "label": "PROJECT_STATUS.md",
@@ -549,7 +582,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "agroia_backend/main.py",
       "id": "apps_backend_agroia_backend_main"
     },
@@ -560,7 +593,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "lifespan()",
       "id": "apps_backend_agroia_backend_main_lifespan"
     },
@@ -571,7 +604,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "fastapi",
       "id": "fastapi"
     },
@@ -582,7 +615,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "agroia backend \u2014 servicio principal de negocio. expone la api rest para...",
       "id": "apps_backend_agroia_backend_main_rationale_1"
     },
@@ -593,7 +626,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "ciclo de vida de la aplicacion.",
       "id": "apps_backend_agroia_backend_main_rationale_55"
     },
@@ -603,8 +636,8 @@
       "source_file": "apps/backend/agroia_backend/models/chat_memoria.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 597,
-      "community_name": "database.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "chat_memoria.py",
       "id": "apps_backend_agroia_backend_models_chat_memoria"
     },
@@ -647,8 +680,8 @@
       "source_file": "apps/backend/agroia_backend/models/chat_memoria.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 597,
-      "community_name": "database.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "modelo chatmemoria \u2014 memoria conversacional por finca. permite que el usuario...",
       "id": "apps_backend_agroia_backend_models_chat_memoria_rationale_1"
     },
@@ -2550,8 +2583,8 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 866,
-      "community_name": "reportes.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "reportes.py",
       "id": "apps_backend_agroia_backend_api_reportes"
     },
@@ -2561,8 +2594,8 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 866,
-      "community_name": "reportes.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "reporterequest",
       "id": "apps_backend_agroia_backend_api_reportes_reporterequest"
     },
@@ -2572,8 +2605,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 866,
-      "community_name": "reportes.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "basemodel",
       "id": "apps_backend_agroia_backend_api_reportes_py_basemodel"
     },
@@ -2583,8 +2616,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 866,
-      "community_name": "reportes.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "post",
       "id": "apps_backend_agroia_backend_api_reportes_py_post"
     },
@@ -2594,8 +2627,8 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L44",
       "_origin": "ast",
-      "community": 866,
-      "community_name": "reportes.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "generar_reporte()",
       "id": "apps_backend_agroia_backend_api_reportes_generar_reporte"
     },
@@ -2605,8 +2638,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 866,
-      "community_name": "reportes.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "asyncsession",
       "id": "apps_backend_agroia_backend_api_reportes_py_asyncsession"
     },
@@ -2616,8 +2649,8 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L186",
       "_origin": "ast",
-      "community": 866,
-      "community_name": "reportes.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "_muestras_geo()",
       "id": "apps_backend_agroia_backend_api_reportes_muestras_geo"
     },
@@ -2627,8 +2660,8 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L211",
       "_origin": "ast",
-      "community": 866,
-      "community_name": "reportes.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "_umbrales_de_analisis()",
       "id": "apps_backend_agroia_backend_api_reportes_umbrales_de_analisis"
     },
@@ -2638,8 +2671,8 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 866,
-      "community_name": "reportes.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "generacion de reportes de analisis de suelo (html + pdf via navegador). tipos:...",
       "id": "apps_backend_agroia_backend_api_reportes_rationale_1"
     },
@@ -2649,8 +2682,8 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 866,
-      "community_name": "reportes.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "genera el html del reporte segun el tipo solicitado.",
       "id": "apps_backend_agroia_backend_api_reportes_rationale_50"
     },
@@ -2660,8 +2693,8 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L187",
       "_origin": "ast",
-      "community": 866,
-      "community_name": "reportes.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "lecturas recientes con posicion (x, y) para pintar el mapa de calor.",
       "id": "apps_backend_agroia_backend_api_reportes_rationale_187"
     },
@@ -2671,8 +2704,8 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L212",
       "_origin": "ast",
-      "community": 866,
-      "community_name": "reportes.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "rangos ideales por variable (simbolo \u2192 (min, max)) desde el analisis.",
       "id": "apps_backend_agroia_backend_api_reportes_rationale_212"
     },
@@ -2682,8 +2715,8 @@
       "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 875,
+      "community_name": "sensor_api.py",
       "norm_label": "sensor_api.py",
       "id": "apps_backend_agroia_backend_api_sensor_api"
     },
@@ -2693,8 +2726,8 @@
       "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 875,
+      "community_name": "sensor_api.py",
       "norm_label": "sensorframe",
       "id": "apps_backend_agroia_backend_api_sensor_api_sensorframe"
     },
@@ -2704,8 +2737,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 875,
+      "community_name": "sensor_api.py",
       "norm_label": "basemodel",
       "id": "apps_backend_agroia_backend_api_sensor_api_py_basemodel"
     },
@@ -2715,8 +2748,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 875,
+      "community_name": "sensor_api.py",
       "norm_label": "post",
       "id": "apps_backend_agroia_backend_api_sensor_api_py_post"
     },
@@ -2726,8 +2759,8 @@
       "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
       "source_location": "L55",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 875,
+      "community_name": "sensor_api.py",
       "norm_label": "ingesta_sensor()",
       "id": "apps_backend_agroia_backend_api_sensor_api_ingesta_sensor"
     },
@@ -2737,8 +2770,8 @@
       "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 875,
+      "community_name": "sensor_api.py",
       "norm_label": "api de ingesta para sensores fisicos (esp32/lorawan). este es el endpoint que...",
       "id": "apps_backend_agroia_backend_api_sensor_api_rationale_1"
     },
@@ -2748,8 +2781,8 @@
       "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 875,
+      "community_name": "sensor_api.py",
       "norm_label": "trama tal como la envia el firmware del sensor.",
       "id": "apps_backend_agroia_backend_api_sensor_api_rationale_38"
     },
@@ -2759,8 +2792,8 @@
       "source_file": "apps/backend/agroia_backend/api/sensor_api.py",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 875,
+      "community_name": "sensor_api.py",
       "norm_label": "recibe una trama del sensor y la procesa en el pipeline de agroia.",
       "id": "apps_backend_agroia_backend_api_sensor_api_rationale_56"
     },
@@ -2847,8 +2880,8 @@
       "source_file": "apps/backend/agroia_backend/services/carga_archivo.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 869,
-      "community_name": "carga_archivo.py",
+      "community": 815,
+      "community_name": "iot.py",
       "norm_label": "carga_archivo.py",
       "id": "apps_backend_agroia_backend_services_carga_archivo"
     },
@@ -2858,8 +2891,8 @@
       "source_file": "apps/backend/agroia_backend/services/carga_archivo.py",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 869,
-      "community_name": "carga_archivo.py",
+      "community": 815,
+      "community_name": "iot.py",
       "norm_label": "_es_flotante()",
       "id": "apps_backend_agroia_backend_services_carga_archivo_es_flotante"
     },
@@ -2869,8 +2902,8 @@
       "source_file": "apps/backend/agroia_backend/services/carga_archivo.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 869,
-      "community_name": "carga_archivo.py",
+      "community": 815,
+      "community_name": "iot.py",
       "norm_label": "_normalizar_clave()",
       "id": "apps_backend_agroia_backend_services_carga_archivo_normalizar_clave"
     },
@@ -2880,8 +2913,8 @@
       "source_file": "apps/backend/agroia_backend/services/carga_archivo.py",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 869,
-      "community_name": "carga_archivo.py",
+      "community": 815,
+      "community_name": "iot.py",
       "norm_label": "_pares_a_frame()",
       "id": "apps_backend_agroia_backend_services_carga_archivo_pares_a_frame"
     },
@@ -2891,8 +2924,8 @@
       "source_file": "apps/backend/agroia_backend/services/carga_archivo.py",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 869,
-      "community_name": "carga_archivo.py",
+      "community": 815,
+      "community_name": "iot.py",
       "norm_label": "_extraer_device_id()",
       "id": "apps_backend_agroia_backend_services_carga_archivo_extraer_device_id"
     },
@@ -2902,8 +2935,8 @@
       "source_file": "apps/backend/agroia_backend/services/carga_archivo.py",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 869,
-      "community_name": "carga_archivo.py",
+      "community": 815,
+      "community_name": "iot.py",
       "norm_label": "_parsear_csv()",
       "id": "apps_backend_agroia_backend_services_carga_archivo_parsear_csv"
     },
@@ -2913,8 +2946,8 @@
       "source_file": "apps/backend/agroia_backend/services/carga_archivo.py",
       "source_location": "L90",
       "_origin": "ast",
-      "community": 869,
-      "community_name": "carga_archivo.py",
+      "community": 815,
+      "community_name": "iot.py",
       "norm_label": "_parsear_txt()",
       "id": "apps_backend_agroia_backend_services_carga_archivo_parsear_txt"
     },
@@ -2924,8 +2957,8 @@
       "source_file": "apps/backend/agroia_backend/services/carga_archivo.py",
       "source_location": "L106",
       "_origin": "ast",
-      "community": 869,
-      "community_name": "carga_archivo.py",
+      "community": 815,
+      "community_name": "iot.py",
       "norm_label": "parsear_archivo_sensor()",
       "id": "apps_backend_agroia_backend_services_carga_archivo_parsear_archivo_sensor"
     },
@@ -2946,8 +2979,8 @@
       "source_file": "apps/backend/agroia_backend/services/carga_archivo.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 869,
-      "community_name": "carga_archivo.py",
+      "community": 815,
+      "community_name": "iot.py",
       "norm_label": "parser de archivos csv/txt/json con mediciones de sensores (carga manual)....",
       "id": "apps_backend_agroia_backend_services_carga_archivo_rationale_1"
     },
@@ -2957,8 +2990,8 @@
       "source_file": "apps/backend/agroia_backend/services/carga_archivo.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 869,
-      "community_name": "carga_archivo.py",
+      "community": 815,
+      "community_name": "iot.py",
       "norm_label": "convierte texto a float aceptando decimal espanol (7,1) e ingles (7.1).",
       "id": "apps_backend_agroia_backend_services_carga_archivo_rationale_16"
     },
@@ -2968,8 +3001,8 @@
       "source_file": "apps/backend/agroia_backend/services/carga_archivo.py",
       "source_location": "L107",
       "_origin": "ast",
-      "community": 869,
-      "community_name": "carga_archivo.py",
+      "community": 815,
+      "community_name": "iot.py",
       "norm_label": "detecta el formato del archivo y devuelve la(s) trama(s) cruda(s). args:...",
       "id": "apps_backend_agroia_backend_services_carga_archivo_rationale_107"
     },
@@ -3023,8 +3056,8 @@
       "source_file": "apps/iot/agroia_iot/consumer.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "consumer.py",
       "id": "apps_iot_agroia_iot_consumer"
     },
@@ -3034,8 +3067,8 @@
       "source_file": "apps/iot/agroia_iot/consumer.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "get_dispositivo()",
       "id": "apps_iot_agroia_iot_consumer_get_dispositivo"
     },
@@ -3056,8 +3089,8 @@
       "source_file": "apps/iot/agroia_iot/consumer.py",
       "source_location": "L155",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "iotingestionconsumer",
       "id": "apps_iot_agroia_iot_consumer_iotingestionconsumer"
     },
@@ -3067,8 +3100,8 @@
       "source_file": "apps/iot/agroia_iot/consumer.py",
       "source_location": "L158",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": ".__init__()",
       "id": "apps_iot_agroia_iot_consumer_iotingestionconsumer_init"
     },
@@ -3078,8 +3111,8 @@
       "source_file": "apps/iot/agroia_iot/consumer.py",
       "source_location": "L161",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": ".start()",
       "id": "apps_iot_agroia_iot_consumer_iotingestionconsumer_start"
     },
@@ -3089,8 +3122,8 @@
       "source_file": "apps/iot/agroia_iot/consumer.py",
       "source_location": "L178",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": ".stop()",
       "id": "apps_iot_agroia_iot_consumer_iotingestionconsumer_stop"
     },
@@ -3100,8 +3133,8 @@
       "source_file": "apps/iot/agroia_iot/consumer.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "consumidor rabbitmq para ingesta de datos iot (lorawan). escucha la cola...",
       "id": "apps_iot_agroia_iot_consumer_rationale_1"
     },
@@ -3111,8 +3144,8 @@
       "source_file": "apps/iot/agroia_iot/consumer.py",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "busca el registro del dispositivo (device_id \u2192 finca_id + calibracion).",
       "id": "apps_iot_agroia_iot_consumer_rationale_22"
     },
@@ -3133,8 +3166,8 @@
       "source_file": "apps/iot/agroia_iot/consumer.py",
       "source_location": "L156",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "consumidor rabbitmq para el servicio iot.",
       "id": "apps_iot_agroia_iot_consumer_rationale_156"
     },
@@ -3144,8 +3177,8 @@
       "source_file": "apps/iot/agroia_iot/consumer.py",
       "source_location": "L162",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "inicia el consumidor (modo polling \u2014 simula rabbitmq en desarrollo).",
       "id": "apps_iot_agroia_iot_consumer_rationale_162"
     },
@@ -3155,8 +3188,8 @@
       "source_file": "apps/iot/agroia_iot/consumer.py",
       "source_location": "L179",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "detiene el consumidor.",
       "id": "apps_iot_agroia_iot_consumer_rationale_179"
     },
@@ -3166,8 +3199,8 @@
       "source_file": "apps/iot/agroia_iot/consumer.py",
       "source_location": "L170",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "# todo: conectar a rabbitmq en produccion",
       "id": "apps_iot_agroia_iot_consumer_rationale_170"
     },
@@ -3177,8 +3210,8 @@
       "source_file": "scripts/seed_demo_integral.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 597,
-      "community_name": "database.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "seed_demo_integral.py",
       "id": "scripts_seed_demo_integral"
     },
@@ -3188,8 +3221,8 @@
       "source_file": "scripts/seed_demo_integral.py",
       "source_location": "L68",
       "_origin": "ast",
-      "community": 815,
-      "community_name": "iot.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "main()",
       "id": "scripts_seed_demo_integral_main"
     },
@@ -3199,8 +3232,8 @@
       "source_file": "scripts/seed_demo_integral.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 597,
-      "community_name": "database.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "siembra la finca demo integral con lecturas simuladas completas. crea/actualiza...",
       "id": "scripts_seed_demo_integral_rationale_1"
     },
@@ -3464,7 +3497,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "community": 872,
-      "community_name": "configure_search_path",
+      "community_name": "datetime",
       "norm_label": "normalize_asyncpg_url()",
       "id": "apps_shared_agroia_database_normalize_asyncpg_url"
     },
@@ -3475,7 +3508,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "community": 872,
-      "community_name": "configure_search_path",
+      "community_name": "datetime",
       "norm_label": "configure_search_path()",
       "id": "apps_shared_agroia_database_configure_search_path"
     },
@@ -3519,7 +3552,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "check_database_health()",
       "id": "apps_shared_agroia_database_check_database_health"
     },
@@ -3541,7 +3574,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "community": 872,
-      "community_name": "configure_search_path",
+      "community_name": "datetime",
       "norm_label": "adapta urls de postgres externos (neon/supabase) al driver asyncpg. asyncpg no...",
       "id": "apps_shared_agroia_database_rationale_17"
     },
@@ -3552,7 +3585,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "community": 872,
-      "community_name": "configure_search_path",
+      "community_name": "datetime",
       "norm_label": "pone el schema `agroia` en el search_path de cada conexion. los casts de tipos...",
       "id": "apps_shared_agroia_database_rationale_28"
     },
@@ -3585,7 +3618,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "verifica que la base de datos responde (para health check).",
       "id": "apps_shared_agroia_database_rationale_78"
     },
@@ -3595,8 +3628,8 @@
       "source_file": "load_seeds.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "load_seeds.py",
       "id": "load_seeds"
     },
@@ -3606,8 +3639,8 @@
       "source_file": "load_seeds.py",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "cargar_seed_data()",
       "id": "load_seeds_cargar_seed_data"
     },
@@ -3617,8 +3650,8 @@
       "source_file": "load_seeds.py",
       "source_location": "L80",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "cargar_reglas()",
       "id": "load_seeds_cargar_reglas"
     },
@@ -3628,8 +3661,8 @@
       "source_file": "load_seeds.py",
       "source_location": "L137",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "main()",
       "id": "load_seeds_main"
     },
@@ -3639,8 +3672,8 @@
       "source_file": "load_seeds.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "load seed cultivos into the database.",
       "id": "load_seeds_rationale_1"
     },
@@ -3650,8 +3683,8 @@
       "source_file": "load_seeds.py",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "carga los cultivos semilla en la bd.",
       "id": "load_seeds_rationale_34"
     },
@@ -3661,8 +3694,8 @@
       "source_file": "load_seeds.py",
       "source_location": "L81",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "carga las reglas agronomicas del sistema experto (uc1 + uc2).",
       "id": "load_seeds_rationale_81"
     },
@@ -3672,8 +3705,8 @@
       "source_file": "scripts/seed_cloud.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 597,
-      "community_name": "database.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "seed_cloud.py",
       "id": "scripts_seed_cloud"
     },
@@ -3684,7 +3717,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "community": 872,
-      "community_name": "configure_search_path",
+      "community_name": "datetime",
       "norm_label": "main()",
       "id": "scripts_seed_cloud_main"
     },
@@ -3694,8 +3727,8 @@
       "source_file": "scripts/seed_cloud.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 597,
-      "community_name": "database.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "siembra usuarios, fincas y asociaciones en la base de datos de la nube....",
       "id": "scripts_seed_cloud_rationale_1"
     },
@@ -3898,7 +3931,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "catalogo.py",
       "id": "apps_backend_agroia_backend_api_catalogo"
@@ -3909,7 +3942,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "cultivocreate",
       "id": "apps_backend_agroia_backend_api_catalogo_cultivocreate"
@@ -3920,7 +3953,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "basemodel",
       "id": "apps_backend_agroia_backend_api_catalogo_py_basemodel"
@@ -3931,7 +3964,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "cultivoresponse",
       "id": "apps_backend_agroia_backend_api_catalogo_cultivoresponse"
@@ -3942,7 +3975,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "field_validator",
       "id": "apps_backend_agroia_backend_api_catalogo_py_field_validator"
@@ -3953,7 +3986,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": ".coerce_id()",
       "id": "apps_backend_agroia_backend_api_catalogo_cultivoresponse_coerce_id"
@@ -3964,7 +3997,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "fichacreate",
       "id": "apps_backend_agroia_backend_api_catalogo_fichacreate"
@@ -3975,7 +4008,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "fichaupdate",
       "id": "apps_backend_agroia_backend_api_catalogo_fichaupdate"
@@ -3986,7 +4019,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "ficharesponse",
       "id": "apps_backend_agroia_backend_api_catalogo_ficharesponse"
@@ -3997,7 +4030,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L72",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": ".coerce_ficha_ids()",
       "id": "apps_backend_agroia_backend_api_catalogo_ficharesponse_coerce_ficha_ids"
@@ -4008,8 +4041,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "get",
       "id": "apps_backend_agroia_backend_api_catalogo_py_get"
     },
@@ -4019,8 +4052,8 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L79",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "listar_cultivos()",
       "id": "apps_backend_agroia_backend_api_catalogo_listar_cultivos"
     },
@@ -4030,8 +4063,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "asyncsession",
       "id": "apps_backend_agroia_backend_api_catalogo_py_asyncsession"
     },
@@ -4041,8 +4074,8 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L94",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "obtener_cultivo()",
       "id": "apps_backend_agroia_backend_api_catalogo_obtener_cultivo"
     },
@@ -4052,8 +4085,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "post",
       "id": "apps_backend_agroia_backend_api_catalogo_py_post"
     },
@@ -4063,7 +4096,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L103",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "crear_cultivo()",
       "id": "apps_backend_agroia_backend_api_catalogo_crear_cultivo"
@@ -4074,7 +4107,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L114",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "listar_fichas()",
       "id": "apps_backend_agroia_backend_api_catalogo_listar_fichas"
@@ -4085,8 +4118,8 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L131",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "obtener_ficha()",
       "id": "apps_backend_agroia_backend_api_catalogo_obtener_ficha"
     },
@@ -4096,7 +4129,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L140",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "crear_ficha()",
       "id": "apps_backend_agroia_backend_api_catalogo_crear_ficha"
@@ -4107,8 +4140,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "put",
       "id": "apps_backend_agroia_backend_api_catalogo_py_put"
     },
@@ -4118,8 +4151,8 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L150",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "actualizar_ficha()",
       "id": "apps_backend_agroia_backend_api_catalogo_actualizar_ficha"
     },
@@ -4129,8 +4162,8 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L160",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "enviar_a_revision()",
       "id": "apps_backend_agroia_backend_api_catalogo_enviar_a_revision"
     },
@@ -4140,8 +4173,8 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L170",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "aprobar_ficha()",
       "id": "apps_backend_agroia_backend_api_catalogo_aprobar_ficha"
     },
@@ -4151,8 +4184,8 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L180",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "rechazar_ficha()",
       "id": "apps_backend_agroia_backend_api_catalogo_rechazar_ficha"
     },
@@ -4162,7 +4195,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "api endpoints del catalogo de cultivos y fichas tecnicas.",
       "id": "apps_backend_agroia_backend_api_catalogo_rationale_1"
@@ -4173,8 +4206,8 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L85",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "lista cultivos paginados con busqueda.",
       "id": "apps_backend_agroia_backend_api_catalogo_rationale_85"
     },
@@ -4184,8 +4217,8 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L95",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "obtiene un cultivo por id.",
       "id": "apps_backend_agroia_backend_api_catalogo_rationale_95"
     },
@@ -4195,7 +4228,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L104",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "crea un nuevo cultivo.",
       "id": "apps_backend_agroia_backend_api_catalogo_rationale_104"
@@ -4206,7 +4239,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L121",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "lista fichas tecnicas paginadas.",
       "id": "apps_backend_agroia_backend_api_catalogo_rationale_121"
@@ -4217,8 +4250,8 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L132",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "obtiene una ficha tecnica por id.",
       "id": "apps_backend_agroia_backend_api_catalogo_rationale_132"
     },
@@ -4228,7 +4261,7 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L141",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "crea una nueva ficha tecnica (estado: borrador).",
       "id": "apps_backend_agroia_backend_api_catalogo_rationale_141"
@@ -4239,8 +4272,8 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L151",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "actualiza una ficha (solo en estado borrador).",
       "id": "apps_backend_agroia_backend_api_catalogo_rationale_151"
     },
@@ -4250,8 +4283,8 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L161",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "envia una ficha a revision (borrador \u2192 en revision).",
       "id": "apps_backend_agroia_backend_api_catalogo_rationale_161"
     },
@@ -4261,8 +4294,8 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L171",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "aprueba una ficha (en revision \u2192 publicado).",
       "id": "apps_backend_agroia_backend_api_catalogo_rationale_171"
     },
@@ -4272,8 +4305,8 @@
       "source_file": "apps/backend/agroia_backend/api/catalogo.py",
       "source_location": "L181",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 810,
+      "community_name": "AsyncSession",
       "norm_label": "rechaza una ficha (en revision \u2192 borrador).",
       "id": "apps_backend_agroia_backend_api_catalogo_rationale_181"
     },
@@ -4746,7 +4779,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "recomendaciones.py",
       "id": "apps_backend_agroia_backend_api_recomendaciones"
     },
@@ -4757,7 +4790,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "recommendrequest",
       "id": "apps_backend_agroia_backend_api_recomendaciones_recommendrequest"
     },
@@ -4768,7 +4801,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "basemodel",
       "id": "apps_backend_agroia_backend_api_recomendaciones_py_basemodel"
     },
@@ -4779,7 +4812,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "recommendresponse",
       "id": "apps_backend_agroia_backend_api_recomendaciones_recommendresponse"
     },
@@ -4790,7 +4823,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "_persistir_recomendacion()",
       "id": "apps_backend_agroia_backend_api_recomendaciones_persistir_recomendacion"
     },
@@ -4801,7 +4834,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "asyncsession",
       "id": "apps_backend_agroia_backend_api_recomendaciones_py_asyncsession"
     },
@@ -4812,7 +4845,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "post",
       "id": "apps_backend_agroia_backend_api_recomendaciones_py_post"
     },
@@ -4823,7 +4856,7 @@
       "source_location": "L130",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "analizar_aptitud()",
       "id": "apps_backend_agroia_backend_api_recomendaciones_analizar_aptitud"
     },
@@ -4834,7 +4867,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "get",
       "id": "apps_backend_agroia_backend_api_recomendaciones_py_get"
     },
@@ -4845,7 +4878,7 @@
       "source_location": "L191",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "historial_recomendaciones()",
       "id": "apps_backend_agroia_backend_api_recomendaciones_historial_recomendaciones"
     },
@@ -4856,7 +4889,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "api endpoints del motor de recomendaciones.",
       "id": "apps_backend_agroia_backend_api_recomendaciones_rationale_1"
     },
@@ -4867,7 +4900,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "persiste el analisis en el historial de la finca (uc1 y uc2). un fallo aqui no...",
       "id": "apps_backend_agroia_backend_api_recomendaciones_rationale_60"
     },
@@ -4878,7 +4911,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "analiza la aptitud del suelo de una finca. dos casos de uso: - sin `cultivo_id`...",
       "id": "apps_backend_agroia_backend_api_recomendaciones_rationale_135"
     },
@@ -4889,7 +4922,7 @@
       "source_location": "L200",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "historial de recomendaciones de una finca.",
       "id": "apps_backend_agroia_backend_api_recomendaciones_rationale_200"
     },
@@ -5372,7 +5405,7 @@
       "source_file": "apps/backend/agroia_backend/models/cultivo.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "cultivo.py",
       "id": "apps_backend_agroia_backend_models_cultivo"
@@ -5383,7 +5416,7 @@
       "source_file": "apps/backend/agroia_backend/models/cultivo.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "estadoficha",
       "id": "apps_backend_agroia_backend_models_cultivo_estadoficha"
@@ -5394,7 +5427,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "str",
       "id": "apps_backend_agroia_backend_models_cultivo_py_str"
@@ -5405,7 +5438,7 @@
       "source_file": "apps/backend/agroia_backend/models/cultivo.py",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "tipofuente",
       "id": "apps_backend_agroia_backend_models_cultivo_tipofuente"
@@ -5416,8 +5449,8 @@
       "source_file": "apps/backend/agroia_backend/models/cultivo.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 550,
+      "community_name": "logging.py",
       "norm_label": "cultivo",
       "id": "apps_backend_agroia_backend_models_cultivo_cultivo"
     },
@@ -5427,8 +5460,8 @@
       "source_file": "apps/backend/agroia_backend/models/cultivo.py",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 550,
+      "community_name": "logging.py",
       "norm_label": ".__repr__()",
       "id": "apps_backend_agroia_backend_models_cultivo_cultivo_repr"
     },
@@ -5439,7 +5472,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "fichatecnica",
       "id": "apps_backend_agroia_backend_models_cultivo_fichatecnica"
     },
@@ -5450,7 +5483,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": ".sla_vencido()",
       "id": "apps_backend_agroia_backend_models_cultivo_fichatecnica_sla_vencido"
     },
@@ -5461,7 +5494,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": ".requiere_revision_periodica()",
       "id": "apps_backend_agroia_backend_models_cultivo_fichatecnica_requiere_revision_periodica"
     },
@@ -5472,7 +5505,7 @@
       "source_location": "L150",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": ".puede_usarse_en_recomendaciones()",
       "id": "apps_backend_agroia_backend_models_cultivo_fichatecnica_puede_usarse_en_recomendaciones"
     },
@@ -5483,7 +5516,7 @@
       "source_location": "L154",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": ".__repr__()",
       "id": "apps_backend_agroia_backend_models_cultivo_fichatecnica_repr"
     },
@@ -5493,7 +5526,7 @@
       "source_file": "apps/backend/agroia_backend/models/cultivo.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "modelo cultivo \u2014 catalogo de cultivos con fichas tecnicas.",
       "id": "apps_backend_agroia_backend_models_cultivo_rationale_1"
@@ -5504,8 +5537,8 @@
       "source_file": "apps/backend/agroia_backend/models/cultivo.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 550,
+      "community_name": "logging.py",
       "norm_label": "catalogo de cultivos. datos compartidos (sin tenant_id).",
       "id": "apps_backend_agroia_backend_models_cultivo_rationale_30"
     },
@@ -5516,7 +5549,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "ficha tecnica de un cultivo con umbrales edafoclimaticos. flujo: borrador \u2192 en...",
       "id": "apps_backend_agroia_backend_models_cultivo_rationale_61"
     },
@@ -5527,7 +5560,7 @@
       "source_location": "L137",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "\u00bfse vencio el sla de revision (5 dias habiles)?",
       "id": "apps_backend_agroia_backend_models_cultivo_rationale_137"
     },
@@ -5538,7 +5571,7 @@
       "source_location": "L144",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "\u00bfhan pasado mas de 12 meses desde la ultima revision?",
       "id": "apps_backend_agroia_backend_models_cultivo_rationale_144"
     },
@@ -5549,7 +5582,7 @@
       "source_location": "L151",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "\u00bflos umbrales de esta ficha pueden usarse para generar recomendaciones?",
       "id": "apps_backend_agroia_backend_models_cultivo_rationale_151"
     },
@@ -5967,7 +6000,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "recomendacion",
       "id": "apps_backend_agroia_backend_models_recomendacion_recomendacion"
     },
@@ -5978,7 +6011,7 @@
       "source_location": "L74",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".__repr__()",
       "id": "apps_backend_agroia_backend_models_recomendacion_recomendacion_repr"
     },
@@ -6000,7 +6033,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "recomendacion generada para una finca sobre un cultivo.",
       "id": "apps_backend_agroia_backend_models_recomendacion_rationale_35"
     },
@@ -6055,7 +6088,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "reglaagronomica",
       "id": "apps_backend_agroia_backend_models_regla_agronomica_reglaagronomica"
     },
@@ -6066,7 +6099,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".__repr__()",
       "id": "apps_backend_agroia_backend_models_regla_agronomica_reglaagronomica_repr"
     },
@@ -6088,7 +6121,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "regla del sistema experto agronomico. sin tenant_id (datos compartidos).",
       "id": "apps_backend_agroia_backend_models_regla_agronomica_rationale_43"
     },
@@ -6264,7 +6297,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "services/__init__.py",
       "id": "apps_backend_agroia_backend_services_init"
     },
@@ -6275,7 +6308,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "agroia backend services package.",
       "id": "apps_backend_agroia_backend_services_init_rationale_1"
     },
@@ -6285,8 +6318,8 @@
       "source_file": "apps/backend/agroia_backend/services/acceso.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 597,
-      "community_name": "database.py",
+      "community": 624,
+      "community_name": "fincas.py",
       "norm_label": "acceso.py",
       "id": "apps_backend_agroia_backend_services_acceso"
     },
@@ -6296,8 +6329,8 @@
       "source_file": "apps/backend/agroia_backend/services/acceso.py",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 550,
-      "community_name": "recomendaciones.py",
+      "community": 624,
+      "community_name": "fincas.py",
       "norm_label": "_normalizar()",
       "id": "apps_backend_agroia_backend_services_acceso_normalizar"
     },
@@ -6307,8 +6340,8 @@
       "source_file": "apps/backend/agroia_backend/services/acceso.py",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 597,
-      "community_name": "database.py",
+      "community": 624,
+      "community_name": "fincas.py",
       "norm_label": "get_usuario()",
       "id": "apps_backend_agroia_backend_services_acceso_get_usuario"
     },
@@ -6340,8 +6373,8 @@
       "source_file": "apps/backend/agroia_backend/services/acceso.py",
       "source_location": "L69",
       "_origin": "ast",
-      "community": 550,
-      "community_name": "recomendaciones.py",
+      "community": 624,
+      "community_name": "fincas.py",
       "norm_label": "verificar_acceso_finca()",
       "id": "apps_backend_agroia_backend_services_acceso_verificar_acceso_finca"
     },
@@ -6351,8 +6384,8 @@
       "source_file": "apps/backend/agroia_backend/services/acceso.py",
       "source_location": "L91",
       "_origin": "ast",
-      "community": 550,
-      "community_name": "recomendaciones.py",
+      "community": 624,
+      "community_name": "fincas.py",
       "norm_label": "exigir_no_cliente()",
       "id": "apps_backend_agroia_backend_services_acceso_exigir_no_cliente"
     },
@@ -6362,8 +6395,8 @@
       "source_file": "apps/backend/agroia_backend/services/acceso.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 597,
-      "community_name": "database.py",
+      "community": 624,
+      "community_name": "fincas.py",
       "norm_label": "control de acceso a fincas por rol (mvp sin auth service). reglas: - admin y...",
       "id": "apps_backend_agroia_backend_services_acceso_rationale_1"
     },
@@ -6373,8 +6406,8 @@
       "source_file": "apps/backend/agroia_backend/services/acceso.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 597,
-      "community_name": "database.py",
+      "community": 624,
+      "community_name": "fincas.py",
       "norm_label": "busca el usuario por email (sesion demo).",
       "id": "apps_backend_agroia_backend_services_acceso_rationale_29"
     },
@@ -6395,8 +6428,8 @@
       "source_file": "apps/backend/agroia_backend/services/acceso.py",
       "source_location": "L72",
       "_origin": "ast",
-      "community": 550,
-      "community_name": "recomendaciones.py",
+      "community": 624,
+      "community_name": "fincas.py",
       "norm_label": "lanza 403 si el usuario actual no puede ver la finca indicada.",
       "id": "apps_backend_agroia_backend_services_acceso_rationale_72"
     },
@@ -6406,8 +6439,8 @@
       "source_file": "apps/backend/agroia_backend/services/acceso.py",
       "source_location": "L92",
       "_origin": "ast",
-      "community": 550,
-      "community_name": "recomendaciones.py",
+      "community": 624,
+      "community_name": "fincas.py",
       "norm_label": "bloquea acciones de escritura para el rol cliente.",
       "id": "apps_backend_agroia_backend_services_acceso_rationale_92"
     },
@@ -6418,7 +6451,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "aptitud.py",
       "id": "apps_backend_agroia_backend_services_aptitud"
     },
@@ -6429,7 +6462,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "clasificar_aptitud()",
       "id": "apps_backend_agroia_backend_services_aptitud_clasificar_aptitud"
     },
@@ -6440,7 +6473,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "aptitudservice",
       "id": "apps_backend_agroia_backend_services_aptitud_aptitudservice"
     },
@@ -6451,7 +6484,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".__init__()",
       "id": "apps_backend_agroia_backend_services_aptitud_aptitudservice_init"
     },
@@ -6462,7 +6495,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "._cultivos_evaluables()",
       "id": "apps_backend_agroia_backend_services_aptitud_aptitudservice_cultivos_evaluables"
     },
@@ -6473,7 +6506,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".recommend_crops()",
       "id": "apps_backend_agroia_backend_services_aptitud_aptitudservice_recommend_crops"
     },
@@ -6484,7 +6517,7 @@
       "source_location": "L141",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "._clasificar_estado()",
       "id": "apps_backend_agroia_backend_services_aptitud_aptitudservice_clasificar_estado"
     },
@@ -6495,7 +6528,7 @@
       "source_location": "L152",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "._formatear_rango()",
       "id": "apps_backend_agroia_backend_services_aptitud_aptitudservice_formatear_rango"
     },
@@ -6506,7 +6539,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "servicio de aptitud de cultivos \u2014 sistema experto (uc1). puntua cada cultivo...",
       "id": "apps_backend_agroia_backend_services_aptitud_rationale_1"
     },
@@ -6517,7 +6550,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "clasifica un score de aptitud en categoria upra-style.",
       "id": "apps_backend_agroia_backend_services_aptitud_rationale_28"
     },
@@ -6528,7 +6561,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "recomienda los cultivos mas aptos para un suelo sin siembra previa.",
       "id": "apps_backend_agroia_backend_services_aptitud_rationale_39"
     },
@@ -6539,7 +6572,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "cultivos activos que tienen al menos una regla agronomica especifica.",
       "id": "apps_backend_agroia_backend_services_aptitud_rationale_46"
     },
@@ -6550,7 +6583,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "uc1: recomienda los cultivos mas aptos para el suelo medido. args: soil_dict:...",
       "id": "apps_backend_agroia_backend_services_aptitud_rationale_67"
     },
@@ -6561,7 +6594,7 @@
       "source_location": "L142",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "clasifica una violacion como deficit, exceso o desconocido.",
       "id": "apps_backend_agroia_backend_services_aptitud_rationale_142"
     },
@@ -6627,7 +6660,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "catalogo_service.py",
       "id": "apps_backend_agroia_backend_services_catalogo_service"
     },
@@ -6638,7 +6671,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "listar_cultivos()",
       "id": "apps_backend_agroia_backend_services_catalogo_service_listar_cultivos"
     },
@@ -6649,7 +6682,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "asyncsession",
       "id": "apps_backend_agroia_backend_services_catalogo_service_py_asyncsession"
     },
@@ -6660,7 +6693,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "obtener_cultivo()",
       "id": "apps_backend_agroia_backend_services_catalogo_service_obtener_cultivo"
     },
@@ -6670,8 +6703,8 @@
       "source_file": "apps/backend/agroia_backend/services/catalogo_service.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": "crear_cultivo()",
       "id": "apps_backend_agroia_backend_services_catalogo_service_crear_cultivo"
     },
@@ -6682,7 +6715,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "listar_fichas()",
       "id": "apps_backend_agroia_backend_services_catalogo_service_listar_fichas"
     },
@@ -6693,7 +6726,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "obtener_ficha()",
       "id": "apps_backend_agroia_backend_services_catalogo_service_obtener_ficha"
     },
@@ -6704,7 +6737,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "crear_ficha()",
       "id": "apps_backend_agroia_backend_services_catalogo_service_crear_ficha"
     },
@@ -6715,7 +6748,7 @@
       "source_location": "L139",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "actualizar_ficha()",
       "id": "apps_backend_agroia_backend_services_catalogo_service_actualizar_ficha"
     },
@@ -6726,7 +6759,7 @@
       "source_location": "L159",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "enviar_a_revision()",
       "id": "apps_backend_agroia_backend_services_catalogo_service_enviar_a_revision"
     },
@@ -6737,7 +6770,7 @@
       "source_location": "L173",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "aprobar_ficha()",
       "id": "apps_backend_agroia_backend_services_catalogo_service_aprobar_ficha"
     },
@@ -6748,7 +6781,7 @@
       "source_location": "L189",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "rechazar_ficha()",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rechazar_ficha"
     },
@@ -6759,7 +6792,7 @@
       "source_location": "L209",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "obtener_fichas_para_recomendaciones()",
       "id": "apps_backend_agroia_backend_services_catalogo_service_obtener_fichas_para_recomendaciones"
     },
@@ -6770,7 +6803,7 @@
       "source_location": "L220",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "obtener_fichas_pendientes_revision()",
       "id": "apps_backend_agroia_backend_services_catalogo_service_obtener_fichas_pendientes_revision"
     },
@@ -6781,7 +6814,7 @@
       "source_location": "L231",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "obtener_fichas_vencidas_revision_periodica()",
       "id": "apps_backend_agroia_backend_services_catalogo_service_obtener_fichas_vencidas_revision_periodica"
     },
@@ -6792,7 +6825,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "servicio de catalogo de cultivos y fichas tecnicas. maneja el crud de cultivo y...",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rationale_1"
     },
@@ -6803,7 +6836,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "lista cultivos paginados con busqueda opcional.",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rationale_33"
     },
@@ -6814,7 +6847,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "obtiene un cultivo por id.",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rationale_53"
     },
@@ -6824,8 +6857,8 @@
       "source_file": "apps/backend/agroia_backend/services/catalogo_service.py",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": "crea un nuevo cultivo.",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rationale_63"
     },
@@ -6836,7 +6869,7 @@
       "source_location": "L86",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "lista fichas tecnicas paginadas con filtros opcionales.",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rationale_86"
     },
@@ -6847,7 +6880,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "obtiene una ficha tecnica por id.",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rationale_104"
     },
@@ -6858,7 +6891,7 @@
       "source_location": "L114",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "crea una nueva ficha tecnica en estado borrador.",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rationale_114"
     },
@@ -6869,7 +6902,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "actualiza campos de una ficha (solo en estado borrador).",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rationale_140"
     },
@@ -6880,7 +6913,7 @@
       "source_location": "L160",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "envia una ficha a revision (borrador \u2192 en revision).",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rationale_160"
     },
@@ -6891,7 +6924,7 @@
       "source_location": "L174",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "aprueba una ficha (en revision \u2192 publicado).",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rationale_174"
     },
@@ -6902,7 +6935,7 @@
       "source_location": "L192",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "rechaza una ficha (en revision \u2192 borrador) con notas de correccion.",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rationale_192"
     },
@@ -6913,7 +6946,7 @@
       "source_location": "L210",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "obtiene fichas publicadas que pueden usarse en recomendaciones (fuente...",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rationale_210"
     },
@@ -6924,7 +6957,7 @@
       "source_location": "L223",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "obtiene fichas en revision, ordenadas por antiguedad (sla).",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rationale_223"
     },
@@ -6935,7 +6968,7 @@
       "source_location": "L232",
       "_origin": "ast",
       "community": 814,
-      "community_name": "catalogo.py",
+      "community_name": "catalogo_service.py",
       "norm_label": "obtiene fichas publicadas que no han sido revisadas en >12 meses.",
       "id": "apps_backend_agroia_backend_services_catalogo_service_rationale_232"
     },
@@ -7078,7 +7111,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "data_adapters.py",
       "id": "apps_backend_agroia_backend_services_data_adapters"
     },
@@ -7089,7 +7122,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "soildata",
       "id": "apps_backend_agroia_backend_services_data_adapters_soildata"
     },
@@ -7100,7 +7133,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".has_sufficient_data()",
       "id": "apps_backend_agroia_backend_services_data_adapters_soildata_has_sufficient_data"
     },
@@ -7111,7 +7144,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".to_dict()",
       "id": "apps_backend_agroia_backend_services_data_adapters_soildata_to_dict"
     },
@@ -7122,7 +7155,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "validate_soil_reading()",
       "id": "apps_backend_agroia_backend_services_data_adapters_validate_soil_reading"
     },
@@ -7133,7 +7166,7 @@
       "source_location": "L125",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "sueloadapter",
       "id": "apps_backend_agroia_backend_services_data_adapters_sueloadapter"
     },
@@ -7144,7 +7177,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".__init__()",
       "id": "apps_backend_agroia_backend_services_data_adapters_sueloadapter_init"
     },
@@ -7155,7 +7188,7 @@
       "source_location": "L131",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".get_latest()",
       "id": "apps_backend_agroia_backend_services_data_adapters_sueloadapter_get_latest"
     },
@@ -7166,7 +7199,7 @@
       "source_location": "L152",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".get_history()",
       "id": "apps_backend_agroia_backend_services_data_adapters_sueloadapter_get_history"
     },
@@ -7177,7 +7210,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "data adapters para el motor de recomendaciones. proveen una interfaz unificada...",
       "id": "apps_backend_agroia_backend_services_data_adapters_rationale_1"
     },
@@ -7188,7 +7221,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "datos de suelo normalizados para el motor de recomendaciones.",
       "id": "apps_backend_agroia_backend_services_data_adapters_rationale_33"
     },
@@ -7199,7 +7232,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "\u00bfhay suficientes datos para generar una recomendacion?",
       "id": "apps_backend_agroia_backend_services_data_adapters_rationale_60"
     },
@@ -7210,7 +7243,7 @@
       "source_location": "L64",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "convierte a diccionario para el motor ml.",
       "id": "apps_backend_agroia_backend_services_data_adapters_rationale_64"
     },
@@ -7221,7 +7254,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "valida una lectura de sensor y la convierte a soildata normalizado.",
       "id": "apps_backend_agroia_backend_services_data_adapters_rationale_95"
     },
@@ -7232,7 +7265,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "adaptador para consultar datos de suelo desde postgresql+timescaledb.",
       "id": "apps_backend_agroia_backend_services_data_adapters_rationale_126"
     },
@@ -7243,7 +7276,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "obtiene la lectura mas reciente para una finca (max. 24h de antiguedad).",
       "id": "apps_backend_agroia_backend_services_data_adapters_rationale_132"
     },
@@ -7254,7 +7287,7 @@
       "source_location": "L155",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "obtiene el historico de lecturas para una finca.",
       "id": "apps_backend_agroia_backend_services_data_adapters_rationale_155"
     },
@@ -7628,7 +7661,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "orchestrator.py",
       "id": "apps_backend_agroia_backend_services_orchestrator"
     },
@@ -7639,7 +7672,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "recommendationrequest",
       "id": "apps_backend_agroia_backend_services_orchestrator_recommendationrequest"
     },
@@ -7650,7 +7683,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "recommendationresult",
       "id": "apps_backend_agroia_backend_services_orchestrator_recommendationresult"
     },
@@ -7661,7 +7694,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "recommendationorchestrator",
       "id": "apps_backend_agroia_backend_services_orchestrator_recommendationorchestrator"
     },
@@ -7672,7 +7705,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".__init__()",
       "id": "apps_backend_agroia_backend_services_orchestrator_recommendationorchestrator_init"
     },
@@ -7683,7 +7716,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".analyze()",
       "id": "apps_backend_agroia_backend_services_orchestrator_recommendationorchestrator_analyze"
     },
@@ -7694,7 +7727,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "._recomendar_cultivos()",
       "id": "apps_backend_agroia_backend_services_orchestrator_recommendationorchestrator_recomendar_cultivos"
     },
@@ -7704,8 +7737,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 597,
-      "community_name": "database.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "datetime",
       "id": "datetime"
     },
@@ -7716,7 +7749,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "._analizar_cultivo()",
       "id": "apps_backend_agroia_backend_services_orchestrator_recommendationorchestrator_analizar_cultivo"
     },
@@ -7727,7 +7760,7 @@
       "source_location": "L289",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "._clasificar_estado()",
       "id": "apps_backend_agroia_backend_services_orchestrator_recommendationorchestrator_clasificar_estado"
     },
@@ -7738,7 +7771,7 @@
       "source_location": "L300",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "._combinar_advertencias()",
       "id": "apps_backend_agroia_backend_services_orchestrator_recommendationorchestrator_combinar_advertencias"
     },
@@ -7749,7 +7782,7 @@
       "source_location": "L309",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "._formatear_rango()",
       "id": "apps_backend_agroia_backend_services_orchestrator_recommendationorchestrator_formatear_rango"
     },
@@ -7760,7 +7793,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "orquestador hibrido de recomendaciones \u2014 ml + reglas. coordina el pipeline...",
       "id": "apps_backend_agroia_backend_services_orchestrator_rationale_1"
     },
@@ -7771,7 +7804,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "solicitud de analisis de aptitud.",
       "id": "apps_backend_agroia_backend_services_orchestrator_rationale_22"
     },
@@ -7782,7 +7815,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "resultado completo del pipeline de recomendacion.",
       "id": "apps_backend_agroia_backend_services_orchestrator_rationale_30"
     },
@@ -7793,7 +7826,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "orquesta el pipeline completo de recomendacion.",
       "id": "apps_backend_agroia_backend_services_orchestrator_rationale_44"
     },
@@ -7804,7 +7837,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "ejecuta el pipeline completo de recomendacion. args: request: solicitud con...",
       "id": "apps_backend_agroia_backend_services_orchestrator_rationale_63"
     },
@@ -7815,7 +7848,7 @@
       "source_location": "L111",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "uc1: puntua todos los cultivos y recomienda los mas aptos.",
       "id": "apps_backend_agroia_backend_services_orchestrator_rationale_111"
     },
@@ -7826,7 +7859,7 @@
       "source_location": "L164",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "uc2: evalua el suelo contra las reglas del cultivo sembrado.",
       "id": "apps_backend_agroia_backend_services_orchestrator_rationale_164"
     },
@@ -7837,7 +7870,7 @@
       "source_location": "L290",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "clasifica una violacion como deficit, exceso o desconocido.",
       "id": "apps_backend_agroia_backend_services_orchestrator_rationale_290"
     },
@@ -7848,7 +7881,7 @@
       "source_location": "L303",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "combina la advertencia del analisis con las de calidad de datos.",
       "id": "apps_backend_agroia_backend_services_orchestrator_rationale_303"
     },
@@ -7859,7 +7892,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "rules_engine.py",
       "id": "apps_backend_agroia_backend_services_rules_engine"
     },
@@ -7870,7 +7903,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "ruleviolation",
       "id": "apps_backend_agroia_backend_services_rules_engine_ruleviolation"
     },
@@ -7881,7 +7914,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "rulesresult",
       "id": "apps_backend_agroia_backend_services_rules_engine_rulesresult"
     },
@@ -7892,7 +7925,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".has_violations()",
       "id": "apps_backend_agroia_backend_services_rules_engine_rulesresult_has_violations"
     },
@@ -7903,7 +7936,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".is_blocked()",
       "id": "apps_backend_agroia_backend_services_rules_engine_rulesresult_is_blocked"
     },
@@ -7914,7 +7947,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "rulesengine",
       "id": "apps_backend_agroia_backend_services_rules_engine_rulesengine"
     },
@@ -7925,7 +7958,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".__init__()",
       "id": "apps_backend_agroia_backend_services_rules_engine_rulesengine_init"
     },
@@ -7936,7 +7969,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".load_rules()",
       "id": "apps_backend_agroia_backend_services_rules_engine_rulesengine_load_rules"
     },
@@ -7947,7 +7980,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": ".evaluate()",
       "id": "apps_backend_agroia_backend_services_rules_engine_rulesengine_evaluate"
     },
@@ -7958,7 +7991,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "motor de reglas agronomicas (sistema experto). evalua variables de suelo contra...",
       "id": "apps_backend_agroia_backend_services_rules_engine_rationale_1"
     },
@@ -7969,7 +8002,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "una violacion detectada por el motor de reglas.",
       "id": "apps_backend_agroia_backend_services_rules_engine_rationale_38"
     },
@@ -7980,7 +8013,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "resultado de la evaluacion del motor de reglas.",
       "id": "apps_backend_agroia_backend_services_rules_engine_rationale_51"
     },
@@ -7991,7 +8024,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "motor de reglas agronomicas deterministico.",
       "id": "apps_backend_agroia_backend_services_rules_engine_rationale_68"
     },
@@ -8002,7 +8035,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "carga reglas activas desde bd, filtrando por cultivo si se especifica.",
       "id": "apps_backend_agroia_backend_services_rules_engine_rationale_77"
     },
@@ -8013,7 +8046,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "evalua datos de suelo contra las reglas activas. args: soil_data: diccionario...",
       "id": "apps_backend_agroia_backend_services_rules_engine_rationale_110"
     },
@@ -8089,8 +8122,8 @@
       "source_file": "apps/backend/tests/test_health.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "test_health.py",
       "id": "apps_backend_tests_test_health"
     },
@@ -8100,8 +8133,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 597,
-      "community_name": "database.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "asyncio",
       "id": "asyncio"
     },
@@ -8111,8 +8144,8 @@
       "source_file": "apps/backend/tests/test_health.py",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "test_health_check()",
       "id": "apps_backend_tests_test_health_test_health_check"
     },
@@ -8122,8 +8155,8 @@
       "source_file": "apps/backend/tests/test_health.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "tests del health check del backend.",
       "id": "apps_backend_tests_test_health_rationale_1"
     },
@@ -8133,8 +8166,8 @@
       "source_file": "apps/backend/tests/test_health.py",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 872,
+      "community_name": "datetime",
       "norm_label": "verifica que el endpoint de salud responde correctamente.",
       "id": "apps_backend_tests_test_health_rationale_9"
     },
@@ -8145,7 +8178,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "config.py",
       "id": "apps_shared_agroia_config"
     },
@@ -8155,8 +8188,8 @@
       "source_file": "apps/shared/agroia/config.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 874,
+      "community_name": "get_settings",
       "norm_label": "settings",
       "id": "apps_shared_agroia_config_settings"
     },
@@ -8166,8 +8199,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 874,
+      "community_name": "get_settings",
       "norm_label": "basesettings",
       "id": "basesettings"
     },
@@ -8177,8 +8210,8 @@
       "source_file": "apps/shared/agroia/config.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 874,
+      "community_name": "get_settings",
       "norm_label": "get_settings()",
       "id": "apps_shared_agroia_config_get_settings"
     },
@@ -8189,7 +8222,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "configuracion centralizada desde variables de entorno. usa pydantic-settings...",
       "id": "apps_shared_agroia_config_rationale_1"
     },
@@ -8199,8 +8232,8 @@
       "source_file": "apps/shared/agroia/config.py",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 874,
+      "community_name": "get_settings",
       "norm_label": "configuracion centralizada de agroia.",
       "id": "apps_shared_agroia_config_rationale_13"
     },
@@ -8210,8 +8243,8 @@
       "source_file": "apps/shared/agroia/config.py",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 874,
+      "community_name": "get_settings",
       "norm_label": "retorna la configuracion cacheada (singleton).",
       "id": "apps_shared_agroia_config_rationale_63"
     },
@@ -8232,8 +8265,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "errors.py",
       "id": "apps_shared_agroia_errors"
     },
@@ -8243,8 +8276,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": "agroiaerror",
       "id": "apps_shared_agroia_errors_agroiaerror"
     },
@@ -8254,8 +8287,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": "exception",
       "id": "exception"
     },
@@ -8265,8 +8298,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": ".__init__()",
       "id": "apps_shared_agroia_errors_agroiaerror_init"
     },
@@ -8276,7 +8309,7 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "notfounderror",
       "id": "apps_shared_agroia_errors_notfounderror"
@@ -8287,8 +8320,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": ".__init__()",
       "id": "apps_shared_agroia_errors_notfounderror_init"
     },
@@ -8298,8 +8331,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": "validationerror",
       "id": "apps_shared_agroia_errors_validationerror"
     },
@@ -8309,8 +8342,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": ".__init__()",
       "id": "apps_shared_agroia_errors_validationerror_init"
     },
@@ -8320,8 +8353,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": "unauthorizederror",
       "id": "apps_shared_agroia_errors_unauthorizederror"
     },
@@ -8331,8 +8364,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": ".__init__()",
       "id": "apps_shared_agroia_errors_unauthorizederror_init"
     },
@@ -8342,8 +8375,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": "forbiddenerror",
       "id": "apps_shared_agroia_errors_forbiddenerror"
     },
@@ -8353,8 +8386,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L52",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": ".__init__()",
       "id": "apps_shared_agroia_errors_forbiddenerror_init"
     },
@@ -8364,8 +8397,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": "conflicterror",
       "id": "apps_shared_agroia_errors_conflicterror"
     },
@@ -8375,8 +8408,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L59",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": ".__init__()",
       "id": "apps_shared_agroia_errors_conflicterror_init"
     },
@@ -8387,7 +8420,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "insufficientdataerror",
       "id": "apps_shared_agroia_errors_insufficientdataerror"
     },
@@ -8397,8 +8430,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": ".__init__()",
       "id": "apps_shared_agroia_errors_insufficientdataerror_init"
     },
@@ -8408,8 +8441,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L84",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "agroia_error_handler()",
       "id": "apps_shared_agroia_errors_agroia_error_handler"
     },
@@ -8419,8 +8452,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "request",
       "id": "request"
     },
@@ -8430,8 +8463,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "jsonresponse",
       "id": "jsonresponse"
     },
@@ -8441,8 +8474,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L97",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "register_error_handlers()",
       "id": "apps_shared_agroia_errors_register_error_handlers"
     },
@@ -8452,8 +8485,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "manejo centralizado de errores para la api. define excepciones de dominio y un...",
       "id": "apps_shared_agroia_errors_rationale_1"
     },
@@ -8463,8 +8496,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": "excepcion base de dominio de agroia.",
       "id": "apps_shared_agroia_errors_rationale_19"
     },
@@ -8474,7 +8507,7 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 814,
+      "community": 588,
       "community_name": "catalogo.py",
       "norm_label": "recurso no encontrado.",
       "id": "apps_shared_agroia_errors_rationale_29"
@@ -8485,8 +8518,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": "error de validacion de negocio.",
       "id": "apps_shared_agroia_errors_rationale_36"
     },
@@ -8496,8 +8529,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": "no autorizado (rbac).",
       "id": "apps_shared_agroia_errors_rationale_50"
     },
@@ -8507,8 +8540,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L57",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 665,
+      "community_name": "ValidationError",
       "norm_label": "conflicto de estado (ej. recurso duplicado).",
       "id": "apps_shared_agroia_errors_rationale_57"
     },
@@ -8519,7 +8552,7 @@
       "source_location": "L64",
       "_origin": "ast",
       "community": 550,
-      "community_name": "recomendaciones.py",
+      "community_name": "logging.py",
       "norm_label": "datos insuficientes para generar una recomendacion.",
       "id": "apps_shared_agroia_errors_rationale_64"
     },
@@ -8529,8 +8562,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L85",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "handler global que convierte agroiaerror \u2192 jsonresponse estructurada.",
       "id": "apps_shared_agroia_errors_rationale_85"
     },
@@ -8540,8 +8573,8 @@
       "source_file": "apps/shared/agroia/errors.py",
       "source_location": "L98",
       "_origin": "ast",
-      "community": 814,
-      "community_name": "catalogo.py",
+      "community": 56,
+      "community_name": "errors.py",
       "norm_label": "registra todos los handlers de error de agroia en la app fastapi.",
       "id": "apps_shared_agroia_errors_rationale_98"
     },
@@ -8552,7 +8585,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "health.py",
       "id": "apps_shared_agroia_health"
     },
@@ -8563,7 +8596,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "healthresponse",
       "id": "apps_shared_agroia_health_healthresponse"
     },
@@ -8574,7 +8607,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "basemodel",
       "id": "apps_shared_agroia_health_py_basemodel"
     },
@@ -8585,7 +8618,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "get",
       "id": "apps_shared_agroia_health_py_get"
     },
@@ -8596,7 +8629,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "health_check()",
       "id": "apps_shared_agroia_health_health_check"
     },
@@ -8607,7 +8640,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "health check endpoint estandar para todos los servicios de agroia. verifica que...",
       "id": "apps_shared_agroia_health_rationale_1"
     },
@@ -8618,7 +8651,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "health check del servicio. verifica conexion a bd.",
       "id": "apps_shared_agroia_health_rationale_21"
     },
@@ -11048,8 +11081,8 @@
       "source_file": "tests/tmp_reporte_esp32.py",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 550,
-      "community_name": "recomendaciones.py",
+      "community": 867,
+      "community_name": "tmp_reporte_esp32.py",
       "norm_label": "fakecultivo",
       "id": "tests_tmp_reporte_esp32_fakecultivo"
     },
@@ -23775,8 +23808,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 37,
-      "community_name": "BM25",
+      "community": 866,
+      "community_name": "assets/scripts/core.py",
       "norm_label": "assets/scripts/core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core"
     },
@@ -23863,8 +23896,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L237",
       "_origin": "ast",
-      "community": 37,
-      "community_name": "BM25",
+      "community": 866,
+      "community_name": "assets/scripts/core.py",
       "norm_label": "_load_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_load_csv"
     },
@@ -23874,8 +23907,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L251",
       "_origin": "ast",
-      "community": 37,
-      "community_name": "BM25",
+      "community": 866,
+      "community_name": "assets/scripts/core.py",
       "norm_label": "_get_bm25()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_get_bm25"
     },
@@ -23885,8 +23918,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L267",
       "_origin": "ast",
-      "community": 37,
-      "community_name": "BM25",
+      "community": 866,
+      "community_name": "assets/scripts/core.py",
       "norm_label": "_search_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_search_csv"
     },
@@ -23896,8 +23929,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L292",
       "_origin": "ast",
-      "community": 37,
-      "community_name": "BM25",
+      "community": 866,
+      "community_name": "assets/scripts/core.py",
       "norm_label": "_suggest_terms()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_suggest_terms"
     },
@@ -23907,8 +23940,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L323",
       "_origin": "ast",
-      "community": 37,
-      "community_name": "BM25",
+      "community": 866,
+      "community_name": "assets/scripts/core.py",
       "norm_label": "_load_product_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_load_product_keywords"
     },
@@ -23918,8 +23951,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L347",
       "_origin": "ast",
-      "community": 37,
-      "community_name": "BM25",
+      "community": 866,
+      "community_name": "assets/scripts/core.py",
       "norm_label": "_domain_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_domain_keywords"
     },
@@ -23951,8 +23984,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L442",
       "_origin": "ast",
-      "community": 37,
-      "community_name": "BM25",
+      "community": 866,
+      "community_name": "assets/scripts/core.py",
       "norm_label": "search_stack()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_search_stack"
     },
@@ -24028,8 +24061,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L238",
       "_origin": "ast",
-      "community": 37,
-      "community_name": "BM25",
+      "community": 866,
+      "community_name": "assets/scripts/core.py",
       "norm_label": "load csv and return list of dicts, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_238"
     },
@@ -24039,8 +24072,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L252",
       "_origin": "ast",
-      "community": 37,
-      "community_name": "BM25",
+      "community": 866,
+      "community_name": "assets/scripts/core.py",
       "norm_label": "fitted bm25 index for this file+columns, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_252"
     },
@@ -24050,8 +24083,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L268",
       "_origin": "ast",
-      "community": 37,
-      "community_name": "BM25",
+      "community": 866,
+      "community_name": "assets/scripts/core.py",
       "norm_label": "core search function using bm25. returns (results, bm25_or_none).",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_268"
     },
@@ -24061,8 +24094,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L293",
       "_origin": "ast",
-      "community": 37,
-      "community_name": "BM25",
+      "community": 866,
+      "community_name": "assets/scripts/core.py",
       "norm_label": "nearest known vocabulary terms for a query that returned 0 hits, so the caller...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_293"
     },
@@ -24094,8 +24127,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/core.py",
       "source_location": "L443",
       "_origin": "ast",
-      "community": 37,
-      "community_name": "BM25",
+      "community": 866,
+      "community_name": "assets/scripts/core.py",
       "norm_label": "search stack-specific guidelines",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_core_rationale_443"
     },
@@ -24270,8 +24303,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L528",
       "_origin": "ast",
-      "community": 38,
-      "community_name": "assets/scripts/design_system.py",
+      "community": 869,
+      "community_name": "assets/scripts/tests/test_core.py",
       "norm_label": "format_markdown()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_format_markdown"
     },
@@ -24281,8 +24314,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L668",
       "_origin": "ast",
-      "community": 38,
-      "community_name": "assets/scripts/design_system.py",
+      "community": 869,
+      "community_name": "assets/scripts/tests/test_core.py",
       "norm_label": "generate_design_system()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_generate_design_system"
     },
@@ -24292,8 +24325,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L710",
       "_origin": "ast",
-      "community": 38,
-      "community_name": "assets/scripts/design_system.py",
+      "community": 869,
+      "community_name": "assets/scripts/tests/test_core.py",
       "norm_label": "safe_slug()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_safe_slug"
     },
@@ -24303,8 +24336,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L721",
       "_origin": "ast",
-      "community": 38,
-      "community_name": "assets/scripts/design_system.py",
+      "community": 869,
+      "community_name": "assets/scripts/tests/test_core.py",
       "norm_label": "persist_design_system()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_persist_design_system"
     },
@@ -24314,8 +24347,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L792",
       "_origin": "ast",
-      "community": 38,
-      "community_name": "assets/scripts/design_system.py",
+      "community": 869,
+      "community_name": "assets/scripts/tests/test_core.py",
       "norm_label": "format_master_md()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_format_master_md"
     },
@@ -24501,8 +24534,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L529",
       "_origin": "ast",
-      "community": 38,
-      "community_name": "assets/scripts/design_system.py",
+      "community": 869,
+      "community_name": "assets/scripts/tests/test_core.py",
       "norm_label": "format design system as markdown.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_529"
     },
@@ -24512,8 +24545,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L672",
       "_origin": "ast",
-      "community": 38,
-      "community_name": "assets/scripts/design_system.py",
+      "community": 869,
+      "community_name": "assets/scripts/tests/test_core.py",
       "norm_label": "main entry point for design system generation. args: query: search query (e.g.,...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_672"
     },
@@ -24523,8 +24556,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L711",
       "_origin": "ast",
-      "community": 38,
-      "community_name": "assets/scripts/design_system.py",
+      "community": 869,
+      "community_name": "assets/scripts/tests/test_core.py",
       "norm_label": "slugify a name into a single safe path segment. only [a-z0-9_-] survives; every...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_711"
     },
@@ -24534,8 +24567,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L723",
       "_origin": "ast",
-      "community": 38,
-      "community_name": "assets/scripts/design_system.py",
+      "community": 869,
+      "community_name": "assets/scripts/tests/test_core.py",
       "norm_label": "persist design system to design-system/<project>/ folder using master +...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_723"
     },
@@ -24545,8 +24578,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/design_system.py",
       "source_location": "L793",
       "_origin": "ast",
-      "community": 38,
-      "community_name": "assets/scripts/design_system.py",
+      "community": 869,
+      "community_name": "assets/scripts/tests/test_core.py",
       "norm_label": "format design system as master.md with hierarchical override logic.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_design_system_rationale_793"
     },
@@ -24622,8 +24655,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 38,
-      "community_name": "assets/scripts/design_system.py",
+      "community": 869,
+      "community_name": "assets/scripts/tests/test_core.py",
       "norm_label": "assets/scripts/tests/test_core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core"
     },
@@ -24732,8 +24765,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 37,
-      "community_name": "BM25",
+      "community": 866,
+      "community_name": "assets/scripts/core.py",
       "norm_label": ".test_every_stack_file_exists_and_is_searchable()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core_testsearchdomains_test_every_stack_file_exists_and_is_searchable"
     },
@@ -24798,8 +24831,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L95",
       "_origin": "ast",
-      "community": 38,
-      "community_name": "assets/scripts/design_system.py",
+      "community": 869,
+      "community_name": "assets/scripts/tests/test_core.py",
       "norm_label": "testpersistence",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core_testpersistence"
     },
@@ -24809,8 +24842,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 38,
-      "community_name": "assets/scripts/design_system.py",
+      "community": 869,
+      "community_name": "assets/scripts/tests/test_core.py",
       "norm_label": ".test_persist_then_skip_then_force()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core_testpersistence_test_persist_then_skip_then_force"
     },
@@ -24820,8 +24853,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/scripts/tests/test_core.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 38,
-      "community_name": "assets/scripts/design_system.py",
+      "community": 869,
+      "community_name": "assets/scripts/tests/test_core.py",
       "norm_label": ".test_persist_writes_only_under_output_dir()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_scripts_tests_test_core_testpersistence_test_persist_writes_only_under_output_dir"
     },
@@ -35187,8 +35220,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 588,
-      "community_name": "src/ui-ux-pro-max/scripts/core.py",
+      "community": 39,
+      "community_name": "BM25",
       "norm_label": "src/ui-ux-pro-max/scripts/core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core"
     },
@@ -35275,8 +35308,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L237",
       "_origin": "ast",
-      "community": 588,
-      "community_name": "src/ui-ux-pro-max/scripts/core.py",
+      "community": 39,
+      "community_name": "BM25",
       "norm_label": "_load_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_load_csv"
     },
@@ -35286,8 +35319,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L251",
       "_origin": "ast",
-      "community": 588,
-      "community_name": "src/ui-ux-pro-max/scripts/core.py",
+      "community": 39,
+      "community_name": "BM25",
       "norm_label": "_get_bm25()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_get_bm25"
     },
@@ -35297,8 +35330,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L267",
       "_origin": "ast",
-      "community": 588,
-      "community_name": "src/ui-ux-pro-max/scripts/core.py",
+      "community": 39,
+      "community_name": "BM25",
       "norm_label": "_search_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_search_csv"
     },
@@ -35308,8 +35341,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L292",
       "_origin": "ast",
-      "community": 588,
-      "community_name": "src/ui-ux-pro-max/scripts/core.py",
+      "community": 39,
+      "community_name": "BM25",
       "norm_label": "_suggest_terms()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_suggest_terms"
     },
@@ -35319,8 +35352,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L323",
       "_origin": "ast",
-      "community": 588,
-      "community_name": "src/ui-ux-pro-max/scripts/core.py",
+      "community": 39,
+      "community_name": "BM25",
       "norm_label": "_load_product_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_load_product_keywords"
     },
@@ -35330,8 +35363,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L347",
       "_origin": "ast",
-      "community": 588,
-      "community_name": "src/ui-ux-pro-max/scripts/core.py",
+      "community": 39,
+      "community_name": "BM25",
       "norm_label": "_domain_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_domain_keywords"
     },
@@ -35363,8 +35396,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L442",
       "_origin": "ast",
-      "community": 588,
-      "community_name": "src/ui-ux-pro-max/scripts/core.py",
+      "community": 39,
+      "community_name": "BM25",
       "norm_label": "search_stack()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_search_stack"
     },
@@ -35440,8 +35473,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L238",
       "_origin": "ast",
-      "community": 588,
-      "community_name": "src/ui-ux-pro-max/scripts/core.py",
+      "community": 39,
+      "community_name": "BM25",
       "norm_label": "load csv and return list of dicts, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_238"
     },
@@ -35451,8 +35484,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L252",
       "_origin": "ast",
-      "community": 588,
-      "community_name": "src/ui-ux-pro-max/scripts/core.py",
+      "community": 39,
+      "community_name": "BM25",
       "norm_label": "fitted bm25 index for this file+columns, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_252"
     },
@@ -35462,8 +35495,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L268",
       "_origin": "ast",
-      "community": 588,
-      "community_name": "src/ui-ux-pro-max/scripts/core.py",
+      "community": 39,
+      "community_name": "BM25",
       "norm_label": "core search function using bm25. returns (results, bm25_or_none).",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_268"
     },
@@ -35473,8 +35506,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L293",
       "_origin": "ast",
-      "community": 588,
-      "community_name": "src/ui-ux-pro-max/scripts/core.py",
+      "community": 39,
+      "community_name": "BM25",
       "norm_label": "nearest known vocabulary terms for a query that returned 0 hits, so the caller...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_293"
     },
@@ -35506,8 +35539,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L443",
       "_origin": "ast",
-      "community": 588,
-      "community_name": "src/ui-ux-pro-max/scripts/core.py",
+      "community": 39,
+      "community_name": "BM25",
       "norm_label": "search stack-specific guidelines",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_443"
     },
@@ -35528,8 +35561,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L69",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 26,
+      "community_name": "DesignSystemGenerator",
       "norm_label": "_resolve_dial()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_resolve_dial"
     },
@@ -35682,8 +35715,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L528",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "format_markdown()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_format_markdown"
     },
@@ -35693,8 +35726,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L668",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "generate_design_system()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_generate_design_system"
     },
@@ -35704,8 +35737,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L710",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "safe_slug()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_safe_slug"
     },
@@ -35715,8 +35748,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L721",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "persist_design_system()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_persist_design_system"
     },
@@ -35726,8 +35759,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L792",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "format_master_md()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_format_master_md"
     },
@@ -35770,8 +35803,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L70",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 26,
+      "community_name": "DesignSystemGenerator",
       "norm_label": "bucket a 1-10 dial value into its tier config. returns none if value is none.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_70"
     },
@@ -35913,8 +35946,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L529",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "format design system as markdown.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_529"
     },
@@ -35924,8 +35957,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L672",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "main entry point for design system generation. args: query: search query (e.g.,...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_672"
     },
@@ -35935,8 +35968,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L711",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "slugify a name into a single safe path segment. only [a-z0-9_-] survives; every...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_711"
     },
@@ -35946,8 +35979,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L723",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "persist design system to design-system/<project>/ folder using master +...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_723"
     },
@@ -35957,8 +35990,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L793",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "format design system as master.md with hierarchical override logic.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_793"
     },
@@ -36034,8 +36067,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core"
     },
@@ -36144,8 +36177,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 588,
-      "community_name": "src/ui-ux-pro-max/scripts/core.py",
+      "community": 39,
+      "community_name": "BM25",
       "norm_label": ".test_every_stack_file_exists_and_is_searchable()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core_testsearchdomains_test_every_stack_file_exists_and_is_searchable"
     },
@@ -36210,8 +36243,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L95",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "testpersistence",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core_testpersistence"
     },
@@ -36221,8 +36254,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": ".test_persist_then_skip_then_force()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core_testpersistence_test_persist_then_skip_then_force"
     },
@@ -36232,8 +36265,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": ".test_persist_writes_only_under_output_dir()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core_testpersistence_test_persist_writes_only_under_output_dir"
     },
@@ -40204,7 +40237,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "agroia_auth/main.py",
       "id": "apps_auth_agroia_auth_main"
     },
@@ -40215,7 +40248,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "lifespan()",
       "id": "apps_auth_agroia_auth_main_lifespan"
     },
@@ -40226,7 +40259,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "fastapi",
       "id": "apps_auth_agroia_auth_main_py_fastapi"
     },
@@ -40237,7 +40270,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "agroia auth service \u2014 autenticacion jwt + oauth2 + rbac.",
       "id": "apps_auth_agroia_auth_main_rationale_1"
     },
@@ -40248,7 +40281,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "security_middleware.py",
       "id": "apps_auth_agroia_auth_security_middleware"
     },
@@ -40259,7 +40292,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "securityheadersmiddleware",
       "id": "apps_auth_agroia_auth_security_middleware_securityheadersmiddleware"
     },
@@ -40270,7 +40303,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "basehttpmiddleware",
       "id": "apps_auth_agroia_auth_security_middleware_py_basehttpmiddleware"
     },
@@ -40281,7 +40314,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": ".dispatch()",
       "id": "apps_auth_agroia_auth_security_middleware_securityheadersmiddleware_dispatch"
     },
@@ -40292,7 +40325,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "auditlogmiddleware",
       "id": "apps_auth_agroia_auth_security_middleware_auditlogmiddleware"
     },
@@ -40303,7 +40336,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": ".dispatch()",
       "id": "apps_auth_agroia_auth_security_middleware_auditlogmiddleware_dispatch"
     },
@@ -40314,7 +40347,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "middleware de seguridad owasp + logging de auditoria. aplica cabeceras http de...",
       "id": "apps_auth_agroia_auth_security_middleware_rationale_1"
     },
@@ -40325,7 +40358,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "agrega cabeceras de seguridad owasp a todas las respuestas.",
       "id": "apps_auth_agroia_auth_security_middleware_rationale_31"
     },
@@ -40336,7 +40369,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "registra operaciones sensibles en logs de auditoria. cumple con ley 1581/2012:...",
       "id": "apps_auth_agroia_auth_security_middleware_rationale_41"
     },
@@ -40492,8 +40525,8 @@
       "source_file": "apps/backend/agroia_backend/services/justification.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "justification.py",
+      "community": 550,
+      "community_name": "logging.py",
       "norm_label": "justification.py",
       "id": "apps_backend_agroia_backend_services_justification"
     },
@@ -40503,8 +40536,8 @@
       "source_file": "apps/backend/agroia_backend/services/justification.py",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "justification.py",
+      "community": 550,
+      "community_name": "logging.py",
       "norm_label": "generate_justification()",
       "id": "apps_backend_agroia_backend_services_justification_generate_justification"
     },
@@ -40514,8 +40547,8 @@
       "source_file": "apps/backend/agroia_backend/services/justification.py",
       "source_location": "L93",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "justification.py",
+      "community": 550,
+      "community_name": "logging.py",
       "norm_label": "translate_soil_condition()",
       "id": "apps_backend_agroia_backend_services_justification_translate_soil_condition"
     },
@@ -40525,8 +40558,8 @@
       "source_file": "apps/backend/agroia_backend/services/justification.py",
       "source_location": "L110",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "justification.py",
+      "community": 550,
+      "community_name": "logging.py",
       "norm_label": "estimate_cost()",
       "id": "apps_backend_agroia_backend_services_justification_estimate_cost"
     },
@@ -40536,8 +40569,8 @@
       "source_file": "apps/backend/agroia_backend/services/justification.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "justification.py",
+      "community": 550,
+      "community_name": "logging.py",
       "norm_label": "servicio de justificacion de recomendaciones. genera explicaciones en lenguaje...",
       "id": "apps_backend_agroia_backend_services_justification_rationale_1"
     },
@@ -40547,8 +40580,8 @@
       "source_file": "apps/backend/agroia_backend/services/justification.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "justification.py",
+      "community": 550,
+      "community_name": "logging.py",
       "norm_label": "genera una justificacion en lenguaje natural. args: template_key: clave de la...",
       "id": "apps_backend_agroia_backend_services_justification_rationale_71"
     },
@@ -40558,8 +40591,8 @@
       "source_file": "apps/backend/agroia_backend/services/justification.py",
       "source_location": "L94",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "justification.py",
+      "community": 550,
+      "community_name": "logging.py",
       "norm_label": "traduce un valor tecnico a lenguaje coloquial.",
       "id": "apps_backend_agroia_backend_services_justification_rationale_94"
     },
@@ -40569,8 +40602,8 @@
       "source_file": "apps/backend/agroia_backend/services/justification.py",
       "source_location": "L111",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "justification.py",
+      "community": 550,
+      "community_name": "logging.py",
       "norm_label": "estima el costo de una recomendacion en cop/ha. valores de referencia (2026,...",
       "id": "apps_backend_agroia_backend_services_justification_rationale_111"
     },
@@ -40625,7 +40658,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "agroia_iot/main.py",
       "id": "apps_iot_agroia_iot_main"
     },
@@ -40636,7 +40669,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "lifespan()",
       "id": "apps_iot_agroia_iot_main_lifespan"
     },
@@ -40647,7 +40680,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "fastapi",
       "id": "apps_iot_agroia_iot_main_py_fastapi"
     },
@@ -40658,7 +40691,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "agroia iot ingestion service \u2014 consumidor rabbitmq para datos de sensores.",
       "id": "apps_iot_agroia_iot_main_rationale_1"
     },
@@ -40903,7 +40936,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "agroia_ml/main.py",
       "id": "apps_ml_agroia_ml_main"
     },
@@ -40914,7 +40947,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "lifespan()",
       "id": "apps_ml_agroia_ml_main_lifespan"
     },
@@ -40925,7 +40958,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "fastapi",
       "id": "apps_ml_agroia_ml_main_py_fastapi"
     },
@@ -40936,7 +40969,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "agroia ml inference service \u2014 modelos de ml y sistema experto.",
       "id": "apps_ml_agroia_ml_main_rationale_1"
     },
@@ -41235,8 +41268,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 874,
+      "community_name": "get_settings",
       "norm_label": "get",
       "id": "apps_rag_agroia_rag_api_chat_py_get"
     },
@@ -41246,8 +41279,8 @@
       "source_file": "apps/rag/agroia_rag/api/chat.py",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 874,
+      "community_name": "get_settings",
       "norm_label": "rag_health()",
       "id": "apps_rag_agroia_rag_api_chat_rag_health"
     },
@@ -41290,8 +41323,8 @@
       "source_file": "apps/rag/agroia_rag/api/chat.py",
       "source_location": "L64",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 874,
+      "community_name": "get_settings",
       "norm_label": "verifica el estado del servicio rag.",
       "id": "apps_rag_agroia_rag_api_chat_rationale_64"
     },
@@ -41302,7 +41335,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "agroia_rag/main.py",
       "id": "apps_rag_agroia_rag_main"
     },
@@ -41313,7 +41346,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "lifespan()",
       "id": "apps_rag_agroia_rag_main_lifespan"
     },
@@ -41324,7 +41357,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "fastapi",
       "id": "apps_rag_agroia_rag_main_py_fastapi"
     },
@@ -41335,7 +41368,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "community": 56,
-      "community_name": "logging.py",
+      "community_name": "errors.py",
       "norm_label": "agroia rag agent service \u2014 agente conversacional con rag + gpt-4.",
       "id": "apps_rag_agroia_rag_main_rationale_1"
     },
@@ -41546,7 +41579,7 @@
       "source_file": "apps/shared/agroia/logging.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 56,
+      "community": 550,
       "community_name": "logging.py",
       "norm_label": "logging.py",
       "id": "apps_shared_agroia_logging"
@@ -41557,8 +41590,8 @@
       "source_file": "apps/shared/agroia/logging.py",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 874,
+      "community_name": "get_settings",
       "norm_label": "setup_logging()",
       "id": "apps_shared_agroia_logging_setup_logging"
     },
@@ -41568,7 +41601,7 @@
       "source_file": "apps/shared/agroia/logging.py",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 56,
+      "community": 550,
       "community_name": "logging.py",
       "norm_label": "get_logger()",
       "id": "apps_shared_agroia_logging_get_logger"
@@ -41579,7 +41612,7 @@
       "source_file": "apps/shared/agroia/logging.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 56,
+      "community": 550,
       "community_name": "logging.py",
       "norm_label": "configuracion de logging estructurado con structlog. formato json en...",
       "id": "apps_shared_agroia_logging_rationale_1"
@@ -41590,8 +41623,8 @@
       "source_file": "apps/shared/agroia/logging.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "logging.py",
+      "community": 874,
+      "community_name": "get_settings",
       "norm_label": "configura structlog para toda la aplicacion.",
       "id": "apps_shared_agroia_logging_rationale_16"
     },
@@ -41601,7 +41634,7 @@
       "source_file": "apps/shared/agroia/logging.py",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 56,
+      "community": 550,
       "community_name": "logging.py",
       "norm_label": "retorna un logger estructurado.",
       "id": "apps_shared_agroia_logging_rationale_50"
@@ -98954,13 +98987,35 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "scripts/md_to_html.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_md_to_html",
+      "target": "scripts_md_to_html_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/md_to_html.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_md_to_html_rationale_1",
+      "target": "scripts_md_to_html",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "resources/architecture/api_sensor_muestreo.md",
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo",
-      "target": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos"
     },
     {
       "relation": "contains",
@@ -98969,9 +99024,9 @@
       "source_location": "L288",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_10_notas_operativas",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_10_notas_operativas"
     },
     {
       "relation": "contains",
@@ -98980,9 +99035,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_1_resumen",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_1_resumen"
     },
     {
       "relation": "contains",
@@ -98991,9 +99046,9 @@
       "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json"
     },
     {
       "relation": "contains",
@@ -99002,9 +99057,9 @@
       "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_3_ejemplo_de_env\u00edo",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_3_ejemplo_de_env\u00edo"
     },
     {
       "relation": "contains",
@@ -99013,9 +99068,9 @@
       "source_location": "L145",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_4_muestreo_en_cuadr\u00edcula_c\u00f3mo_tomar_los_puntos",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_4_muestreo_en_cuadr\u00edcula_c\u00f3mo_tomar_los_puntos"
     },
     {
       "relation": "contains",
@@ -99024,9 +99079,9 @@
       "source_location": "L178",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_5_respuesta_del_servidor",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_5_respuesta_del_servidor"
     },
     {
       "relation": "contains",
@@ -99035,9 +99090,9 @@
       "source_location": "L210",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_6_calibraci\u00f3n_npk",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_6_calibraci\u00f3n_npk"
     },
     {
       "relation": "contains",
@@ -99046,9 +99101,9 @@
       "source_location": "L227",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_7_registro_de_dispositivos_evitar_auto_registro_a_la_finca_equivocada",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_7_registro_de_dispositivos_evitar_auto_registro_a_la_finca_equivocada"
     },
     {
       "relation": "contains",
@@ -99057,9 +99112,9 @@
       "source_location": "L239",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_8_carga_por_archivo_alternativa_sin_conexi\u00f3n",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_8_carga_por_archivo_alternativa_sin_conexi\u00f3n"
     },
     {
       "relation": "contains",
@@ -99068,9 +99123,9 @@
       "source_location": "L277",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_9_d\u00f3nde_se_ve_el_resultado",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_9_d\u00f3nde_se_ve_el_resultado"
     },
     {
       "relation": "contains",
@@ -99079,9 +99134,9 @@
       "source_location": "L71",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json",
-      "target": "resources_architecture_api_sensor_muestreo_alias_aceptados_por_variable_por_si_el_firmware_cambia_de_nombres",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_alias_aceptados_por_variable_por_si_el_firmware_cambia_de_nombres"
     },
     {
       "relation": "contains",
@@ -99090,9 +99145,9 @@
       "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json",
-      "target": "resources_architecture_api_sensor_muestreo_campos",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_campos"
     },
     {
       "relation": "contains",
@@ -99101,9 +99156,9 @@
       "source_location": "L86",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_3_ejemplo_de_env\u00edo",
-      "target": "resources_architecture_api_sensor_muestreo_curl_prueba_r\u00e1pida",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_curl_prueba_r\u00e1pida"
     },
     {
       "relation": "contains",
@@ -99112,9 +99167,9 @@
       "source_location": "L101",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_3_ejemplo_de_env\u00edo",
-      "target": "resources_architecture_api_sensor_muestreo_esp32_arduino_esp_idf_referencia",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_esp32_arduino_esp_idf_referencia"
     },
     {
       "relation": "contains",
@@ -99123,9 +99178,9 @@
       "source_location": "L200",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_5_respuesta_del_servidor",
-      "target": "resources_architecture_api_sensor_muestreo_errores",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_errores"
     },
     {
       "relation": "contains",
@@ -99134,9 +99189,9 @@
       "source_location": "L180",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_5_respuesta_del_servidor",
-      "target": "resources_architecture_api_sensor_muestreo_\u00e9xito_202_accepted",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_\u00e9xito_202_accepted"
     },
     {
       "relation": "contains",
@@ -99145,9 +99200,9 @@
       "source_location": "L245",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_8_carga_por_archivo_alternativa_sin_conexi\u00f3n",
-      "target": "resources_architecture_api_sensor_muestreo_csv_ancho_con_varias_filas_una_fila_un_punto_de_muestreo",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_csv_ancho_con_varias_filas_una_fila_un_punto_de_muestreo"
     },
     {
       "relation": "contains",
@@ -99156,9 +99211,9 @@
       "source_location": "L263",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "resources_architecture_api_sensor_muestreo_8_carga_por_archivo_alternativa_sin_conexi\u00f3n",
-      "target": "resources_architecture_api_sensor_muestreo_json_lista_de_tramas_una_por_punto",
-      "confidence_score": 1.0
+      "target": "resources_architecture_api_sensor_muestreo_json_lista_de_tramas_una_por_punto"
     },
     {
       "relation": "contains",
@@ -219177,5 +219232,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "5b636ed480fa6b2390dbf9da6ab05611790ebe86"
+  "built_at_commit": "c95ecd9d3e1c71fbb36df3a8e64e3dea508a253d"
 }

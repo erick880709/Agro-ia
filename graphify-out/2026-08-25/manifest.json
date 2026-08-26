@@ -4708,5 +4708,15 @@
     "mtime": 1787705554.2559385,
     "ast_hash": "881a93e4ce26a7390657f8876ce0e1e3",
     "semantic_hash": ""
+  },
+  "scripts/md_to_html.py": {
+    "mtime": 1787705707.3494227,
+    "ast_hash": "54600e55dd8be9310f26c220d4ffecde",
+    "semantic_hash": ""
+  },
+  "resources/architecture/api_sensor_muestreo.html": {
+    "mtime": 1787705706.0425303,
+    "ast_hash": "71017462fb1d4f4624de5233cc651c29",
+    "semantic_hash": ""
   }
 }
