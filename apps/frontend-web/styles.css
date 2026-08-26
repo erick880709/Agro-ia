@@ -458,3 +458,17 @@ tr:hover td { background: #f2f8f4; }
   padding: 2px 10px;
   font-size: 0.8rem;
 }
+
+.mini-id {
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.72rem;
+  background: #e6f0e7;
+  color: #2e5d34;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+#sensores-actualizacion {
+  font-weight: normal;
+  font-size: 0.8rem;
+}

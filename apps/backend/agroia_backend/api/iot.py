@@ -492,6 +492,7 @@ async def ultimas_lecturas(
         "data": [
             {
                 "id": str(r.id),
+                "finca_id": str(r.finca_id),
                 "sensor_id": r.sensor_id,
                 "ts": r.ts.isoformat() if r.ts else None,
                 "pos_x": r.pos_x,

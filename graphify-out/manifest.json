@@ -4070,8 +4070,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/iot.py": {
-    "mtime": 1787706997.540469,
-    "ast_hash": "7b8bdb5e821953794d27c89595f90710",
+    "mtime": 1787709696.2671318,
+    "ast_hash": "c0ab5707205f4f6ba141212e94426329",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/external_apis.py": {
@@ -4727,6 +4727,11 @@
   "apps/backend/alembic/versions/008_reparar_enums_sensor.py": {
     "mtime": 1787707445.0401697,
     "ast_hash": "5789e2335563fdc2a8e6b60b89c86002",
+    "semantic_hash": ""
+  },
+  "scripts/vigilar_sensor.py": {
+    "mtime": 1787709759.3658013,
+    "ast_hash": "27d36a0bc3fe9d36410c58580812c95b",
     "semantic_hash": ""
   }
 }

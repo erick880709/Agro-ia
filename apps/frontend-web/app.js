@@ -23,6 +23,8 @@ const state = {
   rol: '',
   email: '',
   nombre: '',
+  tabActual: 'inicio',
+  cargandoSensores: false,
 };
 
 if (state.sesion) {
@@ -164,6 +166,7 @@ async function iniciarApp(data) {
 
 function goTab(name) {
   const rol = state.rol.toLowerCase();
+  state.tabActual = name;
   if (name === 'fincas' && rol !== 'admin') {
     renderAccesoRestringido();
   }
@@ -260,6 +263,15 @@ async function arrancarAplicacion() {
   if (state.rol === 'Admin') await cargarUsuarios();
   await cargarDashboard();
   cargarSalud();
+
+  // ── Auto-refresco SOLO de la página de sensores IoT (cada 10 s) ──
+  // Permite ver en tiempo real la ingesta de tramas del sensor sin
+  // recargar el resto de la aplicación.
+  setInterval(() => {
+    if (state.tabActual === 'sensores' && state.fincaId && !state.cargandoSensores) {
+      cargarSensores();
+    }
+  }, 10000);
 }
 
 function poblarMunicipios() {
@@ -530,11 +542,13 @@ function kpi(num, label) {
 /* ─────────────────────────── sensores ─────────────────────────── */
 
 async function cargarSensores() {
-  if (!state.fincaId) return;
-  await cargarDispositivos();
-  const div = document.getElementById('dispositivos');
-  div.innerHTML = state.dispositivos.length
-    ? state.dispositivos.map(d => `
+  if (!state.fincaId || state.cargandoSensores) return;
+  state.cargandoSensores = true;
+  try {
+    await cargarDispositivos();
+    const div = document.getElementById('dispositivos');
+    div.innerHTML = state.dispositivos.length
+      ? state.dispositivos.map(d => `
       <div class="device-card">
         <h3>🔌 ${esc(d.nombre || d.device_id)}</h3>
         <div class="device-meta">
@@ -545,13 +559,13 @@ async function cargarSensores() {
           <span>Última transmisión: ${d.ultima_transmision ? new Date(d.ultima_transmision).toLocaleString() : '—'}</span>
         </div>
       </div>`).join('')
-    : '<p class="muted">No hay dispositivos registrados. Regístralos en POST /api/v1/iot/dispositivos.</p>';
+      : '<p class="muted">No hay dispositivos registrados. Regístralos en POST /api/v1/iot/dispositivos.</p>';
 
-  try {
-    const status = await api(`/iot/sensores/${state.fincaId}/status`);
-    const divS = document.getElementById('sensor-status');
-    const sensores = status.sensores || [];
-    divS.innerHTML = sensores.length ? `
+    try {
+      const status = await api(`/iot/sensores/${state.fincaId}/status`);
+      const divS = document.getElementById('sensor-status');
+      const sensores = status.sensores || [];
+      divS.innerHTML = sensores.length ? `
       <div class="table-wrap"><table>
         <tr><th>Dispositivo</th><th>Última transmisión</th><th>Horas desde última</th><th>Estado</th></tr>
         ${sensores.map(s => `
@@ -563,15 +577,20 @@ async function cargarSensores() {
           </tr>`).join('')}
       </table></div>`
       : '<p class="muted">Sin transmisiones registradas todavía.</p>';
-  } catch (e) {
-    document.getElementById('sensor-status').innerHTML = errorBanner(e.message);
-  }
+    } catch (e) {
+      document.getElementById('sensor-status').innerHTML = errorBanner(e.message);
+    }
 
-  try {
-    const lecturas = await api(`/iot/lecturas/${state.fincaId}?limite=10`);
-    renderTablaLecturas(lecturas.data || [], document.getElementById('lecturas'), 10);
-  } catch (e) {
-    document.getElementById('lecturas').innerHTML = errorBanner(e.message);
+    try {
+      const lecturas = await api(`/iot/lecturas/${state.fincaId}?limite=10`);
+      renderTablaLecturas(lecturas.data || [], document.getElementById('lecturas'), 10);
+    } catch (e) {
+      document.getElementById('lecturas').innerHTML = errorBanner(e.message);
+    }
+  } finally {
+    state.cargandoSensores = false;
+    const ind = document.getElementById('sensores-actualizacion');
+    if (ind) ind.textContent = `· Actualizado ${new Date().toLocaleTimeString()} (auto cada 10 s)`;
   }
 }
 
@@ -581,6 +600,19 @@ const ETIQUETAS = {
   materia_organica: ['M.O.', '%'], cic: ['CIC', 'meq/100g'], humedad: ['Humedad suelo', '%'], temperatura_suelo: ['T suelo', '°C'],
 };
 
+function nombreFinca(fid) {
+  if (!fid) return '';
+  const f = (state.fincas || []).find(x => String(x.id) === String(fid));
+  return f ? f.nombre : '';
+}
+
+function celdaFinca(fid) {
+  if (!fid) return '<td>—</td>';
+  const nombre = nombreFinca(fid);
+  const corto = String(fid).slice(0, 8);
+  return `<td>${nombre ? esc(nombre) : '—'} <code class="mini-id" title="${esc(fid)}">${esc(corto)}…</code></td>`;
+}
+
 function renderTablaLecturas(data, container, limit) {
   if (!data.length) {
     container.innerHTML = '<p class="muted">Sin lecturas todavía. Envía una trama en vivo o carga un archivo.</p>';
@@ -589,10 +621,11 @@ function renderTablaLecturas(data, container, limit) {
   const columnas = ['ph', 'nitrogeno', 'fosforo', 'potasio', 'conductividad_electrica', 'humedad_ambiental', 'temperatura_ambiental', 'materia_organica', 'cic'];
   container.innerHTML = `
     <div class="table-wrap"><table>
-      <tr><th>Fecha</th><th>Sensor</th>${columnas.map(c => `<th>${ETIQUETAS[c][0]}</th>`).join('')}<th>Calidad</th></tr>
+      <tr><th>Fecha</th><th>Finca</th><th>Sensor</th>${columnas.map(c => `<th>${ETIQUETAS[c][0]}</th>`).join('')}<th>Calidad</th></tr>
       ${data.slice(0, limit).map(r => `
         <tr>
           <td>${r.ts ? new Date(r.ts).toLocaleString() : '—'}</td>
+          ${celdaFinca(r.finca_id)}
           <td>${esc(r.sensor_id || '—')}</td>
           ${columnas.map(c => `<td>${fmtNum(r[c])}${r[c] != null && ETIQUETAS[c][1] ? ' ' + ETIQUETAS[c][1] : ''}</td>`).join('')}
           <td>${badge(r.calidad === 'OK' ? 'OK' : 'npk sin calibrar', r.calidad === 'OK' ? 'ok' : 'warning')}</td>

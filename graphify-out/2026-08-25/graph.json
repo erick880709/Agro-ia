@@ -4,15 +4,257 @@
   "graph": {},
   "nodes": [
     {
+      "label": "api_sensor_muestreo.md",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "api_sensor_muestreo.md"
+    },
+    {
+      "label": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "agroia \u2014 documentacion del servicio de ingesta de sensores (muestreo por puntos)"
+    },
+    {
+      "label": "1. Resumen",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_1_resumen",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "1. resumen"
+    },
+    {
+      "label": "\ud83e\uddea Body de prueba \u2014 copie y pegue",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_body_de_prueba_copie_y_pegue",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "\ud83e\uddea body de prueba \u2014 copie y pegue"
+    },
+    {
+      "label": "2. Formato de la trama (JSON)",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L90",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "2. formato de la trama (json)"
+    },
+    {
+      "label": "\u00bfA qu\u00e9 finca corresponde la trama? (resoluci\u00f3n)",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L110",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_a_qu\u00e9_finca_corresponde_la_trama_resoluci\u00f3n",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "\u00bfa que finca corresponde la trama? (resolucion)"
+    },
+    {
+      "label": "Campos",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L128",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_campos",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "campos"
+    },
+    {
+      "label": "Alias aceptados por variable (por si el firmware cambia de nombres)",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L154",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_alias_aceptados_por_variable_por_si_el_firmware_cambia_de_nombres",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "alias aceptados por variable (por si el firmware cambia de nombres)"
+    },
+    {
+      "label": "3. Ejemplo de env\u00edo",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L167",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_3_ejemplo_de_env\u00edo",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "3. ejemplo de envio"
+    },
+    {
+      "label": "curl (prueba r\u00e1pida)",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L169",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_curl_prueba_r\u00e1pida",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "curl (prueba rapida)"
+    },
+    {
+      "label": "ESP32 (Arduino / ESP-IDF) \u2014 referencia",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L185",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_esp32_arduino_esp_idf_referencia",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "esp32 (arduino / esp-idf) \u2014 referencia"
+    },
+    {
+      "label": "4. Muestreo en cuadr\u00edcula (c\u00f3mo tomar los puntos)",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L231",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_4_muestreo_en_cuadr\u00edcula_c\u00f3mo_tomar_los_puntos",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "4. muestreo en cuadricula (como tomar los puntos)"
+    },
+    {
+      "label": "5. Respuesta del servidor",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L264",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_5_respuesta_del_servidor",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "5. respuesta del servidor"
+    },
+    {
+      "label": "\u00c9xito \u2014 `202 Accepted`",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L266",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_\u00e9xito_202_accepted",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "exito \u2014 `202 accepted`"
+    },
+    {
+      "label": "Errores",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L287",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_errores",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "errores"
+    },
+    {
+      "label": "6. Calibraci\u00f3n NPK",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L298",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_6_calibraci\u00f3n_npk",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "6. calibracion npk"
+    },
+    {
+      "label": "7. Registro de dispositivos (evitar auto-registro a la finca equivocada)",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L315",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_7_registro_de_dispositivos_evitar_auto_registro_a_la_finca_equivocada",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "7. registro de dispositivos (evitar auto-registro a la finca equivocada)"
+    },
+    {
+      "label": "8. Carga por archivo (alternativa sin conexi\u00f3n)",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L327",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_8_carga_por_archivo_alternativa_sin_conexi\u00f3n",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "8. carga por archivo (alternativa sin conexion)"
+    },
+    {
+      "label": "CSV ancho con varias filas (una fila = un punto de muestreo)",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L333",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_csv_ancho_con_varias_filas_una_fila_un_punto_de_muestreo",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "csv ancho con varias filas (una fila = un punto de muestreo)"
+    },
+    {
+      "label": "JSON \u2014 lista de tramas (una por punto)",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L351",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_json_lista_de_tramas_una_por_punto",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "json \u2014 lista de tramas (una por punto)"
+    },
+    {
+      "label": "9. D\u00f3nde se ve el resultado",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L365",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_9_d\u00f3nde_se_ve_el_resultado",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "9. donde se ve el resultado"
+    },
+    {
+      "label": "10. Notas operativas",
+      "file_type": "document",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L376",
+      "_origin": "ast",
+      "id": "resources_architecture_api_sensor_muestreo_10_notas_operativas",
+      "community": 606,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
+      "norm_label": "10. notas operativas"
+    },
+    {
       "label": "PROJECT_STATUS.md",
       "file_type": "document",
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "project_status",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "project_status.md"
+      "norm_label": "project_status.md",
+      "id": "project_status"
     },
     {
       "label": "AgroIA \u2014 Estado del Proyecto",
@@ -20,10 +262,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "project_status_agroia_estado_del_proyecto",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "agroia \u2014 estado del proyecto"
+      "norm_label": "agroia \u2014 estado del proyecto",
+      "id": "project_status_agroia_estado_del_proyecto"
     },
     {
       "label": "\ud83c\udfaf Objetivo",
@@ -31,10 +273,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "project_status_objetivo",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83c\udfaf objetivo"
+      "norm_label": "\ud83c\udfaf objetivo",
+      "id": "project_status_objetivo"
     },
     {
       "label": "\ud83d\udcca Estado por \u00e9pica",
@@ -42,10 +284,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "project_status_estado_por_\u00e9pica",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83d\udcca estado por epica"
+      "norm_label": "\ud83d\udcca estado por epica",
+      "id": "project_status_estado_por_\u00e9pica"
     },
     {
       "label": "\ud83c\udfd7\ufe0f Stack",
@@ -53,10 +295,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L23",
       "_origin": "ast",
-      "id": "project_status_stack",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83c\udfd7\ufe0f stack"
+      "norm_label": "\ud83c\udfd7\ufe0f stack",
+      "id": "project_status_stack"
     },
     {
       "label": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
@@ -64,10 +306,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L37",
       "_origin": "ast",
-      "id": "project_status_despliegue_gratuito_render_neon_supabase",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83d\ude80 despliegue gratuito (render + neon/supabase)"
+      "norm_label": "\ud83d\ude80 despliegue gratuito (render + neon/supabase)",
+      "id": "project_status_despliegue_gratuito_render_neon_supabase"
     },
     {
       "label": "Chat asesor agron\u00f3mico (2026-08-25)",
@@ -75,10 +317,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L41",
       "_origin": "ast",
-      "id": "project_status_chat_asesor_agron\u00f3mico_2026_08_25",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "chat asesor agronomico (2026-08-25)"
+      "norm_label": "chat asesor agronomico (2026-08-25)",
+      "id": "project_status_chat_asesor_agron\u00f3mico_2026_08_25"
     },
     {
       "label": "Mapa de calor del lote (2026-08-25)",
@@ -86,10 +328,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L50",
       "_origin": "ast",
-      "id": "project_status_mapa_de_calor_del_lote_2026_08_25",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "mapa de calor del lote (2026-08-25)"
+      "norm_label": "mapa de calor del lote (2026-08-25)",
+      "id": "project_status_mapa_de_calor_del_lote_2026_08_25"
     },
     {
       "label": "Relaci\u00f3n finca \u2194 sensor en la trama (2026-08-26)",
@@ -97,10 +339,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L57",
       "_origin": "ast",
-      "id": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "relacion finca \u2194 sensor en la trama (2026-08-26)"
+      "norm_label": "relacion finca \u2194 sensor en la trama (2026-08-26)",
+      "id": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26"
     },
     {
       "label": "C\u00f3mo est\u00e1 montado",
@@ -108,10 +350,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L66",
       "_origin": "ast",
-      "id": "project_status_c\u00f3mo_est\u00e1_montado",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "como esta montado"
+      "norm_label": "como esta montado",
+      "id": "project_status_c\u00f3mo_est\u00e1_montado"
     },
     {
       "label": "Migraciones destacadas",
@@ -119,10 +361,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L72",
       "_origin": "ast",
-      "id": "project_status_migraciones_destacadas",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "migraciones destacadas"
+      "norm_label": "migraciones destacadas",
+      "id": "project_status_migraciones_destacadas"
     },
     {
       "label": "L\u00edmites del tier gratuito (validados 2026-08-25)",
@@ -130,10 +372,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L77",
       "_origin": "ast",
-      "id": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "limites del tier gratuito (validados 2026-08-25)"
+      "norm_label": "limites del tier gratuito (validados 2026-08-25)",
+      "id": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25"
     },
     {
       "label": "Notas t\u00e9cnicas",
@@ -141,10 +383,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L87",
       "_origin": "ast",
-      "id": "project_status_notas_t\u00e9cnicas",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "notas tecnicas"
+      "norm_label": "notas tecnicas",
+      "id": "project_status_notas_t\u00e9cnicas"
     },
     {
       "label": "\ud83d\udcc1 Estructura",
@@ -152,10 +394,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L92",
       "_origin": "ast",
-      "id": "project_status_estructura",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83d\udcc1 estructura"
+      "norm_label": "\ud83d\udcc1 estructura",
+      "id": "project_status_estructura"
     },
     {
       "label": "\ud83d\ude80 Arranque r\u00e1pido",
@@ -163,10 +405,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L111",
       "_origin": "ast",
-      "id": "project_status_arranque_r\u00e1pido",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83d\ude80 arranque rapido"
+      "norm_label": "\ud83d\ude80 arranque rapido",
+      "id": "project_status_arranque_r\u00e1pido"
     },
     {
       "label": "\u2b1c Pendiente",
@@ -174,10 +416,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L124",
       "_origin": "ast",
-      "id": "project_status_pendiente",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\u2b1c pendiente"
+      "norm_label": "\u2b1c pendiente",
+      "id": "project_status_pendiente"
     },
     {
       "label": "\ud83e\udde0 Motor de recomendaciones \u2014 Sistema Experto activo (2026-08-25)",
@@ -185,10 +427,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L132",
       "_origin": "ast",
-      "id": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83e\udde0 motor de recomendaciones \u2014 sistema experto activo (2026-08-25)"
+      "norm_label": "\ud83e\udde0 motor de recomendaciones \u2014 sistema experto activo (2026-08-25)",
+      "id": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25"
     },
     {
       "label": "\ud83d\udc65 Roles y permisos por finca (2026-08-25)",
@@ -196,10 +438,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L147",
       "_origin": "ast",
-      "id": "project_status_roles_y_permisos_por_finca_2026_08_25",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83d\udc65 roles y permisos por finca (2026-08-25)"
+      "norm_label": "\ud83d\udc65 roles y permisos por finca (2026-08-25)",
+      "id": "project_status_roles_y_permisos_por_finca_2026_08_25"
     },
     {
       "label": "\ud83d\udcc4 Reportes de an\u00e1lisis (2026-08-25)",
@@ -207,10 +449,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L157",
       "_origin": "ast",
-      "id": "project_status_reportes_de_an\u00e1lisis_2026_08_25",
       "community": 630,
       "community_name": "AgroIA \u2014 Estado del Proyecto",
-      "norm_label": "\ud83d\udcc4 reportes de analisis (2026-08-25)"
+      "norm_label": "\ud83d\udcc4 reportes de analisis (2026-08-25)",
+      "id": "project_status_reportes_de_an\u00e1lisis_2026_08_25"
     },
     {
       "label": "agroia_backend/main.py",
@@ -1707,237 +1949,6 @@
       "community_name": "app.js",
       "norm_label": "rendercatalogo()",
       "id": "apps_frontend_web_app_rendercatalogo"
-    },
-    {
-      "label": "api_sensor_muestreo.md",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "api_sensor_muestreo.md",
-      "id": "resources_architecture_api_sensor_muestreo"
-    },
-    {
-      "label": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "agroia \u2014 documentacion del servicio de ingesta de sensores (muestreo por puntos)",
-      "id": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos"
-    },
-    {
-      "label": "1. Resumen",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L9",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "1. resumen",
-      "id": "resources_architecture_api_sensor_muestreo_1_resumen"
-    },
-    {
-      "label": "2. Formato de la trama (JSON)",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L27",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "2. formato de la trama (json)",
-      "id": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json"
-    },
-    {
-      "label": "\u00bfA qu\u00e9 finca corresponde la trama? (resoluci\u00f3n)",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L47",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "\u00bfa que finca corresponde la trama? (resolucion)",
-      "id": "resources_architecture_api_sensor_muestreo_a_qu\u00e9_finca_corresponde_la_trama_resoluci\u00f3n"
-    },
-    {
-      "label": "Campos",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L65",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "campos",
-      "id": "resources_architecture_api_sensor_muestreo_campos"
-    },
-    {
-      "label": "Alias aceptados por variable (por si el firmware cambia de nombres)",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L91",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "alias aceptados por variable (por si el firmware cambia de nombres)",
-      "id": "resources_architecture_api_sensor_muestreo_alias_aceptados_por_variable_por_si_el_firmware_cambia_de_nombres"
-    },
-    {
-      "label": "3. Ejemplo de env\u00edo",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L104",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "3. ejemplo de envio",
-      "id": "resources_architecture_api_sensor_muestreo_3_ejemplo_de_env\u00edo"
-    },
-    {
-      "label": "curl (prueba r\u00e1pida)",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L106",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "curl (prueba rapida)",
-      "id": "resources_architecture_api_sensor_muestreo_curl_prueba_r\u00e1pida"
-    },
-    {
-      "label": "ESP32 (Arduino / ESP-IDF) \u2014 referencia",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L122",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "esp32 (arduino / esp-idf) \u2014 referencia",
-      "id": "resources_architecture_api_sensor_muestreo_esp32_arduino_esp_idf_referencia"
-    },
-    {
-      "label": "4. Muestreo en cuadr\u00edcula (c\u00f3mo tomar los puntos)",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L168",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "4. muestreo en cuadricula (como tomar los puntos)",
-      "id": "resources_architecture_api_sensor_muestreo_4_muestreo_en_cuadr\u00edcula_c\u00f3mo_tomar_los_puntos"
-    },
-    {
-      "label": "5. Respuesta del servidor",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L201",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "5. respuesta del servidor",
-      "id": "resources_architecture_api_sensor_muestreo_5_respuesta_del_servidor"
-    },
-    {
-      "label": "\u00c9xito \u2014 `202 Accepted`",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L203",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "exito \u2014 `202 accepted`",
-      "id": "resources_architecture_api_sensor_muestreo_\u00e9xito_202_accepted"
-    },
-    {
-      "label": "Errores",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L223",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "errores",
-      "id": "resources_architecture_api_sensor_muestreo_errores"
-    },
-    {
-      "label": "6. Calibraci\u00f3n NPK",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L234",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "6. calibracion npk",
-      "id": "resources_architecture_api_sensor_muestreo_6_calibraci\u00f3n_npk"
-    },
-    {
-      "label": "7. Registro de dispositivos (evitar auto-registro a la finca equivocada)",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L251",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "7. registro de dispositivos (evitar auto-registro a la finca equivocada)",
-      "id": "resources_architecture_api_sensor_muestreo_7_registro_de_dispositivos_evitar_auto_registro_a_la_finca_equivocada"
-    },
-    {
-      "label": "8. Carga por archivo (alternativa sin conexi\u00f3n)",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L263",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "8. carga por archivo (alternativa sin conexion)",
-      "id": "resources_architecture_api_sensor_muestreo_8_carga_por_archivo_alternativa_sin_conexi\u00f3n"
-    },
-    {
-      "label": "CSV ancho con varias filas (una fila = un punto de muestreo)",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L269",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "csv ancho con varias filas (una fila = un punto de muestreo)",
-      "id": "resources_architecture_api_sensor_muestreo_csv_ancho_con_varias_filas_una_fila_un_punto_de_muestreo"
-    },
-    {
-      "label": "JSON \u2014 lista de tramas (una por punto)",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L287",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "json \u2014 lista de tramas (una por punto)",
-      "id": "resources_architecture_api_sensor_muestreo_json_lista_de_tramas_una_por_punto"
-    },
-    {
-      "label": "9. D\u00f3nde se ve el resultado",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L301",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "9. donde se ve el resultado",
-      "id": "resources_architecture_api_sensor_muestreo_9_d\u00f3nde_se_ve_el_resultado"
-    },
-    {
-      "label": "10. Notas operativas",
-      "file_type": "document",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L312",
-      "_origin": "ast",
-      "community": 606,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n del Servicio de Ingesta de Sensores (muestreo por puntos)",
-      "norm_label": "10. notas operativas",
-      "id": "resources_architecture_api_sensor_muestreo_10_notas_operativas"
     },
     {
       "label": "md_to_html.py",
@@ -17593,8 +17604,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 837,
-      "community_name": "0",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "0",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_spacing_0"
     },
@@ -17604,8 +17615,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 837,
-      "community_name": "0",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_0_value"
     },
@@ -17615,8 +17626,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 837,
-      "community_name": "0",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_0_type"
     },
@@ -17659,8 +17670,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 841,
-      "community_name": "2",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "2",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_spacing_2"
     },
@@ -17670,8 +17681,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 841,
-      "community_name": "2",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_2_value"
     },
@@ -17681,8 +17692,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 841,
-      "community_name": "2",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_2_type"
     },
@@ -17791,8 +17802,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 842,
-      "community_name": "6",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "6",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_spacing_6"
     },
@@ -17802,8 +17813,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 842,
-      "community_name": "6",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_6_value"
     },
@@ -17813,8 +17824,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 842,
-      "community_name": "6",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_6_type"
     },
@@ -17824,8 +17835,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 843,
-      "community_name": "8",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "8",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_spacing_8"
     },
@@ -17835,8 +17846,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 843,
-      "community_name": "8",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_8_value"
     },
@@ -17846,8 +17857,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 843,
-      "community_name": "8",
+      "community": 13,
+      "community_name": "spacing",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_8_type"
     },
@@ -18000,8 +18011,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 828,
-      "community_name": "sm",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "sm",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_fontsize_sm"
     },
@@ -18011,8 +18022,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 828,
-      "community_name": "sm",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_sm_value"
     },
@@ -18022,8 +18033,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 828,
-      "community_name": "sm",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_sm_type"
     },
@@ -18066,8 +18077,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 107,
-      "community_name": "radius",
+      "community": 42,
+      "community_name": "fontSize",
       "norm_label": "lg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_fontsize_lg"
     },
@@ -18077,8 +18088,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 107,
-      "community_name": "radius",
+      "community": 42,
+      "community_name": "fontSize",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_lg_value"
     },
@@ -18088,8 +18099,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 107,
-      "community_name": "radius",
+      "community": 42,
+      "community_name": "fontSize",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_lg_type"
     },
@@ -18242,8 +18253,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 836,
-      "community_name": "none",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "none",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_radius_none"
     },
@@ -18253,8 +18264,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 836,
-      "community_name": "none",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_none_value"
     },
@@ -18264,8 +18275,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 836,
-      "community_name": "none",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_none_type"
     },
@@ -18275,8 +18286,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L64",
       "_origin": "ast",
-      "community": 828,
-      "community_name": "sm",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "sm",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_radius_sm"
     },
@@ -18319,8 +18330,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 833,
-      "community_name": "md",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "md",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_radius_md"
     },
@@ -18330,8 +18341,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 833,
-      "community_name": "md",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_md_value"
     },
@@ -18341,8 +18352,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 833,
-      "community_name": "md",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_md_type"
     },
@@ -18352,8 +18363,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 107,
-      "community_name": "radius",
+      "community": 42,
+      "community_name": "fontSize",
       "norm_label": "lg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_radius_lg"
     },
@@ -18418,8 +18429,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L72",
       "_origin": "ast",
-      "community": 836,
-      "community_name": "none",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "none",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_shadow_none"
     },
@@ -18429,8 +18440,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 828,
-      "community_name": "sm",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "sm",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_shadow_sm"
     },
@@ -18451,8 +18462,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 833,
-      "community_name": "md",
+      "community": 107,
+      "community_name": "radius",
       "norm_label": "md",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_shadow_md"
     },
@@ -18462,8 +18473,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L76",
       "_origin": "ast",
-      "community": 107,
-      "community_name": "radius",
+      "community": 42,
+      "community_name": "fontSize",
       "norm_label": "lg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_shadow_lg"
     },
@@ -18671,8 +18682,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 863,
-      "community_name": "primary",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "primary",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_color_primary"
     },
@@ -18682,8 +18693,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 863,
-      "community_name": "primary",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_primary_value"
     },
@@ -18693,8 +18704,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 863,
-      "community_name": "primary",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_primary_type"
     },
@@ -18737,8 +18748,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L90",
       "_origin": "ast",
-      "community": 864,
-      "community_name": "primary-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "primary-foreground",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_color_primary_foreground"
     },
@@ -18748,8 +18759,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L90",
       "_origin": "ast",
-      "community": 864,
-      "community_name": "primary-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_primary_foreground_value"
     },
@@ -18759,8 +18770,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L90",
       "_origin": "ast",
-      "community": 864,
-      "community_name": "primary-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_primary_foreground_type"
     },
@@ -18803,8 +18814,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L92",
       "_origin": "ast",
-      "community": 869,
-      "community_name": "secondary-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "secondary-foreground",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_color_secondary_foreground"
     },
@@ -18814,8 +18825,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L92",
       "_origin": "ast",
-      "community": 869,
-      "community_name": "secondary-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_secondary_foreground_value"
     },
@@ -18825,8 +18836,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L92",
       "_origin": "ast",
-      "community": 869,
-      "community_name": "secondary-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_secondary_foreground_type"
     },
@@ -18836,8 +18847,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L93",
       "_origin": "ast",
-      "community": 862,
-      "community_name": "muted",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "muted",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_color_muted"
     },
@@ -18847,8 +18858,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L93",
       "_origin": "ast",
-      "community": 862,
-      "community_name": "muted",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_muted_value"
     },
@@ -18858,8 +18869,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L93",
       "_origin": "ast",
-      "community": 862,
-      "community_name": "muted",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_muted_type"
     },
@@ -18935,8 +18946,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 860,
-      "community_name": "destructive-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "destructive-foreground",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_color_destructive_foreground"
     },
@@ -18946,8 +18957,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 860,
-      "community_name": "destructive-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_destructive_foreground_value"
     },
@@ -18957,8 +18968,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 860,
-      "community_name": "destructive-foreground",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_destructive_foreground_type"
     },
@@ -18968,8 +18979,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L97",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "$type",
+      "community": 35,
+      "community_name": "card",
       "norm_label": "border",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_color_border"
     },
@@ -18979,8 +18990,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L97",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "$type",
+      "community": 35,
+      "community_name": "card",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_border_value"
     },
@@ -18990,8 +19001,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L97",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "$type",
+      "community": 35,
+      "community_name": "card",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_border_type"
     },
@@ -19001,8 +19012,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L98",
       "_origin": "ast",
-      "community": 867,
-      "community_name": "ring",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "ring",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_color_ring"
     },
@@ -19012,8 +19023,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L98",
       "_origin": "ast",
-      "community": 867,
-      "community_name": "ring",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_ring_value"
     },
@@ -19023,8 +19034,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L98",
       "_origin": "ast",
-      "community": 867,
-      "community_name": "ring",
+      "community": 27,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_ring_type"
     },
@@ -19133,8 +19144,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L107",
       "_origin": "ast",
-      "community": 35,
-      "community_name": "card",
+      "community": 115,
+      "community_name": "button",
       "norm_label": "bg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_button_bg"
     },
@@ -19144,8 +19155,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L107",
       "_origin": "ast",
-      "community": 35,
-      "community_name": "card",
+      "community": 115,
+      "community_name": "button",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_bg_value"
     },
@@ -19155,8 +19166,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L107",
       "_origin": "ast",
-      "community": 35,
-      "community_name": "card",
+      "community": 115,
+      "community_name": "button",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_bg_type"
     },
@@ -19298,8 +19309,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L112",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "radius",
+      "community": 108,
+      "community_name": "input",
       "norm_label": "radius",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_button_radius"
     },
@@ -19309,8 +19320,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L112",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "radius",
+      "community": 108,
+      "community_name": "input",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_radius_value"
     },
@@ -19320,8 +19331,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L112",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "radius",
+      "community": 108,
+      "community_name": "input",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_radius_type"
     },
@@ -19375,8 +19386,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L116",
       "_origin": "ast",
-      "community": 35,
-      "community_name": "card",
+      "community": 115,
+      "community_name": "button",
       "norm_label": "bg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_input_bg"
     },
@@ -19386,8 +19397,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L117",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "$type",
+      "community": 35,
+      "community_name": "card",
       "norm_label": "border",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_input_border"
     },
@@ -19452,8 +19463,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L121",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "radius",
+      "community": 108,
+      "community_name": "input",
       "norm_label": "radius",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_input_radius"
     },
@@ -19474,8 +19485,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L124",
       "_origin": "ast",
-      "community": 35,
-      "community_name": "card",
+      "community": 115,
+      "community_name": "button",
       "norm_label": "bg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_card_bg"
     },
@@ -19485,8 +19496,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L125",
       "_origin": "ast",
-      "community": 665,
-      "community_name": "$type",
+      "community": 35,
+      "community_name": "card",
       "norm_label": "border",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_card_border"
     },
@@ -19562,8 +19573,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L128",
       "_origin": "ast",
-      "community": 810,
-      "community_name": "radius",
+      "community": 108,
+      "community_name": "input",
       "norm_label": "radius",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_design_system_templates_design_tokens_starter_card_radius"
     },
@@ -22785,8 +22796,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": "skills/ui-ux-pro-max/scripts/core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core"
     },
@@ -22873,8 +22884,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L237",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": "_load_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_load_csv"
     },
@@ -22884,8 +22895,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L251",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": "_get_bm25()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_get_bm25"
     },
@@ -22895,8 +22906,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L267",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": "_search_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_search_csv"
     },
@@ -22906,8 +22917,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L292",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": "_suggest_terms()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_suggest_terms"
     },
@@ -22917,8 +22928,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L323",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": "_load_product_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_load_product_keywords"
     },
@@ -22928,8 +22939,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L347",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": "_domain_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_domain_keywords"
     },
@@ -22940,7 +22951,7 @@
       "source_location": "L377",
       "_origin": "ast",
       "community": 832,
-      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community_name": "detect_domain",
       "norm_label": "detect_domain()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_detect_domain"
     },
@@ -22961,8 +22972,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L442",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": "search_stack()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_search_stack"
     },
@@ -23038,8 +23049,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L238",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": "load csv and return list of dicts, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_238"
     },
@@ -23049,8 +23060,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L252",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": "fitted bm25 index for this file+columns, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_252"
     },
@@ -23060,8 +23071,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L268",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": "core search function using bm25. returns (results, bm25_or_none).",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_268"
     },
@@ -23071,8 +23082,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L293",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": "nearest known vocabulary terms for a query that returned 0 hits, so the caller...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_293"
     },
@@ -23083,7 +23094,7 @@
       "source_location": "L378",
       "_origin": "ast",
       "community": 832,
-      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community_name": "detect_domain",
       "norm_label": "auto-detect the most relevant domain from query. matches are weighted by...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_378"
     },
@@ -23104,8 +23115,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/core.py",
       "source_location": "L443",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": "search stack-specific guidelines",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_core_rationale_443"
     },
@@ -23632,8 +23643,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 832,
-      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 51,
+      "community_name": "skills/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core"
     },
@@ -23742,8 +23753,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 92,
-      "community_name": "skills/ui-ux-pro-max/scripts/core.py",
+      "community": 36,
+      "community_name": "BM25",
       "norm_label": ".test_every_stack_file_exists_and_is_searchable()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testsearchdomains_test_every_stack_file_exists_and_is_searchable"
     },
@@ -23754,7 +23765,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "community": 832,
-      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community_name": "detect_domain",
       "norm_label": "testdomaindetection",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection"
     },
@@ -23765,7 +23776,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "community": 832,
-      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community_name": "detect_domain",
       "norm_label": ".test_style_keywords_route_to_style()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection_test_style_keywords_route_to_style"
     },
@@ -23776,7 +23787,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "community": 832,
-      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community_name": "detect_domain",
       "norm_label": ".test_accessibility_keywords_route_to_ux()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection_test_accessibility_keywords_route_to_ux"
     },
@@ -23787,7 +23798,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "community": 832,
-      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community_name": "detect_domain",
       "norm_label": ".test_ambiguous_query_returns_runner_up()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection_test_ambiguous_query_returns_runner_up"
     },
@@ -23798,7 +23809,7 @@
       "source_location": "L91",
       "_origin": "ast",
       "community": 832,
-      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community_name": "detect_domain",
       "norm_label": ".test_empty_query_falls_back_to_style()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testdomaindetection_test_empty_query_falls_back_to_style"
     },
@@ -23808,8 +23819,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L95",
       "_origin": "ast",
-      "community": 832,
-      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 51,
+      "community_name": "skills/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "testpersistence",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testpersistence"
     },
@@ -23819,8 +23830,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 832,
-      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 51,
+      "community_name": "skills/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": ".test_persist_then_skip_then_force()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testpersistence_test_persist_then_skip_then_force"
     },
@@ -23830,8 +23841,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 832,
-      "community_name": "skills/ui-ux-pro-max/scripts/tests/test_core.py",
+      "community": 51,
+      "community_name": "skills/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": ".test_persist_writes_only_under_output_dir()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_claude_skills_ui_ux_pro_max_scripts_tests_test_core_testpersistence_test_persist_writes_only_under_output_dir"
     },
@@ -27339,8 +27350,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 109,
-      "community_name": "radius",
+      "community": 85,
+      "community_name": "primitive",
       "norm_label": "primitive",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_primitive"
     },
@@ -27977,8 +27988,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 659,
-      "community_name": "1",
+      "community": 14,
+      "community_name": "spacing",
       "norm_label": "1",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_spacing_1"
     },
@@ -27988,8 +27999,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 659,
-      "community_name": "1",
+      "community": 14,
+      "community_name": "spacing",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_1_value"
     },
@@ -27999,8 +28010,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 659,
-      "community_name": "1",
+      "community": 14,
+      "community_name": "spacing",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_1_type"
     },
@@ -28043,8 +28054,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L43",
       "_origin": "ast",
-      "community": 660,
-      "community_name": "3",
+      "community": 14,
+      "community_name": "spacing",
       "norm_label": "3",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_spacing_3"
     },
@@ -28054,8 +28065,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L43",
       "_origin": "ast",
-      "community": 660,
-      "community_name": "3",
+      "community": 14,
+      "community_name": "spacing",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_3_value"
     },
@@ -28065,8 +28076,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L43",
       "_origin": "ast",
-      "community": 660,
-      "community_name": "3",
+      "community": 14,
+      "community_name": "spacing",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_3_type"
     },
@@ -28175,8 +28186,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 686,
-      "community_name": "8",
+      "community": 14,
+      "community_name": "spacing",
       "norm_label": "8",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_spacing_8"
     },
@@ -28186,8 +28197,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 686,
-      "community_name": "8",
+      "community": 14,
+      "community_name": "spacing",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_8_value"
     },
@@ -28197,8 +28208,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 686,
-      "community_name": "8",
+      "community": 14,
+      "community_name": "spacing",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_8_type"
     },
@@ -28274,8 +28285,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 658,
-      "community_name": "16",
+      "community": 14,
+      "community_name": "spacing",
       "norm_label": "16",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_spacing_16"
     },
@@ -28285,8 +28296,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 658,
-      "community_name": "16",
+      "community": 14,
+      "community_name": "spacing",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_16_value"
     },
@@ -28296,8 +28307,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 658,
-      "community_name": "16",
+      "community": 14,
+      "community_name": "spacing",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_16_type"
     },
@@ -28351,8 +28362,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 655,
-      "community_name": "sm",
+      "community": 109,
+      "community_name": "radius",
       "norm_label": "sm",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_fontsize_sm"
     },
@@ -28362,8 +28373,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 655,
-      "community_name": "sm",
+      "community": 109,
+      "community_name": "radius",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_sm_value"
     },
@@ -28373,8 +28384,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 655,
-      "community_name": "sm",
+      "community": 109,
+      "community_name": "radius",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_sm_type"
     },
@@ -28417,8 +28428,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 651,
-      "community_name": "lg",
+      "community": 109,
+      "community_name": "radius",
       "norm_label": "lg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_fontsize_lg"
     },
@@ -28428,8 +28439,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 651,
-      "community_name": "lg",
+      "community": 109,
+      "community_name": "radius",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_lg_value"
     },
@@ -28439,8 +28450,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 651,
-      "community_name": "lg",
+      "community": 109,
+      "community_name": "radius",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_lg_type"
     },
@@ -28450,8 +28461,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L57",
       "_origin": "ast",
-      "community": 656,
-      "community_name": "xl",
+      "community": 46,
+      "community_name": "fontSize",
       "norm_label": "xl",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_fontsize_xl"
     },
@@ -28461,8 +28472,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L57",
       "_origin": "ast",
-      "community": 656,
-      "community_name": "xl",
+      "community": 46,
+      "community_name": "fontSize",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_xl_value"
     },
@@ -28472,8 +28483,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L57",
       "_origin": "ast",
-      "community": 656,
-      "community_name": "xl",
+      "community": 46,
+      "community_name": "fontSize",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_xl_type"
     },
@@ -28626,8 +28637,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L64",
       "_origin": "ast",
-      "community": 655,
-      "community_name": "sm",
+      "community": 109,
+      "community_name": "radius",
       "norm_label": "sm",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_radius_sm"
     },
@@ -28670,8 +28681,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 672,
-      "community_name": "md",
+      "community": 109,
+      "community_name": "radius",
       "norm_label": "md",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_radius_md"
     },
@@ -28681,8 +28692,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 672,
-      "community_name": "md",
+      "community": 109,
+      "community_name": "radius",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_md_value"
     },
@@ -28692,8 +28703,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 672,
-      "community_name": "md",
+      "community": 109,
+      "community_name": "radius",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_md_type"
     },
@@ -28703,8 +28714,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 651,
-      "community_name": "lg",
+      "community": 109,
+      "community_name": "radius",
       "norm_label": "lg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_radius_lg"
     },
@@ -28714,8 +28725,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L68",
       "_origin": "ast",
-      "community": 656,
-      "community_name": "xl",
+      "community": 46,
+      "community_name": "fontSize",
       "norm_label": "xl",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_radius_xl"
     },
@@ -28780,8 +28791,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 655,
-      "community_name": "sm",
+      "community": 109,
+      "community_name": "radius",
       "norm_label": "sm",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_shadow_sm"
     },
@@ -28802,8 +28813,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 672,
-      "community_name": "md",
+      "community": 109,
+      "community_name": "radius",
       "norm_label": "md",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_shadow_md"
     },
@@ -28813,8 +28824,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L76",
       "_origin": "ast",
-      "community": 651,
-      "community_name": "lg",
+      "community": 109,
+      "community_name": "radius",
       "norm_label": "lg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_shadow_lg"
     },
@@ -28825,7 +28836,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "community": 85,
-      "community_name": "duration",
+      "community_name": "primitive",
       "norm_label": "duration",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_primitive_duration"
     },
@@ -28836,7 +28847,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "community": 85,
-      "community_name": "duration",
+      "community_name": "primitive",
       "norm_label": "fast",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_duration_fast"
     },
@@ -28847,7 +28858,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "community": 85,
-      "community_name": "duration",
+      "community_name": "primitive",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_fast_value"
     },
@@ -28858,7 +28869,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "community": 85,
-      "community_name": "duration",
+      "community_name": "primitive",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_fast_type"
     },
@@ -28869,7 +28880,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "community": 85,
-      "community_name": "duration",
+      "community_name": "primitive",
       "norm_label": "normal",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_duration_normal"
     },
@@ -28880,7 +28891,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "community": 85,
-      "community_name": "duration",
+      "community_name": "primitive",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_normal_value"
     },
@@ -28891,7 +28902,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "community": 85,
-      "community_name": "duration",
+      "community_name": "primitive",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_normal_type"
     },
@@ -28902,7 +28913,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "community": 85,
-      "community_name": "duration",
+      "community_name": "primitive",
       "norm_label": "slow",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_duration_slow"
     },
@@ -28913,7 +28924,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "community": 85,
-      "community_name": "duration",
+      "community_name": "primitive",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_slow_value"
     },
@@ -28924,7 +28935,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "community": 85,
-      "community_name": "duration",
+      "community_name": "primitive",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_slow_type"
     },
@@ -29022,8 +29033,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 687,
-      "community_name": "primary",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "primary",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_color_primary"
     },
@@ -29033,8 +29044,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 687,
-      "community_name": "primary",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_primary_value"
     },
@@ -29044,8 +29055,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 687,
-      "community_name": "primary",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_primary_type"
     },
@@ -29088,8 +29099,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L90",
       "_origin": "ast",
-      "community": 155,
-      "community_name": "primary-foreground",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "primary-foreground",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_color_primary_foreground"
     },
@@ -29099,8 +29110,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L90",
       "_origin": "ast",
-      "community": 155,
-      "community_name": "primary-foreground",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_primary_foreground_value"
     },
@@ -29110,8 +29121,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L90",
       "_origin": "ast",
-      "community": 155,
-      "community_name": "primary-foreground",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_primary_foreground_type"
     },
@@ -29154,8 +29165,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L92",
       "_origin": "ast",
-      "community": 635,
-      "community_name": "secondary-foreground",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "secondary-foreground",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_color_secondary_foreground"
     },
@@ -29165,8 +29176,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L92",
       "_origin": "ast",
-      "community": 635,
-      "community_name": "secondary-foreground",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_secondary_foreground_value"
     },
@@ -29176,8 +29187,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L92",
       "_origin": "ast",
-      "community": 635,
-      "community_name": "secondary-foreground",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_secondary_foreground_type"
     },
@@ -29187,8 +29198,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L93",
       "_origin": "ast",
-      "community": 632,
-      "community_name": "muted",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "muted",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_color_muted"
     },
@@ -29198,8 +29209,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L93",
       "_origin": "ast",
-      "community": 632,
-      "community_name": "muted",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_muted_value"
     },
@@ -29209,8 +29220,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L93",
       "_origin": "ast",
-      "community": 632,
-      "community_name": "muted",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_muted_type"
     },
@@ -29286,8 +29297,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 631,
-      "community_name": "destructive-foreground",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "destructive-foreground",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_color_destructive_foreground"
     },
@@ -29297,8 +29308,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 631,
-      "community_name": "destructive-foreground",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_destructive_foreground_value"
     },
@@ -29308,8 +29319,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 631,
-      "community_name": "destructive-foreground",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_destructive_foreground_type"
     },
@@ -29352,8 +29363,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L98",
       "_origin": "ast",
-      "community": 634,
-      "community_name": "ring",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "ring",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_color_ring"
     },
@@ -29363,8 +29374,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L98",
       "_origin": "ast",
-      "community": 634,
-      "community_name": "ring",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_ring_value"
     },
@@ -29374,8 +29385,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L98",
       "_origin": "ast",
-      "community": 634,
-      "community_name": "ring",
+      "community": 28,
+      "community_name": "color",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_ring_type"
     },
@@ -29462,8 +29473,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L105",
       "_origin": "ast",
-      "community": 67,
-      "community_name": "assets/skills/design-system/templates/design-tokens-starter.json",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "component",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_component"
     },
@@ -29484,8 +29495,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L107",
       "_origin": "ast",
-      "community": 72,
-      "community_name": "card",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "bg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_button_bg"
     },
@@ -29495,8 +29506,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L107",
       "_origin": "ast",
-      "community": 72,
-      "community_name": "card",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_bg_value"
     },
@@ -29506,8 +29517,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L107",
       "_origin": "ast",
-      "community": 72,
-      "community_name": "card",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_bg_type"
     },
@@ -29583,8 +29594,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L110",
       "_origin": "ast",
-      "community": 667,
-      "community_name": "padding-x",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "padding-x",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_button_padding_x"
     },
@@ -29594,8 +29605,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L110",
       "_origin": "ast",
-      "community": 667,
-      "community_name": "padding-x",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_padding_x_value"
     },
@@ -29605,8 +29616,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L110",
       "_origin": "ast",
-      "community": 667,
-      "community_name": "padding-x",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_padding_x_type"
     },
@@ -29616,8 +29627,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L111",
       "_origin": "ast",
-      "community": 598,
-      "community_name": "input",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "padding-y",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_button_padding_y"
     },
@@ -29627,8 +29638,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L111",
       "_origin": "ast",
-      "community": 598,
-      "community_name": "input",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_padding_y_value"
     },
@@ -29638,8 +29649,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L111",
       "_origin": "ast",
-      "community": 598,
-      "community_name": "input",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_padding_y_type"
     },
@@ -29649,8 +29660,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L112",
       "_origin": "ast",
-      "community": 612,
-      "community_name": "radius",
+      "community": 72,
+      "community_name": "card",
       "norm_label": "radius",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_button_radius"
     },
@@ -29660,8 +29671,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L112",
       "_origin": "ast",
-      "community": 612,
-      "community_name": "radius",
+      "community": 72,
+      "community_name": "card",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_radius_value"
     },
@@ -29671,8 +29682,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L112",
       "_origin": "ast",
-      "community": 612,
-      "community_name": "radius",
+      "community": 72,
+      "community_name": "card",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_radius_type"
     },
@@ -29715,8 +29726,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L115",
       "_origin": "ast",
-      "community": 598,
-      "community_name": "input",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "input",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_component_input"
     },
@@ -29726,8 +29737,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L116",
       "_origin": "ast",
-      "community": 72,
-      "community_name": "card",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "bg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_input_bg"
     },
@@ -29748,8 +29759,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L118",
       "_origin": "ast",
-      "community": 598,
-      "community_name": "input",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "focus-ring",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_input_focus_ring"
     },
@@ -29759,8 +29770,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L118",
       "_origin": "ast",
-      "community": 598,
-      "community_name": "input",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "$value",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_focus_ring_value"
     },
@@ -29770,8 +29781,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L118",
       "_origin": "ast",
-      "community": 598,
-      "community_name": "input",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "$type",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_focus_ring_type"
     },
@@ -29781,8 +29792,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L119",
       "_origin": "ast",
-      "community": 667,
-      "community_name": "padding-x",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "padding-x",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_input_padding_x"
     },
@@ -29792,8 +29803,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L120",
       "_origin": "ast",
-      "community": 598,
-      "community_name": "input",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "padding-y",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_input_padding_y"
     },
@@ -29803,8 +29814,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L121",
       "_origin": "ast",
-      "community": 612,
-      "community_name": "radius",
+      "community": 72,
+      "community_name": "card",
       "norm_label": "radius",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_input_radius"
     },
@@ -29825,8 +29836,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L124",
       "_origin": "ast",
-      "community": 72,
-      "community_name": "card",
+      "community": 593,
+      "community_name": "button",
       "norm_label": "bg",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_card_bg"
     },
@@ -29913,8 +29924,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/cli/assets/skills/design-system/templates/design-tokens-starter.json",
       "source_location": "L128",
       "_origin": "ast",
-      "community": 612,
-      "community_name": "radius",
+      "community": 72,
+      "community_name": "card",
       "norm_label": "radius",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_cli_assets_skills_design_system_templates_design_tokens_starter_card_radius"
     },
@@ -35341,8 +35352,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "src/ui-ux-pro-max/scripts/core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core"
     },
@@ -35429,8 +35440,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L237",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_load_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_load_csv"
     },
@@ -35440,8 +35451,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L251",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_get_bm25()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_get_bm25"
     },
@@ -35451,8 +35462,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L267",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_search_csv()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_search_csv"
     },
@@ -35462,8 +35473,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L292",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_suggest_terms()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_suggest_terms"
     },
@@ -35473,8 +35484,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L323",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_load_product_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_load_product_keywords"
     },
@@ -35484,8 +35495,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L347",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "_domain_keywords()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_domain_keywords"
     },
@@ -35517,8 +35528,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L442",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "search_stack()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_search_stack"
     },
@@ -35594,8 +35605,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L238",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "load csv and return list of dicts, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_238"
     },
@@ -35605,8 +35616,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L252",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "fitted bm25 index for this file+columns, with mtime-based caching.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_252"
     },
@@ -35616,8 +35627,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L268",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "core search function using bm25. returns (results, bm25_or_none).",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_268"
     },
@@ -35627,8 +35638,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L293",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "nearest known vocabulary terms for a query that returned 0 hits, so the caller...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_293"
     },
@@ -35660,8 +35671,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/core.py",
       "source_location": "L443",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": "search stack-specific guidelines",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_core_rationale_443"
     },
@@ -35682,8 +35693,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L69",
       "_origin": "ast",
-      "community": 26,
-      "community_name": "DesignSystemGenerator",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "_resolve_dial()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_resolve_dial"
     },
@@ -35836,8 +35847,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L528",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 155,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "format_markdown()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_format_markdown"
     },
@@ -35847,8 +35858,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L668",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 155,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "generate_design_system()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_generate_design_system"
     },
@@ -35858,8 +35869,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L710",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 155,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "safe_slug()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_safe_slug"
     },
@@ -35869,8 +35880,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L721",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 155,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "persist_design_system()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_persist_design_system"
     },
@@ -35880,8 +35891,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L792",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 155,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "format_master_md()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_format_master_md"
     },
@@ -35924,8 +35935,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L70",
       "_origin": "ast",
-      "community": 26,
-      "community_name": "DesignSystemGenerator",
+      "community": 40,
+      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
       "norm_label": "bucket a 1-10 dial value into its tier config. returns none if value is none.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_70"
     },
@@ -36067,8 +36078,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L529",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 155,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "format design system as markdown.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_529"
     },
@@ -36078,8 +36089,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L672",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 155,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "main entry point for design system generation. args: query: search query (e.g.,...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_672"
     },
@@ -36089,8 +36100,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L711",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 155,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "slugify a name into a single safe path segment. only [a-z0-9_-] survives; every...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_711"
     },
@@ -36100,8 +36111,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L723",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 155,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "persist design system to design-system/<project>/ folder using master +...",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_723"
     },
@@ -36111,8 +36122,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/design_system.py",
       "source_location": "L793",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 155,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "format design system as master.md with hierarchical override logic.",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_design_system_rationale_793"
     },
@@ -36188,8 +36199,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 155,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core"
     },
@@ -36298,8 +36309,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 39,
-      "community_name": "BM25",
+      "community": 92,
+      "community_name": "src/ui-ux-pro-max/scripts/core.py",
       "norm_label": ".test_every_stack_file_exists_and_is_searchable()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core_testsearchdomains_test_every_stack_file_exists_and_is_searchable"
     },
@@ -36364,8 +36375,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L95",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 155,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": "testpersistence",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core_testpersistence"
     },
@@ -36375,8 +36386,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 155,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_persist_then_skip_then_force()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core_testpersistence_test_persist_then_skip_then_force"
     },
@@ -36386,8 +36397,8 @@
       "source_file": ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/src/ui-ux-pro-max/scripts/tests/test_core.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "src/ui-ux-pro-max/scripts/design_system.py",
+      "community": 155,
+      "community_name": "src/ui-ux-pro-max/scripts/tests/test_core.py",
       "norm_label": ".test_persist_writes_only_under_output_dir()",
       "id": "github_skills_figma_prd_mockups_references_ui_ux_pro_max_skill_main_src_ui_ux_pro_max_scripts_tests_test_core_testpersistence_test_persist_writes_only_under_output_dir"
     },
@@ -99108,13 +99119,244 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo",
+      "target": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L376",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
+      "target": "resources_architecture_api_sensor_muestreo_10_notas_operativas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
+      "target": "resources_architecture_api_sensor_muestreo_1_resumen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L90",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
+      "target": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L167",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
+      "target": "resources_architecture_api_sensor_muestreo_3_ejemplo_de_env\u00edo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L231",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
+      "target": "resources_architecture_api_sensor_muestreo_4_muestreo_en_cuadr\u00edcula_c\u00f3mo_tomar_los_puntos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L264",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
+      "target": "resources_architecture_api_sensor_muestreo_5_respuesta_del_servidor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L298",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
+      "target": "resources_architecture_api_sensor_muestreo_6_calibraci\u00f3n_npk",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L315",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
+      "target": "resources_architecture_api_sensor_muestreo_7_registro_de_dispositivos_evitar_auto_registro_a_la_finca_equivocada",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L327",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
+      "target": "resources_architecture_api_sensor_muestreo_8_carga_por_archivo_alternativa_sin_conexi\u00f3n",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L365",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
+      "target": "resources_architecture_api_sensor_muestreo_9_d\u00f3nde_se_ve_el_resultado",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_1_resumen",
+      "target": "resources_architecture_api_sensor_muestreo_body_de_prueba_copie_y_pegue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L110",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json",
+      "target": "resources_architecture_api_sensor_muestreo_a_qu\u00e9_finca_corresponde_la_trama_resoluci\u00f3n",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L154",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json",
+      "target": "resources_architecture_api_sensor_muestreo_alias_aceptados_por_variable_por_si_el_firmware_cambia_de_nombres",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L128",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json",
+      "target": "resources_architecture_api_sensor_muestreo_campos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L169",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_3_ejemplo_de_env\u00edo",
+      "target": "resources_architecture_api_sensor_muestreo_curl_prueba_r\u00e1pida",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L185",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_3_ejemplo_de_env\u00edo",
+      "target": "resources_architecture_api_sensor_muestreo_esp32_arduino_esp_idf_referencia",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L287",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_5_respuesta_del_servidor",
+      "target": "resources_architecture_api_sensor_muestreo_errores",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L266",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_5_respuesta_del_servidor",
+      "target": "resources_architecture_api_sensor_muestreo_\u00e9xito_202_accepted",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L333",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_8_carga_por_archivo_alternativa_sin_conexi\u00f3n",
+      "target": "resources_architecture_api_sensor_muestreo_csv_ancho_con_varias_filas_una_fila_un_punto_de_muestreo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/api_sensor_muestreo.md",
+      "source_location": "L351",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_api_sensor_muestreo_8_carga_por_archivo_alternativa_sin_conexi\u00f3n",
+      "target": "resources_architecture_api_sensor_muestreo_json_lista_de_tramas_una_por_punto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status",
-      "target": "project_status_agroia_estado_del_proyecto",
-      "confidence_score": 1.0
+      "target": "project_status_agroia_estado_del_proyecto"
     },
     {
       "relation": "contains",
@@ -99123,9 +99365,9 @@
       "source_location": "L111",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_arranque_r\u00e1pido",
-      "confidence_score": 1.0
+      "target": "project_status_arranque_r\u00e1pido"
     },
     {
       "relation": "contains",
@@ -99134,9 +99376,9 @@
       "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_despliegue_gratuito_render_neon_supabase",
-      "confidence_score": 1.0
+      "target": "project_status_despliegue_gratuito_render_neon_supabase"
     },
     {
       "relation": "contains",
@@ -99145,9 +99387,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_estado_por_\u00e9pica",
-      "confidence_score": 1.0
+      "target": "project_status_estado_por_\u00e9pica"
     },
     {
       "relation": "contains",
@@ -99156,9 +99398,9 @@
       "source_location": "L92",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_estructura",
-      "confidence_score": 1.0
+      "target": "project_status_estructura"
     },
     {
       "relation": "contains",
@@ -99167,9 +99409,9 @@
       "source_location": "L132",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25",
-      "confidence_score": 1.0
+      "target": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25"
     },
     {
       "relation": "contains",
@@ -99178,9 +99420,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_objetivo",
-      "confidence_score": 1.0
+      "target": "project_status_objetivo"
     },
     {
       "relation": "contains",
@@ -99189,9 +99431,9 @@
       "source_location": "L124",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_pendiente",
-      "confidence_score": 1.0
+      "target": "project_status_pendiente"
     },
     {
       "relation": "contains",
@@ -99200,9 +99442,9 @@
       "source_location": "L157",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_reportes_de_an\u00e1lisis_2026_08_25",
-      "confidence_score": 1.0
+      "target": "project_status_reportes_de_an\u00e1lisis_2026_08_25"
     },
     {
       "relation": "contains",
@@ -99211,9 +99453,9 @@
       "source_location": "L147",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_roles_y_permisos_por_finca_2026_08_25",
-      "confidence_score": 1.0
+      "target": "project_status_roles_y_permisos_por_finca_2026_08_25"
     },
     {
       "relation": "contains",
@@ -99222,9 +99464,9 @@
       "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_stack",
-      "confidence_score": 1.0
+      "target": "project_status_stack"
     },
     {
       "relation": "contains",
@@ -99233,9 +99475,9 @@
       "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_chat_asesor_agron\u00f3mico_2026_08_25",
-      "confidence_score": 1.0
+      "target": "project_status_chat_asesor_agron\u00f3mico_2026_08_25"
     },
     {
       "relation": "contains",
@@ -99244,9 +99486,9 @@
       "source_location": "L66",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_c\u00f3mo_est\u00e1_montado",
-      "confidence_score": 1.0
+      "target": "project_status_c\u00f3mo_est\u00e1_montado"
     },
     {
       "relation": "contains",
@@ -99255,9 +99497,9 @@
       "source_location": "L77",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25",
-      "confidence_score": 1.0
+      "target": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25"
     },
     {
       "relation": "contains",
@@ -99266,9 +99508,9 @@
       "source_location": "L50",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_mapa_de_calor_del_lote_2026_08_25",
-      "confidence_score": 1.0
+      "target": "project_status_mapa_de_calor_del_lote_2026_08_25"
     },
     {
       "relation": "contains",
@@ -99277,9 +99519,9 @@
       "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_migraciones_destacadas",
-      "confidence_score": 1.0
+      "target": "project_status_migraciones_destacadas"
     },
     {
       "relation": "contains",
@@ -99288,9 +99530,9 @@
       "source_location": "L87",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_notas_t\u00e9cnicas",
-      "confidence_score": 1.0
+      "target": "project_status_notas_t\u00e9cnicas"
     },
     {
       "relation": "contains",
@@ -99299,9 +99541,9 @@
       "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26",
-      "confidence_score": 1.0
+      "target": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26"
     },
     {
       "relation": "contains",
@@ -103572,226 +103814,6 @@
       "confidence_score": 1.0,
       "source": "apps_frontend_web_app_enviarchat",
       "target": "apps_frontend_web_app_renderchat"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo",
-      "target": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L312",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_10_notas_operativas"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_1_resumen"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L27",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L104",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_3_ejemplo_de_env\u00edo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L168",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_4_muestreo_en_cuadr\u00edcula_c\u00f3mo_tomar_los_puntos"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L201",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_5_respuesta_del_servidor"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L234",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_6_calibraci\u00f3n_npk"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L251",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_7_registro_de_dispositivos_evitar_auto_registro_a_la_finca_equivocada"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L263",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_8_carga_por_archivo_alternativa_sin_conexi\u00f3n"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L301",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_agroia_documentaci\u00f3n_del_servicio_de_ingesta_de_sensores_muestreo_por_puntos",
-      "target": "resources_architecture_api_sensor_muestreo_9_d\u00f3nde_se_ve_el_resultado"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L47",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json",
-      "target": "resources_architecture_api_sensor_muestreo_a_qu\u00e9_finca_corresponde_la_trama_resoluci\u00f3n"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L91",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json",
-      "target": "resources_architecture_api_sensor_muestreo_alias_aceptados_por_variable_por_si_el_firmware_cambia_de_nombres"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L65",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_2_formato_de_la_trama_json",
-      "target": "resources_architecture_api_sensor_muestreo_campos"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L106",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_3_ejemplo_de_env\u00edo",
-      "target": "resources_architecture_api_sensor_muestreo_curl_prueba_r\u00e1pida"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L122",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_3_ejemplo_de_env\u00edo",
-      "target": "resources_architecture_api_sensor_muestreo_esp32_arduino_esp_idf_referencia"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L223",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_5_respuesta_del_servidor",
-      "target": "resources_architecture_api_sensor_muestreo_errores"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L203",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_5_respuesta_del_servidor",
-      "target": "resources_architecture_api_sensor_muestreo_\u00e9xito_202_accepted"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L269",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_8_carga_por_archivo_alternativa_sin_conexi\u00f3n",
-      "target": "resources_architecture_api_sensor_muestreo_csv_ancho_con_varias_filas_una_fila_un_punto_de_muestreo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/api_sensor_muestreo.md",
-      "source_location": "L287",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_api_sensor_muestreo_8_carga_por_archivo_alternativa_sin_conexi\u00f3n",
-      "target": "resources_architecture_api_sensor_muestreo_json_lista_de_tramas_una_por_punto"
     },
     {
       "relation": "contains",
@@ -219277,5 +219299,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6a9467afa5387bef135164d8c6ce4cd44ed57ce5"
+  "built_at_commit": "6c9d8c30e142824936a5216306660c9947145b73"
 }
