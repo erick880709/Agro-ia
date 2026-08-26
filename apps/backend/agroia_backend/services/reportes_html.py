@@ -119,6 +119,12 @@ _CSS = """
   .heat-cell { aspect-ratio: 1.6 / 1; display: flex; align-items: center; justify-content: center;
     font-family: var(--mono); font-size: .68rem; border-radius: 3px; }
   .heat-cell:hover { outline: 2px solid var(--moss); }
+  .heatmap .heat-var, .plano-lote { break-inside: avoid; page-break-inside: avoid; }
+  .plano-svg { max-width: 560px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcf8; }
+  .plano-stats { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 12px; }
+  .plano-stat { background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px;
+    padding: 8px 14px; font-size: .82rem; }
+  .plano-stat b { display: block; font-family: var(--mono); font-size: 1.05rem; color: var(--moss); }
   .ft-intro { font-family: var(--serif); font-size: 1.08rem; margin-bottom: 16px; }
   .ft-sub { font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--moss); margin: 16px 0 8px; }
   .ft-para { font-size: .92rem; }
@@ -144,6 +150,10 @@ _CSS = """
     td, th { border-color: #ccc; }
     .toolbar { display: none; }
     .badge-exceso, .badge-deficit, .badge-noapta, .badge-apta, .badge-ok { background: none; }
+    /* PDF: una matriz por parámetro, sin pestañas ni vista unificada */
+    .heatmap .heat-tabs { display: none !important; }
+    .heatmap .heat-var { display: block !important; }
+    .heatmap .heat-var[data-var="__resumen__"] { display: none !important; }
   }
 """
 
@@ -499,19 +509,210 @@ def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> s
     La intensidad del color indica el valor del parámetro: más intenso = valor más alto,
     menos intenso = valor más bajo (cada parámetro usa su propia escala).
     Use los botones para ver un parámetro por separado o todos a la vez.</p>
-    <style>
-    /* PDF / impresión: cada matriz por parámetro, sin pestañas ni vista unificada
-       (la vista unificada «Resumen» es solo para la aplicación) */
-    @media print {{
-      .heatmap .heat-tabs {{ display: none !important; }}
-      .heatmap .heat-var {{ display: block !important; }}
-      .heatmap .heat-var[data-var="__resumen__"] {{ display: none !important; }}
-    }}
-    </style>
     {pestañas}
     {bloque_resumen}
     {''.join(bloques)}
     {script}
+  </section>"""
+
+
+def _paso_nice(maxv: float) -> float:
+    for p in (1, 2, 2.5, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000):
+        if maxv / p <= 8:
+            return float(p)
+    return 1000.0
+
+
+def _hull(puntos: list[tuple[float, float]]) -> list[tuple[float, float]]:
+    """Cierre convexo (monotone chain)."""
+    pts = sorted(set(puntos))
+    if len(pts) <= 1:
+        return pts
+
+    def cross(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+
+    lower: list[tuple[float, float]] = []
+    for p in pts:
+        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
+            lower.pop()
+        lower.append(p)
+    upper: list[tuple[float, float]] = []
+    for p in reversed(pts):
+        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
+            upper.pop()
+        upper.append(p)
+    return lower[:-1] + upper[:-1]
+
+
+def _area_poligono(pts: list[tuple[float, float]]) -> float:
+    n = len(pts)
+    if n < 3:
+        return 0.0
+    s = 0.0
+    for i in range(n):
+        x1, y1 = pts[i]
+        x2, y2 = pts[(i + 1) % n]
+        s += x1 * y2 - x2 * y1
+    return abs(s) / 2.0
+
+
+def _perimetro_poligono(pts: list[tuple[float, float]]) -> float:
+    n = len(pts)
+    if n < 2:
+        return 0.0
+    total = 0.0
+    for i in range(n):
+        x1, y1 = pts[i]
+        x2, y2 = pts[(i + 1) % n]
+        total += ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
+    return total
+
+
+def _seccion_plano_lote(muestras: list[dict] | None, finca: dict | None) -> str:
+    """Plano del lote: dibujo de los puntos de muestreo (pos_x, pos_y).
+
+    - Los puntos (0, 0) se omiten (sensor sin posición real).
+    - La silueta del lote es el cierre convexo de los puntos y de ella se
+      estiman el perímetro y el área.
+    """
+    if not muestras:
+        return ""
+    puntos = [
+        (float(m["pos_x"]), float(m["pos_y"]))
+        for m in muestras
+        if m.get("pos_x") is not None
+        and m.get("pos_y") is not None
+        and not (float(m["pos_x"]) == 0 and float(m["pos_y"]) == 0)
+    ]
+    if len(puntos) < 2:
+        return ""
+
+    hull = _hull(puntos)
+    perimetro = _perimetro_poligono(hull)
+    area_m2 = _area_poligono(hull)
+
+    def _fmt_area(v: float) -> str:
+        return f"{v:,.0f}".replace(",", ".")
+
+    stats = (
+        '<div class="plano-stats">'
+        f'<div class="plano-stat"><b>{_fmt_area(perimetro)} m</b>perímetro estimado</div>'
+        f'<div class="plano-stat"><b>{_fmt_area(area_m2)} m²</b>área estimada ({_num(area_m2 / 10000, 3)} ha)</div>'
+        f'<div class="plano-stat"><b>{len(puntos)}</b>puntos de muestreo</div>'
+    )
+    area_reg = (finca or {}).get("area_hectareas")
+    if area_reg:
+        stats += (
+            f'<div class="plano-stat"><b>{_num(area_reg, 2)} ha</b>'
+            'área registrada de la finca (referencia)</div>'
+        )
+    stats += "</div>"
+
+    # ── SVG del lote ──
+    margen_x, margen_y_sup, margen_y_inf, margen_der = 46, 14, 40, 18
+    W = 560
+    xs = [p[0] for p in puntos]
+    ys = [p[1] for p in puntos]
+    xmax, ymax = max(xs), max(ys)
+    xmin, ymin = min(xs), min(ys)
+    # Origen en el mínimo para centrar la silueta
+    ox = xmin - max(2.0, (xmax - xmin) * 0.08)
+    oy = ymin - max(2.0, (ymax - ymin) * 0.08)
+    span_x = max(xmax - ox, 1.0)
+    span_y = max(ymax - oy, 1.0)
+    H_max = 360
+    s = min((W - margen_x - margen_der) / span_x, (H_max - margen_y_sup - margen_y_inf) / span_y)
+    H = s * span_y + margen_y_sup + margen_y_inf
+
+    def X(v: float) -> float:
+        return margen_x + (v - ox) * s
+
+    def Y(v: float) -> float:
+        return H - margen_y_inf - (v - oy) * s
+
+    paso = _paso_nice(max(xmax - ox, ymax - oy))
+    partes_svg = []
+    # Rejilla y ejes
+    t = ox
+    while t <= xmax + paso * 0.5:
+        xp = X(t)
+        partes_svg.append(
+            f'<line x1="{xp:.1f}" y1="{margen_y_sup}" x2="{xp:.1f}" y2="{H - margen_y_inf}" '
+            'stroke="#dfe6d8" stroke-width="1" stroke-dasharray="3 4"/>'
+        )
+        partes_svg.append(
+            f'<text x="{xp:.1f}" y="{H - margen_y_inf + 16}" font-size="9" fill="#6b7c66" '
+            f'text-anchor="middle">{_num(t, 0)}</text>'
+        )
+        t += paso
+    t = oy
+    while t <= ymax + paso * 0.5:
+        yp = Y(t)
+        partes_svg.append(
+            f'<line x1="{margen_x}" y1="{yp:.1f}" x2="{W - margen_der}" y2="{yp:.1f}" '
+            'stroke="#dfe6d8" stroke-width="1" stroke-dasharray="3 4"/>'
+        )
+        partes_svg.append(
+            f'<text x="{margen_x - 6}" y="{yp + 3:.1f}" font-size="9" fill="#6b7c66" '
+            f'text-anchor="end">{_num(t, 0)}</text>'
+        )
+        t += paso
+    partes_svg.append(
+        f'<line x1="{margen_x}" y1="{H - margen_y_inf}" x2="{W - margen_der}" y2="{H - margen_y_inf}" '
+        'stroke="#8aa07f" stroke-width="1.2"/>'
+    )
+    partes_svg.append(
+        f'<line x1="{margen_x}" y1="{margen_y_sup}" x2="{margen_x}" y2="{H - margen_y_inf}" '
+        'stroke="#8aa07f" stroke-width="1.2"/>'
+    )
+    partes_svg.append(
+        f'<text x="{W / 2:.1f}" y="{H - 4}" font-size="9" fill="#8aa07f" text-anchor="middle">'
+        'x (metros)</text>'
+    )
+    partes_svg.append(
+        f'<text x="12" y="{H / 2:.1f}" font-size="9" fill="#8aa07f" '
+        'transform="rotate(-90 12 ' + f"{H / 2:.1f}" + ')" text-anchor="middle">y (metros)</text>'
+    )
+    # Silueta (cierre convexo) si hay >= 3 puntos
+    if len(hull) >= 3:
+        pts_hull = " ".join(f"{X(x):.1f},{Y(y):.1f}" for x, y in hull)
+        partes_svg.append(
+            f'<polygon points="{pts_hull}" fill="rgba(135,169,92,.22)" '
+            'stroke="#6f8f4f" stroke-width="2"/>'
+        )
+    # Puntos de muestreo
+    for i, (x, y) in enumerate(sorted(puntos), start=1):
+        partes_svg.append(
+            f'<circle cx="{X(x):.1f}" cy="{Y(y):.1f}" r="4.2" fill="#2e5d34" '
+            'stroke="#fff" stroke-width="1.4"/>'
+        )
+        partes_svg.append(
+            f'<text x="{X(x) + 7:.1f}" y="{Y(y) - 6:.1f}" font-size="8.5" fill="#37474f">'
+            f'{i}</text>'
+        )
+    svg = (
+        f'<svg class="plano-svg" viewBox="0 0 {W} {H}" width="100%" '
+        f'role="img" aria-label="Plano del lote con los puntos de muestreo">'
+        + "".join(partes_svg)
+        + "</svg>"
+    )
+
+    nota_cero = (
+        '<p class="muted">Los puntos con posición (0, 0) se omiten: '
+        'corresponden a tramas del sensor sin coordenada real del punto de toma.</p>'
+    )
+    return f"""
+  <section class="block plano-lote">
+    <div class="block-head"><span class="block-num">N</span>
+      <div><div class="block-title">Plano del lote — puntos de muestreo</div>
+      <div class="block-sub">Forma estimada del lote a partir de las coordenadas (x, y) de cada toma</div></div>
+    </div>
+    <p class="muted">Cada punto numerado es un sitio donde se tomó una muestra. La silueta verde
+    es la forma del lote que encierran los puntos; de ella se estiman el perímetro y el área.</p>
+    {stats}
+    {svg}
+    {nota_cero}
   </section>"""
 
 
@@ -542,6 +743,9 @@ def generar_reporte_html(
 
     # Mapa de calor del lote (muestreo en cuadrícula con posiciones x, y)
     seccion_mapa = _seccion_mapa_calor(muestras, umbrales)
+
+    # Plano del lote (puntos de muestreo + silueta + perímetro/área)
+    seccion_plano = _seccion_plano_lote(muestras, finca)
 
     # Explicación en lenguaje campesino (siempre que haya análisis)
     explicacion_campo = generar_explicacion_campesina(uc1=uc1, uc2=uc2, lectura=lectura)
@@ -599,6 +803,7 @@ def generar_reporte_html(
   </section>
   {secciones}
   {seccion_mapa}
+  {seccion_plano}
   {explicacion_campo}
   <section class="block">
     <div class="block-head"><span class="block-num">04</span>
