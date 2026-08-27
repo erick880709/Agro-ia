@@ -266,10 +266,17 @@ async def registrar_finca(
     from datetime import datetime, timezone
 
     area_declarada = body.area_declarada_ha or body.area_hectareas
-    # Normalizar tipo de riego a valor del enum (o None)
+    # Normalizar tipo de riego al nombre del enum (mayúsculas)
     tipo_riego = body.tipo_riego
-    if tipo_riego and tipo_riego.lower() not in {"goteo", "aspersión", "aspersion", "gravedad", "secano"}:
-        tipo_riego = None
+    if tipo_riego:
+        normalizado = (
+            tipo_riego.strip().upper().replace("Á", "A").replace("É", "E")
+        )
+        tipo_riego = (
+            normalizado
+            if normalizado in {"GOTEO", "ASPERSION", "GRAVEDAD", "SECANO"}
+            else None
+        )
     finca = Finca(
         id=uuid_mod.uuid4(),
         tenant_id=usuario.tenant_id,

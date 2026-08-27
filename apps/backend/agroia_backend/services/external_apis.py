@@ -50,30 +50,38 @@ CLIMATE_ZONES_COLOMBIA = {
 
 
 def _estimate_region_from_coords(lat: float, lon: float) -> str:
-    """Estima la región climática de Colombia a partir de coordenadas."""
-    # Regiones aproximadas por bounding box
-    if 4.5 <= lat <= 12.0 and -75.0 <= lon <= -72.0:
-        return "costa_atlantica"
-    if 1.5 <= lat <= 5.0 and -78.5 <= lon <= -77.0:
-        return "costa_pacifica"
-    if 4.5 <= lat <= 8.0 and -74.5 <= lon <= -72.5:
-        return "cundinamarca"
-    if 5.0 <= lat <= 7.0 and -74.0 <= lon <= -72.0:
-        return "boyaca"
-    if 5.5 <= lat <= 8.5 and -77.0 <= lon <= -74.0:
-        return "antioquia"
-    if 6.5 <= lat <= 8.5 and -74.0 <= lon <= -72.5:
-        return "santander"
-    if 4.5 <= lat <= 5.5 and -76.0 <= lon <= -75.0:
-        return "eje_cafetero"
-    if 3.0 <= lat <= 5.0 and -76.0 <= lon <= -74.5:
-        return "tolima"
+    """Estima la región climática de Colombia a partir de coordenadas.
+
+    Las regiones más específicas se evalúan PRIMERO; las costas amplias van
+    al final para no capturar puntos del interior (ej. la Sabana de Bogotá
+    caía en la caja Caribe).
+    """
+    # Regiones aproximadas por bounding box (orden: más específico primero)
     if 0.5 <= lat <= 2.5 and -78.5 <= lon <= -77.0:
         return "narino"
-    if 2.5 <= lat <= 6.0 and -73.0 <= lon <= -67.0:
+    # Tolima: valle del Magdalena (Ibagué/Melgar) + norte (Honda/Mariquita)
+    if (3.0 <= lat <= 4.45 and -76.0 <= lon <= -74.4) or (
+        5.0 <= lat <= 5.4 and -75.2 <= lon <= -74.4
+    ):
+        return "tolima"
+    if 4.45 <= lat <= 5.7 and -76.0 <= lon <= -75.35:
+        return "eje_cafetero"
+    if 4.3 <= lat <= 5.3 and -74.5 <= lon <= -73.2:
+        return "cundinamarca"  # Sabana de Bogotá
+    if 5.3 <= lat <= 6.5 and -73.8 <= lon <= -72.6:
+        return "boyaca"
+    if 6.5 <= lat <= 8.3 and -74.5 <= lon <= -72.5:
+        return "santander"
+    if 5.5 <= lat <= 8.5 and -77.0 <= lon <= -74.0:
+        return "antioquia"
+    if 1.5 <= lat <= 5.0 and -78.5 <= lon <= -77.0:
+        return "costa_pacifica"
+    if 2.5 <= lat <= 6.5 and -74.0 <= lon <= -67.0:
         return "llanos"
-    if -4.0 <= lat <= 2.0 and -74.0 <= lon <= -69.0:
+    if -5.0 <= lat <= 2.0 and -74.0 <= lon <= -69.0:
         return "amazonia"
+    if 7.0 <= lat <= 12.5 and -77.5 <= lon <= -72.0:
+        return "costa_atlantica"
     return "default"
 
 
