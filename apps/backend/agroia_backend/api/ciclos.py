@@ -6,9 +6,11 @@ incidencias JSONB) y observaciones. Gestión: Admin/Agrónomo (crear/editar),
 Admin (eliminar). Consulta: cualquier rol con acceso a la finca.
 """
 
+import csv
+import io
 import re
 import uuid as uuid_mod
-from datetime import date
+from datetime import date, datetime
 
 from agroia.database import get_db
 from agroia.logging import get_logger
@@ -81,6 +83,36 @@ class CosecharCicloRequest(BaseModel):
         None, max_length=4000,
         description="Texto libre: «Urea 150kg, DAP 80kg» — un parser simple lo convierte a JSONB",
     )
+
+
+class CargaCiclosCsvRequest(BaseModel):
+    """Carga masiva: CSV con el historial de ciclos (últimos 5 años).
+
+    Columnas esperadas: lote, cultivo, fecha_siembra, fecha_cosecha,
+    rendimiento, aplicaciones_texto.
+    """
+
+    csv_texto: str = Field(..., min_length=1, max_length=2_000_000, description="Contenido del CSV")
+
+
+COLUMNAS_CICLOS_CSV = {
+    "lote", "cultivo", "fecha_siembra", "fecha_cosecha", "rendimiento", "aplicaciones_texto",
+}
+
+
+def _parsear_fecha_csv(valor: str) -> date | None:
+    """Acepta ISO (YYYY-MM-DD) o DD/MM/YYYY."""
+    v = (valor or "").strip()
+    if not v:
+        return None
+    try:
+        return date.fromisoformat(v)
+    except ValueError:
+        pass
+    try:
+        return datetime.strptime(v, "%d/%m/%Y").date()
+    except ValueError:
+        return None
 
 
 _RE_APLICACION = re.compile(
@@ -731,4 +763,166 @@ async def cosechar_ciclo(
         "status": "harvested",
         "ciclo": _ciclo_a_dict(ciclo, await _cultivo_nombre(db, ciclo.cultivo_id)),
         "advertencias": advertencias,
+    }
+
+
+@router.post("/fincas/{finca_id}/ciclos/carga-csv")
+async def carga_masiva_ciclos(
+    finca_id: str,
+    body: CargaCiclosCsvRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
+):
+    """Ingesta en bloque del historial de ciclos (CSV de los últimos 5 años).
+
+    Columnas: `lote, cultivo, fecha_siembra, fecha_cosecha, rendimiento,
+    aplicaciones_texto`. El lote se busca por nombre entre los lotes de la
+    finca y se crea si no existe; el cultivo se resuelve por nombre en el
+    catálogo; el rendimiento va en t/ha y el texto de aplicaciones se
+    convierte a JSONB. Las filas inválidas se reportan sin abortar la carga.
+    """
+    rol = _exigir_rol(
+        x_user_role, ROL_EXPERTOS,
+        "Solo el administrador o el agrónomo pueden cargar el historial de ciclos.",
+    )
+    await verificar_acceso_finca(db, x_user_role, x_user_email, finca_id)
+    try:
+        finca_uuid = uuid_mod.UUID(finca_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FINCA_INVALIDA", "message": "finca_id no es un UUID válido.",
+        })
+    finca = (
+        await db.execute(select(Finca).where(Finca.id == finca_uuid))
+    ).scalar_one_or_none()
+    if finca is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "FINCA_NOT_FOUND", "message": "La finca no está registrada.",
+        })
+
+    # ── Parsear CSV ──
+    try:
+        filas = list(csv.DictReader(io.StringIO(body.csv_texto)))
+    except Exception as e:  # noqa: BLE001
+        raise HTTPException(status_code=422, detail={
+            "code": "CSV_INVALIDO",
+            "message": f"No se pudo interpretar el CSV: {e}",
+        })
+    if not filas:
+        raise HTTPException(status_code=422, detail={
+            "code": "CSV_VACIO", "message": "El CSV no contiene filas de datos.",
+        })
+    faltantes = COLUMNAS_CICLOS_CSV - {c.strip().lower() for c in filas[0].keys()}
+    if faltantes:
+        raise HTTPException(status_code=422, detail={
+            "code": "CSV_COLUMNAS",
+            "message": "Faltan columnas: " + ", ".join(sorted(faltantes)),
+        })
+
+    # ── Contexto: lotes de la finca y catálogo de cultivos ──
+    lotes_db = (
+        await db.execute(
+            select(Lote).where(Lote.finca_id == finca_uuid, Lote.activo.is_(True))
+        )
+    ).scalars().all()
+    lotes_por_nombre = {lote.nombre.strip().lower(): lote for lote in lotes_db}
+    cultivos = (await db.execute(select(Cultivo))).scalars().all()
+    cultivos_por_nombre = {c.nombre.strip().lower(): c for c in cultivos}
+
+    creados = 0
+    lotes_creados = 0
+    errores: list[dict] = []
+
+    for idx, fila in enumerate(filas, start=2):  # fila 2 = primera fila de datos
+        def celda(nombre: str) -> str:
+            valor = fila.get(nombre) or fila.get(nombre.capitalize()) or ""
+            return (valor or "").strip()
+
+        nombre_lote = celda("lote")
+        nombre_cultivo = celda("cultivo")
+        siembra_txt = celda("fecha_siembra")
+        cosecha_txt = celda("fecha_cosecha")
+        rendimiento_txt = celda("rendimiento")
+        aplicaciones_txt = celda("aplicaciones_texto")
+
+        if not nombre_lote:
+            errores.append({"fila": idx, "mensaje": "Columna 'lote' vacía."})
+            continue
+        lote = lotes_por_nombre.get(nombre_lote.lower())
+        if lote is None:
+            lote = Lote(finca_id=finca_uuid, nombre=nombre_lote[:100])
+            db.add(lote)
+            await db.flush()
+            lotes_por_nombre[nombre_lote.lower()] = lote
+            lotes_creados += 1
+
+        cultivo = cultivos_por_nombre.get(nombre_cultivo.lower())
+        if cultivo is None:
+            errores.append({"fila": idx, "mensaje": f"Cultivo '{nombre_cultivo}' no está en el catálogo."})
+            continue
+
+        fecha_siembra = _parsear_fecha_csv(siembra_txt)
+        if fecha_siembra is None:
+            errores.append({"fila": idx, "mensaje": f"Fecha de siembra inválida: '{siembra_txt}'."})
+            continue
+        fecha_cosecha = _parsear_fecha_csv(cosecha_txt)
+        if cosecha_txt and fecha_cosecha is None:
+            errores.append({"fila": idx, "mensaje": f"Fecha de cosecha inválida: '{cosecha_txt}'."})
+            continue
+        if fecha_cosecha and fecha_cosecha < fecha_siembra:
+            errores.append({"fila": idx, "mensaje": "La cosecha es anterior a la siembra."})
+            continue
+
+        rendimiento = None
+        if rendimiento_txt:
+            try:
+                rendimiento = float(rendimiento_txt.replace(",", "."))
+            except ValueError:
+                errores.append({"fila": idx, "mensaje": f"Rendimiento inválido: '{rendimiento_txt}'."})
+                continue
+
+        aplicaciones = parsear_resumen_aplicaciones(aplicaciones_txt)
+
+        db.add(CicloLote(
+            lote_id=lote.id,
+            cultivo_id=cultivo.id,
+            fecha_siembra=fecha_siembra,
+            fecha_cosecha=fecha_cosecha,
+            rendimiento_tn_ha=rendimiento,
+            aplicaciones=aplicaciones,
+            observaciones="Ciclo histórico importado por carga masiva (CSV).",
+        ))
+        creados += 1
+
+    await registrar_auditoria(
+        db,
+        usuario_email=x_user_email or "desconocido@agroia.co",
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="ciclo.carga_csv",
+        entidad="ciclo",
+        detalle={
+            "finca_id": str(finca.id),
+            "finca": finca.nombre,
+            "total_filas": len(filas),
+            "creados": creados,
+            "errores": len(errores),
+            "lotes_creados": lotes_creados,
+        },
+        ip=request.client.host if request and request.client else None,
+    )
+    await db.commit()
+    logger.info(
+        "ciclos_carga_csv", finca_id=str(finca.id), creados=creados,
+        errores=len(errores), lotes_creados=lotes_creados, rol=rol,
+    )
+    return {
+        "status": "ok",
+        "total_filas": len(filas),
+        "creados": creados,
+        "lotes_creados": lotes_creados,
+        "errores": errores,
     }

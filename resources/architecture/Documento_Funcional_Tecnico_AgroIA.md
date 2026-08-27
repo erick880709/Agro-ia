@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 1.9 · **Fecha:** 2026-08-27
+**Versión:** 2.0 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -443,6 +443,7 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 - `PATCH …/ciclos/{ciclo_id}` — editar ciclo (Admin/Agrónomo).
 - `DELETE …/ciclos/{ciclo_id}` — eliminar ciclo (solo Admin).
 - **`POST /api/v1/fincas/{finca_id}/ciclo/iniciar`** — **flujo rápido desde Recomendaciones** (Admin/Agrónomo): recibe `{cultivo_id, fecha_siembra, variedad?, densidad_siembra_plantas_ha?}` y en una sola transacción (1) crea el ciclo en `historial_ciclos_lote` sobre el lote principal, (2) **actualiza `fincas.cultivo_sembrado`** con el nombre del cultivo y (3) **actualiza el lote** (`fecha_siembra`, `variedad`, `densidad_siembra_plantas_ha`) para que el análisis actual use el cultivo recién sembrado. Auditoría `ciclo.iniciar`.
+- **`POST /api/v1/fincas/{finca_id}/ciclos/carga-csv`** — **carga masiva del historial de ciclos** (Admin/Agrónomo): recibe `{csv_texto}` con columnas `lote, cultivo, fecha_siembra, fecha_cosecha, rendimiento, aplicaciones_texto`. El lote se busca por nombre y **se crea si no existe**; el cultivo se resuelve por nombre en el catálogo; fechas en ISO o `DD/MM/YYYY`; el rendimiento va en t/ha; el texto de aplicaciones se convierte a JSONB con el parser. Las filas inválidas se reportan (`errores[{fila, mensaje}]`) sin abortar la carga. Auditoría `ciclo.carga_csv`.
 - **`GET /api/v1/fincas/{finca_id}/ciclo/activo`** — ciclo abierto (sin cosechar) más reciente del lote principal; alimenta el botón «✏️ Cosechar ciclo» del Dashboard.
 - **`POST /api/v1/fincas/{finca_id}/ciclo/cosechar`** — **cierre del ciclo** (Admin/Agrónomo): `{fecha_cosecha, rendimiento (obligatorio), unidad_rendimiento (kg_ha|t_ha), calidad_cosecha?, resumen_aplicaciones?}`. Normaliza el rendimiento a t/ha (kg/ha ÷ 1000), convierte el resumen en texto plano («Urea 150kg, DAP 80kg») a JSONB con un **parser simple** (separa por coma/punto y coma/salto de línea; los gramos se normalizan a kg) y rechaza con `NO_CICLO_ACTIVO` si no hay ciclo abierto o `FECHAS_INVALIDAS` si la cosecha es anterior a la siembra. Auditoría `ciclo.cosechar`.
 
@@ -451,6 +452,8 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 **Flujo rápido en Recomendaciones**: sobre el botón «🧪 Analizar suelo» está el botón **«🌱 Registrar nuevo ciclo»** (Admin/Agrónomo): abre un modal con cultivo (preseleccionado con el elegido en el selector), fecha de siembra (obligatoria), variedad y densidad (plantas/ha, opcionales). Al guardar llama `POST …/ciclo/iniciar` y la finca/lote quedan actualizados para el análisis siguiente; el selector de Recomendaciones adopta el cultivo recién sembrado.
 
 **Cierre del ciclo en el Dashboard y en el Historial**: cuando hay un ciclo abierto, la tarjeta «⚡ Acciones rápidas» (P1) y el Historial (P6) muestran el bloque «🔄 Ciclo activo» con el botón **«✏️ Cosechar ciclo»** (Admin/Agrónomo): modal con fecha de cosecha (por defecto hoy), rendimiento obligatorio (kg/ha o t/ha — alimenta el ROI futuro), calidad opcional y un textarea para pegar el resumen de aplicaciones («Urea 150kg, DAP 80kg») — o **cargar un CSV pequeño** (`Producto,Dosis,Unidad`; la UI lo convierte a texto y el parser del backend lo vuelve JSONB). Al guardar, el ciclo se cierra (`fecha_cosecha`, `rendimiento_tn_ha`, `calidad_cosecha`, `aplicaciones`) y el bloque desaparece.
+
+**Carga masiva en P4 (Cargar archivo)**: tarjeta «🗂️ Carga masiva — historial de ciclos (CSV)» para **grandes fincas**: sube un CSV con el historial de los últimos 5 años (`lote, cultivo, fecha_siembra, fecha_cosecha, rendimiento, aplicaciones_texto`), con botón de **plantilla de ejemplo** descargable. La UI muestra el resumen (ciclos importados, lotes creados y filas con error).
 
 ---
 

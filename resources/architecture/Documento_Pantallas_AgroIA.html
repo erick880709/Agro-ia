@@ -69,7 +69,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
   <h1>Pantallas del sistema y su propósito</h1>
-  <div class="meta">Versión 1.8 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+  <div class="meta">Versión 1.9 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
 </header>
 
 <div class="wrap">
@@ -240,6 +240,12 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   <p><b>Servicio que llama:</b> <code>POST /api/v1/carga</code> (multipart). El backend decodifica,
   normaliza con las mismas reglas de una trama en vivo, persiste <code>SensorReading</code> y ejecuta el
   motor de recomendaciones al instante (UC1 sin cultivo, UC2 con cultivo).</p>
+  <p><b>🗂️ Carga masiva — historial de ciclos (CSV)</b>: segunda tarjeta de P4 para <b>grandes
+  fincas</b>: sube un CSV con el historial de los últimos 5 años (<code>lote, cultivo,
+  fecha_siembra, fecha_cosecha, rendimiento, aplicaciones_texto</code>) con plantilla de ejemplo
+  descargable. <code>POST /api/v1/fincas/{id}/ciclos/carga-csv</code> lo ingesta en bloque: crea
+  los lotes que no existan, resuelve cultivos por nombre, convierte el texto de aplicaciones a
+  JSONB y reporta las filas con error. La UI muestra el resumen de importación.</p>
   <p><span class="siguiente">Siguiente → P5 Recomendaciones.</span></p>
 </div>
 
@@ -419,7 +425,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.8 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.9 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

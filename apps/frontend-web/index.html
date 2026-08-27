@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AgroIA · AgroInteligente Colombia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="/styles.css?v=20260827-cosecha-p6" />
+  <link rel="stylesheet" href="/styles.css?v=20260827-ciclos-csv" />
 </head>
 <body>
   <!-- ============ PANTALLA DE AUTENTICACIÓN ============ -->
@@ -169,6 +169,32 @@
         </div>
       </div>
       <div id="carga-resultado"></div>
+
+      <div class="card">
+        <h2>🗂️ Carga masiva — historial de ciclos (CSV) <span class="muted">(grandes fincas · últimos 5 años)</span></h2>
+        <p class="muted">
+          Sube un CSV con el historial de ciclos del predio. Columnas:
+          <code>lote, cultivo, fecha_siembra, fecha_cosecha, rendimiento, aplicaciones_texto</code>.
+          El lote se crea si no existe, el rendimiento queda en t/ha y el texto de aplicaciones
+          («Urea 150kg, DAP 80kg») se convierte a JSONB.
+        </p>
+        <form id="form-carga-ciclos" class="form-grid">
+          <label class="field">
+            <span>Archivo CSV del historial</span>
+            <input type="file" id="carga-ciclos-file" accept=".csv" required />
+          </label>
+          <label class="field">
+            <span>Finca</span>
+            <select id="carga-ciclos-finca"></select>
+          </label>
+          <button type="submit" class="btn btn-primary">⬆️ Importar historial</button>
+        </form>
+        <div class="example-files">
+          <span class="muted">Plantilla:</span>
+          <button class="chip" id="plantilla-ciclos">historial_ciclos_ejemplo.csv</button>
+        </div>
+        <div id="carga-ciclos-resultado"></div>
+      </div>
     </section>
 
     <!-- ============ RECOMENDACIONES ============ -->
@@ -579,7 +605,7 @@
     AgroIA v0.1.0 · Motor: sistema experto (reglas UPRA/Cenicafé/AGROSAVIA) · ML en modo sombra
   </footer>
 
-  <script src="/departamentos.js?v=20260827-cosecha-p6"></script>
-  <script src="/app.js?v=20260827-cosecha-p6"></script>
+  <script src="/departamentos.js?v=20260827-ciclos-csv"></script>
+  <script src="/app.js?v=20260827-ciclos-csv"></script>
 </body>
 </html>

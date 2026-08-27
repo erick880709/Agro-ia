@@ -201,6 +201,12 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **API**: `GET /api/v1/fincas/{id}/ciclo/activo` y `POST /api/v1/fincas/{id}/ciclo/cosechar` — guardas `NO_CICLO_ACTIVO` y `FECHAS_INVALIDAS`; auditoría `ciclo.cosechar`.
 - Validado local (API + UI completa iniciar→cosechar) y en producción.
 
+### Carga masiva del historial de ciclos (CSV, 2026-08-27)
+
+- **P4 (Cargar archivo)**: nueva tarjeta «🗂️ Carga masiva — historial de ciclos (CSV)» para grandes fincas: CSV con los últimos 5 años (`lote, cultivo, fecha_siembra, fecha_cosecha, rendimiento, aplicaciones_texto`) + plantilla de ejemplo descargable.
+- **`POST /api/v1/fincas/{id}/ciclos/carga-csv`** (Admin/Agrónomo): ingesta en bloque — crea lotes que no existan, resuelve cultivos por nombre, fechas ISO o DD/MM/YYYY, rendimiento en t/ha, aplicaciones texto → JSONB; reporta filas con error sin abortar. Auditoría `ciclo.carga_csv`.
+- Validado local (API: 3 creados + 1 lote nuevo + 2 errores reportados; UI con plantilla y resumen) y en producción.
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).

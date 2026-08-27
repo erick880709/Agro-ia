@@ -242,6 +242,9 @@ async function arrancarAplicacion() {
   const btnCiclo = document.getElementById('reco-nuevo-ciclo');
   if (btnCiclo) btnCiclo.addEventListener('click', abrirModalIniciarCiclo);
   document.getElementById('form-carga').addEventListener('submit', enviarCarga);
+  // ── Carga masiva: historial de ciclos (CSV) ──
+  document.getElementById('form-carga-ciclos').addEventListener('submit', enviarCargaCiclos);
+  document.getElementById('plantilla-ciclos').addEventListener('click', descargarPlantillaCiclos);
   document.getElementById('form-finca').addEventListener('submit', enviarFinca);
   // ── Wizard de finca (3 secciones) — defensivo: si el HTML es viejo
   //    (caché), no debe romper el resto del arranque. ──
@@ -423,16 +426,19 @@ async function cargarFincas() {
     const sel = document.getElementById('finca-select');
     const selReco = document.getElementById('reco-finca');
     const selCarga = document.getElementById('carga-finca');
+    const selCiclos = document.getElementById('carga-ciclos-finca');
     const selRepo = document.getElementById('repo-finca');
     sel.innerHTML = '';
     selReco.innerHTML = '';
     selCarga.innerHTML = '<option value="">— Auto (según dispositivo) —</option>';
+    selCiclos.innerHTML = '';
     selRepo.innerHTML = '';
     for (const f of state.fincas) {
       const opt = `<option value="${esc(f.id)}">${esc(f.nombre)} (${esc(f.departamento || '?')})</option>`;
       sel.innerHTML += opt;
       selReco.innerHTML += opt;
       selCarga.innerHTML += opt;
+      selCiclos.innerHTML += opt;
       selRepo.innerHTML += opt;
     }
     if (state.fincas.length) {
@@ -1848,6 +1854,61 @@ async function enviarCarga(e) {
   } finally {
     btn.disabled = false;
     btn.textContent = '⬆️ Cargar y analizar';
+  }
+}
+
+/* ─────────────────── carga masiva: historial de ciclos (CSV) ─────────────────── */
+
+const PLANTILLA_CICLOS_CSV = [
+  'lote,cultivo,fecha_siembra,fecha_cosecha,rendimiento,aplicaciones_texto',
+  'Lote principal,Café,2021-04-10,2023-12-15,3.8,"Urea 150kg, DAP 80kg"',
+  'Lote principal,Café,2024-03-01,2026-01-20,4.2,"KCl 100kg, Cal dolomítica 500kg"',
+  'Lote La Vega,Plátano,2022-05-15,2023-08-30,12.5,"Urea 100kg"',
+].join('\n');
+
+function descargarPlantillaCiclos() {
+  const blob = new Blob([PLANTILLA_CICLOS_CSV], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'historial_ciclos_ejemplo.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+}
+
+async function enviarCargaCiclos(e) {
+  e.preventDefault();
+  const out = document.getElementById('carga-ciclos-resultado');
+  const fincaId = document.getElementById('carga-ciclos-finca').value;
+  const file = document.getElementById('carga-ciclos-file').files[0];
+  if (!fincaId) { out.innerHTML = errorBanner('Seleccione la finca para importar el historial.'); return; }
+  if (!file) { out.innerHTML = errorBanner('Seleccione el archivo CSV del historial.'); return; }
+  out.innerHTML = '<div class="ok-banner">⏳ Importando historial…</div>';
+  try {
+    const texto = await file.text();
+    const r = await api(`/fincas/${fincaId}/ciclos/carga-csv`, {
+      method: 'POST', headers: headers(), body: JSON.stringify({ csv_texto: texto }),
+    });
+    const erroresHtml = r.errores && r.errores.length
+      ? `<div class="table-wrap" style="margin-top:10px"><table>
+           <tr><th>Fila</th><th>Error</th></tr>
+           ${r.errores.map(x => `<tr><td>${x.fila}</td><td>${esc(x.mensaje)}</td></tr>`).join('')}
+         </table></div>`
+      : '';
+    out.innerHTML = `
+      <div class="card">
+        <h2>📥 Importación del historial de ciclos</h2>
+        ${okBanner(
+          `<b>${r.creados}</b> ciclo(s) importados de <b>${r.total_filas}</b> filas` +
+          (r.lotes_creados ? ` · <b>${r.lotes_creados}</b> lote(s) creado(s)` : '') +
+          (r.errores.length ? ` · ${r.errores.length} fila(s) con error` : '') + '.'
+        )}
+        ${erroresHtml}
+      </div>`;
+    await cargarFincas();
+  } catch (err) {
+    out.innerHTML = errorBanner(err.message);
   }
 }
 
