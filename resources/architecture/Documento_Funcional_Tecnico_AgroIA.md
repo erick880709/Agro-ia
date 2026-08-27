@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.6 · **Fecha:** 2026-08-27
+**Versión:** 2.7 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -489,6 +489,10 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 
 **Geoservicio real (opcional)**: `intentar_geoservicio_igac()` consulta un WMS/WFS GetFeatureInfo si se define `SIG_IGAC_WMS_URL`; sin configuración degrada con gracia a las zonas de referencia locales.
 
+**Resolución de zonas (refinada)**: `_estimate_region_from_coords()` evalúa las regiones **más específicas primero** (Nariño, Tolima, Eje Cafetero, Cundinamarca/Sabana, Boyacá, Santander, Antioquia, Pacífico, Orinoquía, Amazonia y Caribe al final). Validada en **13 puntos del país** (Armenia, Bogotá, Pasto, Ibagué, Honda, Villavicencio, Yopal, Tunja, Bucaramanga, Barranquilla, Medellín, Manizales, Leticia). Caso exigido verificado de punta a punta: finca de prueba en Zipaquirá (polígono GeoJSON) → zona «Cundinamarca / Sabana de Bogotá», textura **Franco-arcillosa**, capa limitante «**Posible fragipán**/arcillolita», MO 7.5 %, CIC 28.0, `calidad = estimado_por_sig` y lote completado.
+
+**Fix relacionado**: `registrar_finca` normaliza `tipo_riego` al nombre del enum (`GOTEO|ASPERSION|GRAVEDAD|SECANO`) — valores en minúscula antes rompían el INSERT con error de enum.
+
 **Impacto**: textura/MO/CIC dejan de ser faltantes; el análisis «preliminar» queda solo para variables dinámicas (pH y CE), que sí requieren medición.
 
 ---
@@ -817,6 +821,12 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 - **P2**: al registrar la finca, el polígono GeoJSON se intersecta con las zonas de referencia IGAC/UPRA y se precargan textura/MO/CIC con `calidad = estimado_por_sig`; el banner verde muestra la zona, la textura y la fuente oficial. Si el sensor mide, **sobrescribe** la estimación.
 - **Confiabilidad transparente**: las filas del diagnóstico rellenadas por SIG muestran «Estimado por SIG (IGAC/UPRA)»; el Dashboard etiqueta la lectura «🗺️ estimado SIG».
 - **Impacto en confianza**: menos variables faltantes → menos análisis «preliminares»; solo pH y CE (dinámicos) siguen exigiendo medición real.
+
+### 11.7 Refinamientos SIG y validación nacional (v2.7)
+
+- **Resolución de zonas corregida**: las cajas amplias (Caribe/Amazonia) capturaban puntos del interior (la Sabana de Bogotá caía en «Costa Atlántica»). Ahora las regiones específicas se evalúan primero; **13 puntos del país validados** de punta a punta.
+- **Caso exigido verificado**: finca en Cundinamarca con polígono → textura **Franco-arcillosa** + capa limitante **fragipán** precargados con `calidad = estimado_por_sig` (MO 7.5 %, CIC 28.0).
+- **Fix `tipo_riego`**: normalización al nombre del enum evita el 500 por valores en minúscula.
 
 ---
 
