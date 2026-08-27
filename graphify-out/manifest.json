@@ -3695,8 +3695,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/main.py": {
-    "mtime": 1787805760.75461,
-    "ast_hash": "de041d89c3573eca79a48384c35444d5",
+    "mtime": 1787837203.329103,
+    "ast_hash": "b3b52e2317498c8fab0ebf1bfa77b85c",
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787836345.4694495,
-    "ast_hash": "1bff9734a76a2e73b63337d7be570a0c",
+    "mtime": 1787837233.835089,
+    "ast_hash": "8fbc691bcc2ea95921e350a5450032b4",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787836304.128763,
-    "ast_hash": "152ec4524680a3bbac51e9683e228c2b",
+    "mtime": 1787837214.5911212,
+    "ast_hash": "5afe366f276067cf5c8fcf0782e4cfce",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {

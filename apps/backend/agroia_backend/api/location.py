@@ -15,6 +15,30 @@ logger = get_logger(__name__)
 router = APIRouter(prefix="/api/v1/location", tags=["geolocalización"])
 
 
+@router.get("/resolver-enlace")
+async def resolver_enlace(
+    url: str = Query(..., min_length=10, description="Enlace de Google Maps (corto o completo)"),
+):
+    """Resuelve un enlace de Google Maps (p. ej. maps.app.goo.gl) y extrae
+    las coordenadas de la URL final, sin necesidad de API key."""
+    from agroia_backend.api.fincas import _extraer_coordenadas
+    from agroia_backend.services.external_apis import resolver_enlace_google
+
+    final = await resolver_enlace_google(url)
+    lat, lng = _extraer_coordenadas(final)
+    if lat is None or lng is None:
+        lat, lng = _extraer_coordenadas(url)
+    if lat is None or lng is None or not (-90 <= lat <= 90) or not (-180 <= lng <= 180):
+        raise HTTPException(status_code=422, detail={
+            "code": "ENLACE_SIN_COORDENADAS",
+            "message": (
+                "No se pudieron extraer coordenadas del enlace. "
+                "Use un enlace de Google Maps con ubicación o el formato 'lat, lng'."
+            ),
+        })
+    return {"status": "ok", "latitud": lat, "longitud": lng, "enlace_final": final}
+
+
 @router.get("/catalogo")
 async def catalogo_geografico():
     """Catálogo departamento → municipios usado por la validación de fincas."""

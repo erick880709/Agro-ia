@@ -27,6 +27,8 @@ ROL_EXPERTOS = {"admin", "administrador", "agronomo", "agrónomo"}
 # Enlaces Google Maps con coordenadas: q=lat,lng · @lat,lng,zoom · place/.../@lat,lng
 _RE_LATLNG_URL = re.compile(r"(-?\d+(?:\.\d+)?)[,\s]+(-?\d+(?:\.\d+)?)")
 _RE_PAR = re.compile(r"^(-?\d+(?:\.\d+)?)[,\s]+(-?\d+(?:\.\d+)?)$")
+# Google Maps también codifica coordenadas como !3d<lat>!4d<lng> (sin coma)
+_RE_D = re.compile(r"!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)")
 
 
 def _extraer_coordenadas(texto: str) -> tuple[float | None, float | None]:
@@ -38,6 +40,9 @@ def _extraer_coordenadas(texto: str) -> tuple[float | None, float | None]:
     if m:
         return float(m.group(1)), float(m.group(2))
     m = _RE_LATLNG_URL.search(t)
+    if m:
+        return float(m.group(1)), float(m.group(2))
+    m = _RE_D.search(t)
     if m:
         return float(m.group(1)), float(m.group(2))
     return None, None

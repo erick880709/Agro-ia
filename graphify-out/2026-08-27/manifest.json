@@ -4165,13 +4165,13 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787809499.5111313,
-    "ast_hash": "8a69d32fdde2d1976dd68dc1eb23591e",
+    "mtime": 1787836722.961696,
+    "ast_hash": "7c1c67ff38174c0f6c924be5320d8d3c",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
-    "mtime": 1787808239.8248274,
-    "ast_hash": "bfb0b2069795ef1453c0e9aec691458b",
+    "mtime": 1787836034.8085744,
+    "ast_hash": "4baba9af6c6d047d32108f6b5fb5bbf7",
     "semantic_hash": ""
   },
   "apps/frontend/angular.json": {
@@ -4495,8 +4495,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/location.py": {
-    "mtime": 1787691942.253909,
-    "ast_hash": "c9e7120ca1121565d9ae9e53e8449d86",
+    "mtime": 1787836224.1704526,
+    "ast_hash": "c884d8e4b4b807b865ba8fe4e47f135c",
     "semantic_hash": ""
   },
   "apps/frontend/src/app/shared/google-maps-picker.component.ts": {
@@ -4510,8 +4510,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/fincas.py": {
-    "mtime": 1787808275.4985366,
-    "ast_hash": "c251c30730d0ee302f8a609c39d57d27",
+    "mtime": 1787836694.6492734,
+    "ast_hash": "b1be1f10eb6ce95fdec4fd62c80f69fb",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/reportes.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787808849.9700084,
-    "ast_hash": "f72208d80b5acbe695179ed63660b7a1",
+    "mtime": 1787836345.4694495,
+    "ast_hash": "1bff9734a76a2e73b63337d7be570a0c",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787711105.8417537,
-    "ast_hash": "05f28fcb539a586b3fb99530abec36f0",
+    "mtime": 1787836304.128763,
+    "ast_hash": "152ec4524680a3bbac51e9683e228c2b",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4832,6 +4832,21 @@
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
     "mtime": 1787834549.571844,
     "ast_hash": "f8e9d71d529878ca2be2bef07e06c70d",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/models/lote.py": {
+    "mtime": 1787836043.407763,
+    "ast_hash": "6159a1bbb184e367dd630357b2ebabb2",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/geografia.py": {
+    "mtime": 1787836485.382526,
+    "ast_hash": "e4f6c8a05f73263e3aacf8e098411653",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/011_fincas_geo_lotes.py": {
+    "mtime": 1787836026.2658727,
+    "ast_hash": "13a794367a77370d1f2193550d8e8aa8",
     "semantic_hash": ""
   }
 }

@@ -546,13 +546,32 @@ function parsearCoordenadas(texto) {
   if (par) return [parseFloat(par[1]), parseFloat(par[2])];
   const url = /(-?\d+(?:\.\d+)?)[,\s]+(-?\d+(?:\.\d+)?)/.exec(t);
   if (url) return [parseFloat(url[1]), parseFloat(url[2])];
+  // Formato de Google sin coma: !3d<lat>!4d<lng>
+  const d = /!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/.exec(t);
+  if (d) return [parseFloat(d[1]), parseFloat(d[2])];
   return null;
 }
 
-function aplicarEnlace() {
+async function aplicarEnlace() {
   const msg = document.getElementById('finca-msg');
-  const texto = document.getElementById('f-enlace').value;
-  const coords = parsearCoordenadas(texto);
+  const texto = document.getElementById('f-enlace').value.trim();
+  if (!texto) {
+    msg.innerHTML = errorBanner('Pegue un enlace de Google Maps o "lat, lng".');
+    return;
+  }
+  let coords = parsearCoordenadas(texto);
+  // Los enlaces cortos (maps.app.goo.gl/…) no traen coordenadas: se
+  // resuelven en el backend siguiendo la redirección.
+  if (!coords && /^https?:\/\//i.test(texto)) {
+    msg.innerHTML = '<div class="ok-banner">🔗 Resolviendo enlace de Google Maps…</div>';
+    try {
+      const r = await api(`/location/resolver-enlace?url=${encodeURIComponent(texto)}`, { method: 'GET' });
+      coords = [r.latitud, r.longitud];
+    } catch (err) {
+      msg.innerHTML = errorBanner('No se pudieron extraer coordenadas del enlace: ' + err.message);
+      return;
+    }
+  }
   if (!coords) {
     msg.innerHTML = errorBanner('No se pudieron extraer coordenadas del enlace. Pegue un enlace de Google Maps o "lat, lng".');
     return;
