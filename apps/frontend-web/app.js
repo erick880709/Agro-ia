@@ -7,7 +7,7 @@ const API = '/api/v1';
 const SESION_KEY = 'agroia_sesion';
 
 const TABS_POR_ROL = {
-  admin: ['inicio', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'usuarios', 'catalogo'],
+  admin: ['inicio', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'usuarios', 'auditoria', 'catalogo'],
   agronomo: ['inicio', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'catalogo'],
   cliente: ['inicio', 'sensores', 'historial', 'reportes', 'catalogo'],
 };
@@ -35,8 +35,9 @@ if (state.sesion) {
 
 function headers(json = true) {
   const h = { 'X-User-Role': state.rol };
-  if (state.rol.toLowerCase() === 'cliente' && state.email) {
+  if (state.email) {
     h['X-User-Email'] = state.email;
+    if (state.nombre) h['X-User-Nombre'] = state.nombre;
   }
   if (json) h['Content-Type'] = 'application/json';
   return h;
@@ -46,8 +47,9 @@ function headers(json = true) {
 
 async function api(path, opts = {}) {
   const h = { ...(opts.headers || {}), 'X-User-Role': state.rol };
-  if (state.rol.toLowerCase() === 'cliente' && state.email) {
+  if (state.email) {
     h['X-User-Email'] = state.email;
+    if (state.nombre) h['X-User-Nombre'] = state.nombre;
   }
   const res = await fetch(API + path, { ...opts, headers: h });
   let body = null;
@@ -181,6 +183,7 @@ function goTab(name) {
   if (name === 'inicio') cargarDashboard();
   if (name === 'fincas' && state.rol.toLowerCase() === 'admin') renderFincasList();
   if (name === 'usuarios' && state.rol.toLowerCase() === 'admin') cargarUsuarios();
+  if (name === 'auditoria' && state.rol.toLowerCase() === 'admin') cargarAuditoria();
 }
 
 /* ─────────────────────────── carga inicial ─────────────────────────── */
@@ -255,6 +258,16 @@ async function arrancarAplicacion() {
     if (_el('f-mapa-limpiar')) _el('f-mapa-limpiar').addEventListener('click', limpiarMapa);
   }
   document.getElementById('form-usuario').addEventListener('submit', enviarUsuario);
+  // ── Modal de edición (fincas/lotes/usuarios) y controles de auditoría ──
+  document.getElementById('modal-cerrar').addEventListener('click', cerrarModal);
+  document.getElementById('modal-cancelar').addEventListener('click', cerrarModal);
+  document.getElementById('audit-refrescar').addEventListener('click', () => cargarAuditoria(1));
+  document.getElementById('audit-anterior').addEventListener('click', () => {
+    if (auditState.page > 1) cargarAuditoria(auditState.page - 1);
+  });
+  document.getElementById('audit-siguiente').addEventListener('click', () => {
+    if (auditState.page < auditState.totalPages) cargarAuditoria(auditState.page + 1);
+  });
   document.getElementById('form-reporte').addEventListener('submit', enviarReporte);
   document.getElementById('repo-tipo').addEventListener('change', aplicarTipoReporte);
   document.getElementById('reporte-abrir').addEventListener('click', abrirReporte);
@@ -459,10 +472,25 @@ function renderFincasList() {
           <span class="mono-id" title="ID de la finca (envíelo en la trama del sensor como finca_id)">ID: <code>${esc(f.id || '—')}</code></span>
           <button type="button" class="btn btn-ghost btn-copiar" data-copiar="${esc(f.id || '')}">📋 Copiar</button>
         </div>
+        <div class="device-actions">
+          <button type="button" class="btn btn-ghost" data-accion="lotes" data-id="${esc(f.id)}">🗂️ Lotes</button>
+          <button type="button" class="btn btn-ghost" data-accion="editar-finca" data-id="${esc(f.id)}">✏️ Editar</button>
+          <button type="button" class="btn btn-ghost btn-danger" data-accion="eliminar-finca" data-id="${esc(f.id)}" data-nombre="${esc(f.nombre)}">🗑️ Eliminar</button>
+        </div>
+        <div class="lotes-panel hidden" id="lotes-${esc(f.id)}"></div>
       </div>`;
   }).join('');
   div.querySelectorAll('.btn-copiar').forEach(b => {
     b.addEventListener('click', () => copiarTexto(b.dataset.copiar || '', b));
+  });
+  div.querySelectorAll('[data-accion="lotes"]').forEach(b => {
+    b.addEventListener('click', () => toggleLotes(b.dataset.id));
+  });
+  div.querySelectorAll('[data-accion="editar-finca"]').forEach(b => {
+    b.addEventListener('click', () => abrirEditarFinca(b.dataset.id));
+  });
+  div.querySelectorAll('[data-accion="eliminar-finca"]').forEach(b => {
+    b.addEventListener('click', () => eliminarFinca(b.dataset.id, b.dataset.nombre || ''));
   });
 }
 
@@ -483,6 +511,357 @@ function copiarTexto(texto, boton) {
   try { document.execCommand('copy'); } catch { /* sin soporte */ }
   document.body.removeChild(ta);
   ok();
+}
+
+/* ────────────────────── edición/eliminación de fincas (admin) ────────────────────── */
+
+function cerrarModal() {
+  document.getElementById('modal-editor').classList.add('hidden');
+}
+
+async function abrirEditarFinca(id) {
+  const f = state.fincas.find(x => x.id === id);
+  if (!f) return;
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = `✏️ Editar finca — ${f.nombre}`;
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <div class="form-grid">
+      <label class="field"><span>Nombre *</span><input id="ef-nombre" value="${esc(f.nombre)}" required /></label>
+      <label class="field"><span>Departamento *</span><input id="ef-departamento" value="${esc(f.departamento || '')}" required /></label>
+      <label class="field"><span>Municipio *</span><input id="ef-municipio" value="${esc(f.municipio || '')}" required /></label>
+      <label class="field"><span>Propietario *</span><input id="ef-propietario" value="${esc(f.propietario || '')}" required /></label>
+      <label class="field"><span>Teléfono *</span><input id="ef-telefono" value="${esc(f.contacto_telefono || '')}" required /></label>
+      <label class="field"><span>Email</span><input id="ef-email" type="email" value="${esc(f.contacto_email || '')}" /></label>
+      <label class="field"><span>Área (ha)</span><input id="ef-area" type="number" min="0" step="0.01" value="${f.area_hectareas != null ? f.area_hectareas : ''}" /></label>
+      <label class="field"><span>Altitud (msnm)</span><input id="ef-altitud" type="number" step="0.01" value="${f.altitud_msnm != null ? f.altitud_msnm : ''}" /></label>
+      <label class="field"><span>Vereda</span><input id="ef-vereda" value="${esc(f.vereda || '')}" /></label>
+      <label class="field"><span>Latitud</span><input id="ef-lat" type="number" step="0.000001" min="-90" max="90" value="${f.latitud != null ? f.latitud : ''}" /></label>
+      <label class="field"><span>Longitud</span><input id="ef-lng" type="number" step="0.000001" min="-180" max="180" value="${f.longitud != null ? f.longitud : ''}" /></label>
+    </div>`;
+  document.getElementById('modal-msg').innerHTML = '';
+  m.classList.remove('hidden');
+  const guardar = document.getElementById('modal-guardar');
+  guardar.onclick = () => guardarEdicionFinca(id);
+}
+
+async function guardarEdicionFinca(id) {
+  const msg = document.getElementById('modal-msg');
+  const num = (v) => v === '' ? null : Number(v);
+  const body = {
+    nombre: document.getElementById('ef-nombre').value.trim(),
+    departamento: document.getElementById('ef-departamento').value.trim(),
+    municipio: document.getElementById('ef-municipio').value.trim(),
+    propietario: document.getElementById('ef-propietario').value.trim(),
+    contacto_telefono: document.getElementById('ef-telefono').value.trim(),
+    contacto_email: document.getElementById('ef-email').value.trim() || null,
+    area_hectareas: num(document.getElementById('ef-area').value),
+    altitud_msnm: num(document.getElementById('ef-altitud').value),
+    vereda: document.getElementById('ef-vereda').value.trim() || null,
+    latitud: num(document.getElementById('ef-lat').value),
+    longitud: num(document.getElementById('ef-lng').value),
+  };
+  try {
+    const r = await api(`/fincas/${id}`, { method: 'PUT', headers: headers(), body: JSON.stringify(body) });
+    msg.innerHTML = okBanner(`Finca <b>${esc(r.finca.nombre)}</b> actualizada.`);
+    await cargarFincas();
+    renderFincasList();
+    setTimeout(() => document.getElementById('modal-editor').classList.add('hidden'), 900);
+  } catch (e) {
+    msg.innerHTML = errorBanner(e.message);
+  }
+}
+
+async function eliminarFinca(id, nombre) {
+  if (!confirm(`¿Eliminar la finca «${nombre}»?\n\nSe eliminarán también sus lotes, lecturas de sensores, dispositivos, recomendaciones y chat. Esta acción NO se puede deshacer.`)) return;
+  try {
+    const r = await api(`/fincas/${id}`, { method: 'DELETE', headers: headers() });
+    alert(`Finca «${nombre}» eliminada.\nLecturas: ${r.detalle.lecturas} · Dispositivos: ${r.detalle.dispositivos} · Recomendaciones: ${r.detalle.recomendaciones}.`);
+    await cargarFincas();
+    renderFincasList();
+    await cargarUsuarios();
+  } catch (e) {
+    alert('No se pudo eliminar: ' + e.message);
+  }
+}
+
+/* ────────────────────── lotes: listar, crear, editar, eliminar ────────────────────── */
+
+async function toggleLotes(fincaId) {
+  const panel = document.getElementById('lotes-' + fincaId);
+  if (!panel) return;
+  if (!panel.classList.contains('hidden')) {
+    panel.classList.add('hidden');
+    return;
+  }
+  panel.innerHTML = '<p class="muted">Cargando lotes…</p>';
+  panel.classList.remove('hidden');
+  const r = await api(`/fincas/${fincaId}/lotes`);
+  renderLotes(fincaId, r.data || []);
+}
+
+function renderLotes(fincaId, lotes) {
+  const panel = document.getElementById('lotes-' + fincaId);
+  if (!panel) return;
+  const fila = (l) => `
+    <div class="lote-row">
+      <div class="lote-info">
+        <b>🗂️ ${esc(l.nombre)}</b>
+        <span class="muted">${l.area_ha != null ? l.area_ha + ' ha' : 'área sin dato'}</span>
+        ${l.profundidad_suelo_cm != null ? `<span class="muted">prof. ${l.profundidad_suelo_cm} cm</span>` : ''}
+        ${l.pedregosidad ? `<span class="muted">pedregosidad: ${esc(l.pedregosidad)}</span>` : ''}
+      </div>
+      <div class="device-actions">
+        <button class="btn btn-ghost" data-lote-editar="${esc(l.id)}" data-nombre="${esc(l.nombre)}">✏️</button>
+        <button class="btn btn-ghost btn-danger" data-lote-eliminar="${esc(l.id)}" data-nombre="${esc(l.nombre)}">🗑️</button>
+      </div>
+    </div>`;
+  panel.innerHTML = `
+    ${lotes.length ? lotes.map(fila).join('') : '<p class="muted">Esta finca aún no tiene lotes activos.</p>'}
+    <details class="lote-nuevo">
+      <summary>➕ Agregar lote (cada lote puede tener características diferentes)</summary>
+      <div class="form-grid">
+        <label class="field"><span>Nombre del lote *</span><input id="ln-nombre" placeholder="Ej. Lote La Vega" required /></label>
+        <label class="field"><span>Área (ha)</span><input id="ln-area" type="number" min="0" step="0.01" /></label>
+        <label class="field"><span>Profundidad de suelo (cm)</span>
+          <select id="ln-prof">
+            <option value="">—</option>
+            <option value="25">25 cm (somero)</option>
+            <option value="45">45 cm</option>
+            <option value="75">75 cm</option>
+            <option value="100">100 cm (profundo)</option>
+          </select>
+        </label>
+        <label class="field"><span>Pedregosidad</span>
+          <select id="ln-pedregosidad">
+            <option value="">—</option>
+            <option value="Ninguna">Ninguna</option>
+            <option value="Moderada">Moderada</option>
+            <option value="Alta">Alta</option>
+          </select>
+        </label>
+        <button type="button" class="btn btn-primary" id="ln-guardar">💾 Guardar lote</button>
+      </div>
+      <div id="ln-msg"></div>
+    </details>`;
+  panel.querySelectorAll('[data-lote-editar]').forEach(b => {
+    b.addEventListener('click', () => abrirEditarLote(fincaId, b.dataset.loteEditar, lotes.find(l => l.id === b.dataset.loteEditar)));
+  });
+  panel.querySelectorAll('[data-lote-eliminar]').forEach(b => {
+    b.addEventListener('click', () => eliminarLote(fincaId, b.dataset.loteEliminar, b.dataset.nombre || ''));
+  });
+  document.getElementById('ln-guardar').addEventListener('click', () => crearLote(fincaId));
+}
+
+async function crearLote(fincaId) {
+  const msg = document.getElementById('ln-msg');
+  const num = (v) => v === '' ? null : Number(v);
+  const sel = (id) => document.getElementById(id).value || null;
+  const body = {
+    nombre: document.getElementById('ln-nombre').value.trim(),
+    area_ha: num(document.getElementById('ln-area').value),
+    profundidad_suelo_cm: sel('ln-prof') ? Number(sel('ln-prof')) : null,
+    pedregosidad: sel('ln-pedregosidad'),
+  };
+  if (!body.nombre) { msg.innerHTML = errorBanner('Indique el nombre del lote.'); return; }
+  try {
+    const r = await api(`/fincas/${fincaId}/lotes`, { method: 'POST', headers: headers(), body: JSON.stringify(body) });
+    msg.innerHTML = okBanner(`Lote <b>${esc(r.lote.nombre)}</b> creado.`);
+    await cargarFincas();
+    const panel = document.getElementById('lotes-' + fincaId);
+    const lr = await api(`/fincas/${fincaId}/lotes`);
+    renderLotes(fincaId, lr.data || []);
+  } catch (e) {
+    msg.innerHTML = errorBanner(e.message);
+  }
+}
+
+function abrirEditarLote(fincaId, loteId, lote) {
+  if (!lote) return;
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = `✏️ Editar lote — ${lote.nombre}`;
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <div class="form-grid">
+      <label class="field"><span>Nombre *</span><input id="el-nombre" value="${esc(lote.nombre)}" required /></label>
+      <label class="field"><span>Área (ha)</span><input id="el-area" type="number" min="0" step="0.01" value="${lote.area_ha != null ? lote.area_ha : ''}" /></label>
+      <label class="field"><span>Profundidad de suelo (cm)</span>
+        <select id="el-prof">
+          <option value="">—</option>
+          ${[25, 45, 75, 100].map(p => `<option value="${p}" ${lote.profundidad_suelo_cm === p ? 'selected' : ''}>${p} cm</option>`).join('')}
+        </select>
+      </label>
+      <label class="field"><span>Pedregosidad</span>
+        <select id="el-pedregosidad">
+          <option value="">—</option>
+          ${['Ninguna', 'Moderada', 'Alta'].map(p => `<option value="${p}" ${lote.pedregosidad === p ? 'selected' : ''}>${p}</option>`).join('')}
+        </select>
+      </label>
+    </div>`;
+  document.getElementById('modal-msg').innerHTML = '';
+  m.classList.remove('hidden');
+  document.getElementById('modal-guardar').onclick = () => guardarEdicionLote(fincaId, loteId);
+}
+
+async function guardarEdicionLote(fincaId, loteId) {
+  const msg = document.getElementById('modal-msg');
+  const num = (v) => v === '' ? null : Number(v);
+  const prof = document.getElementById('el-prof').value;
+  const body = {
+    nombre: document.getElementById('el-nombre').value.trim(),
+    area_ha: num(document.getElementById('el-area').value),
+    profundidad_suelo_cm: prof ? Number(prof) : null,
+    pedregosidad: document.getElementById('el-pedregosidad').value || null,
+  };
+  try {
+    const r = await api(`/fincas/${fincaId}/lotes/${loteId}`, { method: 'PATCH', headers: headers(), body: JSON.stringify(body) });
+    msg.innerHTML = okBanner(`Lote <b>${esc(r.lote.nombre)}</b> actualizado.`);
+    const lr = await api(`/fincas/${fincaId}/lotes`);
+    renderLotes(fincaId, lr.data || []);
+    setTimeout(() => document.getElementById('modal-editor').classList.add('hidden'), 900);
+  } catch (e) {
+    msg.innerHTML = errorBanner(e.message);
+  }
+}
+
+async function eliminarLote(fincaId, loteId, nombre) {
+  if (!confirm(`¿Eliminar el lote «${nombre}»? Su registro quedará en auditoría.`)) return;
+  try {
+    await api(`/fincas/${fincaId}/lotes/${loteId}`, { method: 'DELETE', headers: headers() });
+    const lr = await api(`/fincas/${fincaId}/lotes`);
+    renderLotes(fincaId, lr.data || []);
+  } catch (e) {
+    alert('No se pudo eliminar: ' + e.message);
+  }
+}
+
+/* ────────────────────── edición/eliminación de usuarios (admin) ────────────────────── */
+
+function abrirEditarUsuario(u) {
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = `✏️ Editar usuario — ${u.nombre}`;
+  const fincasChk = state.fincas.map(f => {
+    const marcada = (u.fincas || []).some(x => x.id === f.id);
+    return `<label><input type="checkbox" class="eu-finca" value="${esc(f.id)}" ${marcada ? 'checked' : ''} /> ${esc(f.nombre)}</label>`;
+  }).join('');
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <div class="form-grid">
+      <label class="field"><span>Nombre *</span><input id="eu-nombre" value="${esc(u.nombre)}" required /></label>
+      <label class="field"><span>Email *</span><input id="eu-email" type="email" value="${esc(u.email)}" required /></label>
+      <label class="field"><span>Rol</span>
+        <select id="eu-rol">
+          ${['Admin', 'Agronomo', 'Cliente', 'Tecnico', 'Investigador'].map(r => `<option value="${r}" ${u.rol === r ? 'selected' : ''}>${r}</option>`).join('')}
+        </select>
+      </label>
+      <label class="field"><span>Estado</span>
+        <select id="eu-activo">
+          <option value="true" ${u.activo ? 'selected' : ''}>Activo</option>
+          <option value="false" ${!u.activo ? 'selected' : ''}>Inactivo</option>
+        </select>
+      </label>
+      <div class="field" style="grid-column: 1 / -1">
+        <span>Fincas a las que tendrá acceso</span>
+        <div class="eu-fincas">${fincasChk || '<span class="muted">No hay fincas.</span>'}</div>
+      </div>
+    </div>`;
+  document.getElementById('modal-msg').innerHTML = '';
+  m.classList.remove('hidden');
+  document.getElementById('modal-guardar').onclick = () => guardarEdicionUsuario(u.id);
+}
+
+async function guardarEdicionUsuario(id) {
+  const msg = document.getElementById('modal-msg');
+  const body = {
+    nombre: document.getElementById('eu-nombre').value.trim(),
+    email: document.getElementById('eu-email').value.trim(),
+    rol: document.getElementById('eu-rol').value,
+    activo: document.getElementById('eu-activo').value === 'true',
+    finca_ids: Array.from(document.querySelectorAll('.eu-finca:checked')).map(cb => cb.value),
+  };
+  try {
+    const r = await api(`/usuarios/${id}`, { method: 'PUT', headers: headers(), body: JSON.stringify(body) });
+    msg.innerHTML = okBanner(`Usuario <b>${esc(r.email)}</b> actualizado (${esc(r.rol)}).`);
+    await cargarUsuarios();
+    setTimeout(() => document.getElementById('modal-editor').classList.add('hidden'), 900);
+  } catch (e) {
+    msg.innerHTML = errorBanner(e.message);
+  }
+}
+
+async function eliminarUsuario(u) {
+  if (!confirm(`¿Desactivar la cuenta de «${u.nombre}» (${u.email})?\n\nNo podrá iniciar sesión. El registro queda en auditoría.`)) return;
+  try {
+    await api(`/usuarios/${u.id}`, { method: 'DELETE', headers: headers() });
+    alert(`Usuario «${u.nombre}» desactivado.`);
+    await cargarUsuarios();
+  } catch (e) {
+    alert('No se pudo desactivar: ' + e.message);
+  }
+}
+
+/* ────────────────────── auditoría (solo admin) ────────────────────── */
+
+const auditState = { page: 1, totalPages: 0 };
+
+async function cargarAuditoria(pagina = 1) {
+  const div = document.getElementById('auditoria-lista');
+  const entidad = document.getElementById('audit-entidad').value;
+  const q = document.getElementById('audit-busqueda').value.trim();
+  const params = new URLSearchParams({ page: String(pagina), page_size: '15' });
+  if (entidad) params.set('entidad', entidad);
+  if (q) params.set('search', q);
+  div.innerHTML = '<p class="muted">Cargando auditoría…</p>';
+  try {
+    const r = await api('/auditoria?' + params.toString());
+    auditState.page = r.meta.page;
+    auditState.totalPages = r.meta.total_pages;
+    renderAuditoria(r.data || [], r.meta);
+  } catch (e) {
+    div.innerHTML = errorBanner(e.message);
+  }
+}
+
+function renderAuditoria(filas, meta) {
+  const div = document.getElementById('auditoria-lista');
+  if (!filas.length) {
+    div.innerHTML = '<p class="muted">Sin eventos registrados todavía.</p>';
+    document.getElementById('audit-pagina').textContent = '';
+    return;
+  }
+  const icono = {
+    'auth.login': '🔐', 'finca.crear': '🏡', 'finca.actualizar': '✏️', 'finca.eliminar': '🗑️',
+    'finca.agronomicos': '🧪', 'lote.crear': '🗂️', 'lote.actualizar': '✏️', 'lote.eliminar': '🗑️',
+    'usuario.crear': '👥', 'usuario.actualizar': '✏️', 'usuario.eliminar': '🗑️', 'demo.reset': '🧹',
+  };
+  const detalleTxt = (d) => {
+    if (!d || typeof d !== 'object') return '';
+    const partes = [];
+    if (d.nombre) partes.push(esc(d.nombre));
+    if (d.finca) partes.push(esc(d.finca));
+    if (d.campos && d.campos.length) partes.push('campos: ' + d.campos.join(', '));
+    if (d.email) partes.push(esc(d.email));
+    if (d.rol) partes.push(esc(d.rol));
+    if (d.lecturas != null) partes.push(d.lecturas + ' lecturas');
+    if (d.fincas_desvinculadas != null) partes.push(d.fincas_desvinculadas + ' fincas desvinculadas');
+    return partes.join(' · ');
+  };
+  div.innerHTML = `
+    <div class="tabla-audit-wrap">
+      <table class="tabla-audit">
+        <thead><tr><th>Fecha</th><th>Usuario</th><th>Acción</th><th>Detalle</th></tr></thead>
+        <tbody>
+          ${filas.map(a => `
+            <tr>
+              <td class="nowrap">${new Date(a.created_at).toLocaleString('es-CO')}</td>
+              <td>${icono[a.accion] || '📌'} <b>${esc(a.usuario_nombre || a.usuario_email)}</b><br>
+                  <span class="muted">${esc(a.usuario_email)} · ${esc(a.rol || '?')}</span></td>
+              <td><code>${esc(a.accion)}</code><br><span class="muted">${esc(a.entidad)}${a.entidad_id ? ' · ' + a.entidad_id.slice(0, 8) : ''}</span></td>
+              <td>${detalleTxt(a.detalle)}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  document.getElementById('audit-pagina').textContent = `Página ${meta.page} de ${meta.total_pages} · ${meta.total} eventos`;
+  document.getElementById('audit-anterior').disabled = meta.page <= 1;
+  document.getElementById('audit-siguiente').disabled = meta.page >= meta.total_pages;
 }
 
 /* ─────────────────── wizard de registro de finca (3 secciones) ─────────────────── */
@@ -1455,14 +1834,31 @@ function renderUsuariosList() {
   }
   div.innerHTML = state.usuarios.map(u => `
     <div class="device-card">
-      <h3>👤 ${esc(u.nombre)} ${badge(u.rol, u.rol === 'Admin' ? 'ok' : u.rol === 'Cliente' ? 'warning' : 'ok')}</h3>
+      <h3>👤 ${esc(u.nombre)} ${badge(u.rol, u.rol === 'Admin' ? 'ok' : u.rol === 'Cliente' ? 'warning' : 'ok')}
+        ${u.activo === false ? badge('Inactivo', 'critical') : ''}</h3>
       <div class="device-meta">
         <span>Email: <b>${esc(u.email)}</b></span>
         <span>Fincas: ${u.fincas && u.fincas.length
           ? u.fincas.map(f => esc(f.nombre)).join(', ')
           : '<span class="muted">ninguna</span>'}</span>
       </div>
+      <div class="device-actions">
+        <button type="button" class="btn btn-ghost" data-u-editar="${esc(u.id)}">✏️ Editar</button>
+        <button type="button" class="btn btn-ghost btn-danger" data-u-eliminar="${esc(u.id)}">🗑️ Desactivar</button>
+      </div>
     </div>`).join('');
+  div.querySelectorAll('[data-u-editar]').forEach(b => {
+    b.addEventListener('click', () => {
+      const u = state.usuarios.find(x => x.id === b.dataset.uEditar);
+      if (u) abrirEditarUsuario(u);
+    });
+  });
+  div.querySelectorAll('[data-u-eliminar]').forEach(b => {
+    b.addEventListener('click', () => {
+      const u = state.usuarios.find(x => x.id === b.dataset.uEliminar);
+      if (u) eliminarUsuario(u);
+    });
+  });
 }
 
 async function enviarUsuario(e) {

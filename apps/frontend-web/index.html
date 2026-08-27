@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AgroIA · AgroInteligente Colombia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="/styles.css?v=20260827-wizard" />
+  <link rel="stylesheet" href="/styles.css?v=20260827-auditoria" />
 </head>
 <body>
   <!-- ============ PANTALLA DE AUTENTICACIÓN ============ -->
@@ -65,6 +65,7 @@
     <button class="tab" data-tab="reportes">📄 Reportes</button>
     <button class="tab" data-tab="fincas">🏡 Fincas</button>
     <button class="tab" data-tab="usuarios">👥 Usuarios</button>
+    <button class="tab" data-tab="auditoria">🕵️ Auditoría</button>
     <button class="tab" data-tab="catalogo">🌾 Catálogo</button>
   </nav>
 
@@ -515,13 +516,58 @@
         </div>
       </div>
     </section>
+    <!-- ============ AUDITORÍA (solo administrador) ============ -->
+    <section id="view-auditoria" class="view">
+      <div class="card">
+        <h2>🕵️ Auditoría de acciones <span class="muted">(solo administrador)</span></h2>
+        <p class="muted">
+          Bitácora de quién hizo qué y cuándo: creación/edición/eliminación de fincas,
+          lotes y usuarios, inicios de sesión y restablecimiento de la demo.
+        </p>
+        <div class="audit-filtros">
+          <select id="audit-entidad">
+            <option value="">Todas las entidades</option>
+            <option value="finca">🏡 Fincas</option>
+            <option value="lote">🗂️ Lotes</option>
+            <option value="usuario">👥 Usuarios</option>
+            <option value="auth">🔐 Inicios de sesión</option>
+            <option value="demo">🧪 Demo</option>
+          </select>
+          <input type="search" id="audit-busqueda" class="search"
+                 placeholder="Buscar por email, nombre o ID…" />
+          <button class="btn" id="audit-refrescar">🔄 Actualizar</button>
+        </div>
+        <div id="auditoria-lista"></div>
+        <div class="audit-paginacion">
+          <button class="btn btn-ghost" id="audit-anterior">← Anterior</button>
+          <span class="muted" id="audit-pagina"></span>
+          <button class="btn btn-ghost" id="audit-siguiente">Siguiente →</button>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <!-- ============ Modal de edición (fincas / usuarios) ============ -->
+  <div class="modal-overlay hidden" id="modal-editor">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="modal-titulo">Editar</h2>
+        <button class="btn-ghost-sm" id="modal-cerrar" title="Cerrar">✕</button>
+      </div>
+      <div id="modal-cuerpo"></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="modal-cancelar">Cancelar</button>
+        <button class="btn btn-primary" id="modal-guardar">💾 Guardar</button>
+      </div>
+      <div id="modal-msg"></div>
+    </div>
+  </div>
 
   <footer class="footer">
     AgroIA v0.1.0 · Motor: sistema experto (reglas UPRA/Cenicafé/AGROSAVIA) · ML en modo sombra
   </footer>
 
-  <script src="/departamentos.js?v=20260827-wizard"></script>
-  <script src="/app.js?v=20260827-wizard"></script>
+  <script src="/departamentos.js?v=20260827-auditoria"></script>
+  <script src="/app.js?v=20260827-auditoria"></script>
 </body>
 </html>

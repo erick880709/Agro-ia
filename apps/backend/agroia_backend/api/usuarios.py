@@ -4,14 +4,15 @@ import uuid as uuid_mod
 
 from agroia.database import get_db
 from agroia.logging import get_logger
-from fastapi import APIRouter, Depends, Header, HTTPException, Query
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
 from pydantic import BaseModel, EmailStr, Field, field_validator
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia_backend.models.finca import Finca
 from agroia_backend.models.finca_usuario import FincaUsuario
 from agroia_backend.models.usuario import RolUsuario, Usuario
+from agroia_backend.services.auditoria import registrar_auditoria
 from agroia_backend.services.auth_utils import hash_password
 
 logger = get_logger(__name__)
@@ -160,8 +161,11 @@ def _hash_password(password: str) -> str:
 @router.post("/usuarios", status_code=201, response_model=UsuarioAdminResponse)
 async def crear_usuario(
     body: UsuarioCreate,
+    request: Request,
     db: AsyncSession = Depends(get_db),
     x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
 ):
     """Crea un usuario (cliente) relacionado a una o más fincas. Solo Admin."""
     rol = (x_user_role or "").strip().lower()
@@ -215,6 +219,22 @@ async def crear_usuario(
         db.add(FincaUsuario(finca_id=finca_uuid, usuario_id=usuario.id))
         fincas_relacionadas.append({"id": str(finca.id), "nombre": finca.nombre})
 
+    await registrar_auditoria(
+        db,
+        usuario_email=x_user_email or "desconocido@agroia.co",
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="usuario.crear",
+        entidad="usuario",
+        entidad_id=str(usuario.id),
+        detalle={
+            "nombre": usuario.nombre,
+            "email": email,
+            "rol": usuario.rol.value,
+            "fincas": [f["nombre"] for f in fincas_relacionadas],
+        },
+        ip=request.client.host if request and request.client else None,
+    )
     await db.commit()
     logger.info("usuario_creado", email=email, rol=body.rol, fincas=len(fincas_relacionadas))
     return UsuarioAdminResponse(
@@ -268,3 +288,198 @@ async def listar_usuarios_reales(
             fincas=[{"id": str(f.id), "nombre": f.nombre} for f in fincas],
         ))
     return resultado
+
+
+# ══════════════════ Edición y eliminación de usuarios (Admin) ══════════════════
+
+class UsuarioUpdate(BaseModel):
+    """Edición de un usuario por el administrador."""
+
+    nombre: str | None = Field(None, min_length=2, max_length=200)
+    email: EmailStr | None = None
+    rol: str | None = Field(None, pattern="^(Admin|Agronomo|Cliente|Tecnico|Investigador)$")
+    activo: bool | None = None
+    finca_ids: list[str] | None = Field(
+        None, description="Lista completa de fincas relacionadas (reemplaza la actual)"
+    )
+
+
+async def _obtener_usuario(db, user_id: str) -> Usuario:
+    try:
+        user_uuid = uuid_mod.UUID(user_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "USUARIO_INVALIDO", "message": "user_id no es un UUID válido.",
+        })
+    usuario = (
+        await db.execute(select(Usuario).where(Usuario.id == user_uuid))
+    ).scalar_one_or_none()
+    if usuario is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "USUARIO_NOT_FOUND", "message": "El usuario no está registrado.",
+        })
+    return usuario
+
+
+def _exigir_admin_usuarios(rol: str | None) -> str:
+    rol_norm = (rol or "").strip().lower()
+    if rol_norm != "admin":
+        raise HTTPException(status_code=403, detail={
+            "code": "FORBIDDEN_ROLE",
+            "message": "Solo el rol administrador puede editar o eliminar usuarios.",
+        })
+    return rol_norm
+
+
+@router.put("/usuarios/{user_id}", response_model=UsuarioAdminResponse)
+async def editar_usuario(
+    user_id: str,
+    body: UsuarioUpdate,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
+):
+    """Edita un usuario (datos, rol, estado y fincas). Solo administrador."""
+    _exigir_admin_usuarios(x_user_role)
+    usuario = await _obtener_usuario(db, user_id)
+    email_admin = (x_user_email or "").strip().lower()
+
+    cambios = body.model_dump(exclude_unset=True)
+    detalle: dict = {"campos": []}
+
+    # Protección: el admin no puede desactivarse a sí mismo
+    if "activo" in cambios and cambios["activo"] is False and usuario.email.lower() == email_admin:
+        raise HTTPException(status_code=422, detail={
+            "code": "SELF_DEACTIVATE",
+            "message": "No puede desactivar su propia cuenta de administrador.",
+        })
+
+    if "email" in cambios:
+        nuevo = cambios["email"].lower()
+        existente = (
+            await db.execute(select(Usuario).where(Usuario.email == nuevo, Usuario.id != usuario.id))
+        ).scalar_one_or_none()
+        if existente is not None:
+            raise HTTPException(status_code=409, detail={
+                "code": "EMAIL_EXISTENTE",
+                "message": f"Ya existe un usuario con el email '{nuevo}'.",
+            })
+        if usuario.email != nuevo:
+            detalle["email_anterior"] = usuario.email
+        usuario.email = nuevo
+
+    if "nombre" in cambios:
+        usuario.nombre = cambios["nombre"]
+    if "rol" in cambios:
+        usuario.rol = RolUsuario[cambios["rol"].upper()]
+    if "activo" in cambios:
+        usuario.activo = bool(cambios["activo"])
+    detalle["campos"] = sorted(cambios)
+
+    # ── Reemplazo de relaciones con fincas (si vienen) ──
+    if "finca_ids" in cambios:
+        await db.execute(delete(FincaUsuario).where(FincaUsuario.usuario_id == usuario.id))
+        nombres: list[str] = []
+        for fid in cambios["finca_ids"]:
+            try:
+                finca_uuid = uuid_mod.UUID(fid)
+            except ValueError:
+                raise HTTPException(status_code=422, detail={
+                    "code": "FINCA_INVALIDA", "message": f"'{fid}' no es un UUID válido.",
+                })
+            finca = (
+                await db.execute(select(Finca).where(Finca.id == finca_uuid))
+            ).scalar_one_or_none()
+            if finca is None:
+                raise HTTPException(status_code=404, detail={
+                    "code": "FINCA_NOT_FOUND",
+                    "message": f"La finca '{fid}' no está registrada.",
+                })
+            db.add(FincaUsuario(finca_id=finca_uuid, usuario_id=usuario.id))
+            nombres.append(finca.nombre)
+        detalle["fincas"] = nombres
+
+    await registrar_auditoria(
+        db,
+        usuario_email=email_admin or "desconocido@agroia.co",
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="usuario.actualizar",
+        entidad="usuario",
+        entidad_id=str(usuario.id),
+        detalle={"nombre": usuario.nombre, "email": usuario.email, **detalle},
+        ip=request.client.host if request and request.client else None,
+    )
+    await db.commit()
+    await db.refresh(usuario)
+
+    links = (
+        await db.execute(select(FincaUsuario).where(FincaUsuario.usuario_id == usuario.id))
+    ).scalars().all()
+    fincas = (
+        await db.execute(
+            select(Finca).where(Finca.id.in_([link.finca_id for link in links])).order_by(Finca.nombre)
+        )
+    ).scalars().all() if links else []
+    logger.info("usuario_editado", user_id=user_id, email=usuario.email)
+    return UsuarioAdminResponse(
+        id=str(usuario.id),
+        nombre=usuario.nombre,
+        email=usuario.email,
+        rol=usuario.rol.value,
+        activo=usuario.activo,
+        fincas=[{"id": str(f.id), "nombre": f.nombre} for f in fincas],
+    )
+
+
+@router.delete("/usuarios/{user_id}")
+async def eliminar_usuario(
+    user_id: str,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
+):
+    """Desactiva un usuario (eliminación lógica, Ley 1581). Solo administrador.
+
+    El usuario queda inactivo (no puede iniciar sesión) y sus relaciones
+    con fincas se retiran; el registro se conserva en auditoría.
+    """
+    _exigir_admin_usuarios(x_user_role)
+    usuario = await _obtener_usuario(db, user_id)
+    email_admin = (x_user_email or "").strip().lower()
+
+    if usuario.email.lower() == email_admin:
+        raise HTTPException(status_code=422, detail={
+            "code": "SELF_DELETE",
+            "message": "No puede eliminar su propia cuenta de administrador.",
+        })
+
+    links = (
+        await db.execute(select(FincaUsuario).where(FincaUsuario.usuario_id == usuario.id))
+    ).scalars().all()
+    await db.execute(delete(FincaUsuario).where(FincaUsuario.usuario_id == usuario.id))
+    usuario.activo = False
+
+    await registrar_auditoria(
+        db,
+        usuario_email=email_admin or "desconocido@agroia.co",
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="usuario.eliminar",
+        entidad="usuario",
+        entidad_id=str(usuario.id),
+        detalle={
+            "nombre": usuario.nombre,
+            "email": usuario.email,
+            "rol": usuario.rol.value,
+            "fincas_desvinculadas": len(links),
+        },
+        ip=request.client.host if request and request.client else None,
+    )
+    await db.commit()
+    logger.info("usuario_eliminado", user_id=user_id, email=usuario.email)
+    return {"status": "deleted", "user_id": str(usuario.id), "email": usuario.email}

@@ -11,12 +11,13 @@ import uuid as uuid_mod
 
 from agroia.database import get_db
 from agroia.logging import get_logger
-from fastapi import APIRouter, Depends, Header, HTTPException, Query
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
 from pydantic import BaseModel, Field, field_validator
-from sqlalchemy import select, text
+from sqlalchemy import delete, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia_backend.models.finca import Finca
+from agroia_backend.services.auditoria import registrar_auditoria
 
 logger = get_logger(__name__)
 router = APIRouter(prefix="/api/v1", tags=["fincas"])
@@ -167,11 +168,22 @@ async def listar_fincas(
     return {"data": [_finca_a_dict(f) for f in fincas], "total": len(fincas)}
 
 
+def _ip(request: Request) -> str | None:
+    """IP de origen de la petición (para la auditoría)."""
+    fwd = request.headers.get("x-forwarded-for") if request else None
+    if fwd:
+        return fwd.split(",")[0].strip()[:45]
+    return (request.client.host if request and request.client else None)
+
+
 @router.post("/fincas", status_code=201)
 async def registrar_finca(
     body: FincaCreate,
+    request: Request,
     db: AsyncSession = Depends(get_db),
     x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
 ):
     """Registra una finca. Solo disponible para el rol administrador."""
     rol = (x_user_role or "").strip().lower()
@@ -297,6 +309,23 @@ async def registrar_finca(
         pedregosidad=pedregosidad,
     )
     db.add(lote)
+    await registrar_auditoria(
+        db,
+        usuario_email=x_user_email or "desconocido@agroia.co",
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="finca.crear",
+        entidad="finca",
+        entidad_id=str(finca.id),
+        detalle={
+            "nombre": finca.nombre,
+            "departamento": finca.departamento,
+            "municipio": finca.municipio,
+            "area_ha": finca.area_hectareas,
+            "tipo_area": finca.tipo_area,
+        },
+        ip=_ip(request),
+    )
     await db.commit()
     await db.refresh(finca)
     await db.refresh(lote)
@@ -341,8 +370,11 @@ class FincaAgroUpdate(BaseModel):
 async def actualizar_datos_agronomicos(
     finca_id: str,
     body: FincaAgroUpdate,
+    request: Request,
     db: AsyncSession = Depends(get_db),
     x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
 ):
     """Actualiza topografía/drenaje/historial/fenología de una finca.
 
@@ -374,6 +406,17 @@ async def actualizar_datos_agronomicos(
     cambios = body.model_dump(exclude_unset=True)
     for campo, valor in cambios.items():
         setattr(finca, campo, valor)
+    await registrar_auditoria(
+        db,
+        usuario_email=x_user_email or "desconocido@agroia.co",
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="finca.agronomicos",
+        entidad="finca",
+        entidad_id=str(finca.id),
+        detalle={"nombre": finca.nombre, "campos": sorted(cambios)},
+        ip=_ip(request),
+    )
     await db.commit()
     await db.refresh(finca)
     logger.info(
@@ -415,3 +458,382 @@ async def lotes_de_finca(
         ],
         "total": len(lotes),
     }
+
+
+# ══════════════════ Edición y eliminación de fincas (Admin) ══════════════════
+
+class FincaUpdate(BaseModel):
+    """Edición de los datos básicos de la finca (solo Admin)."""
+
+    nombre: str = Field(..., min_length=2, max_length=200)
+    departamento: str = Field(..., min_length=2, max_length=100)
+    municipio: str = Field(..., min_length=1, max_length=100)
+    propietario: str = Field(..., min_length=2, max_length=200)
+    contacto_telefono: str = Field(..., min_length=7, max_length=50)
+    contacto_email: str | None = Field(None, max_length=255)
+    area_hectareas: float | None = Field(None, ge=0, le=1_000_000)
+    altitud_msnm: float | None = None
+    latitud: float | None = Field(None, ge=-90, le=90)
+    longitud: float | None = Field(None, ge=-180, le=180)
+    vereda: str | None = Field(None, max_length=100)
+
+
+def _exigir_rol(rol: str, permitidos: set[str], mensaje: str) -> None:
+    if rol not in permitidos:
+        raise HTTPException(status_code=403, detail={
+            "code": "FORBIDDEN_ROLE", "message": mensaje,
+        })
+
+
+async def _obtener_finca(db, finca_id: str) -> Finca:
+    try:
+        finca_uuid = uuid_mod.UUID(finca_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FINCA_INVALIDA", "message": "finca_id no es un UUID válido.",
+        })
+    finca = (
+        await db.execute(select(Finca).where(Finca.id == finca_uuid))
+    ).scalar_one_or_none()
+    if finca is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "FINCA_NOT_FOUND", "message": "La finca no está registrada.",
+        })
+    return finca
+
+
+@router.put("/fincas/{finca_id}")
+async def editar_finca(
+    finca_id: str,
+    body: FincaUpdate,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
+):
+    """Edita los datos básicos de una finca. Solo administrador."""
+    rol = (x_user_role or "").strip().lower()
+    _exigir_rol(rol, ROL_ADMIN, "Solo el rol administrador puede editar fincas.")
+
+    finca = await _obtener_finca(db, finca_id)
+    await db.execute(text("SET LOCAL search_path TO public, agroia"))
+
+    cambios = body.model_dump(exclude_unset=True)
+    for campo, valor in cambios.items():
+        setattr(finca, campo, valor)
+    finca.area_declarada_ha = finca.area_hectareas
+
+    await registrar_auditoria(
+        db,
+        usuario_email=x_user_email or "desconocido@agroia.co",
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="finca.actualizar",
+        entidad="finca",
+        entidad_id=str(finca.id),
+        detalle={"nombre": finca.nombre, "campos": sorted(cambios)},
+        ip=_ip(request),
+    )
+    await db.commit()
+    await db.refresh(finca)
+    logger.info("finca_editada", finca_id=str(finca.id), campos=", ".join(sorted(cambios)), rol=rol)
+    return {"status": "updated", "finca": _finca_a_dict(finca)}
+
+
+@router.delete("/fincas/{finca_id}")
+async def eliminar_finca(
+    finca_id: str,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
+):
+    """Elimina una finca y todos sus datos asociados. Solo administrador.
+
+    Se eliminan en cascada: lotes, relaciones finca-usuario, chat, aceptaciones
+    (FK con ON DELETE CASCADE) y, de forma explícita, recomendaciones (y sus
+    discordancias), lecturas de sensores y dispositivos IoT.
+    """
+    rol = (x_user_role or "").strip().lower()
+    _exigir_rol(rol, ROL_ADMIN, "Solo el rol administrador puede eliminar fincas.")
+
+    finca = await _obtener_finca(db, finca_id)
+    await db.execute(text("SET LOCAL search_path TO public, agroia"))
+
+    # ── Limpieza explícita de tablas sin ON DELETE CASCADE ──
+    from agroia_backend.models.discordancia import Discordancia
+    from agroia_backend.models.dispositivo_iot import DispositivoIoT
+    from agroia_backend.models.recomendacion import Recomendacion
+    from agroia_backend.models.sensor_reading import SensorReading
+
+    rec_ids = (
+        await db.execute(select(Recomendacion.id).where(Recomendacion.finca_id == finca.id))
+    ).scalars().all()
+    n_recomendaciones = len(rec_ids)
+    if rec_ids:
+        await db.execute(delete(Discordancia).where(Discordancia.recomendacion_id.in_(rec_ids)))
+        await db.execute(delete(Recomendacion).where(Recomendacion.finca_id == finca.id))
+    lecturas = (
+        await db.execute(delete(SensorReading).where(SensorReading.finca_id == finca.id))
+    )
+    dispositivos = (
+        await db.execute(delete(DispositivoIoT).where(DispositivoIoT.finca_id == finca.id))
+    )
+
+    detalle = {
+        "nombre": finca.nombre,
+        "recomendaciones": n_recomendaciones,
+        "lecturas": lecturas.rowcount,
+        "dispositivos": dispositivos.rowcount,
+    }
+    nombre_eliminada = finca.nombre
+    await db.delete(finca)  # lotes/chat/aceptaciones/finca_usuario caen en cascada
+    await registrar_auditoria(
+        db,
+        usuario_email=x_user_email or "desconocido@agroia.co",
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="finca.eliminar",
+        entidad="finca",
+        entidad_id=finca_id,
+        detalle=detalle,
+        ip=_ip(request),
+    )
+    await db.commit()
+    logger.info("finca_eliminada", finca_id=finca_id, nombre=nombre_eliminada, rol=rol)
+    return {"status": "deleted", "finca_id": finca_id, "detalle": detalle}
+
+
+# ══════════════════ Lotes: crear, editar y eliminar ══════════════════
+
+PEDREGOSIDADES = {"ninguna", "moderada", "alta"}
+
+
+class LoteCreate(BaseModel):
+    nombre: str = Field(..., min_length=2, max_length=100)
+    area_ha: float | None = Field(None, ge=0, le=100_000)
+    geometria: dict | None = Field(None, description="Geometría GeoJSON del lote")
+    profundidad_suelo_cm: int | None = Field(None, ge=0, le=500)
+    pedregosidad: str | None = Field(None, description="Ninguna | Moderada | Alta")
+
+
+class LoteUpdate(BaseModel):
+    nombre: str | None = Field(None, min_length=2, max_length=100)
+    area_ha: float | None = Field(None, ge=0, le=100_000)
+    geometria: dict | None = None
+    profundidad_suelo_cm: int | None = Field(None, ge=0, le=500)
+    pedregosidad: str | None = Field(None, description="Ninguna | Moderada | Alta")
+
+
+def _lote_a_dict(lote) -> dict:
+    return {
+        "id": str(lote.id),
+        "finca_id": str(lote.finca_id),
+        "nombre": lote.nombre,
+        "area_ha": lote.area_ha,
+        "geometria": lote.geometria,
+        "profundidad_suelo_cm": lote.profundidad_suelo_cm,
+        "pedregosidad": lote.pedregosidad.value if lote.pedregosidad else None,
+        "activo": lote.activo,
+    }
+
+
+@router.post("/fincas/{finca_id}/lotes", status_code=201)
+async def crear_lote(
+    finca_id: str,
+    body: LoteCreate,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
+):
+    """Agrega un lote (unidad productiva) a una finca. Admin/Agrónomo."""
+    from agroia_backend.models.lote import Lote, Pedregosidad
+
+    rol = (x_user_role or "").strip().lower()
+    _exigir_rol(
+        rol, ROL_EXPERTOS,
+        "Solo el administrador o el agrónomo pueden agregar lotes.",
+    )
+    finca = await _obtener_finca(db, finca_id)
+    await db.execute(text("SET LOCAL search_path TO public, agroia"))
+
+    pedregosidad = None
+    if body.pedregosidad and body.pedregosidad.lower() in PEDREGOSIDADES:
+        pedregosidad = Pedregosidad[body.pedregosidad.strip().upper()]
+
+    lote = Lote(
+        finca_id=finca.id,
+        nombre=body.nombre,
+        area_ha=body.area_ha,
+        geometria=body.geometria,
+        profundidad_suelo_cm=body.profundidad_suelo_cm,
+        pedregosidad=pedregosidad,
+    )
+    db.add(lote)
+    await db.flush()
+
+    # Si ahora hay más de un lote activo, marcar la finca como multi-lote
+    n_lotes = (
+        await db.execute(
+            select(Lote).where(Lote.finca_id == finca.id, Lote.activo.is_(True))
+        )
+    ).scalars().all()
+    if len(n_lotes) > 1:
+        finca.tiene_multiples_lotes = True
+
+    await registrar_auditoria(
+        db,
+        usuario_email=x_user_email or "desconocido@agroia.co",
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="lote.crear",
+        entidad="lote",
+        entidad_id=str(lote.id),
+        detalle={
+            "finca_id": str(finca.id),
+            "finca": finca.nombre,
+            "nombre": lote.nombre,
+            "area_ha": lote.area_ha,
+            "profundidad_suelo_cm": lote.profundidad_suelo_cm,
+        },
+        ip=_ip(request),
+    )
+    await db.commit()
+    await db.refresh(lote)
+    logger.info("lote_creado", lote_id=str(lote.id), finca_id=str(finca.id), rol=rol)
+    return {"status": "created", "lote": _lote_a_dict(lote)}
+
+
+@router.patch("/fincas/{finca_id}/lotes/{lote_id}")
+async def editar_lote(
+    finca_id: str,
+    lote_id: str,
+    body: LoteUpdate,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
+):
+    """Edita las características de un lote. Admin/Agrónomo."""
+    from agroia_backend.models.lote import Lote, Pedregosidad
+
+    rol = (x_user_role or "").strip().lower()
+    _exigir_rol(rol, ROL_EXPERTOS, "Solo el administrador o el agrónomo pueden editar lotes.")
+    await _obtener_finca(db, finca_id)
+    await db.execute(text("SET LOCAL search_path TO public, agroia"))
+
+    try:
+        lote_uuid = uuid_mod.UUID(lote_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "LOTE_INVALIDO", "message": "lote_id no es un UUID válido.",
+        })
+    lote = (
+        await db.execute(
+            select(Lote).where(Lote.id == lote_uuid, Lote.finca_id == uuid_mod.UUID(finca_id))
+        )
+    ).scalar_one_or_none()
+    if lote is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "LOTE_NOT_FOUND", "message": "El lote no pertenece a esta finca o no existe.",
+        })
+
+    cambios = body.model_dump(exclude_unset=True)
+    pedregosidad = cambios.pop("pedregosidad", None)
+    if pedregosidad is not None:
+        cambios["pedregosidad"] = (
+            Pedregosidad[pedregosidad.strip().upper()]
+            if pedregosidad.strip().lower() in PEDREGOSIDADES else None
+        )
+    for campo, valor in cambios.items():
+        setattr(lote, campo, valor)
+
+    await registrar_auditoria(
+        db,
+        usuario_email=x_user_email or "desconocido@agroia.co",
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="lote.actualizar",
+        entidad="lote",
+        entidad_id=str(lote.id),
+        detalle={"finca_id": finca_id, "nombre": lote.nombre, "campos": sorted(body.model_dump(exclude_unset=True))},
+        ip=_ip(request),
+    )
+    await db.commit()
+    await db.refresh(lote)
+    logger.info("lote_editado", lote_id=str(lote.id), finca_id=finca_id, rol=rol)
+    return {"status": "updated", "lote": _lote_a_dict(lote)}
+
+
+@router.delete("/fincas/{finca_id}/lotes/{lote_id}")
+async def eliminar_lote(
+    finca_id: str,
+    lote_id: str,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
+):
+    """Elimina (desactiva) un lote. Solo administrador.
+
+    Desactivación lógica: el lote deja de aparecer en listados pero su
+    historial en auditoría se conserva. No se permite eliminar el último
+    lote activo de la finca.
+    """
+    from agroia_backend.models.lote import Lote
+
+    rol = (x_user_role or "").strip().lower()
+    _exigir_rol(rol, ROL_ADMIN, "Solo el rol administrador puede eliminar lotes.")
+    await _obtener_finca(db, finca_id)
+    await db.execute(text("SET LOCAL search_path TO public, agroia"))
+
+    try:
+        lote_uuid = uuid_mod.UUID(lote_id)
+        finca_uuid = uuid_mod.UUID(finca_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "LOTE_INVALIDO", "message": "lote_id o finca_id no es un UUID válido.",
+        })
+    lote = (
+        await db.execute(
+            select(Lote).where(Lote.id == lote_uuid, Lote.finca_id == finca_uuid)
+        )
+    ).scalar_one_or_none()
+    if lote is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "LOTE_NOT_FOUND", "message": "El lote no pertenece a esta finca o no existe.",
+        })
+
+    activos = (
+        await db.execute(
+            select(Lote).where(Lote.finca_id == finca_uuid, Lote.activo.is_(True))
+        )
+    ).scalars().all()
+    if len(activos) <= 1 and lote.activo:
+        raise HTTPException(status_code=422, detail={
+            "code": "ULTIMO_LOTE",
+            "message": "No se puede eliminar el último lote activo de la finca. "
+                       "Cada finca debe conservar al menos un lote.",
+        })
+
+    lote.activo = False
+    await registrar_auditoria(
+        db,
+        usuario_email=x_user_email or "desconocido@agroia.co",
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="lote.eliminar",
+        entidad="lote",
+        entidad_id=str(lote.id),
+        detalle={"finca_id": str(finca_uuid), "nombre": lote.nombre},
+        ip=_ip(request),
+    )
+    await db.commit()
+    logger.info("lote_eliminado", lote_id=str(lote.id), finca_id=str(finca_uuid), rol=rol)
+    return {"status": "deleted", "lote_id": str(lote.id), "nombre": lote.nombre}

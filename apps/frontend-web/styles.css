@@ -665,3 +665,105 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
   font-weight: normal;
   font-size: 0.8rem;
 }
+
+/* ────────────────────── edición/eliminación, lotes, modal y auditoría ────────────────────── */
+
+.hidden { display: none !important; }
+
+.device-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.device-actions .btn { padding: 6px 12px; font-size: 0.85rem; }
+.btn-danger { background: #fdecea; color: var(--rojo); }
+.btn-danger:hover { filter: brightness(0.94); }
+
+.lotes-panel {
+  margin-top: 12px;
+  border: 1px solid #cfe3d1;
+  border-radius: 10px;
+  background: #f4faf5;
+  padding: 12px 14px;
+}
+.lote-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dashed #d3e5d6;
+  flex-wrap: wrap;
+}
+.lote-row:last-of-type { border-bottom: none; }
+.lote-info { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; font-size: 0.9rem; }
+.lote-nuevo { margin-top: 12px; border-top: 1px dashed #b9d4be; padding-top: 10px; }
+.lote-nuevo summary { cursor: pointer; font-weight: 600; color: #1e5c2e; font-size: 0.9rem; }
+.lote-nuevo .form-grid { margin-top: 10px; }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: rgba(8, 28, 21, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+.modal {
+  background: var(--blanco);
+  border-radius: 16px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+  width: 100%;
+  max-width: 680px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  padding: 20px 22px;
+}
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.modal-head h2 { margin: 0; font-size: 1.1rem; color: var(--verde-700); }
+.modal-head .btn-ghost-sm { color: var(--verde-700); border-color: #c8d6cd; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+.eu-fincas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid #c8d6cd;
+  border-radius: 9px;
+  padding: 8px;
+}
+.eu-fincas label { display: flex; gap: 8px; align-items: center; font-size: 0.88rem; cursor: pointer; }
+
+.audit-filtros { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+.audit-filtros select, .audit-filtros input {
+  padding: 9px 12px;
+  border: 1px solid #c8d6cd;
+  border-radius: 9px;
+  font-size: 0.92rem;
+  background: var(--blanco);
+}
+.audit-filtros .search { margin-bottom: 0; max-width: 280px; }
+.tabla-audit-wrap { overflow-x: auto; }
+.tabla-audit { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.tabla-audit th {
+  text-align: left;
+  background: #eef6ef;
+  color: var(--verde-700);
+  padding: 9px 10px;
+  border-bottom: 2px solid #cfe3d1;
+  white-space: nowrap;
+}
+.tabla-audit td { padding: 9px 10px; border-bottom: 1px solid #e4ece6; vertical-align: top; }
+.tabla-audit tr:hover td { background: #f6fbf7; }
+.tabla-audit code { font-size: 0.78rem; background: #e6f0e7; padding: 2px 6px; border-radius: 4px; }
+.tabla-audit .nowrap { white-space: nowrap; }
+.audit-paginacion { display: flex; gap: 12px; align-items: center; margin-top: 12px; justify-content: flex-end; }
