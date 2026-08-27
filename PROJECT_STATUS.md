@@ -72,6 +72,15 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Render Blueprint** (`render.yaml`): web service Docker desde `apps/backend/Dockerfile`, health check `/api/v1/health`, migraciones `alembic upgrade head` automáticas al arrancar el contenedor (Render free no permite `preDeployCommand`).
 - **Neon** (`agroia`): Postgres free con SSL. El backend normaliza la URL (`sslmode=require` → `ssl=require`, solo asyncpg) y pone `agroia` en el `search_path` de cada conexión.
 - **Auto-reparación de enums al arranque** (`services/asegurar_enums.py`): si la BD externa fue reiniciada/restaurada después de las migraciones, la API recrea los tipos enum faltantes en cada arranque (además de las migraciones `008_reparar_enums_sensor` y `009_reparar_enums_2`).
+
+### Validación y entrenamiento del modelo de recomendación/diagnóstico (2026-08-26)
+
+- **Diagnóstico actual**: el motor en producción es el **sistema experto** (23 reglas activas, 9 variables, 5 cultivos con reglas específicas) — determinístico y trazable; el ML corría solo como baseline (India) y no estaba conectado.
+- **Entrenamiento con datos simulados colombianos** (`apps/ml/agroia_ml/train_colombia.py`): 75 000 perfiles de suelo etiquetados por el sistema experto → RandomForest por variable (diagnóstico DEFICIT/OK/EXCESO) + clasificador de aptitud UPRA.
+- **Precisión obtenida (holdout)** — F1 por modelo: CIC 0.9999 · CE 1.0 · humedad 0.9946 · MO 0.9905 · temp. suelo 0.977 · pH 0.9742 · K 0.9374 · P 0.9423 · N 0.9302 · **aptitud UPRA 0.9759** (CV 5-fold 0.8213).
+- **Concordancia con datos reales del sensor** (etiquetas del sistema experto): Café 0.59 · Papa 0.45 · Maíz 0.43 · Arroz 0.36 · Plátano 0.32 — limitada por lo dispersos que son los datos reales (muchas variables faltantes) y por el desbalance; es honesto: el sistema experto sigue siendo la fuente de verdad.
+- **Oráculo ML en sombra** (`services/ml_oracle.py`): carga los artefactos (`apps/ml/models/*.joblib`, ~18 MB) y alimenta la detección de discordancia del orquestador; si faltan artefactos, opera solo con reglas. `GET /api/v1/ml/estado` expone modelos, métricas y artefactos.
+- **Plan de mejora propuesto**: (1) ampliar reglas a más cultivos/variables (fuente de verdad), (2) imputación de variables faltantes en el entrenamiento para subir la concordancia en datos reales, (3) reentrenar cuando la BD acumule más lecturas calibradas y promover a stage PRODUCTION.
 - **Datos sembrados**: 30 cultivos, 23 reglas, usuarios (admin/agrónomo/cliente), 4 fincas y finca demo integral con lecturas. Scripts: `load_seeds.py`, `scripts/seed_cloud.py`, `scripts/seed_demo_integral.py` (apuntan a `DATABASE_URL`).
 
 ### Migraciones destacadas

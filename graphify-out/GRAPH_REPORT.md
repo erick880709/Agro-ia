@@ -1,7 +1,7 @@
 # Graph Report - Agro-ia  (2026-08-26)
 
 ## Corpus Check
-- 892 files · ~616,807 words
+- 892 files · ~616,809 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `16a4cb8b`
+- Built from commit: `546d41b9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
