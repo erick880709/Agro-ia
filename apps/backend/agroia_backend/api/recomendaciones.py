@@ -70,12 +70,14 @@ async def _persistir_recomendacion(
     """
     import uuid as uuid_mod
 
-    from sqlalchemy import select
+    from sqlalchemy import select, text
 
     from agroia_backend.models.finca import Finca
     from agroia_backend.models.recomendacion import Recomendacion
 
     try:
+        # Endurecer contra search_path frágil (casts de enum en INSERT)
+        await db.execute(text("SET LOCAL search_path TO public, agroia"))
         finca_uuid = uuid_mod.UUID(request.finca_id)
 
         # UC2: cultivo solicitado. UC1: cultivo top sugerido.

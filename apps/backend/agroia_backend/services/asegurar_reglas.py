@@ -92,23 +92,46 @@ async def asegurar_reglas() -> dict:
     from agroia_backend.models.regla_agronomica import ReglaAgronomica
 
     async with async_session_factory() as db:
+        # Endurecer contra search_path frágil (Neon/pgBouncer): los casts de
+        # enum en INSERT dependen del search_path de la transacción.
+        await db.execute(sa.text("SET LOCAL search_path TO public, agroia"))
+
         cultivos = {
             c.nombre: c
             for c in (await db.execute(select(Cultivo))).scalars().all()
         }
         insertadas = {"universales": 0, "cultivos": 0}
 
-        async def _existe(variable, umin, umax, cultivo_id) -> bool:
-            stmt = select(ReglaAgronomica.id).where(
-                ReglaAgronomica.variable == variable,
-                ReglaAgronomica.umbral_min.is_(None) if umin is None else (ReglaAgronomica.umbral_min == umin),
-                ReglaAgronomica.umbral_max.is_(None) if umax is None else (ReglaAgronomica.umbral_max == umax),
-                ReglaAgronomica.cultivo_id.is_(None) if cultivo_id is None else (ReglaAgronomica.cultivo_id == cultivo_id),
+        # Índice en Python de reglas existentes (evita casts `::variablesuelo`).
+        existentes = (
+            await db.execute(
+                select(ReglaAgronomica).where(ReglaAgronomica.activa.is_(True))
             )
-            return (await db.execute(stmt.limit(1))).first() is not None
+        ).scalars().all()
+
+        def _variable_nombre(r) -> str:
+            var = getattr(r, "variable", None)
+            return str(getattr(var, "value", None) or var or "")
+
+        def _existe(variable, umin, umax, cultivo_id) -> bool:
+            for r in existentes:
+                if r.cultivo_id != cultivo_id:
+                    continue
+                if _variable_nombre(r) != variable:
+                    continue
+                if (r.umbral_min is None) != (umin is None):
+                    continue
+                if umin is not None and abs(float(r.umbral_min) - float(umin)) > 1e-9:
+                    continue
+                if (r.umbral_max is None) != (umax is None):
+                    continue
+                if umax is not None and abs(float(r.umbral_max) - float(umax)) > 1e-9:
+                    continue
+                return True
+            return False
 
         async def _insertar(variable, umin, umax, accion, prioridad, fuente, cultivo):
-            if await _existe(variable, umin, umax, cultivo.id if cultivo else None):
+            if _existe(variable, umin, umax, cultivo.id if cultivo else None):
                 return False
             db.add(ReglaAgronomica(
                 cultivo_id=cultivo.id if cultivo else None,
@@ -121,6 +144,15 @@ async def asegurar_reglas() -> dict:
                 version=1,
                 activa=True,
             ))
+            existentes.append(
+                ReglaAgronomica(
+                    cultivo_id=cultivo.id if cultivo else None,
+                    variable=variable,
+                    umbral_min=umin,
+                    umbral_max=umax,
+                    activa=True,
+                )
+            )
             return True
 
         for variable, umin, umax, accion, prioridad, fuente in REGLAS_UNIVERSALES:

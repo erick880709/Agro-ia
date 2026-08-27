@@ -390,18 +390,27 @@ class RecommendationOrchestrator:
             pass  # cultivo_id no es UUID válido; se usa tal cual
 
         # ── Rango ideal de pH del cultivo (para contextualizar la lectura) ──
+        # Se filtra en Python para no emitir casts de enum (`::variablesuelo`),
+        # que dependen del search_path de la conexión (frágil en Neon/pgBouncer).
         rango_ph_cultivo = None
         try:
-            rango_ph_cultivo = (
+            reglas_cultivo = (
                 await self.db.execute(
                     select(ReglaAgronomica).where(
                         ReglaAgronomica.cultivo_id == uuid.UUID(str(request.cultivo_id)),
-                        ReglaAgronomica.variable == "PH",
                         ReglaAgronomica.activa.is_(True),
-                    ).limit(1)
+                    )
                 )
-            ).scalar_one_or_none()
-        except (ValueError, TypeError):
+            ).scalars().all()
+            rango_ph_cultivo = next(
+                (
+                    r for r in reglas_cultivo
+                    if getattr(r.variable, "value", r.variable) in ("PH", "pH")
+                ),
+                None,
+            )
+        except Exception as e:  # noqa: BLE001 — degrada a sin contexto
+            logger.warning("rango_ph_no_resuelto", error=str(e))
             rango_ph_cultivo = None
 
         # ── ML Inference (modo sombra; no afecta la respuesta si falla) ──
