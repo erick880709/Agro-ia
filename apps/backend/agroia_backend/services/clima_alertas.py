@@ -92,9 +92,9 @@ async def evaluar_alertas_finca(db, finca: Finca, pronostico: list[dict] | None 
 
     hoy = datetime.now(timezone.utc).date()
     creadas: list[dict] = []
+    cambios = 0
 
-    async def _registrar(tipo: str, severidad: str, mensaje: str, dia: dict) -> None:
-        # Desactivar alertas previas del mismo tipo para esta finca
+    async def _desactivar_tipo(tipo: str) -> int:
         anteriores = (
             await db.execute(
                 select(AlertaClimatica).where(
@@ -106,6 +106,11 @@ async def evaluar_alertas_finca(db, finca: Finca, pronostico: list[dict] | None 
         ).scalars().all()
         for a in anteriores:
             a.activa = False
+        return len(anteriores)
+
+    async def _registrar(tipo: str, severidad: str, mensaje: str, dia: dict) -> None:
+        nonlocal cambios
+        cambios += await _desactivar_tipo(tipo)
         alerta = AlertaClimatica(
             id=uuid.uuid4(),
             finca_id=finca.id,
@@ -127,20 +132,22 @@ async def evaluar_alertas_finca(db, finca: Finca, pronostico: list[dict] | None 
 
     # ── Regla 1: lluvia fuerte + fertilización programada ──
     dia_lluvia = _dia_lluvia_fuerte(pronostico)
-    if dia_lluvia:
-        labores = await _labores_fertilizacion_proximas(db, finca.id)
-        if labores:
-            productos = " y ".join(
-                labor.producto or labor.titulo[:60] for labor in labores[:2]
-            )
-            await _registrar(
-                "lluvia_aplicacion",
-                "Alta",
-                f"Aplace la aplicación de {productos}: se pronostican "
-                f"{float(dia_lluvia['precipitacion_mm']):.0f} mm en 24h "
-                f"({dia_lluvia['fecha']}), riesgo de lixiviación.",
-                dia_lluvia,
-            )
+    labores = await _labores_fertilizacion_proximas(db, finca.id) if dia_lluvia else []
+    if dia_lluvia and labores:
+        productos = " y ".join(
+            labor.producto or labor.titulo[:60] for labor in labores[:2]
+        )
+        await _registrar(
+            "lluvia_aplicacion",
+            "Alta",
+            f"Aplace la aplicación de {productos}: se pronostican "
+            f"{float(dia_lluvia['precipitacion_mm']):.0f} mm en 24h "
+            f"({dia_lluvia['fecha']}), riesgo de lixiviación.",
+            dia_lluvia,
+        )
+    else:
+        # Sin riesgo: desactivar alertas previas de este tipo (ya no vigentes)
+        cambios += await _desactivar_tipo("lluvia_aplicacion")
 
     # ── Regla 2: helada + etapa de Floración en cultivos sensibles ──
     dia_helada = _dia_helada(pronostico)
@@ -155,12 +162,14 @@ async def evaluar_alertas_finca(db, finca: Finca, pronostico: list[dict] | None 
             "durante la floración. Active el sistema de riego por aspersión.",
             dia_helada,
         )
+    else:
+        cambios += await _desactivar_tipo("helada_floracion")
 
-    if creadas:
+    if creadas or cambios:
         await db.commit()
         logger.info(
             "alertas_climaticas_evaluadas",
-            finca_id=str(finca.id), alertas=len(creadas),
+            finca_id=str(finca.id), alertas=len(creadas), desactivadas=cambios,
         )
     return creadas
 

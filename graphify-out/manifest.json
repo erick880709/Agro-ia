@@ -3695,8 +3695,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/main.py": {
-    "mtime": 1787865590.610298,
-    "ast_hash": "64a8f17552aabd565ded94a1ca1e03f5",
+    "mtime": 1787867385.2480092,
+    "ast_hash": "e3f662ff47858454a0c53210d06d6f88",
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
@@ -4075,8 +4075,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/external_apis.py": {
-    "mtime": 1787750120.8948107,
-    "ast_hash": "cb68f46219684b831eab207dd3f035ea",
+    "mtime": 1787867385.261464,
+    "ast_hash": "93b26ef00bba1eb7269035cfaa7cbcb4",
     "semantic_hash": ""
   },
   "apps/iot/agroia_iot/consumer.py": {
@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787865954.125831,
-    "ast_hash": "08abcdfbbce65faa497645333cf8b605",
+    "mtime": 1787869113.9689848,
+    "ast_hash": "6435177e1de146498305fa0cc945c19a",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4515,8 +4515,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/reportes.py": {
-    "mtime": 1787864472.585157,
-    "ast_hash": "40e09fc2a585a745873b476181ac947b",
+    "mtime": 1787867385.2605042,
+    "ast_hash": "c1302ad8b76d3b937006cf768d70cf62",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/sensor_api.py": {
@@ -4570,8 +4570,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/reportes_html.py": {
-    "mtime": 1787864515.7311144,
-    "ast_hash": "7c2f91abefceaa30802e5afacd59225c",
+    "mtime": 1787867385.2556965,
+    "ast_hash": "a16285b449c4fb71c2a118f126bd20d2",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/003_dispositivos_iot.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787865845.2353034,
-    "ast_hash": "801d1de7e35820d45fc023412abd95cb",
+    "mtime": 1787867385.25458,
+    "ast_hash": "718210dca0ad5640b2634409f8f29375",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787865618.3978474,
-    "ast_hash": "6a7abb973fddb6539d83a02ea8401b8f",
+    "mtime": 1787867385.252535,
+    "ast_hash": "f205f35409a32098cc58cd453404ec2d",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4830,8 +4830,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1787865954.1441271,
-    "ast_hash": "3d514431b80fa920b22ee4888f8d3066",
+    "mtime": 1787869060.7287138,
+    "ast_hash": "7272022968d7cb7c941b465e2a60e15b",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {
@@ -4855,8 +4855,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Pantallas_AgroIA.html": {
-    "mtime": 1787865954.1441271,
-    "ast_hash": "4936aa36b89ff9e384a3b4298f89645a",
+    "mtime": 1787869094.4534414,
+    "ast_hash": "e71ca7bb2d3ace718811e5f43d1bb6cc",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/economia.py": {
@@ -4952,6 +4952,26 @@
   "apps/backend/alembic/versions/018_labores.py": {
     "mtime": 1787865550.8399887,
     "ast_hash": "3413a6167f429512fa16b0db18673dcc",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/alertas.py": {
+    "mtime": 1787867385.2732127,
+    "ast_hash": "31b46790451a4b8a936607a37da42747",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/models/alerta_climatica.py": {
+    "mtime": 1787867385.2634604,
+    "ast_hash": "e70222be220267e2da921f41206028f6",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/clima_alertas.py": {
+    "mtime": 1787867705.2512171,
+    "ast_hash": "f179c7004765625e84d8a30fe4c9e9a9",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/019_alertas_climaticas.py": {
+    "mtime": 1787867385.2634604,
+    "ast_hash": "d7c17ec016e5941fcf026da7ba590146",
     "semantic_hash": ""
   }
 }
