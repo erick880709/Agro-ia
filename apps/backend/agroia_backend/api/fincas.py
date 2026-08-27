@@ -13,7 +13,7 @@ from agroia.database import get_db
 from agroia.logging import get_logger
 from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from pydantic import BaseModel, Field, field_validator
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia_backend.models.finca import Finca
@@ -85,6 +85,12 @@ class FincaCreate(BaseModel):
     area_declarada_ha: float | None = Field(None, ge=0, le=1_000_000, description="Área declarada (ha)")
     tipo_area: str = Field("finca_completa", max_length=30, description="finca_completa | lote | parcela")
     tiene_multiples_lotes: bool = Field(False, description="¿La finca tiene varios lotes?")
+    # ── Características físicas del suelo y riego (2026-08-27) ──
+    tipo_riego: str | None = Field(None, description="Goteo | Aspersión | Gravedad | Secano")
+    profundidad_suelo_cm: int | None = Field(
+        None, description="Profundidad efectiva del suelo del lote principal (cm); categorías: 25, 45, 75, 100"
+    )
+    pedregosidad: str | None = Field(None, description="Ninguna | Moderada | Alta")
 
     @field_validator("contacto_email")
     @classmethod
@@ -126,6 +132,7 @@ def _finca_a_dict(f: Finca) -> dict:
         "perimetro_m": f.perimetro_m,
         "tipo_area": f.tipo_area,
         "tiene_multiples_lotes": f.tiene_multiples_lotes,
+        "tipo_riego": f.tipo_riego.value if f.tipo_riego else None,
         "fecha_georreferenciacion": (
             f.fecha_georreferenciacion.isoformat()
             if f.fecha_georreferenciacion else None
@@ -177,6 +184,9 @@ async def registrar_finca(
             ),
         })
 
+    # Endurecer contra search_path frágil (casts de enum en INSERT)
+    await db.execute(text("SET LOCAL search_path TO public, agroia"))
+
     lat, lng = body.latitud, body.longitud
     if lat is None or lng is None:
         lat, lng = _extraer_coordenadas(body.coordenadas_google or "")
@@ -227,6 +237,13 @@ async def registrar_finca(
     from datetime import datetime, timezone
 
     area_declarada = body.area_declarada_ha or body.area_hectareas
+    # Normalizar tipo de riego a valor del enum (o None)
+    tipo_riego = body.tipo_riego
+    if tipo_riego and tipo_riego.lower() not in {"goteo", "aspersión", "aspersion", "gravedad", "secano"}:
+        tipo_riego = None
+    pedregosidad = body.pedregosidad
+    if pedregosidad and pedregosidad.lower() not in {"ninguna", "moderada", "alta"}:
+        pedregosidad = None
     finca = Finca(
         id=uuid_mod.uuid4(),
         tenant_id=usuario.tenant_id,
@@ -260,6 +277,7 @@ async def registrar_finca(
         perimetro_m=perimetro,
         tipo_area=body.tipo_area,
         tiene_multiples_lotes=body.tiene_multiples_lotes,
+        tipo_riego=tipo_riego,
         fecha_georreferenciacion=(
             datetime.now(timezone.utc) if (lat is not None and lng is not None) else None
         ),
@@ -275,6 +293,8 @@ async def registrar_finca(
         nombre="Lote principal" if body.tipo_area == "finca_completa" else body.nombre,
         area_ha=area_calculada or area_declarada,
         geometria=body.geometria,
+        profundidad_suelo_cm=body.profundidad_suelo_cm,
+        pedregosidad=pedregosidad,
     )
     db.add(lote)
     await db.commit()
@@ -295,6 +315,8 @@ async def registrar_finca(
             "id": str(lote.id),
             "nombre": lote.nombre,
             "area_ha": lote.area_ha,
+            "profundidad_suelo_cm": lote.profundidad_suelo_cm,
+            "pedregosidad": lote.pedregosidad.value if lote.pedregosidad else None,
         },
     }
 
@@ -312,6 +334,7 @@ class FincaAgroUpdate(BaseModel):
     cultivo_sembrado: str | None = Field(None, max_length=100)
     edad_anos: float | None = Field(None, ge=0, le=500)
     etapa_fenologica: str | None = Field(None, max_length=30)
+    tipo_riego: str | None = Field(None, max_length=30, description="Goteo | Aspersión | Gravedad | Secano")
 
 
 @router.patch("/fincas/{finca_id}")
@@ -347,6 +370,7 @@ async def actualizar_datos_agronomicos(
             "code": "FINCA_NOT_FOUND", "message": "La finca no está registrada.",
         })
 
+    await db.execute(text("SET LOCAL search_path TO public, agroia"))
     cambios = body.model_dump(exclude_unset=True)
     for campo, valor in cambios.items():
         setattr(finca, campo, valor)
@@ -383,6 +407,8 @@ async def lotes_de_finca(
                 "nombre": lote.nombre,
                 "area_ha": lote.area_ha,
                 "geometria": lote.geometria,
+                "profundidad_suelo_cm": lote.profundidad_suelo_cm,
+                "pedregosidad": lote.pedregosidad.value if lote.pedregosidad else None,
                 "activo": lote.activo,
             }
             for lote in lotes

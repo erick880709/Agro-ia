@@ -912,7 +912,9 @@ def _seccion_plano_lote(
     # ── Clima del día de la muestra (solo si la finca tiene coordenadas) ──
     clima_html = ""
     if clima:
-        clima_html = _bloque_clima_muestra(clima, fechas, cultivo_nombre)
+        clima_html = _bloque_clima_muestra(
+            clima, fechas, cultivo_nombre, (finca or {}).get("tipo_riego")
+        )
 
     # ── Historial de manejo del lote (#7) y fenología (#9) ──
     manejo_html = ""
@@ -976,7 +978,8 @@ def _seccion_plano_lote(
 
 
 def _bloque_clima_muestra(
-    clima: dict, fechas: list[str], cultivo_nombre: str | None = None
+    clima: dict, fechas: list[str], cultivo_nombre: str | None = None,
+    tipo_riego: str | None = None,
 ) -> str:
     """Bloque de clima del día de la muestra (IDEAM) + notas para recomendaciones."""
     tmin = clima.get("temperatura_min")
@@ -1058,12 +1061,28 @@ def _bloque_clima_muestra(
             '<div class="alerta-fito">🛡️ <b>Alerta fitosanitaria específica '
             f"({esc(str(cultivo_nombre))}):</b> {alerta_fito}</div>"
         )
+    riego_html = ""
+    riego = (tipo_riego or "").strip().lower()
+    if riego == "secano" and p <= 60:
+        riego_html = (
+            '<div class="alerta-fito">💧 <b>Alerta de eficiencia de riego:</b> la finca '
+            'opera en <b>secano</b> y la precipitación del mes de la muestra fue baja. '
+            'Priorice cultivos resistentes a sequía y planifique reservorios o riego '
+            'complementario para las etapas críticas (floración y llenado).</div>'
+        )
+    elif riego == "secano":
+        riego_html = (
+            '<div class="alerta-fito">💧 <b>Riego:</b> la finca opera en <b>secano</b>. '
+            'Las recomendaciones priorizan cultivos resistentes a sequía; vigile la '
+            'distribución de lluvias para no perder ventanas de siembra.</div>'
+        )
     return f"""
     <div class="clima-muestra">
       <div class="heat-title">🌦️ Clima del día de la muestra{f' — {esc(fecha_txt)}' if fecha_txt else ''}</div>
       {tiles}
       <p class="muted">Fuente: {esc(fuente)}</p>
       {fito_html}
+      {riego_html}
       <div class="heat-title">Cómo usar estos datos en las recomendaciones</div>
       <ul class="warnings">{lista_notas}</ul>
     </div>"""

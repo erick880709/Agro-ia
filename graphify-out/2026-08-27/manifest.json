@@ -4495,8 +4495,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/location.py": {
-    "mtime": 1787836224.1704526,
-    "ast_hash": "c884d8e4b4b807b865ba8fe4e47f135c",
+    "mtime": 1787838084.490621,
+    "ast_hash": "066dd7046660777f50dc72bbcfdd0748",
     "semantic_hash": ""
   },
   "apps/frontend/src/app/shared/google-maps-picker.component.ts": {
@@ -4510,8 +4510,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/fincas.py": {
-    "mtime": 1787836694.6492734,
-    "ast_hash": "b1be1f10eb6ce95fdec4fd62c80f69fb",
+    "mtime": 1787838084.490621,
+    "ast_hash": "586b0415fc6c7c43a1b5109630109eec",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/reportes.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787837233.835089,
-    "ast_hash": "8fbc691bcc2ea95921e350a5450032b4",
+    "mtime": 1787838598.55046,
+    "ast_hash": "da402aeb9da6af899f59176e87f01405",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {

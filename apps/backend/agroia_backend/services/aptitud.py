@@ -23,6 +23,16 @@ PESOS_PRIORIDAD = {
 MAX_PENALIZACION = 100.0
 TOTAL_VARIABLES_SENSOR = 18  # ALL_SOIL_VARIABLES en data_adapters.py
 
+# Cultivos de raíz profunda: no prosperan en suelos someros (< 30 cm)
+CULTIVOS_RAIZ_PROFUNDA = {
+    "aguacate", "mango", "naranja", "limón", "mandarina", "palma de aceite",
+}
+
+# Cultivos tolerantes a sequía (priorizados en fincas de secano)
+CULTIVOS_RESISTENTES_SEQUIA = {
+    "sorgo", "yuca", "mango", "maracuyá", "uva", "tabaco", "higuerilla",
+}
+
 
 def clasificar_aptitud(score: float) -> str:
     """Clasifica un score de aptitud en categoría UPRA-style."""
@@ -63,6 +73,7 @@ class AptitudService:
         soil_dict: dict,
         top_n: int = 5,
         min_score: float = 40.0,
+        lote: dict | None = None,
     ) -> list[dict]:
         """UC1: recomienda los cultivos más aptos para el suelo medido.
 
@@ -71,6 +82,9 @@ class AptitudService:
                 (claves de SoilData.to_dict(): ph, nitrogeno, ...).
             top_n: número máximo de sugerencias a devolver.
             min_score: score mínimo (0-100) para incluir un cultivo.
+            lote: características físicas del lote (profundidad_suelo_cm,
+                pedregosidad) — penalizan cultivos con requerimientos
+                específicos (p. ej. aguacate de raíz pivotante).
 
         Returns:
             Lista ordenada desc por score con cultivo, score, confianza,
@@ -82,6 +96,9 @@ class AptitudService:
             return []
 
         cobertura = len(soil_dict) / TOTAL_VARIABLES_SENSOR
+        lote = lote or {}
+        profundidad = lote.get("profundidad_suelo_cm")
+        pedregosidad = (lote.get("pedregosidad") or "").lower()
 
         sugerencias: list[dict] = []
         for cultivo, n_reglas in cultivos:
@@ -101,6 +118,48 @@ class AptitudService:
                     "prioridad": v.prioridad,
                     "fuente": v.fuente,
                 })
+
+            # ── Profundidad efectiva del suelo (limitante física) ──
+            # Cultivos de raíz profunda (aguacate >1 m, cítricos, mango,
+            # palma) no prosperan en suelos someros (< 30 cm): penalización
+            # CRÍTICA equivalente a +40 puntos.
+            nombre_l = cultivo.nombre.lower()
+            if (
+                profundidad is not None
+                and profundidad < 30
+                and nombre_l in CULTIVOS_RAIZ_PROFUNDA
+            ):
+                penalizacion += 40.0
+                ajustes.append({
+                    "variable": "profundidad_suelo",
+                    "estado": "DEFICIT",
+                    "valor_actual": profundidad,
+                    "rango_ideal": "> 60 cm para " + cultivo.nombre,
+                    "accion": (
+                        f"Profundidad efectiva del suelo ({profundidad} cm) insuficiente "
+                        f"para {cultivo.nombre} (raíz profunda). Considere otro cultivo o "
+                        "mejore el perfil con camellones/enmiendas profundas."
+                    ),
+                    "prioridad": "Critica",
+                    "fuente": "AGROSAVIA",
+                })
+
+            # ── Pedregosidad alta: advertencia de limitante física ──
+            if pedregosidad == "alta":
+                ajustes.append({
+                    "variable": "pedregosidad",
+                    "estado": "ADVERTENCIA",
+                    "valor_actual": "Alta",
+                    "rango_ideal": "Ninguna – Moderada",
+                    "accion": (
+                        "Limitante física: alta pedregosidad restringe el desarrollo "
+                        "radicular y la retención de agua. Valore despedrado del hoyo "
+                        "de siembra o cultivos tolerantes."
+                    ),
+                    "prioridad": "Media",
+                    "fuente": "AGROSAVIA",
+                })
+                penalizacion += PESOS_PRIORIDAD.get("Media", 10)
 
             score = round(max(0.0, 100.0 - min(penalizacion, MAX_PENALIZACION)), 1)
             # Confianza: calidad de cumplimiento de reglas + cobertura de datos

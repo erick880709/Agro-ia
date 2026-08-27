@@ -166,10 +166,12 @@ class RecommendationOrchestrator:
         )
 
     async def _cargar_contexto_finca(self, finca_id: str) -> dict:
-        """Datos agronómicos de la finca: validación de laboratorio, fenología…"""
+        """Datos agronómicos de la finca: validación de laboratorio, fenología,
+        tipo de riego y características físicas del lote principal."""
         from sqlalchemy import select
 
         from agroia_backend.models.finca import Finca
+        from agroia_backend.models.lote import Lote
 
         try:
             finca = (
@@ -182,6 +184,24 @@ class RecommendationOrchestrator:
             return {}
         if finca is None:
             return {}
+        lote = None
+        try:
+            lote_obj = (
+                await self.db.execute(
+                    select(Lote).where(
+                        Lote.finca_id == finca.id, Lote.activo.is_(True)
+                    ).order_by(Lote.created_at).limit(1)
+                )
+            ).scalars().first()
+            if lote_obj is not None:
+                lote = {
+                    "profundidad_suelo_cm": lote_obj.profundidad_suelo_cm,
+                    "pedregosidad": (
+                        lote_obj.pedregosidad.value if lote_obj.pedregosidad else None
+                    ),
+                }
+        except Exception as e:  # noqa: BLE001
+            logger.warning("lote_ctx_no_resuelto", error=str(e))
         return {
             "validacion_laboratorio": bool(finca.validacion_laboratorio),
             "cultivo_sembrado": finca.cultivo_sembrado,
@@ -190,6 +210,8 @@ class RecommendationOrchestrator:
             "pendiente_pct": finca.pendiente_pct,
             "drenaje": finca.drenaje,
             "historial_agronomico": finca.historial_agronomico,
+            "tipo_riego": finca.tipo_riego.value if finca.tipo_riego else None,
+            "lote": lote,
         }
 
     async def _respaldos(self, finca_id: str, cultivo_id: str | None = None) -> int:
@@ -278,7 +300,33 @@ class RecommendationOrchestrator:
         if self.aptitud is None:
             raise RuntimeError("AptitudService no configurado en el orquestador")
 
-        sugerencias = await self.aptitud.recommend_crops(soil_dict, top_n=5)
+        finca_ctx = finca_ctx or {}
+        sugerencias = await self.aptitud.recommend_crops(
+            soil_dict, top_n=5, lote=finca_ctx.get("lote")
+        )
+
+        # ── Riego de secano: priorizar cultivos resistentes a sequía ──
+        tipo_riego = (finca_ctx.get("tipo_riego") or "").lower()
+        advertencia_secano = None
+        if tipo_riego == "secano":
+            from agroia_backend.services.aptitud import CULTIVOS_RESISTENTES_SEQUIA
+
+            for s in sugerencias:
+                if s["cultivo"].lower() in CULTIVOS_RESISTENTES_SEQUIA:
+                    s["score"] = round(min(100.0, float(s["score"]) + 8.0), 1)
+                    s["nota_secano"] = (
+                        "Riego de secano: cultivo resistente a sequía (+8)."
+                    )
+            sugerencias.sort(
+                key=lambda s: (s["score"], s.get("reglas_especificas", 0)),
+                reverse=True,
+            )
+            advertencia_secano = (
+                "💧 La finca es de secano: se priorizaron los cultivos resistentes "
+                "a sequía (+8 puntos). Si la precipitación es baja, considere "
+                "reservorios o riego complementario."
+            )
+
         top = sugerencias[0] if sugerencias else None
 
         cultivo = top["cultivo"] if top else "No determinado"
@@ -288,9 +336,6 @@ class RecommendationOrchestrator:
         finca_ctx = finca_ctx or {}
 
         npk_sin_calibrar = bool(npk_no_calibrado)
-        for r in recomendaciones:
-            if r.get("variable") in VARIABLES_NPK_SENSOR:
-                npk_sin_calibrar = True
         respaldos = await self._respaldos(
             finca_id, top.get("cultivo_id") if top else None
         )
@@ -317,6 +362,8 @@ class RecommendationOrchestrator:
                 "⚠️ Esta recomendación tiene baja confianza y será revisada por un "
                 "técnico agrónomo."
             )
+        if advertencia_secano:
+            advertencia = self._combinar_advertencias(advertencia, advertencia_secano)
         if faltantes:
             advertencia = self._combinar_advertencias(
                 advertencia,

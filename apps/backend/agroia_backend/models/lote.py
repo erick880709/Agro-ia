@@ -3,13 +3,20 @@
 Separación arquitectónica: la finca identifica el predio; el lote es la
 unidad productiva que después se analiza (sensores, muestras, reportes).
 """
+import enum
 import uuid
 from datetime import datetime
 
 from agroia.database import Base
-from sqlalchemy import Boolean, DateTime, Float, ForeignKey, String, func
+from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
+
+
+class Pedregosidad(str, enum.Enum):
+    NINGUNA = "Ninguna"
+    MODERADA = "Moderada"
+    ALTA = "Alta"
 
 
 class Lote(Base):
@@ -31,6 +38,14 @@ class Lote(Base):
     area_ha: Mapped[float | None] = mapped_column(Float, nullable=True)
     geometria: Mapped[dict | None] = mapped_column(
         JSONB, nullable=True, comment="Geometría GeoJSON del lote"
+    )
+    # ── Características físicas del suelo del lote (2026-08-27) ──
+    profundidad_suelo_cm: Mapped[int | None] = mapped_column(
+        Integer, nullable=True,
+        comment="Profundidad efectiva del suelo (cm); categorías: 25, 45, 75, 100"
+    )
+    pedregosidad: Mapped[Pedregosidad | None] = mapped_column(
+        nullable=True, comment="Pedregosidad del lote"
     )
     activo: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=True, server_default="true"

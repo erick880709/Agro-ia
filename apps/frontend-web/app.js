@@ -85,7 +85,7 @@ function badgeClase(clasificacion) {
 function badgeEstadoClase(estado) {
   const e = String(estado || '').toUpperCase();
   if (e === 'EXCESO' || e === 'CRITICA') return 'critical';
-  if (e === 'DEFICIT' || e === 'ALTA') return 'warning';
+  if (e === 'DEFICIT' || e === 'ALTA' || e === 'ADVERTENCIA' || e === 'MEDIA') return 'warning';
   return 'ok';
 }
 
@@ -765,6 +765,10 @@ async function enviarFinca(e) {
     area_hectareas: area,
     tipo_area: document.getElementById('f-tipo-area').value,
     tiene_multiples_lotes: multi ? multi.value === 'si' : false,
+    tipo_riego: document.getElementById('f-tipo-riego').value || null,
+    profundidad_suelo_cm: document.getElementById('f-profundidad').value
+      ? Number(document.getElementById('f-profundidad').value) : null,
+    pedregosidad: document.getElementById('f-pedregosidad').value || null,
     largo_metros: document.getElementById('f-largo').value ? Number(document.getElementById('f-largo').value) : null,
     ancho_metros: document.getElementById('f-ancho').value ? Number(document.getElementById('f-ancho').value) : null,
   };
@@ -1200,7 +1204,7 @@ function renderAnalisis(a) {
         ${a.sugerencias_cultivos.map((s, i) => `
           <tr>
             <td>${i + 1}</td>
-            <td>${esc(s.icono || '')} ${esc(s.cultivo)}</td>
+            <td>${esc(s.icono || '')} ${esc(s.cultivo)}${s.nota_secano ? `<div class="muted" style="font-size:0.75rem">${esc(s.nota_secano)}</div>` : ''}</td>
             <td>${fmtNum(s.score, 1)}</td>
             <td>${badge(s.clasificacion, badgeClase(s.clasificacion))}</td>
             <td>${Math.round((s.confianza || 0) * 100)}%</td>

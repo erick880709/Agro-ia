@@ -184,6 +184,7 @@ async def generar_reporte(
             "cultivo_sembrado": finca.cultivo_sembrado,
             "edad_anos": finca.edad_anos,
             "etapa_fenologica": finca.etapa_fenologica,
+            "tipo_riego": finca.tipo_riego.value if finca.tipo_riego else None,
         },
         lectura={
             "ts": lectura.ts.isoformat() if lectura.ts else None,

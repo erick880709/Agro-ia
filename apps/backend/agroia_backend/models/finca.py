@@ -1,4 +1,5 @@
 """Modelo Finca — predio agrícola del usuario."""
+import enum
 import uuid
 from datetime import datetime
 
@@ -8,6 +9,13 @@ from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from agroia_backend.models import TenantMixin, TimestampMixin
+
+
+class TipoRiego(str, enum.Enum):
+    GOTEO = "Goteo"
+    ASPERSION = "Aspersión"
+    GRAVEDAD = "Gravedad"
+    SECANO = "Secano"
 
 
 class Finca(Base, TenantMixin, TimestampMixin):
@@ -126,6 +134,10 @@ class Finca(Base, TenantMixin, TimestampMixin):
     fecha_georreferenciacion: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True,
         comment="Fecha de captura de coordenadas"
+    )
+    # ── Riego (2026-08-27) ──
+    tipo_riego: Mapped["TipoRiego | None"] = mapped_column(
+        nullable=True, comment="Tipo de riego predominante"
     )
 
     def __repr__(self) -> str:

@@ -30,6 +30,8 @@ ENUMS = {
         "PH", "N", "P", "K", "Ca", "Mg", "S", "Fe", "Mn", "Zn", "Cu",
         "B", "MO", "CIC", "TEXTURA", "HUMEDAD", "TEMPERATURA_SUELO", "CE",
     ],
+    "pedregosidad": ["NINGUNA", "MODERADA", "ALTA"],
+    "tiporiego": ["GOTEO", "ASPERSION", "GRAVEDAD", "SECANO"],
 }
 
 
