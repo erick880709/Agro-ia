@@ -1189,6 +1189,32 @@ async function renderLaboresPendientes() {
   }
 }
 
+/* ────────────────────── alertas climáticas proactivas (P1) ────────────────────── */
+
+const ICONOS_ALERTA = {
+  lluvia_aplicacion: '⛅',
+  helada_floracion: '🥶',
+};
+
+async function renderAlertasClimaticas() {
+  const div = document.getElementById('dashboard-alertas');
+  if (!div || !state.fincaId) return;
+  div.innerHTML = '';
+  try {
+    const r = await api(`/fincas/${state.fincaId}/alertas-climaticas/activas`);
+    const alertas = r.data || [];
+    if (!alertas.length) return;
+    div.innerHTML = alertas.map(a => `
+      <div class="alerta-clima alerta-${esc(a.tipo)}">
+        <span class="alerta-clima-ico">${ICONOS_ALERTA[a.tipo] || '⚠️'}</span>
+        <div class="alerta-clima-cuerpo">
+          <div class="alerta-clima-titulo">Alerta meteorológica · ${esc(a.severidad)}</div>
+          <div class="alerta-clima-msg">${esc(a.mensaje)}</div>
+        </div>
+      </div>`).join('');
+  } catch { /* sin alertas o error: no mostrar */ }
+}
+
 async function actualizarLabor(laborId, estado) {
   let observacion = null;
   if (estado === 'Completada') {
@@ -1777,6 +1803,7 @@ async function cargarDashboard() {
     renderTablaLecturas(lecturas.data || [], document.getElementById('dashboard-lecturas'), 5);
     renderCicloActivo();
     renderLaboresPendientes();
+    renderAlertasClimaticas();
   } catch (e) {
     kpis.innerHTML = errorBanner(e.message);
   }

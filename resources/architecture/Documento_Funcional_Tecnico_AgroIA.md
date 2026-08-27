@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.3 · **Fecha:** 2026-08-27
+**Versión:** 2.4 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -13,7 +13,7 @@
 4. [Autenticación y sesión (lo más básico)](#4-autenticación-y-sesión-lo-más-básico)
 5. [El frontend SPA: navegación y utilidades](#5-el-frontend-spa-navegación-y-utilidades)
 6. [Recorrido sección por sección](#6-recorrido-sección-por-sección)
-   - [6.11 🕵️ Auditoría](#611--auditoría-de-acciones-solo-admin) · [6.12 🔄 Ciclos productivos](#612--ciclos-productivos-por-lote-historial_ciclos_lote)
+   - [6.11 🕵️ Auditoría](#611--auditoría-de-acciones-solo-admin) · [6.12 🔄 Ciclos productivos](#612--ciclos-productivos-por-lote-historial_ciclos_lote) · [6.13 ⛅ Alertas climáticas](#613--alertas-climáticas-proactivas)
 7. [Ingesta de datos IoT — `POST /api/sensor`](#7-ingesta-de-datos-iot--post-apisensor)
 8. [El motor de recomendaciones (corazón del sistema)](#8-el-motor-de-recomendaciones-corazón-del-sistema)
 9. [Aceptación humana de recomendaciones (human-in-the-loop)](#9-aceptación-humana-de-recomendaciones-human-in-the-loop)
@@ -457,6 +457,23 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 
 **Carga masiva en P4 (Cargar archivo)**: tarjeta «🗂️ Carga masiva — historial de ciclos (CSV)» para **grandes fincas**: sube un CSV con el historial de los últimos 5 años (`lote, cultivo, fecha_siembra, fecha_cosecha, rendimiento, aplicaciones_texto`), con botón de **plantilla de ejemplo** descargable. La UI muestra el resumen (ciclos importados, lotes creados y filas con error).
 
+### 6.13 ⛅ Alertas climáticas proactivas
+
+**Servicio programado** (tarea asyncio en el `lifespan` de `main.py`): cada **6 horas** (primer ciclo 45 s tras el arranque) evalúa todas las fincas con coordenadas contra el **pronóstico de 7 días de Open-Meteo** (gratis, sin API key; `services/external_apis.py::fetch_pronostico_open_meteo`, timeout 12 s, degradación con gracia si falla).
+
+**Reglas** (`services/clima_alertas.py`, umbrales configurables `UMBRAL_LLUVIA_MM=20` y `UMBRAL_HELADA_C=5`):
+
+1. **Lluvia > 20 mm en 24h** (próximos 3 días) **+ labores de Fertilización pendientes** programadas en la ventana → «Aplace la aplicación de {producto}: se pronostican X mm en 24h (fecha), riesgo de lixiviación».
+2. **Temperatura mínima < 5 °C** + `etapa_fenologica == 'Floración'` + cultivo sensible (café, aguacate, cacao, cítricos, mango, mora, lulo…) → «Riesgo de helada: temperatura mínima de X °C el (fecha) durante la floración. Active el sistema de riego por aspersión».
+
+**Persistencia**: tabla `agroia.alertas_climaticas` (migración 019) — `finca_id` (FK CASCADE), `tipo` (`lluvia_aplicacion` | `helada_floracion`), `severidad` (Alta), `mensaje`, `fecha_alerta`, `pronostico` JSONB (día disparador + 3 días) y `activa`. Al evaluar, las alertas previas del mismo tipo/finca **se desactivan** (solo queda la más reciente).
+
+**Endpoints**:
+- `GET /api/v1/fincas/{finca_id}/alertas-climaticas/activas` — alertas activas de hoy (banner del Dashboard P1).
+- `POST /api/v1/alertas-climaticas/evaluar` (solo Admin) — disparo manual; acepta `{finca_id?, pronostico?}` con **pronóstico inyectado** para pruebas deterministas/demos.
+
+**UI**: P1 muestra el contenedor `#dashboard-alertas` sobre los KPIs con banners de colores (azul = lluvia/lixiviación, rojo = helada). El **reporte (sección N)** agrega «⛅ Pronóstico extendido (7 días)» con tabla de fecha/lluvia/T mín/T máx y avisos ⚠️/🥶 cuando supera los umbrales.
+
 ---
 
 ## 7. Ingesta de datos IoT — `POST /api/sensor`
@@ -755,6 +772,13 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 - **Trazabilidad**: auditoría `labor.generar`, `labor.actualizar`, `labor.completar`, `labor.eliminar` (`DELETE` solo Admin).
 - **PWA (punto 5)**: preparado — el mismo `PATCH` acepta `observaciones_ejecucion` y `fecha_ejecucion`; la app móvil con geolocalización y foto se conectará a estos endpoints.
 
+### 11.4 Alertas climáticas proactivas (pronóstico + fenología + labores, v2.4)
+
+- **Fuente de pronóstico**: Open-Meteo Forecast (gratis, sin clave) con degradación con gracia; el diseño admite conmutar a IDEAM/NASA POWER sin tocar las reglas (el servicio recibe el pronóstico normalizado `[{fecha, precipitacion_mm, temp_min_c, temp_max_c}]`).
+- **Servicio cada 6 h** + endpoint manual `POST /api/v1/alertas-climaticas/evaluar` (Admin) con pronóstico inyectable para pruebas deterministas.
+- **Banner P1** con severidad y colores por tipo; **sección N del reporte** con pronóstico extendido de 7 días y avisos de umbrales.
+- **Regla 1 (lixiviación)**: lluvia > 20 mm/24h en los próximos 3 días + fertilización pendiente → «Aplace la aplicación…». **Regla 2 (helada)**: T mín < 5 °C + Floración + cultivo sensible → «Riesgo de helada, active riego por aspersión».
+
 ---
 
 ## 12. Persistencia y base de datos
@@ -781,15 +805,16 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 | `aceptaciones_recomendacion` | Feedback humano (rol, comentario, resumen, confianza previa) |
 | `historial_ciclos_lote` | **Ciclos productivos por lote** (siembra→cosecha): fechas, rendimiento t/ha, calidad, aplicaciones/incidencias JSONB, riego, observaciones — FK lotes ON DELETE CASCADE |
 | `labores` | **Órdenes de trabajo**: título, tipo, producto/dosis, fechas programada/ejecución, responsable, estado y observaciones — FK lotes y recomendaciones |
+| `alertas_climaticas` | **Alertas meteorológicas proactivas**: tipo (lluvia_aplicacion/helada_floracion), severidad, mensaje, fecha, pronóstico JSONB y flag `activa` — FK fincas CASCADE |
 | `auditoria` | **Bitácora de acciones**: usuario (email/nombre/rol), acción, entidad, entidad_id, detalle JSONB, IP, fecha |
 
 ### 12.2 Enums (12 tipos en schema `agroia`)
 
 `clasificacionupra, estadodiscordancia, estadoficha, estadomembresia, estadorecomendacion, planmembresia, prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo`.
 
-### 12.3 Migraciones (001 → 018)
+### 12.3 Migraciones (001 → 019)
 
-- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` + índice `idx_ciclos_lote` · `017` inicio de ciclo: `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes` y en `historial_ciclos_lote` · `018` tabla `labores`.
+- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` + índice `idx_ciclos_lote` · `017` inicio de ciclo: `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes` y en `historial_ciclos_lote` · `018` tabla `labores` · `019` tabla `alertas_climaticas`.
 - **Auto-reparación al arranque**: `asegurar_enums()` crea tipos enum faltantes y `asegurar_reglas()` siembra reglas faltantes (idempotentes, corren en el `lifespan` de `main.py`).
 
 ### 12.4 Gotchas de Neon (lecciones aprendidas)

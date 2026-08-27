@@ -965,6 +965,7 @@ def _seccion_plano_lote(
     clima: dict | None = None,
     cultivo_nombre: str | None = None,
     historial_ciclos: list[dict] | None = None,
+    pronostico_extendido: list[dict] | None = None,
 ) -> str:
     """Plano del lote: dibujo de los puntos de muestreo (pos_x, pos_y).
 
@@ -1239,6 +1240,39 @@ def _seccion_plano_lote(
             + '</table></div></div>'
         )
 
+    # ── Pronóstico extendido (7 días) para la sección N ──
+    pronostico_html = ""
+    if pronostico_extendido:
+        filas_pron = []
+        for d in pronostico_extendido:
+            lluvia = d.get("precipitacion_mm")
+            tmin = d.get("temp_min_c")
+            tmax = d.get("temp_max_c")
+            aviso = ""
+            if lluvia is not None and float(lluvia) > 20:
+                aviso = ' <b>⚠️ lluvia fuerte</b>'
+            if tmin is not None and float(tmin) < 5:
+                aviso = ' <b>🥶 riesgo de helada</b>'
+            filas_pron.append(
+                "<tr>"
+                f"<td>{esc(d.get('fecha') or '')}</td>"
+                f"<td class='num'>{_num(lluvia, 1)} mm{aviso}</td>"
+                f"<td class='num'>{_num(tmin, 1)} °C</td>"
+                f"<td class='num'>{_num(tmax, 1)} °C</td>"
+                "</tr>"
+            )
+        pronostico_html = (
+            '<div class="clima-muestra">'
+            '<div class="heat-title">⛅ Pronóstico extendido (7 días)</div>'
+            '<div class="table-wrap"><table class="tabla-ciclos">'
+            '<tr><th>Fecha</th><th>Lluvia</th><th>T mín</th><th>T máx</th></tr>'
+            + "".join(filas_pron)
+            + '</table></div>'
+            '<p class="muted">Fuente: Open-Meteo. Lluvias > 20 mm/24h pueden ' 
+            'lavar fertilizantes; temperaturas < 5 °C en floración generan ' 
+            'alerta de helada.</p></div>'
+        )
+
     return f"""
   <section class="block plano-lote">
     <div class="block-head"><span class="block-num">N</span>
@@ -1251,6 +1285,7 @@ def _seccion_plano_lote(
     {svg}
     <div class="muted" style="margin-top:8px">📐 Metodología de muestreo: {metodologia}</div>
     {clima_html}
+    {pronostico_html}
     {manejo_html}
     {ciclos_html}
     {nota_cero}
@@ -1388,6 +1423,7 @@ def generar_reporte_html(
     historial_ciclos: list[dict] | None = None,
     prediccion_rendimiento: dict | None = None,
     advertencia_acumulacion: str | None = None,
+    pronostico_extendido: list[dict] | None = None,
 ) -> str:
     """Construye el documento HTML completo del reporte."""
     fecha = datetime.now(timezone.utc).astimezone().strftime("%d/%m/%Y %H:%M")
@@ -1411,7 +1447,9 @@ def generar_reporte_html(
         (uc2 or {}).get("cultivo") or (uc1 or {}).get("cultivo")
     )
     seccion_plano = _seccion_plano_lote(
-        muestras, finca, clima, cultivo_nombre, historial_ciclos=historial_ciclos
+        muestras, finca, clima, cultivo_nombre,
+        historial_ciclos=historial_ciclos,
+        pronostico_extendido=pronostico_extendido,
     )
 
     # Parámetros faltantes: aviso para un reporte con mayor detalle

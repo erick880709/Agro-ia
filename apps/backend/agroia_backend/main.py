@@ -21,6 +21,7 @@ from fastapi.staticfiles import StaticFiles
 # Estos imports garantizan que SQLAlchemy conozca todas las tablas al
 # resolver claves foráneas entre modelos (ej. dispositivos_iot → fincas).
 import agroia_backend.models.aceptacion_recomendacion  # noqa: F401
+import agroia_backend.models.alerta_climatica  # noqa: F401
 import agroia_backend.models.auditoria  # noqa: F401
 import agroia_backend.models.chat_memoria  # noqa: F401
 import agroia_backend.models.ciclo_lote  # noqa: F401
@@ -38,6 +39,7 @@ import agroia_backend.models.sensor_reading  # noqa: F401
 import agroia_backend.models.usuario  # noqa: F401
 
 from agroia_backend.api.auth import router as auth_router
+from agroia_backend.api.alertas import router as alertas_router
 from agroia_backend.api.auditoria import router as auditoria_router
 from agroia_backend.api.catalogo import router as catalogo_router
 from agroia_backend.api.chat import router as chat_router
@@ -78,7 +80,27 @@ async def lifespan(app: FastAPI):
         await asegurar_reglas()
     except Exception as e:  # noqa: BLE001 — no bloquear el arranque
         logger.error("asegurar_reglas_fallo", error=str(e))
+
+    # ── Servicio programado: alertas climáticas proactivas (cada 6 h) ──
+    import asyncio
+
+    from agroia.database import async_session_factory
+
+    async def _tarea_clima_periodica():
+        await asyncio.sleep(45)  # primer ciclo poco después del arranque
+        while True:
+            try:
+                from agroia_backend.services.clima_alertas import evaluar_todas_fincas
+
+                async with async_session_factory() as db:
+                    await evaluar_todas_fincas(db)
+            except Exception as e:  # noqa: BLE001 — el ciclo sigue vivo
+                logger.error("tarea_clima_error", error=str(e))
+            await asyncio.sleep(6 * 3600)  # cada 6 horas
+
+    clima_task = asyncio.create_task(_tarea_clima_periodica())
     yield
+    clima_task.cancel()
     logger.info("backend_stopping")
 
 
@@ -122,6 +144,7 @@ app.include_router(usuarios_router)
 app.include_router(location_router)
 app.include_router(fincas_router)
 app.include_router(auth_router)
+app.include_router(alertas_router)
 app.include_router(auditoria_router)
 app.include_router(ciclos_router)
 app.include_router(labores_router)

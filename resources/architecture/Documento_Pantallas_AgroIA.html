@@ -148,6 +148,12 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
     Pendientes/En Progreso con fecha programada ≤ hoy y botones <b>«✔️ Completar»</b>
     (registra fecha de ejecución y observación) y <b>«🚫 Cancelar»</b> — la trazabilidad
     llega al suelo.</li>
+    <li><b>⛅ Alertas climáticas proactivas</b>: sobre los KPIs aparecen banners de colores
+    cuando el servicio de pronóstico (cada 6 h, Open-Meteo) detecta riesgo:
+    <b>azul</b> «Aplace la aplicación de …, se pronostican X mm en 24h, riesgo de
+    lixiviación» (lluvia &gt; 20 mm + fertilización pendiente) y <b>rojo</b> «Riesgo de
+    helada … active el sistema de riego por aspersión» (T mín &lt; 5 °C en floración).
+    Si no hay alertas activas, la franja no aparece.</li>
   </ul>
   <p><b>Servicios que llama:</b> <code>GET /api/v1/dashboard/{finca_id}?modo=agricultor|experto</code>
   (modo agricultor: lenguaje coloquial con semáforo; modo experto: datos crudos + exportación csv/json/excel).</p>
@@ -352,7 +358,9 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
     <li><b>N · Plano del lote</b> — silueta, área/perímetro, pendiente, drenaje, metodología de muestreo,
     clima IDEAM del día de la muestra con alerta fitosanitaria específica e historial de manejo.
     Incluye la tabla <b>«📜 Historial de ciclos»</b> con los últimos 3 ciclos del lote
-    (Siembra → Aplicaciones destacadas → Cosecha → Rendimiento).</li>
+    (Siembra → Aplicaciones destacadas → Cosecha → Rendimiento) y el bloque
+    <b>«⛅ Pronóstico extendido (7 días)»</b> (fecha, lluvia, T mín/T máx) con avisos
+    ⚠️ lluvia fuerte (&gt; 20 mm/24h) y 🥶 riesgo de helada (&lt; 5 °C) por día.</li>
     <li><b>E · Análisis económico proyectado</b> — ganancia esperada si se aplica el plan (+15 %),
     ROI = (ganancia − costo fertilización) ÷ costo; si el ROI &lt; 1,2 muestra la alerta
     «⚠️ Inversión justa, considere subvenciones». Si se declaró el rendimiento actual, compara
@@ -440,7 +448,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.2 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.3 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

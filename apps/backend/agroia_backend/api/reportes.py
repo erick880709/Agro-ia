@@ -337,6 +337,15 @@ async def generar_reporte(
                 except Exception as e:  # noqa: BLE001
                     logger.warning("clima_ideam_no_disponible", error=str(e))
 
+    # ── Pronóstico extendido (7 días) para la sección N ──
+    pronostico_extendido = None
+    if finca.latitud is not None and finca.longitud is not None:
+        from agroia_backend.services.external_apis import fetch_pronostico_open_meteo
+
+        pronostico_extendido = await fetch_pronostico_open_meteo(
+            float(finca.latitud), float(finca.longitud), dias=7
+        )
+
     html = generar_reporte_html(
         finca={
             "nombre": finca.nombre,
@@ -393,6 +402,7 @@ async def generar_reporte(
         historial_ciclos=historial_ciclos,
         prediccion_rendimiento=prediccion_rendimiento,
         advertencia_acumulacion=advertencia_acumulacion,
+        pronostico_extendido=pronostico_extendido,
     )
 
     titulo = {

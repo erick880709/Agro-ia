@@ -4830,8 +4830,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1787864626.8255727,
-    "ast_hash": "910b30dd3a8e5538631036707e7adb64",
+    "mtime": 1787865205.9481926,
+    "ast_hash": "329834de834c28fc0b8ef2f4e5571e04",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {
@@ -4855,8 +4855,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Pantallas_AgroIA.html": {
-    "mtime": 1787864626.8298686,
-    "ast_hash": "e96cd96fae88fbc9a4b027b37a096821",
+    "mtime": 1787865205.951422,
+    "ast_hash": "8f9854621defd772a502128e4efaaa18",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/economia.py": {

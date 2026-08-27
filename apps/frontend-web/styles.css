@@ -829,3 +829,12 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
 }
 .labor-row:last-of-type { border-bottom: none; }
 .labor-info { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; font-size: 0.88rem; }
+/* ─────────────────────────── Alertas climáticas proactivas ─────────────────────────── */
+#dashboard-alertas { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.alerta-clima { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; border: 1px solid; }
+.alerta-clima-ico { font-size: 22px; line-height: 1.2; }
+.alerta-clima-titulo { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; opacity: .85; }
+.alerta-clima-msg { font-size: 14px; line-height: 1.45; margin-top: 2px; }
+.alerta-clima-msg b { font-weight: 700; }
+.alerta-lluvia_aplicacion { background: #eff6ff; border-color: #93c5fd; color: #1e40af; }
+.alerta-helada_floracion { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }

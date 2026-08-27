@@ -366,6 +366,53 @@ async def fetch_copernicus_ndvi(lat: float, lon: float) -> dict | None:
 
 
 # ═══════════════════════════════════════════════════════════════
+# Pronóstico extendido (Open-Meteo, sin API key) — alertas proactivas
+# ═══════════════════════════════════════════════════════════════
+
+TIMEOUT_PRONOSTICO = 12.0
+
+
+async def fetch_pronostico_open_meteo(lat: float, lon: float, dias: int = 7) -> list[dict] | None:
+    """Pronóstico diario (lluvia y temperaturas) para los próximos `dias` días.
+
+    Usa la API pública de Open-Meteo (sin clave). Si falla, devuelve None
+    para que el llamador degrade con gracia. Formato por día:
+    {fecha, precipitacion_mm, temp_min_c, temp_max_c}.
+    """
+    url = "https://api.open-meteo.com/v1/forecast"
+    params = {
+        "latitude": f"{lat:.4f}",
+        "longitude": f"{lon:.4f}",
+        "daily": "precipitation_sum,temperature_2m_min,temperature_2m_max",
+        "timezone": "America/Bogota",
+        "forecast_days": str(int(dias)),
+    }
+    try:
+        async with httpx.AsyncClient(timeout=TIMEOUT_PRONOSTICO) as client:
+            r = await client.get(url, params=params)
+            r.raise_for_status()
+            datos = r.json()
+        daily = datos.get("daily") or {}
+        fechas = daily.get("time") or []
+        lluvias = daily.get("precipitation_sum") or []
+        tmin = daily.get("temperature_2m_min") or []
+        tmax = daily.get("temperature_2m_max") or []
+        pronostico = [
+            {
+                "fecha": fechas[i],
+                "precipitacion_mm": float(lluvias[i]) if i < len(lluvias) and lluvias[i] is not None else 0.0,
+                "temp_min_c": float(tmin[i]) if i < len(tmin) and tmin[i] is not None else 20.0,
+                "temp_max_c": float(tmax[i]) if i < len(tmax) and tmax[i] is not None else 26.0,
+            }
+            for i in range(len(fechas))
+        ]
+        return pronostico or None
+    except Exception as e:  # noqa: BLE001 — graceful degradation
+        logger.warning("pronostico_no_disponible", error=str(e), lat=lat, lon=lon)
+        return None
+
+
+# ═══════════════════════════════════════════════════════════════
 # Servicio unificado
 # ═══════════════════════════════════════════════════════════════
 

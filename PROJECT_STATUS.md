@@ -222,6 +222,15 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - Auditoría `labor.generar/actualizar/completar/eliminar`. La PWA (punto 5) se conectará a estos endpoints con geolocalización y foto.
 - Validado local (API: 6 acciones → 6 labores con tipos correctos; completar registra fecha; auditoría) y UI (generar desde P5 y completar en P1) — pendiente validación en producción.
 
+### Alertas climáticas proactivas (pronóstico + fenología + labores, 2026-08-27)
+
+- **Fuente**: Open-Meteo Forecast (gratis, sin API key) para el pronóstico de 7 días; el diseño admite conmutar a IDEAM/NASA POWER (el servicio recibe pronóstico normalizado `[{fecha, precipitacion_mm, temp_min_c, temp_max_c}]`).
+- **Servicio programado** cada 6 h (tarea asyncio en el `lifespan`; primer ciclo a los 45 s) + `POST /api/v1/alertas-climaticas/evaluar` manual (Admin, con pronóstico inyectable para pruebas deterministas).
+- **Reglas**: (1) lluvia > 20 mm/24h en los próximos 3 días + labor de Fertilización pendiente → «Aplace la aplicación…, riesgo de lixiviación»; (2) T mín < 5 °C + etapa Floración + cultivo sensible → «Riesgo de helada, active riego por aspersión».
+- **Tabla `agroia.alertas_climaticas`** (migración 019): tipo/severidad/mensaje/fecha/pronóstico JSONB/activa; las alertas previas del mismo tipo se desactivan en cada evaluación.
+- **UI**: banner de colores en P1 (azul lluvia, rojo helada) vía `GET /fincas/{id}/alertas-climaticas/activas`; reporte sección N con «⛅ Pronóstico extendido (7 días)» y avisos de umbral.
+- Validado local: reglas con pronóstico inyectado (ambas alertas), camino real Open-Meteo sin fallas, banner en P1 — pendiente validación en producción.
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).
@@ -230,6 +239,7 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - `016_historial_ciclos_lote` — tabla `agroia.historial_ciclos_lote` + índice `idx_ciclos_lote` (ciclos productivos por lote).
 - `017_ciclo_inicio` — `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes`; `variedad`/`densidad_siembra_plantas_ha` en `historial_ciclos_lote`.
 - `018_labores` — tabla `agroia.labores` (órdenes de trabajo con estado, responsable y fechas).
+- `019_alertas_climaticas` — tabla `agroia.alertas_climaticas` (alertas meteorológicas proactivas con pronóstico JSONB).
 
 ### Límites del tier gratuito (validados 2026-08-25)
 
