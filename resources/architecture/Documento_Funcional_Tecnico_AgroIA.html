@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroIA · Documento Funcional-Técnico</title>
+<style>
+  :root {
+    --bg: #f6f8f4; --surface: #ffffff; --surface2: #eef4ec; --line: #dfe8dc;
+    --ink: #1f2a21; --muted: #6b7c66; --moss: #2e7d32; --moss-dark: #1b5e20;
+    --amber: #b45309; --serif: Georgia, 'Times New Roman', serif;
+    --mono: 'Consolas', 'Courier New', monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.6 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  header.portada { background: linear-gradient(135deg, #17381f 0%, #2e7d32 60%, #66a85b 100%);
+    color: #fff; padding: 52px 28px 40px; }
+  header.portada .brand { font-family: var(--serif); font-size: 2rem; font-weight: 700; }
+  header.portada .kicker { letter-spacing: .18em; text-transform: uppercase; font-size: .78rem; opacity: .85; }
+  header.portada h1 { margin: 14px 0 4px; font-size: 1.9rem; font-family: var(--serif); }
+  header.portada .meta { opacity: .85; font-size: .9rem; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 18px 80px; }
+  nav.toc { background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 18px 22px; margin-bottom: 26px; columns: 2; column-gap: 30px; font-size: .88rem; }
+  nav.toc a { color: var(--moss-dark); text-decoration: none; display: block; padding: 2px 0; }
+  nav.toc a:hover { text-decoration: underline; }
+  h2 { font-family: var(--serif); font-size: 1.45rem; color: var(--moss-dark);
+    border-bottom: 3px solid var(--moss); padding-bottom: 6px; margin: 44px 0 14px; }
+  h2 .num { color: var(--moss); margin-right: 10px; }
+  h3 { font-size: 1.1rem; color: #24512b; margin: 24px 0 8px; }
+  h4 { font-size: .98rem; color: #34583b; margin: 18px 0 6px; }
+  p { margin: 8px 0; }
+  ul, ol { margin: 8px 0; padding-left: 24px; }
+  li { margin: 3px 0; }
+  code { background: var(--surface2); border: 1px solid var(--line); border-radius: 5px;
+    padding: 1px 6px; font-family: var(--mono); font-size: .86em; color: #24492c; }
+  pre { background: #10251a; color: #d9ecd9; border-radius: 10px; padding: 14px 16px;
+    overflow-x: auto; font-family: var(--mono); font-size: .82rem; line-height: 1.5; }
+  pre code { background: none; border: none; color: inherit; padding: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; background: var(--surface);
+    border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: .88rem; }
+  th { background: #244d2c; color: #fff; text-align: left; padding: 8px 12px;
+    font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; }
+  td { padding: 8px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+  tr:nth-child(even) td { background: #f8fbf6; }
+  .nota { background: #fdf6e3; border-left: 4px solid #d9a20c; border-radius: 8px;
+    padding: 10px 14px; margin: 12px 0; font-size: .9rem; }
+  .alerta { background: #fdeceb; border-left: 4px solid #c0563f; border-radius: 8px;
+    padding: 10px 14px; margin: 12px 0; font-size: .9rem; }
+  .exito { background: #eaf6ec; border-left: 4px solid #2e7d32; border-radius: 8px;
+    padding: 10px 14px; margin: 12px 0; font-size: .9rem; }
+  .flujo { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 16px 0; }
+  .flujo .caja { background: var(--surface); border: 1.5px solid var(--moss); color: var(--moss-dark);
+    border-radius: 9px; padding: 8px 12px; font-size: .82rem; font-weight: 600; text-align: center; }
+  .flujo .flecha { color: var(--muted); font-size: 1.1rem; }
+  .flujo .sub { display: block; font-weight: 400; font-size: .72rem; color: var(--muted); margin-top: 2px; }
+  .dos-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 760px) { .dos-col { grid-template-columns: 1fr; } nav.toc { columns: 1; } }
+  footer { background: #17381f; color: #cfe3d2; text-align: center; padding: 22px; font-size: .85rem; }
+  @media print { header.portada { background: #17381f !important; -webkit-print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+
+<header class="portada">
+  <div class="brand">Agro<em>IA</em></div>
+  <div class="kicker">AgroInteligente Colombia · Documentación técnica</div>
+  <h1>Documento Funcional-Técnico</h1>
+  <div class="meta">Versión 1.0 · 2026-08-27 · Repositorio <code>erick880709/Agro-ia</code> (rama master) ·
+  Despliegue: Render + Neon (PostgreSQL 15)</div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <a href="#s1">1. Propósito del documento</a>
+  <a href="#s2">2. Visión general y stack tecnológico</a>
+  <a href="#s3">3. Arquitectura de componentes</a>
+  <a href="#s4">4. Autenticación y sesión</a>
+  <a href="#s5">5. El frontend SPA: navegación y utilidades</a>
+  <a href="#s6">6. Recorrido sección por sección</a>
+  <a href="#s7">7. Ingesta de datos IoT — POST /api/sensor</a>
+  <a href="#s8">8. El motor de recomendaciones</a>
+  <a href="#s9">9. Aceptación humana (human-in-the-loop)</a>
+  <a href="#s10">10. Modelo ML: entrenamiento y artefactos</a>
+  <a href="#s11">11. Reportes: anatomía del HTML</a>
+  <a href="#s12">12. Persistencia y base de datos</a>
+  <a href="#s13">13. Despliegue y CI/CD</a>
+  <a href="#s14">14. Seguridad y limitaciones</a>
+  <a href="#s15">15. Glosario</a>
+</nav>
+
+<h2 id="s1"><span class="num">1</span>Propósito del documento</h2>
+<p>Este documento describe, de lo más básico (el login) a lo más complejo (la invocación del modelo de
+recomendación y diagnóstico), <b>qué hace cada sección del aplicativo AgroIA, qué servicios llama, qué hace
+cada servicio y qué parámetros recibe el modelo</b>. Está pensado para:</p>
+<ul>
+  <li><b>Analizar la construcción del software</b>: capas, módulos y responsabilidades.</li>
+  <li><b>Entender las funcionalidades</b> de cara al negocio agronómico.</li>
+  <li><b>Auditar la trazabilidad</b> de las recomendaciones: qué datos entran al modelo, con qué reglas y con qué confianza.</li>
+</ul>
+
+<h2 id="s2"><span class="num">2</span>Visión general y stack tecnológico</h2>
+<p>AgroIA es un sistema de <b>agricultura de precisión para Colombia</b>: sensores IoT (ESP32) miden variables
+de suelo, y un <b>motor híbrido</b> (sistema experto de reglas agronómicas UPRA/Cenicafé/AGROSAVIA + modelos
+de Machine Learning en modo sombra) emite recomendaciones de cultivos, diagnósticos de fertilidad y planes de acción.</p>
+
+<table>
+  <tr><th>Capa</th><th>Tecnología</th><th>Ubicación</th></tr>
+  <tr><td>Frontend</td><td>SPA vanilla (HTML + CSS + JS, sin framework)</td><td><code>apps/frontend-web/</code></td></tr>
+  <tr><td>Backend</td><td>Python 3.11 · FastAPI · SQLAlchemy 2 (async/asyncpg)</td><td><code>apps/backend/agroia_backend/</code></td></tr>
+  <tr><td>Compartido</td><td>Config, base de datos, errores, logging</td><td><code>apps/shared/agroia/</code></td></tr>
+  <tr><td>ML</td><td>scikit-learn (RandomForest) · joblib · numpy</td><td><code>apps/ml/agroia_ml/</code></td></tr>
+  <tr><td>IoT</td><td>Consumidor de tramas y normalización</td><td><code>apps/iot/</code> + backend</td></tr>
+  <tr><td>Base de datos</td><td>PostgreSQL 15, schema <code>agroia</code> (local Docker :5434 · Neon)</td><td>—</td></tr>
+  <tr><td>Despliegue</td><td>Dockerfile → Render Web Service Free (auto-deploy)</td><td><code>apps/backend/Dockerfile</code>, <code>render.yaml</code></td></tr>
+  <tr><td>CI</td><td>GitHub Actions (ruff → pytest → build Docker)</td><td><code>.github/workflows/</code></td></tr>
+</table>
+
+<div class="nota"><b>Principio rector:</b> el <b>sistema experto (reglas) es la fuente de verdad</b>. El ML corre en
+<i>modo sombra</i>: predice en paralelo, se compara con las reglas para detectar discordancia y sus métricas se
+reportan, pero las recomendaciones publicadas salen del motor de reglas.</div>
+
+<h2 id="s3"><span class="num">3</span>Arquitectura de componentes</h2>
+<div class="flujo">
+  <div class="caja">Frontend SPA<span class="sub">login + 9 pestañas</span></div><span class="flecha">→</span>
+  <div class="caja">API FastAPI<span class="sub">14 routers /api/v1</span></div><span class="flecha">→</span>
+  <div class="caja">Orquestador<span class="sub">RecommendationOrchestrator</span></div><span class="flecha">→</span>
+  <div class="caja">Reglas + Aptitud<span class="sub">sistema experto (fuente de verdad)</span></div>
+</div>
+<div class="flujo">
+  <div class="caja">Sensores ESP32<span class="sub">POST /api/sensor</span></div><span class="flecha">→</span>
+  <div class="caja">Normalización IoT<span class="sub">MAPA_CAMPOS, µS/cm→dS/m</span></div><span class="flecha">→</span>
+  <div class="caja">PostgreSQL schema agroia<span class="sub">local :5434 · Neon</span></div><span class="flecha">←</span>
+  <div class="caja">Oráculo ML (sombra)<span class="sub">18 artefactos joblib + ml_meta.json</span></div>
+</div>
+
+<table>
+  <tr><th>Módulo del backend</th><th>Responsabilidad</th></tr>
+  <tr><td><code>main.py</code></td><td>Crea la app FastAPI, monta los 14 routers, sirve el frontend en <code>/</code>, y en el arranque (<code>lifespan</code>) ejecuta <code>asegurar_enums()</code> y <code>asegurar_reglas()</code>.</td></tr>
+  <tr><td><code>api/*.py</code></td><td>Endpoints HTTP: auth, sensor_api, iot, fincas, recomendaciones, reportes, ml, chat, dashboard, catalogo, usuarios, location, health.</td></tr>
+  <tr><td><code>services/orchestrator.py</code></td><td>Orquesta el pipeline completo de recomendación (datos → reglas → ML → discordancia → confianza → respuesta).</td></tr>
+  <tr><td><code>services/rules_engine.py</code></td><td>Sistema experto: evalúa reglas agronómicas contra los datos de suelo.</td></tr>
+  <tr><td><code>services/aptitud.py</code></td><td>UC1: puntúa todos los cultivos y los ordena por aptitud.</td></tr>
+  <tr><td><code>services/ml_oracle.py</code></td><td>Oráculo ML en modo sombra (carga artefactos y predice).</td></tr>
+  <tr><td><code>services/data_adapters.py</code></td><td>Adapter de datos de suelo + validación de rangos físicos.</td></tr>
+  <tr><td><code>services/reportes_html.py</code></td><td>Genera el documento HTML del reporte (mapa de calor, plano, clima…).</td></tr>
+  <tr><td><code>services/asegurar_enums.py</code> / <code>asegurar_reglas.py</code></td><td>Auto-reparación idempotente de tipos enum y reglas en la BD al arrancar.</td></tr>
+  <tr><td><code>services/acceso.py</code></td><td>Control de acceso a fincas por rol (MVP sin JWT).</td></tr>
+  <tr><td><code>services/normalizacion_iot.py</code></td><td>Normaliza tramas del firmware al esquema canónico.</td></tr>
+  <tr><td><code>services/puente_iot.py</code></td><td>Puente de import del consumidor IoT (portable dev/contenedor).</td></tr>
+  <tr><td><code>models/*.py</code></td><td>Modelos SQLAlchemy (15+ tablas).</td></tr>
+  <tr><td><code>alembic/versions/</code></td><td>Migraciones 001 → 010.</td></tr>
+</table>
+
+<h2 id="s4"><span class="num">4</span>Autenticación y sesión (lo más básico)</h2>
+<h3>4.1 Pantalla de login</h3>
+<p>El frontend muestra <code>login-screen</code> si no hay sesión guardada. Ofrece formulario
+<b>email + contraseña</b> y <b>cuentas demo de un clic</b>: 👑 Administrador, 🧑‍🌾 Agrónomo,
+👤 Cliente (María) y 🌱 Cliente (Finca Demo). Cada botón llama al mismo endpoint con credenciales
+predefinidas en <code>index.html</code>.</p>
+
+<h3>4.2 Servicio que se invoca — <code>POST /api/v1/auth/login</code></h3>
+<p>Archivo: <code>apps/backend/agroia_backend/api/auth.py</code></p>
+<pre><code>// Parámetros (body)
+{ "email": "correo@ejemplo.co", "password": "••••" }</code></pre>
+<p><b>Qué hace el servicio:</b></p>
+<ol>
+  <li>Normaliza el email a minúsculas.</li>
+  <li>Busca el usuario en <code>agroia.usuarios</code> por email.</li>
+  <li>Verifica la contraseña con <code>verify_password()</code> (<code>services/auth_utils.py</code>, hash bcrypt sobre <code>password_hash</code>). Credenciales inválidas → <code>401 CREDENCIALES_INVALIDAS</code>.</li>
+  <li>Verifica <code>usuario.activo</code> → si no, <code>403 USUARIO_INACTIVO</code>.</li>
+  <li>Devuelve los datos de sesión.</li>
+</ol>
+<pre><code>// Respuesta
+{ "id": "uuid", "nombre": "Administrador Demo", "email": "…", "rol": "Admin", "activo": true }</code></pre>
+<div class="nota">Nota MVP: no hay token JWT todavía. El rol viaja en cabeceras (ver 4.4). El endpoint está preparado
+para ser reemplazado por un Auth Service con OAuth2.</div>
+
+<h3>4.3 Sesión en el cliente</h3>
+<ul>
+  <li>La respuesta se guarda en <code>localStorage</code> bajo la clave <code>agroia_sesion</code>.</li>
+  <li>Al recargar, <code>init()</code> restaura la sesión y arranca sin volver a loguear.</li>
+  <li><code>cerrarSesion()</code> borra la clave y recarga.</li>
+</ul>
+
+<h3>4.4 Roles, permisos y cabeceras</h3>
+<table>
+  <tr><th>Cabecera</th><th>Cuándo</th><th>Propósito</th></tr>
+  <tr><td><code>X-User-Role</code></td><td>Siempre</td><td>Rol activo (<code>Admin</code>, <code>Agronomo</code>, <code>Cliente</code>, …)</td></tr>
+  <tr><td><code>X-User-Email</code></td><td>Solo rol Cliente</td><td>Identificar al cliente para filtrar sus fincas</td></tr>
+</table>
+<table>
+  <tr><th>Rol</th><th>Pestañas visibles</th><th>Fincas visibles</th><th>Escritura</th></tr>
+  <tr><td><b>Admin</b></td><td>Inicio, Sensores, Carga, Recomendaciones, Historial, Reportes, <b>Fincas</b>, <b>Usuarios</b>, Catálogo</td><td>Todas</td><td>Registrar/editar fincas, aceptar recomendaciones, cambiar roles, fichas</td></tr>
+  <tr><td><b>Agrónomo</b></td><td>Igual sin Fincas ni Usuarios</td><td>Todas</td><td>Aceptar recomendaciones, datos agronómicos de fincas</td></tr>
+  <tr><td><b>Cliente</b></td><td>Inicio, Sensores, Historial, Reportes, Catálogo</td><td>Solo las ligadas a su email</td><td><b>Solo lectura</b> (<code>exigir_no_cliente</code>)</td></tr>
+</table>
+<p><code>services/acceso.py</code> expone: <code>fincas_permitidas_ids()</code> (Admin/Agrónomo → todas),
+<code>verificar_acceso_finca()</code> (403 <code>FINCA_NO_AUTORIZADA</code>) y <code>exigir_no_cliente()</code>.</p>
+
+<h2 id="s5"><span class="num">5</span>El frontend SPA: navegación y utilidades</h2>
+<p><code>apps/frontend-web/app.js</code> es una SPA sin framework (~1.400 líneas).</p>
+<ul>
+  <li><b>Estado global (<code>state</code>):</b> <code>fincas, cultivos, dispositivos, fincaId, catalogo, usuarios, sesion, rol, tabActual, cargandoSensores, ultimoAnalisis</code> (resultado del último análisis, usado por el panel de aceptación).</li>
+  <li><b>Helper <code>api(path, opts)</code>:</b> envuelve <code>fetch('/api/v1' + path)</code>, inyecta las cabeceras de rol, parsea JSON y convierte errores <code>detail.message</code> en excepciones legibles para banners.</li>
+  <li><b>Navegación (<code>goTab</code>):</b> carga perezosa por pestaña: <code>historial</code>→<code>cargarHistorial()</code>, <code>sensores</code>→<code>cargarSensores()</code>, <code>inicio</code>→<code>cargarDashboard()</code>, <code>fincas</code>→<code>renderFincasList()</code> (admin), <code>usuarios</code>→<code>cargarUsuarios()</code> (admin).</li>
+</ul>
+
+<h2 id="s6"><span class="num">6</span>Recorrido sección por sección</h2>
+
+<h3>6.1 🏠 Inicio (Dashboard)</h3>
+<p><b>Qué hace el usuario:</b> ve el resumen de su finca: semáforo de aptitud, KPIs, alertas y últimas lecturas.</p>
+<p><b>Servicio:</b> <code>GET /api/v1/dashboard/{finca_id}?modo=agricultor|experto</code> (<code>api/dashboard.py</code>)</p>
+<p><b>Qué hace el servicio:</b> verifica acceso; llama a <code>dashboard_service.get_dashboard_data()</code>
+(última recomendación, KPIs de pH/N/P/K/CE, series, alertas —confianza &lt; 80 % genera alerta—) y formatea según modo:
+<code>agricultor</code> (lenguaje coloquial con semáforo 🟢🟡🟠🔴) o <code>experto</code> (datos crudos + export csv/json/excel).</p>
+<pre><code>// Respuesta (modo agricultor)
+{ "finca_id", "modo", "mensaje", "semaforo": { "clasificacion", "color", "confianza" }, "kpis": [], "alertas": [], "guia" }</code></pre>
+
+<h3>6.2 📡 Sensores IoT</h3>
+<p><b>Qué hace el usuario:</b> monitorea lecturas en tiempo real (auto-refresco 10 s con la pestaña activa) y el estado de los dispositivos.</p>
+<p><b>Servicios:</b></p>
+<ul>
+  <li><code>GET /api/v1/lecturas/{finca_id}?limite=10</code> — últimas lecturas de <code>sensor_readings</code> (pos_x/pos_y, calidad, 17 variables).</li>
+  <li><code>GET /api/v1/sensores/{finca_id}/status</code> — por sensor: última transmisión y estado (<code>online</code> &lt; 12 h, <code>datos_desactualizados</code> &lt; 24 h, <code>offline</code>).</li>
+</ul>
+<p>La UI pinta la tabla (nombre de finca + mini-ID copiable), indicador "actualizando…" y evita dobles peticiones.</p>
+
+<h3>6.3 📂 Cargar archivo</h3>
+<p><b>Qué hace el usuario:</b> sube mediciones (cuando el sensor perdió conexión) y obtiene recomendación al instante.</p>
+<p><b>Servicio:</b> <code>POST /api/v1/carga</code> (<code>api/iot.py</code>) — <code>multipart/form-data</code>:</p>
+<table>
+  <tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr>
+  <tr><td><code>file</code></td><td>archivo</td><td>CSV pares (<code>ph,7.1</code>), CSV ancho, TXT (<code>clave=valor</code>) o JSON (trama del firmware)</td></tr>
+  <tr><td><code>device_id</code></td><td>texto</td><td>Opcional</td></tr>
+  <tr><td><code>finca_id</code></td><td>UUID</td><td>Opcional (relación directa sin dispositivo)</td></tr>
+  <tr><td><code>cultivo_id</code></td><td>UUID</td><td>Opcional (activa UC2 al instante)</td></tr>
+</table>
+<p><b>Qué hace el servicio:</b> bloquea clientes → <code>decodificar_contenido</code> + <code>parsear_archivo_sensor</code>
+→ normaliza con <code>normalizar_trama</code> → persiste <code>SensorReading</code> (con <code>SET LOCAL search_path</code>)
+→ ejecuta el <b>orquestador</b> al instante (UC1/UC2) y guarda historial.</p>
+
+<h3>6.4 🧪 Recomendaciones (la sección central)</h3>
+<p><b>Qué hace el usuario:</b> elige finca y (opcionalmente) cultivo, y pulsa «Analizar suelo».</p>
+<p><b>Servicio:</b> <code>POST /api/v1/recomendaciones/analyze</code></p>
+<pre><code>// Parámetros (body)
+{ "finca_id": "uuid", "cultivo_id": "uuid | null" }
+// cultivo_id null → UC1 (¿qué sembrar?) · presente → UC2 (diagnóstico del cultivo)</code></pre>
+<pre><code>// Respuesta (resumida)
+{
+  "cultivo": "Aguacate",
+  "clasificacion_upra": "Moderadamente apta (sujeta a confirmación de textura)",
+  "confianza": 0.571, "confianza_real": 0.55,
+  "estado_validacion": "sujeta a confirmación de textura",
+  "respaldos": 1, "variables_faltantes_fertilidad": ["calcio", "…"],
+  "recomendaciones": [{
+    "variable": "pH", "estado": "DEFICIT", "valor_actual": 4.9, "rango_ideal": "[5.5 - 6.5]",
+    "accion": "…", "prioridad": "Alta", "fuente": "Cenicafé",
+    "confiabilidad": "Sin validar", "condicional": true,
+    "contexto": "pH 4.9 — ácido en escala general, pero fuera del rango óptimo para Aguacate [5.5–6.5]",
+    "plan": { "fuente": "Cal dolomítica…", "frecuencia": "…", "dosis": "Dosis a definir por técnico agrónomo…" }
+  }],
+  "sugerencias_cultivos": [{ "cultivo_id", "cultivo", "icono", "score", "confianza",
+    "clasificacion", "reglas_especificas", "ajustes": [] }],
+  "justificacion": { "resumen", "variables_analizadas", "reglas_aplicadas",
+    "faltantes", "excesos", "confianza", "confianza_real", "respaldos_expertos" },
+  "advertencia": "…", "discordancia": null, "tiempo_respuesta_ms": 1613, "modo": "analizar_cultivo"
+}</code></pre>
+<p><b>Qué hace la UI (<code>renderAnalisis</code>):</b> cabecera con cultivo, badge de clasificación +
+badge de estado de validación, barra de confianza (final y real) y respaldos; avisos de fenología, fertilidad
+faltante, advertencia y discordancia; tabla de diagnóstico con Acción (marcador <i>condicional a confirmación
+de laboratorio</i> + contexto pH), Prioridad, <b>Confiabilidad</b> y <b>Plan sugerido</b>; ranking
+«🌾 Cultivos sugeridos (ranking del motor)» con columna de <b>descripción de reglas aplicadas</b>; y al final,
+para Admin/Agrónomo, el <b>panel de aceptación</b> con caja de texto (sección 9).</p>
+
+<h3>6.5 📜 Historial</h3>
+<p><b>Servicio:</b> <code>GET /api/v1/recomendaciones/historial/{finca_id}?page=&amp;page_size=&amp;cultivo_id=</code>
+— paginación sobre <code>agroia.recomendaciones</code> (fecha, cultivo, clasificación, confianza, estado).</p>
+
+<h3>6.6 📄 Reportes</h3>
+<p><b>Servicio:</b> <code>POST /api/v1/reportes/generar</code> con body
+<code>{ "finca_id", "tipo": "siembra|cultivo|completo", "cultivo_id" }</code>.</p>
+<p><b>Qué hace (<code>api/reportes.py</code>):</b> verifica acceso y lecturas (<code>SIN_LECTURAS</code>) →
+ejecuta UC1 y/o UC2 con el orquestador → <code>_muestras_geo</code> (lecturas con pos_x/pos_y) →
+resuelve <b>clima IDEAM</b> del día de la muestra desde las coordenadas de la finca →
+<code>generar_reporte_html()</code> (sección 11) → devuelve <code>{titulo, tipo, html}</code>.
+La UI muestra el HTML y ofrece PDF por impresión (<code>@media print</code>).</p>
+
+<h3>6.7 🏡 Fincas (solo Admin)</h3>
+<table>
+  <tr><th>Endpoint</th><th>Qué hace</th></tr>
+  <tr><td><code>GET /api/v1/fincas?search=</code></td><td>Listado (Admin/Agrónomo todas; cliente las suyas)</td></tr>
+  <tr><td><code>POST /api/v1/fincas</code></td><td>Registro (solo Admin): datos generales + coordenadas Google (extrae lat/lng) + campos agronómicos</td></tr>
+  <tr><td><code>PATCH /api/v1/fincas/{id}</code></td><td>Datos agronómicos (Admin/Agrónomo): pendiente, drenaje, historial, validación lab, cultivo sembrado, edad, etapa fenológica</td></tr>
+</table>
+<p>La UI muestra tarjetas con ID copiable (para configurar el firmware) y formulario de alta.</p>
+
+<h3>6.8 👥 Usuarios (solo Admin)</h3>
+<p><code>GET /api/v1/usuarios</code> · <code>POST /api/v1/usuarios</code> ·
+<code>PUT /api/v1/admin/usuarios/{id}/rol</code> · perfil propio en <code>/usuarios/me</code>.</p>
+
+<h3>6.9 🌾 Catálogo</h3>
+<p><code>GET /api/v1/cultivos</code> (30 cultivos activos con icono) · <code>GET/POST /cultivos/{id}</code> ·
+<code>GET/POST/PUT /fichas/…</code> · flujo editorial
+<code>POST /fichas/{id}/enviar-revision | aprobar | rechazar</code>.</p>
+
+<h3>6.10 💬 Chat asesor</h3>
+<p><b>Servicio:</b> <code>POST /api/v1/chat/consultar</code></p>
+<pre><code>// Parámetros (body)
+{ "finca_id": "uuid", "mensaje": "¿Cuánto fertilizante aplico?",
+  "cultivo_id": "uuid | null", "historial": [ { "rol": "user|assistant", "contenido": "…" } ] }</code></pre>
+<p><b>Qué hace (<code>api/chat.py</code> + <code>agronomo_chat.py</code> + <code>agronomo_kb.py</code>):</b>
+verifica acceso, carga la última lectura, ejecuta el orquestador para tener contexto real, enruta la pregunta a la
+base de conocimiento (cal/fertilización/riego, clima por época, diagnóstico diferencial, "por qué este cultivo") y:
+si <code>OPENAI_API_KEY</code> está configurada usa LLM; si no, responde el <b>motor local determinista</b> con
+respuesta fundamentada (fuentes, confianza, datos utilizados, qué falta). Guarda memoria en <code>chat_memoria</code>
+(<code>GET /chat/memoria/{finca_id}</code>).</p>
+
+<h2 id="s7"><span class="num">7</span>Ingesta de datos IoT — <code>POST /api/sensor</code></h2>
+<p>Doble ruta: <code>api/sensor_api.py</code> (formato firmware, <b>la que usan los sensores</b>) y
+<code>api/iot.py::/sensor</code> (trama canónica).</p>
+<h3>7.1 Formato real de la trama del firmware</h3>
+<pre><code>{
+  "device_id": "esp32-npk-001",
+  "humidity": 0.0, "temperature": 26.8, "conductivity": 0.0,
+  "ph": 8.6, "nitrogen": 0.0, "phosphorus": 0.0, "potassium": 0.0,
+  "rssi": -41, "uptime_s": 64
+}</code></pre>
+<p>Opcionales: <code>finca_id</code>, <code>pos_x/pos_y</code> (muestreo en cuadrícula) y cualquier variable de suelo del <code>MAPA_CAMPOS</code>.</p>
+<h3>7.2 Procesamiento (paso a paso)</h3>
+<ol>
+  <li><b>Normalización</b> (<code>normalizacion_iot.py</code>): <code>MAPA_CAMPOS</code> traduce nombres del firmware al
+  esquema canónico: <code>nitrogen→nitrogeno</code>, <code>phosphorus→fosforo</code>, <code>potassium→potasio</code>,
+  <code>humidity→humedad_ambiental</code> (DHT22), <code>soil_humidity→humedad</code> (suelo),
+  <code>conductivity→conductividad_electrica</code> <b>convirtiendo µS/cm → dS/m (×10⁻³)</b>. Si vienen N/P/K →
+  advertencia <code>npk_sin_calibrar</code>.</li>
+  <li><b>Resolución de finca</b>: <code>finca_id</code> de la trama → finca del <code>device_id</code> → auto-registro
+  a la primera finca. <code>finca_id</code> inexistente → <code>422 FINCA_NOT_FOUND</code>; cambio de finca → reasocia.</li>
+  <li><b>Persistencia</b> (<code>puente_iot → consumer.process_sensor_message</code>): inserta <code>SensorReading</code>
+  ejecutando antes <code>SET LOCAL search_path TO public, agroia</code>; actualiza telemetría del <code>DispositivoIoT</code>.</li>
+  <li><b>Respuesta 202</b>: <code>{status, device_id, finca_id, auto_registrado, variables_recibidas[], advertencias[], recibida_en}</code>.</li>
+</ol>
+
+<h2 id="s8"><span class="num">8</span>El motor de recomendaciones (corazón del sistema)</h2>
+<p><code>services/orchestrator.py::RecommendationOrchestrator.analyze(request)</code> — ejecutado por
+<code>/recomendaciones/analyze</code>, <code>/reportes/generar</code>, <code>/chat/consultar</code> y <code>/carga</code>.</p>
+
+<h3>8.1 Pipeline completo (numerado)</h3>
+<div class="flujo">
+  <div class="caja">1. SueloAdapter<span class="sub">última lectura → SoilData validado</span></div><span class="flecha">→</span>
+  <div class="caja">2. Contexto finca<span class="sub">lab, fenología, respaldos</span></div><span class="flecha">→</span>
+  <div class="caja">3. UC1 / UC2<span class="sub">AptitudService o RulesEngine</span></div><span class="flecha">→</span>
+  <div class="caja">4. ML sombra<span class="sub">predict + discordancia</span></div><span class="flecha">→</span>
+  <div class="caja">5. Confianza real<span class="sub">+ estado de validación</span></div><span class="flecha">→</span>
+  <div class="caja">6. Respuesta<span class="sub">recomendaciones + plan + contexto</span></div>
+</div>
+
+<h3>8.2 Paso 1 — SueloAdapter y validación (<code>data_adapters.py</code>)</h3>
+<ul>
+  <li><code>SueloAdapter.get_latest(finca_id)</code> convierte la última <code>SensorReading</code> en
+  <code>SoilData</code> (18 variables: ph, nitrogeno, fosforo, potasio, calcio, magnesio, azufre, hierro,
+  manganeso, zinc, cobre, boro, materia_organica, cic, textura, humedad, temperatura_suelo,
+  conductividad_electrica).</li>
+  <li><code>validate_soil_reading</code>: rangos físicos (<code>SOIL_RANGES</code>) → fuera de rango marca
+  <code>calidad="out_of_range"</code>; clasifica faltantes: <b>bloqueantes</b> (<code>ph</code>,
+  <code>conductividad_electrica</code> → <code>422 INSUFFICIENT_DATA</code>) y <b>no bloqueantes</b>
+  (advertencia de "recomendación parcial").</li>
+  <li><code>to_dict()</code> devuelve solo variables presentes.</li>
+</ul>
+
+<h3>8.3 Paso 2 — Sistema experto: RulesEngine (<code>rules_engine.py</code>)</h3>
+<ul>
+  <li>Carga de <code>agroia.reglas_agronomicas</code> las reglas <b>específicas del cultivo</b> + las
+  <b>universales</b> (<code>cultivo_id IS NULL</code>). Hoy: <b>54 reglas activas, 17 variables,
+  10 cultivos con reglas específicas</b> + 8 universales de Ca/Mg/S/Fe/Mn/Zn/Cu/B.</li>
+  <li>Cada regla: <code>variable, umbral_min, umbral_max, accion, prioridad (Critica/Alta/Media/Baja),
+  fuente (UPRA/Cenicafé/AGROSAVIA)</code>.</li>
+  <li>Compara la lectura contra umbrales → <code>RuleViolation</code> (DEFICIT si &lt; min, EXCESO si &gt; max).</li>
+  <li>Resultado: <code>RulesResult{status: OK|WARNING|FORBIDDEN, violations[], warnings[], applied_rules, total_rules}</code>.</li>
+</ul>
+
+<h3>8.4 UC1 — AptitudService (<code>aptitud.py</code>)</h3>
+<table>
+  <tr><th>Concepto</th><th>Fórmula</th></tr>
+  <tr><td>Penalización</td><td>Σ pesos por violación: Critica=30, Alta=20, Media=10, Baja=5</td></tr>
+  <tr><td>Score</td><td><code>max(0, 100 − min(penalización, 100))</code></td></tr>
+  <tr><td>Clasificación UPRA</td><td>≥80 Apta · ≥60 Moderadamente apta · ≥40 Marginalmente apta · &lt;40 No apta</td></tr>
+  <tr><td>Confianza base</td><td><code>min(0.99, max(0.05, (100−penalización)/100 × (0.75 + 0.25 × cobertura)))</code></td></tr>
+</table>
+<p>Devuelve los top 5 con <code>ajustes</code> (hasta 5 por cultivo): variable, estado, rango, acción, prioridad, fuente.</p>
+
+<h3>8.5 Paso 3 — ML en modo sombra: qué parámetros se envían al modelo</h3>
+<p><code>services/ml_oracle.py::MLOracleService.predict(soil_dict, cultivo_id)</code></p>
+<table>
+  <tr><th>Parámetro</th><th>Qué es</th><th>Valores</th></tr>
+  <tr><td><code>soil_dict</code></td><td>Diccionario con las variables medidas (claves canónicas)</td><td>Solo claves presentes, p. ej. <code>{ph: 4.9, nitrogeno: 85, …}</code></td></tr>
+  <tr><td><code>cultivo_id</code></td><td>UUID del cultivo (UC2) o <code>None</code></td><td>Se reduce a <code>idx = 0 si None else hash(uuid) % 5</code></td></tr>
+</table>
+<p><b>Transformación a features (<code>_features</code>):</b></p>
+<ul>
+  <li>Matriz <code>X</code> de <b>18 columnas</b> = 17 variables canónicas (<code>ph … conductividad_electrica</code>)
+  <b>+ 1 columna <code>cultivo_idx</code></b>.</li>
+  <li><b>Imputación de faltantes</b>: variables ausentes se rellenan con la <b>mediana por variable</b> calculada
+  en entrenamiento y guardada en <code>ml_meta.json</code> (fallback −1). Permite predecir con datos incompletos
+  (los sensores reales envían ~7 variables).</li>
+</ul>
+<p><b>Modelos cargados (lazy, 18 artefactos <code>ml_*.joblib</code>):</b> <code>ml_aptitud</code> (clasificador UPRA)
++ <code>ml_diagnostico_*</code> (17, uno por variable → DEFICIT/OK/EXCESO).</p>
+<pre><code>// Respuesta del oráculo
+{ "disponible": true, "cultivo": "No apta", "clasificacion": "No apta",
+  "diagnostico": { "ph": {"estado": "DEFICIT", "confianza": 0.98} },
+  "confianza": 0.776, "confianza_aptitud": 0.81 }</code></pre>
+<div class="nota">Si no hay artefactos o falta numpy, devuelve <code>None</code> y el sistema opera solo con reglas.</div>
+
+<h3>8.6 Paso 4 — Discordancia ML vs reglas</h3>
+<p>Si el ML predice bloqueo y las reglas también, se registra
+<code>discordancia {tipo: ml_vs_reglas, cultivo_ml, confianza_ml, regla_bloqueante, sla_vencimiento: +10 días}</code>.
+No altera la recomendación publicada (las reglas mandan).</p>
+
+<h3>8.7 Paso 5 — Confianza real y estado de validación</h3>
+<p><b>Confianza base (UC2):</b> <code>max(0.05, min(0.99, 1 − (n_violaciones×0.20 + n_warnings×0.05)))</code></p>
+<table>
+  <tr><th>Factor</th><th>Fórmula</th></tr>
+  <tr><td>Fertilidad faltante</td><td><code>max(0.6, 1 − 0.04 × n_faltantes)</code> sobre MO, CIC, Ca, Mg, S, Fe, Mn, Zn, Cu, B</td></tr>
+  <tr><td>Sensor NPK sin calibrar</td><td><code>× 0.9</code></td></tr>
+  <tr><td>Respaldo humano</td><td><code>+ min(0.10, 0.02 × aceptaciones)</code> (máx +0.10)</td></tr>
+</table>
+<p><code>confianza_real = base × factor_fertilidad × factor_sensor</code> ·
+<code>confianza_final = min(0.99, confianza_real + respaldo)</code>.</p>
+<p><b>Estado de validación (umbral duro):</b></p>
+<ol>
+  <li>Cultivo sensible a drenaje (aguacate, cacao, cítricos, palma) <b>sin textura</b> → <code>sujeta a confirmación de textura</code>.</li>
+  <li><code>confianza_final &lt; 0.80</code> → <code>pendiente_validacion</code> (se muestra <b>"Pendiente de validación técnica"</b>, nunca "Apta" a secas).</li>
+  <li>Fertilidad faltante → <code>preliminar</code> ("Apta (preliminar)").</li>
+  <li>Si no → <code>validada</code>.</li>
+</ol>
+
+<h3>8.8 Paso 6 — Enriquecimiento de cada recomendación (UC2)</h3>
+<ul>
+  <li><b>Confiabilidad</b>: <code>Validado en laboratorio</code> (finca con <code>validacion_laboratorio=true</code>) ·
+  <code>Calibrado de fábrica</code> (pH/CE) · <code>Sin validar</code> (N/P/K de sensor).</li>
+  <li><b>Condicional</b>: acciones sobre N/P/K sin validar → <i>"condicional a confirmación de laboratorio"</i>.</li>
+  <li><b>Contexto pH</b>: "pH 4.9 — ácido en escala general, pero fuera del rango óptimo para Aguacate [5.5–6.5]"
+  (rango de pH del cultivo; se filtra en Python para no emitir casts de enum frágiles).</li>
+  <li><b>Plan ejecutable</b>: fuente + frecuencia por variable (<code>PLAN_FERTILIZACION</code>: urea/DAP/KCl/cal dolomítica…);
+  dosis = "Dosis a definir por técnico agrónomo tras análisis de laboratorio" salvo validación lab.</li>
+  <li><b>Fenología</b>: cultivo sembrado/edad/etapa → ajuste por etapa (vegetativa→N; floración→P y B; fructificación→K y Ca; cosecha→carencias).</li>
+</ul>
+
+<h2 id="s9"><span class="num">9</span>Aceptación humana de recomendaciones (human-in-the-loop)</h2>
+<p><b>Servicio:</b> <code>POST /api/v1/recomendaciones/aceptar</code> (solo Admin/Agrónomo).</p>
+<pre><code>// Parámetros (body)
+{ "finca_id": "uuid", "cultivo_id": "uuid | null",
+  "comentario": "Aplicar encalado en el primer trimestre…",
+  "resumen": { "cultivo": "Aguacate", "clasificacion": "…", "confianza": 0.57, "recomendaciones": [] },
+  "clasificacion_previa": "…", "confianza_previa": 0.57 }</code></pre>
+<p><b>Qué hace:</b> inserta en <code>agroia.aceptaciones_recomendacion</code> y devuelve
+<code>{status, total_aceptaciones_finca, total_aceptaciones_cultivo, refuerzo_confianza, mensaje}</code>.
+<b>Efecto en el modelo:</b> cada aceptación suma <b>+0.02 de confianza</b> al análisis de esa finca/cultivo
+(máx +0.10). El análisis siguiente muestra <code>respaldos: N</code>; <code>/ml/estado</code> expone
+<code>validaciones_humanas</code>; el comentario queda como feedback para futuros reentrenamientos.</p>
+
+<h2 id="s10"><span class="num">10</span>El modelo de Machine Learning: entrenamiento y artefactos</h2>
+<p><code>apps/ml/agroia_ml/train_colombia.py</code> (ejecutar con <code>python -m agroia_ml.train_colombia --registrar</code>).</p>
+<h3>10.1 Datos y etiquetado</h3>
+<ul>
+  <li><b>75 000 perfiles sintéticos</b> (2 500 × 30 cultivos) con distribuciones agronómicas plausibles (<code>RANGOS</code>).</li>
+  <li><b>Etiquetas del propio sistema experto</b> (<code>etiquetar()</code>): estado por variable (DEFICIT/OK/EXCESO) + aptitud.</li>
+  <li><b>Imputación por medianas</b> (guardadas en <code>ml_meta.json.medianas</code>) y <b>máscara del 35 %</b> de muestras
+  (30–60 % de variables borradas) para aprender con datos incompletos como los de los sensores reales.</li>
+</ul>
+<h3>10.2 Modelos y métricas</h3>
+<table>
+  <tr><th>Modelo</th><th>Configuración</th><th>Resultado</th></tr>
+  <tr><td>17 RandomForest de diagnóstico</td><td><code>n_estimators=120, max_depth=12</code>, holdout 80/20 estratificado</td><td>F1 0.82–0.99</td></tr>
+  <tr><td>1 RandomForest de aptitud (<code>ml_aptitud</code>)</td><td>Ídem + CV 5-fold</td><td>F1 0.9111 · CV 0.756 ± 0.201</td></tr>
+  <tr><td>Concordancia en datos reales</td><td>Últimas lecturas etiquetadas por el sistema experto</td><td>Media ≈ 0.66 (&lt; 0.85)</td></tr>
+</table>
+<h3>10.3 Artefactos y promoción</h3>
+<ul>
+  <li>Artefactos: <code>apps/ml/models/ml_*.joblib</code> (18) + <code>ml_meta.json</code>.</li>
+  <li>Registro en BD: <code>modelos_ml</code> + <code>metricas_modelo</code> (stage STAGING por defecto).</li>
+  <li><b>Promoción a PRODUCTION solo si concordancia real media ≥ 0.85</b>; si no, queda en STAGING de forma honesta.</li>
+</ul>
+<h3>10.4 Oráculo en producción</h3>
+<p><code>MLOracleService</code> carga artefactos perezosamente, imputa con las mismas medianas de
+<code>ml_meta.json</code> y se invoca en cada análisis (8.5). <code>GET /api/v1/ml/estado</code> expone modelos,
+métricas, <code>artefactos_meta</code>, <code>n_artefactos</code>, <code>oraculo_ml_disponible</code> y
+<code>validaciones_humanas</code>.</p>
+
+<h2 id="s11"><span class="num">11</span>Reportes: anatomía del HTML generado</h2>
+<p><code>services/reportes_html.py::generar_reporte_html()</code> produce un HTML autocontenido (CSS de pantalla +
+<code>@media print</code> para PDF). Secciones:</p>
+<table>
+  <tr><th>#</th><th>Sección</th><th>Contenido</th></tr>
+  <tr><td>T</td><td>Telemetría</td><td>Dispositivo, finca, última transmisión, RSSI, uptime, <b>Calidad NPK en 3 niveles</b>, validación lab, pH, CE, N, P, K, HR/T ambiente</td></tr>
+  <tr><td>pH</td><td>Escala</td><td>Barra de pH con marcador y etiqueta ácido/neutro/alcalino</td></tr>
+  <tr><td>01</td><td>Diagnóstico UC2</td><td>Badge de clasificación + <b>estado de validación</b>, tabla con Acción, Prioridad, <b>Confiabilidad</b> y <b>Plan sugerido</b>, contexto pH, condicional NPK, respaldos, fenología</td></tr>
+  <tr><td>02</td><td>Recomendación UC1</td><td>Ranking top 5 con scorebar, badge de estado, confianza real y faltantes de fertilidad</td></tr>
+  <tr><td>M</td><td>Mapa de calor</td><td>Matriz de puntos <code>pos_x/pos_y</code> por variable, rampa <code>#e8f5e9→#1b5e20</code> normalizada por parámetro; en PDF se imprimen <b>todas</b> las variables</td></tr>
+  <tr><td>N</td><td>Plano del lote</td><td>SVG con puntos, cierre convexo, <b>perímetro/área</b>, pendiente y drenaje, metodología de muestreo, clima IDEAM con <b>alerta fitosanitaria específica</b> (HR &gt; 78 %) e historial de manejo</td></tr>
+  <tr><td>04</td><td>Advertencias</td><td>Calidad de datos y limitaciones (NPK sin validar, faltantes, textura)</td></tr>
+  <tr><td>05</td><td>Próximos pasos</td><td>Plan de acción (completar fertilidad, umbral del 80 %)</td></tr>
+</table>
+<div class="exito"><b>Las 12 mejoras de calidad del reporte</b> (resumen): 1) NPK en 3 niveles sin "Calibrado" a secas ·
+2) pH contextualizado por cultivo · 3) acciones condicionales por confiabilidad del sensor · 4) faltantes de fertilidad
+bajan confianza y marcan "preliminar" · 5) textura obligatoria para cultivos sensibles · 6) pendiente/drenaje en el plano ·
+7) historial de manejo · 8) plan ejecutable con fuente/frecuencia/dosis · 9) fenología · 10) alerta fitosanitaria cruzada
+con clima · 11) metodología de muestreo del mapa de calor · 12) umbral duro &lt; 80 % → "Pendiente de validación técnica".</div>
+
+<h2 id="s12"><span class="num">12</span>Persistencia y base de datos</h2>
+<ul>
+  <li><b>Servidor:</b> PostgreSQL 15. Local: Docker <code>agroia-postgres</code> puerto <b>5434</b> (user/db <code>agroia</code>).
+  Producción: <b>Neon</b> (SSL obligatorio; <code>?sslmode=require</code> → normalizado a <code>?ssl=require</code> por
+  <code>database.py::normalize_asyncpg_url</code>).</li>
+  <li><b>Schema:</b> todo vive en <code>agroia</code>.</li>
+</ul>
+<h3>12.1 Tablas principales</h3>
+<table>
+  <tr><th>Tabla</th><th>Uso</th></tr>
+  <tr><td><code>usuarios</code></td><td>Cuentas (rol enum, password_hash, activo, membresía)</td></tr>
+  <tr><td><code>fincas</code></td><td>Predios (+ coordenadas, área, pendiente, drenaje, historial JSONB, validación lab, cultivo sembrado/edad/etapa)</td></tr>
+  <tr><td><code>dispositivos_iot</code></td><td>Sensores registrados (device_id, telemetría, npk_calibrado)</td></tr>
+  <tr><td><code>sensor_readings</code></td><td>Cada medición (17 variables + pos_x/pos_y + textura + calidad)</td></tr>
+  <tr><td><code>cultivos</code></td><td>Catálogo (30 activos, icono, nombre científico)</td></tr>
+  <tr><td><code>fichas_tecnicas</code></td><td>Fichas agronómicas con flujo editorial</td></tr>
+  <tr><td><code>reglas_agronomicas</code></td><td>Sistema experto (54 activas; <code>cultivo_id NULL</code> = universal)</td></tr>
+  <tr><td><code>recomendaciones</code></td><td>Historial de análisis persistidos</td></tr>
+  <tr><td><code>discordancias</code></td><td>Registro de discordancia ML vs reglas (SLA)</td></tr>
+  <tr><td><code>modelos_ml</code> / <code>metricas_modelo</code></td><td>Registro de entrenamientos y métricas (stage)</td></tr>
+  <tr><td><code>chat_memoria</code></td><td>Memoria conversacional del chat por finca</td></tr>
+  <tr><td><code>aceptaciones_recomendacion</code></td><td>Feedback humano (rol, comentario, resumen, confianza previa)</td></tr>
+</table>
+<h3>12.2 Enums (12 tipos en schema <code>agroia</code>)</h3>
+<p><code>clasificacionupra, estadodiscordancia, estadoficha, estadomembresia, estadorecomendacion, planmembresia,
+prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo</code>.</p>
+<h3>12.3 Migraciones (001 → 010)</h3>
+<p><code>001–003</code> tablas base y dispositivos · <code>004/005</code> creación y corrección de enums ·
+<code>006</code> posiciones de muestreo · <code>007</code> chat_memoria · <code>008/009</code> auto-reparación de enums ·
+<code>010</code> campos agronómicos de finca + aceptaciones. Además, <b>auto-reparación al arranque</b>:
+<code>asegurar_enums()</code> crea tipos faltantes y <code>asegurar_reglas()</code> siembra reglas faltantes.</p>
+<h3>12.4 Gotchas de Neon (lecciones aprendidas)</h3>
+<ul>
+  <li>asyncpg no acepta <code>sslmode</code> (usar <code>ssl=require</code>).</li>
+  <li><code>search_path</code> sin <code>agroia</code> → los <b>casts de enum</b> (<code>$2::variablesuelo</code>) fallan intermitentemente.
+  Defensas: <code>server_settings={"search_path": "public, agroia"}</code> en el engine, <code>SET LOCAL</code> antes de
+  INSERTs con enum, y <b>evitar filtrar por columnas enum en SQL</b> (filtrar en Python).</li>
+</ul>
+
+<h2 id="s13"><span class="num">13</span>Despliegue y CI/CD</h2>
+<ul>
+  <li><b>Dockerfile</b> (<code>apps/backend/</code>): instala con Poetry, <code>PYTHONPATH</code> incluye
+  <code>/app/apps/iot</code>; en <code>CMD</code> ejecuta <b><code>alembic upgrade head</code> y luego uvicorn en <code>$PORT</code></b>.</li>
+  <li><b>Render (Free):</b> web service <code>agroia-backend</code>, auto-deploy en cada push a <code>master</code>;
+  se duerme por inactividad (cold start ~1 min). Health check <code>/api/v1/health</code>.</li>
+  <li><b>Neon:</b> Postgres Free con SSL.</li>
+  <li><b>CI (GitHub Actions):</b> <code>ruff</code> (lint) → <code>pytest</code> (migraciones + tests) → build Docker.</li>
+  <li><b>Frontend:</b> servido por el mismo backend en <code>/</code> (StaticFiles).</li>
+</ul>
+
+<h2 id="s14"><span class="num">14</span>Seguridad y limitaciones conocidas</h2>
+<ul>
+  <li><b>Autenticación MVP:</b> sin JWT; el rol viaja en cabeceras confiadas (<code>X-User-Role</code>). Pendiente: Auth Service.</li>
+  <li><b>ML en sombra:</b> no decide; la fuente de verdad son las reglas. Promoción a PRODUCTION exige concordancia ≥ 0.85.</li>
+  <li><b>Sensor NPK sin calibrar:</b> N/P/K llegan como 0 (sensor real) y se tratan como no confiables hasta validación de laboratorio.</li>
+  <li><b>Datos dispersos:</b> con ~7 variables de 18, la confianza real baja y la clasificación se marca preliminar o
+  pendiente de validación (comportamiento deseado).</li>
+  <li><b>Render Free / Neon Free:</b> límites de memoria y suspensión por inactividad.</li>
+</ul>
+
+<h2 id="s15"><span class="num">15</span>Glosario</h2>
+<table>
+  <tr><th>Término</th><th>Significado</th></tr>
+  <tr><td><b>UC1</b></td><td>Caso de uso "¿qué me conviene sembrar?" (ranking de cultivos)</td></tr>
+  <tr><td><b>UC2</b></td><td>Caso de uso "diagnóstico para el cultivo sembrado"</td></tr>
+  <tr><td><b>Sistema experto</b></td><td>Motor determinístico de reglas agronómicas (UPRA/Cenicafé/AGROSAVIA)</td></tr>
+  <tr><td><b>Oráculo ML (sombra)</b></td><td>Modelos RandomForest que predicen en paralelo para comparación/discordancia</td></tr>
+  <tr><td><b>Confianza real</b></td><td>Confianza base ajustada por cobertura de fertilidad y confiabilidad del sensor</td></tr>
+  <tr><td><b>Estado de validación</b></td><td><code>validada</code> / <code>preliminar</code> / <code>pendiente_validacion</code> / <code>sujeta a confirmación de textura</code></td></tr>
+  <tr><td><b>Respaldo</b></td><td>Aceptación humana registrada; refuerza la confianza (+0.02 c/u, máx +0.10)</td></tr>
+  <tr><td><b>Imputación por medianas</b></td><td>Relleno de variables faltantes con la mediana calculada en entrenamiento</td></tr>
+  <tr><td><b>Discordancia</b></td><td>Desacuerdo ML vs reglas; se registra con SLA de 10 días</td></tr>
+  <tr><td><b>Clasificación UPRA</b></td><td>Apta / Moderadamente apta / Marginalmente apta / No apta por score</td></tr>
+  <tr><td><b>search_path</b></td><td>Ruta de esquemas de PostgreSQL; crítica para casts de enum en Neon</td></tr>
+</table>
+
+</div>
+
+<footer>
+  AgroIA — AgroInteligente Colombia · Documento Funcional-Técnico v1.0 · generado 2026-08-27<br>
+  Fuente: repositorio erick880709/Agro-ia (master) · aplica a producción https://agroia-backend.onrender.com
+</footer>
+</body>
+</html>
