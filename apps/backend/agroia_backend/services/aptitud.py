@@ -120,28 +120,30 @@ class AptitudService:
                 })
 
             # ── Profundidad efectiva del suelo (limitante física) ──
-            # Cultivos de raíz profunda (aguacate >1 m, cítricos, mango,
-            # palma) no prosperan en suelos someros (< 30 cm): penalización
-            # CRÍTICA equivalente a +40 puntos.
+            # El cultivo declara su profundidad radicular mínima (fisiología).
+            # Si el lote es más somero, se penaliza proporcional al déficit
+            # (fallback: raíces profundas conocidas si la columna es NULL).
             nombre_l = cultivo.nombre.lower()
-            if (
-                profundidad is not None
-                and profundidad < 30
-                and nombre_l in CULTIVOS_RAIZ_PROFUNDA
-            ):
-                penalizacion += 40.0
+            req_prof = cultivo.profundidad_radicular_min_cm
+            if req_prof is None and nombre_l in CULTIVOS_RAIZ_PROFUNDA:
+                req_prof = 60  # fallback agronómico histórico
+            if req_prof is not None and profundidad is not None and profundidad < req_prof:
+                deficit = req_prof - profundidad
+                pen = round(min(40.0, 10.0 + deficit * 0.5), 1)
+                penalizacion += pen
                 ajustes.append({
                     "variable": "profundidad_suelo",
                     "estado": "DEFICIT",
                     "valor_actual": profundidad,
-                    "rango_ideal": "> 60 cm para " + cultivo.nombre,
+                    "rango_ideal": f"≥ {req_prof} cm para {cultivo.nombre}",
                     "accion": (
-                        f"Profundidad efectiva del suelo ({profundidad} cm) insuficiente "
-                        f"para {cultivo.nombre} (raíz profunda). Considere otro cultivo o "
-                        "mejore el perfil con camellones/enmiendas profundas."
+                        f"Profundidad efectiva del suelo ({profundidad} cm) por debajo "
+                        f"de lo requerido para {cultivo.nombre} (raíz de {req_prof} cm). "
+                        "Considere otro cultivo o mejore el perfil con camellones/"
+                        "enmiendas profundas."
                     ),
-                    "prioridad": "Critica",
-                    "fuente": "AGROSAVIA",
+                    "prioridad": "Critica" if deficit >= 15 else "Alta",
+                    "fuente": "AGROSAVIA — fisiología del cultivo",
                 })
 
             # ── Pedregosidad alta: advertencia de limitante física ──

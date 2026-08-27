@@ -74,6 +74,21 @@ async def crear_cultivo(db: AsyncSession, nombre: str, **kwargs) -> Cultivo:
     return cultivo
 
 
+async def actualizar_cultivo(
+    db: AsyncSession,
+    cultivo_id: str,
+    **campos,
+) -> Cultivo:
+    """Actualiza campos editables de un cultivo (fisiología, descripción…)."""
+    cultivo = await obtener_cultivo(db, cultivo_id)
+    for clave, valor in campos.items():
+        if valor is not None and hasattr(cultivo, clave):
+            setattr(cultivo, clave, valor)
+    await db.flush()
+    logger.info("cultivo_actualizado", cultivo_id=cultivo_id, campos=list(campos))
+    return cultivo
+
+
 # ── Ficha Técnica CRUD ──
 
 async def listar_fichas(

@@ -21,6 +21,19 @@ class CultivoCreate(BaseModel):
     nombre_cientifico: str | None = None
     descripcion: str | None = None
     icono: str | None = None
+    profundidad_radicular_min_cm: int | None = Field(None, ge=0, le=500)
+    gdd_total_requerido: int | None = Field(None, ge=0, le=20000)
+    dias_ciclo: int | None = Field(None, ge=0, le=1500)
+
+
+class CultivoUpdate(BaseModel):
+    nombre_cientifico: str | None = None
+    descripcion: str | None = None
+    icono: str | None = None
+    activo: bool | None = None
+    profundidad_radicular_min_cm: int | None = Field(None, ge=0, le=500)
+    gdd_total_requerido: int | None = Field(None, ge=0, le=20000)
+    dias_ciclo: int | None = Field(None, ge=0, le=1500)
 
 
 class CultivoResponse(BaseModel):
@@ -30,6 +43,9 @@ class CultivoResponse(BaseModel):
     descripcion: str | None = None
     icono: str | None = None
     activo: bool
+    profundidad_radicular_min_cm: int | None = None
+    gdd_total_requerido: int | None = None
+    dias_ciclo: int | None = None
     model_config = {"from_attributes": True}
 
     @field_validator("id", mode="before")
@@ -106,6 +122,21 @@ async def crear_cultivo(body: CultivoCreate, db: AsyncSession = Depends(get_db))
         return await svc.crear_cultivo(db, **body.model_dump())
     except ValidationError as e:
         raise HTTPException(status_code=422, detail={"code": "VALIDATION_ERROR", "message": str(e)})
+
+
+@router.patch("/cultivos/{cultivo_id}", response_model=CultivoResponse)
+async def actualizar_cultivo(
+    cultivo_id: str,
+    body: CultivoUpdate,
+    db: AsyncSession = Depends(get_db),
+):
+    """Actualiza la fisiología/datos agronómicos de un cultivo."""
+    try:
+        return await svc.actualizar_cultivo(
+            db, cultivo_id, **body.model_dump(exclude_unset=True)
+        )
+    except NotFoundError as e:
+        raise HTTPException(status_code=404, detail={"code": "NOT_FOUND", "message": str(e)})
 
 
 # ── Fichas Técnicas ──

@@ -213,6 +213,8 @@ class RecommendationOrchestrator:
             "drenaje": finca.drenaje,
             "historial_agronomico": finca.historial_agronomico,
             "tipo_riego": finca.tipo_riego.value if finca.tipo_riego else None,
+            "latitud": finca.latitud,
+            "longitud": finca.longitud,
             "lote": lote,
         }
 
@@ -444,6 +446,7 @@ class RecommendationOrchestrator:
 
         # ── Nombre del cultivo objetivo ──
         nombre_cultivo = request.cultivo_id
+        cultivo_obj = None
         try:
             cultivo_uuid = uuid.UUID(str(request.cultivo_id))
             cultivo_obj = (
@@ -605,6 +608,14 @@ class RecommendationOrchestrator:
                     + f": {nota}"
                 )
 
+        # ── Fisiología: GDD acumulado (IDEAM) vs. requerido para madurez ──
+        gdd_nota = await self._gdd_faltante(cultivo_obj, finca_ctx)
+        if gdd_nota:
+            fenologia_ajustada = (
+                fenologia_ajustada + " " + gdd_nota
+                if fenologia_ajustada else gdd_nota
+            )
+
         # ── Clasificación con estado de validación ──
         if estado_validacion == "sujeta a confirmación de textura":
             clasificacion = f"{clasificacion} (sujeta a confirmación de textura)"
@@ -701,6 +712,56 @@ class RecommendationOrchestrator:
         if v.umbral_max is not None and v.valor_actual > v.umbral_max:
             return "EXCESO"
         return "DESCONOCIDO"
+
+    async def _gdd_faltante(self, cultivo, finca_ctx: dict) -> str | None:
+        """Estima el GDD acumulado con IDEAM y lo compara con lo requerido.
+
+        GDD diario = máx(0, T_promedio − 10 °C). Los días transcurridos del
+        ciclo se estiman a partir de la etapa fenológica registrada en la
+        finca (vegetativa 35 %, floración 55 %, fructificación 80 %,
+        cosecha 100 %) sobre `dias_ciclo` de la fisiología del cultivo.
+        """
+        if cultivo is None:
+            return None
+        gdd_requerido = getattr(cultivo, "gdd_total_requerido", None)
+        if not gdd_requerido:
+            return None
+        dias_ciclo = getattr(cultivo, "dias_ciclo", None) or 120
+        lat = finca_ctx.get("latitud")
+        lon = finca_ctx.get("longitud")
+        if lat is None or lon is None:
+            return None
+        etapa = (finca_ctx.get("etapa_fenologica") or "").strip().lower()
+        progreso = {
+            "vegetativa": 0.35,
+            "floración": 0.55,
+            "floracion": 0.55,
+            "fructificación": 0.80,
+            "fructificacion": 0.80,
+            "cosecha": 1.0,
+        }.get(etapa)
+        if progreso is None:
+            return None
+        try:
+            from agroia_backend.services.external_apis import (
+                fetch_ideam_climate_offline,
+            )
+
+            clima = await fetch_ideam_climate_offline(float(lat), float(lon))
+            t_prom = float(clima.get("temperatura_promedio") or 0)
+        except Exception as e:  # noqa: BLE001 — IDEAM no disponible
+            logger.warning("gdd_no_disponible", error=str(e))
+            return None
+        gdd_diario = max(0.0, t_prom - 10.0)
+        gdd_acumulado = gdd_diario * (progreso * dias_ciclo)
+        faltante = int(gdd_requerido) - gdd_acumulado
+        if faltante <= 0 or etapa == "cosecha":
+            return None
+        return (
+            f"⏳ Faltan ~{int(faltante)} GDD para cosecha, optimice riego "
+            f"(GDD acumulado ~{int(gdd_acumulado)} de {int(gdd_requerido)} "
+            f"según IDEAM)."
+        )
 
     @staticmethod
     def _combinar_advertencias(

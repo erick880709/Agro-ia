@@ -1644,14 +1644,22 @@ function renderCatalogo(q) {
     (c.nombre_cientifico || '').toLowerCase().includes(ql) ||
     (c.descripcion || '').toLowerCase().includes(ql));
   div.innerHTML = items.length
-    ? items.map(c => `
+    ? items.map(c => {
+      const fisio = [
+        c.profundidad_radicular_min_cm != null ? `raíz ≥ ${c.profundidad_radicular_min_cm} cm` : null,
+        c.gdd_total_requerido != null ? `${c.gdd_total_requerido} GDD` : null,
+        c.dias_ciclo != null ? `${c.dias_ciclo} días` : null,
+      ].filter(Boolean);
+      return `
       <div class="cultivo-card">
         <div class="icono">${esc(c.icono || '🌱')}</div>
         <h3>${esc(c.nombre)}</h3>
         ${c.nombre_cientifico ? `<p><i>${esc(c.nombre_cientifico)}</i></p>` : ''}
         ${c.descripcion ? `<p>${esc(c.descripcion)}</p>` : ''}
+        ${fisio.length ? `<p class="muted mono">🌱 ${fisio.join(' · ')}</p>` : ''}
         ${c.activo === false ? badge('Inactivo', 'critical') : badge('Activo', 'ok')}
-      </div>`).join('')
+      </div>`;
+    }).join('')
     : '<p class="muted">Sin resultados.</p>';
 }
 

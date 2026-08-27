@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime, timedelta
 
 from agroia.database import Base
-from sqlalchemy import Boolean, DateTime, ForeignKey, String, Text
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -46,6 +46,23 @@ class Cultivo(Base, TimestampMixin):
         String(50), nullable=True, comment="Emoji o código de icono"
     )
     activo: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+
+    # ── Fisiología del cultivo (datos agronómicos) ──
+    profundidad_radicular_min_cm: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True,
+        comment="Profundidad radicular mínima requerida (cm)",
+    )
+    gdd_total_requerido: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True,
+        comment="Grados-día acumulados (GDD, T base 10 °C) para madurez",
+    )
+    dias_ciclo: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True,
+        comment="Duración del ciclo (días, siembra→cosecha)",
+    )
 
     # Relaciones
     fichas_tecnicas: Mapped[list["FichaTecnica"]] = relationship(

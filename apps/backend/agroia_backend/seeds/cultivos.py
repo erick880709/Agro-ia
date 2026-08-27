@@ -12,6 +12,9 @@ CULTIVOS_COLOMBIA = [
         "nombre_cientifico": "Coffea arabica",
         "descripcion": "Principal producto agrícola de exportación de Colombia. Cultivado en el Eje Cafetero entre 1,200-1,800 msnm.",
         "icono": "☕",
+        "profundidad_radicular_min_cm": 80,
+        "gdd_total_requerido": 2000,
+        "dias_ciclo": 270,
         "ficha": {
             "tipo_fuente": "Nacional",
             "fuente": "Cenicafé, 2007, Guía de fertilidad del suelo y nutrición del café en Colombia. FNC.",
@@ -37,6 +40,9 @@ CULTIVOS_COLOMBIA = [
         "nombre_cientifico": "Zea mays",
         "descripcion": "Cereal básico en la dieta colombiana. Cultivado en todo el territorio nacional.",
         "icono": "🌽",
+        "profundidad_radicular_min_cm": 45,
+        "gdd_total_requerido": 1600,
+        "dias_ciclo": 130,
         "ficha": {
             "tipo_fuente": "Nacional",
             "fuente": "UPRA, Zonificación de aptitud para maíz tecnificado. AGROSAVIA, Manual de manejo agronómico.",
@@ -60,6 +66,9 @@ CULTIVOS_COLOMBIA = [
         "nombre_cientifico": "Oryza sativa",
         "descripcion": "Cereal de consumo masivo en Colombia. Principales zonas: Tolima, Meta, Casanare.",
         "icono": "🍚",
+        "profundidad_radicular_min_cm": 25,
+        "gdd_total_requerido": 1800,
+        "dias_ciclo": 125,
         "ficha": {
             "tipo_fuente": "Nacional",
             "fuente": "UPRA, Zonificación para arroz. DANE-EVA, rendimientos municipales.",
@@ -81,6 +90,9 @@ CULTIVOS_COLOMBIA = [
         "nombre_cientifico": "Musa paradisiaca",
         "descripcion": "Alimento básico en Colombia. Principal productor en Urabá y Eje Cafetero.",
         "icono": "🍌",
+        "profundidad_radicular_min_cm": 60,
+        "gdd_total_requerido": 2100,
+        "dias_ciclo": 450,
         "ficha": {
             "tipo_fuente": "Nacional",
             "fuente": "UPRA, Zonificación para plátano. AGROSAVIA.",
@@ -102,6 +114,9 @@ CULTIVOS_COLOMBIA = [
         "nombre_cientifico": "Solanum tuberosum",
         "descripcion": "Tubérculo de alta producción en clima frío colombiano. Cundinamarca, Boyacá, Nariño.",
         "icono": "🥔",
+        "profundidad_radicular_min_cm": 40,
+        "gdd_total_requerido": 1300,
+        "dias_ciclo": 135,
         "ficha": {
             "tipo_fuente": "Nacional",
             "fuente": "UPRA, Zonificación para papa. AGROSAVIA.",

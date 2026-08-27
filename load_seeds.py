@@ -37,7 +37,28 @@ async def cargar_seed_data():
         result = await session.execute(text("SELECT COUNT(*) FROM agroia.cultivos"))
         count = result.scalar()
         if count > 0:
-            print(f"   ⚠️  Ya existen {count} cultivos. Saltando seed...")
+            print(f"   ⚠️  Ya existen {count} cultivos. Aplicando backfill de fisiología…")
+            _FISIOLOGIA_KEYS = (
+                "profundidad_radicular_min_cm", "gdd_total_requerido", "dias_ciclo",
+            )
+            actualizados = 0
+            for cdata in CULTIVOS_COLOMBIA:
+                valores = {k: cdata[k] for k in _FISIOLOGIA_KEYS if k in cdata}
+                if not valores:
+                    continue
+                set_sql = ", ".join(f"{k} = :{k}" for k in valores)
+                params = {"nombre": cdata["nombre"], **valores}
+                r = await session.execute(
+                    text(
+                        f"UPDATE agroia.cultivos SET {set_sql} "
+                        "WHERE nombre = :nombre AND "
+                        f"{next(iter(valores))} IS NULL"
+                    ),
+                    params,
+                )
+                actualizados += r.rowcount or 0
+            await session.commit()
+            print(f"   ✅ Fisiología actualizada en {actualizados} cultivo(s).")
             return
 
         cultivos_data = list(CULTIVOS_COLOMBIA) + [
@@ -54,6 +75,9 @@ async def cargar_seed_data():
                 descripcion=cdata.get("descripcion"),
                 icono=cdata.get("icono", "🌱"),
                 activo=True,
+                profundidad_radicular_min_cm=cdata.get("profundidad_radicular_min_cm"),
+                gdd_total_requerido=cdata.get("gdd_total_requerido"),
+                dias_ciclo=cdata.get("dias_ciclo"),
             )
             session.add(cultivo)
 

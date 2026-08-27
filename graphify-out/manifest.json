@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787845732.779314,
-    "ast_hash": "2c15f6d01e7a3c14450f4ddd4b7879be",
+    "mtime": 1787846549.3264732,
+    "ast_hash": "53359dd51f32b8cfd8124e03eaefe4cf",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787844137.6224048,
-    "ast_hash": "d2fb67a444a71b1b6d2f53a81aadd1bc",
+    "mtime": 1787845972.3753307,
+    "ast_hash": "e4fa0a517245f7aedaa7e7707b3aa458",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787844137.6140933,
-    "ast_hash": "7008467f4413a955f061954255010754",
+    "mtime": 1787845972.369064,
+    "ast_hash": "d51e6550cc02592f0cceabdad834c165",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4670,13 +4670,13 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/chat.py": {
-    "mtime": 1787704612.5011394,
-    "ast_hash": "bbb336ef947030c109576d179e6764e4",
+    "mtime": 1787845936.2630775,
+    "ast_hash": "bc35b16b281dbe7234e14032efed4e6b",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/agronomo_chat.py": {
-    "mtime": 1787704855.3024294,
-    "ast_hash": "ea02f6ae51e998778e53fc63257ce232",
+    "mtime": 1787845913.0530953,
+    "ast_hash": "4cc494226b4b63d59d7550ff2d8fa00f",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/006_posiciones_muestreo.py": {
@@ -4685,8 +4685,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/chat_memoria.py": {
-    "mtime": 1787704454.0315852,
-    "ast_hash": "2008f573d0228f12c300139c2ebfd8d3",
+    "mtime": 1787845913.0591607,
+    "ast_hash": "1604e714ce078c5f492d6e8b2c710ece",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/agronomo_kb.py": {
@@ -4862,6 +4862,11 @@
   "apps/backend/agroia_backend/services/economia.py": {
     "mtime": 1787843942.4460163,
     "ast_hash": "de27149c367d98dd0ddb2b6a8b6220f9",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/013_chat_imagen.py": {
+    "mtime": 1787845913.0591607,
+    "ast_hash": "b1e11b75797d5e3f2cdecc86b2de9be1",
     "semantic_hash": ""
   }
 }
