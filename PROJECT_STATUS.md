@@ -229,7 +229,7 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Reglas**: (1) lluvia > 20 mm/24h en los próximos 3 días + labor de Fertilización pendiente → «Aplace la aplicación…, riesgo de lixiviación»; (2) T mín < 5 °C + etapa Floración + cultivo sensible → «Riesgo de helada, active riego por aspersión».
 - **Tabla `agroia.alertas_climaticas`** (migración 019): tipo/severidad/mensaje/fecha/pronóstico JSONB/activa; las alertas previas del mismo tipo se desactivan en cada evaluación.
 - **UI**: banner de colores en P1 (azul lluvia, rojo helada) vía `GET /fincas/{id}/alertas-climaticas/activas`; reporte sección N con «⛅ Pronóstico extendido (7 días)» y avisos de umbral.
-- Validado local: reglas con pronóstico inyectado (ambas alertas), camino real Open-Meteo sin fallas, banner en P1 — pendiente validación en producción.
+- Validado local y en producción: reglas con pronóstico inyectado (ambas alertas), camino real Open-Meteo sin fallas, banner en P1, desactivación automática cuando el pronóstico deja de cumplir la regla, y pronóstico extendido en la sección N del reporte.
 
 ### Migraciones destacadas
 
