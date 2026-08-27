@@ -538,6 +538,44 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
   border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
+/* ── Completar parámetros esenciales ── */
+
+.completar-params {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid #e3c98a;
+  border-radius: 10px;
+  background: #fdf8ec;
+}
+
+.completar-params h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.params-fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-end;
+  margin-top: 10px;
+}
+
+.params-fila label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #6b5b2d;
+}
+
+.params-fila input {
+  width: 130px;
+  padding: 8px 10px;
+  border: 1px solid #d8c89a;
+  border-radius: 8px;
+}
+
 /* ─────────────────────────── id de finca para sensores ─────────────────────────── */
 
 .finca-id-box {

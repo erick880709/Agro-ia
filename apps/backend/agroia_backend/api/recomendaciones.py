@@ -2,7 +2,6 @@
 
 
 from agroia.database import get_db
-from agroia.errors import InsufficientDataError
 from agroia.logging import get_logger
 from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from pydantic import BaseModel, Field
@@ -47,6 +46,7 @@ class RecommendResponse(BaseModel):
     estado_validacion: str = "pendiente_validacion"
     respaldos: int = 0
     variables_faltantes_fertilidad: list[str] = []
+    variables_faltantes_esenciales: list[str] = []
     fenologia_ajustada: str | None = None
     plan_economico: dict | None = None
 
@@ -191,15 +191,10 @@ async def analizar_aptitud(
             estado_validacion=result.estado_validacion,
             respaldos=result.respaldos,
             variables_faltantes_fertilidad=result.variables_faltantes_fertilidad,
+            variables_faltantes_esenciales=result.variables_faltantes_esenciales,
             fenologia_ajustada=result.fenologia_ajustada,
             plan_economico=result.plan_economico,
         )
-    except InsufficientDataError as e:
-        raise HTTPException(status_code=422, detail={
-            "code": "INSUFFICIENT_DATA",
-            "message": f"Datos insuficientes. Variables faltantes: {', '.join(e.missing_vars)}",
-            "missing_variables": e.missing_vars,
-        })
     except Exception as e:
         logger.exception("orchestrator_unexpected_error", error=str(e), finca_id=request.finca_id)
         raise HTTPException(status_code=500, detail={

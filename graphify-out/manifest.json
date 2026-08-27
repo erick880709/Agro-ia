@@ -3980,8 +3980,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/orchestrator.py": {
-    "mtime": 1787844018.4194322,
-    "ast_hash": "b2cea836c5773389e057b4eb318295d5",
+    "mtime": 1787846917.5404174,
+    "ast_hash": "ba0154718af52930a8de45c4c0f25c9a",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/rules_engine.py": {
@@ -4040,13 +4040,13 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/catalogo.py": {
-    "mtime": 1787691942.3506272,
-    "ast_hash": "3ee3763d480b003a9ca5024f6c0d4e7a",
+    "mtime": 1787846791.7870977,
+    "ast_hash": "b74454a5f497ef704d4f35a146c14193",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/cultivo.py": {
-    "mtime": 1787691942.2605817,
-    "ast_hash": "7b64c75bf1e351756644a1e8b1cdddb2",
+    "mtime": 1787846791.7870977,
+    "ast_hash": "2672cb524244d465857be5c51f4bf201",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/seeds/__init__.py": {
@@ -4055,13 +4055,13 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/seeds/cultivos.py": {
-    "mtime": 1787691942.3597043,
-    "ast_hash": "b9cda91bf3276f8c91521cb3470911c7",
+    "mtime": 1787846808.5792499,
+    "ast_hash": "e67c0b25a6a41ecaceab3fa1712c1055",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/catalogo_service.py": {
-    "mtime": 1787692192.6280465,
-    "ast_hash": "c431e9aec7f73b086e87881f50d9f00e",
+    "mtime": 1787846791.7870977,
+    "ast_hash": "e6987b5ac8e92316c0945dcbed7c4f8c",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/002_catalogo_cultivos.py": {
@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787846549.3264732,
-    "ast_hash": "53359dd51f32b8cfd8124e03eaefe4cf",
+    "mtime": 1787847239.8149323,
+    "ast_hash": "331e20c4700adffb3402d511806c15b7",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4270,8 +4270,8 @@
     "semantic_hash": ""
   },
   "load_seeds.py": {
-    "mtime": 1787700442.3273869,
-    "ast_hash": "ecda57d821fd074367814128c18014ca",
+    "mtime": 1787846808.5725496,
+    "ast_hash": "beed468e7eba12a96284ea1aaf5faca1",
     "semantic_hash": ""
   },
   "migrate.py": {
@@ -4545,8 +4545,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/aptitud.py": {
-    "mtime": 1787842668.0119007,
-    "ast_hash": "490b55776c80734c1cfa41e8094a0564",
+    "mtime": 1787846830.0612166,
+    "ast_hash": "1eb34b9999e9c176a923703e9ac3094a",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/auth_utils.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787845972.3753307,
-    "ast_hash": "e4fa0a517245f7aedaa7e7707b3aa458",
+    "mtime": 1787846917.4786248,
+    "ast_hash": "4397b3ad8e1a43d440a8a34974f6116f",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4867,6 +4867,11 @@
   "apps/backend/alembic/versions/013_chat_imagen.py": {
     "mtime": 1787845913.0591607,
     "ast_hash": "b1e11b75797d5e3f2cdecc86b2de9be1",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/014_fisiologia_cultivos.py": {
+    "mtime": 1787846808.5792499,
+    "ast_hash": "26c6dcc89a690b3cc5a6315b34a9883a",
     "semantic_hash": ""
   }
 }

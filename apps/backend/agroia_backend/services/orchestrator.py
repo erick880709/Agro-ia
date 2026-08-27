@@ -8,7 +8,6 @@ import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 
-from agroia.errors import InsufficientDataError
 from agroia.logging import get_logger
 
 logger = get_logger(__name__)
@@ -88,6 +87,7 @@ class RecommendationResult:
     estado_validacion: str = "pendiente_validacion"
     respaldos: int = 0
     variables_faltantes_fertilidad: list[str] = field(default_factory=list)
+    variables_faltantes_esenciales: list[str] = field(default_factory=list)
     fenologia_ajustada: str | None = None
     plan_economico: dict | None = None
 
@@ -127,10 +127,11 @@ class RecommendationOrchestrator:
 
         # ── Paso 1: Obtener datos de suelo ──
         soil_data = await self.soil.get_latest(request.finca_id)
-        if soil_data is None or not soil_data.has_sufficient_data:
-            missing = soil_data.missing_blocking if soil_data else ["ph", "nitrogeno", "fosforo", "potasio"]
-            logger.warning("insufficient_data", finca_id=request.finca_id, missing=missing)
-            raise InsufficientDataError(missing)
+        if soil_data is None:
+            # Sin ninguna lectura: NO se bloquea. Se entrega una
+            # recomendación preliminar con los parámetros esenciales
+            # faltantes y el requisito de aval de un agrónomo.
+            return await self._recomendacion_sin_datos(request, t_start)
 
         soil_dict = soil_data.to_dict()
         logger.info("soil_data_loaded", finca_id=request.finca_id, vars=len(soil_dict))
@@ -150,6 +151,13 @@ class RecommendationOrchestrator:
                 "⚠️ Recomendación parcial: faltan variables ("
                 + ", ".join(soil_data.missing_non_blocking) + ")."
             )
+        if soil_data.missing_blocking:
+            advertencias_datos.append(
+                "⚠️ Faltan parámetros esenciales ("
+                + ", ".join(soil_data.missing_blocking)
+                + "): la recomendación no tiene el 100% de certeza y requiere "
+                "el aval de un agrónomo."
+            )
         advertencia_datos = " ".join(advertencias_datos) or None
 
         # ── Paso 2: Ramificación por caso de uso ──
@@ -159,12 +167,13 @@ class RecommendationOrchestrator:
             return await self._recomendar_cultivos(
                 request.finca_id, soil_dict, t_start, advertencia_datos,
                 finca_ctx, npk_no_calibrado, request.presupuesto_cop,
+                missing_esenciales=soil_data.missing_blocking,
             )
 
         # UC2: hay cultivo sembrado → diagnosticar qué falta/sobra
         return await self._analizar_cultivo(
             request, soil_dict, t_start, advertencia_datos, finca_ctx,
-            npk_no_calibrado,
+            npk_no_calibrado, missing_esenciales=soil_data.missing_blocking,
         )
 
     async def _cargar_contexto_finca(self, finca_id: str) -> dict:
@@ -246,6 +255,7 @@ class RecommendationOrchestrator:
         npk_sin_calibrar: bool,
         respaldos: int,
         cultivo_nombre: str | None = None,
+        missing_esenciales: list[str] | None = None,
     ) -> tuple[float, float, str, list[str]]:
         """Confianza real: cobertura de datos + confiabilidad del sensor + respaldos.
 
@@ -255,14 +265,23 @@ class RecommendationOrchestrator:
         faltantes = [v for v in VARIABLES_FERTILIDAD if v not in soil_dict]
         factor_fertilidad = max(0.6, 1.0 - 0.04 * len(faltantes))
         factor_sensor = 0.9 if npk_sin_calibrar else 1.0
-        confianza_real = round(confianza_base * factor_fertilidad * factor_sensor, 3)
+        missing_esenciales = missing_esenciales or []
+        # Cada parámetro esencial faltante reduce la confianza real
+        factor_esenciales = max(0.55, 1.0 - 0.15 * len(missing_esenciales))
+        confianza_real = round(
+            confianza_base * factor_fertilidad * factor_sensor * factor_esenciales,
+            3,
+        )
         # Cada aceptación humana suma +0.02 de confianza (máx +0.10)
         confianza_final = round(
             min(0.99, confianza_real + min(0.10, 0.02 * respaldos)), 3
         )
 
         nombre_l = (cultivo_nombre or "").lower()
-        if nombre_l in CULTIVOS_SENSIBLES_TEXTURA and "textura" not in soil_dict:
+        if missing_esenciales:
+            # Sin parámetros esenciales: requiere aval de un agrónomo
+            estado = "pendiente_validacion"
+        elif nombre_l in CULTIVOS_SENSIBLES_TEXTURA and "textura" not in soil_dict:
             estado = "sujeta a confirmación de textura"
         elif confianza_final < 0.80:
             estado = "pendiente_validacion"
@@ -300,6 +319,7 @@ class RecommendationOrchestrator:
         finca_ctx: dict | None = None,
         npk_no_calibrado: bool = False,
         presupuesto_cop: float | None = None,
+        missing_esenciales: list[str] | None = None,
     ) -> "RecommendationResult":
         """UC1: puntúa todos los cultivos y recomienda los más aptos."""
         if self.aptitud is None:
@@ -341,12 +361,14 @@ class RecommendationOrchestrator:
         finca_ctx = finca_ctx or {}
 
         npk_sin_calibrar = bool(npk_no_calibrado)
+        missing_esenciales = missing_esenciales or []
         respaldos = await self._respaldos(
             finca_id, top.get("cultivo_id") if top else None
         )
         confianza_real, confianza_final, estado_validacion, faltantes = (
             self._ajustar_confianza(
-                confianza, soil_dict, npk_sin_calibrar, respaldos, cultivo
+                confianza, soil_dict, npk_sin_calibrar, respaldos, cultivo,
+                missing_esenciales,
             )
         )
         if estado_validacion == "sujeta a confirmación de textura":
@@ -426,6 +448,7 @@ class RecommendationOrchestrator:
             estado_validacion=estado_validacion,
             respaldos=respaldos,
             variables_faltantes_fertilidad=faltantes,
+            variables_faltantes_esenciales=missing_esenciales,
             plan_economico=plan_economico,
         )
 
@@ -437,6 +460,7 @@ class RecommendationOrchestrator:
         advertencia_datos: str | None = None,
         finca_ctx: dict | None = None,
         npk_no_calibrado: bool = False,
+        missing_esenciales: list[str] | None = None,
     ) -> "RecommendationResult":
         """UC2: evalúa el suelo contra las reglas del cultivo sembrado."""
         from sqlalchemy import select
@@ -582,6 +606,25 @@ class RecommendationOrchestrator:
                     )
             recomendaciones.append(fila)
 
+        # ── Parámetros esenciales faltantes: filas explícitas (aval) ──
+        missing_esenciales = missing_esenciales or []
+        for var in missing_esenciales:
+            recomendaciones.append({
+                "variable": var,
+                "estado": "SIN DATO",
+                "valor_actual": None,
+                "rango_ideal": "Por definir",
+                "accion": (
+                    f"Falta el parámetro esencial '{var}': suminístrelo para "
+                    "una recomendación certera."
+                ),
+                "prioridad": "Alta",
+                "fuente": "AgroIA — calidad de datos",
+                "confiabilidad": "Sin dato",
+                "condicional": False,
+                "plan": self._plan_ejecutable(var, False),
+            })
+
         # ── Confianza en función del cumplimiento de reglas ──
         penalizacion = len(rules_result.violations) * 0.20 + len(rules_result.warnings) * 0.05
         confianza = round(max(0.05, min(0.99, 1.0 - penalizacion)), 3)
@@ -590,7 +633,7 @@ class RecommendationOrchestrator:
         confianza_real, confianza_final, estado_validacion, faltantes = (
             self._ajustar_confianza(
                 confianza, soil_dict, npk_sin_calibrar, respaldos,
-                str(nombre_cultivo),
+                str(nombre_cultivo), missing_esenciales,
             )
         )
 
@@ -698,8 +741,140 @@ class RecommendationOrchestrator:
             estado_validacion=estado_validacion,
             respaldos=respaldos,
             variables_faltantes_fertilidad=faltantes,
+            variables_faltantes_esenciales=missing_esenciales,
             fenologia_ajustada=fenologia_ajustada,
             plan_economico=plan_economico,
+        )
+
+    async def _recomendacion_sin_datos(
+        self,
+        request: RecommendationRequest,
+        t_start: datetime,
+    ) -> RecommendationResult:
+        """Recomendación preliminar cuando la finca NO tiene lecturas.
+
+        No se bloquea la generación: se entrega una recomendación genérica
+        con confianza mínima, los parámetros esenciales faltantes y el
+        requisito de aval de un agrónomo.
+        """
+        esenciales = ["ph", "nitrogeno", "fosforo", "potasio"]
+        aviso = (
+            "⚠️ La finca no tiene lecturas de suelo. Esta recomendación es "
+            "preliminar y NO tiene el 100% de certeza: requiere el aval de un "
+            "agrónomo. Complete los parámetros esenciales (ph, nitrógeno, "
+            "fósforo, potasio) para una recomendación certera."
+        )
+        finca_ctx = await self._cargar_contexto_finca(request.finca_id)
+        elapsed_ms = (datetime.utcnow() - t_start).total_seconds() * 1000
+
+        if request.cultivo_id is None:
+            # UC1 sin datos: catálogo prioritario como ranking preliminar
+            sugerencias: list[dict] = []
+            evaluables: list = []
+            if self.aptitud is not None:
+                try:
+                    evaluables = await self.aptitud._cultivos_evaluables()
+                except Exception as e:  # noqa: BLE001
+                    logger.warning("aptitud_no_disponible_sin_datos", error=str(e))
+            prioridad = ["Café", "Maíz", "Arroz", "Plátano", "Papa"]
+            evaluables.sort(
+                key=lambda t: prioridad.index(t[0].nombre)
+                if t[0].nombre in prioridad else len(prioridad)
+            )
+            for cultivo, n_reglas in evaluables[:5]:
+                sugerencias.append({
+                    "cultivo_id": str(cultivo.id),
+                    "cultivo": cultivo.nombre,
+                    "icono": cultivo.icono,
+                    "score": 50.0,
+                    "confianza": 0.05,
+                    "clasificacion": "Preliminar",
+                    "reglas_especificas": n_reglas,
+                    "ajustes": [{
+                        "variable": "datos_suelo",
+                        "estado": "SIN DATO",
+                        "valor_actual": None,
+                        "rango_ideal": "Lecturas de suelo",
+                        "accion": (
+                            "Sin lecturas de suelo: suministre ph, nitrógeno, "
+                            "fósforo y potasio para evaluar la aptitud real."
+                        ),
+                        "prioridad": "Alta",
+                        "fuente": "AgroIA — calidad de datos",
+                    }],
+                })
+            top = sugerencias[0] if sugerencias else None
+            return RecommendationResult(
+                cultivo=top["cultivo"] if top else "No determinado",
+                clasificacion_upra="Preliminar",
+                confianza=0.05,
+                recomendaciones=[],
+                justificacion={
+                    "resumen": (
+                        "Recomendación preliminar SIN lecturas de suelo: complete "
+                        "los parámetros esenciales y vuelva a analizar para "
+                        "obtener un resultado certero."
+                    ),
+                    "variables_analizadas": 0,
+                    "cultivos_evaluados": len(sugerencias),
+                    "confianza": 0.05,
+                    "confianza_real": 0.05,
+                    "respaldos_expertos": 0,
+                },
+                advertencia=aviso,
+                tiempo_respuesta_ms=elapsed_ms,
+                sugerencias_cultivos=sugerencias,
+                modo="recomendar_cultivos",
+                confianza_real=0.05,
+                estado_validacion="pendiente_validacion",
+                respaldos=0,
+                variables_faltantes_esenciales=esenciales,
+            )
+
+        # UC2 sin datos: filas por parámetro esencial faltante
+        cultivo_nombre = finca_ctx.get("cultivo_sembrado") or request.cultivo_id
+        recomendaciones = [{
+            "variable": var,
+            "estado": "SIN DATO",
+            "valor_actual": None,
+            "rango_ideal": "Por definir",
+            "accion": (
+                f"Falta el parámetro esencial '{var}': suminístrelo para "
+                "evaluar el cultivo con certeza."
+            ),
+            "prioridad": "Alta",
+            "fuente": "AgroIA — calidad de datos",
+            "confiabilidad": "Sin dato",
+            "condicional": False,
+            "plan": self._plan_ejecutable(var, False),
+        } for var in esenciales]
+        return RecommendationResult(
+            cultivo=str(cultivo_nombre or "No determinado"),
+            clasificacion_upra="Preliminar",
+            confianza=0.05,
+            recomendaciones=recomendaciones,
+            justificacion={
+                "resumen": (
+                    "Diagnóstico preliminar SIN lecturas de suelo: la "
+                    "recomendación no tiene el 100% de certeza y requiere "
+                    "aval de un agrónomo."
+                ),
+                "variables_analizadas": 0,
+                "reglas_aplicadas": 0,
+                "faltantes": len(esenciales),
+                "excesos": 0,
+                "confianza": 0.05,
+                "confianza_real": 0.05,
+                "respaldos_expertos": 0,
+            },
+            advertencia=aviso,
+            tiempo_respuesta_ms=elapsed_ms,
+            sugerencias_cultivos=[],
+            modo="analizar_cultivo",
+            confianza_real=0.05,
+            estado_validacion="pendiente_validacion",
+            respaldos=0,
+            variables_faltantes_esenciales=esenciales,
         )
 
     @staticmethod

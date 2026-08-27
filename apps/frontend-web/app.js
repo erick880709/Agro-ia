@@ -1232,6 +1232,21 @@ function renderAnalisis(a) {
   if (a.variables_faltantes_fertilidad && a.variables_faltantes_fertilidad.length) {
     html += `<div class="advertencia">🔬 Variables de fertilidad sin dato: ${esc(a.variables_faltantes_fertilidad.join(', '))}. La confianza global se redujo; la clasificación es preliminar.</div>`;
   }
+  if (a.variables_faltantes_esenciales && a.variables_faltantes_esenciales.length) {
+    html += `
+      <div class="completar-params">
+        <h3>📝 Complete los parámetros esenciales</h3>
+        <p class="muted">Para una recomendación más acertada, suministre los siguientes valores (medición de laboratorio o sensor). La recomendación actual <b>no tiene el 100% de certeza y requiere el aval de un agrónomo</b>.</p>
+        <div class="params-fila">
+          ${a.variables_faltantes_esenciales.map(v => `
+            <label>${esc(ETIQUETAS_PARAM[v] || v)}
+              <input id="completar-${esc(v)}" type="number" step="any" min="0" placeholder="${esc(ETIQUETAS_PARAM[v] || v)}">
+            </label>`).join('')}
+          <button type="button" class="btn btn-primary" onclick="completarParametros()">💾 Guardar y reanalizar</button>
+        </div>
+        <p id="completar-msg"></p>
+      </div>`;
+  }
   if (a.advertencia) html += `<div class="advertencia">${esc(a.advertencia)}</div>`;
   if (a.discordancia) html += `<div class="advertencia">🔀 Discordancia detectada: ${esc(JSON.stringify(a.discordancia))}</div>`;
 
@@ -1276,6 +1291,54 @@ function renderAnalisis(a) {
     html += `<p class="muted" style="margin-top:12px">📋 ${esc(a.justificacion.resumen)}</p>`;
   }
   return html;
+}
+
+/* ── Completar parámetros esenciales faltantes (aval de agrónomo) ── */
+
+const ETIQUETAS_PARAM = {
+  ph: 'pH (0-14)',
+  nitrogeno: 'Nitrógeno (ppm)',
+  fosforo: 'Fósforo (ppm)',
+  potasio: 'Potasio (ppm)',
+  conductividad_electrica: 'Conductividad eléctrica (µS/cm)',
+};
+
+async function completarParametros() {
+  const a = state.ultimoAnalisis;
+  const faltan = (a && a.variables_faltantes_esenciales) || [];
+  const finca = document.getElementById('reco-finca').value;
+  const msg = document.getElementById('completar-msg');
+  const frame = {
+    device_id: 'manual-' + String(finca).slice(0, 8) + '-params',
+    finca_id: finca,
+  };
+  let completados = 0;
+  for (const v of faltan) {
+    const el = document.getElementById('completar-' + v);
+    const val = el ? parseFloat(el.value) : NaN;
+    if (!Number.isFinite(val)) continue;
+    if (v === 'ph') frame.ph = val;
+    else if (v === 'nitrogeno') frame.nitrogen = val;
+    else if (v === 'fosforo') frame.phosphorus = val;
+    else if (v === 'potasio') frame.potassium = val;
+    else if (v === 'conductividad_electrica') frame.conductivity = val;
+    completados += 1;
+  }
+  if (!completados) {
+    if (msg) msg.innerHTML = errorBanner('Ingrese al menos un valor para guardar.');
+    return;
+  }
+  try {
+    await fetch('/api/sensor', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-User-Role': state.rol },
+      body: JSON.stringify(frame),
+    });
+    if (msg) msg.innerHTML = okBanner('Parámetros guardados. Reanalizando…');
+    document.getElementById('form-analyze').requestSubmit();
+  } catch (err) {
+    if (msg) msg.innerHTML = errorBanner('No se pudieron guardar los parámetros: ' + err.message);
+  }
 }
 
 /* ─────────────────────────── historial ─────────────────────────── */
