@@ -72,7 +72,8 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Sin ninguna lectura**: recomendación preliminar (confianza 5%) con ranking prioritario del catálogo (UC1) o filas «SIN DATO» por parámetro esencial (UC2).
 - **Respuesta**: nuevo campo `variables_faltantes_esenciales`; la confianza real se reduce 15% por cada parámetro esencial faltante.
 - **Pantalla de captura**: la UI muestra el bloque «📝 Complete los parámetros esenciales» con inputs para los valores faltantes; el botón «Guardar y reanalizar» los ingesta vía `POST /api/sensor` y reejecuta el análisis (flujo validado: 5% → 41% de confianza al completar pH/N/P/K).
-- Validado local y en producción (finca sin datos → Preliminar/pendiente_validacion).
+- **Reportes**: `POST /api/v1/reportes/generar` tampoco se bloquea — genera el reporte igual (incluso sin lecturas) y agrega la sección «P — Parámetros faltantes para mayor detalle» indicando que sería bueno contar con los valores faltantes y que el reporte es preliminar (aval de agrónomo). La respuesta incluye `parametros_faltantes` y `preliminar`.
+- Validado local y en producción (finca sin datos → reporte completo con sección P y faltantes ph/nitrogeno/fosforo/potasio).
 
 ### Chat asesor agronómico (2026-08-25)
 
