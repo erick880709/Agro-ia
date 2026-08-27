@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787863557.5122209,
-    "ast_hash": "71bac9388060de7e8aca388e587d67d5",
+    "mtime": 1787864036.3142517,
+    "ast_hash": "dc1dd50242347fd3edcc5ffbb282121d",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787863488.859651,
-    "ast_hash": "0ab6aa95dadbfb510f7287b4ecde1a24",
+    "mtime": 1787863896.0947561,
+    "ast_hash": "b2db5f09fe2c7dec1743368bda856786",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787863488.8570352,
-    "ast_hash": "3babed8ffec7b95e4110ebde0ea7d254",
+    "mtime": 1787863873.5946774,
+    "ast_hash": "a399a6bc690d17c77b4641d62f86473c",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4830,8 +4830,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1787863557.5283046,
-    "ast_hash": "4d14824c2f14d3c07bb4690ceea1894b",
+    "mtime": 1787864036.318946,
+    "ast_hash": "669d56f4b5abb8960975f14ebbfe5c00",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {
@@ -4855,8 +4855,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Pantallas_AgroIA.html": {
-    "mtime": 1787863557.5591364,
-    "ast_hash": "be72423cfe105ad727e7611146a26f41",
+    "mtime": 1787864050.0496547,
+    "ast_hash": "acae0635e57bfdc6c1cdf24d32903be7",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/economia.py": {
@@ -4915,8 +4915,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/ciclos.py": {
-    "mtime": 1787862924.326337,
-    "ast_hash": "5a0d31de91b1c518026c60ba64e0885e",
+    "mtime": 1787863928.7750661,
+    "ast_hash": "634c4298ce040a22244c692f77c3608e",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/ciclo_lote.py": {

@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.1 · **Fecha:** 2026-08-27
+**Versión:** 2.2 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -13,11 +13,13 @@
 4. [Autenticación y sesión (lo más básico)](#4-autenticación-y-sesión-lo-más-básico)
 5. [El frontend SPA: navegación y utilidades](#5-el-frontend-spa-navegación-y-utilidades)
 6. [Recorrido sección por sección](#6-recorrido-sección-por-sección)
+   - [6.11 🕵️ Auditoría](#611--auditoría-de-acciones-solo-admin) · [6.12 🔄 Ciclos productivos](#612--ciclos-productivos-por-lote-historial_ciclos_lote)
 7. [Ingesta de datos IoT — `POST /api/sensor`](#7-ingesta-de-datos-iot--post-apisensor)
 8. [El motor de recomendaciones (corazón del sistema)](#8-el-motor-de-recomendaciones-corazón-del-sistema)
 9. [Aceptación humana de recomendaciones (human-in-the-loop)](#9-aceptación-humana-de-recomendaciones-human-in-the-loop)
 10. [El modelo de Machine Learning: entrenamiento y artefactos](#10-el-modelo-de-machine-learning-entrenamiento-y-artefactos)
 11. [Reportes: anatomía del HTML generado](#11-reportes-anatomía-del-html-generado)
+    - [11.1 Muestreo inteligente, ROI realista y simulación](#111-novedades-v13--muestreo-inteligente-roi-realista-y-modo-simulación) · [11.2 Historial de ciclos en el reporte](#112-historial-de-ciclos-en-el-reporte-v21)
 12. [Persistencia y base de datos](#12-persistencia-y-base-de-datos)
 13. [Despliegue y CI/CD](#13-despliegue-y-cicd)
 14. [Seguridad y limitaciones conocidas](#14-seguridad-y-limitaciones-conocidas)
@@ -723,10 +725,10 @@ Reejecuta `RulesEngine.evaluate` sobre el último suelo de la finca con las vari
 | 01 | Diagnóstico UC2 | Badge de clasificación + **badge de estado de validación** (PENDIENTE/PRELIMINAR/SUJETA A TEXTURA/VALIDADA), tabla con Acción, Prioridad, **Confiabilidad** y **Plan sugerido**, contexto pH, condicional NPK, respaldos, fenología + GDD, y bloque **«💰 Plan económico vs. plan ideal»** |
 | 02 | Recomendación UC1 | Ranking top 5 con scorebar, badge de estado, confianza real y faltantes de fertilidad |
 | M | Mapa de calor | Matriz de puntos `pos_x/pos_y` por variable, rampa de intensidad `#e8f5e9→#1b5e20` normalizada por parámetro; en PDF se imprimen **todas las variables** |
-| N | Plano del lote | SVG con puntos, cierre convexo, **perímetro/área**, pendiente y drenaje del lote, metodología de muestreo, clima IDEAM del día de la muestra con **alerta fitosanitaria específica** (HR > 78 %) y **historial de manejo** |
+| N | Plano del lote | SVG con puntos, cierre convexo, **perímetro/área**, pendiente y drenaje del lote, metodología de muestreo, clima IDEAM del día de la muestra con **alerta fitosanitaria específica** (HR > 78 %), **historial de manejo** y tabla **«📜 Historial de ciclos — línea de tiempo»** (últimos 3 ciclos: Siembra → Aplicaciones destacadas → Cosecha → Rendimiento) |
 | E | **Análisis económico proyectado** | Ganancia esperada = (rendimiento × precio de cosecha) × 1,15 si se aplica el plan · ROI = (ganancia − costo fertilización) ÷ costo · alerta «⚠️ Inversión justa, considere subvenciones» si ROI < 1,2 |
-| 04 | Advertencias | Calidad de datos y limitaciones (NPK sin validar, faltantes, textura, presupuesto) |
-| 05 | Próximos pasos | Plan de acción (incluye completar variables de fertilidad y umbral del 80 %) |
+| 04 | Advertencias | Calidad de datos y limitaciones (NPK sin validar, faltantes, textura, presupuesto) + **alerta «⚠️ Histórico de P alto»** cuando los últimos 2 ciclos superan 120 kg/ha de fósforo |
+| 05 | Próximos pasos | Plan de acción (incluye completar variables de fertilidad y umbral del 80 %) + **📈 Predicción de rendimiento** basada en el historial de ciclos (promedio × 1,15 plan optimizado / × 1,25 plan ideal) |
 
 Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3 niveles sin "Calibrado" a secas · 2) pH contextualizado por cultivo · 3) acciones condicionales por confiabilidad del sensor · 4) faltantes de fertilidad bajan la confianza y marcan "preliminar" · 5) textura obligatoria para cultivos sensibles · 6) pendiente/drenaje en el plano · 7) historial de manejo · 8) plan ejecutable con fuente/frecuencia/dosis · 9) fenología · 10) alerta fitosanitaria cruzada con clima · 11) metodología de muestreo del mapa de calor · 12) umbral duro de confianza < 80 % → "Pendiente de validación técnica".
 
@@ -776,7 +778,7 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 
 `clasificacionupra, estadodiscordancia, estadoficha, estadomembresia, estadorecomendacion, planmembresia, prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo`.
 
-### 12.3 Migraciones (001 → 014)
+### 12.3 Migraciones (001 → 017)
 
 - `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` + índice `idx_ciclos_lote` · `017` inicio de ciclo: `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes` y en `historial_ciclos_lote`.
 - **Auto-reparación al arranque**: `asegurar_enums()` crea tipos enum faltantes y `asegurar_reglas()` siembra reglas faltantes (idempotentes, corren en el `lifespan` de `main.py`).

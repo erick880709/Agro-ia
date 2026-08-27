@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787864036.3142517,
-    "ast_hash": "dc1dd50242347fd3edcc5ffbb282121d",
+    "mtime": 1787864626.823383,
+    "ast_hash": "4dc14f4ab14a3964ce7a5567553c1b71",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4515,8 +4515,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/reportes.py": {
-    "mtime": 1787858507.2900622,
-    "ast_hash": "3126dd8dce5fd3f2c7e7e4c3a7c053b1",
+    "mtime": 1787864472.585157,
+    "ast_hash": "40e09fc2a585a745873b476181ac947b",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/sensor_api.py": {
@@ -4570,8 +4570,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/reportes_html.py": {
-    "mtime": 1787853678.161788,
-    "ast_hash": "550a9ed05cd091f11433f69ed52992b5",
+    "mtime": 1787864515.7311144,
+    "ast_hash": "7c2f91abefceaa30802e5afacd59225c",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/003_dispositivos_iot.py": {
@@ -4830,8 +4830,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1787864036.318946,
-    "ast_hash": "669d56f4b5abb8960975f14ebbfe5c00",
+    "mtime": 1787864626.8255727,
+    "ast_hash": "910b30dd3a8e5538631036707e7adb64",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {
@@ -4855,8 +4855,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Pantallas_AgroIA.html": {
-    "mtime": 1787864050.0496547,
-    "ast_hash": "acae0635e57bfdc6c1cdf24d32903be7",
+    "mtime": 1787864626.8298686,
+    "ast_hash": "e96cd96fae88fbc9a4b027b37a096821",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/economia.py": {
@@ -4932,6 +4932,11 @@
   "apps/backend/alembic/versions/017_ciclo_inicio.py": {
     "mtime": 1787862254.9097385,
     "ast_hash": "612aa024443e55c71b2c01710696695f",
+    "semantic_hash": ""
+  },
+  "reports/reporte_test_ciclos.html": {
+    "mtime": 1787864567.3164825,
+    "ast_hash": "2ef7bec79708f50e57746d1b1a870c3c",
     "semantic_hash": ""
   }
 }
