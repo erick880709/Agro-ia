@@ -55,7 +55,9 @@ async function api(path, opts = {}) {
   if (!res.ok) {
     const detail = body && body.detail;
     const msg = (detail && (detail.message || JSON.stringify(detail))) || `HTTP ${res.status}`;
-    throw new Error(msg);
+    const err = new Error(msg);
+    err.detail = detail || null;
+    throw err;
   }
   return body;
 }
@@ -233,6 +235,19 @@ async function arrancarAplicacion() {
   document.getElementById('form-analyze').addEventListener('submit', enviarAnalisis);
   document.getElementById('form-carga').addEventListener('submit', enviarCarga);
   document.getElementById('form-finca').addEventListener('submit', enviarFinca);
+  // ── Wizard de finca (3 secciones) ──
+  document.querySelectorAll('.wizard-steps .wstep').forEach(b =>
+    b.addEventListener('click', () => irWStep(Number(b.dataset.step))));
+  document.querySelectorAll('[data-next]').forEach(b =>
+    b.addEventListener('click', () => irWStep(Number(b.dataset.next))));
+  document.getElementById('f-ubic-gps').addEventListener('click', usarMiUbicacion);
+  document.getElementById('f-ubic-mapa').addEventListener('click', abrirMapa);
+  document.getElementById('f-ubic-enlace').addEventListener('click', () => {
+    document.getElementById('f-enlace-wrap').style.display = '';
+  });
+  document.getElementById('f-enlace-aplicar').addEventListener('click', aplicarEnlace);
+  document.getElementById('f-mapa-cerrar').addEventListener('click', cerrarPoligono);
+  document.getElementById('f-mapa-limpiar').addEventListener('click', limpiarMapa);
   document.getElementById('form-usuario').addEventListener('submit', enviarUsuario);
   document.getElementById('form-reporte').addEventListener('submit', enviarReporte);
   document.getElementById('repo-tipo').addEventListener('change', aplicarTipoReporte);
@@ -385,7 +400,12 @@ function renderFincasList() {
           <span>Propietario: <b>${esc(f.propietario || '—')}</b></span>
           <span>Tel: ${esc(f.contacto_telefono || '—')}</span>
           ${f.contacto_email ? `<span>Email: ${esc(f.contacto_email)}</span>` : ''}
+          ${f.vereda ? `<span>Vereda: ${esc(f.vereda)}</span>` : ''}
           ${f.area_hectareas ? `<span>Área: ${f.area_hectareas} ha</span>` : ''}
+          ${f.area_calculada_ha ? `<span>Área calculada: ${f.area_calculada_ha} ha</span>` : ''}
+          ${f.tipo_area && f.tipo_area !== 'finca_completa' ? `<span>Tipo de área: ${esc(f.tipo_area)}</span>` : ''}
+          ${f.tiene_multiples_lotes ? '<span>Varios lotes: sí</span>' : ''}
+          ${f.precision_gps != null ? `<span>Precisión GPS: ±${f.precision_gps} m</span>` : ''}
           ${f.largo_metros && f.ancho_metros ? `<span>Dimensiones: ${f.largo_metros} × ${f.ancho_metros} m</span>` : ''}
           ${link ? `<span>📍 <a href="${esc(link)}" target="_blank">Ver en Google Maps</a></span>` : ''}
         </div>
@@ -419,43 +439,312 @@ function copiarTexto(texto, boton) {
   ok();
 }
 
+/* ─────────────────── wizard de registro de finca (3 secciones) ─────────────────── */
+
+const fincaWiz = {
+  lat: null, lng: null, altitud: null, precision: null,
+  fuente: null, geometria: null, areaCalc: null, perimetro: null,
+  puntos: [], mapa: null, poligono: null, marcadores: [],
+};
+
+function irWStep(n) {
+  if (n === 2 && !validarPaso1()) return;
+  if (n === 3 && !validarPaso2()) return;
+  document.querySelectorAll('.wstep').forEach(b =>
+    b.classList.toggle('active', Number(b.dataset.step) === n));
+  [1, 2, 3].forEach(i => {
+    document.getElementById('wstep-' + i).style.display = i === n ? '' : 'none';
+  });
+}
+
+function validarPaso1() {
+  const msg = document.getElementById('finca-msg');
+  const nombre = document.getElementById('f-nombre').value.trim();
+  const dep = document.getElementById('f-departamento').value;
+  const munSel = document.getElementById('f-municipio').value;
+  const municipio = munSel === '__otro'
+    ? document.getElementById('f-municipio-otro').value.trim() : munSel;
+  if (!nombre || !dep || !municipio) {
+    msg.innerHTML = errorBanner('Complete nombre, departamento y municipio antes de continuar.');
+    return false;
+  }
+  msg.innerHTML = '';
+  return true;
+}
+
+function validarPaso2() {
+  const msg = document.getElementById('finca-msg');
+  if (fincaWiz.lat == null || fincaWiz.lng == null) {
+    msg.innerHTML = errorBanner('Defina la ubicación (GPS, mapa o enlace de Google Maps) antes de continuar.');
+    return false;
+  }
+  msg.innerHTML = '';
+  return true;
+}
+
+function actualizarResumenUbicacion() {
+  const wrap = document.getElementById('f-ubicacion-resumen');
+  wrap.style.display = '';
+  document.getElementById('f-res-lat').textContent = fincaWiz.lat != null ? fincaWiz.lat.toFixed(5) : '—';
+  document.getElementById('f-res-lng').textContent = fincaWiz.lng != null ? fincaWiz.lng.toFixed(5) : '—';
+  document.getElementById('f-res-alt').textContent = fincaWiz.altitud != null
+    ? `${Math.round(fincaWiz.altitud).toLocaleString('es-CO')} msnm` : '—';
+  document.getElementById('f-res-prec').textContent = fincaWiz.precision != null
+    ? `±${Math.round(fincaWiz.precision)} m` : '—';
+}
+
+function aplicarCoordenadas(lat, lng, extra = {}) {
+  fincaWiz.lat = lat; fincaWiz.lng = lng;
+  fincaWiz.precision = extra.precision ?? null;
+  fincaWiz.fuente = extra.fuente || 'manual';
+  fincaWiz.altitud = extra.altitud ?? null;
+  fincaWiz.geometria = null; fincaWiz.puntos = [];
+  fincaWiz.areaCalc = null; fincaWiz.perimetro = null;
+  actualizarAreaCalc();
+  actualizarResumenUbicacion();
+  if (fincaWiz.altitud == null) cargarElevacion(lat, lng);
+}
+
+async function cargarElevacion(lat, lng) {
+  try {
+    const r = await api(`/location/elevation?lat=${lat}&lon=${lng}`, { method: 'GET' });
+    fincaWiz.altitud = r.elevation ?? r.altitud ?? r.altitud_estimada_msnm ?? null;
+    actualizarResumenUbicacion();
+  } catch { /* altitud opcional */ }
+}
+
+function usarMiUbicacion() {
+  const msg = document.getElementById('finca-msg');
+  if (!navigator.geolocation) {
+    msg.innerHTML = errorBanner('El navegador no soporta geolocalización.');
+    return;
+  }
+  msg.innerHTML = '<div class="ok-banner">📍 Obteniendo ubicación…</div>';
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      aplicarCoordenadas(pos.coords.latitude, pos.coords.longitude, {
+        precision: pos.coords.accuracy,
+        altitud: pos.coords.altitude ?? null,
+        fuente: 'gps_navegador',
+      });
+      msg.innerHTML = okBanner('Ubicación obtenida con GPS del dispositivo.');
+    },
+    err => {
+      msg.innerHTML = errorBanner('No se pudo obtener la ubicación: ' + (err.message || 'permiso denegado'));
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+  );
+}
+
+function parsearCoordenadas(texto) {
+  const t = (texto || '').trim();
+  const par = /^(-?\d+(?:\.\d+)?)[,\s]+(-?\d+(?:\.\d+)?)$/.exec(t);
+  if (par) return [parseFloat(par[1]), parseFloat(par[2])];
+  const url = /(-?\d+(?:\.\d+)?)[,\s]+(-?\d+(?:\.\d+)?)/.exec(t);
+  if (url) return [parseFloat(url[1]), parseFloat(url[2])];
+  return null;
+}
+
+function aplicarEnlace() {
+  const msg = document.getElementById('finca-msg');
+  const texto = document.getElementById('f-enlace').value;
+  const coords = parsearCoordenadas(texto);
+  if (!coords) {
+    msg.innerHTML = errorBanner('No se pudieron extraer coordenadas del enlace. Pegue un enlace de Google Maps o "lat, lng".');
+    return;
+  }
+  aplicarCoordenadas(coords[0], coords[1], { fuente: 'google_maps' });
+  msg.innerHTML = okBanner('Coordenadas aplicadas desde el enlace.');
+}
+
+/* ── Mapa (Leaflet, se carga desde CDN la primera vez) ── */
+
+let leafletCargando = false;
+function cargarLeaflet(cb) {
+  if (window.L) { cb(); return; }
+  if (leafletCargando) {
+    const t = setInterval(() => { if (window.L) { clearInterval(t); cb(); } }, 250);
+    return;
+  }
+  leafletCargando = true;
+  const css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+  document.head.appendChild(css);
+  const s = document.createElement('script');
+  s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  s.onload = () => cb();
+  s.onerror = () => {
+    document.getElementById('finca-msg').innerHTML =
+      errorBanner('No se pudo cargar el mapa (sin conexión). Use "Usar mi ubicación" o el enlace de Google Maps.');
+  };
+  document.head.appendChild(s);
+}
+
+function abrirMapa() {
+  const msg = document.getElementById('finca-msg');
+  msg.innerHTML = '';
+  document.getElementById('f-mapa-wrap').style.display = '';
+  document.getElementById('f-enlace-wrap').style.display = 'none';
+  cargarLeaflet(() => {
+    if (fincaWiz.mapa) { fincaWiz.mapa.invalidateSize(); return; }
+    const centro = fincaWiz.lat != null ? [fincaWiz.lat, fincaWiz.lng] : [4.57, -75.64];
+    fincaWiz.mapa = L.map('f-mapa').setView(centro, 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19, attribution: '© OpenStreetMap',
+    }).addTo(fincaWiz.mapa);
+    fincaWiz.mapa.on('click', e => {
+      fincaWiz.puntos.push({ lat: e.latlng.lat, lng: e.latlng.lng });
+      fincaWiz.marcadores.push(L.marker(e.latlng).addTo(fincaWiz.mapa));
+      if (fincaWiz.poligono) { fincaWiz.mapa.removeLayer(fincaWiz.poligono); fincaWiz.poligono = null; }
+    });
+  });
+}
+
+function cerrarPoligono() {
+  const msg = document.getElementById('finca-msg');
+  if (fincaWiz.puntos.length < 3) {
+    msg.innerHTML = errorBanner('Marque al menos 3 vértices del lindero.');
+    return;
+  }
+  const latlngs = fincaWiz.puntos.map(p => [p.lat, p.lng]);
+  if (fincaWiz.poligono) fincaWiz.mapa.removeLayer(fincaWiz.poligono);
+  fincaWiz.poligono = L.polygon(latlngs, { color: '#2e7d32', weight: 2 }).addTo(fincaWiz.mapa);
+  fincaWiz.mapa.fitBounds(fincaWiz.poligono.getBounds(), { padding: [20, 20] });
+  // Cálculo local del área (el backend lo recalcula con autoridad)
+  fincaWiz.areaCalc = calcularAreaHa(fincaWiz.puntos);
+  fincaWiz.perimetro = calcularPerimetroM(fincaWiz.puntos);
+  // Geometría GeoJSON ([lng, lat], anillo cerrado)
+  const anillo = fincaWiz.puntos.map(p => [p.lng, p.lat]);
+  anillo.push([fincaWiz.puntos[0].lng, fincaWiz.puntos[0].lat]);
+  fincaWiz.geometria = { type: 'Polygon', coordinates: [anillo] };
+  // Centroide como punto de referencia de la finca
+  const lat0 = fincaWiz.puntos.reduce((s, p) => s + p.lat, 0) / fincaWiz.puntos.length;
+  const lng0 = fincaWiz.puntos.reduce((s, p) => s + p.lng, 0) / fincaWiz.puntos.length;
+  fincaWiz.lat = lat0; fincaWiz.lng = lng0;
+  fincaWiz.fuente = 'mapa';
+  actualizarAreaCalc();
+  actualizarResumenUbicacion();
+  if (fincaWiz.altitud == null) cargarElevacion(lat0, lng0);
+  msg.innerHTML = okBanner(`Polígono cerrado: ${fincaWiz.areaCalc.toFixed(2)} ha calculadas.`);
+}
+
+function limpiarMapa() {
+  fincaWiz.marcadores.forEach(m => { if (fincaWiz.mapa) fincaWiz.mapa.removeLayer(m); });
+  if (fincaWiz.poligono && fincaWiz.mapa) fincaWiz.mapa.removeLayer(fincaWiz.poligono);
+  fincaWiz.marcadores = []; fincaWiz.puntos = [];
+  fincaWiz.poligono = null; fincaWiz.geometria = null;
+  fincaWiz.areaCalc = null; fincaWiz.perimetro = null;
+  actualizarAreaCalc();
+  document.getElementById('finca-msg').innerHTML = '';
+}
+
+function calcularAreaHa(puntos) {
+  const lat0 = puntos.reduce((s, p) => s + p.lat, 0) / puntos.length;
+  const xy = puntos.map(p => [
+    p.lng * Math.cos(lat0 * Math.PI / 180) * 111320,
+    p.lat * 110574,
+  ]);
+  let area = 0;
+  for (let i = 0; i < xy.length; i++) {
+    const [x1, y1] = xy[i], [x2, y2] = xy[(i + 1) % xy.length];
+    area += x1 * y2 - x2 * y1;
+  }
+  return Math.abs(area) / 2 / 10000;
+}
+
+function calcularPerimetroM(puntos) {
+  const R = 6371000;
+  const rad = d => d * Math.PI / 180;
+  let per = 0;
+  for (let i = 0; i < puntos.length; i++) {
+    const a = puntos[i], b = puntos[(i + 1) % puntos.length];
+    const dLat = rad(b.lat - a.lat), dLng = rad(b.lng - a.lng);
+    const h = Math.sin(dLat / 2) ** 2 +
+      Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLng / 2) ** 2;
+    per += 2 * R * Math.asin(Math.sqrt(h));
+  }
+  return per;
+}
+
+function actualizarAreaCalc() {
+  const el = document.getElementById('f-area-calc');
+  if (!el) return;
+  if (fincaWiz.areaCalc != null) {
+    el.innerHTML = `<b>${fincaWiz.areaCalc.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ha</b>
+      <small>(calculada del polígono · perímetro ${Math.round(fincaWiz.perimetro || 0).toLocaleString('es-CO')} m)</small>`;
+  } else {
+    el.innerHTML = '— <small>(calculada automáticamente del polígono)</small>';
+  }
+}
+
+function renderValidaciones(pasos) {
+  const div = document.getElementById('finca-validaciones');
+  if (!pasos || !pasos.length) { div.innerHTML = ''; return; }
+  const icono = { ok: '✅', error: '❌', warn: '⚠️' };
+  div.innerHTML = '<div class="val-box">' + pasos.map(p =>
+    `<div class="val-step val-${p.estado}">${icono[p.estado] || '•'} <b>${p.paso}.</b> ${esc(p.mensaje)}</div>`
+  ).join('') + '</div>';
+}
+
 async function enviarFinca(e) {
   e.preventDefault();
   const msg = document.getElementById('finca-msg');
   const btn = document.getElementById('finca-btn');
   msg.innerHTML = '';
+  renderValidaciones(null);
 
   const municipioSel = document.getElementById('f-municipio').value;
   const municipio = municipioSel === '__otro'
     ? document.getElementById('f-municipio-otro').value.trim()
     : municipioSel;
 
-  const body = {
-    nombre: document.getElementById('f-nombre').value.trim(),
-    departamento: document.getElementById('f-departamento').value,
-    municipio: municipio,
-    coordenadas_google: document.getElementById('f-coordenadas').value.trim(),
-    propietario: document.getElementById('f-propietario').value.trim(),
-    contacto_telefono: document.getElementById('f-telefono').value.trim(),
-    contacto_email: document.getElementById('f-email').value.trim() || null,
-    area_hectareas: document.getElementById('f-area').value ? Number(document.getElementById('f-area').value) : null,
-    largo_metros: document.getElementById('f-largo').value ? Number(document.getElementById('f-largo').value) : null,
-    ancho_metros: document.getElementById('f-ancho').value ? Number(document.getElementById('f-ancho').value) : null,
-  };
-
   if (!municipio) {
     msg.innerHTML = errorBanner('Selecciona un municipio o especifícalo.');
     return;
   }
+  if (fincaWiz.lat == null || fincaWiz.lng == null) {
+    msg.innerHTML = errorBanner('Define la ubicación de la finca en el paso 2.');
+    return;
+  }
+
+  const area = document.getElementById('f-area').value
+    ? Number(document.getElementById('f-area').value) : null;
+  const enlace = document.getElementById('f-enlace').value.trim();
+  const multi = document.querySelector('input[name="f-multi"]:checked');
+
+  const body = {
+    nombre: document.getElementById('f-nombre').value.trim(),
+    departamento: document.getElementById('f-departamento').value,
+    municipio: municipio,
+    vereda: document.getElementById('f-vereda').value.trim() || null,
+    propietario: document.getElementById('f-propietario').value.trim(),
+    contacto_telefono: document.getElementById('f-telefono').value.trim(),
+    contacto_email: document.getElementById('f-email').value.trim() || null,
+    latitud: fincaWiz.lat,
+    longitud: fincaWiz.lng,
+    altitud_msnm: fincaWiz.altitud,
+    precision_gps: fincaWiz.precision,
+    fuente_geolocalizacion: fincaWiz.fuente,
+    geometria: fincaWiz.geometria,
+    coordenadas_google: enlace || `${fincaWiz.lat}, ${fincaWiz.lng}`,
+    area_declarada_ha: area,
+    area_hectareas: area,
+    tipo_area: document.getElementById('f-tipo-area').value,
+    tiene_multiples_lotes: multi ? multi.value === 'si' : false,
+    largo_metros: document.getElementById('f-largo').value ? Number(document.getElementById('f-largo').value) : null,
+    ancho_metros: document.getElementById('f-ancho').value ? Number(document.getElementById('f-ancho').value) : null,
+  };
 
   btn.disabled = true;
-  btn.textContent = '⏳ Guardando…';
+  btn.textContent = '⏳ Validando y guardando…';
   try {
     const r = await api('/fincas', { method: 'POST', headers: headers(), body: JSON.stringify(body) });
     const finca = r.finca || {};
     const fid = finca.id || '';
+    renderValidaciones(r.validaciones);
     msg.innerHTML = okBanner(
-      `Finca <b>${esc(finca.nombre)}</b> registrada con éxito.`
+      `Finca <b>${esc(finca.nombre)}</b> creada y validada con éxito.`
     ) + `
     <div class="finca-id-box">
       <div><b>ID de la finca (para el sensor):</b></div>
@@ -464,14 +753,24 @@ async function enviarFinca(e) {
         <button type="button" class="btn btn-ghost" data-copiar="${esc(fid)}">📋 Copiar</button>
       </div>
       <p class="muted">Envíe este ID en cada trama del sensor como <code>finca_id</code>, o úselo para registrar el dispositivo en <code>POST /api/v1/iot/dispositivos</code>.</p>
-    </div>`;
+    </div>
+    ${r.lote_principal ? `<p class="muted">🌱 Lote productivo creado: <b>${esc(r.lote_principal.nombre)}</b>${r.lote_principal.area_ha != null ? ` (${esc(String(r.lote_principal.area_ha))} ha)` : ''}.</p>` : ''}`;
     const btnCopia = msg.querySelector('[data-copiar]');
     if (btnCopia) btnCopia.addEventListener('click', () => copiarTexto(btnCopia.dataset.copiar || '', btnCopia));
     e.target.reset();
+    fincaWiz.lat = null; fincaWiz.lng = null; fincaWiz.altitud = null;
+    fincaWiz.precision = null; fincaWiz.geometria = null;
+    fincaWiz.areaCalc = null; fincaWiz.perimetro = null; fincaWiz.puntos = [];
+    document.getElementById('f-ubicacion-resumen').style.display = 'none';
+    document.getElementById('f-mapa-wrap').style.display = 'none';
+    document.getElementById('f-enlace-wrap').style.display = 'none';
+    actualizarAreaCalc();
+    irWStep(1);
     await cargarFincas();
     renderFincasList();
     await cargarDashboard();
   } catch (err) {
+    renderValidaciones(err.detail && err.detail.validaciones);
     msg.innerHTML = errorBanner(err.message);
   } finally {
     btn.disabled = false;

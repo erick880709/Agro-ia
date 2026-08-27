@@ -3925,8 +3925,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/recomendaciones.py": {
-    "mtime": 1787808567.1181526,
-    "ast_hash": "63d635f89c40adc3d7a9b7945070e710",
+    "mtime": 1787810119.8947992,
+    "ast_hash": "1351ab0c54e87d5544cddf6cef014ae7",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/__init__.py": {
@@ -3980,8 +3980,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/orchestrator.py": {
-    "mtime": 1787809472.0987062,
-    "ast_hash": "fd7400c557848f6409fdd44da3840240",
+    "mtime": 1787810075.9818556,
+    "ast_hash": "3b2d58d744bf1205378f09e8bf2270d7",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/rules_engine.py": {
@@ -4800,8 +4800,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/asegurar_reglas.py": {
-    "mtime": 1787805746.3671162,
-    "ast_hash": "bfae2975175e5f6485fa1407cd43235d",
+    "mtime": 1787810101.530155,
+    "ast_hash": "5dd5c27b24446259629f875223c59282",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/aceptacion_recomendacion.py": {
@@ -4822,6 +4822,16 @@
   "reports/test_mejoras_demo.html": {
     "mtime": 1787809359.1005495,
     "ast_hash": "f9c9aca73e0d9f581cefebcc0303b893",
+    "semantic_hash": ""
+  },
+  "resources/architecture/Documento_Funcional_Tecnico_AgroIA.html": {
+    "mtime": 1787834690.0162814,
+    "ast_hash": "b0c75b4e443e1fcc5c7e85227c454246",
+    "semantic_hash": ""
+  },
+  "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
+    "mtime": 1787834549.571844,
+    "ast_hash": "f8e9d71d529878ca2be2bef07e06c70d",
     "semantic_hash": ""
   }
 }

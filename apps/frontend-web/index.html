@@ -255,54 +255,131 @@
       <div class="grid-2">
         <div class="card" id="finca-form-card">
           <h2>🏡 Registrar finca <span class="muted">(solo administrador)</span></h2>
-          <form id="form-finca" class="form-grid">
-            <label class="field">
-              <span>Nombre de la finca *</span>
-              <input id="f-nombre" required minlength="2" maxlength="200" />
-            </label>
-            <label class="field">
-              <span>Departamento *</span>
-              <select id="f-departamento" required></select>
-            </label>
-            <label class="field">
-              <span>Municipio *</span>
-              <select id="f-municipio" required></select>
-            </label>
-            <label class="field" id="f-municipio-otro-wrap" style="display:none">
-              <span>Municipio (especifique)</span>
-              <input id="f-municipio-otro" />
-            </label>
-            <label class="field">
-              <span>Ubicación coordenadas Google * <small>(enlace de Maps o "lat, lng")</small></span>
-              <input id="f-coordenadas" required placeholder="4.5339, -75.6811 o https://maps.app.goo.gl/…" />
-            </label>
-            <label class="field">
-              <span>Propietario *</span>
-              <input id="f-propietario" required minlength="2" />
-            </label>
-            <label class="field">
-              <span>Teléfono de contacto *</span>
-              <input id="f-telefono" required minlength="7" maxlength="50" />
-            </label>
-            <label class="field">
-              <span>Email de contacto</span>
-              <input id="f-email" type="email" />
-            </label>
-            <label class="field">
-              <span>Área (hectáreas) — opcional</span>
-              <input id="f-area" type="number" min="0" step="0.01" />
-            </label>
-            <label class="field">
-              <span>Largo del terreno (m) — opcional</span>
-              <input id="f-largo" type="number" min="0" step="0.01" />
-            </label>
-            <label class="field">
-              <span>Ancho del terreno (m) — opcional</span>
-              <input id="f-ancho" type="number" min="0" step="0.01" />
-            </label>
-            <button type="submit" class="btn btn-primary" id="finca-btn">💾 Guardar finca</button>
+          <form id="form-finca" class="form-grid" novalidate>
+            <div class="wizard-steps">
+              <button type="button" class="wstep active" data-step="1"><span>1</span><b>Información básica</b></button>
+              <button type="button" class="wstep" data-step="2"><span>2</span><b>Ubicación</b></button>
+              <button type="button" class="wstep" data-step="3"><span>3</span><b>Características del predio</b></button>
+            </div>
+
+            <!-- Paso 1: Información básica -->
+            <div class="wpanel" id="wstep-1">
+              <label class="field">
+                <span>Nombre de la finca *</span>
+                <input id="f-nombre" required minlength="2" maxlength="200" />
+              </label>
+              <label class="field">
+                <span>Propietario *</span>
+                <input id="f-propietario" required minlength="2" />
+              </label>
+              <label class="field">
+                <span>Teléfono de contacto *</span>
+                <input id="f-telefono" required minlength="7" maxlength="50" />
+              </label>
+              <label class="field">
+                <span>Email de contacto</span>
+                <input id="f-email" type="email" />
+              </label>
+              <label class="field">
+                <span>Departamento *</span>
+                <select id="f-departamento" required></select>
+              </label>
+              <label class="field">
+                <span>Municipio *</span>
+                <select id="f-municipio" required></select>
+              </label>
+              <label class="field" id="f-municipio-otro-wrap" style="display:none">
+                <span>Municipio (especifique)</span>
+                <input id="f-municipio-otro" />
+              </label>
+              <label class="field">
+                <span>Vereda / Corregimiento</span>
+                <input id="f-vereda" maxlength="100" placeholder="Ej. La Tebaida" />
+              </label>
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-primary" data-next="2">Siguiente →</button>
+              </div>
+            </div>
+
+            <!-- Paso 2: Ubicación -->
+            <div class="wpanel" id="wstep-2" style="display:none">
+              <div class="ubicacion-acciones">
+                <button type="button" id="f-ubic-gps">📍 Usar mi ubicación</button>
+                <button type="button" id="f-ubic-mapa">🗺️ Seleccionar en mapa</button>
+                <button type="button" id="f-ubic-enlace">🔗 Pegar enlace Google Maps</button>
+              </div>
+              <label class="field" id="f-enlace-wrap" style="display:none">
+                <span>Enlace de Google Maps o "lat, lng"</span>
+                <div class="enlace-row">
+                  <input id="f-enlace" placeholder="https://maps.app.goo.gl/… o 4.5339, -75.6811" />
+                  <button type="button" class="btn btn-ghost" id="f-enlace-aplicar">Aplicar</button>
+                </div>
+              </label>
+              <div id="f-mapa-wrap" style="display:none">
+                <div id="f-mapa" class="mapa-picker"></div>
+                <p class="muted">Haga clic sobre el mapa para marcar los vértices del lindero; luego pulse
+                «Cerrar polígono» para calcular el área georreferenciada.</p>
+                <div class="ubicacion-acciones">
+                  <button type="button" id="f-mapa-cerrar">🟩 Cerrar polígono</button>
+                  <button type="button" id="f-mapa-limpiar">🗑️ Limpiar</button>
+                </div>
+              </div>
+              <div id="f-ubicacion-resumen" class="ubicacion-resumen" style="display:none">
+                <div class="ur-item"><b>Latitud</b><span id="f-res-lat">—</span></div>
+                <div class="ur-item"><b>Longitud</b><span id="f-res-lng">—</span></div>
+                <div class="ur-item"><b>Altitud</b><span id="f-res-alt">—</span></div>
+                <div class="ur-item"><b>Precisión</b><span id="f-res-prec">—</span></div>
+              </div>
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-ghost" data-next="1">← Atrás</button>
+                <button type="button" class="btn btn-primary" data-next="3">Siguiente →</button>
+              </div>
+            </div>
+
+            <!-- Paso 3: Características del predio -->
+            <div class="wpanel" id="wstep-3" style="display:none">
+              <label class="field">
+                <span>Tipo de área *</span>
+                <select id="f-tipo-area">
+                  <option value="finca_completa">Finca completa</option>
+                  <option value="lote">Lote</option>
+                  <option value="parcela">Parcela</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Área registrada (ha)</span>
+                <input id="f-area" type="number" min="0.01" step="0.01" placeholder="2,50" />
+              </label>
+              <div class="field">
+                <span>Área georreferenciada</span>
+                <div class="area-calc" id="f-area-calc">— <small>(calculada automáticamente del polígono)</small></div>
+              </div>
+              <div class="field">
+                <span>¿La finca tiene varios lotes?</span>
+                <div class="radio-row">
+                  <label><input type="radio" name="f-multi" value="si" /> Sí</label>
+                  <label><input type="radio" name="f-multi" value="no" checked /> No</label>
+                </div>
+              </div>
+              <details class="field">
+                <summary>Dimensiones del terreno (opcional)</summary>
+                <label class="field">
+                  <span>Largo del terreno (m)</span>
+                  <input id="f-largo" type="number" min="0" step="0.01" />
+                </label>
+                <label class="field">
+                  <span>Ancho del terreno (m)</span>
+                  <input id="f-ancho" type="number" min="0" step="0.01" />
+                </label>
+              </details>
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-ghost" data-next="2">← Atrás</button>
+                <button type="submit" class="btn btn-primary" id="finca-btn">💾 Guardar finca</button>
+              </div>
+            </div>
           </form>
           <div id="finca-msg"></div>
+          <div id="finca-validaciones"></div>
         </div>
         <div class="card">
           <h2>🗂️ Fincas registradas</h2>

@@ -1,8 +1,9 @@
 """Modelo Finca — predio agrícola del usuario."""
 import uuid
+from datetime import datetime
 
 from agroia.database import Base
-from sqlalchemy import Boolean, Float, ForeignKey, String
+from sqlalchemy import Boolean, DateTime, Float, ForeignKey, String
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -90,6 +91,41 @@ class Finca(Base, TenantMixin, TimestampMixin):
     etapa_fenologica: Mapped[str | None] = mapped_column(
         String(30), nullable=True,
         comment="Etapa fenológica: Vegetativa | Floración | Fructificación | Cosecha"
+    )
+    # ── Georreferenciación y loteo (2026-08-27) ──
+    vereda: Mapped[str | None] = mapped_column(
+        String(100), nullable=True, comment="Vereda / corregimiento"
+    )
+    precision_gps: Mapped[float | None] = mapped_column(
+        Float, nullable=True, comment="Precisión GPS en metros"
+    )
+    fuente_geolocalizacion: Mapped[str | None] = mapped_column(
+        String(30), nullable=True,
+        comment="gps_navegador | mapa | google_maps | manual"
+    )
+    geometria: Mapped[dict | None] = mapped_column(
+        JSONB, nullable=True, comment="Geometría GeoJSON del predio (polígono)"
+    )
+    area_declarada_ha: Mapped[float | None] = mapped_column(
+        Float, nullable=True, comment="Área declarada (ha)"
+    )
+    area_calculada_ha: Mapped[float | None] = mapped_column(
+        Float, nullable=True, comment="Área calculada desde la geometría (ha)"
+    )
+    perimetro_m: Mapped[float | None] = mapped_column(
+        Float, nullable=True, comment="Perímetro calculado (m)"
+    )
+    tipo_area: Mapped[str] = mapped_column(
+        String(30), nullable=False, default="finca_completa", server_default="finca_completa",
+        comment="finca_completa | lote | parcela"
+    )
+    tiene_multiples_lotes: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false",
+        comment="¿La finca tiene varios lotes?"
+    )
+    fecha_georreferenciacion: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True,
+        comment="Fecha de captura de coordenadas"
     )
 
     def __repr__(self) -> str:

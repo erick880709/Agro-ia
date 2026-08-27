@@ -108,6 +108,12 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
   11. Metodología de muestreo del mapa de calor (grilla ciega vs puntos dirigidos).
   12. Umbral duro de confianza < 80 % → la clasificación se muestra como **Pendiente de validación técnica** (no "Apta" a secas).
 
+### Registro de finca en 3 secciones + cadena de validación + separación Finca/Lote (2026-08-27)
+
+- **Wizard de 3 secciones** en «🏡 Fincas»: 1) Información básica (nombre, propietario, teléfono, email, departamento, municipio, vereda) · 2) Ubicación (📍 Usar mi ubicación con GPS del navegador, 🗺️ seleccionar en mapa con Leaflet y polígono del lindero, 🔗 pegar enlace Google Maps; muestra latitud, longitud, altitud y precisión) · 3) Características del predio (tipo de área, área registrada, **área georreferenciada calculada automáticamente del polígono**, ¿varios lotes?).
+- **Migración 011**: nuevas columnas en `fincas` (`vereda, precision_gps, fuente_geolocalizacion, geometria (GeoJSON), area_declarada_ha, area_calculada_ha, perimetro_m, tipo_area, tiene_multiples_lotes, fecha_georreferenciacion`) + tabla `lotes` (separación arquitectónica Finca ≠ Lote). Al guardar se crea el **lote principal** y `GET /fincas/{id}/lotes` los lista.
+- **Cadena de validación al guardar** (`services/geografia.py`, catálogo de 32 departamentos + municipios con centroides, espejo de `departamentos.js`): 1 departamento existe → 2 municipio pertenece → 3 coordenadas válidas → 4 coinciden con el municipio (≤ 50 km del centroide) → 5 área razonable (0.01–100 000 ha) → 6 precisión aceptable (≤ 100 m). Cada paso se devuelve y se pinta en la UI (✅/⚠️/❌); el error 422 `VALIDACION_FINCA` incluye la lista de pasos. `GET /api/v1/location/catalogo` expone el catálogo.
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).

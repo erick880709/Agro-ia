@@ -15,6 +15,32 @@ logger = get_logger(__name__)
 router = APIRouter(prefix="/api/v1/location", tags=["geolocalización"])
 
 
+@router.get("/catalogo")
+async def catalogo_geografico():
+    """Catálogo departamento → municipios usado por la validación de fincas."""
+    from agroia_backend.services.geografia import CATALOGO, CENTROIDES
+
+    return {
+        "departamentos": [
+            {
+                "nombre": dep,
+                "municipios": [
+                    {
+                        "nombre": mun,
+                        "centroide": (
+                            {"latitud": CENTROIDES[mun][0], "longitud": CENTROIDES[mun][1]}
+                            if mun in CENTROIDES else None
+                        ),
+                    }
+                    for mun in sorted(municipios)
+                ],
+            }
+            for dep, municipios in sorted(CATALOGO.items())
+        ],
+        "total_departamentos": len(CATALOGO),
+    }
+
+
 @router.get("/enrich")
 async def enriquecer_ubicacion(
     lat: float = Query(..., ge=-90, le=90, description="Latitud (WGS84)"),
