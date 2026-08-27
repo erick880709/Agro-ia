@@ -166,6 +166,12 @@ _CSS = """
   .toolbar button { font-family: var(--sans); font-size: .82rem; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface-2); color: var(--text); cursor: pointer; }
   .toolbar button:hover { border-color: var(--accent); color: var(--accent); }
 
+  .tabla-ciclos { width: 100%; border-collapse: collapse; font-size: .82rem; margin-top: 8px; }
+  .tabla-ciclos th { text-align: left; background: rgba(135,169,92,.14); color: var(--moss); padding: 7px 9px; border-bottom: 2px solid var(--line); white-space: nowrap; }
+  .tabla-ciclos td { padding: 7px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .tabla-ciclos tr:hover td { background: rgba(135,169,92,.06); }
+  .prediccion-rend { margin: 4px 0 14px; padding: 12px 16px; border-left: 3px solid var(--moss); background: rgba(135,169,92,.1); font-size: .88rem; }
+
   @media print {
     body { background: #fff; color: #111; padding: 0; }
     .sheet { box-shadow: none; border: none; max-width: none; background: #fff; }
@@ -958,6 +964,7 @@ def _seccion_plano_lote(
     finca: dict | None,
     clima: dict | None = None,
     cultivo_nombre: str | None = None,
+    historial_ciclos: list[dict] | None = None,
 ) -> str:
     """Plano del lote: dibujo de los puntos de muestreo (pos_x, pos_y).
 
@@ -1201,6 +1208,37 @@ def _seccion_plano_lote(
             '</div>'
         )
 
+    # ── Historial de ciclos (últimos 3) con línea de tiempo ──
+    ciclos_html = ""
+    if historial_ciclos:
+        filas_ciclos = []
+        for c in historial_ciclos:
+            aplic = c.get("aplicaciones") or []
+            aplic_txt = " · ".join(
+                f"{esc(str(a.get('producto')))} {_num(a.get('dosis_kg_ha'), 0)} kg/ha"
+                for a in aplic[:3]
+            ) or "—"
+            rend = c.get("rendimiento_tn_ha")
+            filas_ciclos.append(
+                "<tr>"
+                f"<td>{esc(c.get('fecha_siembra') or '?')}</td>"
+                f"<td>{esc(c.get('cultivo') or '—')}</td>"
+                f"<td>{aplic_txt}</td>"
+                f"<td>{esc(c.get('fecha_cosecha') or '—')}</td>"
+                f"<td class='num'>{_num(rend, 1) + ' t/ha' if rend else '—'}</td>"
+                "</tr>"
+            )
+        ciclos_html = (
+            '<div class="clima-muestra">'
+            '<div class="heat-title">📜 Historial de ciclos — línea de tiempo ' 
+            '(Siembra → Aplicaciones → Cosecha → Rendimiento)</div>'
+            '<div class="table-wrap"><table class="tabla-ciclos">'
+            '<tr><th>Siembra</th><th>Cultivo</th><th>Aplicaciones destacadas</th>' 
+            '<th>Cosecha</th><th>Rendimiento</th></tr>'
+            + "".join(filas_ciclos)
+            + '</table></div></div>'
+        )
+
     return f"""
   <section class="block plano-lote">
     <div class="block-head"><span class="block-num">N</span>
@@ -1214,6 +1252,7 @@ def _seccion_plano_lote(
     <div class="muted" style="margin-top:8px">📐 Metodología de muestreo: {metodologia}</div>
     {clima_html}
     {manejo_html}
+    {ciclos_html}
     {nota_cero}
   </section>"""
 
@@ -1346,6 +1385,9 @@ def generar_reporte_html(
     puntos_sugeridos: list[dict] | None = None,
     confianza_actual: float | None = None,
     rendimiento_actual_t_ha: float | None = None,
+    historial_ciclos: list[dict] | None = None,
+    prediccion_rendimiento: dict | None = None,
+    advertencia_acumulacion: str | None = None,
 ) -> str:
     """Construye el documento HTML completo del reporte."""
     fecha = datetime.now(timezone.utc).astimezone().strftime("%d/%m/%Y %H:%M")
@@ -1368,7 +1410,9 @@ def generar_reporte_html(
     cultivo_nombre = (
         (uc2 or {}).get("cultivo") or (uc1 or {}).get("cultivo")
     )
-    seccion_plano = _seccion_plano_lote(muestras, finca, clima, cultivo_nombre)
+    seccion_plano = _seccion_plano_lote(
+        muestras, finca, clima, cultivo_nombre, historial_ciclos=historial_ciclos
+    )
 
     # Parámetros faltantes: aviso para un reporte con mayor detalle
     seccion_faltantes = ""
@@ -1451,6 +1495,8 @@ def generar_reporte_html(
     explicacion_campo = generar_explicacion_campesina(uc1=uc1, uc2=uc2, lectura=lectura)
 
     advertencias = []
+    if advertencia_acumulacion:
+        advertencias.append(advertencia_acumulacion)
     for a in (uc2, uc1):
         if a and a.get("advertencia"):
             for w in a["advertencia"].split("."):
@@ -1475,6 +1521,19 @@ def generar_reporte_html(
             "inteligente de la sección P e ingresar los resultados para subir "
             "la confianza del reporte."
         ))
+
+    # ── Predicción de rendimiento (histórico de ciclos + planes) ──
+    prediccion_html = ""
+    if prediccion_rendimiento:
+        p = prediccion_rendimiento
+        prediccion_html = (
+            '<div class="prediccion-rend">📈 <b>Predicción de rendimiento:</b> '
+            f"Basado en su historial (promedio <b>{_num(p['promedio'], 1)} t/ha</b>) "
+            f"y aplicando el plan optimizado, estimamos un rendimiento de "
+            f"<b>{_num(p['optimizado'], 1)} t/ha (+15%)</b>. Si aplica el plan ideal "
+            f"(sin restricción de presupuesto), estimamos "
+            f"<b>{_num(p['ideal'], 1)} t/ha (+25%)</b>.</div>"
+        )
 
     datos_json = ""
     try:
@@ -1538,6 +1597,7 @@ def generar_reporte_html(
       <div><div class="block-title">Próximos pasos</div>
       <div class="block-sub">Plan de acción sugerido</div></div>
     </div>
+    {prediccion_html}
     <ol class="steps">{"".join(f"<li>{esc(p)}</li>" for p in pasos)}</ol>
   </section>
   <div class="stamp">AgroIA · sistema experto UPRA / Cenicafé / AGROSAVIA · generado {esc(fecha)}</div>

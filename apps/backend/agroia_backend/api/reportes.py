@@ -16,7 +16,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from agroia_backend.models.cultivo import EstadoFicha, FichaTecnica
+from agroia_backend.models.cultivo import Cultivo, EstadoFicha, FichaTecnica
 from agroia_backend.models.dispositivo_iot import DispositivoIoT
 from agroia_backend.models.finca import Finca
 from agroia_backend.models.sensor_reading import SensorReading
@@ -34,6 +34,107 @@ from agroia_backend.services.rules_engine import RulesEngine
 
 logger = get_logger(__name__)
 router = APIRouter(prefix="/api/v1/reportes", tags=["reportes"])
+
+_PALABRAS_FOSFORO = {"dap", "fosfato", "fosforo", "fósforo", "p2o5", "superfosfato", "roca fosfórica"}
+
+
+def _dosis_fosforo_ciclo(aplicaciones: list | None) -> float | None:
+    """Máxima dosis (kg/ha) de productos fosforados en las aplicaciones del ciclo."""
+    max_dosis = None
+    for a in aplicaciones or []:
+        if not isinstance(a, dict):
+            continue
+        nombre = str(a.get("producto", "")).lower()
+        if any(p in nombre for p in _PALABRAS_FOSFORO):
+            try:
+                dosis = float(a.get("dosis_kg_ha") or 0)
+            except (TypeError, ValueError):
+                continue
+            max_dosis = dosis if max_dosis is None else max(max_dosis, dosis)
+    return max_dosis
+
+
+async def _historial_ciclos_reporte(db, finca_uuid) -> dict:
+    """Últimos 3 ciclos de la finca + predicción de rendimiento + alerta de P."""
+    from agroia_backend.models.ciclo_lote import CicloLote
+    from agroia_backend.models.lote import Lote
+
+    lote = (
+        await db.execute(
+            select(Lote)
+            .where(Lote.finca_id == finca_uuid, Lote.activo.is_(True))
+            .order_by(Lote.created_at)
+            .limit(1)
+        )
+    ).scalars().first()
+    if lote is None:
+        return {"ciclos": [], "prediccion": None, "advertencia_acumulacion": None}
+
+    ciclos = (
+        await db.execute(
+            select(CicloLote)
+            .where(CicloLote.lote_id == lote.id)
+            .order_by(CicloLote.fecha_siembra.desc(), CicloLote.created_at.desc())
+            .limit(3)
+        )
+    ).scalars().all()
+
+    nombres: dict[str, str] = {}
+    for c in ciclos:
+        key = str(c.cultivo_id)
+        if key not in nombres:
+            cultivo = (
+                await db.execute(
+                    select(Cultivo).where(Cultivo.id == c.cultivo_id)
+                )
+            ).scalar_one_or_none()
+            nombres[key] = cultivo.nombre if cultivo is not None else str(c.cultivo_id)
+
+    historial = [
+        {
+            "cultivo": nombres.get(str(c.cultivo_id)),
+            "fecha_siembra": c.fecha_siembra.isoformat() if c.fecha_siembra else None,
+            "fecha_cosecha": c.fecha_cosecha.isoformat() if c.fecha_cosecha else None,
+            "rendimiento_tn_ha": float(c.rendimiento_tn_ha) if c.rendimiento_tn_ha is not None else None,
+            "aplicaciones": [
+                {"producto": a.get("producto"), "dosis_kg_ha": a.get("dosis_kg_ha")}
+                for a in (c.aplicaciones or [])
+                if isinstance(a, dict) and a.get("producto")
+            ],
+        }
+        for c in ciclos
+    ]
+
+    # ── Predicción de rendimiento (histórico + planes) ──
+    con_rend = [h["rendimiento_tn_ha"] for h in historial if h["rendimiento_tn_ha"]]
+    prediccion = None
+    if con_rend:
+        promedio = sum(con_rend) / len(con_rend)
+        prediccion = {
+            "promedio": round(promedio, 2),
+            "optimizado": round(promedio * 1.15, 2),
+            "ideal": round(promedio * 1.25, 2),
+        }
+
+    # ── Advertencia de acumulación de fósforo (últimos 2 ciclos cosechados) ──
+    advertencia_acumulacion = None
+    dosis_ultimos = [
+        _dosis_fosforo_ciclo(c.aplicaciones)
+        for c in ciclos
+        if c.fecha_cosecha is not None
+    ][:2]
+    dosis_ultimos = [d for d in dosis_ultimos if d is not None]
+    if len(dosis_ultimos) >= 2 and all(d > 120 for d in dosis_ultimos):
+        advertencia_acumulacion = (
+            "Histórico de P alto (últimos 2 ciclos > 120 kg/ha). Reduzca la dosis "
+            "de fósforo en el plan actual para evitar fijación y ahorrar costos."
+        )
+
+    return {
+        "ciclos": historial,
+        "prediccion": prediccion,
+        "advertencia_acumulacion": advertencia_acumulacion,
+    }
 
 
 class ReporteRequest(BaseModel):
@@ -184,6 +285,12 @@ async def generar_reporte(
 
     muestras_geo = await _muestras_geo(db, finca_uuid)
 
+    # ── Historial de ciclos (últimos 3) + predicción de rendimiento ──
+    historial = await _historial_ciclos_reporte(db, finca_uuid)
+    historial_ciclos = historial["ciclos"]
+    prediccion_rendimiento = historial["prediccion"]
+    advertencia_acumulacion = historial["advertencia_acumulacion"]
+
     # ── Muestreo inteligente: dónde tomar la muestra de laboratorio ──
     puntos_sugeridos = []
     confianza_actual = (uc2.confianza if uc2 else (uc1.confianza if uc1 else None))
@@ -283,6 +390,9 @@ async def generar_reporte(
         puntos_sugeridos=puntos_sugeridos,
         confianza_actual=confianza_actual,
         rendimiento_actual_t_ha=body.rendimiento_actual_t_ha,
+        historial_ciclos=historial_ciclos,
+        prediccion_rendimiento=prediccion_rendimiento,
+        advertencia_acumulacion=advertencia_acumulacion,
     )
 
     titulo = {

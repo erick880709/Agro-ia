@@ -207,6 +207,13 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **`POST /api/v1/fincas/{id}/ciclos/carga-csv`** (Admin/Agrónomo): ingesta en bloque — crea lotes que no existan, resuelve cultivos por nombre, fechas ISO o DD/MM/YYYY, rendimiento en t/ha, aplicaciones texto → JSONB; reporta filas con error sin abortar. Auditoría `ciclo.carga_csv`.
 - Validado local (API: 3 creados + 1 lote nuevo + 2 errores reportados; UI con plantilla y resumen) y en producción.
 
+### Historial de ciclos en el reporte — predicción de rendimiento y alerta de P (2026-08-27)
+
+- **Sección N**: tabla «📜 Historial de ciclos — línea de tiempo (Siembra → Aplicaciones → Cosecha → Rendimiento)» con los últimos 3 ciclos del lote principal.
+- **Sección 05**: 📈 Predicción de rendimiento — promedio histórico × 1,15 (plan optimizado) y × 1,25 (plan ideal). Ejemplo validado: promedio 14.2 → «16.3 t/ha (+15%)» y «17.8 t/ha (+25%)».
+- **Sección 04**: alerta «⚠️ Histórico de P alto (últimos 2 ciclos > 120 kg/ha)» cuando los ciclos tienen aplicaciones fosforadas altas (DAP/fosfatos).
+- Validado local y en producción; sin ciclos las tres piezas se omiten.
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).

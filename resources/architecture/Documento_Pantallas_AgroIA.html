@@ -69,7 +69,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
   <h1>Pantallas del sistema y su propósito</h1>
-  <div class="meta">Versión 1.9 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+  <div class="meta">Versión 2.0 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
 </header>
 
 <div class="wrap">
@@ -340,13 +340,18 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
     <li><b>02 · Recomendación UC1</b> — ranking de cultivos.</li>
     <li><b>M · Mapa de calor</b> — intensidad por parámetro según pos_x/pos_y (en PDF se imprimen todas las variables).</li>
     <li><b>N · Plano del lote</b> — silueta, área/perímetro, pendiente, drenaje, metodología de muestreo,
-    clima IDEAM del día de la muestra con alerta fitosanitaria específica e historial de manejo.</li>
+    clima IDEAM del día de la muestra con alerta fitosanitaria específica e historial de manejo.
+    Incluye la tabla <b>«📜 Historial de ciclos»</b> con los últimos 3 ciclos del lote
+    (Siembra → Aplicaciones destacadas → Cosecha → Rendimiento).</li>
     <li><b>E · Análisis económico proyectado</b> — ganancia esperada si se aplica el plan (+15 %),
     ROI = (ganancia − costo fertilización) ÷ costo; si el ROI &lt; 1,2 muestra la alerta
     «⚠️ Inversión justa, considere subvenciones». Si se declaró el rendimiento actual, compara
     contra ese valor real: «Con el plan ideal, su rendimiento podría pasar de X a Y t/ha (+Z%).
     Con su presupuesto actual, pasaría a Y₂ t/ha (+Z₂%)».</li>
-    <li><b>04/05 · Advertencias y próximos pasos</b>.</li>
+    <li><b>04/05 · Advertencias y próximos pasos</b> — la 05 incluye la <b>📈 Predicción de
+    rendimiento</b> basada en el historial de ciclos (promedio × 1,15 con plan optimizado;
+    × 1,25 con plan ideal); la 04 muestra la alerta «⚠️ Histórico de P alto» cuando los
+    últimos 2 ciclos superan 120 kg/ha de fósforo.</li>
   </ul>
   <p><b>Servicio que llama:</b> <code>POST /api/v1/reportes/generar</code> (admite
   <code>presupuesto_cop</code> opcional para el plan económico).</p>
@@ -425,7 +430,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.9 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.0 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

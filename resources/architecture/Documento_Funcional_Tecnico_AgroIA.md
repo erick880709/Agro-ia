@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.0 · **Fecha:** 2026-08-27
+**Versión:** 2.1 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -737,6 +737,13 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 - **ROI realista**: `POST /api/v1/reportes/generar` y `POST /api/v1/recomendaciones/analyze` aceptan `rendimiento_actual_t_ha`. El bloque `.eco-rend` muestra *«Con el plan ideal, su rendimiento podría pasar de X a Y t/ha (+15%). Con su presupuesto actual, pasaría a Y₂ t/ha (+Z₂%)»* — X = rendimiento declarado o el de la ficha técnica; Y₂ escala el +15 % por la cobertura del presupuesto.
 - **Script de datos embebido**: el HTML incluye `<script type="application/json" id="datos-reporte">{suelo + umbrales}</script>` (con `</` escapado como `<\/`) para que la UI precargue los sliders del modo simulación sin llamadas extra.
 - **Modo simulación**: el endpoint `POST /api/v1/reportes/simular` reejecuta el motor sin tocar BD (< 200 ms); en la UI se usa desde el panel «🧪 Simular enmienda» (sliders pH/N/P/K con debounce 250 ms).
+
+### 11.2 Historial de ciclos en el reporte (v2.1)
+
+- **Sección N (Plano del lote)** — tabla **«📜 Historial de ciclos — línea de tiempo (Siembra → Aplicaciones → Cosecha → Rendimiento)»** con los **últimos 3 ciclos** de `historial_ciclos_lote` (del lote principal): fechas, cultivo, aplicaciones destacadas (producto + dosis) y rendimiento t/ha.
+- **Predicción de rendimiento (sección 05)**: *«Basado en su historial (promedio X t/ha) y aplicando el plan optimizado, estimamos un rendimiento de X×1,15 t/ha (+15%). Si aplica el plan ideal (sin restricción de presupuesto), estimamos X×1,25 t/ha (+25%)»* — calculada del promedio de los ciclos con rendimiento.
+- **Advertencia de acumulación (sección 04)**: si los últimos 2 ciclos cosechados tienen aplicaciones de productos fosforados (DAP, fosfatos, P₂O₅…) > 120 kg/ha, se muestra *«⚠️ Histórico de P alto (últimos 2 ciclos > 120 kg/ha). Reduzca la dosis de fósforo en el plan actual para evitar fijación y ahorrar costos»*.
+- Sin ciclos registrados, las tres piezas se omiten silenciosamente (el reporte no se degrada).
 
 ---
 
