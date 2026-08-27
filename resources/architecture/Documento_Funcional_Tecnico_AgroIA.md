@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 1.3 · **Fecha:** 2026-08-27
+**Versión:** 1.4 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -345,8 +345,13 @@ Cada petición `fetch` lleva:
 **Servicios:**
 - `GET /api/v1/fincas?search=` — listado (Admin/Agrónomo todas; cliente solo las suyas).
 - `POST /api/v1/fincas` — registro (solo Admin): campos básicos + georreferenciación (`latitud`/`longitud` directos o `coordenadas_google`, `vereda`, `precision_gps`, `fuente_geolocalizacion`, `geometria` GeoJSON, `area_declarada_ha`, `tipo_area`, `tiene_multiples_lotes`) + campos agronómicos. Ejecuta la **cadena de validación** (abajo) y crea el **lote principal**.
+- `PUT /api/v1/fincas/{id}` — **edición de datos básicos** (solo Admin): nombre, ubicación, propietario, contactos, área, altitud, vereda, coordenadas. Registra auditoría `finca.actualizar`.
+- `DELETE /api/v1/fincas/{id}` — **eliminación de finca** (solo Admin): limpia recomendaciones + discordancias, lecturas de sensores y dispositivos IoT (los lotes, chat, aceptaciones y relaciones finca-usuario caen por ON DELETE CASCADE) y registra `finca.eliminar` con el detalle de lo borrado.
 - `PATCH /api/v1/fincas/{id}` — actualización de datos agronómicos (Admin/Agrónomo): pendiente, drenaje, historial, validación de laboratorio, cultivo sembrado, edad, etapa fenológica.
 - `GET /api/v1/fincas/{id}/lotes` — lotes (unidades productivas) de la finca.
+- `POST /api/v1/fincas/{id}/lotes` — **agregar lote** (Admin/Agrónomo) con características propias: nombre, área (ha), geometría, profundidad de suelo (cm) y pedregosidad; si quedan ≥ 2 lotes marca la finca como multi-lote.
+- `PATCH /api/v1/fincas/{id}/lotes/{lote_id}` — **editar características del lote** (Admin/Agrónomo).
+- `DELETE /api/v1/fincas/{id}/lotes/{lote_id}` — **eliminar lote** (solo Admin): desactivación lógica; rechaza con `422 ULTIMO_LOTE` si es el último lote activo de la finca.
 - `GET /api/v1/location/catalogo` — catálogo departamento → municipios (33 departamentos, con centroides) usado por la validación y por el frontend.
 - `GET /api/v1/location/resolver-enlace?url=` — resuelve enlaces cortos de Google Maps a coordenadas.
 
@@ -367,15 +372,19 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 
 **Área/perímetro calculados** (`calcular_geometria_geojson`): fórmula de Gauss (shoelace) sobre proyección equirectangular + perímetro Haversine; acepta `Polygon` GeoJSON o anillo plano `[[lng,lat], …]`.
 
-**Qué hace la UI:** tarjetas por finca con ID y botón «Copiar» (para configurar el firmware), formulario wizard con navegación Siguiente/Atrás y el panel de validaciones al guardar.
+**Qué hace la UI:** tarjetas por finca con ID y botón «Copiar» (para configurar el firmware), formulario wizard con navegación Siguiente/Atrás, el panel de validaciones al guardar, y **botones de administración por tarjeta**: «🗂️ Lotes» (panel que lista los lotes y permite agregar con características propias, editar ✏️ y eliminar 🗑️), «✏️ Editar» (modal con los datos básicos) y «🗑️ Eliminar» (confirmación y borrado en cascada).
 
 ### 6.8 👥 Usuarios (solo Admin)
 
 **Servicios:**
 - `GET /api/v1/usuarios` — listado de usuarios.
 - `POST /api/v1/usuarios` — alta por admin.
+- `PUT /api/v1/usuarios/{id}` — **edición de usuario** (solo Admin): nombre, email, rol, activo/inactivo y reemplazo de las fincas relacionadas. Rechaza con `422 SELF_DEACTIVATE` si el admin intenta desactivarse a sí mismo.
+- `DELETE /api/v1/usuarios/{id}` — **desactivación** (solo Admin, eliminación lógica Ley 1581): `activo=false` + desvinculación de fincas; rechaza con `422 SELF_DELETE` para la propia cuenta del admin. El registro se conserva en auditoría.
 - `PUT /api/v1/admin/usuarios/{id}/rol` — cambio de rol.
 - (Perfil propio: `GET/PUT/DELETE /usuarios/me`.)
+
+**Qué hace la UI:** cada tarjeta de usuario muestra el badge de rol (e «Inactivo» en rojo si fue desactivado) y botones «✏️ Editar» (modal con nombre/email/rol/estado y multi-select de fincas) y «🗑️ Desactivar» (confirmación).
 
 ### 6.9 🌾 Catálogo (Admin/Agrónomo gestionan; Cliente consulta)
 
@@ -406,6 +415,22 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 4. **Foto adjunta (botón 📎 en la UI)**: si hay `OPENAI_API_KEY` con modelo de visión (gpt-4o, gpt-4.1, gpt-4o-mini…), la imagen se envía multimodal con el prompt *«Analiza esta foto de cultivo y da un diagnóstico»*. Sin visión, la foto queda guardada como referencia en `chat_memoria.imagen_base64` y el prompt textual lo indica. La respuesta incluye `imagen_guardada` / `imagen_analizada`.
 5. Si `OPENAI_API_KEY` está configurado usa LLM; si no, responde el **motor local determinista** con respuesta fundamentada (fuentes, confianza, datos utilizados, qué falta).
 6. Guarda memoria conversacional en `chat_memoria` (`GET /chat/memoria/{finca_id}`).
+
+### 6.11 🕵️ Auditoría de acciones (solo Admin)
+
+**Servicio:** `GET /api/v1/auditoria?page=&page_size=&entidad=&accion=&search=` (solo Admin).
+
+**Qué registra** (`models/auditoria.py` + `services/auditoria.py::registrar_auditoria`, tabla `agroia.auditoria`, migración 015): quién (email, nombre, rol), qué acción, sobre qué entidad, cuándo, desde qué IP y un `detalle` JSONB con contexto (nombre, campos cambiados, conteos de lo eliminado…). Eventos:
+
+| Acción | Cuándo |
+|---|---|
+| `auth.login` | Cada inicio de sesión exitoso |
+| `finca.crear` / `finca.actualizar` / `finca.eliminar` / `finca.agronomicos` | Gestión de fincas |
+| `lote.crear` / `lote.actualizar` / `lote.eliminar` | Gestión de lotes |
+| `usuario.crear` / `usuario.actualizar` / `usuario.eliminar` | Gestión de usuarios |
+| `demo.reset` | Restablecimiento de la demo |
+
+**Qué hace la UI:** pestaña «🕵️ Auditoría» con filtros por entidad (finca/lote/usuario/auth/demo) y búsqueda por email/nombre/ID, tabla paginada (fecha, usuario, acción, detalle) y navegación anterior/siguiente.
 
 ---
 
@@ -714,6 +739,7 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 | `modelos_ml` / `metricas_modelo` | Registro de entrenamientos y métricas (stage) |
 | `chat_memoria` | Memoria conversacional del chat por finca (+ **imagen_base64** de la foto adjunta) |
 | `aceptaciones_recomendacion` | Feedback humano (rol, comentario, resumen, confianza previa) |
+| `auditoria` | **Bitácora de acciones**: usuario (email/nombre/rol), acción, entidad, entidad_id, detalle JSONB, IP, fecha |
 
 ### 12.2 Enums (12 tipos en schema `agroia`)
 
@@ -721,7 +747,7 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 
 ### 12.3 Migraciones (001 → 014)
 
-- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`).
+- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria`.
 - **Auto-reparación al arranque**: `asegurar_enums()` crea tipos enum faltantes y `asegurar_reglas()` siembra reglas faltantes (idempotentes, corren en el `lifespan` de `main.py`).
 
 ### 12.4 Gotchas de Neon (lecciones aprendidas)

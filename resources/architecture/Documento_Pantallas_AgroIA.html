@@ -69,7 +69,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
   <h1>Pantallas del sistema y su propósito</h1>
-  <div class="meta">Versión 1.2 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+  <div class="meta">Versión 1.3 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
 </header>
 
 <div class="wrap">
@@ -87,6 +87,7 @@
   <a href="#p8">P8 · Chat asesor</a>
   <a href="#p9">P9 · Usuarios</a>
   <a href="#p10">P10 · Catálogo</a>
+  <a href="#p11">P11 · Auditoría</a>
 </nav>
 
 <h2 id="ruta">🧭 Ruta natural de trabajo</h2>
@@ -121,7 +122,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   </ul>
   <p><b>Qué ocurre después:</b> la sesión se guarda en <code>localStorage</code>
   (<code>agroia_sesion</code>) y se carga el menú según el rol
-  (Admin: 9 pestañas · Agrónomo: 7 · Cliente: 5). <span class="siguiente">Siguiente → P1 Inicio.</span></p>
+  (Admin: 10 pestañas · Agrónomo: 7 · Cliente: 5). <span class="siguiente">Siguiente → P1 Inicio.</span></p>
 </div>
 
 <!-- ─────────── P1 ─────────── -->
@@ -172,6 +173,17 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   <p><b>Servicios que llama:</b> <code>POST /api/v1/fincas</code> (crea la finca y el <b>lote principal</b>) ·
   <code>GET /api/v1/location/elevation</code> · <code>GET /api/v1/location/resolver-enlace</code> (enlaces cortos) ·
   <code>PATCH /api/v1/fincas/{id}</code> (datos agronómicos) · <code>GET /api/v1/fincas/{id}/lotes</code>.</p>
+  <p><b>Administración de fincas y lotes (solo Admin):</b> cada tarjeta del listado tiene tres botones:</p>
+  <ul>
+    <li><b>🗂️ Lotes</b> — abre el panel de lotes de la finca: lista los lotes activos con sus
+    características (área, profundidad de suelo, pedregosidad) y permite <b>➕ Agregar lote</b>
+    (cada lote puede tener características propias), editarlos ✏️ y eliminarlos 🗑️
+    (no se permite borrar el último lote activo).</li>
+    <li><b>✏️ Editar</b> — modal con los datos básicos de la finca (nombre, ubicación, propietario,
+    contactos, área, altitud, vereda, coordenadas).</li>
+    <li><b>🗑️ Eliminar</b> — confirmación y borrado en cascada de la finca (lotes, lecturas,
+    dispositivos, recomendaciones y chat).</li>
+  </ul>
   <p><span class="siguiente">Siguiente → P3 Sensores IoT.</span></p>
 </div>
 
@@ -337,7 +349,12 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   <div class="objetivo"><b>Objetivo:</b> administrar las cuentas del sistema y sus permisos.</div>
   <p><b>Qué muestra:</b> listado de usuarios con rol, estado y fincas asignadas; formulario de alta
   con multi-selector de fincas a las que tendrá acceso.</p>
+  <p><b>Administración de cuentas:</b> cada tarjeta de usuario tiene botones <b>✏️ Editar</b>
+  (modal con nombre, email, rol, estado Activo/Inactivo y multi-select de fincas) y
+  <b>🗑️ Desactivar</b> (el usuario queda inactivo y no puede iniciar sesión; su registro se
+  conserva en auditoría). El admin no puede desactivar ni eliminar su propia cuenta.</p>
   <p><b>Servicios que llama:</b> <code>GET /api/v1/usuarios</code> · <code>POST /api/v1/usuarios</code> ·
+  <code>PUT /api/v1/usuarios/{id}</code> · <code>DELETE /api/v1/usuarios/{id}</code> ·
   <code>PUT /api/v1/admin/usuarios/{id}/rol</code> · perfil propio en <code>/usuarios/me</code>.</p>
 </div>
 
@@ -358,10 +375,28 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   del sistema experto que emite las recomendaciones de P5.</p>
 </div>
 
+<!-- ─────────── P11 ─────────── -->
+<div class="pantalla" id="p11">
+  <div class="cab"><span class="icono">🕵️</span><span class="titulo">P11 · Auditoría de acciones</span>
+    <span class="rol">Solo Admin</span></div>
+  <div class="objetivo"><b>Objetivo:</b> trazabilidad total — saber <b>quién</b> hizo <b>qué</b>,
+  sobre <b>qué entidad</b> y <b>cuándo</b>.</div>
+  <p><b>Qué muestra:</b> bitácora paginada con filtros por entidad (🏡 fincas · 🗂️ lotes · 👥 usuarios ·
+  🔐 inicios de sesión · 🧪 demo) y búsqueda por email/nombre/ID. Cada fila: fecha y hora,
+  usuario (nombre, email, rol), acción (<code>finca.crear</code>, <code>usuario.eliminar</code>,
+  <code>lote.actualizar</code>, <code>auth.login</code>…) y detalle con contexto (nombre de la
+  entidad, campos cambiados, conteos de lo eliminado).</p>
+  <p><b>Qué se registra:</b> cada inicio de sesión, creación/edición/eliminación de fincas y lotes,
+  creación/edición/desactivación de usuarios y el restablecimiento de la demo — con IP de origen
+  y detalle JSON.</p>
+  <p><b>Servicio que llama:</b> <code>GET /api/v1/auditoria?page=&amp;page_size=&amp;entidad=&amp;accion=&amp;search=</code>
+  (tabla <code>agroia.auditoria</code>).</p>
+</div>
+
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.2 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.3 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

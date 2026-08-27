@@ -164,10 +164,20 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Modo Simulación what-if**: nuevo `POST /api/v1/reportes/simular` `{finca_id, soil_modificado}` que reejecuta el RulesEngine con el suelo modificado **sin tocar la BD** (< 200 ms) y devuelve clasificación, confianza, violaciones y advertencias. En Reportes, el panel colapsable **«🧪 Simular enmienda»** precarga 4 sliders (pH/N/P/K) desde el script `datos-reporte` embebido en el HTML y muestra el resultado al instante.
 - Validado local y en producción (sin migración nueva: las 4 features no cambian el esquema).
 
+### Administración de fincas, lotes y usuarios + auditoría de acciones (2026-08-27)
+
+- **Editar finca** `PUT /api/v1/fincas/{id}` (Admin): datos básicos vía modal en la pestaña 🏡 Fincas.
+- **Eliminar finca** `DELETE /api/v1/fincas/{id}` (Admin): borrado en cascada — recomendaciones + discordancias, lecturas de sensores, dispositivos IoT, lotes, chat y relaciones finca-usuario — con resumen de lo eliminado en la respuesta.
+- **Lotes por finca** (cada lote con características propias): `POST /fincas/{id}/lotes` (Admin/Agrónomo, nombre/área/geometría/profundidad de suelo/pedregosidad; marca la finca como multi-lote), `PATCH …/lotes/{lote_id}` (editar) y `DELETE …/lotes/{lote_id}` (Admin, desactivación lógica; rechaza `ULTIMO_LOTE` si es el último activo). UI: botón «🗂️ Lotes» por tarjeta de finca con panel de alta/edición/borrado.
+- **Usuarios**: `PUT /api/v1/usuarios/{id}` (Admin, nombre/email/rol/activo + reemplazo de fincas) y `DELETE /api/v1/usuarios/{id}` (desactivación Ley 1581). Protecciones: el admin no puede desactivarse ni eliminarse a sí mismo (`SELF_DEACTIVATE`/`SELF_DELETE`). UI: botones «✏️ Editar» y «🗑️ Desactivar» por usuario, badge «Inactivo».
+- **Auditoría** (migración 015, tabla `agroia.auditoria`): registra `auth.login`, `finca.*`, `lote.*`, `usuario.*` y `demo.reset` con quién (email/nombre/rol), cuándo, IP y detalle JSONB. `GET /api/v1/auditoria` (Admin) con filtros por entidad/acción y búsqueda; pestaña «🕵️ Auditoría» con tabla paginada.
+- Validado local y en producción (la migración corre sola en el deploy de Render).
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).
 - `005_fix_enum_values` — renombra valores de enums creados por 003 (valores → nombres de miembro: `Admin` → `ADMIN`).
+- `015_auditoria` — tabla `agroia.auditoria` (bitácora de acciones: usuario, acción, entidad, detalle JSONB, IP, fecha).
 
 ### Límites del tier gratuito (validados 2026-08-25)
 
