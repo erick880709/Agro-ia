@@ -67,7 +67,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Documentación técnica</div>
   <h1>Documento Funcional-Técnico</h1>
-  <div class="meta">Versión 1.0 · 2026-08-27 · Repositorio <code>erick880709/Agro-ia</code> (rama master) ·
+  <div class="meta">Versión 1.1 · 2026-08-27 · Repositorio <code>erick880709/Agro-ia</code> (rama master) ·
   Despliegue: Render + Neon (PostgreSQL 15)</div>
 </header>
 
@@ -149,6 +149,7 @@ reportan, pero las recomendaciones publicadas salen del motor de reglas.</div>
   <tr><td><code>services/asegurar_enums.py</code> / <code>asegurar_reglas.py</code></td><td>Auto-reparación idempotente de tipos enum y reglas en la BD al arrancar.</td></tr>
   <tr><td><code>services/acceso.py</code></td><td>Control de acceso a fincas por rol (MVP sin JWT).</td></tr>
   <tr><td><code>services/normalizacion_iot.py</code></td><td>Normaliza tramas del firmware al esquema canónico.</td></tr>
+  <tr><td><code>services/geografia.py</code></td><td>Catálogo departamentos/municipios con centroides, cadena de validación de fincas y cálculo de área/perímetro de polígonos.</td></tr>
   <tr><td><code>services/puente_iot.py</code></td><td>Puente de import del consumidor IoT (portable dev/contenedor).</td></tr>
   <tr><td><code>models/*.py</code></td><td>Modelos SQLAlchemy (15+ tablas).</td></tr>
   <tr><td><code>alembic/versions/</code></td><td>Migraciones 001 → 010.</td></tr>
@@ -288,14 +289,36 @@ resuelve <b>clima IDEAM</b> del día de la muestra desde las coordenadas de la f
 <code>generar_reporte_html()</code> (sección 11) → devuelve <code>{titulo, tipo, html}</code>.
 La UI muestra el HTML y ofrece PDF por impresión (<code>@media print</code>).</p>
 
-<h3>6.7 🏡 Fincas (solo Admin)</h3>
+<h3>6.7 🏡 Fincas — registro en 3 secciones, validación y lotes (registro solo Admin)</h3>
+<p><b>Wizard de 3 secciones</b> (SPA en <code>index.html</code> + <code>app.js</code>):</p>
+<ol>
+  <li><b>Información básica</b>: nombre, propietario, teléfono, email, departamento (select de 33), municipio (filtrado por departamento con el catálogo de <code>departamentos.js</code>), vereda / corregimiento.</li>
+  <li><b>Ubicación</b>: 📍 Usar mi ubicación (geolocalización del navegador, con precisión ±m) · 🗺️ Seleccionar en mapa (Leaflet/OpenStreetMap: se marcan los vértices del lindero y «Cerrar polígono» calcula área/perímetro y genera el GeoJSON) · 🔗 Pegar enlace Google Maps (parse local de <code>lat, lng</code>, <code>@lat,lng</code> y <code>!3d…!4d…</code>; los enlaces cortos <code>maps.app.goo.gl</code> se resuelven con <code>GET /location/resolver-enlace</code> siguiendo la redirección). Muestra Latitud, Longitud, Altitud msnm (<code>GET /location/elevation</code>) y Precisión.</li>
+  <li><b>Características del predio</b>: tipo de área (finca completa / lote / parcela), área registrada (ha), <b>área georreferenciada calculada automáticamente del polígono</b> (con perímetro), ¿la finca tiene varios lotes? Sí/No y dimensiones opcionales.</li>
+</ol>
 <table>
   <tr><th>Endpoint</th><th>Qué hace</th></tr>
   <tr><td><code>GET /api/v1/fincas?search=</code></td><td>Listado (Admin/Agrónomo todas; cliente las suyas)</td></tr>
-  <tr><td><code>POST /api/v1/fincas</code></td><td>Registro (solo Admin): datos generales + coordenadas Google (extrae lat/lng) + campos agronómicos</td></tr>
+  <tr><td><code>POST /api/v1/fincas</code></td><td>Registro (solo Admin): campos básicos + georreferenciación (<code>latitud/longitud</code> directos o <code>coordenadas_google</code>, <code>vereda</code>, <code>precision_gps</code>, <code>fuente_geolocalizacion</code>, <code>geometria</code> GeoJSON, <code>area_declarada_ha</code>, <code>tipo_area</code>, <code>tiene_multiples_lotes</code>) + campos agronómicos. Ejecuta la <b>cadena de validación</b> y crea el <b>lote principal</b>.</td></tr>
   <tr><td><code>PATCH /api/v1/fincas/{id}</code></td><td>Datos agronómicos (Admin/Agrónomo): pendiente, drenaje, historial, validación lab, cultivo sembrado, edad, etapa fenológica</td></tr>
+  <tr><td><code>GET /api/v1/fincas/{id}/lotes</code></td><td>Lotes (unidades productivas) de la finca</td></tr>
+  <tr><td><code>GET /api/v1/location/catalogo</code></td><td>Catálogo departamento → municipios (33 departamentos con centroides) usado por la validación</td></tr>
+  <tr><td><code>GET /api/v1/location/resolver-enlace?url=</code></td><td>Resuelve enlaces cortos de Google Maps a coordenadas</td></tr>
 </table>
-<p>La UI muestra tarjetas con ID copiable (para configurar el firmware) y formulario de alta.</p>
+<p><b>Cadena de validación al guardar</b> (<code>services/geografia.py::validar_creacion_finca</code>):</p>
+<table>
+  <tr><th>#</th><th>Paso</th><th>Regla</th><th>Código de rechazo</th></tr>
+  <tr><td>1</td><td>¿Departamento existe?</td><td>Catálogo de 33 departamentos</td><td><code>DEPARTAMENTO_INVALIDO</code></td></tr>
+  <tr><td>2</td><td>¿Municipio pertenece al departamento?</td><td>Catálogo municipios por departamento</td><td><code>MUNICIPIO_NO_PERTENECE</code></td></tr>
+  <tr><td>3</td><td>¿Coordenadas válidas?</td><td>WGS84 (−90…90, −180…180)</td><td><code>COORDENADAS_INVALIDAS</code></td></tr>
+  <tr><td>4</td><td>¿Coinciden con el municipio?</td><td>Distancia Haversine al centroide ≤ 50 km</td><td><code>COORDENADAS_FUERA_MUNICIPIO</code></td></tr>
+  <tr><td>5</td><td>¿Área razonable?</td><td>0.01–100 000 ha</td><td><code>AREA_NO_RAZONABLE</code></td></tr>
+  <tr><td>6</td><td>¿Precisión aceptable?</td><td>≤ 100 m (50–100 m → advertencia)</td><td><code>PRECISION_INSUFICIENTE</code></td></tr>
+</table>
+<p>Cada paso se devuelve en la respuesta (<code>validaciones[]</code> con estado <code>ok/error/warn</code>) y se pinta en la UI con ✅/⚠️/❌; los rechazos llegan como <code>422 VALIDACION_FINCA</code> con la lista completa de pasos.</p>
+<p><b>Separación arquitectónica Finca ≠ Lote</b>: al guardar se crea automáticamente el <b>lote principal</b> (<code>agroia.lotes</code>) con el área calculada (polígono) o la declarada. La finca identifica el predio; el lote es la unidad productiva que después se analiza (sensores, muestras, reportes).</p>
+<p><b>Área/perímetro calculados</b> (<code>calcular_geometria_geojson</code>): fórmula de Gauss (shoelace) sobre proyección equirectangular + perímetro Haversine; acepta <code>Polygon</code> GeoJSON o anillo plano <code>[[lng,lat], …]</code>.</p>
+<p>La UI muestra tarjetas con ID copiable (para configurar el firmware), formulario wizard con navegación Siguiente/Atrás y el panel de validaciones al guardar.</p>
 
 <h3>6.8 👥 Usuarios (solo Admin)</h3>
 <p><code>GET /api/v1/usuarios</code> · <code>POST /api/v1/usuarios</code> ·
@@ -521,7 +544,8 @@ con clima · 11) metodología de muestreo del mapa de calor · 12) umbral duro &
 <table>
   <tr><th>Tabla</th><th>Uso</th></tr>
   <tr><td><code>usuarios</code></td><td>Cuentas (rol enum, password_hash, activo, membresía)</td></tr>
-  <tr><td><code>fincas</code></td><td>Predios (+ coordenadas, área, pendiente, drenaje, historial JSONB, validación lab, cultivo sembrado/edad/etapa)</td></tr>
+  <tr><td><code>fincas</code></td><td>Predios (+ coordenadas, área, pendiente, drenaje, historial JSONB, validación lab, cultivo sembrado/edad/etapa, <b>vereda, precision_gps, fuente_geolocalizacion, geometria GeoJSON, área declarada/calculada, perímetro, tipo_area, tiene_multiples_lotes, fecha_georreferenciacion</b>)</td></tr>
+  <tr><td><code>lotes</code></td><td><b>Unidades productivas dentro de una finca</b> (nombre, área, geometría) — separación Finca ≠ Lote</td></tr>
   <tr><td><code>dispositivos_iot</code></td><td>Sensores registrados (device_id, telemetría, npk_calibrado)</td></tr>
   <tr><td><code>sensor_readings</code></td><td>Cada medición (17 variables + pos_x/pos_y + textura + calidad)</td></tr>
   <tr><td><code>cultivos</code></td><td>Catálogo (30 activos, icono, nombre científico)</td></tr>
@@ -539,7 +563,8 @@ prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo
 <h3>12.3 Migraciones (001 → 010)</h3>
 <p><code>001–003</code> tablas base y dispositivos · <code>004/005</code> creación y corrección de enums ·
 <code>006</code> posiciones de muestreo · <code>007</code> chat_memoria · <code>008/009</code> auto-reparación de enums ·
-<code>010</code> campos agronómicos de finca + aceptaciones. Además, <b>auto-reparación al arranque</b>:
+<code>010</code> campos agronómicos de finca + aceptaciones · <code>011</code> georreferenciación de fincas + tabla <code>lotes</code>.
+Además, <b>auto-reparación al arranque</b>:
 <code>asegurar_enums()</code> crea tipos faltantes y <code>asegurar_reglas()</code> siembra reglas faltantes.</p>
 <h3>12.4 Gotchas de Neon (lecciones aprendidas)</h3>
 <ul>
@@ -557,7 +582,9 @@ prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo
   se duerme por inactividad (cold start ~1 min). Health check <code>/api/v1/health</code>.</li>
   <li><b>Neon:</b> Postgres Free con SSL.</li>
   <li><b>CI (GitHub Actions):</b> <code>ruff</code> (lint) → <code>pytest</code> (migraciones + tests) → build Docker.</li>
-  <li><b>Frontend:</b> servido por el mismo backend en <code>/</code> (StaticFiles).</li>
+  <li><b>Frontend:</b> servido por el mismo backend en <code>/</code> (StaticFiles). Un middleware sirve los estáticos con
+  <code>Cache-Control: no-cache, no-store, must-revalidate</code> y los assets se versionan en <code>index.html</code>
+  (<code>?v=…</code>) para evitar caché mixta tras cada deploy (HTML nuevo con CSS/JS viejos).</li>
 </ul>
 
 <h2 id="s14"><span class="num">14</span>Seguridad y limitaciones conocidas</h2>

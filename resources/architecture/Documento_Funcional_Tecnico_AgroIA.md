@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 1.0 · **Fecha:** 2026-08-27
+**Versión:** 1.1 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -110,6 +110,7 @@ flowchart LR
 | `services/asegurar_enums.py` / `asegurar_reglas.py` | Auto-reparación idempotente de tipos enum y reglas en la BD al arrancar. |
 | `services/acceso.py` | Control de acceso a fincas por rol (MVP sin JWT). |
 | `services/normalizacion_iot.py` | Normaliza tramas del firmware al esquema canónico. |
+| `services/geografia.py` | Catálogo departamentos/municipios con centroides, cadena de validación de fincas y cálculo de área/perímetro de polígonos. |
 | `services/puente_iot.py` | Puente de import del consumidor IoT (portable dev/contenedor). |
 | `models/*.py` | Modelos SQLAlchemy (15+ tablas). |
 | `alembic/versions/` | Migraciones 001 → 010. |
@@ -321,14 +322,40 @@ Cada petición `fetch` lleva:
 
 **Qué hace la UI:** muestra el HTML en un iframe/pestaña nueva y ofrece **descargar PDF** (impresión del navegador con `@media print` del propio HTML).
 
-### 6.7 🏡 Fincas (solo Admin)
+### 6.7 🏡 Fincas — registro en 3 secciones, validación y lotes (registro solo Admin)
+
+**Wizard de 3 secciones** (SPA en `index.html` + `app.js`):
+
+1. **Información básica**: nombre, propietario, teléfono, email, departamento (select de 33), municipio (filtrado por departamento con el catálogo de `departamentos.js`), vereda / corregimiento.
+2. **Ubicación**: 📍 Usar mi ubicación (geolocalización del navegador, con precisión ±m) · 🗺️ Seleccionar en mapa (Leaflet/OpenStreetMap: se marcan los vértices del lindero y «Cerrar polígono» calcula área/perímetro y genera el GeoJSON) · 🔗 Pegar enlace Google Maps (parse local de `lat, lng`, `@lat,lng` y `!3d…!4d…`; los enlaces cortos `maps.app.goo.gl` se resuelven con `GET /location/resolver-enlace` siguiendo la redirección). Muestra Latitud, Longitud, Altitud msnm (`GET /location/elevation`) y Precisión.
+3. **Características del predio**: tipo de área (finca completa / lote / parcela), área registrada (ha), **área georreferenciada calculada automáticamente del polígono** (con perímetro), ¿la finca tiene varios lotes? Sí/No y dimensiones opcionales.
 
 **Servicios:**
 - `GET /api/v1/fincas?search=` — listado (Admin/Agrónomo todas; cliente solo las suyas).
-- `POST /api/v1/fincas` — registro (solo Admin): `nombre, departamento, municipio, coordenadas_google, propietario, contacto_telefono, contacto_email, area_hectareas, largo/ancho, altitud_msnm` + campos agronómicos (pendiente, drenaje, historial, validación lab, cultivo sembrado, edad, etapa fenológica). Extrae lat/lng del enlace Google (`_extraer_coordenadas`) y valida (`COORDENADAS_INVALIDAS`).
-- `PATCH /api/v1/fincas/{id}` — actualización de **datos agronómicos** (Admin/Agrónomo): pendiente, drenaje, historial, validación de laboratorio, cultivo sembrado, edad, etapa fenológica.
+- `POST /api/v1/fincas` — registro (solo Admin): campos básicos + georreferenciación (`latitud`/`longitud` directos o `coordenadas_google`, `vereda`, `precision_gps`, `fuente_geolocalizacion`, `geometria` GeoJSON, `area_declarada_ha`, `tipo_area`, `tiene_multiples_lotes`) + campos agronómicos. Ejecuta la **cadena de validación** (abajo) y crea el **lote principal**.
+- `PATCH /api/v1/fincas/{id}` — actualización de datos agronómicos (Admin/Agrónomo): pendiente, drenaje, historial, validación de laboratorio, cultivo sembrado, edad, etapa fenológica.
+- `GET /api/v1/fincas/{id}/lotes` — lotes (unidades productivas) de la finca.
+- `GET /api/v1/location/catalogo` — catálogo departamento → municipios (33 departamentos, con centroides) usado por la validación y por el frontend.
+- `GET /api/v1/location/resolver-enlace?url=` — resuelve enlaces cortos de Google Maps a coordenadas.
 
-**Qué hace la UI:** tarjetas por finca con ID y botón «Copiar» (para configurar el firmware), y formulario de alta.
+**Cadena de validación al guardar** (`services/geografia.py::validar_creacion_finca`):
+
+| # | Paso | Regla | Código de rechazo |
+|---|---|---|---|
+| 1 | ¿Departamento existe? | Catálogo de 33 departamentos | `DEPARTAMENTO_INVALIDO` |
+| 2 | ¿Municipio pertenece al departamento? | Catálogo municipios por departamento | `MUNICIPIO_NO_PERTENECE` |
+| 3 | ¿Coordenadas válidas? | WGS84 (−90…90, −180…180) | `COORDENADAS_INVALIDAS` |
+| 4 | ¿Coinciden con el municipio? | Distancia Haversine al centroide ≤ 50 km | `COORDENADAS_FUERA_MUNICIPIO` |
+| 5 | ¿Área razonable? | 0.01–100 000 ha | `AREA_NO_RAZONABLE` |
+| 6 | ¿Precisión aceptable? | ≤ 100 m (50–100 m → advertencia) | `PRECISION_INSUFICIENTE` |
+
+Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/warn`) y se pinta en la UI con ✅/⚠️/❌; los rechazos llegan como `422 VALIDACION_FINCA` con la lista completa de pasos.
+
+**Separación arquitectónica Finca ≠ Lote**: al guardar se crea automáticamente el **lote principal** (`agroia.lotes`) con el área calculada (polígono) o la declarada. La finca identifica el predio; el lote es la unidad productiva que después se analiza (sensores, muestras, reportes).
+
+**Área/perímetro calculados** (`calcular_geometria_geojson`): fórmula de Gauss (shoelace) sobre proyección equirectangular + perímetro Haversine; acepta `Polygon` GeoJSON o anillo plano `[[lng,lat], …]`.
+
+**Qué hace la UI:** tarjetas por finca con ID y botón «Copiar» (para configurar el firmware), formulario wizard con navegación Siguiente/Atrás y el panel de validaciones al guardar.
 
 ### 6.8 👥 Usuarios (solo Admin)
 
@@ -603,7 +630,8 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 | Tabla | Uso |
 |---|---|
 | `usuarios` | Cuentas (rol enum, password_hash, activo, membresía) |
-| `fincas` | Predios (+ coordenadas, área, pendiente, drenaje, historial JSONB, validación lab, cultivo sembrado/edad/etapa) |
+| `fincas` | Predios (+ coordenadas, área, pendiente, drenaje, historial JSONB, validación lab, cultivo sembrado/edad/etapa, **vereda, precision_gps, fuente_geolocalizacion, geometria GeoJSON, área declarada/calculada, perímetro, tipo_area, tiene_multiples_lotes, fecha_georreferenciacion**) |
+| `lotes` | **Unidades productivas dentro de una finca** (nombre, área, geometría) — separación Finca ≠ Lote |
 | `dispositivos_iot` | Sensores registrados (device_id, telemetría, npk_calibrado) |
 | `sensor_readings` | Cada medición (17 variables + pos_x/pos_y + textura + calidad) |
 | `cultivos` | Catálogo (30 activos, icono, nombre científico) |
@@ -619,9 +647,9 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 
 `clasificacionupra, estadodiscordancia, estadoficha, estadomembresia, estadorecomendacion, planmembresia, prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo`.
 
-### 12.3 Migraciones (001 → 010)
+### 12.3 Migraciones (001 → 011)
 
-- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones.
+- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes`.
 - **Auto-reparación al arranque**: `asegurar_enums()` crea tipos enum faltantes y `asegurar_reglas()` siembra reglas faltantes (idempotentes, corren en el `lifespan` de `main.py`).
 
 ### 12.4 Gotchas de Neon (lecciones aprendidas)
@@ -637,7 +665,7 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 - **Render** (Free): web service `agroia-backend` con auto-deploy en cada push a `master`; se duerme tras inactividad (cold start ~1 min). Health check `/api/v1/health`.
 - **Neon**: Postgres Free con SSL; conexión normalizada por `database.py`.
 - **CI (GitHub Actions)**: `ruff` (lint) → `pytest` (migraciones + tests) → build Docker.
-- **Frontend**: servido por el mismo backend en `/` (StaticFiles); cualquier cambio en `apps/frontend-web` se despliega con el backend.
+- **Frontend**: servido por el mismo backend en `/` (StaticFiles). Un middleware sirve los estáticos con `Cache-Control: no-cache, no-store, must-revalidate` y los assets se versionan en `index.html` (`?v=…`) para evitar caché mixta tras cada deploy (HTML nuevo con CSS/JS viejos).
 
 ---
 
