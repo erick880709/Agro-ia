@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 1.8 · **Fecha:** 2026-08-27
+**Versión:** 1.9 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -450,7 +450,7 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 
 **Flujo rápido en Recomendaciones**: sobre el botón «🧪 Analizar suelo» está el botón **«🌱 Registrar nuevo ciclo»** (Admin/Agrónomo): abre un modal con cultivo (preseleccionado con el elegido en el selector), fecha de siembra (obligatoria), variedad y densidad (plantas/ha, opcionales). Al guardar llama `POST …/ciclo/iniciar` y la finca/lote quedan actualizados para el análisis siguiente; el selector de Recomendaciones adopta el cultivo recién sembrado.
 
-**Cierre del ciclo en el Dashboard**: cuando hay un ciclo abierto, la tarjeta «⚡ Acciones rápidas» muestra el bloque «🔄 Ciclo activo» con el botón **«✏️ Cosechar ciclo»** (Admin/Agrónomo): modal con fecha de cosecha (por defecto hoy), rendimiento obligatorio (kg/ha o t/ha — alimenta el ROI futuro), calidad opcional y un textarea para pegar el resumen de aplicaciones («Urea 150kg, DAP 80kg») que el parser convierte a JSONB. Al guardar, el ciclo se cierra (`fecha_cosecha`, `rendimiento_tn_ha`, `calidad_cosecha`, `aplicaciones`) y el bloque desaparece del Dashboard.
+**Cierre del ciclo en el Dashboard y en el Historial**: cuando hay un ciclo abierto, la tarjeta «⚡ Acciones rápidas» (P1) y el Historial (P6) muestran el bloque «🔄 Ciclo activo» con el botón **«✏️ Cosechar ciclo»** (Admin/Agrónomo): modal con fecha de cosecha (por defecto hoy), rendimiento obligatorio (kg/ha o t/ha — alimenta el ROI futuro), calidad opcional y un textarea para pegar el resumen de aplicaciones («Urea 150kg, DAP 80kg») — o **cargar un CSV pequeño** (`Producto,Dosis,Unidad`; la UI lo convierte a texto y el parser del backend lo vuelve JSONB). Al guardar, el ciclo se cierra (`fecha_cosecha`, `rendimiento_tn_ha`, `calidad_cosecha`, `aplicaciones`) y el bloque desaparece.
 
 ---
 

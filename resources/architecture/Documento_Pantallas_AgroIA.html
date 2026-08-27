@@ -69,7 +69,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
   <h1>Pantallas del sistema y su propósito</h1>
-  <div class="meta">Versión 1.7 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+  <div class="meta">Versión 1.8 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
 </header>
 
 <div class="wrap">
@@ -297,7 +297,10 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   <div class="objetivo"><b>Objetivo:</b> consultar la trazabilidad de los análisis realizados a la
   finca y su evolución en el tiempo.</div>
   <p><b>Qué muestra:</b> lista paginada de recomendaciones persistidas (fecha, cultivo,
-  clasificación, confianza, estado PUBLICA/ADVERTENCIA).</p>
+  clasificación, confianza, estado PUBLICA/ADVERTENCIA). Si hay un <b>ciclo activo</b>,
+  arriba aparece el bloque «🔄 Ciclo activo» con el botón <b>«✏️ Cosechar ciclo»</b>
+  (Admin/Agrónomo): abre el mismo modal de cierre que el Dashboard (fecha de cosecha,
+  rendimiento obligatorio kg/ha o t/ha, calidad y resumen de aplicaciones por texto o CSV).</p>
   <p><b>Servicio que llama:</b> <code>GET /api/v1/recomendaciones/historial/{finca_id}?page=&amp;page_size=&amp;cultivo_id=</code>.</p>
   <p><span class="siguiente">Siguiente → P7 Reportes.</span></p>
 </div>
@@ -416,7 +419,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.7 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.8 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

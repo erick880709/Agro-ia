@@ -1071,10 +1071,36 @@ function abrirModalCosechar(ciclo) {
       </label>
       <label class="field" style="grid-column: 1 / -1"><span>Resumen de aplicaciones (opcional)</span>
         <textarea id="cc-aplic" rows="3" placeholder="Pegue las dosis aplicadas, ej. Urea 150kg, DAP 80kg"></textarea>
+        <input type="file" id="cc-csv" accept=".csv,text/csv" class="csv-input"
+               title="O cargue un CSV pequeño con las dosis (Producto,Dosis,Unidad)" />
       </label>
     </div>`;
   document.getElementById('modal-msg').innerHTML = '';
   m.classList.remove('hidden');
+  // CSV pequeño: parsea «Producto,Dosis,Unidad» y lo agrega al textarea
+  document.getElementById('cc-csv').addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const lineas = String(reader.result).split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      const parsed = [];
+      for (const l of lineas) {
+        const cols = l.split(/[;,]/).map(x => x.trim());
+        if (cols.length >= 2 && /\d/.test(cols[1])) {
+          parsed.push(`${cols[0]} ${cols[1]}${cols[2] || 'kg'}`);
+        } else if (l) {
+          parsed.push(l);
+        }
+      }
+      const ta = document.getElementById('cc-aplic');
+      const actual = ta.value.trim();
+      ta.value = (actual ? actual + ', ' : '') + parsed.join(', ');
+      document.getElementById('modal-msg').innerHTML =
+        okBanner(`CSV leído: ${parsed.length} aplicación(es) agregada(s) al resumen.`);
+    };
+    reader.readAsText(f);
+  });
   document.getElementById('modal-guardar').onclick = () => cosecharCiclo();
 }
 
@@ -1106,6 +1132,7 @@ async function cosecharCiclo() {
       ((r.advertencias || []).length ? `<br>⚠️ ${esc(r.advertencias.join(' '))}` : '')
     );
     await cargarDashboard();
+    if (state.tabActual === 'historial') await cargarHistorial();
     setTimeout(() => cerrarModal(), 1500);
   } catch (e) {
     msg.innerHTML = errorBanner(e.message);
@@ -2143,6 +2170,7 @@ async function cargarHistorial() {
     return;
   }
   div.innerHTML = '<p class="muted">Cargando…</p>';
+  await renderCicloActivoHistorial();
   try {
     const r = await api(`/recomendaciones/historial/${state.fincaId}?page_size=50`);
     const items = r.data || [];
@@ -2168,6 +2196,35 @@ async function cargarHistorial() {
       </table></div>`;
   } catch (e) {
     div.innerHTML = errorBanner(e.message);
+  }
+}
+
+/* Ciclo activo también en Historial (P6): botón «✏️ Cosechar ciclo» */
+async function renderCicloActivoHistorial() {
+  const div = document.getElementById('historial-ciclo');
+  if (!div || !state.fincaId) return;
+  div.innerHTML = '';
+  try {
+    const r = await api(`/fincas/${state.fincaId}/ciclo/activo`);
+    if (!r.data) return;
+    const c = r.data.ciclo;
+    const rol = state.rol.toLowerCase();
+    const boton = (rol === 'admin' || rol === 'agronomo')
+      ? '<button type="button" class="btn" id="btn-cosechar-hist">✏️ Cosechar ciclo</button>' : '';
+    div.innerHTML = `
+      <div class="ciclo-activo">
+        <div class="ciclo-activo-info">
+          <b>🔄 Ciclo activo:</b> 🌱 ${esc(c.cultivo_nombre || 'Cultivo')}
+          <span class="muted">siembra ${esc(c.fecha_siembra || '?')}</span>
+          ${c.variedad ? `<span class="muted">variedad ${esc(c.variedad)}</span>` : ''}
+          <span class="muted">lote: ${esc((r.data.lote || {}).nombre || 'principal')}</span>
+        </div>
+        ${boton}
+      </div>`;
+    const b = document.getElementById('btn-cosechar-hist');
+    if (b) b.addEventListener('click', () => abrirModalCosechar(c));
+  } catch {
+    /* sin ciclo activo: no se muestra nada */
   }
 }
 

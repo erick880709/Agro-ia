@@ -813,3 +813,5 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
   flex-wrap: wrap;
 }
 .ciclo-activo-info { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; font-size: 0.9rem; }
+
+.csv-input { font-size: 0.78rem; color: var(--muted); }

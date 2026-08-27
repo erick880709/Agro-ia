@@ -196,7 +196,8 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 ### Cierre del ciclo — Cosechar (2026-08-27)
 
 - **Dashboard (P1)**: con ciclo abierto, la tarjeta «⚡ Acciones rápidas» muestra el bloque «🔄 Ciclo activo» y el botón **«✏️ Cosechar ciclo»** (Admin/Agrónomo).
-- **Modal de cierre**: fecha de cosecha (hoy por defecto) · **rendimiento obligatorio** (kg/ha o t/ha, normalizado a t/ha — alimenta el ROI futuro) · calidad opcional · textarea de aplicaciones con **parser simple** («Urea 150kg, DAP 80kg» → JSONB `[{producto, dosis_kg_ha, unidad, tipo}]`, gramos → kg).
+- **Historial (P6)**: el mismo bloque y botón aparecen arriba del listado de recomendaciones cuando hay ciclo abierto.
+- **Modal de cierre**: fecha de cosecha (hoy por defecto) · **rendimiento obligatorio** (kg/ha o t/ha, normalizado a t/ha — alimenta el ROI futuro) · calidad opcional · textarea de aplicaciones con **parser simple** («Urea 150kg, DAP 80kg» → JSONB `[{producto, dosis_kg_ha, unidad, tipo}]`, gramos → kg) · **carga de CSV pequeño** (`Producto,Dosis,Unidad`) que se convierte al mismo formato.
 - **API**: `GET /api/v1/fincas/{id}/ciclo/activo` y `POST /api/v1/fincas/{id}/ciclo/cosechar` — guardas `NO_CICLO_ACTIVO` y `FECHAS_INVALIDAS`; auditoría `ciclo.cosechar`.
 - Validado local (API + UI completa iniciar→cosechar) y en producción.
 
