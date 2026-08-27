@@ -30,6 +30,14 @@ CULTIVOS_SENSIBLES_TEXTURA = {
 # Variables que el sensor NPK mide sin validación de laboratorio
 VARIABLES_NPK_SENSOR = {"N", "P", "K"}
 
+# Variables que puede rellenar la capa SIG oficial (IGAC/UPRA)
+# display (reglas/UI) → canónica (columna del sensor)
+SIG_DISPLAY_CANONICO = {
+    "MO": "materia_organica",
+    "CIC": "cic",
+    "TEXTURA": "textura",
+}
+
 # Canónica (columna del sensor) → display (reglas/UI)
 MAPA_DISPLAY_ML = {
     "ph": "pH", "nitrogeno": "N", "fosforo": "P", "potasio": "K",
@@ -190,6 +198,7 @@ class RecommendationOrchestrator:
             request, soil_dict, t_start, advertencia_datos, finca_ctx,
             npk_no_calibrado, missing_esenciales=soil_data.missing_blocking,
             rendimiento_actual_t_ha=request.rendimiento_actual_t_ha,
+            estimaciones_sig=soil_data.estimaciones_sig,
         )
 
     async def _cargar_contexto_finca(self, finca_id: str) -> dict:
@@ -483,6 +492,7 @@ class RecommendationOrchestrator:
         npk_no_calibrado: bool = False,
         missing_esenciales: list[str] | None = None,
         rendimiento_actual_t_ha: float | None = None,
+        estimaciones_sig: list[str] | None = None,
     ) -> "RecommendationResult":
         """UC2: evalúa el suelo contra las reglas del cultivo sembrado."""
         from sqlalchemy import select
@@ -604,8 +614,15 @@ class RecommendationOrchestrator:
                 "prioridad": v.prioridad,
                 "fuente": v.fuente,
                 "confiabilidad": (
-                    "Validado en laboratorio" if validacion_lab
-                    else ("Calibrado de fábrica" if not es_npk else "Sin validar")
+                    "Estimado por SIG (IGAC/UPRA)"
+                    if (
+                        SIG_DISPLAY_CANONICO.get(v.variable)
+                        in (estimaciones_sig or [])
+                    )
+                    else (
+                        "Validado en laboratorio" if validacion_lab
+                        else ("Calibrado de fábrica" if not es_npk else "Sin validar")
+                    )
                 ),
                 "condicional": condicional,
                 "plan": self._plan_ejecutable(v.variable, validacion_lab),

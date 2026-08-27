@@ -344,6 +344,20 @@ async def registrar_finca(
     await db.refresh(finca)
     await db.refresh(lote)
 
+    # ── Enriquecimiento SIG (IGAC/UPRA): precarga textura/MO/CIC oficiales ──
+    # Si la finca tiene coordenadas, se intersecta el polígono con las zonas
+    # de referencia del Estudio General de Suelos y se guarda una lectura con
+    # calidad 'estimado_por_sig'. El sensor gana si llega a medir.
+    enriquecimiento = None
+    if lat is not None and lng is not None:
+        try:
+            from agroia_backend.services.sig_suelos import enriquecer_finca_sig
+
+            enriquecimiento = await enriquecer_finca_sig(db, finca)
+            await db.refresh(lote)  # el enriquecimiento pudo completar el lote
+        except Exception as e:  # noqa: BLE001 — no bloquear el registro
+            logger.warning("sig_enriquecimiento_fallo", finca_id=str(finca.id), error=str(e))
+
     logger.info(
         "finca_registrada",
         finca_id=str(finca.id), nombre=finca.nombre, rol=rol,
@@ -354,6 +368,7 @@ async def registrar_finca(
         "finca": _finca_a_dict(finca),
         "validaciones": pasos,
         "advertencias": advertencias,
+        "enriquecimiento_sig": enriquecimiento,
         "lote_principal": {
             "id": str(lote.id),
             "nombre": lote.nombre,

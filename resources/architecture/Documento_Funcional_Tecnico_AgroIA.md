@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.5 · **Fecha:** 2026-08-27
+**Versión:** 2.6 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -13,7 +13,7 @@
 4. [Autenticación y sesión (lo más básico)](#4-autenticación-y-sesión-lo-más-básico)
 5. [El frontend SPA: navegación y utilidades](#5-el-frontend-spa-navegación-y-utilidades)
 6. [Recorrido sección por sección](#6-recorrido-sección-por-sección)
-   - [6.11 🕵️ Auditoría](#611--auditoría-de-acciones-solo-admin) · [6.12 🔄 Ciclos productivos](#612--ciclos-productivos-por-lote-historial_ciclos_lote) · [6.13 ⛅ Alertas climáticas](#613--alertas-climáticas-proactivas)
+   - [6.11 🕵️ Auditoría](#611--auditoría-de-acciones-solo-admin) · [6.12 🔄 Ciclos productivos](#612--ciclos-productivos-por-lote-historial_ciclos_lote) · [6.13 ⛅ Alertas climáticas](#613--alertas-climáticas-proactivas) · [6.14 🗺️ Enriquecimiento SIG IGAC/UPRA](#614--enriquecimiento-sig-igacupra)
 7. [Ingesta de datos IoT — `POST /api/sensor`](#7-ingesta-de-datos-iot--post-apisensor)
 8. [El motor de recomendaciones (corazón del sistema)](#8-el-motor-de-recomendaciones-corazón-del-sistema)
 9. [Aceptación humana de recomendaciones (human-in-the-loop)](#9-aceptación-humana-de-recomendaciones-human-in-the-loop)
@@ -474,6 +474,23 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 
 **UI**: P1 muestra el contenedor `#dashboard-alertas` sobre los KPIs con banners de colores (azul = lluvia/lixiviación, rojo = helada). El **reporte (sección N)** agrega «⛅ Pronóstico extendido (7 días)» con tabla de fecha/lluvia/T mín/T máx y avisos ⚠️/🥶 cuando supera los umbrales.
 
+### 6.14 🗺️ Enriquecimiento SIG IGAC/UPRA
+
+**Objetivo**: dejar de depender del sensor para textura/MO/CIC. Al registrar la finca (P2), el polígono GeoJSON se intersecta (centroide) con las **zonas de referencia del Estudio General de Suelos del IGAC** (1:100.000) y las zonificaciones **UPRA/SIPRA** — `services/sig_suelos.py::ZONAS_SUELOS_COLOMBIA` (11 regiones: Eje Cafetero, Antioquia, Cundinamarca con posible fragipán, Boyacá, Santander, Tolima, Nariño, Costa Atlántica, Costa Pacífica, Orinoquía, Amazonia).
+
+**Relleno automático**: se crea una fila en `sensor_readings` con `calidad = 'estimado_por_sig'` y `sensor_id = 'sig-igac-upra'` que precarga **textura** (clases granulométricas IGAC: Franca, Franco-arenosa, Franco-arcillosa, Franco-limosa — migración 020 amplía el enum `texturasuelo`), **materia orgánica (%)** y **CIC (meq/100g)**; además completa el lote principal (`profundidad_suelo_cm`, `pedregosidad`) si venían vacíos.
+
+**Precedencia** (`SueloAdapter.get_latest`): el **sensor gana SIEMPRE** — las variables que el sensor mide no se tocan; el SIG solo rellena las faltantes, que quedan marcadas en `estimaciones_sig`. En las filas del diagnóstico su `confiabilidad` muestra «Estimado por SIG (IGAC/UPRA)» y el Dashboard etiqueta la lectura «🗺️ estimado SIG».
+
+**Endpoints** (Admin/Agrónomo):
+- `POST /api/v1/fincas/{id}/enriquecer-sig` — disparo manual (reutiliza la fila SIG reciente, idempotente). Auditoría `sig.enriquecer`.
+- `GET /api/v1/fincas/{id}/enriquecimiento-sig` — última estimación SIG registrada.
+- El `POST /fincas` lo ejecuta automáticamente si la finca trae coordenadas (no bloquea el registro si falla).
+
+**Geoservicio real (opcional)**: `intentar_geoservicio_igac()` consulta un WMS/WFS GetFeatureInfo si se define `SIG_IGAC_WMS_URL`; sin configuración degrada con gracia a las zonas de referencia locales.
+
+**Impacto**: textura/MO/CIC dejan de ser faltantes; el análisis «preliminar» queda solo para variables dinámicas (pH y CE), que sí requieren medición.
+
 ---
 
 ## 7. Ingesta de datos IoT — `POST /api/sensor`
@@ -795,6 +812,12 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 - **Ground Truth**: aceptaciones de agrónomos (estados por variable) + ciclos cerrados (rendimiento real vs. ficha) — `services/ml_labels.py`, visible en `GET /api/v1/ml/etiquetas-doradas`.
 - **Validador ML en P5**: banner «🤖 Validador ML activo» con coincidencias (refuerzo de confianza) y discrepancias (prevalecen las reglas); el semáforo de confianza suma una 5.ª barra.
 
+### 11.6 Capas oficiales IGAC/UPRA — enriquecimiento SIG (v2.6)
+
+- **P2**: al registrar la finca, el polígono GeoJSON se intersecta con las zonas de referencia IGAC/UPRA y se precargan textura/MO/CIC con `calidad = estimado_por_sig`; el banner verde muestra la zona, la textura y la fuente oficial. Si el sensor mide, **sobrescribe** la estimación.
+- **Confiabilidad transparente**: las filas del diagnóstico rellenadas por SIG muestran «Estimado por SIG (IGAC/UPRA)»; el Dashboard etiqueta la lectura «🗺️ estimado SIG».
+- **Impacto en confianza**: menos variables faltantes → menos análisis «preliminares»; solo pH y CE (dinámicos) siguen exigiendo medición real.
+
 ---
 
 ## 12. Persistencia y base de datos
@@ -828,9 +851,9 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 
 `clasificacionupra, estadodiscordancia, estadoficha, estadomembresia, estadorecomendacion, planmembresia, prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo`.
 
-### 12.3 Migraciones (001 → 019)
+### 12.3 Migraciones (001 → 020)
 
-- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` + índice `idx_ciclos_lote` · `017` inicio de ciclo: `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes` y en `historial_ciclos_lote` · `018` tabla `labores` · `019` tabla `alertas_climaticas`.
+- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` + índice `idx_ciclos_lote` · `017` inicio de ciclo: `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes` y en `historial_ciclos_lote` · `018` tabla `labores` · `019` tabla `alertas_climaticas` · `020` enum `texturasuelo` ampliado con clases IGAC (FRANCA, FRANCO_ARENOSA, FRANCO_ARCILLOSA, FRANCO_LIMOSA).
 - **Auto-reparación al arranque**: `asegurar_enums()` crea tipos enum faltantes y `asegurar_reglas()` siembra reglas faltantes (idempotentes, corren en el `lifespan` de `main.py`).
 
 ### 12.4 Gotchas de Neon (lecciones aprendidas)

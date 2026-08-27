@@ -239,6 +239,14 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Transparencia**: `GET /api/v1/ml/etiquetas-doradas` (Admin) y `variables_promovidas` en `GET /api/v1/ml/estado`.
 - Validado local: siembra de etiquetas doradas (aceptación + ciclo cerrado), entrenamiento `--active-learning --registrar` (75 000 sintéticos + doradas, 0 promovidas con 1 muestra — comportamiento honesto), validador runtime con promoción simulada (desacuerdos P/K → reglas mandan) y banner en P5. Validado en producción: `variables_promovidas` en `/ml/estado`, `/ml/etiquetas-doradas` (Admin), `validacion_ml` en el analyze y UI sirviendo `v=20260827-mlactivo`.
 
+### Capas oficiales IGAC/UPRA — enriquecimiento SIG (2026-08-27)
+
+- **`services/sig_suelos.py`**: 11 zonas de referencia del Estudio General de Suelos del IGAC + zonificaciones UPRA/SIPRA (textura, M.O., CIC, drenaje, profundidad efectiva, pedregosidad, capas limitantes — ej. posible fragipán en Cundinamarca). El polígono GeoJSON se intersecta por centroide (`resolver_zona_sig`).
+- **Relleno automático**: fila en `sensor_readings` con `calidad = 'estimado_por_sig'` (`sensor_id = 'sig-igac-upra'`) precarga textura/MO/CIC y completa profundidad/pedregosidad del lote. Migración 020 amplía el enum `texturasuelo` con clases IGAC.
+- **Precedencia**: `SueloAdapter.get_latest` hace merge — el **sensor gana SIEMPRE**; el SIG solo rellena faltantes (marcados en `estimaciones_sig`). En el diagnóstico, confiabilidad «Estimado por SIG (IGAC/UPRA)»; en el Dashboard, badge «🗺️ estimado SIG».
+- **Endpoints**: `POST /fincas/{id}/enriquecer-sig` (manual, idempotente, auditoría `sig.enriquecer`), `GET /fincas/{id}/enriquecimiento-sig`; `POST /fincas` lo ejecuta automáticamente si hay coordenadas. Geoservicio WMS/WFS real opcional vía `SIG_IGAC_WMS_URL`.
+- Validado local: enriquecimiento Eje Cafetero (Franco-arcillosa, MO 9.5 %, CIC 24), violaciones SIG → filas con confiabilidad SIG, sensor (MO 3.0/CIC 5.0) sobreescribe al SIG, badge en Dashboard — pendiente validación en producción.
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).
@@ -248,6 +256,7 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - `017_ciclo_inicio` — `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes`; `variedad`/`densidad_siembra_plantas_ha` en `historial_ciclos_lote`.
 - `018_labores` — tabla `agroia.labores` (órdenes de trabajo con estado, responsable y fechas).
 - `019_alertas_climaticas` — tabla `agroia.alertas_climaticas` (alertas meteorológicas proactivas con pronóstico JSONB).
+- `020_texturas_sig` — enum `agroia.texturasuelo` ampliado con clases granulométricas IGAC (FRANCA, FRANCO_ARENOSA, FRANCO_ARCILLOSA, FRANCO_LIMOSA).
 
 ### Límites del tier gratuito (validados 2026-08-25)
 

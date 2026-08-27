@@ -179,6 +179,15 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
     suelo, pedregosidad y dimensiones (largo × ancho). Aunque indique «Finca completa»,
     estos parámetros se exigen porque enriquecen el estudio del suelo.</li>
   </ol>
+  <p><b>🗺️ Enriquecimiento SIG (IGAC/UPRA):</b> al guardar, el polígono GeoJSON se intersecta
+  con las zonas de referencia del Estudio General de Suelos y el sistema precarga
+  <b>textura</b> (clases IGAC: Franca, Franco-arcillosa…), <b>materia orgánica</b> y <b>CIC</b>
+  en una lectura con calidad <code>estimado_por_sig</code>, y completa profundidad/pedregosidad
+  del lote si venían vacíos. El mensaje de éxito muestra el banner verde «🗺️ Capas oficiales
+  IGAC/UPRA aplicadas» con la zona, textura, M.O., CIC, drenaje y profundidad. Si el sensor
+  envía datos reales, <b>sobreescriben</b> la estimación oficial. En el Dashboard, la lectura
+  aparece etiquetada «🗺️ estimado SIG» y en el diagnóstico (P5) las filas de MO/CIC/textura
+  muestran confiabilidad «Estimado por SIG (IGAC/UPRA)».</p>
   <p><b>Cadena de validación al guardar</b> (cada paso se muestra con ✅/⚠️/❌):</p>
   <table>
     <tr><th>#</th><th>Validación</th><th>Rechazo si falla</th></tr>
@@ -456,7 +465,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.4 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.5 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

@@ -24,7 +24,10 @@ ENUMS = {
     "prioridadregla": ["CRITICA", "ALTA", "MEDIA", "BAJA"],
     "rolusuario": ["ADMIN", "CLIENTE", "TECNICO", "INVESTIGADOR", "AGRONOMO"],
     "stagemodelo": ["STAGING", "PRODUCTION", "ARCHIVED"],
-    "texturasuelo": ["ARENA", "LIMO", "ARCILLA"],
+    "texturasuelo": [
+        "ARENA", "LIMO", "ARCILLA",
+        "FRANCA", "FRANCO_ARENOSA", "FRANCO_ARCILLOSA", "FRANCO_LIMOSA",
+    ],
     "tipofuente": ["NACIONAL", "INTERNACIONAL"],
     "variablesuelo": [
         "PH", "N", "P", "K", "Ca", "Mg", "S", "Fe", "Mn", "Zn", "Cu",

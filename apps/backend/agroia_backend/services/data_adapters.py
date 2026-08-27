@@ -52,6 +52,8 @@ class SoilData:
     temperatura_suelo: float | None = None
     conductividad_electrica: float | None = None
     calidad: str | None = "OK"
+    # Variables completadas por la capa SIG oficial (IGAC/UPRA), no por sensor
+    estimaciones_sig: list[str] = field(default_factory=list)
     missing_blocking: list[str] = field(default_factory=list)
     missing_non_blocking: list[str] = field(default_factory=list)
 
@@ -129,25 +131,85 @@ class SueloAdapter:
         self.db = db_session
 
     async def get_latest(self, finca_id: str, max_age_hours: int = 24) -> SoilData | None:
-        """Obtiene la lectura más reciente para una finca (máx. 24h de antigüedad)."""
-        from sqlalchemy import desc, select
+        """Obtiene la lectura más reciente para una finca (máx. 24h).
+
+        Precedencia: el sensor manda SIEMPRE; las variables que no mida se
+        rellenan con la última estimación SIG oficial (calidad
+        `estimado_por_sig`, fuente IGAC/UPRA), quedando marcadas en
+        `estimaciones_sig`.
+        """
+        from sqlalchemy import desc, or_, select
 
         cutoff = datetime.utcnow() - timedelta(hours=max_age_hours)
-        stmt = (
-            select(SensorReading)
-            .where(
-                SensorReading.finca_id == finca_id,
-                SensorReading.ts >= cutoff,
+        sensor = (
+            await self.db.execute(
+                select(SensorReading)
+                .where(
+                    SensorReading.finca_id == finca_id,
+                    SensorReading.ts >= cutoff,
+                    or_(
+                        SensorReading.calidad.is_(None),
+                        SensorReading.calidad != "estimado_por_sig",
+                    ),
+                )
+                .order_by(desc(SensorReading.ts))
+                .limit(1)
             )
-            .order_by(desc(SensorReading.ts))
-            .limit(1)
-        )
-        result = await self.db.execute(stmt)
-        reading = result.scalar_one_or_none()
-        if reading is None:
+        ).scalar_one_or_none()
+        sig = (
+            await self.db.execute(
+                select(SensorReading)
+                .where(
+                    SensorReading.finca_id == finca_id,
+                    SensorReading.calidad == "estimado_por_sig",
+                )
+                .order_by(desc(SensorReading.ts))
+                .limit(1)
+            )
+        ).scalar_one_or_none()
+
+        if sensor is None and sig is None:
             logger.info("no_recent_soil_data", finca_id=finca_id, max_age_hours=max_age_hours)
             return None
-        return validate_soil_reading(reading)
+        if sensor is None:
+            data = validate_soil_reading(sig)
+            data.estimaciones_sig = [
+                v for v in ALL_SOIL_VARIABLES if getattr(data, v) is not None
+            ]
+            logger.info(
+                "soil_data_sig_only", finca_id=finca_id,
+                variables_sig=data.estimaciones_sig,
+            )
+            return data
+
+        data = validate_soil_reading(sensor)
+        if sig is not None:
+            data = self._rellenar_con_sig(data, sig)
+        return data
+
+    @staticmethod
+    def _rellenar_con_sig(data: SoilData, sig: SensorReading) -> SoilData:
+        """Rellena variables faltantes del sensor con la capa SIG oficial."""
+        for var in ALL_SOIL_VARIABLES:
+            if getattr(data, var) is not None:
+                continue
+            v = getattr(sig, var, None)
+            if v is None:
+                continue
+            if hasattr(v, "value"):  # enums (textura) → valor de texto
+                v = v.value
+            setattr(data, var, v)
+            data.estimaciones_sig.append(var)
+            if var in data.missing_blocking:
+                data.missing_blocking.remove(var)
+            if var in data.missing_non_blocking:
+                data.missing_non_blocking.remove(var)
+        if data.estimaciones_sig:
+            logger.info(
+                "soil_data_merge_sig",
+                finca_id=data.finca_id, variables_sig=data.estimaciones_sig,
+            )
+        return data
 
     async def get_history(
         self, finca_id: str, days: int = 90

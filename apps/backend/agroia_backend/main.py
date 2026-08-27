@@ -54,6 +54,7 @@ from agroia_backend.api.ml import router as ml_router
 from agroia_backend.api.recomendaciones import router as recomendaciones_router
 from agroia_backend.api.reportes import router as reportes_router
 from agroia_backend.api.sensor_api import router as sensor_api_router
+from agroia_backend.api.sig import router as sig_router
 from agroia_backend.api.usuarios import router as usuarios_router
 
 settings = get_settings()
@@ -150,6 +151,7 @@ app.include_router(ciclos_router)
 app.include_router(labores_router)
 app.include_router(reportes_router)
 app.include_router(sensor_api_router)
+app.include_router(sig_router)
 app.include_router(demo_router)
 # app.include_router(catalogo_router, prefix="/api/v1")
 # app.include_router(usuarios_router, prefix="/api/v1")

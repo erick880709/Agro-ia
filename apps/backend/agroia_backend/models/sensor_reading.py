@@ -18,6 +18,11 @@ class TexturaSuelo(str, enum.Enum):
     ARENA = "Arena"
     LIMO = "Limo"
     ARCILLA = "Arcilla"
+    # Clases granulométricas IGAC (Estudio General de Suelos de Colombia)
+    FRANCA = "Franca"
+    FRANCO_ARENOSA = "Franco-arenosa"
+    FRANCO_ARCILLOSA = "Franco-arcillosa"
+    FRANCO_LIMOSA = "Franco-limosa"
 
 
 class SensorReading(Base):

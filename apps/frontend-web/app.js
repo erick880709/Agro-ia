@@ -1632,6 +1632,20 @@ function renderValidaciones(pasos) {
   ).join('') + '</div>';
 }
 
+/* ── Enriquecimiento SIG (IGAC/UPRA) tras registrar la finca ── */
+
+function renderSigEnriquecimiento(sig) {
+  if (!sig || !sig.zona) return '';
+  return `
+    <div class="sig-banner">
+      🗺️ <b>Capas oficiales IGAC/UPRA aplicadas:</b> textura <b>${esc(sig.zona.textura)}</b>,
+      materia orgánica ${esc(String(sig.zona.materia_organica_pct))} %,
+      CIC ${esc(String(sig.zona.cic_meq))} meq/100g · drenaje ${esc(sig.zona.drenaje || '—')}
+      · profundidad ${esc(String(sig.zona.profundidad_efectiva_cm))} cm
+      <div class="muted" style="font-size:0.78rem">Calidad <b>estimado_por_sig</b> — si el sensor envía datos reales, sobreescriben la estimación oficial.</div>
+    </div>`;
+}
+
 async function enviarFinca(e) {
   e.preventDefault();
   const msg = document.getElementById('finca-msg');
@@ -1726,7 +1740,8 @@ async function enviarFinca(e) {
       </div>
       <p class="muted">Envíe este ID en cada trama del sensor como <code>finca_id</code>, o úselo para registrar el dispositivo en <code>POST /api/v1/iot/dispositivos</code>.</p>
     </div>
-    ${r.lote_principal ? `<p class="muted">🌱 Lote productivo creado: <b>${esc(r.lote_principal.nombre)}</b>${r.lote_principal.area_ha != null ? ` (${esc(String(r.lote_principal.area_ha))} ha)` : ''}.</p>` : ''}`;
+    ${r.lote_principal ? `<p class="muted">🌱 Lote productivo creado: <b>${esc(r.lote_principal.nombre)}</b>${r.lote_principal.area_ha != null ? ` (${esc(String(r.lote_principal.area_ha))} ha)` : ''}.</p>` : ''}`
+    + renderSigEnriquecimiento(r.enriquecimiento_sig);
     const btnCopia = msg.querySelector('[data-copiar]');
     if (btnCopia) btnCopia.addEventListener('click', () => copiarTexto(btnCopia.dataset.copiar || '', btnCopia));
     e.target.reset();
@@ -1874,6 +1889,12 @@ const ETIQUETAS = {
   materia_organica: ['M.O.', '%'], cic: ['CIC', 'meq/100g'], humedad: ['Humedad suelo', '%'], temperatura_suelo: ['T suelo', '°C'],
 };
 
+const CALIDAD_LECTURA = {
+  OK: 'OK',
+  'npk sin calibrar': 'npk sin calibrar',
+  estimado_por_sig: '🗺️ estimado SIG',
+};
+
 function nombreFinca(fid) {
   if (!fid) return '';
   const f = (state.fincas || []).find(x => String(x.id) === String(fid));
@@ -1902,7 +1923,7 @@ function renderTablaLecturas(data, container, limit) {
           ${celdaFinca(r.finca_id)}
           <td>${esc(r.sensor_id || '—')}</td>
           ${columnas.map(c => `<td>${fmtNum(r[c])}${r[c] != null && ETIQUETAS[c][1] ? ' ' + ETIQUETAS[c][1] : ''}</td>`).join('')}
-          <td>${badge(r.calidad === 'OK' ? 'OK' : 'npk sin calibrar', r.calidad === 'OK' ? 'ok' : 'warning')}</td>
+          <td>${badge(CALIDAD_LECTURA[r.calidad] || (r.calidad || '—'), r.calidad === 'OK' ? 'ok' : r.calidad === 'estimado_por_sig' ? 'textura' : 'warning')}</td>
         </tr>`).join('')}
     </table></div>`;
 }
