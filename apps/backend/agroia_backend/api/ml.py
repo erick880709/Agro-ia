@@ -3,6 +3,8 @@
 GET /api/v1/ml/estado — modelos registrados, métricas y artefactos.
 """
 
+import json
+
 from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
