@@ -14,7 +14,7 @@ from agroia.database import get_db
 from agroia.errors import AgroIAError
 from agroia.logging import get_logger
 from fastapi import APIRouter, Depends, Header, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -29,6 +29,7 @@ from agroia_backend.services.agronomo_chat import (
     construir_contexto,
     contexto_resumido,
     respuesta_orquestada,
+    vision_disponible,
 )
 from agroia_backend.services.agronomo_kb import (
     contexto_climatico,
@@ -52,6 +53,23 @@ class ChatRequest(BaseModel):
     mensaje: str = Field(..., min_length=1, max_length=2000)
     cultivo_id: str | None = Field(None, description="UUID del cultivo (opcional; si no, se usa el top sugerido)")
     historial: list[dict] | None = Field(None, description="Últimos mensajes [{rol, contenido}]")
+    imagen_base64: str | None = Field(
+        None,
+        max_length=6_000_000,
+        description="Foto del cultivo en base64 (JPG/PNG, sin prefijo data:)",
+    )
+
+    @field_validator("imagen_base64")
+    @classmethod
+    def _limpiar_imagen(cls, v):
+        if not v:
+            return None
+        v = v.strip()
+        if v.startswith("data:image/"):
+            v = v.split(",", 1)[1]
+        if len(v) > 6_000_000:  # ~4,5 MB máx.
+            raise ValueError("La imagen supera el tamaño máximo (4,5 MB).")
+        return v or None
 
 
 @router.post("/consultar")
@@ -197,11 +215,25 @@ async def consultar_chat(
         + contexto_conocimiento()
     )
 
+    # ── Imagen adjunta: visión si el modelo la soporta; si no, referencia ──
+    imagen = body.imagen_base64
+    vision = imagen is not None and vision_disponible()
+    mensaje_efectivo = body.mensaje
+    if imagen and not vision:
+        mensaje_efectivo = (
+            body.mensaje
+            + "\n\nNOTA: El usuario adjuntó una imagen del cultivo (hojas, "
+            "planta o síntoma). No hay análisis visual disponible: quedó "
+            "guardada como referencia en la memoria de la finca y el "
+            "diagnóstico se basa en la descripción textual."
+        )
+
     resultado = await consultar_experto(
-        mensaje=body.mensaje,
+        mensaje=mensaje_efectivo,
         historial=body.historial or [],
         contexto=contexto_texto,
         rol=x_user_role or "cliente",
+        imagen_base64=imagen if vision else None,
     )
 
     if resultado["modo"] == "llm" and resultado["respuesta"]:
@@ -212,7 +244,7 @@ async def consultar_chat(
         falta = None
         datos_utilizados = ["contexto de la finca", "análisis del motor", "clima disponible"]
     else:
-        orquestado = respuesta_orquestada(body.mensaje, contexto_resumido(ctx))
+        orquestado = respuesta_orquestada(mensaje_efectivo, contexto_resumido(ctx))
         respuesta = orquestado["respuesta"] or ""
         modo = "experto-local"
         fuentes = orquestado.get("fuentes") or []
@@ -229,6 +261,7 @@ async def consultar_chat(
         respuesta=respuesta,
         fuentes="; ".join(fuentes) if fuentes else None,
         confianza=confianza,
+        imagen_base64=imagen,
     ))
     await db.commit()
 
@@ -244,6 +277,8 @@ async def consultar_chat(
         "datos_utilizados": datos_utilizados,
         "falta": falta,
         "clima": resumen_climatico(clima),
+        "imagen_analizada": bool(imagen and vision),
+        "imagen_guardada": bool(imagen),
         "nota": (
             "Respuesta generada por el sistema experto local."
             if modo == "experto-local" else None

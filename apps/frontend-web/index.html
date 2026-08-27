@@ -249,8 +249,16 @@
         <form id="form-chat" class="chat-form">
           <input id="chat-input" type="text" maxlength="2000" autocomplete="off"
                  placeholder="Escriba su pregunta… (ej. ¿cada cuánto abono el café?)">
+          <button type="button" class="btn btn-ghost chat-attach" id="chat-attach"
+                  title="Adjuntar foto del cultivo (JPG/PNG, máx. 4,5 MB)">📎</button>
           <button type="submit" class="btn btn-primary" id="chat-btn">Enviar</button>
+          <input type="file" id="chat-imagen" accept="image/jpeg,image/png" hidden>
         </form>
+        <div id="chat-preview" class="chat-preview hidden">
+          <img id="chat-preview-img" alt="Vista previa de la foto adjunta">
+          <button type="button" class="btn btn-ghost chat-quitar" id="chat-quitar"
+                  title="Quitar foto">✕ Quitar</button>
+        </div>
         <p class="muted" id="chat-nota"></p>
       </div>
     </section>

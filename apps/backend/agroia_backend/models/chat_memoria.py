@@ -40,6 +40,11 @@ class ChatMemoria(Base, TimestampMixin):
     confianza: Mapped[str | None] = mapped_column(
         String(50), nullable=True, comment="Alta / Media / Baja"
     )
+    imagen_base64: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+        comment="Foto del cultivo adjuntada en el chat (JPG/PNG en base64)",
+    )
     ts: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
     )

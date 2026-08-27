@@ -3925,8 +3925,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/recomendaciones.py": {
-    "mtime": 1787810119.8947992,
-    "ast_hash": "1351ab0c54e87d5544cddf6cef014ae7",
+    "mtime": 1787844018.3978922,
+    "ast_hash": "a86f175cf5c5931a849fa9e51c5c70dd",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/__init__.py": {
@@ -3980,8 +3980,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/orchestrator.py": {
-    "mtime": 1787842668.0119007,
-    "ast_hash": "1eb0ab44601705c66ef4cd39c550b424",
+    "mtime": 1787844018.4194322,
+    "ast_hash": "b2cea836c5773389e057b4eb318295d5",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/rules_engine.py": {
@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787836722.961696,
-    "ast_hash": "7c1c67ff38174c0f6c924be5320d8d3c",
+    "mtime": 1787845732.779314,
+    "ast_hash": "2c15f6d01e7a3c14450f4ddd4b7879be",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4515,8 +4515,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/reportes.py": {
-    "mtime": 1787842668.007853,
-    "ast_hash": "01aec6a439265d788fa121f0d5efc073",
+    "mtime": 1787845116.5071056,
+    "ast_hash": "d529e6a709fd48e2042b23a4b71962f6",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/sensor_api.py": {
@@ -4570,8 +4570,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/reportes_html.py": {
-    "mtime": 1787842668.0057054,
-    "ast_hash": "a030a17f1b91d41447fa27c869aeb91a",
+    "mtime": 1787845114.156075,
+    "ast_hash": "2c5c95530702c9e8092cd9375c113b43",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/003_dispositivos_iot.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787842668.0040863,
-    "ast_hash": "ffc2fa5ad0863dab1b5d0648522047df",
+    "mtime": 1787844137.6224048,
+    "ast_hash": "d2fb67a444a71b1b6d2f53a81aadd1bc",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787842667.997656,
-    "ast_hash": "e946fef2f56dd992d919b7972f410931",
+    "mtime": 1787844137.6140933,
+    "ast_hash": "7008467f4413a955f061954255010754",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4857,6 +4857,11 @@
   "resources/architecture/Documento_Pantallas_AgroIA.html": {
     "mtime": 1787839856.7896135,
     "ast_hash": "091136492972185dbf426dfec57444bf",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/economia.py": {
+    "mtime": 1787843942.4460163,
+    "ast_hash": "de27149c367d98dd0ddb2b6a8b6220f9",
     "semantic_hash": ""
   }
 }

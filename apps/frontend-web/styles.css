@@ -505,6 +505,39 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
   font-size: 0.95rem;
 }
 
+.chat-attach {
+  padding: 0 14px;
+  font-size: 1.05rem;
+}
+
+.chat-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: -4px 0 12px;
+}
+
+.chat-preview.hidden {
+  display: none;
+}
+
+.chat-preview img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #c9d6cb;
+}
+
+.chat-img {
+  display: block;
+  max-width: 180px;
+  max-height: 140px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
 /* ─────────────────────────── id de finca para sensores ─────────────────────────── */
 
 .finca-id-box {

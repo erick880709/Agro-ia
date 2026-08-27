@@ -32,6 +32,23 @@ logger = get_logger(__name__)
 
 MAX_HISTORIAL = 6  # mensajes previos que se envían al LLM
 
+# Modelos OpenAI con soporte de imágenes (visión)
+_TOKEN_VISION = ("gpt-4o", "gpt-4.1", "gpt-4.5", "vision", "omni")
+
+
+def _modelo_con_vision(modelo: str | None) -> bool:
+    """¿El modelo configurado acepta entrada de imágenes?"""
+    m = (modelo or "").lower()
+    return any(t in m for t in _TOKEN_VISION)
+
+
+def vision_disponible() -> bool:
+    """¿Hay API de OpenAI con un modelo de visión (p. ej. gpt-4o)?"""
+    key = settings.openai_api_key or ""
+    if not key or key == "sk-your-key-here":
+        return False
+    return _modelo_con_vision(settings.openai_model)
+
 # ── Prompt de sistema: experto agrónomo colombiano ──
 PROMPT_SISTEMA_EXPERTO = (
     "Eres Don Gabriel, un agrónomo colombiano con más de 30 años de experiencia "
@@ -579,8 +596,19 @@ def _respuesta_local(mensaje: str, ctx: dict) -> str:
 
 # ── Orquestador ──
 
-async def consultar_experto(*, mensaje: str, historial: list[dict], contexto: str, rol: str) -> dict:
-    """Consulta al LLM (OpenAI) si hay API key; si no, motor local."""
+async def consultar_experto(
+    *,
+    mensaje: str,
+    historial: list[dict],
+    contexto: str,
+    rol: str,
+    imagen_base64: str | None = None,
+) -> dict:
+    """Consulta al LLM (OpenAI) si hay API key; si no, motor local.
+
+    Si se adjunta una imagen y el modelo configurado tiene visión
+    (gpt-4o y afines), se envía como parte multimodal del mensaje.
+    """
     key = settings.openai_api_key or ""
     if not key or key == "sk-your-key-here":
         return {"respuesta": None, "modo": "local"}
@@ -595,14 +623,31 @@ async def consultar_experto(*, mensaje: str, historial: list[dict], contexto: st
             contenido = m.get("contenido") or ""
             if rol_msg in ("user", "assistant") and contenido:
                 mensajes.append({"role": rol_msg, "content": contenido})
-        mensajes.append({
-            "role": "user",
-            "content": (
-                "CONTEXTO DE LA FINCA (fuente única de verdad, no inventes datos):\n"
-                f"{contexto}\n\n"
-                f"PREGUNTA DEL USUARIO ({rol}):\n{mensaje}"
-            ),
-        })
+
+        texto_usuario = (
+            "CONTEXTO DE LA FINCA (fuente única de verdad, no inventes datos):\n"
+            f"{contexto}\n\n"
+            f"PREGUNTA DEL USUARIO ({rol}):\n{mensaje}"
+        )
+        if imagen_base64 and _modelo_con_vision(settings.openai_model):
+            contenido_usuario = [
+                {
+                    "type": "text",
+                    "text": (
+                        "Analiza esta foto de cultivo y da un diagnóstico:\n\n"
+                        + texto_usuario
+                    ),
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{imagen_base64}",
+                    },
+                },
+            ]
+        else:
+            contenido_usuario = texto_usuario
+        mensajes.append({"role": "user", "content": contenido_usuario})
 
         response = await client.chat.completions.create(
             model=settings.openai_model or "gpt-4o-mini",

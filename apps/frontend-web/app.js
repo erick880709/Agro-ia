@@ -260,6 +260,32 @@ async function arrancarAplicacion() {
   document.getElementById('reporte-abrir').addEventListener('click', abrirReporte);
   document.getElementById('reporte-descargar').addEventListener('click', descargarReporteHtml);
   document.getElementById('form-chat').addEventListener('submit', enviarChat);
+  document.getElementById('chat-attach').addEventListener('click', () => {
+    document.getElementById('chat-imagen').click();
+  });
+  document.getElementById('chat-imagen').addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    if (!/^image\/(jpeg|png)$/.test(f.type)) {
+      alert('Solo se permiten fotos en formato JPG o PNG.');
+      e.target.value = '';
+      return;
+    }
+    if (f.size > 4.5 * 1024 * 1024) {
+      alert('La foto no puede superar 4,5 MB.');
+      e.target.value = '';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      chatImagen = reader.result;
+      const pv = document.getElementById('chat-preview');
+      document.getElementById('chat-preview-img').src = reader.result;
+      pv.classList.remove('hidden');
+    };
+    reader.readAsDataURL(f);
+  });
+  document.getElementById('chat-quitar').addEventListener('click', limpiarChatImagen);
   document.getElementById('repo-finca').addEventListener('change', e => {
     state.fincaId = e.target.value || null;
     renderChat();
@@ -1458,10 +1484,19 @@ function descargarReporteHtml() {
 
 /* ─────────────────────────── chat asesor agronómico ─────────────────────────── */
 
-const chatHistorial = {}; // finca_id → [{rol, contenido}]
+const chatHistorial = {}; // finca_id → [{rol, contenido}] (imagen opcional)
 let chatFincaActual = null;
 let chatModo = null; // 'llm' | 'experto-local'
 let chatMeta = null; // {confianza, fuentes} de la última respuesta
+let chatImagen = null; // dataURL de la foto adjunta (o null)
+
+function limpiarChatImagen() {
+  chatImagen = null;
+  const pv = document.getElementById('chat-preview');
+  if (pv) pv.classList.add('hidden');
+  const fi = document.getElementById('chat-imagen');
+  if (fi) fi.value = '';
+}
 
 function chatFincaId() {
   const sel = document.getElementById('repo-finca');
@@ -1484,9 +1519,12 @@ function renderChat() {
       : 'Seleccione una finca para poder consultar al asesor.';
     return;
   }
-  div.innerHTML = hist.map(m =>
-    `<div class="chat-msg ${m.rol === 'user' ? 'chat-user' : 'chat-bot'}">${esc(m.contenido)}</div>`
-  ).join('');
+  div.innerHTML = hist.map(m => {
+    const imgHtml = m.imagen
+      ? `<img class="chat-img" src="${esc(m.imagen)}" alt="Foto adjunta del cultivo">`
+      : '';
+    return `<div class="chat-msg ${m.rol === 'user' ? 'chat-user' : 'chat-bot'}">${imgHtml}${esc(m.contenido)}</div>`;
+  }).join('');
   let extra = '';
   if (chatMeta) {
     const partes = [];
@@ -1514,12 +1552,15 @@ async function enviarChat(e) {
     alert('Selecciona una finca para consultar al asesor.');
     return;
   }
-  if (!mensaje) return;
+  if (!mensaje && !chatImagen) return;
+  const mensajeFinal = mensaje || 'Mira esta foto de mi cultivo.';
+  const imagenData = chatImagen; // dataURL o null
 
   btn.disabled = true;
   const hist = chatHistorial[fid] || (chatHistorial[fid] = []);
-  hist.push({ rol: 'user', contenido: mensaje });
+  hist.push({ rol: 'user', contenido: mensajeFinal, imagen: imagenData });
   input.value = '';
+  limpiarChatImagen();
   renderChat();
 
   const div = document.getElementById('chat-mensajes');
@@ -1534,7 +1575,8 @@ async function enviarChat(e) {
       headers: headers(),
       body: JSON.stringify({
         finca_id: fid,
-        mensaje,
+        mensaje: mensajeFinal,
+        imagen_base64: imagenData ? imagenData.split(',')[1] : undefined,
         historial: hist.slice(-7, -1),
       }),
     });
