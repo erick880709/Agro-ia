@@ -1,6 +1,0 @@
-c:\Users\ELITEBOOK\OneDrive\Documentos\Repositorio\Trabajo\Agro-ia\apps\backend\agroia_backend\main.py:13: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
-  from agroia.errors import register_error_handlers
-INFO:     Started server process [25732]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
