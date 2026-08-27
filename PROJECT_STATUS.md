@@ -252,7 +252,7 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Tabla `agroia.precios_insumos`** (migración 021): `producto` (clave única), `precio_kg_cop`, `fecha_actualizacion`, `fuente`.
 - **Cálculo dinámico** en `services/economia.py`: `calcular_plan_economico(..., precios_insumos)` convierte COP/kg → COP/ha con `DOSIS_PRODUCTO_VARIABLE` (N = Urea 60 kg/ha, P = DAP 35 kg/ha, K = KCl 45 kg/ha…); el orquestador (UC1/UC2) y el reporte cargan la tabla en cada análisis. Sin registro → fallback estático + `advertencia_precios` «Precios de referencia desactualizados» (P5 y reporte).
 - **Endpoints solo Admin**: `GET/PUT /api/v1/admin/precios-insumos` (upsert con fecha = hoy, auditoría `precios.actualizar`); panel «💰 Precios de insumos» en la pestaña Usuarios (tabla editable de 14 insumos).
-- Validado local: 403 para Cliente, advertencia con tabla vacía, tras PUT (Urea 3 500) el costo de N pasa 180 000 → 210 000 COP/ha, P 150 000 → 168 000 (DAP 4 800), K 160 000 → 189 000 (KCl 4 200), sin advertencia — pendiente validación en producción.
+- Validado local y en producción: 403 para Cliente, advertencia con tabla vacía, tras PUT (Urea 3 500) el costo de N pasa 180 000 → 210 000 COP/ha, P 150 000 → 168 000 (DAP 4 800), K 160 000 → 189 000 (KCl 4 200), sin advertencia; en prod el analyze usa `precios_fuente = precios_insumos` (ideal 357 000) y el panel admin sirve con `v=20260827-precios`.
 
 ### Migraciones destacadas
 
