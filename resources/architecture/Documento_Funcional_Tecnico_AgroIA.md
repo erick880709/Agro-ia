@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.2 · **Fecha:** 2026-08-27
+**Versión:** 2.3 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -747,6 +747,14 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 - **Advertencia de acumulación (sección 04)**: si los últimos 2 ciclos cosechados tienen aplicaciones de productos fosforados (DAP, fosfatos, P₂O₅…) > 120 kg/ha, se muestra *«⚠️ Histórico de P alto (últimos 2 ciclos > 120 kg/ha). Reduzca la dosis de fósforo en el plan actual para evitar fijación y ahorrar costos»*.
 - Sin ciclos registrados, las tres piezas se omiten silenciosamente (el reporte no se degrada).
 
+### 11.3 Labores / órdenes de trabajo (ejecución con trazabilidad, v2.3)
+
+- **Tabla `agroia.labores`** (migración 018, FK a `lotes` y `recomendaciones`): `titulo`, `tipo` (Fertilización | Enmienda | Riego | Control Fitosanitario), `producto`, `dosis_kg_ha`, `fecha_programada`, `fecha_ejecucion`, `responsable_id`, `estado` (Pendiente | En Progreso | Completada | Cancelada) y `observaciones_ejecucion`.
+- **P5**: junto a «✅ Aceptar recomendación», el botón **«📋 Generar órdenes de trabajo»** convierte cada acción de la tabla de diagnóstico en una labor individual (`POST /api/v1/fincas/{id}/labores/generar`); el tipo se infiere del texto (cal/enmienda → Enmienda, riego/agua → Riego, fungicida/plaga → Control Fitosanitario, resto → Fertilización) y se vincula a la recomendación más reciente.
+- **P1**: widget **«📋 Tareas pendientes de hoy»** (`GET /api/v1/fincas/{id}/labores/pendientes-hoy`) con botones «✔️ Completar» (fecha de ejecución automática + observación) y «🚫 Cancelar» (`PATCH /api/v1/labores/{id}`).
+- **Trazabilidad**: auditoría `labor.generar`, `labor.actualizar`, `labor.completar`, `labor.eliminar` (`DELETE` solo Admin).
+- **PWA (punto 5)**: preparado — el mismo `PATCH` acepta `observaciones_ejecucion` y `fecha_ejecucion`; la app móvil con geolocalización y foto se conectará a estos endpoints.
+
 ---
 
 ## 12. Persistencia y base de datos
@@ -772,15 +780,16 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 | `chat_memoria` | Memoria conversacional del chat por finca (+ **imagen_base64** de la foto adjunta) |
 | `aceptaciones_recomendacion` | Feedback humano (rol, comentario, resumen, confianza previa) |
 | `historial_ciclos_lote` | **Ciclos productivos por lote** (siembra→cosecha): fechas, rendimiento t/ha, calidad, aplicaciones/incidencias JSONB, riego, observaciones — FK lotes ON DELETE CASCADE |
+| `labores` | **Órdenes de trabajo**: título, tipo, producto/dosis, fechas programada/ejecución, responsable, estado y observaciones — FK lotes y recomendaciones |
 | `auditoria` | **Bitácora de acciones**: usuario (email/nombre/rol), acción, entidad, entidad_id, detalle JSONB, IP, fecha |
 
 ### 12.2 Enums (12 tipos en schema `agroia`)
 
 `clasificacionupra, estadodiscordancia, estadoficha, estadomembresia, estadorecomendacion, planmembresia, prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo`.
 
-### 12.3 Migraciones (001 → 017)
+### 12.3 Migraciones (001 → 018)
 
-- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` + índice `idx_ciclos_lote` · `017` inicio de ciclo: `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes` y en `historial_ciclos_lote`.
+- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` + índice `idx_ciclos_lote` · `017` inicio de ciclo: `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes` y en `historial_ciclos_lote` · `018` tabla `labores`.
 - **Auto-reparación al arranque**: `asegurar_enums()` crea tipos enum faltantes y `asegurar_reglas()` siembra reglas faltantes (idempotentes, corren en el `lifespan` de `main.py`).
 
 ### 12.4 Gotchas de Neon (lecciones aprendidas)

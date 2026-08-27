@@ -214,6 +214,14 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Sección 04**: alerta «⚠️ Histórico de P alto (últimos 2 ciclos > 120 kg/ha)» cuando los ciclos tienen aplicaciones fosforadas altas (DAP/fosfatos).
 - Validado local y en producción; sin ciclos las tres piezas se omiten.
 
+### Módulo de labores / órdenes de trabajo (2026-08-27)
+
+- **Tabla `agroia.labores`** (migración 018): título, tipo (Fertilización/Enmienda/Riego/Control Fitosanitario), producto/dosis, fechas programada/ejecución, responsable, estado y observaciones — FK a lotes y recomendaciones.
+- **P5**: botón «📋 Generar órdenes de trabajo» junto a «Aceptar recomendación» → cada acción del diagnóstico se vuelve una labor individual (`POST /fincas/{id}/labores/generar`, tipo inferido del texto).
+- **P1**: widget «📋 Tareas pendientes de hoy» con «✔️ Completar» (fecha de ejecución automática) y «🚫 Cancelar» (`PATCH /labores/{id}`).
+- Auditoría `labor.generar/actualizar/completar/eliminar`. La PWA (punto 5) se conectará a estos endpoints con geolocalización y foto.
+- Validado local (API: 6 acciones → 6 labores con tipos correctos; completar registra fecha; auditoría) y UI (generar desde P5 y completar en P1) — pendiente validación en producción.
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).
@@ -221,6 +229,7 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - `015_auditoria` — tabla `agroia.auditoria` (bitácora de acciones: usuario, acción, entidad, detalle JSONB, IP, fecha).
 - `016_historial_ciclos_lote` — tabla `agroia.historial_ciclos_lote` + índice `idx_ciclos_lote` (ciclos productivos por lote).
 - `017_ciclo_inicio` — `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes`; `variedad`/`densidad_siembra_plantas_ha` en `historial_ciclos_lote`.
+- `018_labores` — tabla `agroia.labores` (órdenes de trabajo con estado, responsable y fechas).
 
 ### Límites del tier gratuito (validados 2026-08-25)
 

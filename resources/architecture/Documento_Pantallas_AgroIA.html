@@ -69,7 +69,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
   <h1>Pantallas del sistema y su propósito</h1>
-  <div class="meta">Versión 2.1 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+  <div class="meta">Versión 2.2 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
 </header>
 
 <div class="wrap">
@@ -144,6 +144,10 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
     obligatorio (kg/ha o t/ha, para el ROI futuro), calidad opcional y textarea para pegar el
     resumen de aplicaciones («Urea 150kg, DAP 80kg» → JSONB). Al guardar, el ciclo se cierra
     y el bloque desaparece.</li>
+    <li><b>📋 Tareas pendientes de hoy</b> (labores / órdenes de trabajo): lista las labores
+    Pendientes/En Progreso con fecha programada ≤ hoy y botones <b>«✔️ Completar»</b>
+    (registra fecha de ejecución y observación) y <b>«🚫 Cancelar»</b> — la trazabilidad
+    llega al suelo.</li>
   </ul>
   <p><b>Servicios que llama:</b> <code>GET /api/v1/dashboard/{finca_id}?modo=agricultor|experto</code>
   (modo agricultor: lenguaje coloquial con semáforo; modo experto: datos crudos + exportación csv/json/excel).</p>
@@ -293,6 +297,12 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   <code>historial_ciclos_lote</code> y actualiza automáticamente <code>cultivo_sembrado</code> de la
   finca y <code>fecha_siembra</code>/variedad/densidad del lote para el análisis actual; el selector
   de cultivo adopta el nuevo cultivo.</p>
+  <p><b>📋 Generar órdenes de trabajo</b> (junto a «✅ Aceptar recomendación»): convierte cada
+  acción de la tabla de diagnóstico en una labor individual
+  (<code>POST /api/v1/fincas/{id}/labores/generar</code>) con tipo inferido (Enmienda,
+  Fertilización, Riego, Control Fitosanitario) y fecha programada de hoy. Las tareas aparecen
+  en el widget «Tareas pendientes de hoy» del Inicio para que el operario las ejecute y
+  complete.</p>
   <p><span class="siguiente">Siguiente → P6 Historial o P7 Reportes.</span></p>
 </div>
 
@@ -430,7 +440,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.1 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.2 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

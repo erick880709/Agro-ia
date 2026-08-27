@@ -1145,6 +1145,69 @@ async function cosecharCiclo() {
   }
 }
 
+/* ────────────────────── labores / órdenes de trabajo (P1 widget) ────────────────────── */
+
+const TIPO_LABOR_ICONO = {
+  'Fertilización': '🧪', 'Enmienda': '🪨', 'Riego': '💧', 'Control Fitosanitario': '🛡️',
+};
+
+async function renderLaboresPendientes() {
+  const div = document.getElementById('dashboard-labores');
+  if (!div || !state.fincaId) return;
+  div.innerHTML = '<p class="muted">Cargando…</p>';
+  try {
+    const r = await api(`/fincas/${state.fincaId}/labores/pendientes-hoy`);
+    const labores = r.data || [];
+    if (!labores.length) {
+      div.innerHTML = '<p class="muted">Sin tareas pendientes. Genere órdenes de trabajo desde Recomendaciones.</p>';
+      return;
+    }
+    const rol = state.rol.toLowerCase();
+    const puedeGestionar = ['admin', 'administrador', 'agronomo', 'agrónomo'].includes(rol);
+    div.innerHTML = labores.map(l => `
+      <div class="labor-row">
+        <div class="labor-info">
+          <b>${TIPO_LABOR_ICONO[l.tipo] || '📋'} ${esc(l.tipo)}</b>
+          <span>${esc(l.titulo)}</span>
+          <span class="muted">programada ${esc(l.fecha_programada || '?')}</span>
+          <span class="muted">${badge(l.estado, l.estado === 'Pendiente' ? 'warning' : 'ok')}</span>
+        </div>
+        ${puedeGestionar ? `
+        <div class="device-actions">
+          <button class="btn btn-ghost" data-labor-completar="${esc(l.id)}">✔️ Completar</button>
+          <button class="btn btn-ghost" data-labor-cancelar="${esc(l.id)}">🚫 Cancelar</button>
+        </div>` : ''}
+      </div>`).join('');
+    div.querySelectorAll('[data-labor-completar]').forEach(b => {
+      b.addEventListener('click', () => actualizarLabor(b.dataset.laborCompletar, 'Completada'));
+    });
+    div.querySelectorAll('[data-labor-cancelar]').forEach(b => {
+      b.addEventListener('click', () => actualizarLabor(b.dataset.laborCancelar, 'Cancelada'));
+    });
+  } catch {
+    div.innerHTML = '<p class="muted">No se pudieron cargar las tareas pendientes.</p>';
+  }
+}
+
+async function actualizarLabor(laborId, estado) {
+  let observacion = null;
+  if (estado === 'Completada') {
+    if (!confirm('¿Marcar esta labor como completada? La fecha de ejecución se registrará con hoy.')) return;
+    observacion = 'Aplicada según plan';
+  } else if (estado === 'Cancelada') {
+    if (!confirm('¿Cancelar esta orden de trabajo?')) return;
+  }
+  try {
+    await api(`/labores/${laborId}`, {
+      method: 'PATCH', headers: headers(),
+      body: JSON.stringify({ estado, observaciones_ejecucion: observacion }),
+    });
+    await renderLaboresPendientes();
+  } catch (e) {
+    alert('No se pudo actualizar la labor: ' + e.message);
+  }
+}
+
 /* ────────────────────── edición/eliminación de usuarios (admin) ────────────────────── */
 
 function abrirEditarUsuario(u) {
@@ -1713,6 +1776,7 @@ async function cargarDashboard() {
       kpi(total, 'Lecturas recientes');
     renderTablaLecturas(lecturas.data || [], document.getElementById('dashboard-lecturas'), 5);
     renderCicloActivo();
+    renderLaboresPendientes();
   } catch (e) {
     kpis.innerHTML = errorBanner(e.message);
   }
@@ -1992,9 +2056,42 @@ function renderPanelAceptacion(a) {
     <textarea id="aceptar-comentario" rows="3" placeholder="Amplíe, si es necesario, la recomendación o las acciones a implementar… (opcional)"></textarea>
     <div class="aceptar-fila">
       <button id="btn-aceptar-rec" onclick="aceptarRecomendacion()">✅ Aceptar recomendación</button>
+      <button id="btn-generar-labores" onclick="generarLabores()">📋 Generar órdenes de trabajo</button>
       <span id="aceptar-estado" class="muted"></span>
     </div>
   </div>`;
+}
+
+async function generarLabores() {
+  const a = state.ultimoAnalisis;
+  const finca = document.getElementById('reco-finca').value;
+  const estado = document.getElementById('aceptar-estado');
+  const btn = document.getElementById('btn-generar-labores');
+  if (!finca || !a) { if (estado) estado.textContent = 'Primero ejecute el análisis.'; return; }
+
+  // Acciones de la tabla de diagnóstico (UC2) o ajustes del ranking (UC1)
+  const acciones = (a.recomendaciones && a.recomendaciones.length)
+    ? a.recomendaciones.map(r => ({ variable: r.variable, accion: r.accion }))
+    : ((a.sugerencias_cultivos && a.sugerencias_cultivos[0] && a.sugerencias_cultivos[0].ajustes)
+      ? a.sugerencias_cultivos[0].ajustes.map(r => ({ variable: r.variable, accion: r.accion }))
+      : []);
+  if (!acciones.length) {
+    if (estado) estado.textContent = '⚠️ No hay acciones de diagnóstico que convertir en órdenes de trabajo.';
+    return;
+  }
+  if (btn) btn.disabled = true;
+  if (estado) estado.textContent = '⏳ Generando órdenes de trabajo…';
+  try {
+    const r = await api(`/fincas/${finca}/labores/generar`, {
+      method: 'POST', headers: headers(), body: JSON.stringify({ acciones: acciones }),
+    });
+    if (estado) estado.textContent = `✅ ${r.creadas} orden(es) de trabajo creada(s). Revisa «Tareas pendientes» en el Inicio.`;
+    if (btn) btn.textContent = '📋 Órdenes generadas';
+    if (state.tabActual === 'inicio') await cargarDashboard();
+  } catch (err) {
+    if (estado) estado.textContent = err.message || 'No se pudieron generar las órdenes.';
+    if (btn) btn.disabled = false;
+  }
 }
 
 async function aceptarRecomendacion() {
