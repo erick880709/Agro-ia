@@ -186,12 +186,20 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **UI**: botón «🔄 Ciclos» por lote en la pestaña 🏡 Fincas → historial + formulario de registro (cultivo, fechas, rendimiento, calidad, riego, aplicaciones/incidencias JSON, observaciones) con edición en modal y eliminación.
 - Validado local (CRUD completo + auditoría + guardas de fechas) y pendiente de validación final en producción tras el deploy.
 
+### Inicio rápido de ciclo desde Recomendaciones (2026-08-27)
+
+- **Botón «🌱 Registrar nuevo ciclo»** sobre «🧪 Analizar suelo» (Admin/Agrónomo): modal con cultivo (preseleccionado), fecha de siembra (obligatoria), variedad y densidad (plantas/ha, opcionales).
+- **`POST /api/v1/fincas/{id}/ciclo/iniciar`**: en una transacción crea el ciclo en `historial_ciclos_lote` sobre el lote principal y **actualiza `fincas.cultivo_sembrado`** + **`lotes.fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha`** para el análisis actual; auditoría `ciclo.iniciar`.
+- **Migración 017**: columnas `fecha_siembra`, `variedad`, `densidad_siembra_plantas_ha` en `lotes` y `variedad`/`densidad_siembra_plantas_ha` en `historial_ciclos_lote`.
+- Validado local (API + UI con preselección y actualización de finca/lote) y en producción.
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).
 - `005_fix_enum_values` — renombra valores de enums creados por 003 (valores → nombres de miembro: `Admin` → `ADMIN`).
 - `015_auditoria` — tabla `agroia.auditoria` (bitácora de acciones: usuario, acción, entidad, detalle JSONB, IP, fecha).
 - `016_historial_ciclos_lote` — tabla `agroia.historial_ciclos_lote` + índice `idx_ciclos_lote` (ciclos productivos por lote).
+- `017_ciclo_inicio` — `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes`; `variedad`/`densidad_siembra_plantas_ha` en `historial_ciclos_lote`.
 
 ### Límites del tier gratuito (validados 2026-08-25)
 

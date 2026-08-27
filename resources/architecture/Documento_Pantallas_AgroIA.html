@@ -69,7 +69,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
   <h1>Pantallas del sistema y su propósito</h1>
-  <div class="meta">Versión 1.5 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+  <div class="meta">Versión 1.6 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
 </header>
 
 <div class="wrap">
@@ -274,6 +274,13 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   <p><b>Servicios que llama:</b> <code>POST /api/v1/recomendaciones/analyze</code> (orquestador:
   SueloAdapter → RulesEngine/AptitudService → MLOracleService en sombra → discordancia → confianza real →
   estado de validación) y <code>POST /api/v1/recomendaciones/aceptar</code>.</p>
+  <p><b>🌱 Registrar nuevo ciclo</b> (Admin/Agrónomo, botón secundario sobre «🧪 Analizar suelo»):
+  modal rápido con cultivo (preseleccionado con el elegido en el selector), fecha de siembra
+  (obligatoria), variedad y densidad de siembra (plantas/ha, opcionales). Al guardar invoca
+  <code>POST /api/v1/fincas/{id}/ciclo/iniciar</code>: crea el ciclo en
+  <code>historial_ciclos_lote</code> y actualiza automáticamente <code>cultivo_sembrado</code> de la
+  finca y <code>fecha_siembra</code>/variedad/densidad del lote para el análisis actual; el selector
+  de cultivo adopta el nuevo cultivo.</p>
   <p><span class="siguiente">Siguiente → P6 Historial o P7 Reportes.</span></p>
 </div>
 
@@ -403,7 +410,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.5 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.6 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

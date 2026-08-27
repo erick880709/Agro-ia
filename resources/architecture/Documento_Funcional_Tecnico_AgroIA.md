@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 1.6 · **Fecha:** 2026-08-27
+**Versión:** 1.7 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -436,14 +436,17 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 
 ### 6.12 🔄 Ciclos productivos por lote (`historial_ciclos_lote`)
 
-**Servicios** (tabla relacional migración 016, indexada por `(lote_id, fecha_siembra)`):
+**Servicios** (tabla relacional migración 016, indexada por `(lote_id, fecha_siembra)`; migración 017 agrega `variedad` y `densidad_siembra_plantas_ha` al ciclo y `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` al lote):
 
 - `GET /api/v1/fincas/{finca_id}/lotes/{lote_id}/ciclos` — historial de ciclos del lote (más reciente primero), con `cultivo_nombre` resuelto del catálogo.
-- `POST /api/v1/fincas/{finca_id}/lotes/{lote_id}/ciclos` — registrar ciclo (Admin/Agrónomo): `cultivo_id`, `fecha_siembra` (obligatoria), `fecha_cosecha`, `rendimiento_tn_ha`, `calidad_cosecha` (Premium | Estándar | Rechazo), `aplicaciones` JSONB (`[{producto, dosis_kg_ha, fecha, tipo}]`), `incidencias` JSONB (`[{plaga, severidad, fecha, control}]`), `practicas_riego` y `observaciones`. Valida fechas (cosecha ≥ siembra), cultivo del catálogo y enums de calidad/riego.
+- `POST /api/v1/fincas/{finca_id}/lotes/{lote_id}/ciclos` — registrar ciclo (Admin/Agrónomo): `cultivo_id`, `fecha_siembra` (obligatoria), `fecha_cosecha`, `variedad`, `densidad_siembra_plantas_ha`, `rendimiento_tn_ha`, `calidad_cosecha` (Premium | Estándar | Rechazo), `aplicaciones` JSONB (`[{producto, dosis_kg_ha, fecha, tipo}]`), `incidencias` JSONB (`[{plaga, severidad, fecha, control}]`), `practicas_riego` y `observaciones`. Valida fechas (cosecha ≥ siembra), cultivo del catálogo y enums de calidad/riego.
 - `PATCH …/ciclos/{ciclo_id}` — editar ciclo (Admin/Agrónomo).
 - `DELETE …/ciclos/{ciclo_id}` — eliminar ciclo (solo Admin).
+- **`POST /api/v1/fincas/{finca_id}/ciclo/iniciar`** — **flujo rápido desde Recomendaciones** (Admin/Agrónomo): recibe `{cultivo_id, fecha_siembra, variedad?, densidad_siembra_plantas_ha?}` y en una sola transacción (1) crea el ciclo en `historial_ciclos_lote` sobre el lote principal, (2) **actualiza `fincas.cultivo_sembrado`** con el nombre del cultivo y (3) **actualiza el lote** (`fecha_siembra`, `variedad`, `densidad_siembra_plantas_ha`) para que el análisis actual use el cultivo recién sembrado. Auditoría `ciclo.iniciar`.
 
-**Qué hace la UI:** en el panel de lotes, cada lote tiene el botón «🔄 Ciclos» que abre su historial y el formulario «➕ Registrar ciclo productivo» (cultivo del catálogo, fechas, rendimiento t/ha, calidad, riego, aplicaciones/incidencias en JSON y observaciones), con edición ✏️ en modal y eliminación 🗑️. Cada acción queda en auditoría (`ciclo.crear/actualizar/eliminar`).
+**Qué hace la UI:** en el panel de lotes, cada lote tiene el botón «🔄 Ciclos» que abre su historial y el formulario «➕ Registrar ciclo productivo» (cultivo del catálogo, fechas, variedad, densidad, rendimiento t/ha, calidad, riego, aplicaciones/incidencias en JSON y observaciones), con edición ✏️ en modal y eliminación 🗑️. Cada acción queda en auditoría (`ciclo.crear/actualizar/eliminar`).
+
+**Flujo rápido en Recomendaciones**: sobre el botón «🧪 Analizar suelo» está el botón **«🌱 Registrar nuevo ciclo»** (Admin/Agrónomo): abre un modal con cultivo (preseleccionado con el elegido en el selector), fecha de siembra (obligatoria), variedad y densidad (plantas/ha, opcionales). Al guardar llama `POST …/ciclo/iniciar` y la finca/lote quedan actualizados para el análisis siguiente; el selector de Recomendaciones adopta el cultivo recién sembrado.
 
 ---
 
@@ -761,7 +764,7 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 
 ### 12.3 Migraciones (001 → 014)
 
-- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` + índice `idx_ciclos_lote`.
+- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` + índice `idx_ciclos_lote` · `017` inicio de ciclo: `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes` y en `historial_ciclos_lote`.
 - **Auto-reparación al arranque**: `asegurar_enums()` crea tipos enum faltantes y `asegurar_reglas()` siembra reglas faltantes (idempotentes, corren en el `lifespan` de `main.py`).
 
 ### 12.4 Gotchas de Neon (lecciones aprendidas)

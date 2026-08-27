@@ -39,6 +39,14 @@ class CicloLote(Base):
     fecha_siembra: Mapped[date] = mapped_column(Date, nullable=False)
     fecha_cosecha: Mapped[date | None] = mapped_column(Date, nullable=True)
 
+    # ── Material de siembra ──
+    variedad: Mapped[str | None] = mapped_column(
+        String(100), nullable=True, comment="Variedad sembrada"
+    )
+    densidad_siembra_plantas_ha: Mapped[float | None] = mapped_column(
+        Numeric(8, 0), nullable=True, comment="Densidad de siembra (plantas/ha)"
+    )
+
     # ── Resultados productivos ──
     rendimiento_tn_ha: Mapped[float | None] = mapped_column(
         Numeric(8, 2), nullable=True, comment="Toneladas por hectárea"

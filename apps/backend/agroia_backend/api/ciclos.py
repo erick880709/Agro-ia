@@ -18,6 +18,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia_backend.models.ciclo_lote import CicloLote
 from agroia_backend.models.cultivo import Cultivo
+from agroia_backend.models.finca import Finca
 from agroia_backend.models.lote import Lote
 from agroia_backend.services.acceso import verificar_acceso_finca
 from agroia_backend.services.auditoria import registrar_auditoria
@@ -35,6 +36,8 @@ class CicloCreate(BaseModel):
     cultivo_id: str = Field(..., description="UUID del cultivo del catálogo")
     fecha_siembra: date
     fecha_cosecha: date | None = None
+    variedad: str | None = Field(None, max_length=100, description="Variedad sembrada (opcional)")
+    densidad_siembra_plantas_ha: float | None = Field(None, ge=0, le=1_000_000, description="Plantas por hectárea (opcional)")
     rendimiento_tn_ha: float | None = Field(None, ge=0, le=1_000, description="t/ha")
     calidad_cosecha: str | None = Field(None, max_length=20, description="Premium | Estándar | Rechazo")
     aplicaciones: list[dict] | None = Field(None, description="[{producto, dosis_kg_ha, fecha, tipo}, …]")
@@ -47,12 +50,23 @@ class CicloUpdate(BaseModel):
     cultivo_id: str | None = None
     fecha_siembra: date | None = None
     fecha_cosecha: date | None = None
+    variedad: str | None = Field(None, max_length=100)
+    densidad_siembra_plantas_ha: float | None = Field(None, ge=0, le=1_000_000)
     rendimiento_tn_ha: float | None = Field(None, ge=0, le=1_000)
     calidad_cosecha: str | None = Field(None, max_length=20)
     aplicaciones: list[dict] | None = None
     incidencias: list[dict] | None = None
     practicas_riego: str | None = Field(None, max_length=50)
     observaciones: str | None = Field(None, max_length=4000)
+
+
+class IniciarCicloRequest(BaseModel):
+    """Flujo rápido desde Recomendaciones: registra el ciclo y actualiza la finca/lote."""
+
+    cultivo_id: str = Field(..., description="UUID del cultivo (preseleccionado en la UI)")
+    fecha_siembra: date = Field(..., description="Fecha de siembra (obligatoria)")
+    variedad: str | None = Field(None, max_length=100, description="Variedad (opcional)")
+    densidad_siembra_plantas_ha: float | None = Field(None, ge=0, le=1_000_000, description="Plantas/ha (opcional)")
 
 
 def _exigir_rol(rol: str | None, permitidos: set[str], mensaje: str) -> str:
@@ -104,6 +118,11 @@ def _ciclo_a_dict(c, cultivo_nombre: str | None = None) -> dict:
         "cultivo_nombre": cultivo_nombre,
         "fecha_siembra": c.fecha_siembra.isoformat() if c.fecha_siembra else None,
         "fecha_cosecha": c.fecha_cosecha.isoformat() if c.fecha_cosecha else None,
+        "variedad": c.variedad,
+        "densidad_siembra_plantas_ha": (
+            float(c.densidad_siembra_plantas_ha)
+            if c.densidad_siembra_plantas_ha is not None else None
+        ),
         "rendimiento_tn_ha": float(c.rendimiento_tn_ha) if c.rendimiento_tn_ha is not None else None,
         "calidad_cosecha": c.calidad_cosecha,
         "aplicaciones": c.aplicaciones or [],
@@ -201,6 +220,8 @@ async def crear_ciclo(
         cultivo_id=uuid_mod.UUID(body.cultivo_id),
         fecha_siembra=body.fecha_siembra,
         fecha_cosecha=body.fecha_cosecha,
+        variedad=body.variedad,
+        densidad_siembra_plantas_ha=body.densidad_siembra_plantas_ha,
         rendimiento_tn_ha=body.rendimiento_tn_ha,
         calidad_cosecha=body.calidad_cosecha,
         aplicaciones=body.aplicaciones or [],
@@ -377,3 +398,123 @@ async def eliminar_ciclo(
     await db.commit()
     logger.info("ciclo_eliminado", ciclo_id=str(ciclo_uuid), lote_id=str(lote.id), rol=rol)
     return {"status": "deleted", "ciclo_id": str(ciclo_uuid)}
+
+
+@router.post("/fincas/{finca_id}/ciclo/iniciar", status_code=201)
+async def iniciar_ciclo(
+    finca_id: str,
+    body: IniciarCicloRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
+):
+    """Inicia un nuevo ciclo productivo (flujo rápido de Recomendaciones).
+
+    Crea el registro en `historial_ciclos_lote` sobre el lote principal y
+    actualiza automáticamente la finca (`cultivo_sembrado`) y el lote
+    (`fecha_siembra`, `variedad`, `densidad_siembra_plantas_ha`) para que
+    el análisis actual use el cultivo recién sembrado.
+    """
+    rol = _exigir_rol(
+        x_user_role, ROL_EXPERTOS,
+        "Solo el administrador o el agrónomo pueden iniciar ciclos.",
+    )
+    await verificar_acceso_finca(db, x_user_role, x_user_email, finca_id)
+
+    try:
+        finca_uuid = uuid_mod.UUID(finca_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FINCA_INVALIDA", "message": "finca_id no es un UUID válido.",
+        })
+    finca = (
+        await db.execute(select(Finca).where(Finca.id == finca_uuid))
+    ).scalar_one_or_none()
+    if finca is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "FINCA_NOT_FOUND", "message": "La finca no está registrada.",
+        })
+
+    # Lote principal: el primero activo de la finca
+    lote = (
+        await db.execute(
+            select(Lote)
+            .where(Lote.finca_id == finca_uuid, Lote.activo.is_(True))
+            .order_by(Lote.created_at)
+            .limit(1)
+        )
+    ).scalars().first()
+    if lote is None:
+        raise HTTPException(status_code=422, detail={
+            "code": "NO_LOTES",
+            "message": "La finca no tiene un lote activo. Registre el lote antes de iniciar el ciclo.",
+        })
+
+    await _validar_cultivo(db, body.cultivo_id)
+    cultivo = (
+        await db.execute(
+            select(Cultivo).where(Cultivo.id == uuid_mod.UUID(body.cultivo_id))
+        )
+    ).scalar_one()
+
+    ciclo = CicloLote(
+        lote_id=lote.id,
+        cultivo_id=cultivo.id,
+        fecha_siembra=body.fecha_siembra,
+        variedad=body.variedad,
+        densidad_siembra_plantas_ha=body.densidad_siembra_plantas_ha,
+        practicas_riego=finca.tipo_riego.value if finca.tipo_riego else None,
+        observaciones="Ciclo registrado desde Recomendaciones (flujo rápido de inicio).",
+    )
+    db.add(ciclo)
+    await db.flush()
+
+    # ── Actualizar finca/lote para el análisis actual ──
+    finca.cultivo_sembrado = cultivo.nombre
+    lote.fecha_siembra = body.fecha_siembra
+    lote.variedad = body.variedad
+    lote.densidad_siembra_plantas_ha = body.densidad_siembra_plantas_ha
+
+    await registrar_auditoria(
+        db,
+        usuario_email=x_user_email or "desconocido@agroia.co",
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="ciclo.iniciar",
+        entidad="ciclo",
+        entidad_id=str(ciclo.id),
+        detalle={
+            "finca_id": str(finca.id),
+            "finca": finca.nombre,
+            "lote_id": str(lote.id),
+            "lote": lote.nombre,
+            "cultivo": cultivo.nombre,
+            "fecha_siembra": body.fecha_siembra.isoformat(),
+            "variedad": body.variedad,
+            "densidad_plantas_ha": body.densidad_siembra_plantas_ha,
+        },
+        ip=request.client.host if request and request.client else None,
+    )
+    await db.commit()
+    await db.refresh(ciclo)
+    logger.info(
+        "ciclo_iniciado", ciclo_id=str(ciclo.id), finca_id=str(finca.id),
+        cultivo=cultivo.nombre, rol=rol,
+    )
+    return {
+        "status": "started",
+        "ciclo": _ciclo_a_dict(ciclo, cultivo.nombre),
+        "finca": {"cultivo_sembrado": finca.cultivo_sembrado},
+        "lote": {
+            "id": str(lote.id),
+            "nombre": lote.nombre,
+            "fecha_siembra": lote.fecha_siembra.isoformat() if lote.fecha_siembra else None,
+            "variedad": lote.variedad,
+            "densidad_siembra_plantas_ha": (
+                float(lote.densidad_siembra_plantas_ha)
+                if lote.densidad_siembra_plantas_ha is not None else None
+            ),
+        },
+    }

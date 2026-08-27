@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AgroIA · AgroInteligente Colombia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="/styles.css?v=20260827-ciclos" />
+  <link rel="stylesheet" href="/styles.css?v=20260827-ciclo-inicio" />
 </head>
 <body>
   <!-- ============ PANTALLA DE AUTENTICACIÓN ============ -->
@@ -193,7 +193,11 @@
             <input id="reco-rendimiento" type="number" min="0" step="0.1"
                    placeholder="Ej. 4.5 (ROI realista)" />
           </label>
-          <button type="submit" class="btn btn-primary">🧪 Analizar suelo</button>
+          <div style="grid-column: 1 / -1; display: flex; gap: 10px; flex-wrap: wrap">
+            <button type="button" class="btn btn-ghost" id="reco-nuevo-ciclo"
+                    data-roles="admin,agronomo" title="Registra el ciclo en el historial del lote y actualiza el cultivo sembrado">🌱 Registrar nuevo ciclo</button>
+            <button type="submit" class="btn btn-primary">🧪 Analizar suelo</button>
+          </div>
         </form>
       </div>
       <div id="reco-resultado"></div>
@@ -573,7 +577,7 @@
     AgroIA v0.1.0 · Motor: sistema experto (reglas UPRA/Cenicafé/AGROSAVIA) · ML en modo sombra
   </footer>
 
-  <script src="/departamentos.js?v=20260827-ciclos"></script>
-  <script src="/app.js?v=20260827-ciclos"></script>
+  <script src="/departamentos.js?v=20260827-ciclo-inicio"></script>
+  <script src="/app.js?v=20260827-ciclo-inicio"></script>
 </body>
 </html>

@@ -467,6 +467,12 @@ async def lotes_de_finca(
                 "profundidad_suelo_cm": lote.profundidad_suelo_cm,
                 "pedregosidad": lote.pedregosidad.value if lote.pedregosidad else None,
                 "activo": lote.activo,
+                "fecha_siembra": lote.fecha_siembra.isoformat() if lote.fecha_siembra else None,
+                "variedad": lote.variedad,
+                "densidad_siembra_plantas_ha": (
+                    float(lote.densidad_siembra_plantas_ha)
+                    if lote.densidad_siembra_plantas_ha is not None else None
+                ),
             }
             for lote in lotes
         ],
@@ -651,6 +657,12 @@ def _lote_a_dict(lote) -> dict:
         "profundidad_suelo_cm": lote.profundidad_suelo_cm,
         "pedregosidad": lote.pedregosidad.value if lote.pedregosidad else None,
         "activo": lote.activo,
+        "fecha_siembra": lote.fecha_siembra.isoformat() if lote.fecha_siembra else None,
+        "variedad": lote.variedad,
+        "densidad_siembra_plantas_ha": (
+            float(lote.densidad_siembra_plantas_ha)
+            if lote.densidad_siembra_plantas_ha is not None else None
+        ),
     }
 
 

@@ -238,6 +238,9 @@ async function arrancarAplicacion() {
     state.fincaId = e.target.value || null;
   });
   document.getElementById('form-analyze').addEventListener('submit', enviarAnalisis);
+  // ── Flujo rápido: registrar nuevo ciclo desde Recomendaciones ──
+  const btnCiclo = document.getElementById('reco-nuevo-ciclo');
+  if (btnCiclo) btnCiclo.addEventListener('click', abrirModalIniciarCiclo);
   document.getElementById('form-carga').addEventListener('submit', enviarCarga);
   document.getElementById('form-finca').addEventListener('submit', enviarFinca);
   // ── Wizard de finca (3 secciones) — defensivo: si el HTML es viejo
@@ -609,6 +612,8 @@ function renderLotes(fincaId, lotes) {
         <span class="muted">${l.area_ha != null ? l.area_ha + ' ha' : 'área sin dato'}</span>
         ${l.profundidad_suelo_cm != null ? `<span class="muted">prof. ${l.profundidad_suelo_cm} cm</span>` : ''}
         ${l.pedregosidad ? `<span class="muted">pedregosidad: ${esc(l.pedregosidad)}</span>` : ''}
+        ${l.fecha_siembra ? `<span class="muted">🌱 siembra ${esc(l.fecha_siembra)}</span>` : ''}
+        ${l.variedad ? `<span class="muted">variedad: ${esc(l.variedad)}</span>` : ''}
       </div>
       <div class="device-actions">
         <button class="btn btn-ghost" data-lote-ciclos="${esc(l.id)}">🔄 Ciclos</button>
@@ -941,6 +946,71 @@ async function eliminarCiclo(fincaId, loteId, cicloId) {
     renderCiclos(fincaId, loteId, lr.data || []);
   } catch (e) {
     alert('No se pudo eliminar: ' + e.message);
+  }
+}
+
+/* ────────────────────── flujo rápido: iniciar ciclo (Recomendaciones) ────────────────────── */
+
+function abrirModalIniciarCiclo() {
+  const fincaId = document.getElementById('reco-finca').value;
+  if (!fincaId) {
+    alert('Seleccione primero la finca en Recomendaciones.');
+    return;
+  }
+  const cultivoPresel = document.getElementById('reco-cultivo').value;
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = '🌱 Registrar nuevo ciclo';
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <p class="muted">
+      Se crea el ciclo en el historial del lote y se actualiza automáticamente el
+      cultivo sembrado y la fecha de siembra de la finca para el análisis actual.
+    </p>
+    <div class="form-grid">
+      <label class="field"><span>Cultivo *</span>
+        <select id="ic-cultivo">
+          <option value="">— Seleccione —</option>
+          ${(state.cultivos || []).map(c => `<option value="${esc(c.id)}" ${c.id === cultivoPresel ? 'selected' : ''}>${esc(c.nombre)}</option>`).join('')}
+        </select>
+      </label>
+      <label class="field"><span>Fecha de siembra *</span><input id="ic-siembra" type="date" required /></label>
+      <label class="field"><span>Variedad (opcional)</span><input id="ic-variedad" maxlength="100" placeholder="Ej. Castillo, Caturra…" /></label>
+      <label class="field"><span>Densidad de siembra (plantas/ha, opcional)</span><input id="ic-densidad" type="number" min="0" step="1" placeholder="Ej. 5000" /></label>
+    </div>`;
+  document.getElementById('modal-msg').innerHTML = '';
+  m.classList.remove('hidden');
+  document.getElementById('modal-guardar').onclick = () => iniciarCiclo(fincaId);
+}
+
+async function iniciarCiclo(fincaId) {
+  const msg = document.getElementById('modal-msg');
+  const cultivoId = document.getElementById('ic-cultivo').value;
+  const fechaSiembra = document.getElementById('ic-siembra').value;
+  const variedad = document.getElementById('ic-variedad').value.trim() || null;
+  const densidad = document.getElementById('ic-densidad').value
+    ? Number(document.getElementById('ic-densidad').value) : null;
+  if (!cultivoId || !fechaSiembra) {
+    msg.innerHTML = errorBanner('Seleccione el cultivo y la fecha de siembra (obligatorios).');
+    return;
+  }
+  try {
+    msg.innerHTML = '<div class="ok-banner">⏳ Registrando ciclo…</div>';
+    const r = await api(`/fincas/${fincaId}/ciclo/iniciar`, {
+      method: 'POST', headers: headers(),
+      body: JSON.stringify({
+        cultivo_id: cultivoId, fecha_siembra: fechaSiembra,
+        variedad: variedad, densidad_siembra_plantas_ha: densidad,
+      }),
+    });
+    msg.innerHTML = okBanner(
+      `Ciclo de <b>${esc(r.ciclo.cultivo_nombre)}</b> registrado (siembra ${esc(r.ciclo.fecha_siembra)}).` +
+      `<br><span class="muted">Finca actualizada: cultivo sembrado «${esc(r.finca.cultivo_sembrado)}» · lote «${esc(r.lote.nombre)}» con fecha de siembra.</span>`
+    );
+    // Actualizar el selector de cultivo de Recomendaciones con el nuevo cultivo
+    document.getElementById('reco-cultivo').value = cultivoId;
+    await cargarFincas();
+    setTimeout(() => cerrarModal(), 1400);
+  } catch (e) {
+    msg.innerHTML = errorBanner(e.message);
   }
 }
 
