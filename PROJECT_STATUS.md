@@ -45,6 +45,13 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Plan económico vs. ideal**: el reporte y la respuesta muestran costo ideal, costo del plan, cobertura del presupuesto (%), estimación de diferencia de rendimiento y listas de acciones **Incluidas / Aplazadas** (con motivo).
 - Validado local y en producción: finca con pH 4.9 → plan prioriza encalado y aplaza P, K, micros según presupuesto (ej. Yuca: ideal $850.000 → plan $700.000, cobertura 82%).
 
+### Retorno de inversión en el reporte (2026-08-27)
+
+- Nueva sección **«E — Análisis económico proyectado — retorno de inversión»** entre el Plano del lote y las Advertencias (HTML y PDF vía impresión).
+- Cálculo con precios de referencia de la ficha técnica del cultivo (sin BD nueva): `Ganancia esperada = (Rendimiento × Precio de cosecha) × 1,15` si se aplica el plan; `ROI = (Ganancia − Costo de fertilización) ÷ Costo de fertilización` (costo = plan económico si hay presupuesto, si no el plan ideal).
+- Si el **ROI < 1,2** el reporte muestra la alerta *«Inversión justa, considere subvenciones»*; si es ≥ 1,2 indica que la inversión es rentable. Sin ficha económica o sin acciones con costo, la sección degrada con notas explicativas.
+- Validado en producción: Café → ingreso $17.280.000/ha, ganancia con plan $19.872.000/ha, costo $700.000/ha, ROI 27,4×.
+
 ### Chat asesor agronómico (2026-08-25)
 
 - `POST /api/v1/chat/consultar` — capa conversacional especializada disponible para admin/agrónomo/cliente (acceso limitado a sus fincas).
