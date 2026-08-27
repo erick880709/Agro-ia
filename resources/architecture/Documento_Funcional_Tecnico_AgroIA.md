@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 1.4 · **Fecha:** 2026-08-27
+**Versión:** 1.5 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -369,6 +369,8 @@ Cada petición `fetch` lleva:
 Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/warn`) y se pinta en la UI con ✅/⚠️/❌; los rechazos llegan como `422 VALIDACION_FINCA` con la lista completa de pasos.
 
 **Separación arquitectónica Finca ≠ Lote**: al guardar se crea automáticamente el **lote principal** (`agroia.lotes`) con el área calculada (polígono) o la declarada. La finca identifica el predio; el lote es la unidad productiva que después se analiza (sensores, muestras, reportes).
+
+**Características del lote SIEMPRE obligatorias**: `profundidad_suelo_cm` (5–500 cm), `pedregosidad` (Ninguna | Moderada | Alta) y dimensiones `largo_metros`/`ancho_metros` (> 0) son **requeridos** en `POST /api/v1/fincas`, aunque se registre la finca completa (`tipo_area=finca_completa`): los parámetros del suelo y las dimensiones enriquecen el estudio. El backend los rechaza con 422 si faltan, y el lote principal se crea siempre con ellos.
 
 **Área/perímetro calculados** (`calcular_geometria_geojson`): fórmula de Gauss (shoelace) sobre proyección equirectangular + perímetro Haversine; acepta `Polygon` GeoJSON o anillo plano `[[lng,lat], …]`.
 

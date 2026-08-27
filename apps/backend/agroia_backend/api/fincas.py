@@ -63,8 +63,14 @@ class FincaCreate(BaseModel):
     contacto_telefono: str = Field(..., min_length=7, max_length=50)
     contacto_email: str | None = Field(None, max_length=255)
     area_hectareas: float | None = Field(None, ge=0, le=1_000_000)
-    largo_metros: float | None = Field(None, ge=0)
-    ancho_metros: float | None = Field(None, ge=0)
+    largo_metros: float = Field(
+        ..., gt=0, le=1_000_000,
+        description="Largo del terreno (m) — obligatorio: enriquece el estudio del lote",
+    )
+    ancho_metros: float = Field(
+        ..., gt=0, le=1_000_000,
+        description="Ancho del terreno (m) — obligatorio: enriquece el estudio del lote",
+    )
     altitud_msnm: float | None = None
     # ── Topografía, drenaje, historial y fenología (2026-08-27) ──
     pendiente_pct: float | None = Field(None, ge=0, le=90, description="Pendiente del lote en %")
@@ -88,10 +94,14 @@ class FincaCreate(BaseModel):
     tiene_multiples_lotes: bool = Field(False, description="¿La finca tiene varios lotes?")
     # ── Características físicas del suelo y riego (2026-08-27) ──
     tipo_riego: str | None = Field(None, description="Goteo | Aspersión | Gravedad | Secano")
-    profundidad_suelo_cm: int | None = Field(
-        None, description="Profundidad efectiva del suelo del lote principal (cm); categorías: 25, 45, 75, 100"
+    profundidad_suelo_cm: int = Field(
+        ..., ge=5, le=500,
+        description="Profundidad efectiva del suelo del lote principal (cm) — obligatoria; categorías: 25, 45, 75, 100",
     )
-    pedregosidad: str | None = Field(None, description="Ninguna | Moderada | Alta")
+    pedregosidad: str = Field(
+        ..., max_length=20,
+        description="Pedregosidad del lote principal — obligatoria: Ninguna | Moderada | Alta",
+    )
 
     @field_validator("contacto_email")
     @classmethod
@@ -99,6 +109,13 @@ class FincaCreate(BaseModel):
         if v and "@" not in v:
             raise ValueError("Email de contacto inválido")
         return v
+
+    @field_validator("pedregosidad")
+    @classmethod
+    def _pedregosidad(cls, v: str) -> str:
+        if v.strip().lower() not in {"ninguna", "moderada", "alta"}:
+            raise ValueError("Pedregosidad debe ser Ninguna, Moderada o Alta")
+        return v.strip()
 
 
 def _finca_a_dict(f: Finca) -> dict:
@@ -253,9 +270,6 @@ async def registrar_finca(
     tipo_riego = body.tipo_riego
     if tipo_riego and tipo_riego.lower() not in {"goteo", "aspersión", "aspersion", "gravedad", "secano"}:
         tipo_riego = None
-    pedregosidad = body.pedregosidad
-    if pedregosidad and pedregosidad.lower() not in {"ninguna", "moderada", "alta"}:
-        pedregosidad = None
     finca = Finca(
         id=uuid_mod.uuid4(),
         tenant_id=usuario.tenant_id,
@@ -298,7 +312,7 @@ async def registrar_finca(
     await db.flush()
 
     # ── Separación Finca ≠ Lote: crear el lote productivo principal ──
-    from agroia_backend.models.lote import Lote
+    from agroia_backend.models.lote import Lote, Pedregosidad
 
     lote = Lote(
         finca_id=finca.id,
@@ -306,7 +320,7 @@ async def registrar_finca(
         area_ha=area_calculada or area_declarada,
         geometria=body.geometria,
         profundidad_suelo_cm=body.profundidad_suelo_cm,
-        pedregosidad=pedregosidad,
+        pedregosidad=Pedregosidad[body.pedregosidad.strip().upper()],
     )
     db.add(lote)
     await registrar_auditoria(

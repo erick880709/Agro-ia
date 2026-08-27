@@ -1165,6 +1165,22 @@ async function enviarFinca(e) {
   const enlace = document.getElementById('f-enlace').value.trim();
   const multi = document.querySelector('input[name="f-multi"]:checked');
 
+  // ── Características del lote: SIEMPRE obligatorias (aunque se registre
+  //    la finca completa) — los parámetros del suelo y las dimensiones
+  //    enriquecen el estudio. ──
+  const profundidad = Number(document.getElementById('f-profundidad').value || 0);
+  const pedregosidad = document.getElementById('f-pedregosidad').value.trim();
+  const largo = Number(document.getElementById('f-largo').value || 0);
+  const ancho = Number(document.getElementById('f-ancho').value || 0);
+  if (!profundidad || !pedregosidad || largo <= 0 || ancho <= 0) {
+    msg.innerHTML = errorBanner(
+      'Complete las características del lote: profundidad efectiva del suelo, ' +
+      'pedregosidad y dimensiones (largo × ancho). Estos datos enriquecen el ' +
+      'estudio, incluso si registra toda la finca.'
+    );
+    return;
+  }
+
   const body = {
     nombre: document.getElementById('f-nombre').value.trim(),
     departamento: document.getElementById('f-departamento').value,
@@ -1185,11 +1201,10 @@ async function enviarFinca(e) {
     tipo_area: document.getElementById('f-tipo-area').value,
     tiene_multiples_lotes: multi ? multi.value === 'si' : false,
     tipo_riego: document.getElementById('f-tipo-riego').value || null,
-    profundidad_suelo_cm: document.getElementById('f-profundidad').value
-      ? Number(document.getElementById('f-profundidad').value) : null,
-    pedregosidad: document.getElementById('f-pedregosidad').value || null,
-    largo_metros: document.getElementById('f-largo').value ? Number(document.getElementById('f-largo').value) : null,
-    ancho_metros: document.getElementById('f-ancho').value ? Number(document.getElementById('f-ancho').value) : null,
+    profundidad_suelo_cm: profundidad,
+    pedregosidad: pedregosidad,
+    largo_metros: largo,
+    ancho_metros: ancho,
   };
 
   btn.disabled = true;

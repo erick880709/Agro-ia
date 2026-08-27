@@ -3980,8 +3980,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/orchestrator.py": {
-    "mtime": 1787853438.8005364,
-    "ast_hash": "55bc299b2a796bf6b14f8710723ae446",
+    "mtime": 1787858507.2900622,
+    "ast_hash": "5bf76ffc765531b43b2866002c48439b",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/rules_engine.py": {
@@ -4165,7 +4165,7 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787857253.944127,
+    "mtime": 1787857481.1624815,
     "ast_hash": "9423be094cd49bad0e9f2d6d12780a56",
     "semantic_hash": ""
   },
@@ -4515,8 +4515,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/reportes.py": {
-    "mtime": 1787853438.795928,
-    "ast_hash": "fb13b2110116e87ef31b7e6e430c8000",
+    "mtime": 1787858507.2900622,
+    "ast_hash": "3126dd8dce5fd3f2c7e7e4c3a7c053b1",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/sensor_api.py": {
@@ -4855,7 +4855,7 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Pantallas_AgroIA.html": {
-    "mtime": 1787857253.9210005,
+    "mtime": 1787857481.1730561,
     "ast_hash": "d82f1706d3c3c84b5e6ed6fced6c3f10",
     "semantic_hash": ""
   },
@@ -4907,6 +4907,16 @@
   "apps/backend/alembic/versions/015_auditoria.py": {
     "mtime": 1787856183.5117414,
     "ast_hash": "0e848377f7df73cac3c653d49f51a4f7",
+    "semantic_hash": ""
+  },
+  "_finca_integral.json": {
+    "mtime": 1787857958.3846798,
+    "ast_hash": "598569f9febec92c2168dce1f19d5eb9",
+    "semantic_hash": ""
+  },
+  "reports/reporte_finca_integral_3ha.html": {
+    "mtime": 1787858460.9732099,
+    "ast_hash": "f8b9192049a2f561c495592a9a156681",
     "semantic_hash": ""
   }
 }
