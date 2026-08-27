@@ -38,6 +38,13 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 
 **Estado:** ✅ **EN PRODUCCIÓN** — https://agroia-backend.onrender.com (Render Web Service Free + Neon Postgres Free). CI en verde; auto-deploy en cada push a `master`.
 
+### Brecha económica — plan de fertilización por presupuesto (2026-08-25)
+
+- `presupuesto_cop` (COP/ha) opcional en `POST /api/v1/recomendaciones/analyze`, `POST /api/v1/reportes/generar` y en la UI («🧪 Analizar suelo»).
+- **Motor económico** (`services/economia.py`): costos de corrección por variable (COP/ha), severidad = prioridad × desviación del rango ideal, y variables obligatorias (pH/CE y críticas) siempre incluidas aunque excedan el presupuesto.
+- **Plan económico vs. ideal**: el reporte y la respuesta muestran costo ideal, costo del plan, cobertura del presupuesto (%), estimación de diferencia de rendimiento y listas de acciones **Incluidas / Aplazadas** (con motivo).
+- Validado local y en producción: finca con pH 4.9 → plan prioriza encalado y aplaza P, K, micros según presupuesto (ej. Yuca: ideal $850.000 → plan $700.000, cobertura 82%).
+
 ### Chat asesor agronómico (2026-08-25)
 
 - `POST /api/v1/chat/consultar` — capa conversacional especializada disponible para admin/agrónomo/cliente (acceso limitado a sus fincas).
