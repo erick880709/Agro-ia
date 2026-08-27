@@ -59,6 +59,13 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Visión**: si `OPENAI_API_KEY` está configurado y el modelo tiene visión (gpt-4o, gpt-4.1, gpt-4o-mini…), la foto se envía al prompt *«Analiza esta foto de cultivo y da un diagnóstico»*. Sin visión, la imagen queda como referencia y el prompt textual lo indica.
 - Respuesta incluye `imagen_guardada` e `imagen_analizada`. Validado local y en producción (modo experto-local).
 
+### Fisiología de cultivos (2026-08-27)
+
+- Nuevas columnas en `cultivos` (migración 014): `profundidad_radicular_min_cm`, `gdd_total_requerido` y `dias_ciclo`; cargadas en la ficha técnica con semillas para Café (80 cm / 2000 GDD / 270 d), Maíz, Arroz, Plátano y Papa, y editables vía `PATCH /api/v1/catalogo/cultivos/{id}`.
+- **Aptitud**: si la profundidad efectiva del lote es menor a la requerida por el cultivo, se penaliza proporcional al déficit (Crítica si ≥ 15 cm de déficit) con ajuste «profundidad_suelo».
+- **Fenología (GDD)**: el orquestador estima el GDD acumulado con la temperatura IDEAM (T base 10 °C) según la etapa fenológica de la finca y compara con `gdd_total_requerido`; avisa *«Faltan ~N GDD para cosecha, optimice riego»*.
+- Tarjeta del catálogo en la UI muestra «🌱 raíz ≥ 80 cm · 2000 GDD · 270 días». Validado local y en producción (Café vegetativa → faltan ~1262 GDD).
+
 ### Chat asesor agronómico (2026-08-25)
 
 - `POST /api/v1/chat/consultar` — capa conversacional especializada disponible para admin/agrónomo/cliente (acceso limitado a sus fincas).
