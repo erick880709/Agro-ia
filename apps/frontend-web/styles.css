@@ -797,3 +797,19 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
   font-size: 0.8rem;
   resize: vertical;
 }
+
+/* ────────────────────── ciclo activo en dashboard ────────────────────── */
+
+.ciclo-activo {
+  margin-top: 14px;
+  border: 1px solid #b9d4be;
+  border-radius: 10px;
+  background: #f2f8f2;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.ciclo-activo-info { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; font-size: 0.9rem; }

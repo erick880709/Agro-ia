@@ -69,7 +69,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
   <h1>Pantallas del sistema y su propósito</h1>
-  <div class="meta">Versión 1.6 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+  <div class="meta">Versión 1.7 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
 </header>
 
 <div class="wrap">
@@ -138,6 +138,12 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
     <li><b>KPIs</b> de suelo (pH, N, P, K, CE…) y <b>alertas</b> (ej. confianza &lt; 80 %).</li>
     <li><b>Últimas lecturas</b> de la finca seleccionada.</li>
     <li><b>Acciones rápidas</b>: cargar archivo, generar recomendación, ver sensores.</li>
+    <li><b>🔄 Ciclo activo</b>: si la finca tiene un ciclo sin cosechar, aparece el bloque con
+    cultivo, fecha de siembra, variedad y lote, y el botón <b>«✏️ Cosechar ciclo»</b>
+    (Admin/Agrónomo): modal de cierre con fecha de cosecha (hoy por defecto), rendimiento
+    obligatorio (kg/ha o t/ha, para el ROI futuro), calidad opcional y textarea para pegar el
+    resumen de aplicaciones («Urea 150kg, DAP 80kg» → JSONB). Al guardar, el ciclo se cierra
+    y el bloque desaparece.</li>
   </ul>
   <p><b>Servicios que llama:</b> <code>GET /api/v1/dashboard/{finca_id}?modo=agricultor|experto</code>
   (modo agricultor: lenguaje coloquial con semáforo; modo experto: datos crudos + exportación csv/json/excel).</p>
@@ -410,7 +416,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.6 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.7 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

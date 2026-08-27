@@ -193,6 +193,13 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Migración 017**: columnas `fecha_siembra`, `variedad`, `densidad_siembra_plantas_ha` en `lotes` y `variedad`/`densidad_siembra_plantas_ha` en `historial_ciclos_lote`.
 - Validado local (API + UI con preselección y actualización de finca/lote) y en producción.
 
+### Cierre del ciclo — Cosechar (2026-08-27)
+
+- **Dashboard (P1)**: con ciclo abierto, la tarjeta «⚡ Acciones rápidas» muestra el bloque «🔄 Ciclo activo» y el botón **«✏️ Cosechar ciclo»** (Admin/Agrónomo).
+- **Modal de cierre**: fecha de cosecha (hoy por defecto) · **rendimiento obligatorio** (kg/ha o t/ha, normalizado a t/ha — alimenta el ROI futuro) · calidad opcional · textarea de aplicaciones con **parser simple** («Urea 150kg, DAP 80kg» → JSONB `[{producto, dosis_kg_ha, unidad, tipo}]`, gramos → kg).
+- **API**: `GET /api/v1/fincas/{id}/ciclo/activo` y `POST /api/v1/fincas/{id}/ciclo/cosechar` — guardas `NO_CICLO_ACTIVO` y `FECHAS_INVALIDAS`; auditoría `ciclo.cosechar`.
+- Validado local (API + UI completa iniciar→cosechar) y en producción.
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).

@@ -1014,6 +1014,104 @@ async function iniciarCiclo(fincaId) {
   }
 }
 
+/* ────────────────────── cierre del ciclo: cosechar (Dashboard P1) ────────────────────── */
+
+async function renderCicloActivo() {
+  const div = document.getElementById('dashboard-ciclo');
+  if (!div || !state.fincaId) return;
+  div.innerHTML = '';
+  try {
+    const r = await api(`/fincas/${state.fincaId}/ciclo/activo`);
+    if (!r.data) return;
+    const c = r.data.ciclo;
+    const rol = state.rol.toLowerCase();
+    const boton = (rol === 'admin' || rol === 'agronomo')
+      ? `<button type="button" class="btn" id="btn-cosechar">✏️ Cosechar ciclo</button>` : '';
+    div.innerHTML = `
+      <div class="ciclo-activo">
+        <div class="ciclo-activo-info">
+          <b>🔄 Ciclo activo:</b> 🌱 ${esc(c.cultivo_nombre || 'Cultivo')}
+          <span class="muted">siembra ${esc(c.fecha_siembra || '?')}</span>
+          ${c.variedad ? `<span class="muted">variedad ${esc(c.variedad)}</span>` : ''}
+          <span class="muted">lote: ${esc(r.data.lote.nombre || 'principal')}</span>
+        </div>
+        ${boton}
+      </div>`;
+    const btn = document.getElementById('btn-cosechar');
+    if (btn) btn.addEventListener('click', () => abrirModalCosechar(c));
+  } catch {
+    /* sin ciclo activo o sin acceso: no se muestra nada */
+  }
+}
+
+function abrirModalCosechar(ciclo) {
+  const hoy = new Date().toISOString().slice(0, 10);
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = `✏️ Cosechar ciclo — ${ciclo.cultivo_nombre || ''} (siembra ${ciclo.fecha_siembra || '?'})`;
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <p class="muted">Cierre del ciclo: el rendimiento queda registrado y alimenta el ROI de ciclos futuros.</p>
+    <div class="form-grid">
+      <label class="field"><span>Fecha de cosecha *</span><input id="cc-fecha" type="date" value="${hoy}" required /></label>
+      <label class="field"><span>Rendimiento * (obligatorio para el ROI)</span>
+        <div class="form-grid" style="grid-template-columns: 1fr 120px">
+          <input id="cc-rend" type="number" min="0.01" step="0.01" placeholder="Ej. 4.5" required />
+          <select id="cc-unidad">
+            <option value="t_ha">t/ha</option>
+            <option value="kg_ha">kg/ha</option>
+          </select>
+        </div>
+      </label>
+      <label class="field"><span>Calidad de cosecha (opcional)</span>
+        <select id="cc-calidad">
+          <option value="">—</option>
+          <option value="Premium">Premium</option>
+          <option value="Estándar">Estándar</option>
+          <option value="Rechazo">Rechazo</option>
+        </select>
+      </label>
+      <label class="field" style="grid-column: 1 / -1"><span>Resumen de aplicaciones (opcional)</span>
+        <textarea id="cc-aplic" rows="3" placeholder="Pegue las dosis aplicadas, ej. Urea 150kg, DAP 80kg"></textarea>
+      </label>
+    </div>`;
+  document.getElementById('modal-msg').innerHTML = '';
+  m.classList.remove('hidden');
+  document.getElementById('modal-guardar').onclick = () => cosecharCiclo();
+}
+
+async function cosecharCiclo() {
+  const msg = document.getElementById('modal-msg');
+  const fecha = document.getElementById('cc-fecha').value;
+  const rend = Number(document.getElementById('cc-rend').value || 0);
+  const unidad = document.getElementById('cc-unidad').value;
+  const calidad = document.getElementById('cc-calidad').value || null;
+  const aplic = document.getElementById('cc-aplic').value.trim() || null;
+  if (!fecha || rend <= 0) {
+    msg.innerHTML = errorBanner('Indique la fecha de cosecha y el rendimiento (obligatorio).');
+    return;
+  }
+  try {
+    msg.innerHTML = '<div class="ok-banner">⏳ Cerrando ciclo…</div>';
+    const r = await api(`/fincas/${state.fincaId}/ciclo/cosechar`, {
+      method: 'POST', headers: headers(),
+      body: JSON.stringify({
+        fecha_cosecha: fecha, rendimiento: rend, unidad_rendimiento: unidad,
+        calidad_cosecha: calidad, resumen_aplicaciones: aplic,
+      }),
+    });
+    const aplicaciones = (r.ciclo.aplicaciones || []).map(a => `${a.producto} ${a.dosis_kg_ha} ${a.unidad}`).join(', ');
+    msg.innerHTML = okBanner(
+      `Ciclo cosechado: rendimiento <b>${r.ciclo.rendimiento_tn_ha} t/ha</b>` +
+      (r.ciclo.calidad_cosecha ? ` · calidad ${esc(r.ciclo.calidad_cosecha)}` : '') +
+      (aplicaciones ? `<br><span class="muted">Aplicaciones registradas: ${esc(aplicaciones)}</span>` : '') +
+      ((r.advertencias || []).length ? `<br>⚠️ ${esc(r.advertencias.join(' '))}` : '')
+    );
+    await cargarDashboard();
+    setTimeout(() => cerrarModal(), 1500);
+  } catch (e) {
+    msg.innerHTML = errorBanner(e.message);
+  }
+}
+
 /* ────────────────────── edición/eliminación de usuarios (admin) ────────────────────── */
 
 function abrirEditarUsuario(u) {
@@ -1581,6 +1679,7 @@ async function cargarDashboard() {
       kpi(offline, 'Sensores desconectados') +
       kpi(total, 'Lecturas recientes');
     renderTablaLecturas(lecturas.data || [], document.getElementById('dashboard-lecturas'), 5);
+    renderCicloActivo();
   } catch (e) {
     kpis.innerHTML = errorBanner(e.message);
   }

@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 1.7 · **Fecha:** 2026-08-27
+**Versión:** 1.8 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -443,10 +443,14 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 - `PATCH …/ciclos/{ciclo_id}` — editar ciclo (Admin/Agrónomo).
 - `DELETE …/ciclos/{ciclo_id}` — eliminar ciclo (solo Admin).
 - **`POST /api/v1/fincas/{finca_id}/ciclo/iniciar`** — **flujo rápido desde Recomendaciones** (Admin/Agrónomo): recibe `{cultivo_id, fecha_siembra, variedad?, densidad_siembra_plantas_ha?}` y en una sola transacción (1) crea el ciclo en `historial_ciclos_lote` sobre el lote principal, (2) **actualiza `fincas.cultivo_sembrado`** con el nombre del cultivo y (3) **actualiza el lote** (`fecha_siembra`, `variedad`, `densidad_siembra_plantas_ha`) para que el análisis actual use el cultivo recién sembrado. Auditoría `ciclo.iniciar`.
+- **`GET /api/v1/fincas/{finca_id}/ciclo/activo`** — ciclo abierto (sin cosechar) más reciente del lote principal; alimenta el botón «✏️ Cosechar ciclo» del Dashboard.
+- **`POST /api/v1/fincas/{finca_id}/ciclo/cosechar`** — **cierre del ciclo** (Admin/Agrónomo): `{fecha_cosecha, rendimiento (obligatorio), unidad_rendimiento (kg_ha|t_ha), calidad_cosecha?, resumen_aplicaciones?}`. Normaliza el rendimiento a t/ha (kg/ha ÷ 1000), convierte el resumen en texto plano («Urea 150kg, DAP 80kg») a JSONB con un **parser simple** (separa por coma/punto y coma/salto de línea; los gramos se normalizan a kg) y rechaza con `NO_CICLO_ACTIVO` si no hay ciclo abierto o `FECHAS_INVALIDAS` si la cosecha es anterior a la siembra. Auditoría `ciclo.cosechar`.
 
 **Qué hace la UI:** en el panel de lotes, cada lote tiene el botón «🔄 Ciclos» que abre su historial y el formulario «➕ Registrar ciclo productivo» (cultivo del catálogo, fechas, variedad, densidad, rendimiento t/ha, calidad, riego, aplicaciones/incidencias en JSON y observaciones), con edición ✏️ en modal y eliminación 🗑️. Cada acción queda en auditoría (`ciclo.crear/actualizar/eliminar`).
 
 **Flujo rápido en Recomendaciones**: sobre el botón «🧪 Analizar suelo» está el botón **«🌱 Registrar nuevo ciclo»** (Admin/Agrónomo): abre un modal con cultivo (preseleccionado con el elegido en el selector), fecha de siembra (obligatoria), variedad y densidad (plantas/ha, opcionales). Al guardar llama `POST …/ciclo/iniciar` y la finca/lote quedan actualizados para el análisis siguiente; el selector de Recomendaciones adopta el cultivo recién sembrado.
+
+**Cierre del ciclo en el Dashboard**: cuando hay un ciclo abierto, la tarjeta «⚡ Acciones rápidas» muestra el bloque «🔄 Ciclo activo» con el botón **«✏️ Cosechar ciclo»** (Admin/Agrónomo): modal con fecha de cosecha (por defecto hoy), rendimiento obligatorio (kg/ha o t/ha — alimenta el ROI futuro), calidad opcional y un textarea para pegar el resumen de aplicaciones («Urea 150kg, DAP 80kg») que el parser convierte a JSONB. Al guardar, el ciclo se cierra (`fecha_cosecha`, `rendimiento_tn_ha`, `calidad_cosecha`, `aplicaciones`) y el bloque desaparece del Dashboard.
 
 ---
 

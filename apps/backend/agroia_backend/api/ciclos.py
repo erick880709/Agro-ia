@@ -6,6 +6,7 @@ incidencias JSONB) y observaciones. Gestión: Admin/Agrónomo (crear/editar),
 Admin (eliminar). Consulta: cualquier rol con acceso a la finca.
 """
 
+import re
 import uuid as uuid_mod
 from datetime import date
 
@@ -67,6 +68,56 @@ class IniciarCicloRequest(BaseModel):
     fecha_siembra: date = Field(..., description="Fecha de siembra (obligatoria)")
     variedad: str | None = Field(None, max_length=100, description="Variedad (opcional)")
     densidad_siembra_plantas_ha: float | None = Field(None, ge=0, le=1_000_000, description="Plantas/ha (opcional)")
+
+
+class CosecharCicloRequest(BaseModel):
+    """Cierre del ciclo activo: cosecha, rendimiento y resumen de aplicaciones."""
+
+    fecha_cosecha: date = Field(..., description="Fecha de cosecha (la UI la precarga con hoy)")
+    rendimiento: float = Field(..., gt=0, le=1_000_000, description="Rendimiento obtenido (obligatorio para el ROI futuro)")
+    unidad_rendimiento: str = Field("t_ha", pattern="^(kg_ha|t_ha)$", description="kg_ha | t_ha")
+    calidad_cosecha: str | None = Field(None, max_length=20, description="Premium | Estándar | Rechazo (opcional)")
+    resumen_aplicaciones: str | None = Field(
+        None, max_length=4000,
+        description="Texto libre: «Urea 150kg, DAP 80kg» — un parser simple lo convierte a JSONB",
+    )
+
+
+_RE_APLICACION = re.compile(
+    r"([A-Za-zÀ-ÿ0-9\.\-\+/ ]+?)\s+(\d+(?:[.,]\d+)?)\s*(g|gr|kg|l|ml|t)?",
+    re.UNICODE,
+)
+
+
+def parsear_resumen_aplicaciones(texto: str | None) -> list[dict] | None:
+    """Convierte «Urea 150kg, DAP 80kg» en JSONB [{producto, dosis_kg_ha, unidad, tipo}].
+
+    Separa por coma/punto y coma/salto de línea y extrae producto + dosis;
+    los gramos se normalizan a kg (÷1000). Sin unidad se asume kg.
+    """
+    if not texto or not texto.strip():
+        return None
+    aplicaciones: list[dict] = []
+    for parte in re.split(r"[,;\n]+", texto):
+        parte = parte.strip()
+        if not parte:
+            continue
+        m = _RE_APLICACION.match(parte)
+        if not m:
+            continue
+        producto = m.group(1).strip()
+        dosis = float(m.group(2).replace(",", "."))
+        unidad = (m.group(3) or "kg").lower()
+        if unidad in {"g", "gr"}:
+            dosis = round(dosis / 1000.0, 3)
+            unidad = "kg"
+        aplicaciones.append({
+            "producto": producto,
+            "dosis_kg_ha": dosis,
+            "unidad": unidad,
+            "tipo": "Fertilizante",
+        })
+    return aplicaciones or None
 
 
 def _exigir_rol(rol: str | None, permitidos: set[str], mensaje: str) -> str:
@@ -517,4 +568,167 @@ async def iniciar_ciclo(
                 if lote.densidad_siembra_plantas_ha is not None else None
             ),
         },
+    }
+
+
+async def _ciclo_abierto(db, finca: Finca) -> tuple[Lote, CicloLote] | None:
+    """Lote principal y ciclo abierto (sin cosecha) más reciente, o None."""
+    lote = (
+        await db.execute(
+            select(Lote)
+            .where(Lote.finca_id == finca.id, Lote.activo.is_(True))
+            .order_by(Lote.created_at)
+            .limit(1)
+        )
+    ).scalars().first()
+    if lote is None:
+        return None
+    ciclo = (
+        await db.execute(
+            select(CicloLote)
+            .where(CicloLote.lote_id == lote.id, CicloLote.fecha_cosecha.is_(None))
+            .order_by(CicloLote.fecha_siembra.desc(), CicloLote.created_at.desc())
+            .limit(1)
+        )
+    ).scalars().first()
+    if ciclo is None:
+        return None
+    return lote, ciclo
+
+
+@router.get("/fincas/{finca_id}/ciclo/activo")
+async def ciclo_activo(
+    finca_id: str,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+):
+    """Ciclo abierto (sin cosechar) de la finca — alimenta el botón «Cosechar ciclo»."""
+    await verificar_acceso_finca(db, x_user_role, x_user_email, finca_id)
+    try:
+        finca_uuid = uuid_mod.UUID(finca_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FINCA_INVALIDA", "message": "finca_id no es un UUID válido.",
+        })
+    finca = (
+        await db.execute(select(Finca).where(Finca.id == finca_uuid))
+    ).scalar_one_or_none()
+    if finca is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "FINCA_NOT_FOUND", "message": "La finca no está registrada.",
+        })
+    abierto = await _ciclo_abierto(db, finca)
+    if abierto is None:
+        return {"data": None}
+    lote, ciclo = abierto
+    return {
+        "data": {
+            "ciclo": _ciclo_a_dict(ciclo, await _cultivo_nombre(db, ciclo.cultivo_id)),
+            "lote": {"id": str(lote.id), "nombre": lote.nombre},
+        },
+    }
+
+
+@router.post("/fincas/{finca_id}/ciclo/cosechar")
+async def cosechar_ciclo(
+    finca_id: str,
+    body: CosecharCicloRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
+):
+    """Cierra el ciclo activo: cosecha, rendimiento (obligatorio) y aplicaciones.
+
+    El rendimiento alimenta el ROI de ciclos futuros (se guarda en
+    `historial_ciclos_lote.rendimiento_tn_ha`); el resumen de aplicaciones
+    en texto plano se convierte a JSONB con un parser simple.
+    """
+    rol = _exigir_rol(
+        x_user_role, ROL_EXPERTOS,
+        "Solo el administrador o el agrónomo pueden cosechar el ciclo.",
+    )
+    await verificar_acceso_finca(db, x_user_role, x_user_email, finca_id)
+    try:
+        finca_uuid = uuid_mod.UUID(finca_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FINCA_INVALIDA", "message": "finca_id no es un UUID válido.",
+        })
+    finca = (
+        await db.execute(select(Finca).where(Finca.id == finca_uuid))
+    ).scalar_one_or_none()
+    if finca is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "FINCA_NOT_FOUND", "message": "La finca no está registrada.",
+        })
+
+    abierto = await _ciclo_abierto(db, finca)
+    if abierto is None:
+        raise HTTPException(status_code=422, detail={
+            "code": "NO_CICLO_ACTIVO",
+            "message": "No hay un ciclo activo en la finca. Inicie un ciclo (🌱 Registrar nuevo ciclo) antes de cosechar.",
+        })
+    lote, ciclo = abierto
+
+    if body.fecha_cosecha < ciclo.fecha_siembra:
+        raise HTTPException(status_code=422, detail={
+            "code": "FECHAS_INVALIDAS",
+            "message": "La fecha de cosecha no puede ser anterior a la de siembra.",
+        })
+    if body.calidad_cosecha and body.calidad_cosecha not in CALIDADES:
+        raise HTTPException(status_code=422, detail={
+            "code": "CALIDAD_INVALIDA",
+            "message": f"Calidad debe ser una de: {', '.join(sorted(CALIDADES))}.",
+        })
+
+    # Rendimiento normalizado a t/ha (unidad t_ha directa; kg_ha ÷ 1000)
+    rendimiento_tn_ha = body.rendimiento if body.unidad_rendimiento == "t_ha" else body.rendimiento / 1000.0
+
+    aplicaciones = parsear_resumen_aplicaciones(body.resumen_aplicaciones)
+    advertencias: list[str] = []
+    if body.resumen_aplicaciones and body.resumen_aplicaciones.strip() and aplicaciones is None:
+        advertencias.append(
+            "No se pudieron interpretar las aplicaciones pegadas; se conservan las del ciclo."
+        )
+
+    ciclo.fecha_cosecha = body.fecha_cosecha
+    ciclo.rendimiento_tn_ha = rendimiento_tn_ha
+    ciclo.calidad_cosecha = body.calidad_cosecha
+    if aplicaciones:
+        ciclo.aplicaciones = aplicaciones
+
+    await registrar_auditoria(
+        db,
+        usuario_email=x_user_email or "desconocido@agroia.co",
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="ciclo.cosechar",
+        entidad="ciclo",
+        entidad_id=str(ciclo.id),
+        detalle={
+            "finca_id": str(finca.id),
+            "finca": finca.nombre,
+            "lote_id": str(lote.id),
+            "lote": lote.nombre,
+            "cultivo": await _cultivo_nombre(db, ciclo.cultivo_id),
+            "fecha_siembra": ciclo.fecha_siembra.isoformat(),
+            "fecha_cosecha": body.fecha_cosecha.isoformat(),
+            "rendimiento_tn_ha": rendimiento_tn_ha,
+            "calidad": body.calidad_cosecha,
+        },
+        ip=request.client.host if request and request.client else None,
+    )
+    await db.commit()
+    await db.refresh(ciclo)
+    logger.info(
+        "ciclo_cosechado", ciclo_id=str(ciclo.id), finca_id=str(finca.id),
+        rendimiento_tn_ha=rendimiento_tn_ha, rol=rol,
+    )
+    return {
+        "status": "harvested",
+        "ciclo": _ciclo_a_dict(ciclo, await _cultivo_nombre(db, ciclo.cultivo_id)),
+        "advertencias": advertencias,
     }
