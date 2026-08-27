@@ -3700,8 +3700,8 @@
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
-    "mtime": 1787694786.652424,
-    "ast_hash": "eb0554f0c86adf7e784f0ca04b23809e",
+    "mtime": 1787804267.3086212,
+    "ast_hash": "0290b5ae4d2ffe8a667ead9db68aff2a",
     "semantic_hash": ""
   },
   "apps/backend/tests/test_health.py": {
@@ -4785,8 +4785,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/ml_oracle.py": {
-    "mtime": 1787803992.8724625,
-    "ast_hash": "f0a1ce50861decd6740d9c58daef0480",
+    "mtime": 1787804243.2339375,
+    "ast_hash": "4d08505ba30e6b62be6127140192541a",
     "semantic_hash": ""
   },
   "apps/ml/agroia_ml/train_colombia.py": {

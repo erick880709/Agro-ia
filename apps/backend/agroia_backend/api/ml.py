@@ -27,6 +27,13 @@ async def estado_ml(db: AsyncSession = Depends(get_db)):
         )
     ).scalars().all()
     oracle = MLOracleService()
+    artefactos_meta = None
+    meta_path = oracle.dir / "ml_meta.json"
+    if meta_path.exists():
+        try:
+            artefactos_meta = json.loads(meta_path.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            artefactos_meta = None
     return {
         "modelos": [
             {
@@ -48,6 +55,7 @@ async def estado_ml(db: AsyncSession = Depends(get_db)):
             }
             for m in metricas
         ],
+        "artefactos_meta": artefactos_meta,
         "oraculo_ml_disponible": oracle.disponible(),
         "n_artefactos": len(list(oracle.dir.glob("ml_*.joblib"))) if oracle.dir.exists() else 0,
     }
