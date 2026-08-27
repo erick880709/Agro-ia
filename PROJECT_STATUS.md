@@ -173,6 +173,12 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Auditoría** (migración 015, tabla `agroia.auditoria`): registra `auth.login`, `finca.*`, `lote.*`, `usuario.*` y `demo.reset` con quién (email/nombre/rol), cuándo, IP y detalle JSONB. `GET /api/v1/auditoria` (Admin) con filtros por entidad/acción y búsqueda; pestaña «🕵️ Auditoría» con tabla paginada.
 - Validado local y en producción (la migración corre sola en el deploy de Render).
 
+### Finca integral de demostración en producción (2026-08-27)
+
+- **«Finca Integral El Nogal — 3 ha»** (Quindío/Armenia, producción): registrada con TODOS los parámetros (agronómicos, fenológicos, riego, georreferenciación con polígono de 3 ha calculada, validación de laboratorio) y **81 lecturas completas** de las 17 variables + textura — **72 puntos por el perímetro del lote + 9 puntos interiores repartidos en retícula** — con dispositivo `esp32-integral-3ha` calibrado contra laboratorio.
+- Resultado: **Apta · Validada · confianza 99% · 0 violaciones · 0 faltantes**; reporte completo con mapa de calor «21 × 21 tomas (81 puntos)», plano del lote, semáforo de 4 barras en 100% y telemetría «Validado en laboratorio».
+- Verificación de bugs en producción: se endureció la búsqueda de ficha económica (sin filtro de enum en SQL, fragilidad Neon) y el encabezado del diagnóstico ahora muestra el nombre del cultivo aunque el `cultivo_id` sea desconocido (usa el cultivo sembrado de la finca). Reporte evidencia: `reports/reporte_finca_integral_3ha.html`.
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).
