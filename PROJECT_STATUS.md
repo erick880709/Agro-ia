@@ -245,7 +245,7 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Relleno automático**: fila en `sensor_readings` con `calidad = 'estimado_por_sig'` (`sensor_id = 'sig-igac-upra'`) precarga textura/MO/CIC y completa profundidad/pedregosidad del lote. Migración 020 amplía el enum `texturasuelo` con clases IGAC.
 - **Precedencia**: `SueloAdapter.get_latest` hace merge — el **sensor gana SIEMPRE**; el SIG solo rellena faltantes (marcados en `estimaciones_sig`). En el diagnóstico, confiabilidad «Estimado por SIG (IGAC/UPRA)»; en el Dashboard, badge «🗺️ estimado SIG».
 - **Endpoints**: `POST /fincas/{id}/enriquecer-sig` (manual, idempotente, auditoría `sig.enriquecer`), `GET /fincas/{id}/enriquecimiento-sig`; `POST /fincas` lo ejecuta automáticamente si hay coordenadas. Geoservicio WMS/WFS real opcional vía `SIG_IGAC_WMS_URL`.
-- Validado local: enriquecimiento Eje Cafetero (Franco-arcillosa, MO 9.5 %, CIC 24), violaciones SIG → filas con confiabilidad SIG, sensor (MO 3.0/CIC 5.0) sobreescribe al SIG, badge en Dashboard — pendiente validación en producción.
+- Validado local y en producción: enriquecimiento Eje Cafetero (Franco-arcillosa, MO 9.5 %, CIC 24), violaciones SIG → filas con confiabilidad «Estimado por SIG (IGAC/UPRA)», sensor (MO 3.0/CIC 5.0) sobreescribe al SIG, badge «🗺️ estimado SIG» en Dashboard (local y prod) y UI sirviendo `v=20260827-sig`.
 
 ### Migraciones destacadas
 
