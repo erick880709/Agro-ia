@@ -298,11 +298,20 @@ async function arrancarAplicacion() {
   });
   renderChat();
   document.getElementById('sim-enviar').addEventListener('click', enviarTramaSimulada);
+  // Trama de ejemplo con el formato REAL del firmware (POST /api/sensor)
   document.getElementById('sim-trama').value = JSON.stringify({
     device_id: 'esp32-npk-001',
-    humidity: 0.0, temperature: 26.8, conductivity: 0.0,
-    ph: 8.6, nitrogen: 0.0, phosphorus: 0.0, potassium: 0.0,
-    rssi: -41, uptime_s: 64,
+    ph: 6.2,
+    nitrogen: 85,
+    phosphorus: 32,
+    potassium: 150,
+    conductivity: 420,
+    humidity: 62.4,
+    temperature: 26.8,
+    rssi: -41,
+    uptime_s: 86400,
+    pos_x: 10,
+    pos_y: 5,
   }, null, 2);
   document.getElementById('catalogo-search').addEventListener('input', e => renderCatalogo(e.target.value));
 

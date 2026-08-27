@@ -103,10 +103,16 @@
       <div class="card" id="sensor-sim-card">
         <h2>🔗 API de sensores — simulador de trama</h2>
         <p class="muted">
-          El sensor envía su trama a <code>POST /api/sensor</code> con este formato (tal como la
-          envía el firmware: variables en la raíz con <code>device_id</code>). Pega una trama y pruébala:
+          Conexión real de los sensores: <code>POST /api/sensor</code>. El firmware envía un JSON con
+          <code>device_id</code> obligatorio y estos campos: <code>ph</code> (0–14), <code>nitrogen</code>,
+          <code>phosphorus</code> y <code>potassium</code> (ppm), <code>conductivity</code> (µS/cm),
+          <code>humidity</code> (% HR ambiente, DHT22), <code>temperature</code> (°C), <code>rssi</code> (dBm) y
+          <code>uptime_s</code> (segundos desde encendido). Opcionales: <code>finca_id</code> (UUID de tu finca;
+          si se envía, el dispositivo queda asociado a ella y si no, se asocia a la primera finca disponible),
+          y <code>pos_x</code>/<code>pos_y</code> (metros del punto de muestreo en el lote, para el mapa de calor).
+          Si el <code>device_id</code> no está registrado, el API lo auto-registra. Pega una trama y pruébala:
         </p>
-        <textarea id="sim-trama" class="sim-trama" rows="9" spellcheck="false"></textarea>
+        <textarea id="sim-trama" class="sim-trama" rows="12" spellcheck="false"></textarea>
         <button class="btn" id="sim-enviar">📡 Enviar trama</button>
         <div id="sim-msg"></div>
       </div>
