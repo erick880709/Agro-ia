@@ -98,7 +98,9 @@ function errorBanner(msg) {
 }
 
 function okBanner(msg) {
-  return `<div class="ok-banner">✅ ${esc(msg)}</div>`;
+  // El mensaje se inserta como HTML: los valores dinámicos DEBEN llegar
+  // ya escapados con esc() desde el llamador (patrón usado en todos).
+  return `<div class="ok-banner">✅ ${msg}</div>`;
 }
 
 /* ─────────────────────────── sesión y autenticación ─────────────────────────── */
@@ -1543,8 +1545,8 @@ async function enviarTramaSimulada() {
     }
     out.innerHTML = okBanner(
       `Trama aceptada para <b>${esc(r.device_id)}</b> (finca ${esc(r.finca_id)}${r.auto_registrado ? ', auto-registrado' : ''}). ` +
-      `Variables recibidas: ${(r.variables_recibidas || []).join(', ') || '—'} ` +
-      `· Advertencias: ${(r.advertencias || []).join(', ') || 'ninguna'}.`
+      `Variables recibidas: ${esc((r.variables_recibidas || []).join(', ') || '—')} ` +
+      `· Advertencias: ${esc((r.advertencias || []).join(', ') || 'ninguna')}.`
     );
   } catch (err) {
     out.innerHTML = errorBanner(err.message);
