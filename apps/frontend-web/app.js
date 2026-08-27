@@ -727,9 +727,68 @@ async function enviarAnalisis(e) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ finca_id: finca, cultivo_id: cultivo || null }),
     });
-    out.innerHTML = `<div class="card">${renderAnalisis(r)}</div>`;
+    state.ultimoAnalisis = r;
+    out.innerHTML = `<div class="card">${renderAnalisis(r)}</div>${renderPanelAceptacion(r)}`;
   } catch (err) {
     out.innerHTML = errorBanner(err.message);
+  }
+}
+
+/* ── Aceptación de recomendación (feedback humano → confianza del modelo) ── */
+
+function renderPanelAceptacion(a) {
+  const rol = (state.rol || '').toLowerCase();
+  if (!['admin', 'administrador', 'agronomo', 'agrónomo'].includes(rol)) return '';
+  return `
+  <div class="card aceptar-rec">
+    <h3>✅ Aceptación de la recomendación (${esc(state.rol || '')})</h3>
+    <p class="muted">Al aceptar, la recomendación queda registrada como feedback y el modelo gana confianza para esta finca/cultivo (aprendizaje continuo).</p>
+    <textarea id="aceptar-comentario" rows="3" placeholder="Amplíe, si es necesario, la recomendación o las acciones a implementar… (opcional)"></textarea>
+    <div class="aceptar-fila">
+      <button id="btn-aceptar-rec" onclick="aceptarRecomendacion()">✅ Aceptar recomendación</button>
+      <span id="aceptar-estado" class="muted"></span>
+    </div>
+  </div>`;
+}
+
+async function aceptarRecomendacion() {
+  const a = state.ultimoAnalisis;
+  const finca = document.getElementById('reco-finca').value;
+  const cultivo = document.getElementById('reco-cultivo').value;
+  const comentarioEl = document.getElementById('aceptar-comentario');
+  const estado = document.getElementById('aceptar-estado');
+  const btn = document.getElementById('btn-aceptar-rec');
+  if (!finca || !a) { if (estado) estado.textContent = 'Primero ejecute el análisis.'; return; }
+  let cultivoId = cultivo || null;
+  if (!cultivoId && a.sugerencias_cultivos && a.sugerencias_cultivos.length) {
+    cultivoId = a.sugerencias_cultivos[0].cultivo_id || null;
+  }
+  if (btn) btn.disabled = true;
+  if (estado) estado.textContent = '⏳ Registrando…';
+  try {
+    const r = await api('/recomendaciones/aceptar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        finca_id: finca,
+        cultivo_id: cultivoId,
+        comentario: comentarioEl ? comentarioEl.value.trim() || null : null,
+        resumen: {
+          cultivo: a.cultivo,
+          clasificacion: a.clasificacion_upra,
+          confianza: a.confianza,
+          recomendaciones: a.recomendaciones || [],
+        },
+        clasificacion_previa: a.clasificacion_upra || null,
+        confianza_previa: a.confianza != null ? a.confianza : null,
+      }),
+    });
+    if (estado) estado.textContent = `✅ ${r.mensaje}`;
+    if (btn) btn.textContent = '✅ Aceptada';
+    if (comentarioEl) comentarioEl.disabled = true;
+  } catch (err) {
+    if (estado) estado.textContent = err.message || 'No se pudo registrar la aceptación.';
+    if (btn) btn.disabled = false;
   }
 }
 
@@ -743,34 +802,60 @@ function descAjustes(ajustes) {
     </div>`).join('');
 }
 
+function badgeValidacion(estado) {
+  const e = (estado || '').toLowerCase();
+  if (e === 'pendiente_validacion' || e.includes('pendiente')) return '<span class="badge pendiente">Pendiente de validación técnica</span>';
+  if (e.includes('textura')) return '<span class="badge textura">Sujeta a confirmación de textura</span>';
+  if (e === 'preliminar') return '<span class="badge preliminar">Preliminar</span>';
+  if (e === 'validada') return '<span class="badge validada">Validada</span>';
+  return '';
+}
+
+function fmtPlan(plan) {
+  if (!plan) return '—';
+  const partes = [];
+  if (plan.fuente) partes.push(`<b>Fuente:</b> ${esc(plan.fuente)}`);
+  if (plan.frecuencia) partes.push(`<b>Frecuencia:</b> ${esc(plan.frecuencia)}`);
+  if (plan.dosis) partes.push(`<b>Dosis:</b> ${esc(plan.dosis)}`);
+  return partes.length ? `<div style="font-size:0.78rem;line-height:1.5">${partes.join('<br>')}</div>` : '—';
+}
+
 function renderAnalisis(a) {
   if (!a) return '<p class="muted">Sin resultado.</p>';
   const confianza = Math.round((a.confianza || 0) * 100);
+  const confianzaReal = Math.round((a.confianza_real || 0) * 100);
+  const respaldos = a.respaldos || 0;
   let html = `
     <div class="analisis-head">
       <div class="cultivo">${esc(a.cultivo)}</div>
-      <div>${badge(a.clasificacion_upra, badgeClase(a.clasificacion_upra))}</div>
+      <div>${badge(a.clasificacion_upra, badgeClase(a.clasificacion_upra))} ${badgeValidacion(a.estado_validacion)}</div>
       <div style="flex:1;min-width:180px">
         <div class="confianza-bar"><div style="width:${confianza}%"></div></div>
-        <span class="muted">Confianza ${confianza}% · ${esc(a.modo)} · ${a.tiempo_respuesta_ms ? Math.round(a.tiempo_respuesta_ms) + ' ms' : ''}</span>
+        <span class="muted">Confianza ${confianza}%${confianzaReal ? ` (real ${confianzaReal}%)` : ''} · ${esc(a.modo)} · ${a.tiempo_respuesta_ms ? Math.round(a.tiempo_respuesta_ms) + ' ms' : ''}${respaldos ? ` · respaldada por ${respaldos} experto${respaldos !== 1 ? 's' : ''}` : ''}</span>
       </div>
     </div>`;
 
+  if (a.fenologia_ajustada) html += `<div class="advertencia">🌱 ${esc(a.fenologia_ajustada)}</div>`;
+  if (a.variables_faltantes_fertilidad && a.variables_faltantes_fertilidad.length) {
+    html += `<div class="advertencia">🔬 Variables de fertilidad sin dato: ${esc(a.variables_faltantes_fertilidad.join(', '))}. La confianza global se redujo; la clasificación es preliminar.</div>`;
+  }
   if (a.advertencia) html += `<div class="advertencia">${esc(a.advertencia)}</div>`;
   if (a.discordancia) html += `<div class="advertencia">🔀 Discordancia detectada: ${esc(JSON.stringify(a.discordancia))}</div>`;
 
   if (a.recomendaciones && a.recomendaciones.length) {
     html += `
       <div class="table-wrap"><table>
-        <tr><th>Variable</th><th>Estado</th><th>Lectura</th><th>Rango ideal</th><th>Acción</th><th>Prioridad</th></tr>
+        <tr><th>Variable</th><th>Estado</th><th>Lectura</th><th>Rango ideal</th><th>Acción</th><th>Prioridad</th><th>Confiabilidad</th><th>Plan sugerido</th></tr>
         ${a.recomendaciones.map(r => `
           <tr>
             <td><b>${esc(r.variable)}</b></td>
             <td>${badge(r.estado, badgeEstadoClase(r.estado))}</td>
             <td>${r.valor_actual != null ? fmtNum(r.valor_actual) : '—'}</td>
             <td>${esc(r.rango_ideal || '—')}</td>
-            <td>${esc(r.accion || '—')}</td>
+            <td>${esc(r.accion || '—')}${r.condicional ? ' <span class="badge preliminar">Condicional a confirmación de laboratorio</span>' : ''}${r.contexto ? `<div class="muted" style="font-size:0.78rem;margin-top:3px">${esc(r.contexto)}</div>` : ''}</td>
             <td>${esc(r.prioridad || '—')}</td>
+            <td>${esc(r.confiabilidad || '—')}</td>
+            <td>${fmtPlan(r.plan)}</td>
           </tr>`).join('')}
       </table></div>`;
   }

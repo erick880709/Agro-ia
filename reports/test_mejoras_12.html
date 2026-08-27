@@ -1,0 +1,372 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroIA Â· Reporte completo de anÃ¡lisis de suelo â Finca Demo Reglas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600;9..144,900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #16130f;   --surface:   #201b14;   --surface-2: #292219;
+    --line:      #3a3126;   --text:      #ede6d8;   --muted:     #a4947d;
+    --moss:      #87a95c;   --amber:     #d99a3d;   --clay:      #c05b45;
+    --sky:       #6b87ad;   --accent:    #e3b04b;
+    --mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(1100px 500px at 85% -10%, rgba(227,176,75,.07), transparent 60%),
+                radial-gradient(900px 420px at -10% 110%, rgba(135,169,92,.05), transparent 55%), var(--bg);
+    color: var(--text); font-family: var(--sans); line-height: 1.55; padding: 40px 20px 72px;
+  }
+  .sheet { max-width: 860px; margin: 0 auto; border: 1px solid var(--line); background: var(--surface); box-shadow: 0 24px 60px rgba(0,0,0,.45); }
+
+  header.specimen { border-bottom: 1px solid var(--line); padding: 28px 32px 24px; display: flex; flex-wrap: wrap; gap: 18px; justify-content: space-between; align-items: flex-end; }
+  .brand { font-family: var(--serif); font-weight: 900; font-size: 1.9rem; letter-spacing: -.01em; }
+  .brand em { font-style: normal; color: var(--accent); }
+  .kicker { font-family: var(--mono); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+  .specimen-label { text-align: right; font-family: var(--mono); font-size: .8rem; color: var(--muted); border: 1px dashed var(--line); padding: 8px 12px; }
+  .specimen-label strong { display: block; color: var(--text); font-size: 1rem; font-weight: 500; }
+
+  .ph-scale { padding: 22px 32px; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, rgba(0,0,0,.18), transparent); }
+  .ph-scale .label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .ph-scale .label span:first-child { font-family: var(--mono); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+  .ph-scale .reading { font-family: var(--mono); font-size: 1.05rem; }
+  .ph-scale .reading b { color: var(--accent); font-weight: 500; }
+  .ph-track { position: relative; height: 14px; border-radius: 7px; background: linear-gradient(90deg, #c65b3f 0%, #d98a4e 18%, #c9a94e 32%, #87a95c 47%, #6b87ad 70%, #7d6ba6 100%); }
+  .ph-ticks { display: flex; justify-content: space-between; font-family: var(--mono); font-size: .68rem; color: var(--muted); margin-top: 6px; }
+  .ph-marker { position: absolute; top: -4px; width: 2px; height: 22px; background: #fff; border-radius: 1px; }
+  .ph-marker::after { content: attr(data-ph); position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: .68rem; color: #fff; background: rgba(0,0,0,.55); padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+
+  section.block { padding: 26px 32px; border-bottom: 1px solid var(--line); }
+  section.block:last-of-type { border-bottom: none; }
+  .block-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+  .block-num { font-family: var(--serif); font-weight: 300; font-size: 1.5rem; color: var(--muted); }
+  .block-title { font-family: var(--serif); font-weight: 600; font-size: 1.25rem; }
+  .block-sub { font-family: var(--mono); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+  .telemetry { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .tile { background: var(--surface-2); border: 1px solid var(--line); padding: 12px 14px; }
+  .tile .k { font-family: var(--mono); font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .tile .v { font-family: var(--mono); font-size: 1.02rem; margin-top: 4px; }
+  .tile .v small { color: var(--muted); font-size: .72rem; }
+
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  th { text-align: left; font-family: var(--mono); font-weight: 500; font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  td { padding: 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td.mono, td.num { font-family: var(--mono); font-size: .86rem; }
+  td.num { text-align: right; }
+
+  .badge { display: inline-block; font-family: var(--mono); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; border: 1px solid; }
+  .badge-exceso  { color: #f0a08e; border-color: rgba(192,91,69,.55); background: rgba(192,91,69,.12); }
+  .badge-deficit { color: #ecc27a; border-color: rgba(217,154,61,.55); background: rgba(217,154,61,.10); }
+  .badge-ok      { color: #a9c584; border-color: rgba(135,169,92,.55); background: rgba(135,169,92,.10); }
+  .badge-noapta  { color: #f0a08e; border-color: var(--clay); background: rgba(192,91,69,.18); }
+  .badge-apta    { color: #a9c584; border-color: rgba(135,169,92,.55); background: rgba(135,169,92,.10); }
+  .badge-pendiente { color: #b45309; border-color: #d97706; background: rgba(217,119,6,.12); }
+  .badge-preliminar { color: #92400e; border-color: #d97706; background: rgba(217,119,6,.10); }
+  .badge-textura { color: #7c2d12; border-color: #c2410c; background: rgba(194,65,12,.10); }
+  .badge-validada { color: #166534; border-color: #16a34a; background: rgba(22,163,74,.12); }
+
+  .verdict { margin-top: 16px; padding: 12px 16px; border-left: 3px solid var(--clay); background: rgba(192,91,69,.08); font-family: var(--mono); font-size: .82rem; }
+  .verdict b { font-weight: 500; }
+
+  .rank { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .rank:last-child { border-bottom: none; }
+  .rank .pos { font-family: var(--serif); font-weight: 900; font-size: 1.3rem; color: var(--accent); min-width: 28px; }
+  .rank .crop { flex: 1; }
+  .rank .crop b { font-family: var(--serif); font-weight: 600; font-size: 1.02rem; }
+  .rank .crop span { display: block; color: var(--muted); font-size: .78rem; }
+  .scorebar { width: 160px; height: 8px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+  .scorebar i { display: block; height: 100%; background: linear-gradient(90deg, var(--amber), var(--moss)); }
+  .rank .score { font-family: var(--mono); font-size: .95rem; min-width: 92px; text-align: right; }
+
+  ul.warnings { list-style: none; }
+  ul.warnings li { padding: 10px 0 10px 26px; position: relative; border-bottom: 1px solid var(--line); font-size: .88rem; }
+  ul.warnings li:last-child { border-bottom: none; }
+  ul.warnings li::before { content: "â "; position: absolute; left: 0; color: var(--amber); }
+
+  ol.steps { list-style: none; counter-reset: paso; }
+  ol.steps li { counter-increment: paso; position: relative; padding: 8px 0 8px 34px; border-bottom: 1px solid var(--line); font-size: .88rem; }
+  ol.steps li:last-child { border-bottom: none; }
+  ol.steps li::before { content: counter(paso, decimal-leading-zero); position: absolute; left: 0; top: 10px; font-family: var(--mono); font-size: .72rem; color: var(--accent); }
+
+  .stamp { text-align: right; padding: 18px 32px; font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--amber); border-top: 1px solid var(--line); }
+  footer.colophon { text-align: center; color: var(--muted); font-family: var(--mono); font-size: .7rem; padding: 26px 0 0; }
+
+  /* ââ Lenguaje de campo ââ */
+  .field-talk { background: linear-gradient(180deg, rgba(135,169,92,.06), transparent); }
+  .field-talk .block-title { color: var(--moss); }
+  .heatmap .heat-var { margin-bottom: 18px; }
+  .heatmap .heat-var.hidden { display: none; }
+  .heat-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .heat-tab { font-family: var(--mono); font-size: .72rem; letter-spacing: .04em;
+    padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line);
+    background: #fff; color: var(--text); cursor: pointer; }
+  .heat-tab.active { background: var(--moss); color: #fff; border-color: var(--moss); }
+  .heatmap .heat-title { font-weight: 600; margin-bottom: 6px; }
+  .heat-legend { display: flex; align-items: center; gap: 8px; font-size: .78rem; color: var(--muted); margin-bottom: 8px; }
+  .heat-legend .chip { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+  .heat-grid { display: grid; gap: 2px; max-width: 560px; margin-bottom: 4px; }
+  .heat-cell { aspect-ratio: 1.6 / 1; display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: .68rem; border-radius: 3px; }
+  .heat-cell:hover { outline: 2px solid var(--moss); }
+  .heatmap .heat-var, .plano-lote { break-inside: avoid; page-break-inside: avoid; }
+  .plano-svg { max-width: 560px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcf8; }
+  .plano-stats { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 12px; }
+  .plano-stat { background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px;
+    padding: 8px 14px; font-size: .82rem; }
+  .plano-stat b { display: block; font-family: var(--mono); font-size: 1.05rem; color: var(--moss); }
+  .clima-muestra { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--line);
+    border-radius: 10px; background: rgba(135,169,92,.07); }
+  .ctx { font-size: .8rem; margin-top: 4px; line-height: 1.45; }
+  td.plan { font-size: .8rem; color: #36593f; line-height: 1.45; min-width: 220px; }
+  .alerta-fito { margin: 10px 0 4px; padding: 10px 12px; border: 1px solid #d97706;
+    border-radius: 8px; background: rgba(217,119,6,.08); color: #7c2d12; font-size: .86rem; }
+  .ft-intro { font-family: var(--serif); font-size: 1.08rem; margin-bottom: 16px; }
+  .ft-sub { font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--moss); margin: 16px 0 8px; }
+  .ft-para { font-size: .92rem; }
+  ul.ft-list { list-style: none; }
+  ul.ft-list li { padding: 12px 0 12px 26px; position: relative; border-bottom: 1px solid var(--line); font-size: .9rem; }
+  ul.ft-list li:last-child { border-bottom: none; }
+  ul.ft-list li::before { content: "ð¿"; position: absolute; left: 0; color: var(--moss); }
+  ol.ft-steps { list-style: none; counter-reset: tarea; }
+  ol.ft-steps li { counter-increment: tarea; position: relative; padding: 10px 0 10px 34px; border-bottom: 1px solid var(--line); font-size: .9rem; }
+  ol.ft-steps li:last-child { border-bottom: none; }
+  ol.ft-steps li::before { content: counter(tarea, decimal-leading-zero); position: absolute; left: 0; top: 12px; font-family: var(--mono); font-size: .72rem; color: var(--moss); }
+  .ft-note { margin-top: 16px; padding: 12px 16px; border-left: 3px solid var(--amber); background: rgba(217,154,61,.08); font-size: .85rem; }
+
+  .toolbar { position: fixed; top: 14px; right: 18px; z-index: 50; display: flex; gap: 8px; }
+  .toolbar button { font-family: var(--sans); font-size: .82rem; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface-2); color: var(--text); cursor: pointer; }
+  .toolbar button:hover { border-color: var(--accent); color: var(--accent); }
+
+  @media print {
+    body { background: #fff; color: #111; padding: 0; }
+    .sheet { box-shadow: none; border: none; max-width: none; background: #fff; }
+    header.specimen, .ph-scale, section.block, .stamp { border-color: #ccc; }
+    .tile { background: #f6f6f6; border-color: #ccc; }
+    td, th { border-color: #ccc; }
+    .toolbar { display: none; }
+    .badge-exceso, .badge-deficit, .badge-noapta, .badge-apta, .badge-ok,
+    .badge-pendiente, .badge-preliminar, .badge-textura, .badge-validada { background: none; }
+    /* PDF: una matriz por parÃ¡metro, sin pestaÃ±as ni vista unificada */
+    .heatmap .heat-tabs { display: none !important; }
+    .heatmap .heat-var { display: block !important; }
+    .heatmap .heat-var[data-var="__resumen__"] { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <button onclick="window.print()">ð¨ Guardar PDF</button>
+    <a id="dl-html" download="reporte.html"><button>â¬ Descargar HTML</button></a>
+  </div>
+
+<div class="sheet">
+  <header class="specimen">
+    <div>
+      <div class="brand">Agro<em>IA</em></div>
+      <div class="kicker">Informe de anÃ¡lisis de suelo Â· Reporte completo de anÃ¡lisis de suelo</div>
+    </div>
+    <div class="specimen-label">
+      EspÃ©cimen
+      <strong>Finca Demo Reglas</strong>
+      Pitalito, Huila Â· 27/08/2026 00:41
+    </div>
+  </header>
+  
+  <div class="ph-scale">
+    <div class="label">
+      <span>Firma de acidez Â· escala pH</span>
+      <span class="reading">pH <b>4.9</b> â Ã¡cido</span>
+    </div>
+    <div class="ph-track"><div class="ph-marker" data-ph="pH 4.9" style="left:35.0%"></div></div>
+    <div class="ph-ticks"><span>0</span><span>3</span><span>5</span><span>7</span><span>9</span><span>11</span><span>14</span></div>
+  </div>
+  <section class="block">
+    <div class="block-head"><span class="block-num">T</span>
+      <div><div class="block-title">TelemetrÃ­a y lectura del sensor</div>
+      <div class="block-sub">Fuente de datos para el anÃ¡lisis</div></div>
+    </div>
+    <div class="telemetry"><div class="tile"><div class="k">Dispositivo</div><div class="v">demo-sensor-01 </div></div><div class="tile"><div class="k">Finca</div><div class="v">Finca Demo Reglas <small>Pitalito, Huila</small></div></div><div class="tile"><div class="k">Ãltima transmisiÃ³n</div><div class="v">26/08/2026 23:53 </div></div><div class="tile"><div class="k">RSSI</div><div class="v">â <small>dBm</small></div></div><div class="tile"><div class="k">Uptime</div><div class="v">0 <small>min</small></div></div><div class="tile"><div class="k">Calidad NPK</div><div class="v">Sin validar <small>nivel mÃ¡s bajo alcanzado</small></div></div><div class="tile"><div class="k">ValidaciÃ³n lab</div><div class="v">No <small>anÃ¡lisis certificado</small></div></div><div class="tile"><div class="k">pH</div><div class="v">4.9 </div></div><div class="tile"><div class="k">Conductividad</div><div class="v">1.8 <small>dS/m</small></div></div><div class="tile"><div class="k">N</div><div class="v">85 <small>ppm</small></div></div><div class="tile"><div class="k">P</div><div class="v">22 <small>ppm</small></div></div><div class="tile"><div class="k">K</div><div class="v">90 <small>ppm</small></div></div><div class="tile"><div class="k">HR ambiente</div><div class="v">â <small>%</small></div></div><div class="tile"><div class="k">T ambiente</div><div class="v">â <small>Â°C</small></div></div></div>
+  </section>
+  
+  <section class="block">
+    <div class="block-head"><span class="block-num">01</span>
+      <div><div class="block-title">DiagnÃ³stico para cultivo sembrado â CafÃ©</div>
+      <div class="block-sub">RecomendaciÃ³n para el cultivo Â· motor de reglas</div></div>
+    </div>
+    <div style="margin-bottom:14px"><span class="badge badge-pendiente">PENDIENTE DE VALIDACIÃN TÃCNICA</span> &nbsp; <span class="mono" style="color:var(--muted)">confianza 4% (real 4%)</span></div>
+    <div class="ctx muted" style="margin-top:6px">ð± Etapa vegetativa (edad ~2.0 aÃ±os): Priorizar nitrÃ³geno y riego regular para crecimiento de follaje.</div>
+    <table>
+      <tr><th>Variable</th><th>Estado</th><th>Lectura</th><th>Rango ideal</th><th>AcciÃ³n</th><th>Prioridad</th><th>Confiabilidad</th><th>Plan sugerido</th></tr>
+      <tr><td class="mono">pH</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">4.9</td>
+            <td class="mono">[5.5 - 6.5]</td>
+            <td>Ajustar pH al rango 5.5-6.5: encalado dolomÃ­tico si es Ã¡cido o yeso agrÃ­cola si es alcalino.<div class="ctx muted">pH 4.9 â Ã¡cido en escala general, pero fuera del rango Ã³ptimo para CafÃ© [5.5â6.5]</div></td>
+            <td class="mono">Critica</td>
+            <td class="mono">Calibrado de fÃ¡brica</td>
+            <td class="plan"><b>Fuente:</b> Cal dolomÃ­tica (suelo Ã¡cido) o yeso agrÃ­cola (suelo alcalino)<br><b>Frecuencia:</b> Incorporar 15â30 dÃ­as antes de la siembra<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">N</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">85</td>
+            <td class="mono">[200.0 - 400.0]</td>
+            <td>NitrÃ³geno fuera del rango objetivo (200-400): ajustar plan de fertilizaciÃ³n nitrogenada fraccionada segÃºn CenicafÃ©. â condicional a confirmaciÃ³n de laboratorio <span class="badge badge-preliminar">CONDICIONAL A CONFIRMACIÃN DE LABORATORIO</span></td>
+            <td class="mono">Alta</td>
+            <td class="mono">Sin validar</td>
+            <td class="plan"><b>Fuente:</b> Urea (46% N) o sulfato de amonio (21% N)<br><b>Frecuencia:</b> Fraccionar en 2â3 aplicaciones segÃºn la etapa del cultivo<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">P</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">22</td>
+            <td class="mono">[30.0 - 75.0]</td>
+            <td>FÃ³sforo fuera del rango objetivo (30-75): aplicar DAP o roca fosfÃ³rica en hoyado o en banda. â condicional a confirmaciÃ³n de laboratorio <span class="badge badge-preliminar">CONDICIONAL A CONFIRMACIÃN DE LABORATORIO</span></td>
+            <td class="mono">Alta</td>
+            <td class="mono">Sin validar</td>
+            <td class="plan"><b>Fuente:</b> DAP (18-46-0) o roca fosfÃ³rica en suelos Ã¡cidos<br><b>Frecuencia:</b> Aplicar al hoyado o en banda a la siembra<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">K</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">90</td>
+            <td class="mono">[100.0 - 300.0]</td>
+            <td>Potasio fuera del rango objetivo (100-300): aplicar KCl segÃºn la etapa del cultivo. â condicional a confirmaciÃ³n de laboratorio <span class="badge badge-preliminar">CONDICIONAL A CONFIRMACIÃN DE LABORATORIO</span></td>
+            <td class="mono">Alta</td>
+            <td class="mono">Sin validar</td>
+            <td class="plan"><b>Fuente:</b> KCl (60% KâO) o sulfato de potasio (50% KâO)<br><b>Frecuencia:</b> En banda o fertirriego segÃºn la etapa del cultivo<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">B</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">0.3</td>
+            <td class="mono">[0.5 - 2.0]</td>
+            <td>Ajustar boro: bÃ³rax en dosis baja si estÃ¡ bajo (rango estrecho); si excede, lavar con riego.</td>
+            <td class="mono">Alta</td>
+            <td class="mono">Calibrado de fÃ¡brica</td>
+            <td class="plan"><b>Fuente:</b> BÃ³rax o Ã¡cido bÃ³rico<br><b>Frecuencia:</b> Dosis baja y precisa (rango estrecho de toxicidad)<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">pH</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">4.9</td>
+            <td class="mono">[5.0 - 7.5]</td>
+            <td>Corregir acidez con encalado (cal dolomita) si pH &lt; 5.0, o alcalinidad incorporando materia orgÃ¡nica Ã¡cida si pH &gt; 7.5.<div class="ctx muted">pH 4.9 â Ã¡cido en escala general, pero fuera del rango Ã³ptimo para CafÃ© [5.5â6.5]</div></td>
+            <td class="mono">Media</td>
+            <td class="mono">Calibrado de fÃ¡brica</td>
+            <td class="plan"><b>Fuente:</b> Cal dolomÃ­tica (suelo Ã¡cido) o yeso agrÃ­cola (suelo alcalino)<br><b>Frecuencia:</b> Incorporar 15â30 dÃ­as antes de la siembra<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">MO</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">2.1</td>
+            <td class="mono">[3.0 - 20.0]</td>
+            <td>Mantener la materia orgÃ¡nica entre 3-20%: incorporar compost o abonos verdes si es baja; reducir aportes orgÃ¡nicos si es excesiva.</td>
+            <td class="mono">Baja</td>
+            <td class="mono">Calibrado de fÃ¡brica</td>
+            <td class="plan"><b>Fuente:</b> Compost, gallinaza compostada o abonos verdes<br><b>Frecuencia:</b> Incorporar 2â4 t/ha por ciclo de cultivo<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">humedad</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">28</td>
+            <td class="mono">[40.0 - 80.0]</td>
+            <td>Ajustar riego para mantener la humedad entre 40-80% de capacidad de campo.</td>
+            <td class="mono">Media</td>
+            <td class="mono">Calibrado de fÃ¡brica</td>
+            <td class="plan"><b>Fuente:</b> Riego programado segÃºn capacidad de campo<br><b>Frecuencia:</b> Ajustar turnos de riego; revisar sensor de humedad<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">MO</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">2.1</td>
+            <td class="mono">[8.0 - 20.0]</td>
+            <td>Materia orgÃ¡nica fuera de 8-20%: incorporar pulpa de cafÃ© compostada.</td>
+            <td class="mono">Media</td>
+            <td class="mono">Calibrado de fÃ¡brica</td>
+            <td class="plan"><b>Fuente:</b> Compost, gallinaza compostada o abonos verdes<br><b>Frecuencia:</b> Incorporar 2â4 t/ha por ciclo de cultivo<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">humedad</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">28</td>
+            <td class="mono">[60.0 - 80.0]</td>
+            <td>Mantener humedad entre 60-80% de capacidad de campo.</td>
+            <td class="mono">Media</td>
+            <td class="mono">Calibrado de fÃ¡brica</td>
+            <td class="plan"><b>Fuente:</b> Riego programado segÃºn capacidad de campo<br><b>Frecuencia:</b> Ajustar turnos de riego; revisar sensor de humedad<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">Ca</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">600</td>
+            <td class="mono">[1000.0 - 4000.0]</td>
+            <td>Ajustar calcio: aplicar cal dolomÃ­tica si estÃ¡ bajo; si excede, reducir enmiendas cÃ¡lcicas.</td>
+            <td class="mono">Media</td>
+            <td class="mono">Calibrado de fÃ¡brica</td>
+            <td class="plan"><b>Fuente:</b> Cal dolomÃ­tica o yeso agrÃ­cola<br><b>Frecuencia:</b> Incorporar en presiembra; evitar exceso en suelos calcÃ¡reos<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">Mg</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">80</td>
+            <td class="mono">[100.0 - 500.0]</td>
+            <td>Ajustar magnesio: sulfato de magnesio si estÃ¡ bajo; si excede, vigilar antagonismo con K.</td>
+            <td class="mono">Media</td>
+            <td class="mono">Calibrado de fÃ¡brica</td>
+            <td class="plan"><b>Fuente:</b> Sulfato de magnesio o cal dolomÃ­tica<br><b>Frecuencia:</b> AplicaciÃ³n Ãºnica por ciclo; vigilar antagonismo con K<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">S</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">8</td>
+            <td class="mono">[10.0 - 40.0]</td>
+            <td>Ajustar azufre: azufre elemental o sulfato de amonio si estÃ¡ bajo.</td>
+            <td class="mono">Baja</td>
+            <td class="mono">Calibrado de fÃ¡brica</td>
+            <td class="plan"><b>Fuente:</b> Azufre elemental o sulfato de amonio<br><b>Frecuencia:</b> Incorporar en presiembra<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">Fe</td>
+            <td><span class="badge badge-exceso">EXCESO</span></td>
+            <td class="num">140</td>
+            <td class="mono">[10.0 - 100.0]</td>
+            <td>Ajustar hierro: quelato de hierro si estÃ¡ bajo (comÃºn en pH alto); si excede, revisar drenaje.</td>
+            <td class="mono">Media</td>
+            <td class="mono">Calibrado de fÃ¡brica</td>
+            <td class="plan"><b>Fuente:</b> Quelato de hierro (EDDHA en pH alto)<br><b>Frecuencia:</b> Aplicaciones foliares o al suelo segÃºn severidad<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">Mn</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">3</td>
+            <td class="mono">[5.0 - 100.0]</td>
+            <td>Ajustar manganeso: sulfato de manganeso si estÃ¡ bajo; si excede, encalar para reducir toxicidad.</td>
+            <td class="mono">Baja</td>
+            <td class="mono">Calibrado de fÃ¡brica</td>
+            <td class="plan"><b>Fuente:</b> Sulfato de manganeso<br><b>Frecuencia:</b> Foliar o al suelo; encalar si hay toxicidad por exceso<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">Zn</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">1.5</td>
+            <td class="mono">[2.0 - 20.0]</td>
+            <td>Ajustar zinc: sulfato de zinc si estÃ¡ bajo; si excede, evitar enmiendas con zinc.</td>
+            <td class="mono">Media</td>
+            <td class="mono">Calibrado de fÃ¡brica</td>
+            <td class="plan"><b>Fuente:</b> Sulfato de zinc<br><b>Frecuencia:</b> Al suelo en presiembra o foliar en floraciÃ³n<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr><tr><td class="mono">Cu</td>
+            <td><span class="badge badge-deficit">DÃFICIT</span></td>
+            <td class="num">0.8</td>
+            <td class="mono">[1.0 - 10.0]</td>
+            <td>Ajustar cobre: sulfato de cobre si estÃ¡ bajo; si excede (toxicidad), suspender fungicidas cÃºpricos.</td>
+            <td class="mono">Baja</td>
+            <td class="mono">Calibrado de fÃ¡brica</td>
+            <td class="plan"><b>Fuente:</b> Sulfato de cobre (con precauciÃ³n)<br><b>Frecuencia:</b> Solo ante deficiencia confirmada; dosis baja<br><b>Dosis:</b> Dosis a definir por tÃ©cnico agrÃ³nomo tras anÃ¡lisis de laboratorio</td></tr>
+    </table>
+    <div class="verdict"><b>ClasificaciÃ³n: No apta (pendiente de validaciÃ³n tÃ©cnica)</b> â AnÃ¡lisis de aptitud para CafÃ©: clasificaciÃ³n No apta (pendiente de validaciÃ³n tÃ©cnica).</div>
+  </section>
+  <section class="block">
+    <div class="block-head"><span class="block-num">02</span>
+      <div><div class="block-title">RecomendaciÃ³n de siembra</div>
+      <div class="block-sub">Â¿QuÃ© conviene sembrar? Â· ranking del motor</div></div>
+    </div>
+    <div style="margin-bottom:10px"><span class="badge badge-pendiente">PENDIENTE DE VALIDACIÃN TÃCNICA</span> &nbsp; <span class="mono" style="color:var(--muted)">confianza 4% (real 4%)</span></div>
+    
+    <div class="rank">
+          <div class="pos">1</div>
+          <div class="crop"><b>â CafÃ©</b>
+          <span><span class="badge badge-noapta">NO APTA</span> Â· 7 reglas</span></div>
+          <div class="scorebar"><i style="width:0.0%"></i></div>
+          <div class="score">0 Â· 5%</div>
+        </div>
+    <div class="verdict"><b>Top:</b> CafÃ© (No apta (pendiente de validaciÃ³n tÃ©cnica))</div>
+  </section>
+  
+  
+  <section class="block field-talk"><div class="block-head"><span class="block-num">03</span><div><div class="block-title">En palabras del campo</div><div class="block-sub">ExplicaciÃ³n sencilla para aplicar en su terreno</div></div></div><p class="ft-intro">Hablando en plata blanca: hoy su tierra no estÃ¡ cÃ³moda para <b>CafÃ©</b>. Abajo le contamos, en el mismo idioma del campo, quÃ© significa cada cosa y quÃ© hacer en su terreno.</p><div class="ft-sub">ð QuÃ© significa cada mediciÃ³n y quÃ© hacer</div><ul class="ft-list"><li><b>pH</b> â QuÃ© tan &#x27;agria&#x27; o &#x27;amarga&#x27; estÃ¡ la tierra (la acidez). Su lectura fue <b>4.9</b> y lo bueno estÃ¡ entre [5.5 - 6.5]. Su tierra estÃ¡ muy <b>agria</b> (Ã¡cida). Endulcela con cal dolomita o cal agrÃ­cola al voleo, de preferencia un mes antes de sembrar, y revuelva con el suelo.</li><li><b>N</b> â El abono que pone verdes las hojas y hace crecer la planta. Su lectura fue <b>85.0</b> y lo bueno estÃ¡ entre [200.0 - 400.0]. A la tierra le falta 'comida verde'. Aplique abono nitrogenado (urea o gallinaza madura) en dos o tres tandas, no todo de un solo golpe.</li><li><b>P</b> â El abono que hace raÃ­ces fuertes y ayuda a florecer y cargar fruto. Su lectura fue <b>22.0</b> y lo bueno estÃ¡ entre [30.0 - 75.0]. A la tierra le falta fÃ³sforo. Aplique DAP o roca fosfÃ³rica en el hoyo o en banda cerca de la semilla, que es donde la planta lo aprovecha mejor.</li><li><b>K</b> â El abono que da fuerza al tallo, llena el fruto y lo pone dulce. Su lectura fue <b>90.0</b> y lo bueno estÃ¡ entre [100.0 - 300.0]. A la tierra le falta potasio. Aplique KCl (cloruro de potasio) segÃºn la etapa del cultivo: poco al comienzo y mÃ¡s cuando estÃ© cargando fruto.</li><li><b>B</b> â Un nutriente o condiciÃ³n del suelo. Su lectura fue <b>0.3</b> y lo bueno estÃ¡ entre [0.5 - 2.0]. Le falta; aplique un abono que contenga B.</li><li><b>pH</b> â QuÃ© tan &#x27;agria&#x27; o &#x27;amarga&#x27; estÃ¡ la tierra (la acidez). Su lectura fue <b>4.9</b> y lo bueno estÃ¡ entre [5.0 - 7.5]. Su tierra estÃ¡ muy <b>agria</b> (Ã¡cida). Endulcela con cal dolomita o cal agrÃ­cola al voleo, de preferencia un mes antes de sembrar, y revuelva con el suelo.</li><li><b>MO</b> â La &#x27;vida&#x27; del suelo: compost, hojarasca, estiÃ©rcol maduro. Su lectura fue <b>2.1</b> y lo bueno estÃ¡ entre [3.0 - 20.0]. A la tierra le falta 'cuerpo'. Eche compost, estiÃ©rcol maduro o gallinaza reposada y dÃ©jela descomponer; la tierra queda mÃ¡s suelta y guarda mejor el agua.</li><li><b>humedad</b> â El agua que guarda el suelo para la planta. Su lectura fue <b>28.0</b> y lo bueno estÃ¡ entre [40.0 - 80.0]. A la tierra le falta agua. Riegue mÃ¡s seguido y ponga cobertura (mulch, hojarasca) para que el suelo no se seque tan rÃ¡pido.</li><li><b>MO</b> â La &#x27;vida&#x27; del suelo: compost, hojarasca, estiÃ©rcol maduro. Su lectura fue <b>2.1</b> y lo bueno estÃ¡ entre [8.0 - 20.0]. A la tierra le falta 'cuerpo'. Eche compost, estiÃ©rcol maduro o gallinaza reposada y dÃ©jela descomponer; la tierra queda mÃ¡s suelta y guarda mejor el agua.</li><li><b>humedad</b> â El agua que guarda el suelo para la planta. Su lectura fue <b>28.0</b> y lo bueno estÃ¡ entre [60.0 - 80.0]. A la tierra le falta agua. Riegue mÃ¡s seguido y ponga cobertura (mulch, hojarasca) para que el suelo no se seque tan rÃ¡pido.</li><li><b>Ca</b> â El &#x27;calcio&#x27; del suelo: evita frutos rajados y podridos. Su lectura fue <b>600.0</b> y lo bueno estÃ¡ entre [1000.0 - 4000.0]. Aplique cal dolomita o yeso agrÃ­cola para aportar calcio a la planta.</li><li><b>Mg</b> â Ayuda a que la hoja &#x27;pinche&#x27; verde (clorofila). Su lectura fue <b>80.0</b> y lo bueno estÃ¡ entre [100.0 - 500.0]. Aplique cal dolomita o sulfato de magnesio si ve las hojas amarillentas entre las venas.</li><li><b>S</b> â Mejora el sabor y ayuda a la planta a aprovechar el nitrÃ³geno. Su lectura fue <b>8.0</b> y lo bueno estÃ¡ entre [10.0 - 40.0]. Puede aplicar sulfato o abonos con azufre; en zonas de lluvia se lava rÃ¡pido.</li><li><b>Fe</b> â Evita que las hojas nuevas se pongan amarillas. Su lectura fue <b>140.0</b> y lo bueno estÃ¡ entre [10.0 - 100.0]. Hay hierro de sobra.</li><li><b>Mn</b> â Un nutriente o condiciÃ³n del suelo. Su lectura fue <b>3.0</b> y lo bueno estÃ¡ entre [5.0 - 100.0]. Le falta; aplique un abono que contenga Mn.</li><li><b>Zn</b> â Un nutriente o condiciÃ³n del suelo. Su lectura fue <b>1.5</b> y lo bueno estÃ¡ entre [2.0 - 20.0]. Le falta; aplique un abono que contenga Zn.</li><li><b>Cu</b> â Un nutriente o condiciÃ³n del suelo. Su lectura fue <b>0.8</b> y lo bueno estÃ¡ entre [1.0 - 10.0]. Le falta; aplique un abono que contenga Cu.</li></ul><div class="ft-sub">ð± Si va a sembrar de nuevo</div><p class="ft-para">Para empezar de cero, lo que mejor le va en su tierra es <b>CafÃ©</b>. El cafÃ© quiere tierra fresca y que no se encharque; con sombra y abono parejo, la mata le responde.</p><div class="ft-sub">ð§º Â¿Por dÃ³nde empiezo en mi lote?</div><ol class="ft-steps"><li><b>pH</b> â QuÃ© tan &#x27;agria&#x27; o &#x27;amarga&#x27; estÃ¡ la tierra (la acidez). Su lectura fue <b>4.9</b> y lo bueno estÃ¡ entre [5.5 - 6.5]. Su tierra estÃ¡ muy <b>agria</b> (Ã¡cida). Endulcela con cal dolomita o cal agrÃ­cola al voleo, de preferencia un mes antes de sembrar, y revuelva con el suelo.</li><li><b>N</b> â El abono que pone verdes las hojas y hace crecer la planta. Su lectura fue <b>85.0</b> y lo bueno estÃ¡ entre [200.0 - 400.0]. A la tierra le falta 'comida verde'. Aplique abono nitrogenado (urea o gallinaza madura) en dos o tres tandas, no todo de un solo golpe.</li><li><b>P</b> â El abono que hace raÃ­ces fuertes y ayuda a florecer y cargar fruto. Su lectura fue <b>22.0</b> y lo bueno estÃ¡ entre [30.0 - 75.0]. A la tierra le falta fÃ³sforo. Aplique DAP o roca fosfÃ³rica en el hoyo o en banda cerca de la semilla, que es donde la planta lo aprovecha mejor.</li><li><b>K</b> â El abono que da fuerza al tallo, llena el fruto y lo pone dulce. Su lectura fue <b>90.0</b> y lo bueno estÃ¡ entre [100.0 - 300.0]. A la tierra le falta potasio. Aplique KCl (cloruro de potasio) segÃºn la etapa del cultivo: poco al comienzo y mÃ¡s cuando estÃ© cargando fruto.</li></ol><div class="ft-note">â ï¸ Para que no se pierda: Los nÃºmeros de N, P y K vienen de un aparato que <b>no estÃ¡ calibrado</b> con un laboratorio: no los tome al pie de la letra. El pH y las sales sÃ­ son confiables. Este consejo lo da un sistema automÃ¡tico con datos incompletos; antes de gastar plata en abonos, muÃ©strele este informe al tÃ©cnico o a la UMATA mÃ¡s cercana.</div></section>
+  <section class="block">
+    <div class="block-head"><span class="block-num">04</span>
+      <div><div class="block-title">Advertencias del reporte</div>
+      <div class="block-sub">Calidad de datos y limitaciones</div></div>
+    </div>
+    <ul class="warnings"><li>Esta recomendaciÃ³n tiene baja confianza y serÃ¡ revisada por un tÃ©cnico agrÃ³nomo</li><li>RecomendaciÃ³n parcial: faltan variables (textura)</li><li>Esta recomendaciÃ³n tiene baja confianza y serÃ¡ revisada por un tÃ©cnico agrÃ³nomo</li><li>RecomendaciÃ³n parcial: faltan variables (textura)</li></ul>
+  </section>
+  <section class="block">
+    <div class="block-head"><span class="block-num">05</span>
+      <div><div class="block-title">PrÃ³ximos pasos</div>
+      <div class="block-sub">Plan de acciÃ³n sugerido</div></div>
+    </div>
+    <ol class="steps"><li>Validar la calibraciÃ³n NPK del sensor contra un anÃ¡lisis de laboratorio antes de aplicar fertilizantes.</li><li>Completar las variables de fertilidad faltantes (MO, CIC, Ca, Mg, S, Fe, Mn, Zn, Cu, B) para subir la confianza del reporte.</li><li>Corregir el pH con encalado dolomÃ­tico (suelo Ã¡cido) o yeso agrÃ­cola (suelo alcalino) segÃºn la recomendaciÃ³n.</li><li>Aplicar el plan de fertilizaciÃ³n fraccionado indicado en la tabla de diagnÃ³stico.</li><li>Replicar el anÃ¡lisis tras 3â4 semanas para verificar la evoluciÃ³n de las variables.</li><li>Escalar al tÃ©cnico agrÃ³nomo si la confianza del reporte es menor al 80% (la clasificaciÃ³n quedarÃ¡ marcada como &#x27;Pendiente de validaciÃ³n tÃ©cnica&#x27;).</li></ol>
+  </section>
+  <div class="stamp">AgroIA Â· sistema experto UPRA / CenicafÃ© / AGROSAVIA Â· generado 27/08/2026 00:41</div>
+</div>
+<footer class="colophon">AgroIA â AgroInteligente Colombia Â· Este reporte es una recomendaciÃ³n tÃ©cnica de apoyo; no sustituye el anÃ¡lisis de laboratorio certificado.</footer>
+<script>
+  const htmlSrc = document.documentElement.outerHTML;
+  document.getElementById('dl-html').href = 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlSrc);
+</script>
+</body>
+</html>

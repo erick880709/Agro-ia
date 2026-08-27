@@ -177,6 +177,13 @@ async def generar_reporte(
             "largo_metros": finca.largo_metros,
             "ancho_metros": finca.ancho_metros,
             "coordenadas_google": finca.coordenadas_google,
+            "pendiente_pct": finca.pendiente_pct,
+            "drenaje": finca.drenaje,
+            "historial_agronomico": finca.historial_agronomico,
+            "validacion_laboratorio": finca.validacion_laboratorio,
+            "cultivo_sembrado": finca.cultivo_sembrado,
+            "edad_anos": finca.edad_anos,
+            "etapa_fenologica": finca.etapa_fenologica,
         },
         lectura={
             "ts": lectura.ts.isoformat() if lectura.ts else None,

@@ -22,6 +22,7 @@ logger = get_logger(__name__)
 router = APIRouter(prefix="/api/v1", tags=["fincas"])
 
 ROL_ADMIN = {"admin", "administrador"}
+ROL_EXPERTOS = {"admin", "administrador", "agronomo", "agrónomo"}
 
 # Enlaces Google Maps con coordenadas: q=lat,lng · @lat,lng,zoom · place/.../@lat,lng
 _RE_LATLNG_URL = re.compile(r"(-?\d+(?:\.\d+)?)[,\s]+(-?\d+(?:\.\d+)?)")
@@ -54,6 +55,16 @@ class FincaCreate(BaseModel):
     largo_metros: float | None = Field(None, ge=0)
     ancho_metros: float | None = Field(None, ge=0)
     altitud_msnm: float | None = None
+    # ── Topografía, drenaje, historial y fenología (2026-08-27) ──
+    pendiente_pct: float | None = Field(None, ge=0, le=90, description="Pendiente del lote en %")
+    drenaje: str | None = Field(None, max_length=20, description="Bueno | Regular | Deficiente")
+    historial_agronomico: dict | None = Field(
+        None, description="Historial de manejo: cultivo anterior, fertilización, encalado"
+    )
+    validacion_laboratorio: bool = Field(False, description="¿Validado en laboratorio?")
+    cultivo_sembrado: str | None = Field(None, max_length=100)
+    edad_anos: float | None = Field(None, ge=0, le=500)
+    etapa_fenologica: str | None = Field(None, max_length=30, description="Vegetativa | Floración | Fructificación | Cosecha")
 
     @field_validator("contacto_email")
     @classmethod
@@ -79,6 +90,13 @@ def _finca_a_dict(f: Finca) -> dict:
         "propietario": f.propietario,
         "contacto_telefono": f.contacto_telefono,
         "contacto_email": f.contacto_email,
+        "pendiente_pct": f.pendiente_pct,
+        "drenaje": f.drenaje,
+        "historial_agronomico": f.historial_agronomico,
+        "validacion_laboratorio": f.validacion_laboratorio,
+        "cultivo_sembrado": f.cultivo_sembrado,
+        "edad_anos": f.edad_anos,
+        "etapa_fenologica": f.etapa_fenologica,
     }
 
 
@@ -169,6 +187,13 @@ async def registrar_finca(
         largo_metros=body.largo_metros,
         ancho_metros=body.ancho_metros,
         altitud_msnm=body.altitud_msnm,
+        pendiente_pct=body.pendiente_pct,
+        drenaje=body.drenaje,
+        historial_agronomico=body.historial_agronomico,
+        validacion_laboratorio=body.validacion_laboratorio,
+        cultivo_sembrado=body.cultivo_sembrado,
+        edad_anos=body.edad_anos,
+        etapa_fenologica=body.etapa_fenologica,
     )
     db.add(finca)
     await db.commit()
@@ -176,3 +201,63 @@ async def registrar_finca(
 
     logger.info("finca_registrada", finca_id=str(finca.id), nombre=finca.nombre, rol=rol)
     return {"status": "registered", "finca": _finca_a_dict(finca)}
+
+
+class FincaAgroUpdate(BaseModel):
+    """Actualización parcial de los campos agronómicos de la finca.
+
+    Solo Admin/Agrónomo pueden completar topografía, drenaje, historial
+    de manejo y estado fenológico del cultivo sembrado.
+    """
+    pendiente_pct: float | None = Field(None, ge=0, le=90)
+    drenaje: str | None = Field(None, max_length=20)
+    historial_agronomico: dict | None = None
+    validacion_laboratorio: bool | None = None
+    cultivo_sembrado: str | None = Field(None, max_length=100)
+    edad_anos: float | None = Field(None, ge=0, le=500)
+    etapa_fenologica: str | None = Field(None, max_length=30)
+
+
+@router.patch("/fincas/{finca_id}")
+async def actualizar_datos_agronomicos(
+    finca_id: str,
+    body: FincaAgroUpdate,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+):
+    """Actualiza topografía/drenaje/historial/fenología de una finca.
+
+    Disponible para administrador y agrónomo.
+    """
+    rol = (x_user_role or "").strip().lower()
+    if rol not in ROL_EXPERTOS:
+        raise HTTPException(status_code=403, detail={
+            "code": "FORBIDDEN_ROLE",
+            "message": "Solo el administrador o el agrónomo pueden actualizar los datos agronómicos de la finca.",
+        })
+
+    try:
+        finca_uuid = uuid_mod.UUID(finca_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FINCA_INVALIDA", "message": "finca_id no es un UUID válido.",
+        })
+
+    finca = (
+        await db.execute(select(Finca).where(Finca.id == finca_uuid))
+    ).scalar_one_or_none()
+    if finca is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "FINCA_NOT_FOUND", "message": "La finca no está registrada.",
+        })
+
+    cambios = body.model_dump(exclude_unset=True)
+    for campo, valor in cambios.items():
+        setattr(finca, campo, valor)
+    await db.commit()
+    await db.refresh(finca)
+    logger.info(
+        "finca_datos_agronomicos_actualizados",
+        finca_id=str(finca.id), campos=", ".join(cambios), rol=rol,
+    )
+    return {"status": "updated", "finca": _finca_a_dict(finca)}

@@ -3695,8 +3695,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/main.py": {
-    "mtime": 1787801462.0806406,
-    "ast_hash": "97c5c316205898ee5b6a21ee0b8892ce",
+    "mtime": 1787805760.75461,
+    "ast_hash": "de041d89c3573eca79a48384c35444d5",
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
@@ -3980,8 +3980,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/orchestrator.py": {
-    "mtime": 1787691942.3263814,
-    "ast_hash": "d59e7bdb0cf9c2d3a37f050a8cd56411",
+    "mtime": 1787806537.95662,
+    "ast_hash": "cb4e966e1edf5ae9dc7750c7f028ce89",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/rules_engine.py": {
@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787804819.1009707,
-    "ast_hash": "b5ece20bf80324e663f4cca8019c240a",
+    "mtime": 1787806660.1079714,
+    "ast_hash": "50f36dee3b4541822e71a48d895b72d6",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4545,8 +4545,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/aptitud.py": {
-    "mtime": 1787692192.6234882,
-    "ast_hash": "01b32af3a363047c40b458fcde893aea",
+    "mtime": 1787806537.9451041,
+    "ast_hash": "22e966946aac70c613ec5d7eef895c9d",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/auth_utils.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787711098.0407586,
-    "ast_hash": "d612a60414df4a2ddcfe219344e3e36f",
+    "mtime": 1787805964.2348292,
+    "ast_hash": "42e21962b1d37bfff4ba0ac9e8f049fd",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4785,18 +4785,23 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/ml_oracle.py": {
-    "mtime": 1787804243.2339375,
-    "ast_hash": "4d08505ba30e6b62be6127140192541a",
+    "mtime": 1787805869.1317344,
+    "ast_hash": "112bfd1e97228233955177ca09ef6706",
     "semantic_hash": ""
   },
   "apps/ml/agroia_ml/train_colombia.py": {
-    "mtime": 1787803662.386569,
-    "ast_hash": "658cfe9e789db0b927932e8bfbbb1882",
+    "mtime": 1787805869.1317344,
+    "ast_hash": "ecf743b02f8300c4b2a1d321e62ab8ad",
     "semantic_hash": ""
   },
   "apps/ml/models/ml_meta.json": {
-    "mtime": 1787803694.3056154,
-    "ast_hash": "2bdbbc2a4b020c7a950d5c01a2e147e4",
+    "mtime": 1787806365.602024,
+    "ast_hash": "28063d84e808c2c1c44b46cf7c56d8c2",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/asegurar_reglas.py": {
+    "mtime": 1787805746.3671162,
+    "ast_hash": "bfae2975175e5f6485fa1407cd43235d",
     "semantic_hash": ""
   }
 }

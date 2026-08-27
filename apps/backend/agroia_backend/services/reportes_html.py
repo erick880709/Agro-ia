@@ -75,6 +75,10 @@ _CSS = """
   .badge-ok      { color: #a9c584; border-color: rgba(135,169,92,.55); background: rgba(135,169,92,.10); }
   .badge-noapta  { color: #f0a08e; border-color: var(--clay); background: rgba(192,91,69,.18); }
   .badge-apta    { color: #a9c584; border-color: rgba(135,169,92,.55); background: rgba(135,169,92,.10); }
+  .badge-pendiente { color: #b45309; border-color: #d97706; background: rgba(217,119,6,.12); }
+  .badge-preliminar { color: #92400e; border-color: #d97706; background: rgba(217,119,6,.10); }
+  .badge-textura { color: #7c2d12; border-color: #c2410c; background: rgba(194,65,12,.10); }
+  .badge-validada { color: #166534; border-color: #16a34a; background: rgba(22,163,74,.12); }
 
   .verdict { margin-top: 16px; padding: 12px 16px; border-left: 3px solid var(--clay); background: rgba(192,91,69,.08); font-family: var(--mono); font-size: .82rem; }
   .verdict b { font-weight: 500; }
@@ -127,6 +131,10 @@ _CSS = """
   .plano-stat b { display: block; font-family: var(--mono); font-size: 1.05rem; color: var(--moss); }
   .clima-muestra { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--line);
     border-radius: 10px; background: rgba(135,169,92,.07); }
+  .ctx { font-size: .8rem; margin-top: 4px; line-height: 1.45; }
+  td.plan { font-size: .8rem; color: #36593f; line-height: 1.45; min-width: 220px; }
+  .alerta-fito { margin: 10px 0 4px; padding: 10px 12px; border: 1px solid #d97706;
+    border-radius: 8px; background: rgba(217,119,6,.08); color: #7c2d12; font-size: .86rem; }
   .ft-intro { font-family: var(--serif); font-size: 1.08rem; margin-bottom: 16px; }
   .ft-sub { font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--moss); margin: 16px 0 8px; }
   .ft-para { font-size: .92rem; }
@@ -151,7 +159,8 @@ _CSS = """
     .tile { background: #f6f6f6; border-color: #ccc; }
     td, th { border-color: #ccc; }
     .toolbar { display: none; }
-    .badge-exceso, .badge-deficit, .badge-noapta, .badge-apta, .badge-ok { background: none; }
+    .badge-exceso, .badge-deficit, .badge-noapta, .badge-apta, .badge-ok,
+    .badge-pendiente, .badge-preliminar, .badge-textura, .badge-validada { background: none; }
     /* PDF: una matriz por parámetro, sin pestañas ni vista unificada */
     .heatmap .heat-tabs { display: none !important; }
     .heatmap .heat-var { display: block !important; }
@@ -195,14 +204,51 @@ def _badge_clasificacion(clas: str) -> str:
     return '<span class="badge badge-deficit">' + esc(clas or "—").upper() + "</span>"
 
 
+def _badge_validacion(estado: str | None) -> str:
+    """Badge del estado de validación del reporte (#4/#12)."""
+    e = (estado or "").lower().strip()
+    if e == "pendiente_validacion" or "pendiente" in e:
+        return '<span class="badge badge-pendiente">PENDIENTE DE VALIDACIÓN TÉCNICA</span>'
+    if "textura" in e:
+        return '<span class="badge badge-textura">SUJETA A CONFIRMACIÓN DE TEXTURA</span>'
+    if e == "preliminar":
+        return '<span class="badge badge-preliminar">PRELIMINAR</span>'
+    if e == "validada":
+        return '<span class="badge badge-validada">VALIDADA</span>'
+    return ""
+
+
+def _nivel_calibracion(dispositivo, finca) -> str:
+    """Calidad de datos de 3 niveles (#1): nunca 'Calibrado' a secas."""
+    if (finca or {}).get("validacion_laboratorio"):
+        return "Validado en laboratorio"
+    if dispositivo and dispositivo.get("npk_calibrado"):
+        return "Calibrado de fábrica"
+    return "Sin validar"
+
+
+def _badge_estado_final(clas: str, estado: str | None) -> str:
+    """Badge de clasificación que respeta el umbral duro de confianza (#12)."""
+    e = (estado or "").lower()
+    if e == "pendiente_validacion" or "textura" in e:
+        return _badge_validacion(e)
+    badge = _badge_clasificacion(clas)
+    if e == "preliminar":
+        return badge + ' <span class="badge badge-preliminar">PRELIMINAR</span>'
+    return badge + ' <span class="badge badge-validada">VALIDADA</span>' if e == "validada" else badge
+
+
 def _telemetria(lectura, dispositivo, finca) -> str:
+    nivel = _nivel_calibracion(dispositivo, finca)
+    lab = "Sí" if (finca or {}).get("validacion_laboratorio") else "No"
     tiles = [
         ("Dispositivo", dispositivo.get("device_id") if dispositivo else (lectura.get("sensor_id") or "—"), ""),
         ("Finca", finca.get("nombre"), f"{finca.get('municipio') or ''}, {finca.get('departamento') or ''}".strip(", ")),
         ("Última transmisión", _fecha(lectura.get("ts")), ""),
         ("RSSI", _num(dispositivo.get("rssi") if dispositivo else None), "dBm"),
         ("Uptime", _num((dispositivo.get("uptime_s") or 0) / 60 if dispositivo else None, 0), "min"),
-        ("Calidad NPK", "Calibrado" if dispositivo and dispositivo.get("npk_calibrado") else "Sin calibrar", ""),
+        ("Calidad NPK", nivel, "nivel más bajo alcanzado"),
+        ("Validación lab", lab, "análisis certificado"),
         ("pH", _num(lectura.get("ph")), ""),
         ("Conductividad", _num(lectura.get("conductividad_electrica")), "dS/m"),
         ("N", _num(lectura.get("nitrogeno")), "ppm"),
@@ -245,26 +291,75 @@ def _ph_scale(ph) -> str:
 def _seccion_uc2(a) -> str:
     if not a:
         return ""
-    filas = "".join(
-        f"""<tr><td class="mono">{esc(r.get("variable"))}</td>
-        <td>{_badge(r.get("estado"))}</td>
-        <td class="num">{_num(r.get("valor_actual"))}</td>
-        <td class="mono">{esc(str(r.get("rango_ideal") or "—"))}</td>
-        <td>{esc(r.get("accion") or "—")}</td>
-        <td class="mono">{esc(r.get("prioridad") or "—")}</td></tr>"""
-        for r in (a.get("recomendaciones") or [])
-    )
+    filas = []
+    for r in (a.get("recomendaciones") or []):
+        accion = esc(r.get("accion") or "—")
+        if r.get("condicional"):
+            accion += (
+                ' <span class="badge badge-preliminar">CONDICIONAL A CONFIRMACIÓN '
+                "DE LABORATORIO</span>"
+            )
+        contexto = r.get("contexto")
+        if contexto:
+            accion += f'<div class="ctx muted">{esc(contexto)}</div>'
+        plan = r.get("plan") or {}
+        plan_html = ""
+        partes_plan = []
+        if plan.get("fuente"):
+            partes_plan.append(f"<b>Fuente:</b> {esc(plan['fuente'])}")
+        if plan.get("frecuencia"):
+            partes_plan.append(f"<b>Frecuencia:</b> {esc(plan['frecuencia'])}")
+        if plan.get("dosis"):
+            partes_plan.append(f"<b>Dosis:</b> {esc(plan['dosis'])}")
+        if partes_plan:
+            plan_html = "<br>".join(partes_plan)
+        filas.append(
+            f"""<tr><td class="mono">{esc(r.get("variable"))}</td>
+            <td>{_badge(r.get("estado"))}</td>
+            <td class="num">{_num(r.get("valor_actual"))}</td>
+            <td class="mono">{esc(str(r.get("rango_ideal") or "—"))}</td>
+            <td>{accion}</td>
+            <td class="mono">{esc(r.get("prioridad") or "—")}</td>
+            <td class="mono">{esc(r.get("confiabilidad") or "—")}</td>
+            <td class="plan">{plan_html or "—"}</td></tr>"""
+        )
     clas = a.get("clasificacion_upra")
+    estado = a.get("estado_validacion")
+    respaldos = int(a.get("respaldos") or 0)
+    confianza = (a.get("confianza") or 0) * 100
+    confianza_real = (a.get("confianza_real") or 0) * 100
+    respaldo_html = (
+        f'<div class="muted" style="margin-top:6px">✅ Respaldada por '
+        f"<b>{respaldos}</b> aceptación{'' if respaldos == 1 else 'es'} de "
+        "expertos (admin/agrónomo) — cada aceptación refuerza la confianza "
+        "del modelo.</div>"
+        if respaldos else ""
+    )
+    fenologia_html = ""
+    if a.get("fenologia_ajustada"):
+        fenologia_html = (
+            f'<div class="ctx muted" style="margin-top:6px">🌱 '
+            f"{esc(a['fenologia_ajustada'])}</div>"
+        )
+    faltantes = a.get("variables_faltantes_fertilidad") or []
+    faltantes_html = ""
+    if faltantes:
+        faltantes_html = (
+            '<div class="ctx muted" style="margin-top:6px">🔬 Variables de '
+            f"fertilidad sin dato: {esc(', '.join(faltantes))}. La confianza "
+            "global del reporte se redujo por esta falta de información.</div>"
+        )
     return f"""
   <section class="block">
     <div class="block-head"><span class="block-num">01</span>
       <div><div class="block-title">Diagnóstico para cultivo sembrado — {esc(a.get("cultivo") or "—")}</div>
       <div class="block-sub">Recomendación para el cultivo · motor de reglas</div></div>
     </div>
-    <div style="margin-bottom:14px">{_badge_clasificacion(clas)} &nbsp; <span class="mono" style="color:var(--muted)">confianza {(a.get("confianza") or 0) * 100:.0f}%</span></div>
+    <div style="margin-bottom:14px">{_badge_estado_final(clas, estado)} &nbsp; <span class="mono" style="color:var(--muted)">confianza {confianza:.0f}% (real {confianza_real:.0f}%)</span></div>
+    {respaldo_html}{fenologia_html}{faltantes_html}
     <table>
-      <tr><th>Variable</th><th>Estado</th><th>Lectura</th><th>Rango ideal</th><th>Acción</th><th>Prioridad</th></tr>
-      {filas or '<tr><td colspan="6">Sin violaciones de reglas.</td></tr>'}
+      <tr><th>Variable</th><th>Estado</th><th>Lectura</th><th>Rango ideal</th><th>Acción</th><th>Prioridad</th><th>Confiabilidad</th><th>Plan sugerido</th></tr>
+      {''.join(filas) or '<tr><td colspan="8">Sin violaciones de reglas.</td></tr>'}
     </table>
     <div class="verdict"><b>Clasificación: {esc(clas or "—")}</b> — {esc((a.get("justificacion") or {}).get("resumen") or "")}</div>
   </section>"""
@@ -284,12 +379,33 @@ def _seccion_uc1(a) -> str:
         </div>"""
         for i, s in enumerate(sugerencias)
     )
+    estado = a.get("estado_validacion")
+    respaldos = int(a.get("respaldos") or 0)
+    confianza = (a.get("confianza") or 0) * 100
+    confianza_real = (a.get("confianza_real") or 0) * 100
+    respaldo_html = (
+        f'<div class="muted" style="margin-top:6px">✅ Respaldada por '
+        f"<b>{respaldos}</b> aceptación{'' if respaldos == 1 else 'es'} de "
+        "expertos (admin/agrónomo) — cada aceptación refuerza la confianza "
+        "del modelo.</div>"
+        if respaldos else ""
+    )
+    faltantes = a.get("variables_faltantes_fertilidad") or []
+    faltantes_html = ""
+    if faltantes:
+        faltantes_html = (
+            '<div class="ctx muted" style="margin-top:6px">🔬 Variables de '
+            f"fertilidad sin dato: {esc(', '.join(faltantes))}. La confianza "
+            "global del reporte se redujo por esta falta de información.</div>"
+        )
     return f"""
   <section class="block">
     <div class="block-head"><span class="block-num">02</span>
       <div><div class="block-title">Recomendación de siembra</div>
       <div class="block-sub">¿Qué conviene sembrar? · ranking del motor</div></div>
     </div>
+    <div style="margin-bottom:10px">{_badge_estado_final(a.get("clasificacion_upra"), estado)} &nbsp; <span class="mono" style="color:var(--muted)">confianza {confianza:.0f}% (real {confianza_real:.0f}%)</span></div>
+    {respaldo_html}{faltantes_html}
     {ranking or '<p>Sin cultivos evaluables.</p>'}
     <div class="verdict"><b>Top:</b> {esc(a.get("cultivo") or "—")} ({esc(a.get("clasificacion_upra") or "—")})</div>
   </section>"""
@@ -321,6 +437,31 @@ _VERDE = "#2e7d32"
 _AMBAR = "#f9a825"
 _ROJO = "#c62828"
 _GRIS = "#eceff1"
+
+# ── Antecedentes fitosanitarios por cultivo (humedad relativa alta) (#10) ──
+_ALERTAS_FITOSANITARIAS = {
+    "aguacate": "Phytophthora cinnamomi (pudrición radicular) — frecuente en "
+                "zonas cafeteras húmedas: asegure drenaje, evite encharcamientos "
+                "y revise el cuello de la raíz.",
+    "cacao": "Moniliasis (Moniliophthora roreri) — la alta humedad favorece la "
+             "esporulación: retire y destruya frutos enfermos semanalmente.",
+    "café": "Roya (Hemileia vastatrix) — con HR alta vigile variedades "
+            "susceptibles y haga monitoreo semanal del envés de las hojas.",
+    "tomate": "Tizón tardío (Phytophthora infestans) — riesgo alto con HR > 80%: "
+              "manejo preventivo y evitar mojar el follaje al regar.",
+    "papa": "Gota o tizón tardío (Phytophthora infestans) — monitorear y rotar "
+            "ingredientes activos ante condiciones favorables.",
+    "papaya": "Antracnosis (Colletotrichum) — la humedad alta favorece la "
+             "enfermedad en frutos en formación.",
+    "plátano": "Sigatoka negra (Mycosphaerella fijiensis) — la HR alta acelera "
+               "su avance; deshoje sanitario y monitoreo.",
+    "mango": "Antracnosis (Colletotrichum gloeosporioides) — vigilar en "
+             "floración y cuajado con HR alta.",
+    "naranja": "Gomosis (Phytophthora spp.) — con HR alta evite heridas en el "
+               "cuello del árbol y encharcamiento.",
+    "limón": "Gomosis (Phytophthora spp.) — con HR alta evite heridas en el "
+             "cuello del árbol y encharcamiento.",
+}
 # Rampa de intensidad por valor: más intenso = valor más alto (cada parámetro)
 _VERDE_CLARO = "#e8f5e9"
 _VERDE_INTENSO = "#1b5e20"
@@ -571,7 +712,12 @@ def _perimetro_poligono(pts: list[tuple[float, float]]) -> float:
     return total
 
 
-def _seccion_plano_lote(muestras: list[dict] | None, finca: dict | None, clima: dict | None = None) -> str:
+def _seccion_plano_lote(
+    muestras: list[dict] | None,
+    finca: dict | None,
+    clima: dict | None = None,
+    cultivo_nombre: str | None = None,
+) -> str:
     """Plano del lote: dibujo de los puntos de muestreo (pos_x, pos_y).
 
     - Los puntos (0, 0) se omiten (sensor sin posición real).
@@ -636,7 +782,34 @@ def _seccion_plano_lote(muestras: list[dict] | None, finca: dict | None, clima: 
             f'<div class="plano-stat"><b>{_num(area_reg, 2)} ha</b>'
             'área registrada de la finca (referencia)</div>'
         )
+    pendiente = (finca or {}).get("pendiente_pct")
+    if pendiente is not None:
+        stats += (
+            f'<div class="plano-stat"><b>{_num(pendiente, 1)} %</b>'
+            'pendiente del lote</div>'
+        )
+    drenaje = (finca or {}).get("drenaje")
+    if drenaje:
+        stats += (
+            f'<div class="plano-stat"><b>{esc(str(drenaje))}</b>'
+            'drenaje del lote</div>'
+        )
     stats += "</div>"
+
+    # ── Metodología de muestreo (#11): grilla ciega vs puntos dirigidos ──
+    xs_uniq = sorted({p[0] for p in puntos})
+    ys_uniq = sorted({p[1] for p in puntos})
+    es_grilla = len(puntos) >= 4 and len(xs_uniq) * len(ys_uniq) == len(puntos)
+    metodologia = (
+        "<b>Grilla ciega (muestreo sistemático)</b>: los puntos se distribuyen en "
+        "una retícula regular del lote; la variabilidad espacial del mapa de calor "
+        "es representativa de toda el área."
+        if es_grilla else
+        "<b>Puntos dispersos (muestreo dirigido)</b>: los puntos no siguen una "
+        "grilla regular; posiblemente corresponden a unidades de manejo "
+        "diferenciado (pendiente, drenaje o uso histórico). Interprete la "
+        "variabilidad espacial con esa reserva."
+    )
 
     # ── SVG del lote ──
     margen_x, margen_y_sup, margen_y_inf, margen_der = 46, 14, 40, 18
@@ -739,7 +912,51 @@ def _seccion_plano_lote(muestras: list[dict] | None, finca: dict | None, clima: 
     # ── Clima del día de la muestra (solo si la finca tiene coordenadas) ──
     clima_html = ""
     if clima:
-        clima_html = _bloque_clima_muestra(clima, fechas)
+        clima_html = _bloque_clima_muestra(clima, fechas, cultivo_nombre)
+
+    # ── Historial de manejo del lote (#7) y fenología (#9) ──
+    manejo_html = ""
+    historial = (finca or {}).get("historial_agronomico") or {}
+    cultivo_sembrado = (finca or {}).get("cultivo_sembrado")
+    edad = (finca or {}).get("edad_anos")
+    etapa = (finca or {}).get("etapa_fenologica")
+    items_manejo = []
+    if historial.get("cultivo_anterior"):
+        items_manejo.append(f"Cultivo anterior: {esc(str(historial['cultivo_anterior']))}")
+    if historial.get("fecha_ultima_fertilizacion"):
+        items_manejo.append(
+            f"Última fertilización: {esc(str(historial['fecha_ultima_fertilizacion']))}"
+            + (f" — dosis: {esc(str(historial['dosis_aplicada']))}" if historial.get("dosis_aplicada") else "")
+        )
+    if historial.get("fecha_ultimo_encalado"):
+        items_manejo.append(f"Último encalado: {esc(str(historial['fecha_ultimo_encalado']))}")
+    if historial.get("observaciones"):
+        items_manejo.append(f"Observaciones: {esc(str(historial['observaciones']))}")
+    if cultivo_sembrado:
+        items_manejo.append(
+            f"Cultivo sembrado: {esc(str(cultivo_sembrado))}"
+            + (f" · edad ~{_num(edad, 1)} años" if edad is not None else "")
+            + (f" · etapa {esc(str(etapa))}" if etapa else "")
+        )
+    if items_manejo:
+        manejo_html = (
+            '<div class="clima-muestra">'
+            '<div class="heat-title">🚜 Historial de manejo del lote</div>'
+            '<ul class="warnings">' + "".join(f"<li>{m}</li>" for m in items_manejo) + "</ul>"
+            '<p class="muted">Sin este historial, valores altos de N/K pueden '
+            'malinterpretarse como exceso natural del suelo cuando en realidad '
+            'son residuales de una aplicación reciente.</p>'
+            '</div>'
+        )
+    else:
+        manejo_html = (
+            '<div class="clima-muestra">'
+            '<div class="heat-title">🚜 Historial de manejo del lote</div>'
+            '<p class="muted">No se registró historial agronómico (cultivo '
+            'anterior, fertilización o encalado). Registre estos datos para '
+            'interpretar correctamente los niveles de N/K y MO.</p>'
+            '</div>'
+        )
 
     return f"""
   <section class="block plano-lote">
@@ -751,12 +968,16 @@ def _seccion_plano_lote(muestras: list[dict] | None, finca: dict | None, clima: 
     La silueta verde es la forma del lote que encierran los puntos; de ella se estiman el perímetro y el área.</p>
     {stats}
     {svg}
+    <div class="muted" style="margin-top:8px">📐 Metodología de muestreo: {metodologia}</div>
     {clima_html}
+    {manejo_html}
     {nota_cero}
   </section>"""
 
 
-def _bloque_clima_muestra(clima: dict, fechas: list[str]) -> str:
+def _bloque_clima_muestra(
+    clima: dict, fechas: list[str], cultivo_nombre: str | None = None
+) -> str:
     """Bloque de clima del día de la muestra (IDEAM) + notas para recomendaciones."""
     tmin = clima.get("temperatura_min")
     tmax = clima.get("temperatura_max")
@@ -811,6 +1032,14 @@ def _bloque_clima_muestra(clima: dict, fechas: list[str]) -> str:
             "Humedad relativa alta: mayor riesgo de enfermedades fúngicas; "
             "vigile el cultivo y evite riegos excesivos."
         )
+    # ── Riesgo fitosanitario cruzado con clima (#10) ──
+    alerta_fito = None
+    if h >= 78 and cultivo_nombre:
+        nombre_l = str(cultivo_nombre).lower()
+        for clave, alerta in _ALERTAS_FITOSANITARIAS.items():
+            if clave in nombre_l:
+                alerta_fito = alerta
+                break
     if t < 10 or t > 32:
         notas.append(
             f"Temperatura promedio de {_num(t, 1)} °C fuera del rango confortable para la "
@@ -823,11 +1052,18 @@ def _bloque_clima_muestra(clima: dict, fechas: list[str]) -> str:
         )
 
     lista_notas = "".join(f"<li>{n}</li>" for n in notas)
+    fito_html = ""
+    if alerta_fito:
+        fito_html = (
+            '<div class="alerta-fito">🛡️ <b>Alerta fitosanitaria específica '
+            f"({esc(str(cultivo_nombre))}):</b> {alerta_fito}</div>"
+        )
     return f"""
     <div class="clima-muestra">
       <div class="heat-title">🌦️ Clima del día de la muestra{f' — {esc(fecha_txt)}' if fecha_txt else ''}</div>
       {tiles}
       <p class="muted">Fuente: {esc(fuente)}</p>
+      {fito_html}
       <div class="heat-title">Cómo usar estos datos en las recomendaciones</div>
       <ul class="warnings">{lista_notas}</ul>
     </div>"""
@@ -863,7 +1099,10 @@ def generar_reporte_html(
     seccion_mapa = _seccion_mapa_calor(muestras, umbrales)
 
     # Plano del lote (puntos de muestreo + silueta + perímetro/área + clima)
-    seccion_plano = _seccion_plano_lote(muestras, finca, clima)
+    cultivo_nombre = (
+        (uc2 or {}).get("cultivo") or (uc1 or {}).get("cultivo")
+    )
+    seccion_plano = _seccion_plano_lote(muestras, finca, clima, cultivo_nombre)
 
     # Explicación en lenguaje campesino (siempre que haya análisis)
     explicacion_campo = generar_explicacion_campesina(uc1=uc1, uc2=uc2, lectura=lectura)
@@ -881,10 +1120,11 @@ def generar_reporte_html(
 
     pasos = [
         "Validar la calibración NPK del sensor contra un análisis de laboratorio antes de aplicar fertilizantes.",
+        "Completar las variables de fertilidad faltantes (MO, CIC, Ca, Mg, S, Fe, Mn, Zn, Cu, B) para subir la confianza del reporte.",
         "Corregir el pH con encalado dolomítico (suelo ácido) o yeso agrícola (suelo alcalino) según la recomendación.",
         "Aplicar el plan de fertilización fraccionado indicado en la tabla de diagnóstico.",
         "Replicar el análisis tras 3–4 semanas para verificar la evolución de las variables.",
-        "Escalar al técnico agrónomo si la confianza del reporte es menor al 80%.",
+        "Escalar al técnico agrónomo si la confianza del reporte es menor al 80% (la clasificación quedará marcada como 'Pendiente de validación técnica').",
     ]
 
     html = f"""<!DOCTYPE html>

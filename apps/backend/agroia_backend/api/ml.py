@@ -6,10 +6,11 @@ GET /api/v1/ml/estado — modelos registrados, métricas y artefactos.
 import json
 
 from fastapi import APIRouter, Depends
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia.database import get_db
+from agroia_backend.models.aceptacion_recomendacion import AceptacionRecomendacion
 from agroia_backend.models.metrica_modelo import MetricaModelo
 from agroia_backend.models.modelo_ml import ModeloML
 from agroia_backend.services.ml_oracle import MLOracleService
@@ -60,4 +61,9 @@ async def estado_ml(db: AsyncSession = Depends(get_db)):
         "artefactos_meta": artefactos_meta,
         "oraculo_ml_disponible": oracle.disponible(),
         "n_artefactos": len(list(oracle.dir.glob("ml_*.joblib"))) if oracle.dir.exists() else 0,
+        "validaciones_humanas": int(
+            (await db.execute(
+                select(func.count(AceptacionRecomendacion.id))
+            )).scalar_one() or 0
+        ),
     }

@@ -90,6 +90,24 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 3. **Reentrenamiento**: 75 000 muestras → **17 modelos de diagnóstico** (F1 0.82–0.99, ahora cubre Ca/Mg/S/Fe/Mn/Zn/Cu/B) + aptitud UPRA (F1 0.9111). Concordancia media en datos reales **0.6591 < 0.85** → permanece en **STAGING** de forma honesta; se promoverá a PRODUCTION cuando la BD acumule más lecturas calibradas (umbral de calidad 0.85).
 4. **UI**: la tabla «🌾 Cultivos sugeridos (ranking del motor)» ahora incluye la columna **«Descripción de reglas aplicadas»** (variable, estado, rango ideal, acción correctiva y prioridad por regla), además del conteo. Los ajustes pasaron de 3 a 5 y los rangos unilaterales se muestran como `≥ x` / `≤ y`.
 
+### Aceptación humana de recomendaciones (human-in-the-loop) y 12 mejoras al reporte (2026-08-27)
+
+- **Aceptación con feedback al modelo**: al final de la página Recomendaciones, Admin/Agrónomo ven el botón «✅ Aceptar recomendación» + caja de texto para ampliar acciones. `POST /api/v1/recomendaciones/aceptar` persiste la aceptación (tabla `aceptaciones_recomendacion`, migración 010) y cada aceptación suma **+0.02 de confianza** al modelo para esa finca/cultivo (máx +0.10). El análisis muestra `respaldos` y `/ml/estado` expone `validaciones_humanas`.
+- **Migración 010**: nuevos campos en `fincas` (pendiente %, drenaje, historial agronómico JSONB, validación de laboratorio, cultivo sembrado, edad, etapa fenológica) + tabla de aceptaciones. `PATCH /api/v1/fincas/{id}` (Admin/Agrónomo) los actualiza.
+- **12 mejoras al reporte** (validado en `reports/test_mejoras_demo.html`):
+  1. Calidad NPK en 3 niveles (Validado en laboratorio / Calibrado de fábrica / Sin validar) — la cabecera muestra el nivel más bajo, nunca "Calibrado" a secas.
+  2. pH contextualizado: "ácido en escala general, pero dentro/fuera del rango óptimo para <cultivo> [a–b]".
+  3. Acciones sobre NPK sin validar marcadas como **condicional a confirmación de laboratorio**.
+  4. Variables de fertilidad faltantes (MO, CIC, Ca, Mg, S, Fe, Mn, Zn, Cu, B) reducen la confianza global y etiquetan la clasificación como **preliminar**.
+  5. Cultivos sensibles a drenaje (aguacate, cacao, cítricos, palma) sin textura → "sujeta a confirmación de textura".
+  6. Plano del lote muestra pendiente (%) y drenaje junto al área/perímetro.
+  7. Bloque "Historial de manejo del lote" (cultivo anterior, fertilización, encalado, dosis).
+  8. Plan ejecutable por variable (fuente, frecuencia, dosis) — dosis "a definir por técnico agrónomo tras análisis de laboratorio" sin validación lab.
+  9. Ajustes por etapa fenológica (vegetativa/floración/fructificación/cosecha).
+  10. Alerta fitosanitaria específica cuando la HR > 78 % (Phytophthora en aguacate, moniliasis en cacao, roya en café…).
+  11. Metodología de muestreo del mapa de calor (grilla ciega vs puntos dirigidos).
+  12. Umbral duro de confianza < 80 % → la clasificación se muestra como **Pendiente de validación técnica** (no "Apta" a secas).
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).

@@ -2,8 +2,8 @@
 import uuid
 
 from agroia.database import Base
-from sqlalchemy import Float, ForeignKey, String
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Boolean, Float, ForeignKey, String
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from agroia_backend.models import TenantMixin, TimestampMixin
@@ -64,6 +64,32 @@ class Finca(Base, TenantMixin, TimestampMixin):
     )
     ancho_metros: Mapped[float | None] = mapped_column(
         Float, nullable=True, comment="Ancho del terreno en metros (opcional)"
+    )
+    # ── Topografía, drenaje e historial de manejo (2026-08-27) ──
+    pendiente_pct: Mapped[float | None] = mapped_column(
+        Float, nullable=True, comment="Pendiente del lote en porcentaje"
+    )
+    drenaje: Mapped[str | None] = mapped_column(
+        String(20), nullable=True,
+        comment="Drenaje del lote: Bueno | Regular | Deficiente"
+    )
+    historial_agronomico: Mapped[dict | None] = mapped_column(
+        JSONB, nullable=True,
+        comment="Historial de manejo: cultivo anterior, fertilización, encalado"
+    )
+    validacion_laboratorio: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false",
+        comment="¿El análisis fue validado en laboratorio?"
+    )
+    cultivo_sembrado: Mapped[str | None] = mapped_column(
+        String(100), nullable=True, comment="Cultivo actualmente sembrado"
+    )
+    edad_anos: Mapped[float | None] = mapped_column(
+        Float, nullable=True, comment="Edad del cultivo/árbol en años"
+    )
+    etapa_fenologica: Mapped[str | None] = mapped_column(
+        String(30), nullable=True,
+        comment="Etapa fenológica: Vegetativa | Floración | Fructificación | Cosecha"
     )
 
     def __repr__(self) -> str:
