@@ -4,15 +4,598 @@
   "graph": {},
   "nodes": [
     {
+      "label": "Documento_Funcional_Tecnico_AgroIA.md",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia",
+      "community": 891,
+      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
+      "norm_label": "documento_funcional_tecnico_agroia.md"
+    },
+    {
+      "label": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "community": 891,
+      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
+      "norm_label": "documento funcional-tecnico \u2014 agroia (agrointeligente colombia)"
+    },
+    {
+      "label": "Tabla de contenidos",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_tabla_de_contenidos",
+      "community": 891,
+      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
+      "norm_label": "tabla de contenidos"
+    },
+    {
+      "label": "1. Prop\u00f3sito del documento",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_1_prop\u00f3sito_del_documento",
+      "community": 891,
+      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
+      "norm_label": "1. proposito del documento"
+    },
+    {
+      "label": "2. Visi\u00f3n general y stack tecnol\u00f3gico",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L41",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_2_visi\u00f3n_general_y_stack_tecnol\u00f3gico",
+      "community": 891,
+      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
+      "norm_label": "2. vision general y stack tecnologico"
+    },
+    {
+      "label": "3. Arquitectura de componentes",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L60",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_3_arquitectura_de_componentes",
+      "community": 891,
+      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
+      "norm_label": "3. arquitectura de componentes"
+    },
+    {
+      "label": "4. Autenticaci\u00f3n y sesi\u00f3n (lo m\u00e1s b\u00e1sico)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L121",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_4_autenticaci\u00f3n_y_sesi\u00f3n_lo_m\u00e1s_b\u00e1sico",
+      "community": 901,
+      "community_name": "4. Autenticaci\u00f3n y sesi\u00f3n (lo m\u00e1s b\u00e1sico)",
+      "norm_label": "4. autenticacion y sesion (lo mas basico)"
+    },
+    {
+      "label": "4.1 Pantalla de login",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L123",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_4_1_pantalla_de_login",
+      "community": 901,
+      "community_name": "4. Autenticaci\u00f3n y sesi\u00f3n (lo m\u00e1s b\u00e1sico)",
+      "norm_label": "4.1 pantalla de login"
+    },
+    {
+      "label": "4.2 Servicio que se invoca",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L130",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_4_2_servicio_que_se_invoca",
+      "community": 901,
+      "community_name": "4. Autenticaci\u00f3n y sesi\u00f3n (lo m\u00e1s b\u00e1sico)",
+      "norm_label": "4.2 servicio que se invoca"
+    },
+    {
+      "label": "4.3 Sesi\u00f3n en el cliente",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L160",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_4_3_sesi\u00f3n_en_el_cliente",
+      "community": 901,
+      "community_name": "4. Autenticaci\u00f3n y sesi\u00f3n (lo m\u00e1s b\u00e1sico)",
+      "norm_label": "4.3 sesion en el cliente"
+    },
+    {
+      "label": "4.4 Roles, permisos y cabeceras",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L166",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_4_4_roles_permisos_y_cabeceras",
+      "community": 901,
+      "community_name": "4. Autenticaci\u00f3n y sesi\u00f3n (lo m\u00e1s b\u00e1sico)",
+      "norm_label": "4.4 roles, permisos y cabeceras"
+    },
+    {
+      "label": "5. El frontend SPA: navegaci\u00f3n y utilidades",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L190",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_5_el_frontend_spa_navegaci\u00f3n_y_utilidades",
+      "community": 891,
+      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
+      "norm_label": "5. el frontend spa: navegacion y utilidades"
+    },
+    {
+      "label": "6. Recorrido secci\u00f3n por secci\u00f3n",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L210",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
+      "community": 893,
+      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
+      "norm_label": "6. recorrido seccion por seccion"
+    },
+    {
+      "label": "6.1 \ud83c\udfe0 Inicio (Dashboard)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L212",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_1_inicio_dashboard",
+      "community": 893,
+      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
+      "norm_label": "6.1 \ud83c\udfe0 inicio (dashboard)"
+    },
+    {
+      "label": "6.2 \ud83d\udce1 Sensores IoT",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L229",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_2_sensores_iot",
+      "community": 893,
+      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
+      "norm_label": "6.2 \ud83d\udce1 sensores iot"
+    },
+    {
+      "label": "6.3 \ud83d\udcc2 Cargar archivo",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L240",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_3_cargar_archivo",
+      "community": 893,
+      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
+      "norm_label": "6.3 \ud83d\udcc2 cargar archivo"
+    },
+    {
+      "label": "6.4 \ud83e\uddea Recomendaciones (la secci\u00f3n central)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L260",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_4_recomendaciones_la_secci\u00f3n_central",
+      "community": 893,
+      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
+      "norm_label": "6.4 \ud83e\uddea recomendaciones (la seccion central)"
+    },
+    {
+      "label": "6.5 \ud83d\udcdc Historial",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L310",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_5_historial",
+      "community": 893,
+      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
+      "norm_label": "6.5 \ud83d\udcdc historial"
+    },
+    {
+      "label": "6.6 \ud83d\udcc4 Reportes",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L316",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_6_reportes",
+      "community": 893,
+      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
+      "norm_label": "6.6 \ud83d\udcc4 reportes"
+    },
+    {
+      "label": "6.7 \ud83c\udfe1 Fincas \u2014 registro en 3 secciones, validaci\u00f3n y lotes (registro solo Admin)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L337",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_7_fincas_registro_en_3_secciones_validaci\u00f3n_y_lotes_registro_solo_admin",
+      "community": 893,
+      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
+      "norm_label": "6.7 \ud83c\udfe1 fincas \u2014 registro en 3 secciones, validacion y lotes (registro solo admin)"
+    },
+    {
+      "label": "6.8 \ud83d\udc65 Usuarios (solo Admin)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L372",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_8_usuarios_solo_admin",
+      "community": 893,
+      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
+      "norm_label": "6.8 \ud83d\udc65 usuarios (solo admin)"
+    },
+    {
+      "label": "6.9 \ud83c\udf3e Cat\u00e1logo (Admin/Agr\u00f3nomo gestionan; Cliente consulta)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L380",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_9_cat\u00e1logo_admin_agr\u00f3nomo_gestionan_cliente_consulta",
+      "community": 893,
+      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
+      "norm_label": "6.9 \ud83c\udf3e catalogo (admin/agronomo gestionan; cliente consulta)"
+    },
+    {
+      "label": "6.10 \ud83d\udcac Chat asesor (pesta\u00f1a Reportes)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L391",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_10_chat_asesor_pesta\u00f1a_reportes",
+      "community": 893,
+      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
+      "norm_label": "6.10 \ud83d\udcac chat asesor (pestana reportes)"
+    },
+    {
+      "label": "7. Ingesta de datos IoT \u2014 `POST /api/sensor`",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L412",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_7_ingesta_de_datos_iot_post_api_sensor",
+      "community": 903,
+      "community_name": "7. Ingesta de datos IoT \u2014 `POST /api/sensor`",
+      "norm_label": "7. ingesta de datos iot \u2014 `post /api/sensor`"
+    },
+    {
+      "label": "7.1 Formato real de la trama del firmware",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L416",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_7_1_formato_real_de_la_trama_del_firmware",
+      "community": 903,
+      "community_name": "7. Ingesta de datos IoT \u2014 `POST /api/sensor`",
+      "norm_label": "7.1 formato real de la trama del firmware"
+    },
+    {
+      "label": "7.2 Procesamiento (paso a paso)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L434",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_7_2_procesamiento_paso_a_paso",
+      "community": 903,
+      "community_name": "7. Ingesta de datos IoT \u2014 `POST /api/sensor`",
+      "norm_label": "7.2 procesamiento (paso a paso)"
+    },
+    {
+      "label": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L446",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
+      "community": 894,
+      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
+      "norm_label": "8. el motor de recomendaciones (corazon del sistema)"
+    },
+    {
+      "label": "8.1 Pipeline completo (numerado)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L450",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_1_pipeline_completo_numerado",
+      "community": 894,
+      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
+      "norm_label": "8.1 pipeline completo (numerado)"
+    },
+    {
+      "label": "8.2 Paso 1 \u2014 SueloAdapter y validaci\u00f3n (`services/data_adapters.py`)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L487",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_2_paso_1_sueloadapter_y_validaci\u00f3n_services_data_adapters_py",
+      "community": 894,
+      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
+      "norm_label": "8.2 paso 1 \u2014 sueloadapter y validacion (`services/data_adapters.py`)"
+    },
+    {
+      "label": "8.3 Paso 2 \u2014 Sistema experto: RulesEngine (`services/rules_engine.py`)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L496",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_3_paso_2_sistema_experto_rulesengine_services_rules_engine_py",
+      "community": 894,
+      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
+      "norm_label": "8.3 paso 2 \u2014 sistema experto: rulesengine (`services/rules_engine.py`)"
+    },
+    {
+      "label": "8.4 UC1 \u2014 AptitudService (`services/aptitud.py`)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L503",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_4_uc1_aptitudservice_services_aptitud_py",
+      "community": 894,
+      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
+      "norm_label": "8.4 uc1 \u2014 aptitudservice (`services/aptitud.py`)"
+    },
+    {
+      "label": "8.5 Paso 3 \u2014 ML en modo sombra: qu\u00e9 par\u00e1metros se env\u00edan al modelo",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L513",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_5_paso_3_ml_en_modo_sombra_qu\u00e9_par\u00e1metros_se_env\u00edan_al_modelo",
+      "community": 894,
+      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
+      "norm_label": "8.5 paso 3 \u2014 ml en modo sombra: que parametros se envian al modelo"
+    },
+    {
+      "label": "8.6 Paso 4 \u2014 Discordancia ML vs reglas",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L545",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_6_paso_4_discordancia_ml_vs_reglas",
+      "community": 894,
+      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
+      "norm_label": "8.6 paso 4 \u2014 discordancia ml vs reglas"
+    },
+    {
+      "label": "8.7 Paso 5 \u2014 Confianza real y estado de validaci\u00f3n",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L549",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_7_paso_5_confianza_real_y_estado_de_validaci\u00f3n",
+      "community": 894,
+      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
+      "norm_label": "8.7 paso 5 \u2014 confianza real y estado de validacion"
+    },
+    {
+      "label": "8.8 Paso 6 \u2014 Enriquecimiento de cada recomendaci\u00f3n (UC2)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L571",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_8_paso_6_enriquecimiento_de_cada_recomendaci\u00f3n_uc2",
+      "community": 894,
+      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
+      "norm_label": "8.8 paso 6 \u2014 enriquecimiento de cada recomendacion (uc2)"
+    },
+    {
+      "label": "8.9 Plan econ\u00f3mico de fertilizaci\u00f3n (brecha econ\u00f3mica)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L581",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_9_plan_econ\u00f3mico_de_fertilizaci\u00f3n_brecha_econ\u00f3mica",
+      "community": 894,
+      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
+      "norm_label": "8.9 plan economico de fertilizacion (brecha economica)"
+    },
+    {
+      "label": "8.10 Recomendaci\u00f3n sin datos: nunca se bloquea",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L590",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_10_recomendaci\u00f3n_sin_datos_nunca_se_bloquea",
+      "community": 894,
+      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
+      "norm_label": "8.10 recomendacion sin datos: nunca se bloquea"
+    },
+    {
+      "label": "9. Aceptaci\u00f3n humana de recomendaciones (human-in-the-loop)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L598",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_9_aceptaci\u00f3n_humana_de_recomendaciones_human_in_the_loop",
+      "community": 891,
+      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
+      "norm_label": "9. aceptacion humana de recomendaciones (human-in-the-loop)"
+    },
+    {
+      "label": "10. El modelo de Machine Learning: entrenamiento y artefactos",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L619",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_10_el_modelo_de_machine_learning_entrenamiento_y_artefactos",
+      "community": 899,
+      "community_name": "10. El modelo de Machine Learning: entrenamiento y artefactos",
+      "norm_label": "10. el modelo de machine learning: entrenamiento y artefactos"
+    },
+    {
+      "label": "10.1 Datos y etiquetado",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L623",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_10_1_datos_y_etiquetado",
+      "community": 899,
+      "community_name": "10. El modelo de Machine Learning: entrenamiento y artefactos",
+      "norm_label": "10.1 datos y etiquetado"
+    },
+    {
+      "label": "10.2 Modelos y m\u00e9tricas",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L630",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_10_2_modelos_y_m\u00e9tricas",
+      "community": 899,
+      "community_name": "10. El modelo de Machine Learning: entrenamiento y artefactos",
+      "norm_label": "10.2 modelos y metricas"
+    },
+    {
+      "label": "10.3 Artefactos y promoci\u00f3n",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L636",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_10_3_artefactos_y_promoci\u00f3n",
+      "community": 899,
+      "community_name": "10. El modelo de Machine Learning: entrenamiento y artefactos",
+      "norm_label": "10.3 artefactos y promocion"
+    },
+    {
+      "label": "10.4 Or\u00e1culo en producci\u00f3n",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L642",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_10_4_or\u00e1culo_en_producci\u00f3n",
+      "community": 899,
+      "community_name": "10. El modelo de Machine Learning: entrenamiento y artefactos",
+      "norm_label": "10.4 oraculo en produccion"
+    },
+    {
+      "label": "11. Reportes: anatom\u00eda del HTML generado",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L648",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_11_reportes_anatom\u00eda_del_html_generado",
+      "community": 891,
+      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
+      "norm_label": "11. reportes: anatomia del html generado"
+    },
+    {
+      "label": "12. Persistencia y base de datos",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L669",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_12_persistencia_y_base_de_datos",
+      "community": 900,
+      "community_name": "12. Persistencia y base de datos",
+      "norm_label": "12. persistencia y base de datos"
+    },
+    {
+      "label": "12.1 Tablas principales",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L674",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_12_1_tablas_principales",
+      "community": 900,
+      "community_name": "12. Persistencia y base de datos",
+      "norm_label": "12.1 tablas principales"
+    },
+    {
+      "label": "12.2 Enums (12 tipos en schema `agroia`)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L692",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_12_2_enums_12_tipos_en_schema_agroia",
+      "community": 900,
+      "community_name": "12. Persistencia y base de datos",
+      "norm_label": "12.2 enums (12 tipos en schema `agroia`)"
+    },
+    {
+      "label": "12.3 Migraciones (001 \u2192 014)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L696",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_12_3_migraciones_001_014",
+      "community": 900,
+      "community_name": "12. Persistencia y base de datos",
+      "norm_label": "12.3 migraciones (001 \u2192 014)"
+    },
+    {
+      "label": "12.4 Gotchas de Neon (lecciones aprendidas)",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L701",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_12_4_gotchas_de_neon_lecciones_aprendidas",
+      "community": 900,
+      "community_name": "12. Persistencia y base de datos",
+      "norm_label": "12.4 gotchas de neon (lecciones aprendidas)"
+    },
+    {
+      "label": "13. Despliegue y CI/CD",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L708",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_13_despliegue_y_ci_cd",
+      "community": 891,
+      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
+      "norm_label": "13. despliegue y ci/cd"
+    },
+    {
+      "label": "14. Seguridad y limitaciones conocidas",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L718",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_14_seguridad_y_limitaciones_conocidas",
+      "community": 891,
+      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
+      "norm_label": "14. seguridad y limitaciones conocidas"
+    },
+    {
+      "label": "15. Demo y restablecimiento de datos",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L728",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_15_demo_y_restablecimiento_de_datos",
+      "community": 891,
+      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
+      "norm_label": "15. demo y restablecimiento de datos"
+    },
+    {
+      "label": "16. Glosario",
+      "file_type": "document",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L735",
+      "_origin": "ast",
+      "id": "resources_architecture_documento_funcional_tecnico_agroia_16_glosario",
+      "community": 891,
+      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
+      "norm_label": "16. glosario"
+    },
+    {
       "label": "PROJECT_STATUS.md",
       "file_type": "document",
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "project_status",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "project_status.md"
+      "norm_label": "project_status.md",
+      "id": "project_status"
     },
     {
       "label": "AgroIA \u2014 Estado del Proyecto",
@@ -20,10 +603,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "project_status_agroia_estado_del_proyecto",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "agroia \u2014 estado del proyecto"
+      "norm_label": "agroia \u2014 estado del proyecto",
+      "id": "project_status_agroia_estado_del_proyecto"
     },
     {
       "label": "\ud83c\udfaf Objetivo",
@@ -31,10 +614,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "project_status_objetivo",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83c\udfaf objetivo"
+      "norm_label": "\ud83c\udfaf objetivo",
+      "id": "project_status_objetivo"
     },
     {
       "label": "\ud83d\udcca Estado por \u00e9pica",
@@ -42,10 +625,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "project_status_estado_por_\u00e9pica",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83d\udcca estado por epica"
+      "norm_label": "\ud83d\udcca estado por epica",
+      "id": "project_status_estado_por_\u00e9pica"
     },
     {
       "label": "\ud83c\udfd7\ufe0f Stack",
@@ -53,10 +636,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L23",
       "_origin": "ast",
-      "id": "project_status_stack",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83c\udfd7\ufe0f stack"
+      "norm_label": "\ud83c\udfd7\ufe0f stack",
+      "id": "project_status_stack"
     },
     {
       "label": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
@@ -64,10 +647,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L37",
       "_origin": "ast",
-      "id": "project_status_despliegue_gratuito_render_neon_supabase",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83d\ude80 despliegue gratuito (render + neon/supabase)"
+      "norm_label": "\ud83d\ude80 despliegue gratuito (render + neon/supabase)",
+      "id": "project_status_despliegue_gratuito_render_neon_supabase"
     },
     {
       "label": "Brecha econ\u00f3mica \u2014 plan de fertilizaci\u00f3n por presupuesto (2026-08-25)",
@@ -75,10 +658,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L41",
       "_origin": "ast",
-      "id": "project_status_brecha_econ\u00f3mica_plan_de_fertilizaci\u00f3n_por_presupuesto_2026_08_25",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "brecha economica \u2014 plan de fertilizacion por presupuesto (2026-08-25)"
+      "norm_label": "brecha economica \u2014 plan de fertilizacion por presupuesto (2026-08-25)",
+      "id": "project_status_brecha_econ\u00f3mica_plan_de_fertilizaci\u00f3n_por_presupuesto_2026_08_25"
     },
     {
       "label": "Retorno de inversi\u00f3n en el reporte (2026-08-27)",
@@ -86,10 +669,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L48",
       "_origin": "ast",
-      "id": "project_status_retorno_de_inversi\u00f3n_en_el_reporte_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "retorno de inversion en el reporte (2026-08-27)"
+      "norm_label": "retorno de inversion en el reporte (2026-08-27)",
+      "id": "project_status_retorno_de_inversi\u00f3n_en_el_reporte_2026_08_27"
     },
     {
       "label": "Chat asesor con contexto visual (2026-08-27)",
@@ -97,10 +680,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L55",
       "_origin": "ast",
-      "id": "project_status_chat_asesor_con_contexto_visual_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "chat asesor con contexto visual (2026-08-27)"
+      "norm_label": "chat asesor con contexto visual (2026-08-27)",
+      "id": "project_status_chat_asesor_con_contexto_visual_2026_08_27"
     },
     {
       "label": "Fisiolog\u00eda de cultivos (2026-08-27)",
@@ -108,10 +691,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L62",
       "_origin": "ast",
-      "id": "project_status_fisiolog\u00eda_de_cultivos_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "fisiologia de cultivos (2026-08-27)"
+      "norm_label": "fisiologia de cultivos (2026-08-27)",
+      "id": "project_status_fisiolog\u00eda_de_cultivos_2026_08_27"
     },
     {
       "label": "Limpieza de BD y finca demo (2026-08-27)",
@@ -119,10 +702,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L69",
       "_origin": "ast",
-      "id": "project_status_limpieza_de_bd_y_finca_demo_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "limpieza de bd y finca demo (2026-08-27)"
+      "norm_label": "limpieza de bd y finca demo (2026-08-27)",
+      "id": "project_status_limpieza_de_bd_y_finca_demo_2026_08_27"
     },
     {
       "label": "Recomendaci\u00f3n sin bloqueo por falta de par\u00e1metros (2026-08-27)",
@@ -130,10 +713,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L74",
       "_origin": "ast",
-      "id": "project_status_recomendaci\u00f3n_sin_bloqueo_por_falta_de_par\u00e1metros_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "recomendacion sin bloqueo por falta de parametros (2026-08-27)"
+      "norm_label": "recomendacion sin bloqueo por falta de parametros (2026-08-27)",
+      "id": "project_status_recomendaci\u00f3n_sin_bloqueo_por_falta_de_par\u00e1metros_2026_08_27"
     },
     {
       "label": "Chat asesor agron\u00f3mico (2026-08-25)",
@@ -141,10 +724,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L83",
       "_origin": "ast",
-      "id": "project_status_chat_asesor_agron\u00f3mico_2026_08_25",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "chat asesor agronomico (2026-08-25)"
+      "norm_label": "chat asesor agronomico (2026-08-25)",
+      "id": "project_status_chat_asesor_agron\u00f3mico_2026_08_25"
     },
     {
       "label": "Mapa de calor del lote (2026-08-25)",
@@ -152,10 +735,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L92",
       "_origin": "ast",
-      "id": "project_status_mapa_de_calor_del_lote_2026_08_25",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "mapa de calor del lote (2026-08-25)"
+      "norm_label": "mapa de calor del lote (2026-08-25)",
+      "id": "project_status_mapa_de_calor_del_lote_2026_08_25"
     },
     {
       "label": "Relaci\u00f3n finca \u2194 sensor en la trama (2026-08-26)",
@@ -163,10 +746,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L103",
       "_origin": "ast",
-      "id": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "relacion finca \u2194 sensor en la trama (2026-08-26)"
+      "norm_label": "relacion finca \u2194 sensor en la trama (2026-08-26)",
+      "id": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26"
     },
     {
       "label": "C\u00f3mo est\u00e1 montado",
@@ -174,10 +757,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L112",
       "_origin": "ast",
-      "id": "project_status_c\u00f3mo_est\u00e1_montado",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "como esta montado"
+      "norm_label": "como esta montado",
+      "id": "project_status_c\u00f3mo_est\u00e1_montado"
     },
     {
       "label": "Validaci\u00f3n y entrenamiento del modelo de recomendaci\u00f3n/diagn\u00f3stico (2026-08-26)",
@@ -185,10 +768,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L118",
       "_origin": "ast",
-      "id": "project_status_validaci\u00f3n_y_entrenamiento_del_modelo_de_recomendaci\u00f3n_diagn\u00f3stico_2026_08_26",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "validacion y entrenamiento del modelo de recomendacion/diagnostico (2026-08-26)"
+      "norm_label": "validacion y entrenamiento del modelo de recomendacion/diagnostico (2026-08-26)",
+      "id": "project_status_validaci\u00f3n_y_entrenamiento_del_modelo_de_recomendaci\u00f3n_diagn\u00f3stico_2026_08_26"
     },
     {
       "label": "Plan de mejora ejecutado (2026-08-27)",
@@ -196,10 +779,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L128",
       "_origin": "ast",
-      "id": "project_status_plan_de_mejora_ejecutado_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "plan de mejora ejecutado (2026-08-27)"
+      "norm_label": "plan de mejora ejecutado (2026-08-27)",
+      "id": "project_status_plan_de_mejora_ejecutado_2026_08_27"
     },
     {
       "label": "Aceptaci\u00f3n humana de recomendaciones (human-in-the-loop) y 12 mejoras al reporte (2026-08-27)",
@@ -207,10 +790,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L135",
       "_origin": "ast",
-      "id": "project_status_aceptaci\u00f3n_humana_de_recomendaciones_human_in_the_loop_y_12_mejoras_al_reporte_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "aceptacion humana de recomendaciones (human-in-the-loop) y 12 mejoras al reporte (2026-08-27)"
+      "norm_label": "aceptacion humana de recomendaciones (human-in-the-loop) y 12 mejoras al reporte (2026-08-27)",
+      "id": "project_status_aceptaci\u00f3n_humana_de_recomendaciones_human_in_the_loop_y_12_mejoras_al_reporte_2026_08_27"
     },
     {
       "label": "Registro de finca en 3 secciones + cadena de validaci\u00f3n + separaci\u00f3n Finca/Lote (2026-08-27)",
@@ -218,10 +801,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L153",
       "_origin": "ast",
-      "id": "project_status_registro_de_finca_en_3_secciones_cadena_de_validaci\u00f3n_separaci\u00f3n_finca_lote_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "registro de finca en 3 secciones + cadena de validacion + separacion finca/lote (2026-08-27)"
+      "norm_label": "registro de finca en 3 secciones + cadena de validacion + separacion finca/lote (2026-08-27)",
+      "id": "project_status_registro_de_finca_en_3_secciones_cadena_de_validaci\u00f3n_separaci\u00f3n_finca_lote_2026_08_27"
     },
     {
       "label": "Migraciones destacadas",
@@ -229,10 +812,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L159",
       "_origin": "ast",
-      "id": "project_status_migraciones_destacadas",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "migraciones destacadas"
+      "norm_label": "migraciones destacadas",
+      "id": "project_status_migraciones_destacadas"
     },
     {
       "label": "L\u00edmites del tier gratuito (validados 2026-08-25)",
@@ -240,10 +823,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L164",
       "_origin": "ast",
-      "id": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "limites del tier gratuito (validados 2026-08-25)"
+      "norm_label": "limites del tier gratuito (validados 2026-08-25)",
+      "id": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25"
     },
     {
       "label": "Notas t\u00e9cnicas",
@@ -251,10 +834,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L174",
       "_origin": "ast",
-      "id": "project_status_notas_t\u00e9cnicas",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "notas tecnicas"
+      "norm_label": "notas tecnicas",
+      "id": "project_status_notas_t\u00e9cnicas"
     },
     {
       "label": "\ud83d\udcc1 Estructura",
@@ -262,10 +845,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L179",
       "_origin": "ast",
-      "id": "project_status_estructura",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83d\udcc1 estructura"
+      "norm_label": "\ud83d\udcc1 estructura",
+      "id": "project_status_estructura"
     },
     {
       "label": "\ud83d\ude80 Arranque r\u00e1pido",
@@ -273,10 +856,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L198",
       "_origin": "ast",
-      "id": "project_status_arranque_r\u00e1pido",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83d\ude80 arranque rapido"
+      "norm_label": "\ud83d\ude80 arranque rapido",
+      "id": "project_status_arranque_r\u00e1pido"
     },
     {
       "label": "\u2b1c Pendiente",
@@ -284,10 +867,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L211",
       "_origin": "ast",
-      "id": "project_status_pendiente",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\u2b1c pendiente"
+      "norm_label": "\u2b1c pendiente",
+      "id": "project_status_pendiente"
     },
     {
       "label": "\ud83e\udde0 Motor de recomendaciones \u2014 Sistema Experto activo (2026-08-25)",
@@ -295,10 +878,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L219",
       "_origin": "ast",
-      "id": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83e\udde0 motor de recomendaciones \u2014 sistema experto activo (2026-08-25)"
+      "norm_label": "\ud83e\udde0 motor de recomendaciones \u2014 sistema experto activo (2026-08-25)",
+      "id": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25"
     },
     {
       "label": "\ud83d\udc65 Roles y permisos por finca (2026-08-25)",
@@ -306,10 +889,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L234",
       "_origin": "ast",
-      "id": "project_status_roles_y_permisos_por_finca_2026_08_25",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83d\udc65 roles y permisos por finca (2026-08-25)"
+      "norm_label": "\ud83d\udc65 roles y permisos por finca (2026-08-25)",
+      "id": "project_status_roles_y_permisos_por_finca_2026_08_25"
     },
     {
       "label": "\ud83d\udcc4 Reportes de an\u00e1lisis (2026-08-25)",
@@ -317,10 +900,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L244",
       "_origin": "ast",
-      "id": "project_status_reportes_de_an\u00e1lisis_2026_08_25",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83d\udcc4 reportes de analisis (2026-08-25)"
+      "norm_label": "\ud83d\udcc4 reportes de analisis (2026-08-25)",
+      "id": "project_status_reportes_de_an\u00e1lisis_2026_08_25"
     },
     {
       "label": "demo.py",
@@ -4974,556 +5557,6 @@
       "community_name": "012_suelo_riego.py",
       "norm_label": "downgrade()",
       "id": "apps_backend_alembic_versions_012_suelo_riego_downgrade"
-    },
-    {
-      "label": "Documento_Funcional_Tecnico_AgroIA.md",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 891,
-      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
-      "norm_label": "documento_funcional_tecnico_agroia.md",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia"
-    },
-    {
-      "label": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 891,
-      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
-      "norm_label": "documento funcional-tecnico \u2014 agroia (agrointeligente colombia)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia"
-    },
-    {
-      "label": "Tabla de contenidos",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L8",
-      "_origin": "ast",
-      "community": 891,
-      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
-      "norm_label": "tabla de contenidos",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_tabla_de_contenidos"
-    },
-    {
-      "label": "1. Prop\u00f3sito del documento",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L28",
-      "_origin": "ast",
-      "community": 891,
-      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
-      "norm_label": "1. proposito del documento",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_1_prop\u00f3sito_del_documento"
-    },
-    {
-      "label": "2. Visi\u00f3n general y stack tecnol\u00f3gico",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L40",
-      "_origin": "ast",
-      "community": 891,
-      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
-      "norm_label": "2. vision general y stack tecnologico",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_2_visi\u00f3n_general_y_stack_tecnol\u00f3gico"
-    },
-    {
-      "label": "3. Arquitectura de componentes",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L59",
-      "_origin": "ast",
-      "community": 891,
-      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
-      "norm_label": "3. arquitectura de componentes",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_3_arquitectura_de_componentes"
-    },
-    {
-      "label": "4. Autenticaci\u00f3n y sesi\u00f3n (lo m\u00e1s b\u00e1sico)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L120",
-      "_origin": "ast",
-      "community": 901,
-      "community_name": "4. Autenticaci\u00f3n y sesi\u00f3n (lo m\u00e1s b\u00e1sico)",
-      "norm_label": "4. autenticacion y sesion (lo mas basico)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_4_autenticaci\u00f3n_y_sesi\u00f3n_lo_m\u00e1s_b\u00e1sico"
-    },
-    {
-      "label": "4.1 Pantalla de login",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L122",
-      "_origin": "ast",
-      "community": 901,
-      "community_name": "4. Autenticaci\u00f3n y sesi\u00f3n (lo m\u00e1s b\u00e1sico)",
-      "norm_label": "4.1 pantalla de login",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_4_1_pantalla_de_login"
-    },
-    {
-      "label": "4.2 Servicio que se invoca",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L129",
-      "_origin": "ast",
-      "community": 901,
-      "community_name": "4. Autenticaci\u00f3n y sesi\u00f3n (lo m\u00e1s b\u00e1sico)",
-      "norm_label": "4.2 servicio que se invoca",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_4_2_servicio_que_se_invoca"
-    },
-    {
-      "label": "4.3 Sesi\u00f3n en el cliente",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L159",
-      "_origin": "ast",
-      "community": 901,
-      "community_name": "4. Autenticaci\u00f3n y sesi\u00f3n (lo m\u00e1s b\u00e1sico)",
-      "norm_label": "4.3 sesion en el cliente",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_4_3_sesi\u00f3n_en_el_cliente"
-    },
-    {
-      "label": "4.4 Roles, permisos y cabeceras",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L165",
-      "_origin": "ast",
-      "community": 901,
-      "community_name": "4. Autenticaci\u00f3n y sesi\u00f3n (lo m\u00e1s b\u00e1sico)",
-      "norm_label": "4.4 roles, permisos y cabeceras",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_4_4_roles_permisos_y_cabeceras"
-    },
-    {
-      "label": "5. El frontend SPA: navegaci\u00f3n y utilidades",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L189",
-      "_origin": "ast",
-      "community": 891,
-      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
-      "norm_label": "5. el frontend spa: navegacion y utilidades",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_5_el_frontend_spa_navegaci\u00f3n_y_utilidades"
-    },
-    {
-      "label": "6. Recorrido secci\u00f3n por secci\u00f3n",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L209",
-      "_origin": "ast",
-      "community": 893,
-      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
-      "norm_label": "6. recorrido seccion por seccion",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n"
-    },
-    {
-      "label": "6.1 \ud83c\udfe0 Inicio (Dashboard)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L211",
-      "_origin": "ast",
-      "community": 893,
-      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
-      "norm_label": "6.1 \ud83c\udfe0 inicio (dashboard)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_1_inicio_dashboard"
-    },
-    {
-      "label": "6.2 \ud83d\udce1 Sensores IoT",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L228",
-      "_origin": "ast",
-      "community": 893,
-      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
-      "norm_label": "6.2 \ud83d\udce1 sensores iot",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_2_sensores_iot"
-    },
-    {
-      "label": "6.3 \ud83d\udcc2 Cargar archivo",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L238",
-      "_origin": "ast",
-      "community": 893,
-      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
-      "norm_label": "6.3 \ud83d\udcc2 cargar archivo",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_3_cargar_archivo"
-    },
-    {
-      "label": "6.4 \ud83e\uddea Recomendaciones (la secci\u00f3n central)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L258",
-      "_origin": "ast",
-      "community": 893,
-      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
-      "norm_label": "6.4 \ud83e\uddea recomendaciones (la seccion central)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_4_recomendaciones_la_secci\u00f3n_central"
-    },
-    {
-      "label": "6.5 \ud83d\udcdc Historial",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L301",
-      "_origin": "ast",
-      "community": 893,
-      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
-      "norm_label": "6.5 \ud83d\udcdc historial",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_5_historial"
-    },
-    {
-      "label": "6.6 \ud83d\udcc4 Reportes",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L307",
-      "_origin": "ast",
-      "community": 893,
-      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
-      "norm_label": "6.6 \ud83d\udcc4 reportes",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_6_reportes"
-    },
-    {
-      "label": "6.7 \ud83c\udfe1 Fincas \u2014 registro en 3 secciones, validaci\u00f3n y lotes (registro solo Admin)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L325",
-      "_origin": "ast",
-      "community": 893,
-      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
-      "norm_label": "6.7 \ud83c\udfe1 fincas \u2014 registro en 3 secciones, validacion y lotes (registro solo admin)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_7_fincas_registro_en_3_secciones_validaci\u00f3n_y_lotes_registro_solo_admin"
-    },
-    {
-      "label": "6.8 \ud83d\udc65 Usuarios (solo Admin)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L360",
-      "_origin": "ast",
-      "community": 893,
-      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
-      "norm_label": "6.8 \ud83d\udc65 usuarios (solo admin)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_8_usuarios_solo_admin"
-    },
-    {
-      "label": "6.9 \ud83c\udf3e Cat\u00e1logo (Admin/Agr\u00f3nomo gestionan; Cliente consulta)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L368",
-      "_origin": "ast",
-      "community": 893,
-      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
-      "norm_label": "6.9 \ud83c\udf3e catalogo (admin/agronomo gestionan; cliente consulta)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_9_cat\u00e1logo_admin_agr\u00f3nomo_gestionan_cliente_consulta"
-    },
-    {
-      "label": "6.10 \ud83d\udcac Chat asesor (pesta\u00f1a Reportes)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L376",
-      "_origin": "ast",
-      "community": 893,
-      "community_name": "6. Recorrido secci\u00f3n por secci\u00f3n",
-      "norm_label": "6.10 \ud83d\udcac chat asesor (pestana reportes)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_6_10_chat_asesor_pesta\u00f1a_reportes"
-    },
-    {
-      "label": "7. Ingesta de datos IoT \u2014 `POST /api/sensor`",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L395",
-      "_origin": "ast",
-      "community": 903,
-      "community_name": "7. Ingesta de datos IoT \u2014 `POST /api/sensor`",
-      "norm_label": "7. ingesta de datos iot \u2014 `post /api/sensor`",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_7_ingesta_de_datos_iot_post_api_sensor"
-    },
-    {
-      "label": "7.1 Formato real de la trama del firmware",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L399",
-      "_origin": "ast",
-      "community": 903,
-      "community_name": "7. Ingesta de datos IoT \u2014 `POST /api/sensor`",
-      "norm_label": "7.1 formato real de la trama del firmware",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_7_1_formato_real_de_la_trama_del_firmware"
-    },
-    {
-      "label": "7.2 Procesamiento (paso a paso)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L411",
-      "_origin": "ast",
-      "community": 903,
-      "community_name": "7. Ingesta de datos IoT \u2014 `POST /api/sensor`",
-      "norm_label": "7.2 procesamiento (paso a paso)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_7_2_procesamiento_paso_a_paso"
-    },
-    {
-      "label": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L423",
-      "_origin": "ast",
-      "community": 894,
-      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
-      "norm_label": "8. el motor de recomendaciones (corazon del sistema)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema"
-    },
-    {
-      "label": "8.1 Pipeline completo (numerado)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L427",
-      "_origin": "ast",
-      "community": 894,
-      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
-      "norm_label": "8.1 pipeline completo (numerado)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_1_pipeline_completo_numerado"
-    },
-    {
-      "label": "8.2 Paso 1 \u2014 SueloAdapter y validaci\u00f3n (`services/data_adapters.py`)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L464",
-      "_origin": "ast",
-      "community": 894,
-      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
-      "norm_label": "8.2 paso 1 \u2014 sueloadapter y validacion (`services/data_adapters.py`)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_2_paso_1_sueloadapter_y_validaci\u00f3n_services_data_adapters_py"
-    },
-    {
-      "label": "8.3 Paso 2 \u2014 Sistema experto: RulesEngine (`services/rules_engine.py`)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L472",
-      "_origin": "ast",
-      "community": 894,
-      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
-      "norm_label": "8.3 paso 2 \u2014 sistema experto: rulesengine (`services/rules_engine.py`)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_3_paso_2_sistema_experto_rulesengine_services_rules_engine_py"
-    },
-    {
-      "label": "8.4 UC1 \u2014 AptitudService (`services/aptitud.py`)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L479",
-      "_origin": "ast",
-      "community": 894,
-      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
-      "norm_label": "8.4 uc1 \u2014 aptitudservice (`services/aptitud.py`)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_4_uc1_aptitudservice_services_aptitud_py"
-    },
-    {
-      "label": "8.5 Paso 3 \u2014 ML en modo sombra: qu\u00e9 par\u00e1metros se env\u00edan al modelo",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L488",
-      "_origin": "ast",
-      "community": 894,
-      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
-      "norm_label": "8.5 paso 3 \u2014 ml en modo sombra: que parametros se envian al modelo",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_5_paso_3_ml_en_modo_sombra_qu\u00e9_par\u00e1metros_se_env\u00edan_al_modelo"
-    },
-    {
-      "label": "8.6 Paso 4 \u2014 Discordancia ML vs reglas",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L520",
-      "_origin": "ast",
-      "community": 894,
-      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
-      "norm_label": "8.6 paso 4 \u2014 discordancia ml vs reglas",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_6_paso_4_discordancia_ml_vs_reglas"
-    },
-    {
-      "label": "8.7 Paso 5 \u2014 Confianza real y estado de validaci\u00f3n",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L524",
-      "_origin": "ast",
-      "community": 894,
-      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
-      "norm_label": "8.7 paso 5 \u2014 confianza real y estado de validacion",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_7_paso_5_confianza_real_y_estado_de_validaci\u00f3n"
-    },
-    {
-      "label": "8.8 Paso 6 \u2014 Enriquecimiento de cada recomendaci\u00f3n (UC2)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L544",
-      "_origin": "ast",
-      "community": 894,
-      "community_name": "8. El motor de recomendaciones (coraz\u00f3n del sistema)",
-      "norm_label": "8.8 paso 6 \u2014 enriquecimiento de cada recomendacion (uc2)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_8_8_paso_6_enriquecimiento_de_cada_recomendaci\u00f3n_uc2"
-    },
-    {
-      "label": "9. Aceptaci\u00f3n humana de recomendaciones (human-in-the-loop)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L554",
-      "_origin": "ast",
-      "community": 891,
-      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
-      "norm_label": "9. aceptacion humana de recomendaciones (human-in-the-loop)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_9_aceptaci\u00f3n_humana_de_recomendaciones_human_in_the_loop"
-    },
-    {
-      "label": "10. El modelo de Machine Learning: entrenamiento y artefactos",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L575",
-      "_origin": "ast",
-      "community": 899,
-      "community_name": "10. El modelo de Machine Learning: entrenamiento y artefactos",
-      "norm_label": "10. el modelo de machine learning: entrenamiento y artefactos",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_10_el_modelo_de_machine_learning_entrenamiento_y_artefactos"
-    },
-    {
-      "label": "10.1 Datos y etiquetado",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L579",
-      "_origin": "ast",
-      "community": 899,
-      "community_name": "10. El modelo de Machine Learning: entrenamiento y artefactos",
-      "norm_label": "10.1 datos y etiquetado",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_10_1_datos_y_etiquetado"
-    },
-    {
-      "label": "10.2 Modelos y m\u00e9tricas",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L586",
-      "_origin": "ast",
-      "community": 899,
-      "community_name": "10. El modelo de Machine Learning: entrenamiento y artefactos",
-      "norm_label": "10.2 modelos y metricas",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_10_2_modelos_y_m\u00e9tricas"
-    },
-    {
-      "label": "10.3 Artefactos y promoci\u00f3n",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L592",
-      "_origin": "ast",
-      "community": 899,
-      "community_name": "10. El modelo de Machine Learning: entrenamiento y artefactos",
-      "norm_label": "10.3 artefactos y promocion",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_10_3_artefactos_y_promoci\u00f3n"
-    },
-    {
-      "label": "10.4 Or\u00e1culo en producci\u00f3n",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L598",
-      "_origin": "ast",
-      "community": 899,
-      "community_name": "10. El modelo de Machine Learning: entrenamiento y artefactos",
-      "norm_label": "10.4 oraculo en produccion",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_10_4_or\u00e1culo_en_producci\u00f3n"
-    },
-    {
-      "label": "11. Reportes: anatom\u00eda del HTML generado",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L604",
-      "_origin": "ast",
-      "community": 891,
-      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
-      "norm_label": "11. reportes: anatomia del html generado",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_11_reportes_anatom\u00eda_del_html_generado"
-    },
-    {
-      "label": "12. Persistencia y base de datos",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L623",
-      "_origin": "ast",
-      "community": 900,
-      "community_name": "12. Persistencia y base de datos",
-      "norm_label": "12. persistencia y base de datos",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_12_persistencia_y_base_de_datos"
-    },
-    {
-      "label": "12.1 Tablas principales",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L628",
-      "_origin": "ast",
-      "community": 900,
-      "community_name": "12. Persistencia y base de datos",
-      "norm_label": "12.1 tablas principales",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_12_1_tablas_principales"
-    },
-    {
-      "label": "12.2 Enums (12 tipos en schema `agroia`)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L646",
-      "_origin": "ast",
-      "community": 900,
-      "community_name": "12. Persistencia y base de datos",
-      "norm_label": "12.2 enums (12 tipos en schema `agroia`)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_12_2_enums_12_tipos_en_schema_agroia"
-    },
-    {
-      "label": "12.3 Migraciones (001 \u2192 011)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L650",
-      "_origin": "ast",
-      "community": 900,
-      "community_name": "12. Persistencia y base de datos",
-      "norm_label": "12.3 migraciones (001 \u2192 011)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_12_3_migraciones_001_011"
-    },
-    {
-      "label": "12.4 Gotchas de Neon (lecciones aprendidas)",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L655",
-      "_origin": "ast",
-      "community": 900,
-      "community_name": "12. Persistencia y base de datos",
-      "norm_label": "12.4 gotchas de neon (lecciones aprendidas)",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_12_4_gotchas_de_neon_lecciones_aprendidas"
-    },
-    {
-      "label": "13. Despliegue y CI/CD",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L662",
-      "_origin": "ast",
-      "community": 891,
-      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
-      "norm_label": "13. despliegue y ci/cd",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_13_despliegue_y_ci_cd"
-    },
-    {
-      "label": "14. Seguridad y limitaciones conocidas",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L672",
-      "_origin": "ast",
-      "community": 891,
-      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
-      "norm_label": "14. seguridad y limitaciones conocidas",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_14_seguridad_y_limitaciones_conocidas"
-    },
-    {
-      "label": "15. Glosario",
-      "file_type": "document",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L682",
-      "_origin": "ast",
-      "community": 891,
-      "community_name": "Documento Funcional-T\u00e9cnico \u2014 AgroIA (AgroInteligente Colombia)",
-      "norm_label": "15. glosario",
-      "id": "resources_architecture_documento_funcional_tecnico_agroia_15_glosario"
     },
     {
       "label": "Finca",
@@ -102056,13 +102089,585 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L619",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_10_el_modelo_de_machine_learning_entrenamiento_y_artefactos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L648",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_11_reportes_anatom\u00eda_del_html_generado",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L669",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_12_persistencia_y_base_de_datos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L708",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_13_despliegue_y_ci_cd",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L718",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_14_seguridad_y_limitaciones_conocidas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L728",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_15_demo_y_restablecimiento_de_datos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L735",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_16_glosario",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_1_prop\u00f3sito_del_documento",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_2_visi\u00f3n_general_y_stack_tecnol\u00f3gico",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L60",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_3_arquitectura_de_componentes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L121",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_4_autenticaci\u00f3n_y_sesi\u00f3n_lo_m\u00e1s_b\u00e1sico",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L190",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_5_el_frontend_spa_navegaci\u00f3n_y_utilidades",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L210",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L412",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_7_ingesta_de_datos_iot_post_api_sensor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L446",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L598",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_9_aceptaci\u00f3n_humana_de_recomendaciones_human_in_the_loop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_tabla_de_contenidos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L123",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_4_autenticaci\u00f3n_y_sesi\u00f3n_lo_m\u00e1s_b\u00e1sico",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_4_1_pantalla_de_login",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L130",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_4_autenticaci\u00f3n_y_sesi\u00f3n_lo_m\u00e1s_b\u00e1sico",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_4_2_servicio_que_se_invoca",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L160",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_4_autenticaci\u00f3n_y_sesi\u00f3n_lo_m\u00e1s_b\u00e1sico",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_4_3_sesi\u00f3n_en_el_cliente",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L166",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_4_autenticaci\u00f3n_y_sesi\u00f3n_lo_m\u00e1s_b\u00e1sico",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_4_4_roles_permisos_y_cabeceras",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L391",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_10_chat_asesor_pesta\u00f1a_reportes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L212",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_1_inicio_dashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L229",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_2_sensores_iot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L240",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_3_cargar_archivo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L260",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_4_recomendaciones_la_secci\u00f3n_central",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L310",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_5_historial",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L316",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_6_reportes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L337",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_7_fincas_registro_en_3_secciones_validaci\u00f3n_y_lotes_registro_solo_admin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L372",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_8_usuarios_solo_admin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L380",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_9_cat\u00e1logo_admin_agr\u00f3nomo_gestionan_cliente_consulta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L416",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_7_ingesta_de_datos_iot_post_api_sensor",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_7_1_formato_real_de_la_trama_del_firmware",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L434",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_7_ingesta_de_datos_iot_post_api_sensor",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_7_2_procesamiento_paso_a_paso",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L590",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_10_recomendaci\u00f3n_sin_datos_nunca_se_bloquea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L450",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_1_pipeline_completo_numerado",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L487",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_2_paso_1_sueloadapter_y_validaci\u00f3n_services_data_adapters_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L496",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_3_paso_2_sistema_experto_rulesengine_services_rules_engine_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L503",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_4_uc1_aptitudservice_services_aptitud_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L513",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_5_paso_3_ml_en_modo_sombra_qu\u00e9_par\u00e1metros_se_env\u00edan_al_modelo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L545",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_6_paso_4_discordancia_ml_vs_reglas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L549",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_7_paso_5_confianza_real_y_estado_de_validaci\u00f3n",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L571",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_8_paso_6_enriquecimiento_de_cada_recomendaci\u00f3n_uc2",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L581",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_9_plan_econ\u00f3mico_de_fertilizaci\u00f3n_brecha_econ\u00f3mica",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L623",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_10_el_modelo_de_machine_learning_entrenamiento_y_artefactos",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_10_1_datos_y_etiquetado",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L630",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_10_el_modelo_de_machine_learning_entrenamiento_y_artefactos",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_10_2_modelos_y_m\u00e9tricas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L636",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_10_el_modelo_de_machine_learning_entrenamiento_y_artefactos",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_10_3_artefactos_y_promoci\u00f3n",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L642",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_10_el_modelo_de_machine_learning_entrenamiento_y_artefactos",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_10_4_or\u00e1culo_en_producci\u00f3n",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L674",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_12_persistencia_y_base_de_datos",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_12_1_tablas_principales",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L692",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_12_persistencia_y_base_de_datos",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_12_2_enums_12_tipos_en_schema_agroia",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L696",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_12_persistencia_y_base_de_datos",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_12_3_migraciones_001_014",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L701",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_funcional_tecnico_agroia_12_persistencia_y_base_de_datos",
+      "target": "resources_architecture_documento_funcional_tecnico_agroia_12_4_gotchas_de_neon_lecciones_aprendidas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status",
-      "target": "project_status_agroia_estado_del_proyecto",
-      "confidence_score": 1.0
+      "target": "project_status_agroia_estado_del_proyecto"
     },
     {
       "relation": "contains",
@@ -102071,9 +102676,9 @@
       "source_location": "L198",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_arranque_r\u00e1pido",
-      "confidence_score": 1.0
+      "target": "project_status_arranque_r\u00e1pido"
     },
     {
       "relation": "contains",
@@ -102082,9 +102687,9 @@
       "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_despliegue_gratuito_render_neon_supabase",
-      "confidence_score": 1.0
+      "target": "project_status_despliegue_gratuito_render_neon_supabase"
     },
     {
       "relation": "contains",
@@ -102093,9 +102698,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_estado_por_\u00e9pica",
-      "confidence_score": 1.0
+      "target": "project_status_estado_por_\u00e9pica"
     },
     {
       "relation": "contains",
@@ -102104,9 +102709,9 @@
       "source_location": "L179",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_estructura",
-      "confidence_score": 1.0
+      "target": "project_status_estructura"
     },
     {
       "relation": "contains",
@@ -102115,9 +102720,9 @@
       "source_location": "L219",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25",
-      "confidence_score": 1.0
+      "target": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25"
     },
     {
       "relation": "contains",
@@ -102126,9 +102731,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_objetivo",
-      "confidence_score": 1.0
+      "target": "project_status_objetivo"
     },
     {
       "relation": "contains",
@@ -102137,9 +102742,9 @@
       "source_location": "L211",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_pendiente",
-      "confidence_score": 1.0
+      "target": "project_status_pendiente"
     },
     {
       "relation": "contains",
@@ -102148,9 +102753,9 @@
       "source_location": "L244",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_reportes_de_an\u00e1lisis_2026_08_25",
-      "confidence_score": 1.0
+      "target": "project_status_reportes_de_an\u00e1lisis_2026_08_25"
     },
     {
       "relation": "contains",
@@ -102159,9 +102764,9 @@
       "source_location": "L234",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_roles_y_permisos_por_finca_2026_08_25",
-      "confidence_score": 1.0
+      "target": "project_status_roles_y_permisos_por_finca_2026_08_25"
     },
     {
       "relation": "contains",
@@ -102170,9 +102775,9 @@
       "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_stack",
-      "confidence_score": 1.0
+      "target": "project_status_stack"
     },
     {
       "relation": "contains",
@@ -102181,9 +102786,9 @@
       "source_location": "L135",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_aceptaci\u00f3n_humana_de_recomendaciones_human_in_the_loop_y_12_mejoras_al_reporte_2026_08_27",
-      "confidence_score": 1.0
+      "target": "project_status_aceptaci\u00f3n_humana_de_recomendaciones_human_in_the_loop_y_12_mejoras_al_reporte_2026_08_27"
     },
     {
       "relation": "contains",
@@ -102192,9 +102797,9 @@
       "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_brecha_econ\u00f3mica_plan_de_fertilizaci\u00f3n_por_presupuesto_2026_08_25",
-      "confidence_score": 1.0
+      "target": "project_status_brecha_econ\u00f3mica_plan_de_fertilizaci\u00f3n_por_presupuesto_2026_08_25"
     },
     {
       "relation": "contains",
@@ -102203,9 +102808,9 @@
       "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_chat_asesor_agron\u00f3mico_2026_08_25",
-      "confidence_score": 1.0
+      "target": "project_status_chat_asesor_agron\u00f3mico_2026_08_25"
     },
     {
       "relation": "contains",
@@ -102214,9 +102819,9 @@
       "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_chat_asesor_con_contexto_visual_2026_08_27",
-      "confidence_score": 1.0
+      "target": "project_status_chat_asesor_con_contexto_visual_2026_08_27"
     },
     {
       "relation": "contains",
@@ -102225,9 +102830,9 @@
       "source_location": "L112",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_c\u00f3mo_est\u00e1_montado",
-      "confidence_score": 1.0
+      "target": "project_status_c\u00f3mo_est\u00e1_montado"
     },
     {
       "relation": "contains",
@@ -102236,9 +102841,9 @@
       "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_fisiolog\u00eda_de_cultivos_2026_08_27",
-      "confidence_score": 1.0
+      "target": "project_status_fisiolog\u00eda_de_cultivos_2026_08_27"
     },
     {
       "relation": "contains",
@@ -102247,9 +102852,9 @@
       "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_limpieza_de_bd_y_finca_demo_2026_08_27",
-      "confidence_score": 1.0
+      "target": "project_status_limpieza_de_bd_y_finca_demo_2026_08_27"
     },
     {
       "relation": "contains",
@@ -102258,9 +102863,9 @@
       "source_location": "L164",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25",
-      "confidence_score": 1.0
+      "target": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25"
     },
     {
       "relation": "contains",
@@ -102269,9 +102874,9 @@
       "source_location": "L92",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_mapa_de_calor_del_lote_2026_08_25",
-      "confidence_score": 1.0
+      "target": "project_status_mapa_de_calor_del_lote_2026_08_25"
     },
     {
       "relation": "contains",
@@ -102280,9 +102885,9 @@
       "source_location": "L159",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_migraciones_destacadas",
-      "confidence_score": 1.0
+      "target": "project_status_migraciones_destacadas"
     },
     {
       "relation": "contains",
@@ -102291,9 +102896,9 @@
       "source_location": "L174",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_notas_t\u00e9cnicas",
-      "confidence_score": 1.0
+      "target": "project_status_notas_t\u00e9cnicas"
     },
     {
       "relation": "contains",
@@ -102302,9 +102907,9 @@
       "source_location": "L128",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_plan_de_mejora_ejecutado_2026_08_27",
-      "confidence_score": 1.0
+      "target": "project_status_plan_de_mejora_ejecutado_2026_08_27"
     },
     {
       "relation": "contains",
@@ -102313,9 +102918,9 @@
       "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_recomendaci\u00f3n_sin_bloqueo_por_falta_de_par\u00e1metros_2026_08_27",
-      "confidence_score": 1.0
+      "target": "project_status_recomendaci\u00f3n_sin_bloqueo_por_falta_de_par\u00e1metros_2026_08_27"
     },
     {
       "relation": "contains",
@@ -102324,9 +102929,9 @@
       "source_location": "L153",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_registro_de_finca_en_3_secciones_cadena_de_validaci\u00f3n_separaci\u00f3n_finca_lote_2026_08_27",
-      "confidence_score": 1.0
+      "target": "project_status_registro_de_finca_en_3_secciones_cadena_de_validaci\u00f3n_separaci\u00f3n_finca_lote_2026_08_27"
     },
     {
       "relation": "contains",
@@ -102335,9 +102940,9 @@
       "source_location": "L103",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26",
-      "confidence_score": 1.0
+      "target": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26"
     },
     {
       "relation": "contains",
@@ -102346,9 +102951,9 @@
       "source_location": "L48",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_retorno_de_inversi\u00f3n_en_el_reporte_2026_08_27",
-      "confidence_score": 1.0
+      "target": "project_status_retorno_de_inversi\u00f3n_en_el_reporte_2026_08_27"
     },
     {
       "relation": "contains",
@@ -102357,9 +102962,9 @@
       "source_location": "L118",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_validaci\u00f3n_y_entrenamiento_del_modelo_de_recomendaci\u00f3n_diagn\u00f3stico_2026_08_26",
-      "confidence_score": 1.0
+      "target": "project_status_validaci\u00f3n_y_entrenamiento_del_modelo_de_recomendaci\u00f3n_diagn\u00f3stico_2026_08_26"
     },
     {
       "relation": "contains",
@@ -113736,545 +114341,6 @@
       "confidence_score": 1.0,
       "source": "apps_backend_alembic_versions_012_suelo_riego",
       "target": "apps_backend_alembic_versions_012_suelo_riego_upgrade"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L575",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_10_el_modelo_de_machine_learning_entrenamiento_y_artefactos"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L604",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_11_reportes_anatom\u00eda_del_html_generado"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L623",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_12_persistencia_y_base_de_datos"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L662",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_13_despliegue_y_ci_cd"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L672",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_14_seguridad_y_limitaciones_conocidas"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L682",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_15_glosario"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L28",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_1_prop\u00f3sito_del_documento"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L40",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_2_visi\u00f3n_general_y_stack_tecnol\u00f3gico"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L59",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_3_arquitectura_de_componentes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L120",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_4_autenticaci\u00f3n_y_sesi\u00f3n_lo_m\u00e1s_b\u00e1sico"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L189",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_5_el_frontend_spa_navegaci\u00f3n_y_utilidades"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L209",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L395",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_7_ingesta_de_datos_iot_post_api_sensor"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L423",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L554",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_9_aceptaci\u00f3n_humana_de_recomendaciones_human_in_the_loop"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_documento_funcional_t\u00e9cnico_agroia_agrointeligente_colombia",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_tabla_de_contenidos"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L122",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_4_autenticaci\u00f3n_y_sesi\u00f3n_lo_m\u00e1s_b\u00e1sico",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_4_1_pantalla_de_login"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L129",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_4_autenticaci\u00f3n_y_sesi\u00f3n_lo_m\u00e1s_b\u00e1sico",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_4_2_servicio_que_se_invoca"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L159",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_4_autenticaci\u00f3n_y_sesi\u00f3n_lo_m\u00e1s_b\u00e1sico",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_4_3_sesi\u00f3n_en_el_cliente"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L165",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_4_autenticaci\u00f3n_y_sesi\u00f3n_lo_m\u00e1s_b\u00e1sico",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_4_4_roles_permisos_y_cabeceras"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L376",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_10_chat_asesor_pesta\u00f1a_reportes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L211",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_1_inicio_dashboard"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L228",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_2_sensores_iot"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L238",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_3_cargar_archivo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L258",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_4_recomendaciones_la_secci\u00f3n_central"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L301",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_5_historial"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L307",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_6_reportes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L325",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_7_fincas_registro_en_3_secciones_validaci\u00f3n_y_lotes_registro_solo_admin"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L360",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_8_usuarios_solo_admin"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L368",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_6_recorrido_secci\u00f3n_por_secci\u00f3n",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_6_9_cat\u00e1logo_admin_agr\u00f3nomo_gestionan_cliente_consulta"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L399",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_7_ingesta_de_datos_iot_post_api_sensor",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_7_1_formato_real_de_la_trama_del_firmware"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L411",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_7_ingesta_de_datos_iot_post_api_sensor",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_7_2_procesamiento_paso_a_paso"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L427",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_1_pipeline_completo_numerado"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L464",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_2_paso_1_sueloadapter_y_validaci\u00f3n_services_data_adapters_py"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L472",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_3_paso_2_sistema_experto_rulesengine_services_rules_engine_py"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L479",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_4_uc1_aptitudservice_services_aptitud_py"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L488",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_5_paso_3_ml_en_modo_sombra_qu\u00e9_par\u00e1metros_se_env\u00edan_al_modelo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L520",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_6_paso_4_discordancia_ml_vs_reglas"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L524",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_7_paso_5_confianza_real_y_estado_de_validaci\u00f3n"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L544",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_8_el_motor_de_recomendaciones_coraz\u00f3n_del_sistema",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_8_8_paso_6_enriquecimiento_de_cada_recomendaci\u00f3n_uc2"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L579",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_10_el_modelo_de_machine_learning_entrenamiento_y_artefactos",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_10_1_datos_y_etiquetado"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L586",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_10_el_modelo_de_machine_learning_entrenamiento_y_artefactos",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_10_2_modelos_y_m\u00e9tricas"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L592",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_10_el_modelo_de_machine_learning_entrenamiento_y_artefactos",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_10_3_artefactos_y_promoci\u00f3n"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L598",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_10_el_modelo_de_machine_learning_entrenamiento_y_artefactos",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_10_4_or\u00e1culo_en_producci\u00f3n"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L628",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_12_persistencia_y_base_de_datos",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_12_1_tablas_principales"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L646",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_12_persistencia_y_base_de_datos",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_12_2_enums_12_tipos_en_schema_agroia"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L650",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_12_persistencia_y_base_de_datos",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_12_3_migraciones_001_011"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L655",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia_12_persistencia_y_base_de_datos",
-      "target": "resources_architecture_documento_funcional_tecnico_agroia_12_4_gotchas_de_neon_lecciones_aprendidas"
     },
     {
       "relation": "contains",
@@ -226052,5 +226118,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "16da081f710e18777aa25e5d031d50facf236c5f"
+  "built_at_commit": "47cc5ad35cbddf055cb2b025765342f422049486"
 }

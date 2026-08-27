@@ -69,7 +69,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
   <h1>Pantallas del sistema y su propósito</h1>
-  <div class="meta">Versión 1.1 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+  <div class="meta">Versión 1.2 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
 </header>
 
 <div class="wrap">
@@ -226,7 +226,8 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   (sistema experto UPRA/Cenicafé/AGROSAVIA + ML en sombra) y, si corresponde, aceptar la recomendación
   para retroalimentar al modelo.</div>
   <p><b>Qué muestra:</b> selector de finca y cultivo (vacío = «¿qué me conviene sembrar?», UC1),
-  campo opcional de <b>presupuesto de fertilización ($/ha)</b> y el resultado del análisis:</p>
+  campos opcionales de <b>presupuesto de fertilización ($/ha)</b> y <b>rendimiento actual (t/ha)</b>
+  para un ROI realista, y el resultado del análisis:</p>
   <ul>
     <li><b>Cabecera</b>: cultivo, clasificación UPRA + badge de estado de validación
     (Validada / Preliminar / Pendiente de validación técnica / Sujeta a confirmación de textura),
@@ -242,6 +243,9 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
     contexto del pH por cultivo) · Prioridad · <b>Confiabilidad</b> · <b>Plan sugerido</b> (fuente, frecuencia, dosis).</li>
     <li><b>Bloque «💰 Plan económico vs. plan ideal»</b> (si se declaró presupuesto): costo del plan,
     costo ideal, cobertura %, diferencia de rendimiento estimada y acciones Incluidas/Aplazadas.</li>
+    <li><b>Semáforo de confianza de 4 barras</b>: 🟢 calibración del sensor · 🟡 cobertura de
+    fertilidad · 🔴 violaciones activas · 🟣 respaldo humano, con la nota «Para subir la confianza
+    al 80%, …» — transparencia del porqué de la confianza y de cómo mejorarla.</li>
     <li><b>Ranking «Cultivos sugeridos»</b> (UC1): score, clasificación, confianza, nº de reglas y
     <b>descripción de las reglas aplicadas</b> (incluye la limitante de profundidad radicular si el
     lote es más somero que lo requerido por el cultivo).</li>
@@ -274,13 +278,22 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   (HTML imprimible a PDF) para compartir con el productor o un técnico. <b>El reporte se genera
   siempre</b>: si faltan datos, sale en modo preliminar con aviso de aval de agrónomo.</div>
   <p><b>Qué muestra:</b> selector de finca, tipo de reporte (<code>siembra</code> ·
-  <code>cultivo</code> · <code>completo</code>), vista previa del HTML y botones para abrir y descargar.</p>
+  <code>cultivo</code> · <code>completo</code>), campos opcionales de presupuesto ($/ha) y
+  <b>rendimiento actual (t/ha)</b>, vista previa del HTML y botones para abrir y descargar.
+  Al generar el reporte se activa el panel colapsable <b>«🧪 Simular enmienda (what-if)»</b>:
+  4 sliders (pH, N, P, K) precargados con el suelo del reporte que, al moverlos, consultan
+  <code>POST /api/v1/reportes/simular</code> y muestran al instante la nueva clasificación,
+  confianza, violaciones y advertencias — sin modificar la base de datos.</p>
   <p><b>Contenido del reporte generado</b> (secciones):</p>
   <ul>
     <li><b>T · Telemetría</b> — dispositivo, señal RSSI, calidad NPK en 3 niveles
     (Validado en laboratorio / Calibrado de fábrica / Sin validar), validación lab.</li>
     <li><b>P · Parámetros faltantes</b> — si el análisis es preliminar, lista los parámetros que
-    «sería bueno contar» para un mayor detalle y el aviso de aval de un agrónomo.</li>
+    «sería bueno contar» para un mayor detalle y el aviso de aval de un agrónomo, y agrega el
+    bloque <b>«📌 Muestreo inteligente»</b>: 3-4 puntos óptimos de muestreo (Farthest Point
+    Sampling, cruces rojas en coordenadas del lote), <b>GeoJSON descargable</b> y la instrucción
+    «Tome muestras compuestas en estos puntos. Al ingresar los resultados de laboratorio, la
+    confianza subirá de 0.55 a 0.82».</li>
     <li><b>01 · Diagnóstico UC2</b> — clasificación + estado de validación, tabla con plan sugerido,
     fenología + GDD y bloque «💰 Plan económico vs. plan ideal».</li>
     <li><b>02 · Recomendación UC1</b> — ranking de cultivos.</li>
@@ -289,7 +302,9 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
     clima IDEAM del día de la muestra con alerta fitosanitaria específica e historial de manejo.</li>
     <li><b>E · Análisis económico proyectado</b> — ganancia esperada si se aplica el plan (+15 %),
     ROI = (ganancia − costo fertilización) ÷ costo; si el ROI &lt; 1,2 muestra la alerta
-    «⚠️ Inversión justa, considere subvenciones».</li>
+    «⚠️ Inversión justa, considere subvenciones». Si se declaró el rendimiento actual, compara
+    contra ese valor real: «Con el plan ideal, su rendimiento podría pasar de X a Y t/ha (+Z%).
+    Con su presupuesto actual, pasaría a Y₂ t/ha (+Z₂%)».</li>
     <li><b>04/05 · Advertencias y próximos pasos</b>.</li>
   </ul>
   <p><b>Servicio que llama:</b> <code>POST /api/v1/reportes/generar</code> (admite
@@ -346,7 +361,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.1 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.2 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 1.2 · **Fecha:** 2026-08-27
+**Versión:** 1.3 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -593,6 +593,24 @@ Si el ML predice bloqueo y las reglas también, se registra `discordancia {tipo:
 - **Con datos parciales**: el motor corre con lo disponible (las reglas sin dato se omiten) y la respuesta incluye `variables_faltantes_esenciales`, la advertencia *«la recomendación no tiene el 100% de certeza y requiere el aval de un agrónomo»* y el estado `pendiente_validacion`.
 - **Pantalla de captura**: la UI ofrece el bloque «📝 Complete los parámetros esenciales» que ingesta los valores vía `POST /api/sensor` y reanaliza al instante.
 
+### 8.11 Confianza transparente — semáforo de 4 barras
+
+- `analyze` devuelve `desglose_confianza` (y la UI/reporte lo pintan como 4 barras): 🟢 **Calibración del sensor** (100 % si el NPK está validado en laboratorio, 60 % si solo está calibrado de fábrica) · 🟡 **Cobertura de fertilidad** (baja 6 % por cada variable de fertilidad faltante) · 🔴 **Violaciones activas** (baja 20 % por cada violación crítica/alta) · 🟣 **Respaldo humano** (sube 2 % por cada aceptación de agrónomo, máx 100 %).
+- Incluye `nota_subir` con los 2 consejos más rentables: *«Para subir la confianza al 80%, … (barra 1/2/3)»* — transparencia de **por qué** la confianza es la que es y **qué hacer** para mejorarla.
+
+### 8.12 Muestreo inteligente (Farthest Point Sampling)
+
+- `services/optimizador_muestreo.py::puntos_muestreo_optimos(muestras, n=3)`: descarta posiciones (0,0)/nulas, si hay ≤ n puntos los usa todos, y elige el punto más lejano del centroide y luego los más distantes entre sí — puntos de **máxima incertidumbre** donde la muestra compuesta de laboratorio aporta más información.
+- Se activa en reportes preliminares por parámetros faltantes (sección P+05) y entrega GeoJSON descargable + proyección de confianza (confianza actual +0.27, máx 0.99).
+
+### 8.13 Modo Simulación what-if (`POST /api/v1/reportes/simular`)
+
+```json
+{ "finca_id": "uuid", "soil_modificado": { "ph": 6.5, "nitrogeno": 200, "fosforo": 60, "potasio": 180 } }
+```
+
+Reejecuta `RulesEngine.evaluate` sobre el último suelo de la finca con las variables modificadas (**sin persistir nada**), y devuelve `{clasificacion, confianza, violaciones, advertencias, detalle[], soil_usado}`. Confianza = `max(0.05, min(0.99, 1 − violaciones×0.20 − advertencias×0.05))`. Es la herramienta del agrónomo para responder «¿y si aplico cal / fertilizo?» antes de invertir.
+
 ---
 
 ## 9. Aceptación humana de recomendaciones (human-in-the-loop)
@@ -663,6 +681,14 @@ Si el ML predice bloqueo y las reglas también, se registra `discordancia {tipo:
 | 05 | Próximos pasos | Plan de acción (incluye completar variables de fertilidad y umbral del 80 %) |
 
 Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3 niveles sin "Calibrado" a secas · 2) pH contextualizado por cultivo · 3) acciones condicionales por confiabilidad del sensor · 4) faltantes de fertilidad bajan la confianza y marcan "preliminar" · 5) textura obligatoria para cultivos sensibles · 6) pendiente/drenaje en el plano · 7) historial de manejo · 8) plan ejecutable con fuente/frecuencia/dosis · 9) fenología · 10) alerta fitosanitaria cruzada con clima · 11) metodología de muestreo del mapa de calor · 12) umbral duro de confianza < 80 % → "Pendiente de validación técnica".
+
+### 11.1 Novedades v1.3 — muestreo inteligente, ROI realista y modo simulación
+
+- **P+05 · Muestreo inteligente**: cuando el análisis es preliminar por faltantes, la sección P agrega el bloque «📌 Muestreo inteligente — ¿dónde tomar la muestra de laboratorio?» con los puntos FPS en coordenadas del lote (cruces rojas), un **enlace de descarga GeoJSON** (`data:application/geo+json` con `download="puntos_muestreo.geojson"`) y la instrucción de toma de muestra compuesta con la proyección de confianza (0.55 → 0.82).
+- **Semáforo de 4 barras** en la sección 01: junto al plan económico se pinta `desglose_confianza` (calibración/cobertura/violaciones/respaldo) con la nota de cómo llegar al 80 %.
+- **ROI realista**: `POST /api/v1/reportes/generar` y `POST /api/v1/recomendaciones/analyze` aceptan `rendimiento_actual_t_ha`. El bloque `.eco-rend` muestra *«Con el plan ideal, su rendimiento podría pasar de X a Y t/ha (+15%). Con su presupuesto actual, pasaría a Y₂ t/ha (+Z₂%)»* — X = rendimiento declarado o el de la ficha técnica; Y₂ escala el +15 % por la cobertura del presupuesto.
+- **Script de datos embebido**: el HTML incluye `<script type="application/json" id="datos-reporte">{suelo + umbrales}</script>` (con `</` escapado como `<\/`) para que la UI precargue los sliders del modo simulación sin llamadas extra.
+- **Modo simulación**: el endpoint `POST /api/v1/reportes/simular` reejecuta el motor sin tocar BD (< 200 ms); en la UI se usa desde el panel «🧪 Simular enmienda» (sliders pH/N/P/K con debounce 250 ms).
 
 ---
 

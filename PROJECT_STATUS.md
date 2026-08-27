@@ -1,6 +1,6 @@
 # AgroIA — Estado del Proyecto
 
-> **Fecha:** 2026-08-25 | **Versión:** 0.1.0 | **Pipeline:** janus → epicureo → archi → genesis → builder | **CI:** 🟢 verde | **Producción:** 🌐 https://agroia-backend.onrender.com (Render Free + Neon)
+> **Fecha:** 2026-08-27 | **Versión:** 0.1.0 | **Pipeline:** janus → epicureo → archi → genesis → builder | **CI:** 🟢 verde | **Producción:** 🌐 https://agroia-backend.onrender.com (Render Free + Neon)
 
 ## 🎯 Objetivo
 
@@ -155,6 +155,14 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Wizard de 3 secciones** en «🏡 Fincas»: 1) Información básica (nombre, propietario, teléfono, email, departamento, municipio, vereda) · 2) Ubicación (📍 Usar mi ubicación con GPS del navegador, 🗺️ seleccionar en mapa con Leaflet y polígono del lindero, 🔗 pegar enlace Google Maps; muestra latitud, longitud, altitud y precisión) · 3) Características del predio (tipo de área, área registrada, **área georreferenciada calculada automáticamente del polígono**, ¿varios lotes?).
 - **Migración 011**: nuevas columnas en `fincas` (`vereda, precision_gps, fuente_geolocalizacion, geometria (GeoJSON), area_declarada_ha, area_calculada_ha, perimetro_m, tipo_area, tiene_multiples_lotes, fecha_georreferenciacion`) + tabla `lotes` (separación arquitectónica Finca ≠ Lote). Al guardar se crea el **lote principal** y `GET /fincas/{id}/lotes` los lista.
 - **Cadena de validación al guardar** (`services/geografia.py`, catálogo de 32 departamentos + municipios con centroides, espejo de `departamentos.js`): 1 departamento existe → 2 municipio pertenece → 3 coordenadas válidas → 4 coinciden con el municipio (≤ 50 km del centroide) → 5 área razonable (0.01–100 000 ha) → 6 precisión aceptable (≤ 100 m). Cada paso se devuelve y se pinta en la UI (✅/⚠️/❌); el error 422 `VALIDACION_FINCA` incluye la lista de pasos. `GET /api/v1/location/catalogo` expone el catálogo.
+
+### Muestreo inteligente, semáforo de confianza, ROI realista y modo simulación (2026-08-27)
+
+- **Muestreo inteligente** (`services/optimizador_muestreo.py`): Farthest Point Sampling sobre `pos_x/pos_y` de las lecturas. Si el análisis es preliminar por parámetros faltantes, el reporte agrega el bloque **«📌 Muestreo inteligente — ¿dónde tomar la muestra de laboratorio?»** con 3-4 puntos óptimos (cruces rojas en coordenadas del lote), **GeoJSON descargable** (`puntos_muestreo.geojson`) y la instrucción *«Tome muestras compuestas en estos puntos. Al ingresar los resultados de laboratorio, la confianza subirá de 0.55 a 0.82»* (proyección honesta de la confianza actual).
+- **Semáforo de 4 barras de confianza**: el diagnóstico muestra 🟢 Calibración del sensor (NPK sin laboratorio = 60 %) · 🟡 Cobertura de fertilidad · 🔴 Violaciones activas · 🟣 Respaldo humano, con la nota *«Para subir la confianza al 80%, complete el análisis de Calcio (barra 2) y valide el NPK en laboratorio (barra 1)»*. Respuesta API: campo `desglose_confianza`.
+- **ROI realista**: campo opcional **«Rendimiento actual (t/ha)»** en Recomendaciones y Reportes. Si se declara, la sección económica compara contra ese valor real: *«Con el plan ideal, su rendimiento podría pasar de X a Y t/ha (+Z%). Con su presupuesto actual, pasaría a Y₂ t/ha (+Z₂%)»*; sin declararlo usa el rendimiento de la ficha técnica.
+- **Modo Simulación what-if**: nuevo `POST /api/v1/reportes/simular` `{finca_id, soil_modificado}` que reejecuta el RulesEngine con el suelo modificado **sin tocar la BD** (< 200 ms) y devuelve clasificación, confianza, violaciones y advertencias. En Reportes, el panel colapsable **«🧪 Simular enmienda»** precarga 4 sliders (pH/N/P/K) desde el script `datos-reporte` embebido en el HTML y muestra el resultado al instante.
+- Validado local y en producción (sin migración nueva: las 4 features no cambian el esquema).
 
 ### Migraciones destacadas
 

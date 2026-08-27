@@ -1,16 +1,16 @@
 # Graph Report - Agro-ia  (2026-08-27)
 
 ## Corpus Check
-- 905 files · ~665,429 words
+- 905 files · ~667,062 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 9274 nodes · 11051 edges · 895 communities (749 shown, 146 thin omitted)
+- 9277 nodes · 11054 edges · 895 communities (749 shown, 146 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 189 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `16da081f`
+- Built from commit: `47cc5ad3`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -3759,16 +3759,16 @@ Cohesion: 0.67
 Nodes (3): muted, $type, $value
 
 ### Community 891 - "Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)"
-Cohesion: 0.17
-Nodes (11): 11. Reportes: anatomía del HTML generado, 13. Despliegue y CI/CD, 14. Seguridad y limitaciones conocidas, 15. Glosario, 1. Propósito del documento, 2. Visión general y stack tecnológico, 3. Arquitectura de componentes, 5. El frontend SPA: navegación y utilidades (+3 more)
+Cohesion: 0.15
+Nodes (12): 11. Reportes: anatomía del HTML generado, 13. Despliegue y CI/CD, 14. Seguridad y limitaciones conocidas, 15. Demo y restablecimiento de datos, 16. Glosario, 1. Propósito del documento, 2. Visión general y stack tecnológico, 3. Arquitectura de componentes (+4 more)
 
 ### Community 893 - "6. Recorrido sección por sección"
 Cohesion: 0.18
 Nodes (11): 6.10 💬 Chat asesor (pestaña Reportes), 6.1 🏠 Inicio (Dashboard), 6.2 📡 Sensores IoT, 6.3 📂 Cargar archivo, 6.4 🧪 Recomendaciones (la sección central), 6.5 📜 Historial, 6.6 📄 Reportes, 6.7 🏡 Fincas — registro en 3 secciones, validación y lotes (registro solo Admin) (+3 more)
 
 ### Community 894 - "8. El motor de recomendaciones (corazón del sistema)"
-Cohesion: 0.22
-Nodes (9): 8.1 Pipeline completo (numerado), 8.2 Paso 1 — SueloAdapter y validación (`services/data_adapters.py`), 8.3 Paso 2 — Sistema experto: RulesEngine (`services/rules_engine.py`), 8.4 UC1 — AptitudService (`services/aptitud.py`), 8.5 Paso 3 — ML en modo sombra: qué parámetros se envían al modelo, 8.6 Paso 4 — Discordancia ML vs reglas, 8.7 Paso 5 — Confianza real y estado de validación, 8.8 Paso 6 — Enriquecimiento de cada recomendación (UC2) (+1 more)
+Cohesion: 0.18
+Nodes (11): 8.10 Recomendación sin datos: nunca se bloquea, 8.1 Pipeline completo (numerado), 8.2 Paso 1 — SueloAdapter y validación (`services/data_adapters.py`), 8.3 Paso 2 — Sistema experto: RulesEngine (`services/rules_engine.py`), 8.4 UC1 — AptitudService (`services/aptitud.py`), 8.5 Paso 3 — ML en modo sombra: qué parámetros se envían al modelo, 8.6 Paso 4 — Discordancia ML vs reglas, 8.7 Paso 5 — Confianza real y estado de validación (+3 more)
 
 ### Community 896 - "primary"
 Cohesion: 0.67
@@ -3784,7 +3784,7 @@ Nodes (5): 10.1 Datos y etiquetado, 10.2 Modelos y métricas, 10.3 Artefactos y 
 
 ### Community 900 - "12. Persistencia y base de datos"
 Cohesion: 0.40
-Nodes (5): 12.1 Tablas principales, 12.2 Enums (12 tipos en schema `agroia`), 12.3 Migraciones (001 → 011), 12.4 Gotchas de Neon (lecciones aprendidas), 12. Persistencia y base de datos
+Nodes (5): 12.1 Tablas principales, 12.2 Enums (12 tipos en schema `agroia`), 12.3 Migraciones (001 → 014), 12.4 Gotchas de Neon (lecciones aprendidas), 12. Persistencia y base de datos
 
 ### Community 901 - "4. Autenticación y sesión (lo más básico)"
 Cohesion: 0.40
@@ -3807,7 +3807,7 @@ Cohesion: 0.67
 Nodes (3): secondary-foreground, $type, $value
 
 ## Knowledge Gaps
-- **4234 isolated node(s):** `🎯 Objetivo`, `📊 Estado por épica`, `🏗️ Stack`, `Brecha económica — plan de fertilización por presupuesto (2026-08-25)`, `Retorno de inversión en el reporte (2026-08-27)` (+4229 more)
+- **4237 isolated node(s):** `Tabla de contenidos`, `1. Propósito del documento`, `2. Visión general y stack tecnológico`, `3. Arquitectura de componentes`, `4.1 Pantalla de login` (+4232 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **146 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -3818,8 +3818,8 @@ _Questions this graph is uniquely positioned to answer:_
   _`TailwindConfigGenerator` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `ShadcnInstaller` (e.g. with `TestShadcnInstaller` and `TestShadcnInstaller`) actually correct?**
   _`ShadcnInstaller` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `🎯 Objetivo`, `📊 Estado por épica`, `🏗️ Stack` to the rest of the system?**
-  _4234 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `Tabla de contenidos`, `1. Propósito del documento`, `2. Visión general y stack tecnológico` to the rest of the system?**
+  _4237 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `init.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.06080246913580247 - nodes in this community are weakly interconnected._
 - **Should `BaseSchemaValidator` be split into smaller, more focused modules?**
