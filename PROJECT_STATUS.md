@@ -179,11 +179,19 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - Resultado: **Apta · Validada · confianza 99% · 0 violaciones · 0 faltantes**; reporte completo con mapa de calor «21 × 21 tomas (81 puntos)», plano del lote, semáforo de 4 barras en 100% y telemetría «Validado en laboratorio».
 - Verificación de bugs en producción: se endureció la búsqueda de ficha económica (sin filtro de enum en SQL, fragilidad Neon) y el encabezado del diagnóstico ahora muestra el nombre del cultivo aunque el `cultivo_id` sea desconocido (usa el cultivo sembrado de la finca). Reporte evidencia: `reports/reporte_finca_integral_3ha.html`.
 
+### Historial de ciclos productivos por lote (2026-08-27)
+
+- **Tabla relacional** `agroia.historial_ciclos_lote` (migración 016): un registro por **ciclo productivo** del lote — `lote_id` (FK lotes ON DELETE CASCADE), `cultivo_id`, `fecha_siembra` (obligatoria) / `fecha_cosecha`, `rendimiento_tn_ha NUMERIC(8,2)`, `calidad_cosecha` (Premium/Estándar/Rechazo), `aplicaciones` JSONB, `incidencias` JSONB, `practicas_riego`, `observaciones`, timestamps — con índice `idx_ciclos_lote (lote_id, fecha_siembra)`.
+- **API**: `GET/POST /api/v1/fincas/{id}/lotes/{lote_id}/ciclos`, `PATCH/DELETE …/ciclos/{ciclo_id}` — crear/editar Admin/Agrónomo, eliminar Admin; valida fechas (cosecha ≥ siembra), cultivo del catálogo y enums; auditoría `ciclo.*`.
+- **UI**: botón «🔄 Ciclos» por lote en la pestaña 🏡 Fincas → historial + formulario de registro (cultivo, fechas, rendimiento, calidad, riego, aplicaciones/incidencias JSON, observaciones) con edición en modal y eliminación.
+- Validado local (CRUD completo + auditoría + guardas de fechas) y pendiente de validación final en producción tras el deploy.
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).
 - `005_fix_enum_values` — renombra valores de enums creados por 003 (valores → nombres de miembro: `Admin` → `ADMIN`).
 - `015_auditoria` — tabla `agroia.auditoria` (bitácora de acciones: usuario, acción, entidad, detalle JSONB, IP, fecha).
+- `016_historial_ciclos_lote` — tabla `agroia.historial_ciclos_lote` + índice `idx_ciclos_lote` (ciclos productivos por lote).
 
 ### Límites del tier gratuito (validados 2026-08-25)
 

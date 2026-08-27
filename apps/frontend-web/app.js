@@ -611,10 +611,12 @@ function renderLotes(fincaId, lotes) {
         ${l.pedregosidad ? `<span class="muted">pedregosidad: ${esc(l.pedregosidad)}</span>` : ''}
       </div>
       <div class="device-actions">
+        <button class="btn btn-ghost" data-lote-ciclos="${esc(l.id)}">🔄 Ciclos</button>
         <button class="btn btn-ghost" data-lote-editar="${esc(l.id)}" data-nombre="${esc(l.nombre)}">✏️</button>
         <button class="btn btn-ghost btn-danger" data-lote-eliminar="${esc(l.id)}" data-nombre="${esc(l.nombre)}">🗑️</button>
       </div>
-    </div>`;
+    </div>
+    <div class="ciclos-panel hidden" id="ciclos-${esc(l.id)}"></div>`;
   panel.innerHTML = `
     ${lotes.length ? lotes.map(fila).join('') : '<p class="muted">Esta finca aún no tiene lotes activos.</p>'}
     <details class="lote-nuevo">
@@ -643,6 +645,9 @@ function renderLotes(fincaId, lotes) {
       </div>
       <div id="ln-msg"></div>
     </details>`;
+  panel.querySelectorAll('[data-lote-ciclos]').forEach(b => {
+    b.addEventListener('click', () => toggleCiclos(fincaId, b.dataset.loteCiclos));
+  });
   panel.querySelectorAll('[data-lote-editar]').forEach(b => {
     b.addEventListener('click', () => abrirEditarLote(fincaId, b.dataset.loteEditar, lotes.find(l => l.id === b.dataset.loteEditar)));
   });
@@ -728,6 +733,212 @@ async function eliminarLote(fincaId, loteId, nombre) {
     await api(`/fincas/${fincaId}/lotes/${loteId}`, { method: 'DELETE', headers: headers() });
     const lr = await api(`/fincas/${fincaId}/lotes`);
     renderLotes(fincaId, lr.data || []);
+  } catch (e) {
+    alert('No se pudo eliminar: ' + e.message);
+  }
+}
+
+/* ────────────────────── ciclos productivos por lote ────────────────────── */
+
+const OPCIONES_CULTIVOS = () => (state.cultivos || []).map(c =>
+  `<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');
+
+async function toggleCiclos(fincaId, loteId) {
+  const panel = document.getElementById('ciclos-' + loteId);
+  if (!panel) return;
+  if (!panel.classList.contains('hidden')) {
+    panel.classList.add('hidden');
+    return;
+  }
+  panel.innerHTML = '<p class="muted">Cargando ciclos…</p>';
+  panel.classList.remove('hidden');
+  const r = await api(`/fincas/${fincaId}/lotes/${loteId}/ciclos`);
+  renderCiclos(fincaId, loteId, r.data || []);
+}
+
+function renderCiclos(fincaId, loteId, ciclos) {
+  const panel = document.getElementById('ciclos-' + loteId);
+  if (!panel) return;
+  const fila = (c) => `
+    <div class="ciclo-row">
+      <div class="ciclo-info">
+        <b>🌱 ${esc(c.cultivo_nombre || 'Cultivo')}</b>
+        <span class="muted">${esc(c.fecha_siembra || '?')}${c.fecha_cosecha ? ' → ' + esc(c.fecha_cosecha) : ' (sin cosechar)'}</span>
+        ${c.rendimiento_tn_ha != null ? `<span class="muted">rinde ${c.rendimiento_tn_ha} t/ha</span>` : ''}
+        ${c.calidad_cosecha ? badge(c.calidad_cosecha, c.calidad_cosecha === 'Premium' ? 'ok' : c.calidad_cosecha === 'Rechazo' ? 'critical' : 'warning') : ''}
+        ${c.practicas_riego ? `<span class="muted">riego: ${esc(c.practicas_riego)}</span>` : ''}
+        ${(c.aplicaciones || []).length ? `<span class="muted">🧪 ${c.aplicaciones.length} aplicación(es)</span>` : ''}
+        ${(c.incidencias || []).length ? `<span class="muted">🐛 ${c.incidencias.length} incidencia(s)</span>` : ''}
+        ${c.observaciones ? `<span class="muted">📝 ${esc(c.observaciones)}</span>` : ''}
+      </div>
+      <div class="device-actions">
+        <button class="btn btn-ghost" data-ciclo-editar="${esc(c.id)}">✏️</button>
+        <button class="btn btn-ghost btn-danger" data-ciclo-eliminar="${esc(c.id)}">🗑️</button>
+      </div>
+    </div>`;
+  panel.innerHTML = `
+    ${ciclos.length ? ciclos.map(fila).join('') : '<p class="muted">Este lote aún no tiene ciclos registrados.</p>'}
+    <details class="lote-nuevo">
+      <summary>➕ Registrar ciclo productivo (siembra → cosecha)</summary>
+      <div class="form-grid">
+        <label class="field"><span>Cultivo *</span>
+          <select id="cic-cultivo-${esc(loteId)}"><option value="">— Seleccione —</option>${OPCIONES_CULTIVOS()}</select>
+        </label>
+        <label class="field"><span>Fecha de siembra *</span><input id="cic-siembra-${esc(loteId)}" type="date" required /></label>
+        <label class="field"><span>Fecha de cosecha</span><input id="cic-cosecha-${esc(loteId)}" type="date" /></label>
+        <label class="field"><span>Rendimiento (t/ha)</span><input id="cic-rend-${esc(loteId)}" type="number" min="0" step="0.01" /></label>
+        <label class="field"><span>Calidad de cosecha</span>
+          <select id="cic-calidad-${esc(loteId)}">
+            <option value="">—</option>
+            <option value="Premium">Premium</option>
+            <option value="Estándar">Estándar</option>
+            <option value="Rechazo">Rechazo</option>
+          </select>
+        </label>
+        <label class="field"><span>Prácticas de riego</span>
+          <select id="cic-riego-${esc(loteId)}">
+            <option value="">—</option>
+            <option value="Goteo">Goteo</option>
+            <option value="Gravedad">Gravedad</option>
+            <option value="Aspersión">Aspersión</option>
+            <option value="Secano">Secano</option>
+          </select>
+        </label>
+        <label class="field"><span>Aplicaciones (JSON opcional)</span>
+          <textarea id="cic-aplic-${esc(loteId)}" rows="3" placeholder='[{"producto":"Urea","dosis_kg_ha":150,"fecha":"2026-01-15","tipo":"Fertilizante"}]'></textarea>
+        </label>
+        <label class="field"><span>Incidencias (JSON opcional)</span>
+          <textarea id="cic-incid-${esc(loteId)}" rows="3" placeholder='[{"plaga":"Roya","severidad":"Alta","fecha":"2026-02-10","control":"Fungicida"}]'></textarea>
+        </label>
+        <label class="field"><span>Observaciones</span><input id="cic-obs-${esc(loteId)}" maxlength="4000" /></label>
+        <button type="button" class="btn btn-primary" id="cic-guardar-${esc(loteId)}">💾 Guardar ciclo</button>
+      </div>
+      <div id="cic-msg-${esc(loteId)}"></div>
+    </details>`;
+  panel.querySelectorAll('[data-ciclo-editar]').forEach(b => {
+    b.addEventListener('click', () => abrirEditarCiclo(fincaId, loteId, ciclos.find(c => c.id === b.dataset.cicloEditar)));
+  });
+  panel.querySelectorAll('[data-ciclo-eliminar]').forEach(b => {
+    b.addEventListener('click', () => eliminarCiclo(fincaId, loteId, b.dataset.cicloEliminar));
+  });
+  document.getElementById('cic-guardar-' + loteId).addEventListener('click', () => crearCiclo(fincaId, loteId));
+}
+
+function _parseJsonOpcional(texto, etiqueta) {
+  const t = (texto || '').trim();
+  if (!t) return null;
+  try {
+    const v = JSON.parse(t);
+    if (!Array.isArray(v)) throw new Error('no es un arreglo');
+    return v;
+  } catch {
+    throw new Error(`${etiqueta} debe ser un JSON válido tipo arreglo (o vacío).`);
+  }
+}
+
+async function crearCiclo(fincaId, loteId) {
+  const msg = document.getElementById('cic-msg-' + loteId);
+  const el = (id) => document.getElementById('cic-' + id + '-' + loteId);
+  try {
+    const body = {
+      cultivo_id: el('cultivo').value,
+      fecha_siembra: el('siembra').value,
+      fecha_cosecha: el('cosecha').value || null,
+      rendimiento_tn_ha: el('rend').value ? Number(el('rend').value) : null,
+      calidad_cosecha: el('calidad').value || null,
+      practicas_riego: el('riego').value || null,
+      aplicaciones: _parseJsonOpcional(el('aplic').value, 'Aplicaciones'),
+      incidencias: _parseJsonOpcional(el('incid').value, 'Incidencias'),
+      observaciones: el('obs').value.trim() || null,
+    };
+    if (!body.cultivo_id || !body.fecha_siembra) {
+      msg.innerHTML = errorBanner('Seleccione el cultivo y la fecha de siembra (obligatorios).');
+      return;
+    }
+    msg.innerHTML = '<div class="ok-banner">⏳ Guardando ciclo…</div>';
+    const r = await api(`/fincas/${fincaId}/lotes/${loteId}/ciclos`, {
+      method: 'POST', headers: headers(), body: JSON.stringify(body),
+    });
+    msg.innerHTML = okBanner(`Ciclo de <b>${esc(r.ciclo.cultivo_nombre || 'cultivo')}</b> registrado (siembra ${esc(r.ciclo.fecha_siembra)}).`);
+    const lr = await api(`/fincas/${fincaId}/lotes/${loteId}/ciclos`);
+    renderCiclos(fincaId, loteId, lr.data || []);
+  } catch (e) {
+    msg.innerHTML = errorBanner(e.message);
+  }
+}
+
+function abrirEditarCiclo(fincaId, loteId, ciclo) {
+  if (!ciclo) return;
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = `✏️ Editar ciclo — ${ciclo.cultivo_nombre || ''} (${ciclo.fecha_siembra})`;
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <div class="form-grid">
+      <label class="field"><span>Cultivo *</span>
+        <select id="ec-cultivo"><option value="">— Seleccione —</option>
+          ${(state.cultivos || []).map(c => `<option value="${esc(c.id)}" ${c.id === ciclo.cultivo_id ? 'selected' : ''}>${esc(c.nombre)}</option>`).join('')}
+        </select>
+      </label>
+      <label class="field"><span>Fecha de siembra *</span><input id="ec-siembra" type="date" value="${esc(ciclo.fecha_siembra || '')}" required /></label>
+      <label class="field"><span>Fecha de cosecha</span><input id="ec-cosecha" type="date" value="${esc(ciclo.fecha_cosecha || '')}" /></label>
+      <label class="field"><span>Rendimiento (t/ha)</span><input id="ec-rend" type="number" min="0" step="0.01" value="${ciclo.rendimiento_tn_ha != null ? ciclo.rendimiento_tn_ha : ''}" /></label>
+      <label class="field"><span>Calidad de cosecha</span>
+        <select id="ec-calidad">
+          <option value="">—</option>
+          ${['Premium', 'Estándar', 'Rechazo'].map(q => `<option value="${q}" ${ciclo.calidad_cosecha === q ? 'selected' : ''}>${q}</option>`).join('')}
+        </select>
+      </label>
+      <label class="field"><span>Prácticas de riego</span>
+        <select id="ec-riego">
+          <option value="">—</option>
+          ${['Goteo', 'Gravedad', 'Aspersión', 'Secano'].map(q => `<option value="${q}" ${ciclo.practicas_riego === q ? 'selected' : ''}>${q}</option>`).join('')}
+        </select>
+      </label>
+      <label class="field"><span>Aplicaciones (JSON)</span>
+        <textarea id="ec-aplic" rows="3">${esc(JSON.stringify(ciclo.aplicaciones || []))}</textarea>
+      </label>
+      <label class="field"><span>Incidencias (JSON)</span>
+        <textarea id="ec-incid" rows="3">${esc(JSON.stringify(ciclo.incidencias || []))}</textarea>
+      </label>
+      <label class="field"><span>Observaciones</span><input id="ec-obs" maxlength="4000" value="${esc(ciclo.observaciones || '')}" /></label>
+    </div>`;
+  document.getElementById('modal-msg').innerHTML = '';
+  m.classList.remove('hidden');
+  document.getElementById('modal-guardar').onclick = () => guardarEdicionCiclo(fincaId, loteId, ciclo.id);
+}
+
+async function guardarEdicionCiclo(fincaId, loteId, cicloId) {
+  const msg = document.getElementById('modal-msg');
+  const el = (id) => document.getElementById('ec-' + id);
+  try {
+    const body = {
+      cultivo_id: el('cultivo').value || null,
+      fecha_siembra: el('siembra').value || null,
+      fecha_cosecha: el('cosecha').value || null,
+      rendimiento_tn_ha: el('rend').value ? Number(el('rend').value) : null,
+      calidad_cosecha: el('calidad').value || null,
+      practicas_riego: el('riego').value || null,
+      aplicaciones: _parseJsonOpcional(el('aplic').value, 'Aplicaciones'),
+      incidencias: _parseJsonOpcional(el('incid').value, 'Incidencias'),
+      observaciones: el('obs').value.trim() || null,
+    };
+    const r = await api(`/fincas/${fincaId}/lotes/${loteId}/ciclos/${cicloId}`, {
+      method: 'PATCH', headers: headers(), body: JSON.stringify(body),
+    });
+    msg.innerHTML = okBanner(`Ciclo actualizado (siembra ${esc(r.ciclo.fecha_siembra)}).`);
+    const lr = await api(`/fincas/${fincaId}/lotes/${loteId}/ciclos`);
+    renderCiclos(fincaId, loteId, lr.data || []);
+    setTimeout(() => document.getElementById('modal-editor').classList.add('hidden'), 900);
+  } catch (e) {
+    msg.innerHTML = errorBanner(e.message);
+  }
+}
+
+async function eliminarCiclo(fincaId, loteId, cicloId) {
+  if (!confirm('¿Eliminar este ciclo del historial del lote? La acción quedará en auditoría.')) return;
+  try {
+    await api(`/fincas/${fincaId}/lotes/${loteId}/ciclos/${cicloId}`, { method: 'DELETE', headers: headers() });
+    const lr = await api(`/fincas/${fincaId}/lotes/${loteId}/ciclos`);
+    renderCiclos(fincaId, loteId, lr.data || []);
   } catch (e) {
     alert('No se pudo eliminar: ' + e.message);
   }

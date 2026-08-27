@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787857481.1624815,
-    "ast_hash": "9423be094cd49bad0e9f2d6d12780a56",
+    "mtime": 1787858837.717409,
+    "ast_hash": "d170fbdcf0309bce401a7a21340506f5",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4909,14 +4909,9 @@
     "ast_hash": "0e848377f7df73cac3c653d49f51a4f7",
     "semantic_hash": ""
   },
-  "_finca_integral.json": {
-    "mtime": 1787857958.3846798,
-    "ast_hash": "598569f9febec92c2168dce1f19d5eb9",
-    "semantic_hash": ""
-  },
   "reports/reporte_finca_integral_3ha.html": {
-    "mtime": 1787858460.9732099,
-    "ast_hash": "f8b9192049a2f561c495592a9a156681",
+    "mtime": 1787858800.0135765,
+    "ast_hash": "45f9d0cb3bde45ab36e41a77cc13c1e6",
     "semantic_hash": ""
   }
 }

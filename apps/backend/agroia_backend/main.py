@@ -23,6 +23,7 @@ from fastapi.staticfiles import StaticFiles
 import agroia_backend.models.aceptacion_recomendacion  # noqa: F401
 import agroia_backend.models.auditoria  # noqa: F401
 import agroia_backend.models.chat_memoria  # noqa: F401
+import agroia_backend.models.ciclo_lote  # noqa: F401
 import agroia_backend.models.cultivo  # noqa: F401
 import agroia_backend.models.discordancia  # noqa: F401
 import agroia_backend.models.dispositivo_iot  # noqa: F401
@@ -39,6 +40,7 @@ from agroia_backend.api.auth import router as auth_router
 from agroia_backend.api.auditoria import router as auditoria_router
 from agroia_backend.api.catalogo import router as catalogo_router
 from agroia_backend.api.chat import router as chat_router
+from agroia_backend.api.ciclos import router as ciclos_router
 from agroia_backend.api.dashboard import router as dashboard_router
 from agroia_backend.api.demo import router as demo_router
 from agroia_backend.api.fincas import router as fincas_router
@@ -119,6 +121,7 @@ app.include_router(location_router)
 app.include_router(fincas_router)
 app.include_router(auth_router)
 app.include_router(auditoria_router)
+app.include_router(ciclos_router)
 app.include_router(reportes_router)
 app.include_router(sensor_api_router)
 app.include_router(demo_router)

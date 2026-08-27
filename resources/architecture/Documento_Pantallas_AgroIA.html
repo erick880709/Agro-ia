@@ -69,7 +69,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
   <h1>Pantallas del sistema y su propósito</h1>
-  <div class="meta">Versión 1.4 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+  <div class="meta">Versión 1.5 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
 </header>
 
 <div class="wrap">
@@ -181,7 +181,11 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
     <li><b>🗂️ Lotes</b> — abre el panel de lotes de la finca: lista los lotes activos con sus
     características (área, profundidad de suelo, pedregosidad) y permite <b>➕ Agregar lote</b>
     (cada lote puede tener características propias), editarlos ✏️ y eliminarlos 🗑️
-    (no se permite borrar el último lote activo).</li>
+    (no se permite borrar el último lote activo). Cada lote tiene además el botón
+    <b>🔄 Ciclos</b>: abre el <b>historial de ciclos productivos</b> del lote (siembra → cosecha)
+    con fechas, rendimiento t/ha, calidad de cosecha, prácticas de riego, aplicaciones e
+    incidencias estructuradas (JSON) y observaciones del agrónomo; permite registrar,
+    editar ✏️ y eliminar 🗑️ ciclos (tabla <code>historial_ciclos_lote</code>).</li>
     <li><b>✏️ Editar</b> — modal con los datos básicos de la finca (nombre, ubicación, propietario,
     contactos, área, altitud, vereda, coordenadas).</li>
     <li><b>🗑️ Eliminar</b> — confirmación y borrado en cascada de la finca (lotes, lecturas,
@@ -399,7 +403,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.4 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.5 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 1.5 · **Fecha:** 2026-08-27
+**Versión:** 1.6 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -434,6 +434,17 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 
 **Qué hace la UI:** pestaña «🕵️ Auditoría» con filtros por entidad (finca/lote/usuario/auth/demo) y búsqueda por email/nombre/ID, tabla paginada (fecha, usuario, acción, detalle) y navegación anterior/siguiente.
 
+### 6.12 🔄 Ciclos productivos por lote (`historial_ciclos_lote`)
+
+**Servicios** (tabla relacional migración 016, indexada por `(lote_id, fecha_siembra)`):
+
+- `GET /api/v1/fincas/{finca_id}/lotes/{lote_id}/ciclos` — historial de ciclos del lote (más reciente primero), con `cultivo_nombre` resuelto del catálogo.
+- `POST /api/v1/fincas/{finca_id}/lotes/{lote_id}/ciclos` — registrar ciclo (Admin/Agrónomo): `cultivo_id`, `fecha_siembra` (obligatoria), `fecha_cosecha`, `rendimiento_tn_ha`, `calidad_cosecha` (Premium | Estándar | Rechazo), `aplicaciones` JSONB (`[{producto, dosis_kg_ha, fecha, tipo}]`), `incidencias` JSONB (`[{plaga, severidad, fecha, control}]`), `practicas_riego` y `observaciones`. Valida fechas (cosecha ≥ siembra), cultivo del catálogo y enums de calidad/riego.
+- `PATCH …/ciclos/{ciclo_id}` — editar ciclo (Admin/Agrónomo).
+- `DELETE …/ciclos/{ciclo_id}` — eliminar ciclo (solo Admin).
+
+**Qué hace la UI:** en el panel de lotes, cada lote tiene el botón «🔄 Ciclos» que abre su historial y el formulario «➕ Registrar ciclo productivo» (cultivo del catálogo, fechas, rendimiento t/ha, calidad, riego, aplicaciones/incidencias en JSON y observaciones), con edición ✏️ en modal y eliminación 🗑️. Cada acción queda en auditoría (`ciclo.crear/actualizar/eliminar`).
+
 ---
 
 ## 7. Ingesta de datos IoT — `POST /api/sensor`
@@ -741,6 +752,7 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 | `modelos_ml` / `metricas_modelo` | Registro de entrenamientos y métricas (stage) |
 | `chat_memoria` | Memoria conversacional del chat por finca (+ **imagen_base64** de la foto adjunta) |
 | `aceptaciones_recomendacion` | Feedback humano (rol, comentario, resumen, confianza previa) |
+| `historial_ciclos_lote` | **Ciclos productivos por lote** (siembra→cosecha): fechas, rendimiento t/ha, calidad, aplicaciones/incidencias JSONB, riego, observaciones — FK lotes ON DELETE CASCADE |
 | `auditoria` | **Bitácora de acciones**: usuario (email/nombre/rol), acción, entidad, entidad_id, detalle JSONB, IP, fecha |
 
 ### 12.2 Enums (12 tipos en schema `agroia`)
@@ -749,7 +761,7 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 
 ### 12.3 Migraciones (001 → 014)
 
-- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria`.
+- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` + índice `idx_ciclos_lote`.
 - **Auto-reparación al arranque**: `asegurar_enums()` crea tipos enum faltantes y `asegurar_reglas()` siembra reglas faltantes (idempotentes, corren en el `lifespan` de `main.py`).
 
 ### 12.4 Gotchas de Neon (lecciones aprendidas)
