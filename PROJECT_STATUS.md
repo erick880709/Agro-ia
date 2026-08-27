@@ -237,7 +237,7 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Pipeline `train_colombia.py --active-learning`**: combina sintéticos (peso 1.0) + doradas (peso 10.0, `sample_weight`), partición por finca sin fuga, y calcula `precision_real` por variable sobre el holdout dorado. Promoción **por variable** con precisión ≥ 0.85 y ≥ 5 muestras → `RF_diagnostico_<var>_colombia_activo` en PRODUCTION; el resto en STAGING honesto.
 - **Validador ML en runtime**: el oráculo lee `ml_meta.json.promovidas`; el orquestador compara ML vs. reglas por variable promovida — acuerdo → +0.02 de confianza (máx +0.06) y 5.ª barra en el semáforo; desacuerdo → prevalecen las reglas y se registra en `validacion_ml`. P5 muestra el banner «🤖 Validador ML activo».
 - **Transparencia**: `GET /api/v1/ml/etiquetas-doradas` (Admin) y `variables_promovidas` en `GET /api/v1/ml/estado`.
-- Validado local: siembra de etiquetas doradas (aceptación + ciclo cerrado), entrenamiento `--active-learning --registrar` (75 000 sintéticos + doradas, 0 promovidas con 1 muestra — comportamiento honesto), validador runtime con promoción simulada (desacuerdos P/K → reglas mandan) y banner en P5 — pendiente validación en producción.
+- Validado local: siembra de etiquetas doradas (aceptación + ciclo cerrado), entrenamiento `--active-learning --registrar` (75 000 sintéticos + doradas, 0 promovidas con 1 muestra — comportamiento honesto), validador runtime con promoción simulada (desacuerdos P/K → reglas mandan) y banner en P5. Validado en producción: `variables_promovidas` en `/ml/estado`, `/ml/etiquetas-doradas` (Admin), `validacion_ml` en el analyze y UI sirviendo `v=20260827-mlactivo`.
 
 ### Migraciones destacadas
 
