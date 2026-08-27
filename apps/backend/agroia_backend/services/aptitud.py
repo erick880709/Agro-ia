@@ -99,6 +99,7 @@ class AptitudService:
                     "rango_ideal": self._formatear_rango(v),
                     "accion": v.accion,
                     "prioridad": v.prioridad,
+                    "fuente": v.fuente,
                 })
 
             score = round(max(0.0, 100.0 - min(penalizacion, MAX_PENALIZACION)), 1)
@@ -117,7 +118,7 @@ class AptitudService:
                 "confianza": confianza,
                 "clasificacion": clasificar_aptitud(score),
                 "reglas_especificas": n_reglas,
-                "ajustes": ajustes[:3],
+                "ajustes": ajustes[:5],
             })
 
         sugerencias.sort(
@@ -150,6 +151,10 @@ class AptitudService:
 
     @staticmethod
     def _formatear_rango(v) -> str:
-        lo = v.umbral_min if v.umbral_min is not None else "-∞"
-        hi = v.umbral_max if v.umbral_max is not None else "+∞"
-        return f"[{lo} - {hi}]"
+        if v.umbral_min is not None and v.umbral_max is not None:
+            return f"[{v.umbral_min} - {v.umbral_max}]"
+        if v.umbral_min is not None:
+            return f"≥ {v.umbral_min}"
+        if v.umbral_max is not None:
+            return f"≤ {v.umbral_max}"
+        return "—"

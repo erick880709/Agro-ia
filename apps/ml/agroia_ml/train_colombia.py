@@ -191,11 +191,13 @@ async def cargar_datos_reales(limite: int = 400) -> list[dict]:
     return muestras
 
 
-def _features(muestras: list[dict], cultivo_idx: int) -> np.ndarray:
+def _features(muestras: list[dict], cultivo_idx: int, medianas: dict | None = None) -> np.ndarray:
+    """Matriz de features; imputa valores faltantes con la mediana de la variable."""
+    med = medianas or {}
     X = np.full((len(muestras), len(VARIABLES) + 1), -1.0, dtype=float)
     for i, m in enumerate(muestras):
         for j, var in enumerate(VARIABLES):
-            X[i, j] = m.get(var, -1.0)
+            X[i, j] = float(m.get(var, med.get(var, -1.0)))
         X[i, len(VARIABLES)] = cultivo_idx
     return X
 
@@ -283,6 +285,25 @@ async def main(registrar: bool = False) -> None:
             })
     print(f"Muestras sintéticas generadas: {len(muestras)}")
 
+    # ── Imputación: medianas por variable (datos faltantes de sensores) ──
+    medianas: dict[str, float] = {}
+    for var in VARIABLES:
+        valores = [s["m"].get(var) for s in muestras if var in s["m"]]
+        medianas[var] = round(float(np.median(valores)), 4) if valores else -1.0
+    print(f"Medianas de imputación calculadas ({len(medianas)} variables)")
+
+    # Enmascarar ~35% de muestras (30-60% de variables faltantes) para que el
+    # modelo aprenda a predecir con datos incompletos, como los sensores reales.
+    muestras_masked: list[dict] = []
+    for s in muestras:
+        m = dict(s["m"])
+        if rng.random() < 0.35:
+            n_vars = len(VARIABLES)
+            k = int(rng.integers(int(n_vars * 0.3), int(n_vars * 0.6) + 1))
+            for var in rng.choice(VARIABLES, size=k, replace=False):
+                m.pop(var, None)
+        muestras_masked.append(m)
+
     # ── Entrenar diagnóstico por variable ──
     claves_variables = {
         "ph": "ph", "n": "nitrogeno", "p": "fosforo", "k": "potasio",
@@ -295,10 +316,10 @@ async def main(registrar: bool = False) -> None:
     resultados: list[dict] = []
     modelos_artefactos: dict[str, object] = {}
 
-    X_all = _features([s["m"] for s in muestras], 0)
+    X_all = _features(muestras_masked, 0, medianas)
     _ = X_all  # noqa: F841 (features sin cultivo para diagnóstico variable)
     for var in variables_modelo:
-        X = _features([s["m"] for s in muestras], 0)
+        X = _features(muestras_masked, 0, medianas)
         y = np.array([s["y_var"].get(var, "OK") for s in muestras])
         r = entrenar_y_evaluar(f"diagnostico_{var}", X, y, sorted(set(y)), con_cv=False)
         if "modelo" in r:
@@ -309,7 +330,7 @@ async def main(registrar: bool = False) -> None:
               f"prec={r.get('precision')} (n={r.get('n')})", flush=True)
 
     # ── Entrenar clasificador de aptitud (UC1) ──
-    X_apt = _features([s["m"] for s in muestras], 0)
+    X_apt = _features(muestras_masked, 0, medianas)
     for i, s in enumerate(muestras):
         X_apt[i, len(VARIABLES)] = s["cultivo_idx"]
     y_apt = np.array([s["y_apt"] for s in muestras])
@@ -330,7 +351,7 @@ async def main(registrar: bool = False) -> None:
                 r for r in reglas
                 if r["cultivo_id"] == cultivo["id"] or r["cultivo_id"] is None
             ]
-            X_r = _features(reales, cultivo_idx)
+            X_r = _features(reales, cultivo_idx, medianas)
             # etiquetas reales del sistema experto
             y_apt_r = []
             for m in reales:
@@ -354,16 +375,26 @@ async def main(registrar: bool = False) -> None:
     else:
         print("\nSin datos reales para evaluación.")
 
+    concordancia_media = (
+        round(float(np.mean([e["concordancia_aptitud"] for e in real_eval])), 4)
+        if real_eval else None
+    )
+    print(f"\nConcordancia media en datos reales: {concordancia_media}")
+
     # ── Guardar artefactos ──
     meta = {
         "fecha": datetime.now(timezone.utc).isoformat(),
         "variables": VARIABLES,
+        "medianas": medianas,
+        "imputacion": "mediana_por_variable_sinteticos",
+        "missingness_sintetico": 0.35,
         "cultivos_entrenados": [c["nombre"] for c in cultivos_con_reglas],
         "resultados": [
             {k: v for k, v in r.items() if k not in ("modelo",)}
             for r in resultados
         ],
         "evaluacion_datos_reales": real_eval,
+        "concordancia_media_datos_reales": concordancia_media,
     }
     for nombre, modelo in modelos_artefactos.items():
         joblib.dump(modelo, MODELS_DIR / f"{nombre}.joblib")
@@ -374,12 +405,15 @@ async def main(registrar: bool = False) -> None:
 
     # ── Registrar en BD ──
     if registrar:
-        await registrar_modelos(resultados)
+        # Promover a PRODUCTION solo si la concordancia real supera el umbral
+        # de calidad (0.85); en caso contrario queda honestamente en STAGING.
+        promover = concordancia_media is not None and concordancia_media >= 0.85
+        await registrar_modelos(resultados, promover_aptitud=promover)
     else:
         print("(Use --registrar para guardar métricas en modelos_ml/metricas_modelo)")
 
 
-async def registrar_modelos(resultados: list[dict]) -> None:
+async def registrar_modelos(resultados: list[dict], promover_aptitud: bool = False) -> None:
     from agroia.database import async_session_factory
 
     from agroia_backend.models.metrica_modelo import MetricaModelo
@@ -389,17 +423,18 @@ async def registrar_modelos(resultados: list[dict]) -> None:
         for r in resultados:
             if "f1" not in r:
                 continue
+            es_aptitud = r["nombre"] == "aptitud_upra"
             modelo = ModeloML(
                 nombre=f"RF_{r['nombre']}_colombia_sintetico",
                 tipo_modelo="RandomForest",
                 descripcion=(
                     "Entrenado con datos simulados de suelos colombianos etiquetados "
-                    "por el sistema experto UPRA/Cenicafé/AGROSAVIA."
+                    "por el sistema experto UPRA/Cenicafé/AGROSAVIA (imputación por medianas)."
                 ),
                 version=1,
                 f1_score=r["f1"],
-                stage=StageModelo.STAGING,
-                activo=False,
+                stage=StageModelo.PRODUCTION if (es_aptitud and promover_aptitud) else StageModelo.STAGING,
+                activo=True if (es_aptitud and promover_aptitud) else False,
             )
             db.add(modelo)
             await db.flush()
@@ -415,7 +450,8 @@ async def registrar_modelos(resultados: list[dict]) -> None:
                         modelo_ml_id=modelo.id, metrica=metrica, valor=valor,
                     ))
         await db.commit()
-    print("Modelos y métricas registrados en la BD (stage STAGING).")
+    etapa = "PRODUCTION (promovido)" if promover_aptitud else "STAGING"
+    print(f"Modelos y métricas registrados en la BD (stage {etapa}).")
 
 
 if __name__ == "__main__":

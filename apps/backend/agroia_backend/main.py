@@ -62,6 +62,14 @@ async def lifespan(app: FastAPI):
         await asegurar_enums()
     except Exception as e:  # noqa: BLE001 — no bloquear el arranque
         logger.error("asegurar_enums_fallo", error=str(e))
+
+    # Reglas agronómicas ampliadas (cobertura completa de variables/cultivos)
+    from agroia_backend.services.asegurar_reglas import asegurar_reglas
+
+    try:
+        await asegurar_reglas()
+    except Exception as e:  # noqa: BLE001 — no bloquear el arranque
+        logger.error("asegurar_reglas_fallo", error=str(e))
     yield
     logger.info("backend_stopping")
 

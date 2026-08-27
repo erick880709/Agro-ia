@@ -34,6 +34,7 @@ class MLOracleService:
     def __init__(self, dir_modelos: Path | None = None):
         self.dir = dir_modelos or _dir_modelos()
         self._modelos: dict[str, object] = {}
+        self._medianas: dict[str, float] = {}
         self._cargados = False
 
     def _cargar(self) -> None:
@@ -54,7 +55,16 @@ class MLOracleService:
                 self._modelos[nombre] = joblib.load(p)
             except Exception as e:  # noqa: BLE001
                 logger.warning("ml_oracle_carga_fallida", modelo=nombre, error=str(e))
-        logger.info("ml_oracle_modelos_cargados", n=len(self._modelos))
+        meta_path = self.dir / "ml_meta.json"
+        if meta_path.exists():
+            try:
+                import json
+
+                meta = json.loads(meta_path.read_text(encoding="utf-8"))
+                self._medianas = {k: float(v) for k, v in meta.get("medianas", {}).items()}
+            except Exception as e:  # noqa: BLE001
+                logger.warning("ml_oracle_meta_fallida", error=str(e))
+        logger.info("ml_oracle_modelos_cargados", n=len(self._modelos), medianas=len(self._medianas))
 
     def disponible(self) -> bool:
         self._cargar()
@@ -67,8 +77,10 @@ class MLOracleService:
             return None
         X = np.full((1, len(VARIABLES) + 1), -1.0, dtype=float)
         for j, var in enumerate(VARIABLES):
-            if soil_dict.get(var) is not None:
-                X[0, j] = float(soil_dict[var])
+            val = soil_dict.get(var)
+            if val is None:
+                val = self._medianas.get(var, -1.0)
+            X[0, j] = float(val)
         X[0, len(VARIABLES)] = cultivo_idx
         return X
 

@@ -264,6 +264,15 @@ th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid #e4ece6; 
 th { color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
 tr:hover td { background: #f2f8f4; }
 
+/* Descripción de reglas en cultivos sugeridos */
+td.ajustes-desc { min-width: 280px; font-size: 0.82rem; }
+.ajuste-item {
+  padding: 5px 0;
+  border-bottom: 1px dashed #e4ece6;
+}
+.ajuste-item:last-child { border-bottom: none; }
+.ajuste-accion { margin-top: 2px; color: #36593f; }
+
 /* ── Badges ── */
 .badge {
   display: inline-block;

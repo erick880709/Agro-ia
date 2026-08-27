@@ -307,6 +307,10 @@ class RecommendationOrchestrator:
 
     @staticmethod
     def _formatear_rango(v) -> str:
-        lo = v.umbral_min if v.umbral_min is not None else "-∞"
-        hi = v.umbral_max if v.umbral_max is not None else "+∞"
-        return f"[{lo} - {hi}]"
+        if v.umbral_min is not None and v.umbral_max is not None:
+            return f"[{v.umbral_min} - {v.umbral_max}]"
+        if v.umbral_min is not None:
+            return f"≥ {v.umbral_min}"
+        if v.umbral_max is not None:
+            return f"≤ {v.umbral_max}"
+        return "—"

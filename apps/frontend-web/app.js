@@ -733,6 +733,16 @@ async function enviarAnalisis(e) {
   }
 }
 
+function descAjustes(ajustes) {
+  if (!ajustes || !ajustes.length) return '<span class="muted">— Sin ajustes necesarios.</span>';
+  return ajustes.map(a => `
+    <div class="ajuste-item">
+      <b>${esc(a.variable)}</b> ${badge(a.estado || '', badgeEstadoClase(a.estado || ''))}
+      <span class="muted">${esc(a.rango_ideal || '')}</span>
+      <div class="ajuste-accion">${esc(a.accion || '')}${a.prioridad ? ` <span class="muted">(${esc(a.prioridad)})</span>` : ''}</div>
+    </div>`).join('');
+}
+
 function renderAnalisis(a) {
   if (!a) return '<p class="muted">Sin resultado.</p>';
   const confianza = Math.round((a.confianza || 0) * 100);
@@ -769,7 +779,7 @@ function renderAnalisis(a) {
     html += `<h3 style="margin-top:18px">🌾 Cultivos sugeridos (ranking del motor)</h3>`;
     html += `
       <div class="table-wrap"><table>
-        <tr><th>#</th><th>Cultivo</th><th>Score</th><th>Clasificación</th><th>Confianza</th><th>Reglas</th></tr>
+        <tr><th>#</th><th>Cultivo</th><th>Score</th><th>Clasificación</th><th>Confianza</th><th>Reglas</th><th>Descripción de reglas aplicadas</th></tr>
         ${a.sugerencias_cultivos.map((s, i) => `
           <tr>
             <td>${i + 1}</td>
@@ -778,6 +788,7 @@ function renderAnalisis(a) {
             <td>${badge(s.clasificacion, badgeClase(s.clasificacion))}</td>
             <td>${Math.round((s.confianza || 0) * 100)}%</td>
             <td>${s.reglas_especificas ?? '—'}</td>
+            <td class="ajustes-desc">${descAjustes(s.ajustes)}</td>
           </tr>`).join('')}
       </table></div>`;
   }

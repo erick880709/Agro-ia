@@ -83,6 +83,13 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Plan de mejora propuesto**: (1) ampliar reglas a más cultivos/variables (fuente de verdad), (2) imputación de variables faltantes en el entrenamiento para subir la concordancia en datos reales, (3) reentrenar cuando la BD acumule más lecturas calibradas y promover a stage PRODUCTION.
 - **Datos sembrados**: 30 cultivos, 23 reglas, usuarios (admin/agrónomo/cliente), 4 fincas y finca demo integral con lecturas. Scripts: `load_seeds.py`, `scripts/seed_cloud.py`, `scripts/seed_demo_integral.py` (apuntan a `DATABASE_URL`).
 
+### Plan de mejora ejecutado (2026-08-27)
+
+1. **Reglas ampliadas** (`services/asegurar_reglas.py`, idempotente al arranque): 8 reglas universales nuevas (Ca, Mg, S, Fe, Mn, Zn, Cu, B) + reglas específicas para Aguacate, Cacao, Fríjol, Tomate y Yuca. Total: **54 reglas activas, 17 variables, 10 cultivos con reglas específicas**.
+2. **Imputación de faltantes**: `train_colombia.py` imputa con la mediana por variable (guardada en `ml_meta.json`) y enmascara 35 % de las muestras sintéticas para que el modelo aprenda con datos incompletos; el oráculo (`ml_oracle.py`) usa las mismas medianas al predecir.
+3. **Reentrenamiento**: 75 000 muestras → **17 modelos de diagnóstico** (F1 0.82–0.99, ahora cubre Ca/Mg/S/Fe/Mn/Zn/Cu/B) + aptitud UPRA (F1 0.9111). Concordancia media en datos reales **0.6591 < 0.85** → permanece en **STAGING** de forma honesta; se promoverá a PRODUCTION cuando la BD acumule más lecturas calibradas (umbral de calidad 0.85).
+4. **UI**: la tabla «🌾 Cultivos sugeridos (ranking del motor)» ahora incluye la columna **«Descripción de reglas aplicadas»** (variable, estado, rango ideal, acción correctiva y prioridad por regla), además del conteo. Los ajustes pasaron de 3 a 5 y los rangos unilaterales se muestran como `≥ x` / `≤ y`.
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).
