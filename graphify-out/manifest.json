@@ -3695,8 +3695,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/main.py": {
-    "mtime": 1787837203.329103,
-    "ast_hash": "b3b52e2317498c8fab0ebf1bfa77b85c",
+    "mtime": 1787850544.2829435,
+    "ast_hash": "8d762a8939fafb42d27261bdfb726cd1",
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
@@ -4872,6 +4872,16 @@
   "apps/backend/alembic/versions/014_fisiologia_cultivos.py": {
     "mtime": 1787846808.5792499,
     "ast_hash": "26c6dcc89a690b3cc5a6315b34a9883a",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/demo.py": {
+    "mtime": 1787850535.6573255,
+    "ast_hash": "9b0a6601d23c55955d8983b6dfe2add7",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/demo_reset.py": {
+    "mtime": 1787850859.9576004,
+    "ast_hash": "9bc37b63b21ebe64e2d1d7de2cd094c9",
     "semantic_hash": ""
   }
 }

@@ -66,6 +66,11 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Fenología (GDD)**: el orquestador estima el GDD acumulado con la temperatura IDEAM (T base 10 °C) según la etapa fenológica de la finca y compara con `gdd_total_requerido`; avisa *«Faltan ~N GDD para cosecha, optimice riego»*.
 - Tarjeta del catálogo en la UI muestra «🌱 raíz ≥ 80 cm · 2000 GDD · 270 días». Validado local y en producción (Café vegetativa → faltan ~1262 GDD).
 
+### Limpieza de BD y finca demo (2026-08-27)
+
+- **Reset de demostración** `POST /api/v1/demo/reset` (solo Admin): elimina fincas, lotes, recomendaciones, chat y dispositivos de prueba; **conserva únicamente las lecturas del sensor real `esp32-npk-001`** y crea la finca demo completa **«Finca Demo — El Vergel»** (Quindío/Armenia, Café 4 años en Fructificación, riego por goteo, validación de laboratorio, historial agronómico, lote de 2,5 ha con suelo de 100 cm de profundidad) con el sensor y sus lecturas asociados.
+- Aplicado en **local y producción**: ambas bases quedan con 1 sola finca demo y las lecturas reales del sensor (15 local / 371 prod).
+
 ### Recomendación sin bloqueo por falta de parámetros (2026-08-27)
 
 - **Ya no devuelve 422**: si faltan parámetros esenciales, el análisis se genera igual con datos disponibles y queda marcado `estado_validacion = pendiente_validacion` + advertencia *«la recomendación no tiene el 100% de certeza y requiere el aval de un agrónomo»*.

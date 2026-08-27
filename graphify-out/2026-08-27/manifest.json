@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787849652.8175776,
-    "ast_hash": "aaa92c0fd47e32f10710f25c8e663127",
+    "mtime": 1787849971.5638072,
+    "ast_hash": "bb8fe1a0a6c672d7900c16387a916ce1",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787849652.8175776,
-    "ast_hash": "2f067a7801d0b7ae9dec82886e4de608",
+    "mtime": 1787849971.561789,
+    "ast_hash": "497bbcc15a0460ef9a45dd7b47db4fca",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
