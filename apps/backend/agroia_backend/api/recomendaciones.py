@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia_backend.services.aptitud import AptitudService
 from agroia_backend.services.data_adapters import SueloAdapter
+from agroia_backend.services.ml_oracle import MLOracleService
 from agroia_backend.services.orchestrator import (
     RecommendationOrchestrator,
     RecommendationRequest,
@@ -150,6 +151,7 @@ async def analizar_aptitud(
     orch = RecommendationOrchestrator(
         db_session=db,
         soil_adapter=SueloAdapter(db),
+        ml_service=MLOracleService(),
         rules_engine=rules_engine,
         aptitud_service=AptitudService(db, rules_engine),
     )

@@ -1,0 +1,259 @@
+{
+  "fecha": "2026-08-27T04:08:13.179707+00:00",
+  "variables": [
+    "ph",
+    "nitrogeno",
+    "fosforo",
+    "potasio",
+    "calcio",
+    "magnesio",
+    "azufre",
+    "hierro",
+    "manganeso",
+    "zinc",
+    "cobre",
+    "boro",
+    "materia_organica",
+    "cic",
+    "humedad",
+    "temperatura_suelo",
+    "conductividad_electrica"
+  ],
+  "cultivos_entrenados": [
+    "Café",
+    "Maíz",
+    "Arroz",
+    "Plátano",
+    "Papa",
+    "Trigo",
+    "Cebada",
+    "Sorgo",
+    "Soya",
+    "Algodón",
+    "Caña de azúcar",
+    "Cacao",
+    "Palma de aceite",
+    "Yuca",
+    "Fríjol",
+    "Tomate",
+    "Cebolla",
+    "Zanahoria",
+    "Aguacate",
+    "Mango",
+    "Piña",
+    "Naranja",
+    "Limón",
+    "Mandarina",
+    "Maracuyá",
+    "Papaya",
+    "Sandía",
+    "Melón",
+    "Uva",
+    "Tabaco"
+  ],
+  "resultados": [
+    {
+      "nombre": "diagnostico_cic",
+      "n": 75000,
+      "accuracy": 0.9999,
+      "precision": 0.9999,
+      "recall": 0.9999,
+      "f1": 0.9999,
+      "cv_f1_mean": null,
+      "cv_f1_std": null,
+      "clases": [
+        "DEFICIT",
+        "EXCESO",
+        "OK"
+      ]
+    },
+    {
+      "nombre": "diagnostico_conductividad_electrica",
+      "n": 75000,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "cv_f1_mean": null,
+      "cv_f1_std": null,
+      "clases": [
+        "EXCESO",
+        "OK"
+      ]
+    },
+    {
+      "nombre": "diagnostico_fosforo",
+      "n": 75000,
+      "accuracy": 0.9613,
+      "precision": 0.924,
+      "recall": 0.9613,
+      "f1": 0.9423,
+      "cv_f1_mean": null,
+      "cv_f1_std": null,
+      "clases": [
+        "DEFICIT",
+        "EXCESO",
+        "OK"
+      ]
+    },
+    {
+      "nombre": "diagnostico_humedad",
+      "n": 75000,
+      "accuracy": 0.9946,
+      "precision": 0.9947,
+      "recall": 0.9946,
+      "f1": 0.9946,
+      "cv_f1_mean": null,
+      "cv_f1_std": null,
+      "clases": [
+        "DEFICIT",
+        "OK"
+      ]
+    },
+    {
+      "nombre": "diagnostico_materia_organica",
+      "n": 75000,
+      "accuracy": 0.9907,
+      "precision": 0.9908,
+      "recall": 0.9907,
+      "f1": 0.9905,
+      "cv_f1_mean": null,
+      "cv_f1_std": null,
+      "clases": [
+        "DEFICIT",
+        "EXCESO",
+        "OK"
+      ]
+    },
+    {
+      "nombre": "diagnostico_nitrogeno",
+      "n": 75000,
+      "accuracy": 0.9531,
+      "precision": 0.9083,
+      "recall": 0.9531,
+      "f1": 0.9302,
+      "cv_f1_mean": null,
+      "cv_f1_std": null,
+      "clases": [
+        "DEFICIT",
+        "EXCESO",
+        "OK"
+      ]
+    },
+    {
+      "nombre": "diagnostico_ph",
+      "n": 75000,
+      "accuracy": 0.9748,
+      "precision": 0.9756,
+      "recall": 0.9748,
+      "f1": 0.9742,
+      "cv_f1_mean": null,
+      "cv_f1_std": null,
+      "clases": [
+        "DEFICIT",
+        "EXCESO",
+        "OK"
+      ]
+    },
+    {
+      "nombre": "diagnostico_potasio",
+      "n": 75000,
+      "accuracy": 0.9579,
+      "precision": 0.9176,
+      "recall": 0.9579,
+      "f1": 0.9374,
+      "cv_f1_mean": null,
+      "cv_f1_std": null,
+      "clases": [
+        "DEFICIT",
+        "EXCESO",
+        "OK"
+      ]
+    },
+    {
+      "nombre": "diagnostico_temperatura_suelo",
+      "n": 75000,
+      "accuracy": 0.9846,
+      "precision": 0.9694,
+      "recall": 0.9846,
+      "f1": 0.977,
+      "cv_f1_mean": null,
+      "cv_f1_std": null,
+      "clases": [
+        "DEFICIT",
+        "EXCESO",
+        "OK"
+      ]
+    },
+    {
+      "nombre": "aptitud_upra",
+      "n": 75000,
+      "accuracy": 0.9759,
+      "precision": 0.9765,
+      "recall": 0.9759,
+      "f1": 0.9759,
+      "cv_f1_mean": 0.8213,
+      "cv_f1_std": 0.2322,
+      "clases": [
+        "Apta",
+        "Marginalmente apta",
+        "Moderadamente apta",
+        "No apta"
+      ]
+    }
+  ],
+  "evaluacion_datos_reales": [
+    {
+      "cultivo": "Café",
+      "n": 44,
+      "concordancia_aptitud": 0.5909,
+      "dist_etiquetas": {
+        "Apta": 4,
+        "Marginalmente apta": 6,
+        "Moderadamente apta": 9,
+        "No apta": 25
+      }
+    },
+    {
+      "cultivo": "Maíz",
+      "n": 44,
+      "concordancia_aptitud": 0.4318,
+      "dist_etiquetas": {
+        "Apta": 3,
+        "Marginalmente apta": 15,
+        "Moderadamente apta": 11,
+        "No apta": 15
+      }
+    },
+    {
+      "cultivo": "Arroz",
+      "n": 44,
+      "concordancia_aptitud": 0.3636,
+      "dist_etiquetas": {
+        "Apta": 7,
+        "Marginalmente apta": 15,
+        "Moderadamente apta": 22
+      }
+    },
+    {
+      "cultivo": "Plátano",
+      "n": 44,
+      "concordancia_aptitud": 0.3182,
+      "dist_etiquetas": {
+        "Apta": 4,
+        "Marginalmente apta": 15,
+        "Moderadamente apta": 25
+      }
+    },
+    {
+      "cultivo": "Papa",
+      "n": 44,
+      "concordancia_aptitud": 0.4545,
+      "dist_etiquetas": {
+        "Apta": 3,
+        "Marginalmente apta": 18,
+        "Moderadamente apta": 23
+      }
+    }
+  ]
+}

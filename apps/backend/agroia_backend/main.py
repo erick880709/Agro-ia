@@ -40,6 +40,7 @@ from agroia_backend.api.dashboard import router as dashboard_router
 from agroia_backend.api.fincas import router as fincas_router
 from agroia_backend.api.iot import router as iot_router
 from agroia_backend.api.location import router as location_router
+from agroia_backend.api.ml import router as ml_router
 from agroia_backend.api.recomendaciones import router as recomendaciones_router
 from agroia_backend.api.reportes import router as reportes_router
 from agroia_backend.api.sensor_api import router as sensor_api_router
@@ -84,6 +85,12 @@ app.add_middleware(
 
 # ── Health check ──
 app.include_router(health_router, prefix="/api/v1")
+
+# ── Estado de modelos ML ──
+app.include_router(ml_router, prefix="/api/v1")
+
+# ── Estado de modelos ML ──
+app.include_router(ml_router, prefix="/api/v1")
 
 # ── Error handlers ──
 register_error_handlers(app)

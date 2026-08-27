@@ -22,6 +22,7 @@ from agroia_backend.models.finca import Finca
 from agroia_backend.models.sensor_reading import SensorReading
 from agroia_backend.services.acceso import verificar_acceso_finca
 from agroia_backend.services.aptitud import AptitudService
+from agroia_backend.services.ml_oracle import MLOracleService
 from agroia_backend.services.data_adapters import SueloAdapter
 from agroia_backend.services.orchestrator import (
     RecommendationOrchestrator,
@@ -94,6 +95,7 @@ async def generar_reporte(
     orch = RecommendationOrchestrator(
         db_session=db,
         soil_adapter=SueloAdapter(db),
+        ml_service=MLOracleService(),
         rules_engine=rules_engine,
         aptitud_service=AptitudService(db, rules_engine),
     )
