@@ -66,6 +66,14 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Fenología (GDD)**: el orquestador estima el GDD acumulado con la temperatura IDEAM (T base 10 °C) según la etapa fenológica de la finca y compara con `gdd_total_requerido`; avisa *«Faltan ~N GDD para cosecha, optimice riego»*.
 - Tarjeta del catálogo en la UI muestra «🌱 raíz ≥ 80 cm · 2000 GDD · 270 días». Validado local y en producción (Café vegetativa → faltan ~1262 GDD).
 
+### Recomendación sin bloqueo por falta de parámetros (2026-08-27)
+
+- **Ya no devuelve 422**: si faltan parámetros esenciales, el análisis se genera igual con datos disponibles y queda marcado `estado_validacion = pendiente_validacion` + advertencia *«la recomendación no tiene el 100% de certeza y requiere el aval de un agrónomo»*.
+- **Sin ninguna lectura**: recomendación preliminar (confianza 5%) con ranking prioritario del catálogo (UC1) o filas «SIN DATO» por parámetro esencial (UC2).
+- **Respuesta**: nuevo campo `variables_faltantes_esenciales`; la confianza real se reduce 15% por cada parámetro esencial faltante.
+- **Pantalla de captura**: la UI muestra el bloque «📝 Complete los parámetros esenciales» con inputs para los valores faltantes; el botón «Guardar y reanalizar» los ingesta vía `POST /api/sensor` y reejecuta el análisis (flujo validado: 5% → 41% de confianza al completar pH/N/P/K).
+- Validado local y en producción (finca sin datos → Preliminar/pendiente_validacion).
+
 ### Chat asesor agronómico (2026-08-25)
 
 - `POST /api/v1/chat/consultar` — capa conversacional especializada disponible para admin/agrónomo/cliente (acceso limitado a sus fincas).
