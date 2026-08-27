@@ -37,6 +37,7 @@ from agroia_backend.api.auth import router as auth_router
 from agroia_backend.api.catalogo import router as catalogo_router
 from agroia_backend.api.chat import router as chat_router
 from agroia_backend.api.dashboard import router as dashboard_router
+from agroia_backend.api.demo import router as demo_router
 from agroia_backend.api.fincas import router as fincas_router
 from agroia_backend.api.iot import router as iot_router
 from agroia_backend.api.location import router as location_router
@@ -116,6 +117,7 @@ app.include_router(fincas_router)
 app.include_router(auth_router)
 app.include_router(reportes_router)
 app.include_router(sensor_api_router)
+app.include_router(demo_router)
 # app.include_router(catalogo_router, prefix="/api/v1")
 # app.include_router(usuarios_router, prefix="/api/v1")
 # app.include_router(dashboards_router, prefix="/api/v1")
