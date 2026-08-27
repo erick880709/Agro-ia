@@ -129,6 +129,22 @@ _FRONTEND_DIR = os.path.join(
     "frontend-web",
 )
 if os.path.isdir(_FRONTEND_DIR):
+
+    @app.middleware("http")
+    async def _no_cache_frontend(request, call_next):
+        """Fuerza revalidación de los estáticos del frontend.
+
+        Sin esto, tras un deploy el navegador puede combinar HTML nuevo con
+        CSS/JS viejos en caché (wizard sin estilos y sin paginación).
+        """
+        response = await call_next(request)
+        path = request.url.path
+        if not path.startswith("/api") and not path.startswith("/docs") \
+                and not path.startswith("/openapi") and not path.startswith("/redoc"):
+            response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+            response.headers["Pragma"] = "no-cache"
+        return response
+
     app.mount("/", StaticFiles(directory=_FRONTEND_DIR, html=True), name="frontend")
 else:
     logger.warning("frontend_dir_no_encontrado", path=_FRONTEND_DIR)

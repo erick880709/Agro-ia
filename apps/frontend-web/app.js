@@ -235,19 +235,23 @@ async function arrancarAplicacion() {
   document.getElementById('form-analyze').addEventListener('submit', enviarAnalisis);
   document.getElementById('form-carga').addEventListener('submit', enviarCarga);
   document.getElementById('form-finca').addEventListener('submit', enviarFinca);
-  // ── Wizard de finca (3 secciones) ──
-  document.querySelectorAll('.wizard-steps .wstep').forEach(b =>
-    b.addEventListener('click', () => irWStep(Number(b.dataset.step))));
-  document.querySelectorAll('[data-next]').forEach(b =>
-    b.addEventListener('click', () => irWStep(Number(b.dataset.next))));
-  document.getElementById('f-ubic-gps').addEventListener('click', usarMiUbicacion);
-  document.getElementById('f-ubic-mapa').addEventListener('click', abrirMapa);
-  document.getElementById('f-ubic-enlace').addEventListener('click', () => {
-    document.getElementById('f-enlace-wrap').style.display = '';
-  });
-  document.getElementById('f-enlace-aplicar').addEventListener('click', aplicarEnlace);
-  document.getElementById('f-mapa-cerrar').addEventListener('click', cerrarPoligono);
-  document.getElementById('f-mapa-limpiar').addEventListener('click', limpiarMapa);
+  // ── Wizard de finca (3 secciones) — defensivo: si el HTML es viejo
+  //    (caché), no debe romper el resto del arranque. ──
+  const _el = id => document.getElementById(id);
+  if (_el('wstep-1') && _el('wstep-2') && _el('wstep-3')) {
+    document.querySelectorAll('.wizard-steps .wstep').forEach(b =>
+      b.addEventListener('click', () => irWStep(Number(b.dataset.step))));
+    document.querySelectorAll('[data-next]').forEach(b =>
+      b.addEventListener('click', () => irWStep(Number(b.dataset.next))));
+    if (_el('f-ubic-gps')) _el('f-ubic-gps').addEventListener('click', usarMiUbicacion);
+    if (_el('f-ubic-mapa')) _el('f-ubic-mapa').addEventListener('click', abrirMapa);
+    if (_el('f-ubic-enlace')) _el('f-ubic-enlace').addEventListener('click', () => {
+      _el('f-enlace-wrap').style.display = '';
+    });
+    if (_el('f-enlace-aplicar')) _el('f-enlace-aplicar').addEventListener('click', aplicarEnlace);
+    if (_el('f-mapa-cerrar')) _el('f-mapa-cerrar').addEventListener('click', cerrarPoligono);
+    if (_el('f-mapa-limpiar')) _el('f-mapa-limpiar').addEventListener('click', limpiarMapa);
+  }
   document.getElementById('form-usuario').addEventListener('submit', enviarUsuario);
   document.getElementById('form-reporte').addEventListener('submit', enviarReporte);
   document.getElementById('repo-tipo').addEventListener('change', aplicarTipoReporte);
@@ -693,6 +697,14 @@ async function enviarFinca(e) {
   const btn = document.getElementById('finca-btn');
   msg.innerHTML = '';
   renderValidaciones(null);
+
+  // HTML desactualizado en caché del navegador (sin wizard)
+  if (!document.getElementById('f-vereda') || !document.getElementById('wstep-3')) {
+    msg.innerHTML = errorBanner(
+      'El formulario está desactualizado en su navegador. Recargue la página con Ctrl+F5 (o borre la caché).'
+    );
+    return;
+  }
 
   const municipioSel = document.getElementById('f-municipio').value;
   const municipio = municipioSel === '__otro'

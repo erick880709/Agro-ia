@@ -4823,5 +4823,15 @@
     "mtime": 1787809359.1005495,
     "ast_hash": "f9c9aca73e0d9f581cefebcc0303b893",
     "semantic_hash": ""
+  },
+  "resources/architecture/Documento_Funcional_Tecnico_AgroIA.html": {
+    "mtime": 1787834690.0162814,
+    "ast_hash": "b0c75b4e443e1fcc5c7e85227c454246",
+    "semantic_hash": ""
+  },
+  "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
+    "mtime": 1787834549.571844,
+    "ast_hash": "f8e9d71d529878ca2be2bef07e06c70d",
+    "semantic_hash": ""
   }
 }
