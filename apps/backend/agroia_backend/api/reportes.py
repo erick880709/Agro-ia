@@ -10,7 +10,6 @@ import uuid as uuid_mod
 from dataclasses import asdict
 
 from agroia.database import get_db
-from agroia.errors import InsufficientDataError
 from agroia.logging import get_logger
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, Field
@@ -88,11 +87,8 @@ async def generar_reporte(
         )
     ).scalars().first()
 
-    if lectura is None:
-        raise HTTPException(status_code=422, detail={
-            "code": "SIN_LECTURAS",
-            "message": "La finca no tiene lecturas de sensores. Envíe una trama o cargue un archivo primero.",
-        })
+    # Sin lecturas: el reporte se genera igual, de forma preliminar, y se
+    # informa qué parámetros harían falta para un mayor detalle.
 
     # ── Ejecutar el motor según el tipo de reporte ──
     rules_engine = RulesEngine(db)
@@ -112,27 +108,29 @@ async def generar_reporte(
 
     uc1 = uc2 = None
     cultivo_analizado = None
-    try:
-        if body.tipo in ("siembra", "completo"):
-            uc1 = await _analizar(None)
-        if body.tipo in ("cultivo", "completo"):
-            cultivo = body.cultivo_id
-            if not cultivo and body.tipo == "completo" and uc1 and uc1.sugerencias_cultivos:
-                cultivo = uc1.sugerencias_cultivos[0].get("cultivo_id")
-            if body.tipo == "cultivo" and not cultivo:
-                raise HTTPException(status_code=422, detail={
-                    "code": "CULTIVO_REQUERIDO",
-                    "message": "El tipo 'cultivo' requiere cultivo_id.",
-                })
-            if cultivo:
-                uc2 = await _analizar(cultivo)
-                cultivo_analizado = cultivo
-    except InsufficientDataError as e:
-        raise HTTPException(status_code=422, detail={
-            "code": "INSUFFICIENT_DATA",
-            "message": "Datos insuficientes para el reporte. Variables faltantes: " + ", ".join(e.missing_vars),
-            "missing_variables": e.missing_vars,
-        })
+    if body.tipo in ("siembra", "completo"):
+        uc1 = await _analizar(None)
+    if body.tipo in ("cultivo", "completo"):
+        cultivo = body.cultivo_id
+        if not cultivo and body.tipo == "completo" and uc1 and uc1.sugerencias_cultivos:
+            cultivo = uc1.sugerencias_cultivos[0].get("cultivo_id")
+        if body.tipo == "cultivo" and not cultivo:
+            raise HTTPException(status_code=422, detail={
+                "code": "CULTIVO_REQUERIDO",
+                "message": "El tipo 'cultivo' requiere cultivo_id.",
+            })
+        if cultivo:
+            uc2 = await _analizar(cultivo)
+            cultivo_analizado = cultivo
+
+    # ── Parámetros esenciales faltantes (aviso de detalle en el reporte) ──
+    if lectura is None:
+        parametros_faltantes = ["ph", "nitrogeno", "fosforo", "potasio"]
+    else:
+        parametros_faltantes = (
+            (uc2.variables_faltantes_esenciales if uc2 else [])
+            or (uc1.variables_faltantes_esenciales if uc1 else [])
+        )
 
     # ── Plan económico para el ROI (ideal si no se declaró presupuesto) ──
     recs = (
@@ -200,7 +198,10 @@ async def generar_reporte(
                 con_fecha = [m["ts"] for m in muestras_geo if m.get("ts")]
                 if con_fecha:
                     fecha_muestreo = max(con_fecha)[:10]
-            fecha_muestreo = fecha_muestreo or (lectura.ts.date().isoformat() if lectura.ts else None)
+            fecha_muestreo = fecha_muestreo or (
+                lectura.ts.date().isoformat()
+                if lectura is not None and lectura.ts else None
+            )
             if fecha_muestreo:
                 try:
                     clima = await fetch_ideam_clima_fecha(lat, lng, fecha_muestreo)
@@ -230,17 +231,17 @@ async def generar_reporte(
             "tipo_riego": finca.tipo_riego.value if finca.tipo_riego else None,
         },
         lectura={
-            "ts": lectura.ts.isoformat() if lectura.ts else None,
-            "sensor_id": lectura.sensor_id,
-            "ph": lectura.ph,
-            "nitrogeno": lectura.nitrogeno,
-            "fosforo": lectura.fosforo,
-            "potasio": lectura.potasio,
-            "conductividad_electrica": lectura.conductividad_electrica,
-            "humedad_ambiental": lectura.humedad_ambiental,
-            "temperatura_ambiental": lectura.temperatura_ambiental,
-            "materia_organica": lectura.materia_organica,
-            "calidad": lectura.calidad,
+            "ts": lectura.ts.isoformat() if lectura is not None and lectura.ts else None,
+            "sensor_id": lectura.sensor_id if lectura is not None else None,
+            "ph": lectura.ph if lectura is not None else None,
+            "nitrogeno": lectura.nitrogeno if lectura is not None else None,
+            "fosforo": lectura.fosforo if lectura is not None else None,
+            "potasio": lectura.potasio if lectura is not None else None,
+            "conductividad_electrica": lectura.conductividad_electrica if lectura is not None else None,
+            "humedad_ambiental": lectura.humedad_ambiental if lectura is not None else None,
+            "temperatura_ambiental": lectura.temperatura_ambiental if lectura is not None else None,
+            "materia_organica": lectura.materia_organica if lectura is not None else None,
+            "calidad": lectura.calidad if lectura is not None else None,
         },
         dispositivo={
             "device_id": dispositivo.device_id,
@@ -256,6 +257,7 @@ async def generar_reporte(
         clima=clima,
         plan_economico=plan_economico,
         ficha_economicos=ficha_economicos,
+        parametros_faltantes=parametros_faltantes,
     )
 
     titulo = {
@@ -265,7 +267,13 @@ async def generar_reporte(
     }.get(body.tipo, "Reporte AgroIA")
 
     logger.info("reporte_generado", finca_id=body.finca_id, tipo=body.tipo, rol=(x_user_role or "?"))
-    return {"titulo": titulo, "tipo": body.tipo, "html": html}
+    return {
+        "titulo": titulo,
+        "tipo": body.tipo,
+        "html": html,
+        "parametros_faltantes": parametros_faltantes,
+        "preliminar": bool(parametros_faltantes),
+    }
 
 
 # ── Helpers del mapa de calor (muestreo en cuadrícula) ──

@@ -3925,8 +3925,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/recomendaciones.py": {
-    "mtime": 1787844018.3978922,
-    "ast_hash": "a86f175cf5c5931a849fa9e51c5c70dd",
+    "mtime": 1787847763.777411,
+    "ast_hash": "1f081a7d065324e38ed826d04a0270d4",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/__init__.py": {
@@ -3980,8 +3980,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/orchestrator.py": {
-    "mtime": 1787846917.5404174,
-    "ast_hash": "ba0154718af52930a8de45c4c0f25c9a",
+    "mtime": 1787847823.4664557,
+    "ast_hash": "b1fbd2d8db821295ffa1937beee73eab",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/rules_engine.py": {
@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787847239.8149323,
-    "ast_hash": "331e20c4700adffb3402d511806c15b7",
+    "mtime": 1787848323.2588358,
+    "ast_hash": "ecfd65e4aad11eb4d020875dec08db4f",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787846917.4786248,
-    "ast_hash": "4397b3ad8e1a43d440a8a34974f6116f",
+    "mtime": 1787847925.5018902,
+    "ast_hash": "f68abc05486042d13b08909681541ad3",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {

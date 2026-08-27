@@ -1274,6 +1274,7 @@ def generar_reporte_html(
     clima: dict | None = None,
     plan_economico: dict | None = None,
     ficha_economicos: dict | None = None,
+    parametros_faltantes: list[str] | None = None,
 ) -> str:
     """Construye el documento HTML completo del reporte."""
     fecha = datetime.now(timezone.utc).astimezone().strftime("%d/%m/%Y %H:%M")
@@ -1297,6 +1298,31 @@ def generar_reporte_html(
         (uc2 or {}).get("cultivo") or (uc1 or {}).get("cultivo")
     )
     seccion_plano = _seccion_plano_lote(muestras, finca, clima, cultivo_nombre)
+
+    # Parámetros faltantes: aviso para un reporte con mayor detalle
+    seccion_faltantes = ""
+    if parametros_faltantes:
+        nombres = {
+            "ph": "pH",
+            "nitrogeno": "nitrógeno",
+            "fosforo": "fósforo",
+            "potasio": "potasio",
+            "conductividad_electrica": "conductividad eléctrica",
+        }
+        etiquetas = ", ".join(nombres.get(v, v) for v in parametros_faltantes)
+        seccion_faltantes = f"""
+  <section class="block">
+    <div class="block-head"><span class="block-num">P</span>
+      <div><div class="block-title">Parámetros faltantes para mayor detalle</div>
+      <div class="block-sub">Calidad de datos del reporte</div></div>
+    </div>
+    <p>Este reporte se generó con los datos disponibles. Para obtener un mayor
+    detalle y una recomendación más certera, sería bueno contar con los
+    siguientes parámetros: <b>{esc(etiquetas)}</b>.</p>
+    <p class="muted">El reporte actual es preliminar: no tiene el 100% de
+    certeza y requiere el aval de un agrónomo. Puede suministrar estos valores
+    (lectura de sensor o análisis de laboratorio) y volver a generar el reporte.</p>
+  </section>"""
 
     # Análisis económico proyectado (retorno de inversión del plan)
     pe = (
@@ -1361,6 +1387,7 @@ def generar_reporte_html(
     </div>
     {_telemetria(lectura, dispositivo, finca)}
   </section>
+  {seccion_faltantes}
   {secciones}
   {seccion_mapa}
   {seccion_plano}
