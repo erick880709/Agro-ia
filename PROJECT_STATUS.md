@@ -231,6 +231,14 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **UI**: banner de colores en P1 (azul lluvia, rojo helada) vía `GET /fincas/{id}/alertas-climaticas/activas`; reporte sección N con «⛅ Pronóstico extendido (7 días)» y avisos de umbral.
 - Validado local y en producción: reglas con pronóstico inyectado (ambas alertas), camino real Open-Meteo sin fallas, banner en P1, desactivación automática cuando el pronóstico deja de cumplir la regla, y pronóstico extendido en la sección N del reporte.
 
+### Aprendizaje activo — promoción del ML por variable (2026-08-27)
+
+- **Ground Truth** (`services/ml_labels.py`): aceptaciones humanas (estados DEFICIT/OK/EXCESO por variable, unidas a la última lectura de la finca) + ciclos cerrados (rendimiento real vs. `rendimiento_esperado` de la ficha → etiqueta de aptitud verificada en campo).
+- **Pipeline `train_colombia.py --active-learning`**: combina sintéticos (peso 1.0) + doradas (peso 10.0, `sample_weight`), partición por finca sin fuga, y calcula `precision_real` por variable sobre el holdout dorado. Promoción **por variable** con precisión ≥ 0.85 y ≥ 5 muestras → `RF_diagnostico_<var>_colombia_activo` en PRODUCTION; el resto en STAGING honesto.
+- **Validador ML en runtime**: el oráculo lee `ml_meta.json.promovidas`; el orquestador compara ML vs. reglas por variable promovida — acuerdo → +0.02 de confianza (máx +0.06) y 5.ª barra en el semáforo; desacuerdo → prevalecen las reglas y se registra en `validacion_ml`. P5 muestra el banner «🤖 Validador ML activo».
+- **Transparencia**: `GET /api/v1/ml/etiquetas-doradas` (Admin) y `variables_promovidas` en `GET /api/v1/ml/estado`.
+- Validado local: siembra de etiquetas doradas (aceptación + ciclo cerrado), entrenamiento `--active-learning --registrar` (75 000 sintéticos + doradas, 0 promovidas con 1 muestra — comportamiento honesto), validador runtime con promoción simulada (desacuerdos P/K → reglas mandan) y banner en P5 — pendiente validación en producción.
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).

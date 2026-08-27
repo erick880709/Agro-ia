@@ -35,6 +35,7 @@ class MLOracleService:
         self.dir = dir_modelos or _dir_modelos()
         self._modelos: dict[str, object] = {}
         self._medianas: dict[str, float] = {}
+        self._promovidas: dict[str, dict] = {}
         self._cargados = False
 
     def _cargar(self) -> None:
@@ -62,9 +63,23 @@ class MLOracleService:
 
                 meta = json.loads(meta_path.read_text(encoding="utf-8"))
                 self._medianas = {k: float(v) for k, v in meta.get("medianas", {}).items()}
+                # Variables promovidas a producción por precisión real ≥ umbral
+                self._promovidas = {
+                    str(k): dict(v) if isinstance(v, dict) else {}
+                    for k, v in meta.get("promovidas", {}).items()
+                }
             except Exception as e:  # noqa: BLE001
                 logger.warning("ml_oracle_meta_fallida", error=str(e))
-        logger.info("ml_oracle_modelos_cargados", n=len(self._modelos), medianas=len(self._medianas))
+        logger.info(
+            "ml_oracle_modelos_cargados",
+            n=len(self._modelos), medianas=len(self._medianas),
+            promovidas=len(self._promovidas),
+        )
+
+    def variables_promovidas(self) -> set[str]:
+        """Variables cuyo modelo fue promovido a producción (validador activo)."""
+        self._cargar()
+        return set(self._promovidas.keys())
 
     def disponible(self) -> bool:
         self._cargar()
@@ -112,6 +127,7 @@ class MLOracleService:
                 diagnostico[var] = {
                     "estado": str(clase),
                     "confianza": round(float(proba.max()), 3),
+                    "promovido": var in self._promovidas,
                 }
                 confianzas.append(float(proba.max()))
             aptitud = None
@@ -129,6 +145,7 @@ class MLOracleService:
                 "diagnostico": diagnostico,
                 "confianza": round(float(np.mean(confianzas)), 3) if confianzas else 0.0,
                 "confianza_aptitud": conf_apt,
+                "promovidas": sorted(self._promovidas.keys()),
             }
         except Exception as e:  # noqa: BLE001
             logger.error("ml_oracle_inferencia_fallida", error=str(e))

@@ -13,12 +13,19 @@ Este script:
    - Holdout estratificado (accuracy, precision, recall, F1 ponderados).
    - Validación cruzada 5-fold.
    - Concordancia sobre datos REALES de sensores almacenados en la BD.
-4. Guarda artefactos en apps/ml/models/ y los registra en `modelos_ml`
-   y `metricas_modelo` (stage STAGING).
+4. Aprendizaje activo (`--active-learning`): combina los datos sintéticos con
+   las ETIQUETAS DORADAS (aceptaciones humanas por variable + ciclos cerrados
+   con rendimiento real), pondera más las muestras reales y evalúa la
+   PRECISIÓN REAL por variable sobre un holdout separado por finca.
+   Las variables con precisión real ≥ 0.85 (con ≥ 5 muestras) se PROMUEVEN
+   a producción de forma individual (`ml_diagnostico_<var>` activo).
+5. Guarda artefactos en apps/ml/models/ y los registra en `modelos_ml`
+   y `metricas_modelo` (stage STAGING o PRODUCTION por variable).
 
 Uso:
-    .venv\\Scripts\\python.exe -m agroia_ml.train_colombia
-    .venv\\Scripts\\python.exe -m agroia_ml.train_colombia --registrar
+    .venv\Scripts\python.exe -m agroia_ml.train_colombia
+    .venv\Scripts\python.exe -m agroia_ml.train_colombia --registrar
+    .venv\Scripts\python.exe -m agroia_ml.train_colombia --registrar --active-learning
 """
 
 import argparse
@@ -41,6 +48,11 @@ from sklearn.model_selection import cross_val_score, train_test_split
 
 RANDOM_STATE = 42
 np.random.seed(RANDOM_STATE)
+
+# ── Parámetros del aprendizaje activo ──
+W_GOLDEN = 10.0               # peso de cada muestra real vs. 1.0 sintética
+UMBRAL_PROMOCION = 0.85       # precisión real mínima para promover una variable
+MIN_GOLDEN_PROMO = 5          # muestras reales mínimas en el holdout
 
 MODELS_DIR = Path(__file__).resolve().parents[1] / "models"
 MODELS_DIR.mkdir(exist_ok=True)
@@ -202,9 +214,54 @@ def _features(muestras: list[dict], cultivo_idx: int, medianas: dict | None = No
     return X
 
 
+def _particion_por_finca(
+    filas: list[dict], test_frac: float = 0.5, semilla: int = RANDOM_STATE,
+) -> tuple[list[dict], list[dict]]:
+    """Divide las filas doradas por FINCA (sin fuga de datos entre particiones)."""
+    if not filas:
+        return [], []
+    fincas = sorted({f["finca_id"] for f in filas})
+    if len(fincas) < 2:
+        # una sola finca: todo va a test (evaluación honesta, sin reentrenar)
+        return [], list(filas)
+    rng = np.random.default_rng(semilla)
+    rng.shuffle(fincas)
+    n_test_fincas = max(1, int(round(len(fincas) * test_frac)))
+    test_ids = set(fincas[:n_test_fincas])
+    train = [f for f in filas if f["finca_id"] not in test_ids]
+    test = [f for f in filas if f["finca_id"] in test_ids]
+    return train, test
+
+
+def _entrenar_con_golden(X_synth, y_synth, X_golden, y_golden):
+    """Reentrena combinando sintéticos + dorados (muestras reales con más peso)."""
+    X = np.vstack([X_synth, X_golden])
+    y = np.concatenate([y_synth, y_golden])
+    pesos = np.concatenate([
+        np.ones(len(y_synth)),
+        np.full(len(y_golden), W_GOLDEN),
+    ])
+    modelo = RandomForestClassifier(
+        n_estimators=120, max_depth=12, random_state=RANDOM_STATE, n_jobs=-1
+    )
+    modelo.fit(X, y, sample_weight=pesos)
+    return modelo
+
+
+def _metricas_golden(modelo, X_g, y_g) -> dict | None:
+    """Métricas REALES del modelo sobre el holdout dorado (mínimo 2 clases)."""
+    if X_g is None or len(y_g) < 2 or len(set(y_g)) < 2:
+        return None
+    y_pred = modelo.predict(X_g)
+    return {
+        "accuracy": round(float(accuracy_score(y_g, y_pred)), 4),
+        "precision_macro": round(float(precision_score(y_g, y_pred, average="macro", zero_division=0)), 4),
+        "f1_macro": round(float(f1_score(y_g, y_pred, average="macro", zero_division=0)), 4),
+        "n": int(len(y_g)),
+    }
+
+
 def entrenar_y_evaluar(nombre: str, X, y, clases, con_cv: bool = False) -> dict:
-    if len(set(y)) < 2:
-        return {"nombre": nombre, "nota": "una sola clase en los datos", "n": len(y)}
     X_tr, X_te, y_tr, y_te = train_test_split(
         X, y, test_size=0.2, random_state=RANDOM_STATE, stratify=y
     )
@@ -231,7 +288,7 @@ def entrenar_y_evaluar(nombre: str, X, y, clases, con_cv: bool = False) -> dict:
     }
 
 
-async def main(registrar: bool = False) -> None:
+async def main(registrar: bool = False, active_learning: bool = False) -> None:
     reglas, cultivos = await cargar_reglas_y_cultivos()
     cultivos_con_reglas = [
         c for c in cultivos
@@ -304,6 +361,19 @@ async def main(registrar: bool = False) -> None:
                 m.pop(var, None)
         muestras_masked.append(m)
 
+    # ── Etiquetas doradas (Ground Truth humano) para aprendizaje activo ──
+    etiquetas_golden: list[dict] = []
+    ciclos_golden: list[dict] = []
+    if active_learning:
+        from agroia.database import async_session_factory
+        from agroia_backend.services.ml_labels import cargar_etiquetas_doradas
+
+        async with async_session_factory() as db:
+            etiquetas_golden, ciclos_golden = await cargar_etiquetas_doradas(db)
+    print(f"Etiquetas doradas: {len(etiquetas_golden)} aceptaciones · "
+          f"{len(ciclos_golden)} ciclos cerrados (aprendizaje activo "
+          f"{'ACTIVO' if active_learning else 'desactivado'})", flush=True)
+
     # ── Entrenar diagnóstico por variable ──
     claves_variables = {
         "ph": "ph", "n": "nitrogeno", "p": "fosforo", "k": "potasio",
@@ -318,16 +388,72 @@ async def main(registrar: bool = False) -> None:
 
     X_all = _features(muestras_masked, 0, medianas)
     _ = X_all  # noqa: F841 (features sin cultivo para diagnóstico variable)
+    promovidas: dict[str, dict] = {}
     for var in variables_modelo:
         X = _features(muestras_masked, 0, medianas)
         y = np.array([s["y_var"].get(var, "OK") for s in muestras])
         r = entrenar_y_evaluar(f"diagnostico_{var}", X, y, sorted(set(y)), con_cv=False)
-        if "modelo" in r:
-            modelos_artefactos[f"ml_diagnostico_{var}"] = r.pop("modelo")
+        if "modelo" not in r:
+            r.pop("clasificacion_report", None)
+            resultados.append(r)
+            print(f"  {r.get('nombre')}: sin modelo ({r.get('nota', 'n/d')})", flush=True)
+            continue
+        modelo = r.pop("modelo")
         r.pop("clasificacion_report", None)
+
+        # ── Aprendizaje activo: reforzar con etiquetas doradas de la variable ──
+        r["n_golden"] = 0
+        r["precision_real"] = None
+        r["f1_real"] = None
+        r["promovida"] = False
+        if active_learning and etiquetas_golden:
+            gold_var = [f for f in etiquetas_golden if var in f["etiquetas"]]
+            r["n_golden"] = len(gold_var)
+            if gold_var:
+                train_g, test_g = _particion_por_finca(gold_var)
+                if train_g:
+                    X_gt = _features([f["features"] for f in train_g], 0, medianas)
+                    y_gt = np.array([f["etiquetas"][var] for f in train_g])
+                    modelo = _entrenar_con_golden(X, y, X_gt, y_gt)
+                m_gold = None
+                if test_g:
+                    X_gte = _features([f["features"] for f in test_g], 0, medianas)
+                    y_gte = np.array([f["etiquetas"][var] for f in test_g])
+                    m_gold = _metricas_golden(modelo, X_gte, y_gte)
+                if m_gold:
+                    r["precision_real"] = m_gold["precision_macro"]
+                    r["f1_real"] = m_gold["f1_macro"]
+                    r["accuracy_real"] = m_gold["accuracy"]
+                    r["n_golden_test"] = m_gold["n"]
+                    if (
+                        m_gold["n"] >= MIN_GOLDEN_PROMO
+                        and m_gold["precision_macro"] >= UMBRAL_PROMOCION
+                    ):
+                        r["promovida"] = True
+                        promovidas[var] = {
+                            "precision_real": m_gold["precision_macro"],
+                            "f1_real": m_gold["f1_macro"],
+                            "n_golden_test": m_gold["n"],
+                        }
+        modelos_artefactos[f"ml_diagnostico_{var}"] = modelo
         resultados.append(r)
-        print(f"  {r.get('nombre')}: f1={r.get('f1')} acc={r.get('accuracy')} "
-              f"prec={r.get('precision')} (n={r.get('n')})", flush=True)
+        print(
+            f"  {r.get('nombre')}: f1={r.get('f1')} acc={r.get('accuracy')} "
+            f"prec={r.get('precision')} (n={r.get('n')})"
+            + (f" | golden={r['n_golden']} prec_real={r['precision_real']}"
+               + (" ⭐PROMOVIDA" if r["promovida"] else "")
+               if active_learning else ""),
+            flush=True,
+        )
+
+    if active_learning and promovidas:
+        print(f"\n⭐ Variables promovidas a producción: {sorted(promovidas)}", flush=True)
+    elif active_learning:
+        print(
+            "\nSin variables promovidas (precisión real < 0.85 o muestras "
+            "doradas insuficientes): todos los modelos quedan en STAGING.",
+            flush=True,
+        )
 
     # ── Entrenar clasificador de aptitud (UC1) ──
     X_apt = _features(muestras_masked, 0, medianas)
@@ -338,9 +464,34 @@ async def main(registrar: bool = False) -> None:
     if "modelo" in r_apt:
         modelos_artefactos["ml_aptitud"] = r_apt.pop("modelo")
     r_apt.pop("clasificacion_report", None)
+
+    # ── Aprendizaje activo en aptitud: ciclos cerrados con rendimiento real ──
+    concordancia_golden = None
+    r_apt["promovida_aptitud"] = False
+    if active_learning and ciclos_golden and "ml_aptitud" in modelos_artefactos:
+        train_c, test_c = _particion_por_finca(ciclos_golden)
+        if train_c:
+            X_ct = _features([f["features"] for f in train_c], 0, medianas)
+            y_ct = np.array([f["etiqueta_aptitud"] for f in train_c])
+            modelos_artefactos["ml_aptitud"] = _entrenar_con_golden(
+                X_apt, y_apt, X_ct, y_ct
+            )
+        if test_c:
+            X_cte = _features([f["features"] for f in test_c], 0, medianas)
+            y_cte = np.array([f["etiqueta_aptitud"] for f in test_c])
+            m_apt_gold = _metricas_golden(modelos_artefactos["ml_aptitud"], X_cte, y_cte)
+            if m_apt_gold:
+                concordancia_golden = m_apt_gold["accuracy"]
+                r_apt["concordancia_golden"] = concordancia_golden
+                r_apt["n_golden_aptitud"] = m_apt_gold["n"]
+                r_apt["promovida_aptitud"] = (
+                    m_apt_gold["n"] >= MIN_GOLDEN_PROMO
+                    and concordancia_golden >= UMBRAL_PROMOCION
+                )
     resultados.append(r_apt)
     print(f"  {r_apt.get('nombre')}: f1={r_apt.get('f1')} acc={r_apt.get('accuracy')} "
-          f"cv={r_apt.get('cv_f1_mean')}±{r_apt.get('cv_f1_std')} (n={r_apt.get('n')})")
+          f"cv={r_apt.get('cv_f1_mean')}±{r_apt.get('cv_f1_std')} (n={r_apt.get('n')})"
+          + (f" | concordancia_golden={concordancia_golden}" if active_learning else ""))
 
     # ── Evaluación con datos reales de sensores ──
     reales = await cargar_datos_reales(400)
@@ -389,6 +540,13 @@ async def main(registrar: bool = False) -> None:
         "imputacion": "mediana_por_variable_sinteticos",
         "missingness_sintetico": 0.35,
         "cultivos_entrenados": [c["nombre"] for c in cultivos_con_reglas],
+        "modo_entrenamiento": "activo" if active_learning else "sintetico",
+        "etiquetas_doradas": {
+            "aceptaciones_utiles": len(etiquetas_golden),
+            "ciclos_cerrados_utiles": len(ciclos_golden),
+            "peso_muestra_real": W_GOLDEN,
+        },
+        "promovidas": promovidas,
         "resultados": [
             {k: v for k, v in r.items() if k not in ("modelo",)}
             for r in resultados
@@ -405,36 +563,58 @@ async def main(registrar: bool = False) -> None:
 
     # ── Registrar en BD ──
     if registrar:
-        # Promover a PRODUCTION solo si la concordancia real supera el umbral
-        # de calidad (0.85); en caso contrario queda honestamente en STAGING.
-        promover = concordancia_media is not None and concordancia_media >= 0.85
-        await registrar_modelos(resultados, promover_aptitud=promover)
+        # Promoción por variable: PRODUCTION solo si la precisión real supera
+        # el umbral de calidad (0.85); el resto queda honestamente en STAGING.
+        promover_apt = r_apt.get("promovida_aptitud") or (
+            concordancia_media is not None and concordancia_media >= UMBRAL_PROMOCION
+        )
+        await registrar_modelos(
+            resultados,
+            promovidas=set(promovidas),
+            promover_aptitud=bool(promover_apt),
+        )
     else:
         print("(Use --registrar para guardar métricas en modelos_ml/metricas_modelo)")
 
 
-async def registrar_modelos(resultados: list[dict], promover_aptitud: bool = False) -> None:
+async def registrar_modelos(
+    resultados: list[dict],
+    promovidas: set[str] | None = None,
+    promover_aptitud: bool = False,
+) -> None:
     from agroia.database import async_session_factory
 
     from agroia_backend.models.metrica_modelo import MetricaModelo
     from agroia_backend.models.modelo_ml import ModeloML, StageModelo
 
+    promovidas = promovidas or set()
     async with async_session_factory() as db:
         for r in resultados:
             if "f1" not in r:
                 continue
             es_aptitud = r["nombre"] == "aptitud_upra"
+            variable = r["nombre"].removeprefix("diagnostico_")
+            promovida = (not es_aptitud) and variable in promovidas
+            activo = promovida or (es_aptitud and promover_aptitud)
+            nombre = (
+                f"RF_{r['nombre']}_colombia_activo" if activo
+                else f"RF_{r['nombre']}_colombia_sintetico"
+            )
             modelo = ModeloML(
-                nombre=f"RF_{r['nombre']}_colombia_sintetico",
+                nombre=nombre,
                 tipo_modelo="RandomForest",
                 descripcion=(
+                    "Entrenado con datos simulados + etiquetas doradas "
+                    "(aceptaciones humanas y ciclos cerrados) etiquetadas por "
+                    "UPRA/Cenicafé/AGROSAVIA — aprendizaje activo."
+                    if activo else
                     "Entrenado con datos simulados de suelos colombianos etiquetados "
                     "por el sistema experto UPRA/Cenicafé/AGROSAVIA (imputación por medianas)."
                 ),
                 version=1,
                 f1_score=r["f1"],
-                stage=StageModelo.PRODUCTION if (es_aptitud and promover_aptitud) else StageModelo.STAGING,
-                activo=True if (es_aptitud and promover_aptitud) else False,
+                stage=StageModelo.PRODUCTION if activo else StageModelo.STAGING,
+                activo=activo,
             )
             db.add(modelo)
             await db.flush()
@@ -444,18 +624,28 @@ async def registrar_modelos(resultados: list[dict], promover_aptitud: bool = Fal
                 ("recall", r.get("recall")),
                 ("f1", r.get("f1")),
                 ("cv_f1_mean", r.get("cv_f1_mean")),
+                ("precision_real", r.get("precision_real")),
+                ("f1_real", r.get("f1_real")),
+                ("concordancia_golden", r.get("concordancia_golden")),
             ):
                 if valor is not None:
                     db.add(MetricaModelo(
                         modelo_ml_id=modelo.id, metrica=metrica, valor=valor,
                     ))
         await db.commit()
-    etapa = "PRODUCTION (promovido)" if promover_aptitud else "STAGING"
-    print(f"Modelos y métricas registrados en la BD (stage {etapa}).")
+    n_prom = len(promovidas) + (1 if promover_aptitud else 0)
+    print(f"Modelos y métricas registrados en la BD: {n_prom} promovido(s) a "
+          f"PRODUCTION, el resto en STAGING.")
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--registrar", action="store_true", help="registrar en modelos_ml")
+    ap.add_argument(
+        "--active-learning", action="store_true",
+        help="combina datos sintéticos con etiquetas doradas (aceptaciones "
+             "humanas + ciclos cerrados) y promueve variables con precisión "
+             "real >= 0.85",
+    )
     args = ap.parse_args()
-    asyncio.run(main(registrar=args.registrar))
+    asyncio.run(main(registrar=args.registrar, active_learning=args.active_learning))

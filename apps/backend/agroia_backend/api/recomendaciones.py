@@ -54,6 +54,8 @@ class RecommendResponse(BaseModel):
     plan_economico: dict | None = None
     rendimiento_actual_t_ha: float | None = None
     desglose_confianza: dict = {}
+    # ── Validador ML (variables promovidas por aprendizaje activo) ──
+    validacion_ml: dict | None = None
 
 
 # ── Persistencia del historial ──
@@ -202,6 +204,7 @@ async def analizar_aptitud(
             plan_economico=result.plan_economico,
             rendimiento_actual_t_ha=result.rendimiento_actual_t_ha,
             desglose_confianza=result.desglose_confianza,
+            validacion_ml=result.validacion_ml,
         )
     except Exception as e:
         logger.exception("orchestrator_unexpected_error", error=str(e), finca_id=request.finca_id)

@@ -30,6 +30,15 @@ CULTIVOS_SENSIBLES_TEXTURA = {
 # Variables que el sensor NPK mide sin validación de laboratorio
 VARIABLES_NPK_SENSOR = {"N", "P", "K"}
 
+# Canónica (columna del sensor) → display (reglas/UI)
+MAPA_DISPLAY_ML = {
+    "ph": "pH", "nitrogeno": "N", "fosforo": "P", "potasio": "K",
+    "calcio": "Ca", "magnesio": "Mg", "azufre": "S", "hierro": "Fe",
+    "manganeso": "Mn", "zinc": "Zn", "cobre": "Cu", "boro": "B",
+    "materia_organica": "MO", "cic": "CIC", "humedad": "humedad",
+    "temperatura_suelo": "temperatura_suelo", "conductividad_electrica": "CE",
+}
+
 # Plan ejecutable por variable: fuente y frecuencia sugeridas
 PLAN_FERTILIZACION = {
     "N": {"fuente": "Urea (46% N) o sulfato de amonio (21% N)", "frecuencia": "Fraccionar en 2–3 aplicaciones según la etapa del cultivo"},
@@ -93,6 +102,8 @@ class RecommendationResult:
     plan_economico: dict | None = None
     rendimiento_actual_t_ha: float | None = None
     desglose_confianza: dict = field(default_factory=dict)
+    # ── Validador ML (variables promovidas por aprendizaje activo) ──
+    validacion_ml: dict | None = None
 
 
 class RecommendationOrchestrator:
@@ -640,6 +651,52 @@ class RecommendationOrchestrator:
                 "plan": self._plan_ejecutable(var, False),
             })
 
+        # ── Validador ML: variables promovidas por aprendizaje activo ──
+        # El ML deja de ser sombra para las variables con precisión real ≥ 0.85:
+        # valida las reglas (acuerdo → refuerzo de confianza) o las cuestiona
+        # (desacuerdo → se registra pero las reglas siguen mandando).
+        validacion_ml = None
+        refuerzo_ml = 0.0
+        if ml_result:
+            promovidas = self.ml.variables_promovidas()
+            if promovidas:
+                estados_reglas = {
+                    str(v.variable): self._clasificar_estado(v)
+                    for v in rules_result.violations + rules_result.warnings
+                }
+                acuerdos: list[dict] = []
+                desacuerdos: list[dict] = []
+                for var_canonica in sorted(promovidas):
+                    diag = ml_result.get("diagnostico", {}).get(var_canonica)
+                    if not diag:
+                        continue
+                    var_display = MAPA_DISPLAY_ML.get(var_canonica, var_canonica)
+                    estado_regla = estados_reglas.get(var_display)
+                    if estado_regla not in ("DEFICIT", "EXCESO"):
+                        continue
+                    item = {
+                        "variable": var_display,
+                        "estado_ml": diag["estado"],
+                        "estado_reglas": estado_regla,
+                        "confianza_ml": diag["confianza"],
+                    }
+                    if diag["estado"] == estado_regla:
+                        acuerdos.append(item)
+                    else:
+                        desacuerdos.append(item)
+                if acuerdos or desacuerdos:
+                    validacion_ml = {
+                        "variables_promovidas": sorted(promovidas),
+                        "acuerdos": acuerdos,
+                        "desacuerdos": desacuerdos,
+                    }
+                    refuerzo_ml = min(0.06, 0.02 * len(acuerdos))
+                    logger.info(
+                        "ml_validator",
+                        promovidas=sorted(promovidas),
+                        acuerdos=len(acuerdos), desacuerdos=len(desacuerdos),
+                    )
+
         # ── Confianza en función del cumplimiento de reglas ──
         penalizacion = len(rules_result.violations) * 0.20 + len(rules_result.warnings) * 0.05
         confianza = round(max(0.05, min(0.99, 1.0 - penalizacion)), 3)
@@ -651,6 +708,8 @@ class RecommendationOrchestrator:
                 str(nombre_cultivo), missing_esenciales,
             )
         )
+        if refuerzo_ml > 0:
+            confianza_final = round(min(0.99, confianza_final + refuerzo_ml), 3)
 
         fenologia_ajustada = None
         etapa = (finca_ctx.get("etapa_fenologica") or "").strip().lower()
@@ -761,8 +820,10 @@ class RecommendationOrchestrator:
             plan_economico=plan_economico,
             rendimiento_actual_t_ha=rendimiento_actual_t_ha,
             desglose_confianza=self._desglose_confianza(
-                npk_sin_calibrar, faltantes, recomendaciones, respaldos
+                npk_sin_calibrar, faltantes, recomendaciones, respaldos,
+                validacion_ml=validacion_ml,
             ),
+            validacion_ml=validacion_ml,
         )
 
     @staticmethod
@@ -771,6 +832,7 @@ class RecommendationOrchestrator:
         faltantes_fertilidad: list[str],
         recomendaciones: list[dict],
         respaldos: int,
+        validacion_ml: dict | None = None,
     ) -> dict:
         """Semáforo de 4 barras: por qué la confianza es la que es."""
         n_violaciones = sum(
@@ -784,6 +846,15 @@ class RecommendationOrchestrator:
             "violaciones_pct": max(40, 100 - 20 * n_violaciones),
             "respaldo_humano_pct": min(100, (respaldos or 0) * 2),
         }
+        if validacion_ml:
+            n_promovidas = len(validacion_ml.get("variables_promovidas") or [])
+            n_acuerdos = len(validacion_ml.get("acuerdos") or [])
+            n_desacuerdos = len(validacion_ml.get("desacuerdos") or [])
+            barras["validador_ml_pct"] = (
+                100
+                if n_promovidas and n_acuerdos and not n_desacuerdos
+                else 70 if n_promovidas else 0
+            )
         consejos = []
         if npk_sin_calibrar:
             consejos.append("valide el NPK en laboratorio (barra 1)")

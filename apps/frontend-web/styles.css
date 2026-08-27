@@ -838,3 +838,5 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
 .alerta-clima-msg b { font-weight: 700; }
 .alerta-lluvia_aplicacion { background: #eff6ff; border-color: #93c5fd; color: #1e40af; }
 .alerta-helada_floracion { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
+/* ─────────────────────────── Validador ML (aprendizaje activo) ─────────────────────────── */
+.validador-ml { background: #ecfdf5; border: 1px solid #6ee7b7; color: #065f46; border-radius: 12px; padding: 10px 14px; margin-top: 12px; font-size: 14px; line-height: 1.45; }

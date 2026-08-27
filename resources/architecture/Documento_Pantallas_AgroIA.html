@@ -286,12 +286,20 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
     costo ideal, cobertura %, diferencia de rendimiento estimada y acciones Incluidas/Aplazadas.</li>
     <li><b>Semáforo de confianza de 4 barras</b>: 🟢 calibración del sensor · 🟡 cobertura de
     fertilidad · 🔴 violaciones activas · 🟣 respaldo humano, con la nota «Para subir la confianza
-    al 80%, …» — transparencia del porqué de la confianza y de cómo mejorarla.</li>
+    al 80%, …» — transparencia del porqué de la confianza y de cómo mejorarla. Cuando hay
+    variables promovidas se agrega una 5.ª barra «Validador ML».</li>
+    <li><b>«🤖 Validador ML activo»</b> (aprendizaje activo): si hay modelos promovidos a
+    producción por variable (precisión real ≥ 85 % sobre etiquetas doradas), el análisis
+    muestra el banner verde con las variables promovidas: coincidencias con las reglas
+    (confianza reforzada +0.02/variable, máx +0.06) y discrepancias («prevalecen las reglas»).
+    Sin variables promovidas, el ML sigue en sombra y el banner no aparece.</li>
     <li><b>Ranking «Cultivos sugeridos»</b> (UC1): score, clasificación, confianza, nº de reglas y
     <b>descripción de las reglas aplicadas</b> (incluye la limitante de profundidad radicular si el
     lote es más somero que lo requerido por el cultivo).</li>
     <li><b>Panel de aceptación</b> (Admin/Agrónomo): botón «✅ Aceptar recomendación» + caja de texto
-    para ampliar acciones. Cada aceptación suma <b>+0.02 de confianza</b> al modelo (máx +0.10).</li>
+    para ampliar acciones. Cada aceptación suma <b>+0.02 de confianza</b> al modelo (máx +0.10) y
+    queda como <b>etiqueta dorada</b> (estados por variable validados) para el reentrenamiento
+    con aprendizaje activo.</li>
   </ul>
   <p><b>Servicios que llama:</b> <code>POST /api/v1/recomendaciones/analyze</code> (orquestador:
   SueloAdapter → RulesEngine/AptitudService → MLOracleService en sombra → discordancia → confianza real →
@@ -448,7 +456,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.3 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.4 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.4 · **Fecha:** 2026-08-27
+**Versión:** 2.5 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -703,7 +703,7 @@ Reejecuta `RulesEngine.evaluate` sobre el último suelo de la finca con las vari
 
 ## 10. El modelo de Machine Learning: entrenamiento y artefactos
 
-`apps/ml/agroia_ml/train_colombia.py` (ejecutar con `python -m agroia_ml.train_colombia --registrar`).
+`apps/ml/agroia_ml/train_colombia.py` (ejecutar con `python -m agroia_ml.train_colombia --registrar --active-learning`).
 
 ### 10.1 Datos y etiquetado
 
@@ -718,15 +718,25 @@ Reejecuta `RulesEngine.evaluate` sobre el último suelo de la finca con las vari
 - **1 RandomForest de aptitud UPRA** (`ml_aptitud`): F1 0.9111 (holdout), CV 5-fold 0.756 ± 0.201.
 - **Concordancia en datos reales**: se evalúa contra las últimas lecturas de `sensor_readings` etiquetadas por el sistema experto. Media actual ≈ 0.66 (< 0.85).
 
-### 10.3 Artefactos y promoción
+### 10.3 Artefactos y promoción por variable
 
-- Artefactos: `apps/ml/models/ml_*.joblib` (18) + `ml_meta.json` (fecha, variables, medianas, resultados, evaluación real, concordancia media).
-- Registro en BD: `modelos_ml` + `metricas_modelo` (stage **STAGING** por defecto).
-- **Promoción automática a PRODUCTION solo si la concordancia real media ≥ 0.85**; si no, queda en STAGING de forma honesta, pendiente de más lecturas calibradas.
+- Artefactos: `apps/ml/models/ml_*.joblib` (18) + `ml_meta.json` (fecha, variables, medianas, resultados, evaluación real, concordancia media, `modo_entrenamiento`, `etiquetas_doradas` y **`promovidas`**).
+- Registro en BD: `modelos_ml` + `metricas_modelo` (stage **STAGING** por defecto; nombre `RF_*_colombia_sintetico`).
+- **Promoción POR VARIABLE** (no global): si la **precisión real sobre el holdout dorado** (macro, ≥ 2 clases) alcanza **0.85 con ≥ 5 muestras**, ese modelo individual (`RF_diagnostico_<var>_colombia_activo`) pasa a **PRODUCTION** y queda `activo`, mientras los demás permanecen en STAGING. El modelo de aptitud se promueve solo si su concordancia dorada ≥ 0.85. Sin datos suficientes, todo queda en STAGING de forma honesta.
 
 ### 10.4 Oráculo en producción
 
-`MLOracleService` carga los artefactos perezosamente, usa las mismas medianas de `ml_meta.json` para imputar y se invoca en cada análisis (sección 8.5). `GET /api/v1/ml/estado` expone modelos, métricas, `artefactos_meta`, `n_artefactos`, `oraculo_ml_disponible` y `validaciones_humanas`.
+`MLOracleService` carga los artefactos perezosamente, usa las mismas medianas de `ml_meta.json` para imputar y se invoca en cada análisis (sección 8.5). Lee `ml_meta.json.promovidas` y expone `variables_promovidas()`; cada predicción marca `promovido: true` en las variables promovidas. `GET /api/v1/ml/estado` incluye `variables_promovidas` y `GET /api/v1/ml/etiquetas-doradas` (Admin) resume el Ground Truth disponible.
+
+### 10.5 Aprendizaje activo — Ground Truth humano (`--active-learning`)
+
+- **Etiquetas doradas** (`services/ml_labels.py`):
+  1. **Aceptaciones humanas**: cada `aceptaciones_recomendacion.resumen.recomendaciones[]` aporta estados por variable (DEFICIT/OK/EXCESO) validados por el agrónomo; se une a la última lectura de la finca anterior a la aceptación para reconstruir el perfil de suelo.
+  2. **Ciclos cerrados**: `historial_ciclos_lote` con rendimiento real vs. `rendimiento_esperado` de la ficha técnica → etiqueta de aptitud verificada en campo (ratio ≥ 0.95 Apta · ≥ 0.75 Moderadamente · ≥ 0.5 Marginalmente · No apta).
+- **Entrenamiento**: sintéticos (peso 1.0) + doradas (peso 10.0, `sample_weight`), con **partición por finca** (sin fuga de datos entre entrenamiento y holdout dorado).
+- **Métricas reales** por variable: `precision_real`, `f1_real`, `n_golden_test` (guardadas también en `metricas_modelo`).
+- **Validador ML en runtime** (orquestador): para cada variable promovida con violación de reglas, compara el diagnóstico ML vs. reglas. **Acuerdo → +0.02 de confianza por variable (máx +0.06)** y 5.ª barra en el semáforo; **desacuerdo → prevalece la regla** y se registra en `validacion_ml.desacuerdos`. La respuesta incluye `validacion_ml` y P5 muestra el banner «🤖 Validador ML activo».
+- **Impacto**: el ML deja de ser sombra eterna: con uso real (aceptaciones y cosechas) gana precisión por nutriente y se convierte en validador de las reglas, sin riesgo global.
 
 ---
 
@@ -778,6 +788,12 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 - **Servicio cada 6 h** + endpoint manual `POST /api/v1/alertas-climaticas/evaluar` (Admin) con pronóstico inyectable para pruebas deterministas.
 - **Banner P1** con severidad y colores por tipo; **sección N del reporte** con pronóstico extendido de 7 días y avisos de umbrales.
 - **Regla 1 (lixiviación)**: lluvia > 20 mm/24h en los próximos 3 días + fertilización pendiente → «Aplace la aplicación…». **Regla 2 (helada)**: T mín < 5 °C + Floración + cultivo sensible → «Riesgo de helada, active riego por aspersión».
+
+### 11.5 Aprendizaje activo — promoción del ML por variable (v2.5)
+
+- **Rompe el techo de 0.85**: ya no se exige concordancia global; el entrenamiento con `--active-learning` evalúa la **precisión real por variable** contra el Ground Truth humano y promueve **solo** los modelos que superan 0.85 (ej. `ml_diagnostico_fosforo` → PRODUCTION, el resto en sombra).
+- **Ground Truth**: aceptaciones de agrónomos (estados por variable) + ciclos cerrados (rendimiento real vs. ficha) — `services/ml_labels.py`, visible en `GET /api/v1/ml/etiquetas-doradas`.
+- **Validador ML en P5**: banner «🤖 Validador ML activo» con coincidencias (refuerzo de confianza) y discrepancias (prevalecen las reglas); el semáforo de confianza suma una 5.ª barra.
 
 ---
 

@@ -1,11 +1,12 @@
 """API de estado de los modelos de ML (validación de entrenamiento).
 
 GET /api/v1/ml/estado — modelos registrados, métricas y artefactos.
+GET /api/v1/ml/etiquetas-doradas — Ground Truth disponible (Admin).
 """
 
 import json
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Header, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -14,6 +15,7 @@ from agroia_backend.models.aceptacion_recomendacion import AceptacionRecomendaci
 from agroia_backend.models.metrica_modelo import MetricaModelo
 from agroia_backend.models.modelo_ml import ModeloML
 from agroia_backend.services.ml_oracle import MLOracleService
+from agroia_backend.services.ml_labels import resumen_etiquetas_doradas
 
 router = APIRouter(prefix="/ml", tags=["ml"])
 
@@ -60,6 +62,7 @@ async def estado_ml(db: AsyncSession = Depends(get_db)):
         ],
         "artefactos_meta": artefactos_meta,
         "oraculo_ml_disponible": oracle.disponible(),
+        "variables_promovidas": sorted(oracle.variables_promovidas()),
         "n_artefactos": len(list(oracle.dir.glob("ml_*.joblib"))) if oracle.dir.exists() else 0,
         "validaciones_humanas": int(
             (await db.execute(
@@ -67,3 +70,23 @@ async def estado_ml(db: AsyncSession = Depends(get_db)):
             )).scalar_one() or 0
         ),
     }
+
+
+@router.get("/etiquetas-doradas")
+async def etiquetas_doradas(
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+):
+    """Ground Truth disponible para el aprendizaje activo (solo Admin).
+
+    Muestra cuántas aceptaciones humanas y ciclos cerrados alimentan el
+    pipeline `train_colombia.py --active-learning` y la cobertura por variable.
+    """
+    rol = (x_user_role or "").strip().lower()
+    if rol not in {"admin", "administrador"}:
+        raise HTTPException(status_code=403, detail={
+            "code": "FORBIDDEN_ROLE",
+            "message": "Solo el administrador puede consultar las etiquetas doradas.",
+        })
+    resumen = await resumen_etiquetas_doradas(db)
+    return {"status": "ok", **resumen}

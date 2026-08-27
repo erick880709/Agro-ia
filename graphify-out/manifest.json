@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787869113.9689848,
-    "ast_hash": "6435177e1de146498305fa0cc945c19a",
+    "mtime": 1787869491.3240538,
+    "ast_hash": "e2ad57073d3346673ee309418486c1c0",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4965,8 +4965,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/clima_alertas.py": {
-    "mtime": 1787867705.2512171,
-    "ast_hash": "f179c7004765625e84d8a30fe4c9e9a9",
+    "mtime": 1787869212.6923594,
+    "ast_hash": "b7be55b25b07f889ace86d3985f81bb4",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/019_alertas_climaticas.py": {

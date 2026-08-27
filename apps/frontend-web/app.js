@@ -2218,6 +2218,31 @@ function renderPlanEconomico(pe) {
   </div>`;
 }
 
+/* ── Validador ML por variable (aprendizaje activo) ── */
+
+function renderValidadorML(v) {
+  if (!v) return '';
+  const acuerdos = v.acuerdos || [];
+  const desacuerdos = v.desacuerdos || [];
+  const vars = (v.variables_promovidas || [])
+    .map(x => ETIQUETAS_PARAM[x] || x).join(', ');
+  let detalle = '';
+  if (acuerdos.length) {
+    detalle += `✅ Coincide con las reglas en ${acuerdos.length} variable(s)` +
+      ` (${acuerdos.map(x => esc(x.variable)).join(', ')}) → confianza reforzada. `;
+  }
+  if (desacuerdos.length) {
+    detalle += `🔀 Discrepa en ${desacuerdos.length} variable(s)` +
+      ` (${desacuerdos.map(x => esc(x.variable)).join(', ')}) → prevalecen las reglas.`;
+  }
+  return `
+    <div class="validador-ml">
+      <b>🤖 Validador ML activo</b> (${esc(vars)}) — modelo promovido por
+      aprendizaje activo con precisión real ≥ 85 %.
+      <div class="muted" style="font-size:0.8rem;margin-top:3px">${detalle}</div>
+    </div>`;
+}
+
 function renderAnalisis(a) {
   if (!a) return '<p class="muted">Sin resultado.</p>';
   const confianza = Math.round((a.confianza || 0) * 100);
@@ -2254,6 +2279,7 @@ function renderAnalisis(a) {
   }
   if (a.advertencia) html += `<div class="advertencia">${esc(a.advertencia)}</div>`;
   if (a.discordancia) html += `<div class="advertencia">🔀 Discordancia detectada: ${esc(JSON.stringify(a.discordancia))}</div>`;
+  if (a.validacion_ml) html += renderValidadorML(a.validacion_ml);
 
   if (a.recomendaciones && a.recomendaciones.length) {
     html += `
