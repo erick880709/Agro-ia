@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroIA · Manual de Pantallas</title>
+<style>
+  :root {
+    --bg: #f6f8f4; --surface: #ffffff; --surface2: #eef4ec; --line: #dfe8dc;
+    --ink: #1f2a21; --muted: #6b7c66; --moss: #2e7d32; --moss-dark: #1b5e20;
+    --amber: #b45309; --clay: #c0563f; --serif: Georgia, 'Times New Roman', serif;
+    --mono: 'Consolas', 'Courier New', monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.65 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  header.portada { background: linear-gradient(135deg, #17381f 0%, #2e7d32 60%, #66a85b 100%);
+    color: #fff; padding: 54px 28px 42px; }
+  header.portada .brand { font-family: var(--serif); font-size: 2rem; font-weight: 700; }
+  header.portada .kicker { letter-spacing: .18em; text-transform: uppercase; font-size: .78rem; opacity: .85; }
+  header.portada h1 { margin: 14px 0 4px; font-size: 1.9rem; font-family: var(--serif); }
+  header.portada .meta { opacity: .85; font-size: .9rem; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 18px 80px; }
+  nav.toc { background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 22px; margin-bottom: 26px; columns: 2; column-gap: 30px; font-size: .88rem; }
+  nav.toc a { color: var(--moss-dark); text-decoration: none; display: block; padding: 3px 0; }
+  nav.toc a:hover { text-decoration: underline; }
+  h2 { font-family: var(--serif); font-size: 1.45rem; color: var(--moss-dark);
+    border-bottom: 3px solid var(--moss); padding-bottom: 6px; margin: 46px 0 14px; }
+  h2 .num { display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 50%; background: var(--moss); color: #fff;
+    font-size: 1rem; margin-right: 12px; font-family: 'Segoe UI', sans-serif; }
+  h3 { font-size: 1.08rem; color: #24512b; margin: 22px 0 8px; }
+  p { margin: 8px 0; }
+  ul, ol { margin: 8px 0; padding-left: 24px; }
+  li { margin: 4px 0; }
+  code { background: var(--surface2); border: 1px solid var(--line); border-radius: 5px;
+    padding: 1px 6px; font-family: var(--mono); font-size: .86em; color: #24492c; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; background: var(--surface);
+    border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: .88rem; }
+  th { background: #244d2c; color: #fff; text-align: left; padding: 8px 12px;
+    font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; }
+  td { padding: 8px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+  tr:nth-child(even) td { background: #f8fbf6; }
+  .pantalla { background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    padding: 22px 24px; margin: 18px 0; box-shadow: 0 1px 3px rgba(31,42,33,.06); }
+  .pantalla .cab { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  .pantalla .icono { font-size: 1.9rem; }
+  .pantalla .titulo { font-family: var(--serif); font-size: 1.3rem; color: var(--moss-dark); }
+  .pantalla .rol { margin-left: auto; font-size: .76rem; color: var(--muted);
+    border: 1px solid var(--line); border-radius: 999px; padding: 3px 12px; background: var(--surface2); }
+  .objetivo { background: #f2faf3; border-left: 4px solid var(--moss); border-radius: 8px;
+    padding: 10px 14px; margin: 10px 0; font-size: .95rem; }
+  .objetivo b { color: var(--moss-dark); }
+  .flujo { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 14px 0; }
+  .flujo .caja { background: var(--surface); border: 1.5px solid var(--moss); color: var(--moss-dark);
+    border-radius: 9px; padding: 7px 12px; font-size: .8rem; font-weight: 600; text-align: center; }
+  .flujo .flecha { color: var(--muted); font-size: 1.05rem; }
+  .siguiente { color: var(--amber); font-weight: 600; }
+  footer { background: #17381f; color: #cfe3d2; text-align: center; padding: 22px; font-size: .85rem; }
+  @media (max-width: 760px) { nav.toc { columns: 1; } }
+  @media print { header.portada { background: #17381f !important; -webkit-print-color-adjust: exact; }
+    .pantalla { break-inside: avoid; } }
+</style>
+</head>
+<body>
+
+<header class="portada">
+  <div class="brand">Agro<em>IA</em></div>
+  <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
+  <h1>Pantallas del sistema y su propósito</h1>
+  <div class="meta">Versión 1.0 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <a href="#ruta">🧭 Ruta natural de trabajo</a>
+  <a href="#p0">P0 · Inicio de sesión</a>
+  <a href="#p1">P1 · Inicio (Dashboard)</a>
+  <a href="#p2">P2 · Fincas (registro)</a>
+  <a href="#p3">P3 · Sensores IoT</a>
+  <a href="#p4">P4 · Cargar archivo</a>
+  <a href="#p5">P5 · Recomendaciones</a>
+  <a href="#p6">P6 · Historial</a>
+  <a href="#p7">P7 · Reportes</a>
+  <a href="#p8">P8 · Chat asesor</a>
+  <a href="#p9">P9 · Usuarios</a>
+  <a href="#p10">P10 · Catálogo</a>
+</nav>
+
+<h2 id="ruta">🧭 Ruta natural de trabajo</h2>
+<p>Este es el orden en que un usuario recorre el sistema, desde el primer acceso hasta la
+operación diaria de monitoreo y análisis:</p>
+<div class="flujo">
+  <div class="caja">P0 · Iniciar sesión</div><span class="flecha">→</span>
+  <div class="caja">P1 · Inicio</div><span class="flecha">→</span>
+  <div class="caja">P2 · Registrar finca</div><span class="flecha">→</span>
+  <div class="caja">P3 · Conectar sensores</div><span class="flecha">→</span>
+  <div class="caja">P5 · Recomendaciones</div><span class="flecha">→</span>
+  <div class="caja">P6 · Historial</div><span class="flecha">→</span>
+  <div class="caja">P7 · Reportes</div>
+</div>
+<p style="font-size:.86rem;color:var(--muted)">Apoyos transversales: P4 (Cargar archivo) cuando el sensor pierde conexión ·
+P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10 (Catálogo) para administración y referencia.</p>
+
+<!-- ─────────── P0 ─────────── -->
+<div class="pantalla" id="p0">
+  <div class="cab"><span class="icono">🔐</span><span class="titulo">P0 · Inicio de sesión</span>
+    <span class="rol">Todos los roles</span></div>
+  <div class="objetivo"><b>Objetivo:</b> identificar al usuario y cargar su perfil de trabajo
+  (rol y fincas visibles) antes de entrar al sistema.</div>
+  <p><b>Qué muestra:</b> el formulario de acceso (email y contraseña) y cuatro botones de
+  <b>cuentas demo de un clic</b>: 👑 Administrador · 🧑🌾 Agrónomo · 👤 Cliente (María) · 🌱 Cliente (Finca Demo).</p>
+  <p><b>Acciones disponibles:</b></p>
+  <ul>
+    <li><b>Entrar</b> — valida credenciales contra <code>POST /api/v1/auth/login</code>
+    (verificación bcrypt del <code>password_hash</code>; errores <code>CREDENCIALES_INVALIDAS</code>
+    o <code>USUARIO_INACTIVO</code>).</li>
+    <li><b>Cuentas demo</b> — hacen login automático con credenciales predefinidas.</li>
+  </ul>
+  <p><b>Qué ocurre después:</b> la sesión se guarda en <code>localStorage</code>
+  (<code>agroia_sesion</code>) y se carga el menú según el rol
+  (Admin: 9 pestañas · Agrónomo: 7 · Cliente: 5). <span class="siguiente">Siguiente → P1 Inicio.</span></p>
+</div>
+
+<!-- ─────────── P1 ─────────── -->
+<div class="pantalla" id="p1">
+  <div class="cab"><span class="icono">🏠</span><span class="titulo">P1 · Inicio (Dashboard de la finca)</span>
+    <span class="rol">Todos los roles</span></div>
+  <div class="objetivo"><b>Objetivo:</b> dar una visión inmediata del estado de la finca:
+  semáforo de aptitud, KPIs, alertas y últimas lecturas.</div>
+  <p><b>Qué muestra:</b></p>
+  <ul>
+    <li>Selector <b>«Finca de análisis»</b> con todas las fincas visibles para el rol.</li>
+    <li><b>Semáforo</b> 🟢🟡🟠🔴 con la clasificación de la última recomendación.</li>
+    <li><b>KPIs</b> de suelo (pH, N, P, K, CE…) y <b>alertas</b> (ej. confianza &lt; 80 %).</li>
+    <li><b>Últimas lecturas</b> de la finca seleccionada.</li>
+    <li><b>Acciones rápidas</b>: cargar archivo, generar recomendación, ver sensores.</li>
+  </ul>
+  <p><b>Servicios que llama:</b> <code>GET /api/v1/dashboard/{finca_id}?modo=agricultor|experto</code>
+  (modo agricultor: lenguaje coloquial con semáforo; modo experto: datos crudos + exportación csv/json/excel).</p>
+  <p><span class="siguiente">Siguiente → P2 Fincas (si no hay finca) o P3 Sensores.</span></p>
+</div>
+
+<!-- ─────────── P2 ─────────── -->
+<div class="pantalla" id="p2">
+  <div class="cab"><span class="icono">🏡</span><span class="titulo">P2 · Fincas — registro en 3 secciones</span>
+    <span class="rol">Admin (registro) · Admin/Agrónomo (consulta)</span></div>
+  <div class="objetivo"><b>Objetivo:</b> registrar el predio con su ubicación verificada y sus
+  características, y crear su <b>lote productivo</b>. Es el paso previo obligatorio para
+  sensores, muestras y análisis.</div>
+  <p><b>Qué muestra:</b> el listado de fincas (tarjetas con ID copiable para el firmware) y el
+  <b>formulario wizard de 3 secciones</b>:</p>
+  <ol>
+    <li><b>Información básica</b> — nombre, propietario, teléfono, email, departamento, municipio, vereda.</li>
+    <li><b>Ubicación</b> — 📍 GPS del navegador · 🗺️ mapa (Leaflet/OSM, marcar lindero y «Cerrar polígono») ·
+    🔗 enlace Google Maps. Muestra latitud, longitud, altitud msnm y precisión ±m.</li>
+    <li><b>Características del predio</b> — tipo de área, área registrada,
+    <b>área georreferenciada calculada del polígono</b>, ¿varios lotes?, dimensiones opcionales.</li>
+  </ol>
+  <p><b>Cadena de validación al guardar</b> (cada paso se muestra con ✅/⚠️/❌):</p>
+  <table>
+    <tr><th>#</th><th>Validación</th><th>Rechazo si falla</th></tr>
+    <tr><td>1</td><td>¿Departamento existe? (catálogo de 33)</td><td><code>DEPARTAMENTO_INVALIDO</code></td></tr>
+    <tr><td>2</td><td>¿Municipio pertenece al departamento?</td><td><code>MUNICIPIO_NO_PERTENECE</code></td></tr>
+    <tr><td>3</td><td>¿Coordenadas válidas? (WGS84)</td><td><code>COORDENADAS_INVALIDAS</code></td></tr>
+    <tr><td>4</td><td>¿Coinciden con el municipio? (≤ 50 km)</td><td><code>COORDENADAS_FUERA_MUNICIPIO</code></td></tr>
+    <tr><td>5</td><td>¿Área razonable? (0.01–100 000 ha)</td><td><code>AREA_NO_RAZONABLE</code></td></tr>
+    <tr><td>6</td><td>¿Precisión aceptable? (≤ 100 m)</td><td><code>PRECISION_INSUFICIENTE</code></td></tr>
+  </table>
+  <p><b>Servicios que llama:</b> <code>POST /api/v1/fincas</code> (crea la finca y el <b>lote principal</b>) ·
+  <code>GET /api/v1/location/elevation</code> · <code>GET /api/v1/location/resolver-enlace</code> (enlaces cortos) ·
+  <code>PATCH /api/v1/fincas/{id}</code> (datos agronómicos) · <code>GET /api/v1/fincas/{id}/lotes</code>.</p>
+  <p><span class="siguiente">Siguiente → P3 Sensores IoT.</span></p>
+</div>
+
+<!-- ─────────── P3 ─────────── -->
+<div class="pantalla" id="p3">
+  <div class="cab"><span class="icono">📡</span><span class="titulo">P3 · Sensores IoT</span>
+    <span class="rol">Todos los roles</span></div>
+  <div class="objetivo"><b>Objetivo:</b> monitorear en tiempo real las lecturas de los sensores
+  de la finca y su estado de conexión.</div>
+  <p><b>Qué muestra:</b> tabla con las últimas lecturas (pH, N, P, K, CE, humedad, temperatura,
+  fecha) por finca —incluye nombre de finca y mini-ID copiable—, indicador de actualización y
+  estado por dispositivo (<code>online</code> &lt; 12 h · <code>datos_desactualizados</code> &lt; 24 h ·
+  <code>offline</code>).</p>
+  <p><b>Acciones:</b> refresco automático cada 10 s (solo con la pestaña activa).</p>
+  <p><b>Servicios que llama:</b> <code>GET /api/v1/lecturas/{finca_id}?limite=10</code> ·
+  <code>GET /api/v1/sensores/{finca_id}/status</code>.</p>
+  <p><b>Cómo llegan los datos:</b> el sensor envía tramas a <code>POST /api/sensor</code> (firmware ESP32:
+  <code>device_id, humidity, temperature, conductivity, ph, nitrogen, phosphorus, potassium, rssi</code>);
+  el backend normaliza (µS/cm → dS/m), asocia la finca (trama → dispositivo → auto-registro) y persiste
+  en <code>sensor_readings</code>.</p>
+  <p><span class="siguiente">Siguiente → P5 Recomendaciones (o P4 si el sensor perdió datos).</span></p>
+</div>
+
+<!-- ─────────── P4 ─────────── -->
+<div class="pantalla" id="p4">
+  <div class="cab"><span class="icono">📂</span><span class="titulo">P4 · Cargar archivo</span>
+    <span class="rol">Admin / Agrónomo</span></div>
+  <div class="objetivo"><b>Objetivo:</b> respaldo manual de mediciones cuando el sensor pierde
+  conexión: cargar un archivo y obtener la recomendación al instante.</div>
+  <p><b>Qué muestra:</b> formulario con selector de finca, cultivo opcional y zona de carga.
+  Acepta <b>CSV pares</b> (<code>ph,7.1</code>), <b>CSV ancho</b>, <b>TXT</b> (<code>clave=valor</code>) o
+  <b>JSON</b> (trama del firmware).</p>
+  <p><b>Servicio que llama:</b> <code>POST /api/v1/carga</code> (multipart). El backend decodifica,
+  normaliza con las mismas reglas de una trama en vivo, persiste <code>SensorReading</code> y ejecuta el
+  motor de recomendaciones al instante (UC1 sin cultivo, UC2 con cultivo).</p>
+  <p><span class="siguiente">Siguiente → P5 Recomendaciones.</span></p>
+</div>
+
+<!-- ─────────── P5 ─────────── -->
+<div class="pantalla" id="p5">
+  <div class="cab"><span class="icono">🧪</span><span class="titulo">P5 · Recomendaciones</span>
+    <span class="rol">Admin / Agrónomo</span></div>
+  <div class="objetivo"><b>Objetivo:</b> generar el diagnóstico del suelo con el motor híbrido
+  (sistema experto UPRA/Cenicafé/AGROSAVIA + ML en sombra) y, si corresponde, aceptar la recomendación
+  para retroalimentar al modelo.</div>
+  <p><b>Qué muestra:</b> selector de finca y cultivo (vacío = «¿qué me conviene sembrar?», UC1) y
+  el resultado del análisis:</p>
+  <ul>
+    <li><b>Cabecera</b>: cultivo, clasificación UPRA + badge de estado de validación
+    (Validada / Preliminar / Pendiente de validación técnica / Sujeta a confirmación de textura),
+    barra de confianza (final y real) y respaldos de expertos.</li>
+    <li><b>Tabla de diagnóstico</b> (UC2): Variable · Estado (DÉFICIT/EXCESO) · Lectura · Rango ideal ·
+    Acción (con <i>condicional a confirmación de laboratorio</i> cuando el NPK no está validado y
+    contexto del pH por cultivo) · Prioridad · <b>Confiabilidad</b> · <b>Plan sugerido</b> (fuente, frecuencia, dosis).</li>
+    <li><b>Ranking «Cultivos sugeridos»</b> (UC1): score, clasificación, confianza, nº de reglas y
+    <b>descripción de las reglas aplicadas</b>.</li>
+    <li><b>Panel de aceptación</b> (Admin/Agrónomo): botón «✅ Aceptar recomendación» + caja de texto
+    para ampliar acciones. Cada aceptación suma <b>+0.02 de confianza</b> al modelo (máx +0.10).</li>
+  </ul>
+  <p><b>Servicios que llama:</b> <code>POST /api/v1/recomendaciones/analyze</code> (orquestador:
+  SueloAdapter → RulesEngine/AptitudService → MLOracleService en sombra → discordancia → confianza real →
+  estado de validación) y <code>POST /api/v1/recomendaciones/aceptar</code>.</p>
+  <p><span class="siguiente">Siguiente → P6 Historial o P7 Reportes.</span></p>
+</div>
+
+<!-- ─────────── P6 ─────────── -->
+<div class="pantalla" id="p6">
+  <div class="cab"><span class="icono">📜</span><span class="titulo">P6 · Historial</span>
+    <span class="rol">Todos los roles</span></div>
+  <div class="objetivo"><b>Objetivo:</b> consultar la trazabilidad de los análisis realizados a la
+  finca y su evolución en el tiempo.</div>
+  <p><b>Qué muestra:</b> lista paginada de recomendaciones persistidas (fecha, cultivo,
+  clasificación, confianza, estado PUBLICA/ADVERTENCIA).</p>
+  <p><b>Servicio que llama:</b> <code>GET /api/v1/recomendaciones/historial/{finca_id}?page=&amp;page_size=&amp;cultivo_id=</code>.</p>
+  <p><span class="siguiente">Siguiente → P7 Reportes.</span></p>
+</div>
+
+<!-- ─────────── P7 ─────────── -->
+<div class="pantalla" id="p7">
+  <div class="cab"><span class="icono">📄</span><span class="titulo">P7 · Reportes</span>
+    <span class="rol">Todos los roles</span></div>
+  <div class="objetivo"><b>Objetivo:</b> producir el documento formal del análisis de suelo
+  (HTML imprimible a PDF) para compartir con el productor o un técnico.</div>
+  <p><b>Qué muestra:</b> selector de finca y tipo de reporte (<code>siembra</code> ·
+  <code>cultivo</code> · <code>completo</code>), vista previa del HTML y botones para abrir y descargar.</p>
+  <p><b>Contenido del reporte generado</b> (secciones):</p>
+  <ul>
+    <li><b>T · Telemetría</b> — dispositivo, señal RSSI, calidad NPK en 3 niveles
+    (Validado en laboratorio / Calibrado de fábrica / Sin validar), validación lab.</li>
+    <li><b>01 · Diagnóstico UC2</b> — clasificación + estado de validación, tabla con plan sugerido.</li>
+    <li><b>02 · Recomendación UC1</b> — ranking de cultivos.</li>
+    <li><b>M · Mapa de calor</b> — intensidad por parámetro según pos_x/pos_y (en PDF se imprimen todas las variables).</li>
+    <li><b>N · Plano del lote</b> — silueta, área/perímetro, pendiente, drenaje, metodología de muestreo,
+    clima IDEAM del día de la muestra con alerta fitosanitaria específica e historial de manejo.</li>
+    <li><b>04/05 · Advertencias y próximos pasos</b>.</li>
+  </ul>
+  <p><b>Servicio que llama:</b> <code>POST /api/v1/reportes/generar</code>.</p>
+  <p><span class="siguiente">Apoyo permanente → P8 Chat asesor.</span></p>
+</div>
+
+<!-- ─────────── P8 ─────────── -->
+<div class="pantalla" id="p8">
+  <div class="cab"><span class="icono">💬</span><span class="titulo">P8 · Chat asesor (dentro de Reportes)</span>
+    <span class="rol">Todos los roles</span></div>
+  <div class="objetivo"><b>Objetivo:</b> resolver preguntas agronómicas sobre la finca con
+  respuestas fundamentadas en los datos reales del sistema.</div>
+  <p><b>Qué muestra:</b> conversación con sugerencias rápidas («¿Cuánto fertilizante aplico?»,
+  «¿Por qué me recomienda este cultivo?»…) y memoria por finca.</p>
+  <p><b>Servicio que llama:</b> <code>POST /api/v1/chat/consultar</code> — ejecuta el orquestador
+  para contexto real, enruta la pregunta a la base de conocimiento (cal/fertilización/riego,
+  clima, diagnóstico diferencial) y responde con fuentes y confianza. Con
+  <code>OPENAI_API_KEY</code> usa LLM; si no, el motor local determinista.</p>
+</div>
+
+<!-- ─────────── P9 ─────────── -->
+<div class="pantalla" id="p9">
+  <div class="cab"><span class="icono">👥</span><span class="titulo">P9 · Usuarios</span>
+    <span class="rol">Solo Admin</span></div>
+  <div class="objetivo"><b>Objetivo:</b> administrar las cuentas del sistema y sus permisos.</div>
+  <p><b>Qué muestra:</b> listado de usuarios con rol, estado y fincas asignadas; formulario de alta
+  con multi-selector de fincas a las que tendrá acceso.</p>
+  <p><b>Servicios que llama:</b> <code>GET /api/v1/usuarios</code> · <code>POST /api/v1/usuarios</code> ·
+  <code>PUT /api/v1/admin/usuarios/{id}/rol</code> · perfil propio en <code>/usuarios/me</code>.</p>
+</div>
+
+<!-- ─────────── P10 ─────────── -->
+<div class="pantalla" id="p10">
+  <div class="cab"><span class="icono">🌾</span><span class="titulo">P10 · Catálogo de cultivos</span>
+    <span class="rol">Consulta: todos · Gestión: Admin/Agrónomo</span></div>
+  <div class="objetivo"><b>Objetivo:</b> consultar y mantener la base de conocimiento agronómica
+  que alimenta el motor de recomendaciones.</div>
+  <p><b>Qué muestra:</b> los 30 cultivos activos con icono y ficha técnica (requerimientos, rangos
+  ideales, fuentes UPRA/Cenicafé/AGROSAVIA).</p>
+  <p><b>Servicios que llama:</b> <code>GET /api/v1/cultivos</code> · <code>GET /api/v1/cultivos/{id}</code> ·
+  <code>GET/POST/PUT /api/v1/fichas/…</code> · flujo editorial
+  <code>POST /fichas/{id}/enviar-revision | aprobar | rechazar</code>.</p>
+  <p class="muted" style="font-size:.85rem">El catálogo + las 54 reglas agronómicas son la fuente de verdad
+  del sistema experto que emite las recomendaciones de P5.</p>
+</div>
+
+</div>
+
+<footer>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.0 · 2026-08-27<br>
+  Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
+</footer>
+</body>
+</html>
