@@ -67,6 +67,7 @@ class RecommendationRequest:
     cultivo_id: str | None = None
     tenant_id: str | None = None
     presupuesto_cop: float | None = None  # presupuesto de fertilización ($/ha)
+    rendimiento_actual_t_ha: float | None = None  # rendimiento declarado por el productor
 
 
 @dataclass
@@ -90,6 +91,8 @@ class RecommendationResult:
     variables_faltantes_esenciales: list[str] = field(default_factory=list)
     fenologia_ajustada: str | None = None
     plan_economico: dict | None = None
+    rendimiento_actual_t_ha: float | None = None
+    desglose_confianza: dict = field(default_factory=dict)
 
 
 class RecommendationOrchestrator:
@@ -168,12 +171,14 @@ class RecommendationOrchestrator:
                 request.finca_id, soil_dict, t_start, advertencia_datos,
                 finca_ctx, npk_no_calibrado, request.presupuesto_cop,
                 missing_esenciales=soil_data.missing_blocking,
+                rendimiento_actual_t_ha=request.rendimiento_actual_t_ha,
             )
 
         # UC2: hay cultivo sembrado → diagnosticar qué falta/sobra
         return await self._analizar_cultivo(
             request, soil_dict, t_start, advertencia_datos, finca_ctx,
             npk_no_calibrado, missing_esenciales=soil_data.missing_blocking,
+            rendimiento_actual_t_ha=request.rendimiento_actual_t_ha,
         )
 
     async def _cargar_contexto_finca(self, finca_id: str) -> dict:
@@ -320,6 +325,7 @@ class RecommendationOrchestrator:
         npk_no_calibrado: bool = False,
         presupuesto_cop: float | None = None,
         missing_esenciales: list[str] | None = None,
+        rendimiento_actual_t_ha: float | None = None,
     ) -> "RecommendationResult":
         """UC1: puntúa todos los cultivos y recomienda los más aptos."""
         if self.aptitud is None:
@@ -450,6 +456,10 @@ class RecommendationOrchestrator:
             variables_faltantes_fertilidad=faltantes,
             variables_faltantes_esenciales=missing_esenciales,
             plan_economico=plan_economico,
+            rendimiento_actual_t_ha=rendimiento_actual_t_ha,
+            desglose_confianza=self._desglose_confianza(
+                npk_sin_calibrar, faltantes, recomendaciones, respaldos
+            ),
         )
 
     async def _analizar_cultivo(
@@ -461,6 +471,7 @@ class RecommendationOrchestrator:
         finca_ctx: dict | None = None,
         npk_no_calibrado: bool = False,
         missing_esenciales: list[str] | None = None,
+        rendimiento_actual_t_ha: float | None = None,
     ) -> "RecommendationResult":
         """UC2: evalúa el suelo contra las reglas del cultivo sembrado."""
         from sqlalchemy import select
@@ -744,7 +755,47 @@ class RecommendationOrchestrator:
             variables_faltantes_esenciales=missing_esenciales,
             fenologia_ajustada=fenologia_ajustada,
             plan_economico=plan_economico,
+            rendimiento_actual_t_ha=rendimiento_actual_t_ha,
+            desglose_confianza=self._desglose_confianza(
+                npk_sin_calibrar, faltantes, recomendaciones, respaldos
+            ),
         )
+
+    @staticmethod
+    def _desglose_confianza(
+        npk_sin_calibrar: bool,
+        faltantes_fertilidad: list[str],
+        recomendaciones: list[dict],
+        respaldos: int,
+    ) -> dict:
+        """Semáforo de 4 barras: por qué la confianza es la que es."""
+        n_violaciones = sum(
+            1 for r in (recomendaciones or [])
+            if str(r.get("prioridad")) in ("Critica", "Alta")
+        )
+        n_faltantes = len(faltantes_fertilidad or [])
+        barras = {
+            "calibracion_sensor_pct": 60 if npk_sin_calibrar else 100,
+            "cobertura_fertilidad_pct": max(60, 100 - 6 * n_faltantes),
+            "violaciones_pct": max(40, 100 - 20 * n_violaciones),
+            "respaldo_humano_pct": min(100, (respaldos or 0) * 2),
+        }
+        consejos = []
+        if npk_sin_calibrar:
+            consejos.append("valide el NPK en laboratorio (barra 1)")
+        if faltantes_fertilidad:
+            consejos.append(
+                "complete el análisis de " + faltantes_fertilidad[0].replace("_", " ")
+                + " (barra 2)"
+            )
+        if n_violaciones:
+            consejos.append("corrija las violaciones activas (barra 3)")
+        nota = (
+            "Para subir la confianza al 80%, " + " y ".join(consejos[:2]) + "."
+            if consejos else None
+        )
+        barras["nota_subir"] = nota
+        return barras
 
     async def _recomendacion_sin_datos(
         self,

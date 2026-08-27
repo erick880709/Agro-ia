@@ -259,6 +259,7 @@ async function arrancarAplicacion() {
   document.getElementById('repo-tipo').addEventListener('change', aplicarTipoReporte);
   document.getElementById('reporte-abrir').addEventListener('click', abrirReporte);
   document.getElementById('reporte-descargar').addEventListener('click', descargarReporteHtml);
+  registrarSimulacion();
   document.getElementById('form-chat').addEventListener('submit', enviarChat);
   document.getElementById('chat-attach').addEventListener('click', () => {
     document.getElementById('chat-imagen').click();
@@ -1096,6 +1097,8 @@ async function enviarAnalisis(e) {
   const cultivo = document.getElementById('reco-cultivo').value;
   const presupuestoEl = document.getElementById('reco-presupuesto');
   const presupuesto = presupuestoEl && presupuestoEl.value ? Number(presupuestoEl.value) : null;
+  const rendimientoEl = document.getElementById('reco-rendimiento');
+  const rendimiento = rendimientoEl && rendimientoEl.value ? Number(rendimientoEl.value) : null;
   if (presupuesto != null) state.presupuesto = presupuesto; // solo sesión/memoria
   if (!finca) { out.innerHTML = errorBanner('Selecciona una finca.'); return; }
   out.innerHTML = '<div class="card"><p class="muted">⏳ Ejecutando motor de recomendaciones…</p></div>';
@@ -1103,7 +1106,10 @@ async function enviarAnalisis(e) {
     const r = await api('/recomendaciones/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ finca_id: finca, cultivo_id: cultivo || null, presupuesto_cop: presupuesto }),
+      body: JSON.stringify({
+        finca_id: finca, cultivo_id: cultivo || null,
+        presupuesto_cop: presupuesto, rendimiento_actual_t_ha: rendimiento,
+      }),
     });
     state.ultimoAnalisis = r;
     out.innerHTML = `<div class="card">${renderAnalisis(r)}</div>${renderPanelAceptacion(r)}`;
@@ -1513,6 +1519,10 @@ async function enviarReporte(e) {
   const tipo = document.getElementById('repo-tipo').value;
   const cultivo = document.getElementById('repo-cultivo').value;
   const finca = document.getElementById('repo-finca').value;
+  const presEl = document.getElementById('repo-presupuesto');
+  const rendEl = document.getElementById('repo-rendimiento');
+  const presupuesto = presEl && presEl.value ? Number(presEl.value) : null;
+  const rendimiento = rendEl && rendEl.value ? Number(rendEl.value) : null;
 
   if (!finca) {
     document.getElementById('reporte-preview-card').style.display = 'none';
@@ -1526,12 +1536,17 @@ async function enviarReporte(e) {
     const r = await api('/reportes/generar', {
       method: 'POST',
       headers: headers(),
-      body: JSON.stringify({ finca_id: finca, tipo, cultivo_id: cultivo || null }),
+      body: JSON.stringify({
+        finca_id: finca, tipo, cultivo_id: cultivo || null,
+        presupuesto_cop: presupuesto, rendimiento_actual_t_ha: rendimiento,
+      }),
     });
     reporteHtmlActual = r.html;
+    state.ultimoReporte = r;
     const card = document.getElementById('reporte-preview-card');
     card.style.display = '';
     document.getElementById('reporte-iframe').srcdoc = r.html;
+    prepararSimulacion(r, finca, cultivo);
     card.scrollIntoView({ behavior: 'smooth' });
   } catch (err) {
     document.getElementById('reporte-preview-card').style.display = 'none';
@@ -1540,6 +1555,86 @@ async function enviarReporte(e) {
     btn.disabled = false;
     btn.textContent = '📄 Generar reporte';
   }
+}
+
+/* ── Simulación what-if (no toca la BD) ── */
+
+let simFinca = null;
+let simCultivo = null;
+let simTimer = null;
+
+function prepararSimulacion(r, finca, cultivo) {
+  simFinca = finca;
+  simCultivo = cultivo || null;
+  const panel = document.getElementById('simular-panel');
+  if (!panel) return;
+  panel.style.display = '';
+  // Valores iniciales desde el JSON embebido del reporte
+  let suelo = {};
+  try {
+    const m = (r.html || '').match(/<script type="application\/json" id="datos-reporte">([\s\S]*?)<\/script>/);
+    if (m) suelo = (JSON.parse(m[1]).soil) || {};
+  } catch { /* sin datos: se usan valores por defecto */ }
+  const presets = [
+    ['ph', suelo.ph != null ? suelo.ph : 6, 'sim-ph'],
+    ['nitrogeno', suelo.nitrogeno != null ? suelo.nitrogeno : 100, 'sim-n'],
+    ['fosforo', suelo.fosforo != null ? suelo.fosforo : 50, 'sim-p'],
+    ['potasio', suelo.potasio != null ? suelo.potasio : 150, 'sim-k'],
+  ];
+  for (const [_, val, id] of presets) {
+    const input = document.getElementById(id);
+    if (input) { input.value = val; actualizarSliderValor(id, val); }
+  }
+}
+
+function actualizarSliderValor(id, val) {
+  const label = document.getElementById(id + '-val');
+  if (label) label.textContent = val;
+}
+
+function mapaSimulacion() {
+  return {
+    ph: parseFloat(document.getElementById('sim-ph').value),
+    nitrogeno: parseFloat(document.getElementById('sim-n').value),
+    fosforo: parseFloat(document.getElementById('sim-p').value),
+    potasio: parseFloat(document.getElementById('sim-k').value),
+  };
+}
+
+async function simularEnmienda() {
+  if (!simFinca) return;
+  const msg = document.getElementById('sim-msg');
+  try {
+    const r = await api('/reportes/simular', {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({
+        finca_id: simFinca,
+        cultivo_id: simCultivo || null,
+        soil_modificado: mapaSimulacion(),
+      }),
+    });
+    msg.innerHTML =
+      `Nueva clasificación: <b>${esc(r.clasificacion)}</b> · Confianza: <b>${Math.round(r.confianza * 100)}%</b>` +
+      ` · Violaciones: ${r.violaciones} · Advertencias: ${r.advertencias}.` +
+      (r.detalle && r.detalle.length
+        ? `<br><span class="muted" style="font-size:.78rem">${r.detalle.slice(0, 4).map(d => esc(d.variable) + ' ' + esc(d.estado) + ' (' + esc(d.rango_ideal) + ')').join(' · ')}</span>`
+        : ' · Sin violaciones con estos valores.');
+  } catch (err) {
+    msg.innerHTML = errorBanner('No se pudo simular: ' + err.message);
+  }
+}
+
+function registrarSimulacion() {
+  const panel = document.getElementById('simular-panel');
+  if (!panel) return;
+  panel.querySelectorAll('input[type="range"]').forEach(input => {
+    input.addEventListener('input', () => {
+      actualizarSliderValor(input.id, input.value);
+      clearTimeout(simTimer);
+      simTimer = setTimeout(simularEnmienda, 250);
+    });
+  });
 }
 
 function abrirReporte() {

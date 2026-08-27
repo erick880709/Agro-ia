@@ -137,6 +137,16 @@ _CSS = """
   @media (max-width: 720px) { .dos-listas { grid-template-columns: 1fr; } }
   .eco-alerta { margin-top: 12px; padding: 10px 14px; border: 1px solid var(--clay);
     border-radius: 8px; background: rgba(192,91,69,.08); color: #7c2d12; font-size: .86rem; }
+  .eco-rend { margin-top: 10px; padding: 10px 14px; border: 1px solid var(--moss);
+    border-radius: 8px; background: rgba(46,125,50,.07); font-size: .88rem; }
+  .desglose-confianza { margin-top: 14px; padding: 12px 14px; border: 1px solid var(--line);
+    border-radius: 10px; background: var(--surface-2); }
+  .barra-fila { display: grid; grid-template-columns: 200px 1fr 52px; gap: 10px;
+    align-items: center; margin: 7px 0; font-size: .82rem; }
+  .barra { background: #e5eae4; border-radius: 999px; height: 10px; overflow: hidden; }
+  .barra i { display: block; height: 100%; border-radius: 999px; }
+  .barra-val { font-family: var(--mono); font-size: .75rem; color: var(--muted); text-align: right; }
+  @media (max-width: 720px) { .barra-fila { grid-template-columns: 1fr; } .barra-val { text-align: left; } }
   .alerta-fito { margin: 10px 0 4px; padding: 10px 12px; border: 1px solid #d97706;
     border-radius: 8px; background: rgba(217,119,6,.08); color: #7c2d12; font-size: .86rem; }
   .ft-intro { font-family: var(--serif); font-size: 1.08rem; margin-bottom: 16px; }
@@ -354,6 +364,7 @@ def _seccion_uc2(a) -> str:
             "global del reporte se redujo por esta falta de información.</div>"
         )
     plan_eco_html = _seccion_plan_economico(a.get("plan_economico"))
+    desglose_html = _desglose_confianza_html(a)
     return f"""
   <section class="block">
     <div class="block-head"><span class="block-num">01</span>
@@ -367,6 +378,7 @@ def _seccion_uc2(a) -> str:
       {''.join(filas) or '<tr><td colspan="8">Sin violaciones de reglas.</td></tr>'}
     </table>
     {plan_eco_html}
+    {desglose_html}
     <div class="verdict"><b>Clasificación: {esc(clas or "—")}</b> — {esc((a.get("justificacion") or {}).get("resumen") or "")}</div>
   </section>"""
 
@@ -376,6 +388,32 @@ def _fmt_cop(v) -> str:
         return f"${_num(float(v), 0)}"
     except (TypeError, ValueError):
         return "—"
+
+
+def _desglose_confianza_html(a) -> str:
+    """Semáforo de 4 barras: por qué la confianza es la que es."""
+    d = a.get("desglose_confianza") or {}
+    if not d:
+        return ""
+    barras = [
+        ("🟢 Calibración del sensor", d.get("calibracion_sensor_pct", 100), "#16a34a"),
+        ("🟡 Cobertura de fertilidad", d.get("cobertura_fertilidad_pct", 100), "#d9a03d"),
+        ("🔴 Violaciones activas", d.get("violaciones_pct", 100), "#c0563f"),
+        ("🟣 Respaldo humano", d.get("respaldo_humano_pct", 0), "#7c5cbf"),
+    ]
+    filas = "".join(
+        f'<div class="barra-fila"><div class="barra-label">{esc(label)}</div>'
+        f'<div class="barra"><i style="width:{min(100, max(0, int(pct)))}%;background:{color}"></i></div>'
+        f'<div class="barra-val">{min(100, max(0, int(pct)))}%</div></div>'
+        for label, pct, color in barras
+    )
+    nota = d.get("nota_subir")
+    return f"""
+    <div class="desglose-confianza">
+      <div class="heat-title">🔎 ¿Por qué esta confianza? (semáforo de 4 barras)</div>
+      {filas}
+      {f'<p class="muted" style="margin-top:6px">💡 {esc(nota)}</p>' if nota else ''}
+    </div>"""
 
 
 def _seccion_plan_economico(pe: dict | None) -> str:
@@ -450,6 +488,7 @@ def _seccion_analisis_economico(
     pe: dict | None,
     ficha_economicos: dict | None,
     cultivo_nombre: str | None,
+    rendimiento_declarado: float | None = None,
 ) -> str:
     """Análisis económico proyectado: ganancia esperada y ROI del plan.
 
@@ -523,6 +562,34 @@ def _seccion_analisis_economico(
         '<ul class="warnings">' + "".join(f"<li>{n}</li>" for n in notas) + "</ul>"
         if notas else ""
     )
+
+    # ── Rendimiento esperado (declarado por el productor o de la ficha) ──
+    rendimiento_txt = ""
+    try:
+        rend_base = float(rendimiento_declarado) if rendimiento_declarado else None
+    except (TypeError, ValueError):
+        rend_base = None
+    if rend_base is None and isinstance(ficha_economicos, dict):
+        try:
+            rend_base = float(ficha_economicos.get("rendimiento_esperado") or 0) or None
+        except (TypeError, ValueError):
+            rend_base = None
+    if rend_base:
+        try:
+            cobertura = float(pe.get("cobertura_pct") or 100)
+        except (TypeError, ValueError):
+            cobertura = 100.0
+        y_ideal = rend_base * 1.15
+        y_plan = rend_base * (1 + 0.15 * cobertura / 100.0)
+        z_plan = (y_plan / rend_base - 1) * 100
+        rendimiento_txt = (
+            '<div class="eco-rend"><b>📈 Rendimiento:</b> con el plan ideal su '
+            f"rendimiento podría pasar de <b>{_num(rend_base, 1)}</b> a "
+            f"<b>{_num(y_ideal, 1)} t/ha (+15%)</b>. Con su presupuesto actual "
+            f"pasaría a <b>{_num(y_plan, 1)} t/ha (+{_num(z_plan, 1)}%)</b>."
+            "</div>"
+        )
+
     return f"""
   <section class="block">
     <div class="block-head"><span class="block-num">E</span>
@@ -530,6 +597,7 @@ def _seccion_analisis_economico(
       <div class="block-sub">¿La fertilización recomendada le genera ganancia a {nombre}?</div></div>
     </div>
     {tiles}
+    {rendimiento_txt}
     {notas_html}
     <p class="muted" style="margin-top:8px">Cálculo: Ganancia esperada = (rendimiento de
     referencia × precio de cosecha) × 1,15 si se aplica el plan · ROI = (Ganancia esperada −
@@ -1275,6 +1343,9 @@ def generar_reporte_html(
     plan_economico: dict | None = None,
     ficha_economicos: dict | None = None,
     parametros_faltantes: list[str] | None = None,
+    puntos_sugeridos: list[dict] | None = None,
+    confianza_actual: float | None = None,
+    rendimiento_actual_t_ha: float | None = None,
 ) -> str:
     """Construye el documento HTML completo del reporte."""
     fecha = datetime.now(timezone.utc).astimezone().strftime("%d/%m/%Y %H:%M")
@@ -1310,6 +1381,47 @@ def generar_reporte_html(
             "conductividad_electrica": "conductividad eléctrica",
         }
         etiquetas = ", ".join(nombres.get(v, v) for v in parametros_faltantes)
+        muestreo_html = ""
+        if puntos_sugeridos:
+            import json as json_mod
+            from urllib.parse import quote
+
+            coordenadas = [
+                (float(p["pos_x"]), float(p["pos_y"]))
+                for p in puntos_sugeridos
+            ]
+            geojson = json_mod.dumps({
+                "type": "FeatureCollection",
+                "properties": {"sistema": "AgroIA", "tipo": "muestreo_laboratorio"},
+                "features": [{
+                    "type": "Feature",
+                    "properties": {"punto": i + 1},
+                    "geometry": {"type": "Point", "coordinates": [x, y]},
+                } for i, (x, y) in enumerate(coordenadas)],
+            }, ensure_ascii=False)
+            href_geo = "data:application/geo+json;charset=utf-8," + quote(geojson)
+            cruces = " · ".join(
+                f"({_num(x, 1)} m, {_num(y, 1)} m)" for x, y in coordenadas
+            )
+            proyectada = None
+            if confianza_actual is not None:
+                proyectada = min(0.99, round(confianza_actual + 0.27, 2))
+            instruccion = (
+                "Tome muestras compuestas en estos puntos. Al ingresar los "
+                "resultados de laboratorio, la confianza subirá de "
+                f"{_num((confianza_actual or 0) * 100, 0)}% a "
+                f"{_num(proyectada * 100, 0)}%."
+                if proyectada is not None else
+                "Tome muestras compuestas en estos puntos para completar el "
+                "análisis de laboratorio."
+            )
+            muestreo_html = f"""
+    <div class="clima-muestra" style="margin-top:14px">
+      <div class="heat-title">📌 Muestreo inteligente — ¿dónde tomar la muestra de laboratorio?</div>
+      <p>Puntos de <b>máxima incertidumbre</b> sobre el mapa de calor (Farthest
+      Point Sampling): <b>{esc(cruces)}</b>. {esc(instruccion)}</p>
+      <p><a href="{href_geo}" download="puntos_muestreo.geojson">⬇ Descargar puntos (GeoJSON)</a></p>
+    </div>"""
         seccion_faltantes = f"""
   <section class="block">
     <div class="block-head"><span class="block-num">P</span>
@@ -1322,6 +1434,7 @@ def generar_reporte_html(
     <p class="muted">El reporte actual es preliminar: no tiene el 100% de
     certeza y requiere el aval de un agrónomo. Puede suministrar estos valores
     (lectura de sensor o análisis de laboratorio) y volver a generar el reporte.</p>
+    {muestreo_html}
   </section>"""
 
     # Análisis económico proyectado (retorno de inversión del plan)
@@ -1330,7 +1443,9 @@ def generar_reporte_html(
         or (uc2 or {}).get("plan_economico")
         or (uc1 or {}).get("plan_economico")
     )
-    seccion_roi = _seccion_analisis_economico(pe, ficha_economicos, cultivo_nombre)
+    seccion_roi = _seccion_analisis_economico(
+        pe, ficha_economicos, cultivo_nombre, rendimiento_actual_t_ha
+    )
 
     # Explicación en lenguaje campesino (siempre que haya análisis)
     explicacion_campo = generar_explicacion_campesina(uc1=uc1, uc2=uc2, lectura=lectura)
@@ -1354,6 +1469,24 @@ def generar_reporte_html(
         "Replicar el análisis tras 3–4 semanas para verificar la evolución de las variables.",
         "Escalar al técnico agrónomo si la confianza del reporte es menor al 80% (la clasificación quedará marcada como 'Pendiente de validación técnica').",
     ]
+    if puntos_sugeridos:
+        pasos.insert(0, (
+            "Tomar muestras compuestas de laboratorio en los puntos de muestreo "
+            "inteligente de la sección P e ingresar los resultados para subir "
+            "la confianza del reporte."
+        ))
+
+    datos_json = ""
+    try:
+        import json as json_mod
+
+        datos_json = json_mod.dumps(
+            {"soil": {k: v for k, v in (lectura or {}).items() if v is not None},
+             "umbrales": umbrales or {}},
+            ensure_ascii=False,
+        ).replace("</", "<\\/")
+    except (TypeError, ValueError):
+        datos_json = "{}"
 
     html = f"""<!DOCTYPE html>
 <html lang="es">
@@ -1410,6 +1543,7 @@ def generar_reporte_html(
   <div class="stamp">AgroIA · sistema experto UPRA / Cenicafé / AGROSAVIA · generado {esc(fecha)}</div>
 </div>
 <footer class="colophon">AgroIA — AgroInteligente Colombia · Este reporte es una recomendación técnica de apoyo; no sustituye el análisis de laboratorio certificado.</footer>
+<script type="application/json" id="datos-reporte">{datos_json}</script>
 <script>
   const htmlSrc = document.documentElement.outerHTML;
   document.getElementById('dl-html').href = 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlSrc);

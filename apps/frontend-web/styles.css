@@ -576,6 +576,42 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
   border-radius: 8px;
 }
 
+/* ── Simulación what-if del reporte ── */
+
+.simular-panel {
+  margin-top: 14px;
+  border: 1px solid #cfe3d1;
+  border-radius: 10px;
+  background: #f2f8f2;
+  padding: 10px 14px;
+}
+
+.simular-panel summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #1e5c2e;
+}
+
+.simular-fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.simular-fila label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #35523a;
+}
+
+.simular-fila input[type="range"] {
+  width: 150px;
+}
+
 /* ─────────────────────────── id de finca para sensores ─────────────────────────── */
 
 .finca-id-box {

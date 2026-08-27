@@ -28,6 +28,9 @@ class RecommendRequest(BaseModel):
     presupuesto_cop: float | None = Field(
         None, ge=0, description="Presupuesto de fertilización ($/ha) para el plan económico (opcional)"
     )
+    rendimiento_actual_t_ha: float | None = Field(
+        None, ge=0, description="Rendimiento actual declarado (t/ha) para el ROI realista (opcional)"
+    )
 
 
 class RecommendResponse(BaseModel):
@@ -49,6 +52,8 @@ class RecommendResponse(BaseModel):
     variables_faltantes_esenciales: list[str] = []
     fenologia_ajustada: str | None = None
     plan_economico: dict | None = None
+    rendimiento_actual_t_ha: float | None = None
+    desglose_confianza: dict = {}
 
 
 # ── Persistencia del historial ──
@@ -173,6 +178,7 @@ async def analizar_aptitud(
                 finca_id=request.finca_id,
                 cultivo_id=request.cultivo_id,
                 presupuesto_cop=request.presupuesto_cop,
+                rendimiento_actual_t_ha=request.rendimiento_actual_t_ha,
             )
         )
         await _persistir_recomendacion(db, request, result)
@@ -194,6 +200,8 @@ async def analizar_aptitud(
             variables_faltantes_esenciales=result.variables_faltantes_esenciales,
             fenologia_ajustada=result.fenologia_ajustada,
             plan_economico=result.plan_economico,
+            rendimiento_actual_t_ha=result.rendimiento_actual_t_ha,
+            desglose_confianza=result.desglose_confianza,
         )
     except Exception as e:
         logger.exception("orchestrator_unexpected_error", error=str(e), finca_id=request.finca_id)

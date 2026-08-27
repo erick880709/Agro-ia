@@ -43,6 +43,15 @@ class ReporteRequest(BaseModel):
     presupuesto_cop: float | None = Field(
         None, ge=0, description="Presupuesto de fertilización ($/ha) para el plan económico (opcional)"
     )
+    rendimiento_actual_t_ha: float | None = Field(
+        None, ge=0, description="Rendimiento actual declarado (t/ha) para el ROI realista (opcional)"
+    )
+
+
+class SimularRequest(BaseModel):
+    finca_id: str = Field(..., description="UUID de la finca")
+    cultivo_id: str | None = Field(None, description="UUID del cultivo (opcional)")
+    soil_modificado: dict = Field(..., description="Variables de suelo modificadas (claves canónicas: ph, nitrogeno, fosforo, potasio…)")
 
 @router.post("/generar")
 async def generar_reporte(
@@ -104,6 +113,7 @@ async def generar_reporte(
         return orch.analyze(RecommendationRequest(
             finca_id=body.finca_id, cultivo_id=cultivo_id,
             presupuesto_cop=body.presupuesto_cop,
+            rendimiento_actual_t_ha=body.rendimiento_actual_t_ha,
         ))
 
     uc1 = uc2 = None
@@ -169,6 +179,14 @@ async def generar_reporte(
                 ficha_economicos = dict(ficha.datos_economicos)
 
     muestras_geo = await _muestras_geo(db, finca_uuid)
+
+    # ── Muestreo inteligente: dónde tomar la muestra de laboratorio ──
+    puntos_sugeridos = []
+    confianza_actual = (uc2.confianza if uc2 else (uc1.confianza if uc1 else None))
+    if parametros_faltantes:
+        from agroia_backend.services.optimizador_muestreo import puntos_muestreo_optimos
+
+        puntos_sugeridos = puntos_muestreo_optimos(muestras_geo, 3)
 
     # ── Clima del día de la muestra (IDEAM) ──
     # Solo si la finca tiene coordenadas útiles (enlace de Google, 'lat,lng'
@@ -258,6 +276,9 @@ async def generar_reporte(
         plan_economico=plan_economico,
         ficha_economicos=ficha_economicos,
         parametros_faltantes=parametros_faltantes,
+        puntos_sugeridos=puntos_sugeridos,
+        confianza_actual=confianza_actual,
+        rendimiento_actual_t_ha=body.rendimiento_actual_t_ha,
     )
 
     titulo = {
@@ -273,6 +294,75 @@ async def generar_reporte(
         "html": html,
         "parametros_faltantes": parametros_faltantes,
         "preliminar": bool(parametros_faltantes),
+    }
+
+
+@router.post("/simular")
+async def simular_enmienda(
+    body: SimularRequest,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+):
+    """Modo simulación (what-if): re-ejecuta el motor con valores modificados.
+
+    NO toca la base de datos: toma la última lectura, le aplica
+    `soil_modificado` y re-ejecuta solo el RulesEngine para devolver la
+    nueva clasificación y confianza en < 200 ms.
+    """
+    await verificar_acceso_finca(db, x_user_role, x_user_email, body.finca_id)
+    try:
+        finca_uuid = uuid_mod.UUID(body.finca_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FINCA_INVALIDA", "message": "finca_id no es un UUID válido.",
+        })
+
+    adapter = SueloAdapter(db)
+    soil_data = await adapter.get_latest(str(finca_uuid))
+    base = soil_data.to_dict() if soil_data is not None else {}
+    suelo = dict(base)
+    for clave, valor in (body.soil_modificado or {}).items():
+        try:
+            suelo[clave] = float(valor)
+        except (TypeError, ValueError):
+            continue
+
+    rules = RulesEngine(db)
+    resultado = await rules.evaluate(suelo, body.cultivo_id)
+    if resultado.is_blocked:
+        clasificacion = "No apta"
+    elif resultado.has_violations:
+        clasificacion = "Moderadamente apta"
+    else:
+        clasificacion = "Apta"
+
+    n_viol = len(resultado.violations)
+    n_warn = len(resultado.warnings)
+    confianza = round(
+        max(0.05, min(0.99, 1.0 - (n_viol * 0.20 + n_warn * 0.05))), 3
+    )
+    violaciones = [{
+        "variable": v.variable,
+        "estado": "DEFICIT" if (v.umbral_min is not None and v.valor_actual < v.umbral_min)
+        else "EXCESO",
+        "valor_actual": v.valor_actual,
+        "rango_ideal": (
+            f"[{v.umbral_min} - {v.umbral_max}]"
+            if v.umbral_min is not None and v.umbral_max is not None else "—"
+        ),
+        "accion": v.accion,
+        "prioridad": v.prioridad,
+        "fuente": v.fuente,
+    } for v in resultado.violations + resultado.warnings]
+
+    return {
+        "clasificacion": clasificacion,
+        "confianza": confianza,
+        "violaciones": n_viol,
+        "advertencias": n_warn,
+        "detalle": violaciones,
+        "soil_usado": suelo,
     }
 
 
