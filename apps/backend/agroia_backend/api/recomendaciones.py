@@ -26,6 +26,9 @@ router = APIRouter(prefix="/api/v1/recomendaciones", tags=["recomendaciones"])
 class RecommendRequest(BaseModel):
     finca_id: str = Field(..., description="UUID de la finca a analizar")
     cultivo_id: str | None = Field(None, description="UUID del cultivo objetivo (opcional, para sugerir el mejor)")
+    presupuesto_cop: float | None = Field(
+        None, ge=0, description="Presupuesto de fertilización ($/ha) para el plan económico (opcional)"
+    )
 
 
 class RecommendResponse(BaseModel):
@@ -45,6 +48,7 @@ class RecommendResponse(BaseModel):
     respaldos: int = 0
     variables_faltantes_fertilidad: list[str] = []
     fenologia_ajustada: str | None = None
+    plan_economico: dict | None = None
 
 
 # ── Persistencia del historial ──
@@ -168,6 +172,7 @@ async def analizar_aptitud(
             RecommendationRequest(
                 finca_id=request.finca_id,
                 cultivo_id=request.cultivo_id,
+                presupuesto_cop=request.presupuesto_cop,
             )
         )
         await _persistir_recomendacion(db, request, result)
@@ -187,6 +192,7 @@ async def analizar_aptitud(
             respaldos=result.respaldos,
             variables_faltantes_fertilidad=result.variables_faltantes_fertilidad,
             fenologia_ajustada=result.fenologia_ajustada,
+            plan_economico=result.plan_economico,
         )
     except InsufficientDataError as e:
         raise HTTPException(status_code=422, detail={

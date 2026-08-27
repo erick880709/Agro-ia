@@ -133,6 +133,8 @@ _CSS = """
     border-radius: 10px; background: rgba(135,169,92,.07); }
   .ctx { font-size: .8rem; margin-top: 4px; line-height: 1.45; }
   td.plan { font-size: .8rem; color: #36593f; line-height: 1.45; min-width: 220px; }
+  .dos-listas { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 6px; }
+  @media (max-width: 720px) { .dos-listas { grid-template-columns: 1fr; } }
   .alerta-fito { margin: 10px 0 4px; padding: 10px 12px; border: 1px solid #d97706;
     border-radius: 8px; background: rgba(217,119,6,.08); color: #7c2d12; font-size: .86rem; }
   .ft-intro { font-family: var(--serif); font-size: 1.08rem; margin-bottom: 16px; }
@@ -349,6 +351,7 @@ def _seccion_uc2(a) -> str:
             f"fertilidad sin dato: {esc(', '.join(faltantes))}. La confianza "
             "global del reporte se redujo por esta falta de información.</div>"
         )
+    plan_eco_html = _seccion_plan_economico(a.get("plan_economico"))
     return f"""
   <section class="block">
     <div class="block-head"><span class="block-num">01</span>
@@ -361,8 +364,55 @@ def _seccion_uc2(a) -> str:
       <tr><th>Variable</th><th>Estado</th><th>Lectura</th><th>Rango ideal</th><th>Acción</th><th>Prioridad</th><th>Confiabilidad</th><th>Plan sugerido</th></tr>
       {''.join(filas) or '<tr><td colspan="8">Sin violaciones de reglas.</td></tr>'}
     </table>
+    {plan_eco_html}
     <div class="verdict"><b>Clasificación: {esc(clas or "—")}</b> — {esc((a.get("justificacion") or {}).get("resumen") or "")}</div>
   </section>"""
+
+
+def _fmt_cop(v) -> str:
+    try:
+        return f"${_num(float(v), 0)}"
+    except (TypeError, ValueError):
+        return "—"
+
+
+def _seccion_plan_economico(pe: dict | None) -> str:
+    """Bloque del plan económico de fertilización (brecha económica)."""
+    if not pe:
+        return ""
+    presupuesto = _fmt_cop(pe.get("presupuesto_cop"))
+    ideal = _fmt_cop(pe.get("costo_ideal"))
+    plan = _fmt_cop(pe.get("costo_plan"))
+    cobertura = pe.get("cobertura_pct")
+    diferencia = pe.get("diferencia_rendimiento_pct")
+    incluidos = pe.get("incluidos") or []
+    aplazados = pe.get("aplazados") or []
+    lis_inc = "".join(
+        f"<li>{esc(f.get('variable') or '—')} ({esc(f.get('prioridad') or '—')}) — "
+        f"<b>{_fmt_cop(f.get('costo_cop'))}</b></li>"
+        for f in incluidos
+    )
+    lis_apl = "".join(
+        f"<li>{esc(f.get('variable') or '—')} ({esc(f.get('prioridad') or '—')}) — "
+        f"<b>{_fmt_cop(f.get('costo_cop'))}</b> · {esc(f.get('motivo') or 'Aplazada.')}</li>"
+        for f in aplazados
+    )
+    dif_txt = (
+        f"Diferencia de rendimiento estimada: <b>{_num(diferencia, 1)}%</b>."
+        if diferencia is not None else ""
+    )
+    return f"""
+    <div class="clima-muestra" style="margin-top:14px">
+      <div class="heat-title">💰 Plan económico vs. plan ideal (fertilización)</div>
+      <p><b>Plan económico</b> (costo: {plan} COP/ha) · <b>Plan ideal</b> (costo: {ideal} COP/ha) ·
+      presupuesto declarado {presupuesto} COP/ha · cobertura {_num(cobertura, 1)}%.<br>
+      {dif_txt} Los costos son estimaciones por hectárea; las acciones de prioridad
+      Crítica (pH, CE) siempre se incluyen.</p>
+      <div class="dos-listas">
+        <div><b>Incluidas ({len(incluidos)}):</b><ul class="warnings">{lis_inc or '<li>Ninguna</li>'}</ul></div>
+        <div><b>Aplazadas ({len(aplazados)}):</b><ul class="warnings">{lis_apl or '<li>Ninguna</li>'}</ul></div>
+      </div>
+    </div>"""
 
 
 def _seccion_uc1(a) -> str:

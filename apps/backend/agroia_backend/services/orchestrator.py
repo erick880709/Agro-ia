@@ -67,6 +67,7 @@ class RecommendationRequest:
     finca_id: str
     cultivo_id: str | None = None
     tenant_id: str | None = None
+    presupuesto_cop: float | None = None  # presupuesto de fertilización ($/ha)
 
 
 @dataclass
@@ -88,6 +89,7 @@ class RecommendationResult:
     respaldos: int = 0
     variables_faltantes_fertilidad: list[str] = field(default_factory=list)
     fenologia_ajustada: str | None = None
+    plan_economico: dict | None = None
 
 
 class RecommendationOrchestrator:
@@ -156,7 +158,7 @@ class RecommendationOrchestrator:
             # UC1: no hay cultivo sembrado → recomendar qué sembrar
             return await self._recomendar_cultivos(
                 request.finca_id, soil_dict, t_start, advertencia_datos,
-                finca_ctx, npk_no_calibrado,
+                finca_ctx, npk_no_calibrado, request.presupuesto_cop,
             )
 
         # UC2: hay cultivo sembrado → diagnosticar qué falta/sobra
@@ -295,6 +297,7 @@ class RecommendationOrchestrator:
         advertencia_datos: str | None = None,
         finca_ctx: dict | None = None,
         npk_no_calibrado: bool = False,
+        presupuesto_cop: float | None = None,
     ) -> "RecommendationResult":
         """UC1: puntúa todos los cultivos y recomienda los más aptos."""
         if self.aptitud is None:
@@ -380,6 +383,22 @@ class RecommendationOrchestrator:
             )
         advertencia = self._combinar_advertencias(advertencia, advertencia_datos)
 
+        # ── Plan económico de fertilización (brecha económica) ──
+        plan_economico = None
+        if presupuesto_cop is not None:
+            from agroia_backend.services.economia import calcular_plan_economico
+
+            plan_economico = calcular_plan_economico(
+                recomendaciones, float(presupuesto_cop)
+            )
+            if plan_economico["aplazados"]:
+                advertencia = self._combinar_advertencias(
+                    advertencia,
+                    "💰 El presupuesto no cubre todo el plan ideal: "
+                    f"{len(plan_economico['aplazados'])} acción(es) aplazada(s) "
+                    f"(cobertura {plan_economico['cobertura_pct']}%).",
+                )
+
         justificacion = {
             "resumen": f"Recomendación sin siembra previa: {cultivo} ({clasificacion}).",
             "variables_analizadas": len(soil_dict),
@@ -405,6 +424,7 @@ class RecommendationOrchestrator:
             estado_validacion=estado_validacion,
             respaldos=respaldos,
             variables_faltantes_fertilidad=faltantes,
+            plan_economico=plan_economico,
         )
 
     async def _analizar_cultivo(
@@ -620,6 +640,22 @@ class RecommendationOrchestrator:
             )
         advertencia = self._combinar_advertencias(advertencia, advertencia_datos)
 
+        # ── Plan económico de fertilización (brecha económica) ──
+        plan_economico = None
+        if request.presupuesto_cop is not None:
+            from agroia_backend.services.economia import calcular_plan_economico
+
+            plan_economico = calcular_plan_economico(
+                recomendaciones, float(request.presupuesto_cop)
+            )
+            if plan_economico["aplazados"]:
+                advertencia = self._combinar_advertencias(
+                    advertencia,
+                    "💰 El presupuesto no cubre todo el plan ideal: "
+                    f"{len(plan_economico['aplazados'])} acción(es) aplazada(s) "
+                    f"(cobertura {plan_economico['cobertura_pct']}%).",
+                )
+
         recs_deficit = [r for r in recomendaciones if r["estado"] == "DEFICIT"]
         recs_exceso = [r for r in recomendaciones if r["estado"] == "EXCESO"]
         justificacion = {
@@ -652,6 +688,7 @@ class RecommendationOrchestrator:
             respaldos=respaldos,
             variables_faltantes_fertilidad=faltantes,
             fenologia_ajustada=fenologia_ajustada,
+            plan_economico=plan_economico,
         )
 
     @staticmethod

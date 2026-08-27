@@ -4825,13 +4825,13 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.html": {
-    "mtime": 1787834690.0162814,
-    "ast_hash": "b0c75b4e443e1fcc5c7e85227c454246",
+    "mtime": 1787838920.5073073,
+    "ast_hash": "45c457f5dc1b3b5108d745bb0d8eb597",
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1787834549.571844,
-    "ast_hash": "f8e9d71d529878ca2be2bef07e06c70d",
+    "mtime": 1787838870.5984938,
+    "ast_hash": "7ccf3717caf904da1b6a5485ea5b485d",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {

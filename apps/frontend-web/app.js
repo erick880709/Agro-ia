@@ -1055,13 +1055,16 @@ async function enviarAnalisis(e) {
   const out = document.getElementById('reco-resultado');
   const finca = document.getElementById('reco-finca').value;
   const cultivo = document.getElementById('reco-cultivo').value;
+  const presupuestoEl = document.getElementById('reco-presupuesto');
+  const presupuesto = presupuestoEl && presupuestoEl.value ? Number(presupuestoEl.value) : null;
+  if (presupuesto != null) state.presupuesto = presupuesto; // solo sesión/memoria
   if (!finca) { out.innerHTML = errorBanner('Selecciona una finca.'); return; }
   out.innerHTML = '<div class="card"><p class="muted">⏳ Ejecutando motor de recomendaciones…</p></div>';
   try {
     const r = await api('/recomendaciones/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ finca_id: finca, cultivo_id: cultivo || null }),
+      body: JSON.stringify({ finca_id: finca, cultivo_id: cultivo || null, presupuesto_cop: presupuesto }),
     });
     state.ultimoAnalisis = r;
     out.innerHTML = `<div class="card">${renderAnalisis(r)}</div>${renderPanelAceptacion(r)}`;
@@ -1156,6 +1159,34 @@ function fmtPlan(plan) {
   return partes.length ? `<div style="font-size:0.78rem;line-height:1.5">${partes.join('<br>')}</div>` : '—';
 }
 
+function fmtCOP(v) {
+  if (v == null) return '—';
+  const n = Number(v);
+  return Number.isFinite(n) ? '$' + Math.round(n).toLocaleString('es-CO') : '—';
+}
+
+function renderPlanEconomico(pe) {
+  if (!pe) return '';
+  const dif = pe.diferencia_rendimiento_pct != null
+    ? `<div><b>Diferencia de rendimiento estimada:</b> ${fmtNum(pe.diferencia_rendimiento_pct, 1)}%</div>` : '';
+  const lisInc = (pe.incluidos || []).map(f =>
+    `<li><b>${esc(f.variable)}</b> (${esc(f.prioridad || '—')}) — ${fmtCOP(f.costo_cop)}/ha</li>`).join('');
+  const lisApl = (pe.aplazados || []).map(f =>
+    `<li><b>${esc(f.variable)}</b> (${esc(f.prioridad || '—')}) — ${fmtCOP(f.costo_cop)}/ha · ${esc(f.motivo || '')}</li>`).join('');
+  return `
+  <div class="plan-eco">
+    <h3>💰 Plan económico vs. plan ideal</h3>
+    <p><b>Plan económico:</b> ${fmtCOP(pe.costo_plan)}/ha · <b>Plan ideal:</b> ${fmtCOP(pe.costo_ideal)}/ha ·
+    presupuesto ${fmtCOP(pe.presupuesto_cop)}/ha · cobertura ${fmtNum(pe.cobertura_pct, 1)}%</p>
+    ${dif}
+    <div class="plan-eco-col">
+      <div><b>✅ Incluidas (${(pe.incluidos || []).length}):</b><ul>${lisInc || '<li>Ninguna</li>'}</ul></div>
+      <div><b>⏳ Aplazadas (${(pe.aplazados || []).length}):</b><ul>${lisApl || '<li>Ninguna</li>'}</ul></div>
+    </div>
+    <p class="muted">Las acciones de prioridad Crítica (pH, CE) siempre se incluyen. Los costos son estimaciones por hectárea.</p>
+  </div>`;
+}
+
 function renderAnalisis(a) {
   if (!a) return '<p class="muted">Sin resultado.</p>';
   const confianza = Math.round((a.confianza || 0) * 100);
@@ -1193,7 +1224,8 @@ function renderAnalisis(a) {
             <td>${esc(r.confiabilidad || '—')}</td>
             <td>${fmtPlan(r.plan)}</td>
           </tr>`).join('')}
-      </table></div>`;
+      </table></div>
+      ${renderPlanEconomico(a.plan_economico)}`;
   }
 
   if (a.sugerencias_cultivos && a.sugerencias_cultivos.length) {

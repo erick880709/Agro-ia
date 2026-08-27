@@ -1,7 +1,7 @@
 # Graph Report - Agro-ia  (2026-08-27)
 
 ## Corpus Check
-- 899 files · ~655,476 words
+- 899 files · ~656,355 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `18c711c0`
+- Built from commit: `d0b08de5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -3852,7 +3852,7 @@ Nodes (3): detect_domain(), Auto-detect the most relevant domain from query. Mat
 
 ### Community 893 - "6. Recorrido sección por sección"
 Cohesion: 0.18
-Nodes (11): 6.10 💬 Chat asesor (pestaña Reportes), 6.1 🏠 Inicio (Dashboard), 6.2 📡 Sensores IoT, 6.3 📂 Cargar archivo, 6.4 🧪 Recomendaciones (la sección central), 6.5 📜 Historial, 6.6 📄 Reportes, 6.7 🏡 Fincas (solo Admin) (+3 more)
+Nodes (11): 6.10 💬 Chat asesor (pestaña Reportes), 6.1 🏠 Inicio (Dashboard), 6.2 📡 Sensores IoT, 6.3 📂 Cargar archivo, 6.4 🧪 Recomendaciones (la sección central), 6.5 📜 Historial, 6.6 📄 Reportes, 6.7 🏡 Fincas — registro en 3 secciones, validación y lotes (registro solo Admin) (+3 more)
 
 ### Community 894 - "8. El motor de recomendaciones (corazón del sistema)"
 Cohesion: 0.22
@@ -3880,7 +3880,7 @@ Nodes (5): 10.1 Datos y etiquetado, 10.2 Modelos y métricas, 10.3 Artefactos y 
 
 ### Community 900 - "12. Persistencia y base de datos"
 Cohesion: 0.40
-Nodes (5): 12.1 Tablas principales, 12.2 Enums (12 tipos en schema `agroia`), 12.3 Migraciones (001 → 010), 12.4 Gotchas de Neon (lecciones aprendidas), 12. Persistencia y base de datos
+Nodes (5): 12.1 Tablas principales, 12.2 Enums (12 tipos en schema `agroia`), 12.3 Migraciones (001 → 011), 12.4 Gotchas de Neon (lecciones aprendidas), 12. Persistencia y base de datos
 
 ### Community 901 - "4. Autenticación y sesión (lo más básico)"
 Cohesion: 0.40
@@ -3895,7 +3895,7 @@ Cohesion: 0.67
 Nodes (3): 7.1 Formato real de la trama del firmware, 7.2 Procesamiento (paso a paso), 7. Ingesta de datos IoT — `POST /api/sensor`
 
 ## Knowledge Gaps
-- **4227 isolated node(s):** `TABS_POR_ROL`, `state`, `fincaWiz`, `ETIQUETAS`, `msFincasSeleccionadas` (+4222 more)
+- **4227 isolated node(s):** `Tabla de contenidos`, `1. Propósito del documento`, `2. Visión general y stack tecnológico`, `3. Arquitectura de componentes`, `4.1 Pantalla de login` (+4222 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **139 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -3910,7 +3910,7 @@ _Questions this graph is uniquely positioned to answer:_
   _`TailwindConfigGenerator` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `ShadcnInstaller` (e.g. with `TestShadcnInstaller` and `TestShadcnInstaller`) actually correct?**
   _`ShadcnInstaller` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `TABS_POR_ROL`, `state`, `fincaWiz` to the rest of the system?**
+- **What connects `Tabla de contenidos`, `1. Propósito del documento`, `2. Visión general y stack tecnológico` to the rest of the system?**
   _4227 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `init.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.06080246913580247 - nodes in this community are weakly interconnected._

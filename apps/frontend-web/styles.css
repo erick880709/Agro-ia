@@ -273,6 +273,15 @@ td.ajustes-desc { min-width: 280px; font-size: 0.82rem; }
 .ajuste-item:last-child { border-bottom: none; }
 .ajuste-accion { margin-top: 2px; color: #36593f; }
 
+/* Plan económico de fertilización */
+.plan-eco { margin-top: 14px; padding: 12px 14px; border: 1px solid #e7d9b8;
+  border-left: 4px solid #d9a20c; border-radius: 10px; background: #fdf9ef; }
+.plan-eco h3 { margin: 0 0 6px; font-size: 1rem; }
+.plan-eco p { margin: 4px 0; }
+.plan-eco-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.plan-eco-col ul { margin: 4px 0 0; padding-left: 18px; font-size: .84rem; }
+@media (max-width: 640px) { .plan-eco-col { grid-template-columns: 1fr; } }
+
 /* Badges de validación del reporte */
 .badge.pendiente { background: rgba(217,119,6,.14); color: #9a3412; }
 .badge.preliminar { background: rgba(217,119,6,.10); color: #92400e; }

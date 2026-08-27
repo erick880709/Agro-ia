@@ -176,6 +176,11 @@
             <span>Cultivo (vacío = ¿qué me conviene sembrar?)</span>
             <select id="reco-cultivo"><option value="">— Sin cultivo (UC1) —</option></select>
           </label>
+          <label class="field">
+            <span>Presupuesto de fertilización ($/ha) — opcional</span>
+            <input id="reco-presupuesto" type="number" min="0" step="10000"
+                   placeholder="Ej. 500000 (genera plan económico)" />
+          </label>
           <button type="submit" class="btn btn-primary">🧪 Analizar suelo</button>
         </form>
       </div>

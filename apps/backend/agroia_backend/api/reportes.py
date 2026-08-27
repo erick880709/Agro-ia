@@ -39,7 +39,9 @@ class ReporteRequest(BaseModel):
     finca_id: str = Field(..., description="UUID de la finca a reportar")
     tipo: str = Field("completo", pattern="^(siembra|cultivo|completo)$")
     cultivo_id: str | None = Field(None, description="UUID del cultivo sembrado (obligatorio en tipo 'cultivo')")
-
+    presupuesto_cop: float | None = Field(
+        None, ge=0, description="Presupuesto de fertilización ($/ha) para el plan económico (opcional)"
+    )
 
 @router.post("/generar")
 async def generar_reporte(
@@ -103,6 +105,7 @@ async def generar_reporte(
     def _analizar(cultivo_id):
         return orch.analyze(RecommendationRequest(
             finca_id=body.finca_id, cultivo_id=cultivo_id,
+            presupuesto_cop=body.presupuesto_cop,
         ))
 
     uc1 = uc2 = None
