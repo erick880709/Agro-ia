@@ -52,6 +52,13 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - Si el **ROI < 1,2** el reporte muestra la alerta *«Inversión justa, considere subvenciones»*; si es ≥ 1,2 indica que la inversión es rentable. Sin ficha económica o sin acciones con costo, la sección degrada con notas explicativas.
 - Validado en producción: Café → ingreso $17.280.000/ha, ganancia con plan $19.872.000/ha, costo $700.000/ha, ROI 27,4×.
 
+### Chat asesor con contexto visual (2026-08-27)
+
+- Botón **📎 en el chat** para adjuntar foto del cultivo (JPG/PNG, máx. 4,5 MB) con vista previa y miniatura en el historial.
+- `POST /api/v1/chat/consultar` acepta `imagen_base64`; se guarda en `chat_memoria.imagen_base64` (migración 013) como referencia de la finca.
+- **Visión**: si `OPENAI_API_KEY` está configurado y el modelo tiene visión (gpt-4o, gpt-4.1, gpt-4o-mini…), la foto se envía al prompt *«Analiza esta foto de cultivo y da un diagnóstico»*. Sin visión, la imagen queda como referencia y el prompt textual lo indica.
+- Respuesta incluye `imagen_guardada` e `imagen_analizada`. Validado local y en producción (modo experto-local).
+
 ### Chat asesor agronómico (2026-08-25)
 
 - `POST /api/v1/chat/consultar` — capa conversacional especializada disponible para admin/agrónomo/cliente (acceso limitado a sus fincas).
