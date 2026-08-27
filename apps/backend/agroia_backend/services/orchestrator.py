@@ -491,6 +491,10 @@ class RecommendationOrchestrator:
             ).scalar_one_or_none()
             if cultivo_obj is not None:
                 nombre_cultivo = cultivo_obj.nombre
+            elif finca_ctx.get("cultivo_sembrado"):
+                # cultivo_id desconocido: usar el nombre sembrado de la finca
+                # para no mostrar el UUID crudo en reportes/respuestas.
+                nombre_cultivo = finca_ctx.get("cultivo_sembrado")
         except ValueError:
             pass  # cultivo_id no es UUID válido; se usa tal cual
 

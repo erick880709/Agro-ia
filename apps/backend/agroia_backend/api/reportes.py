@@ -164,17 +164,21 @@ async def generar_reporte(
         except ValueError:
             cultivo_ref_uuid = None
         if cultivo_ref_uuid:
-            ficha = (
+            # Nota (Neon): no se filtra por `estado` en SQL — los casts de enum
+            # dependen del search_path de la conexión y fallan intermitentemente.
+            # Se traen las últimas fichas y se elige en Python (prefiere Publicado).
+            fichas = (
                 await db.execute(
                     select(FichaTecnica)
-                    .where(
-                        FichaTecnica.cultivo_id == cultivo_ref_uuid,
-                        FichaTecnica.estado == EstadoFicha.PUBLICADO,
-                    )
+                    .where(FichaTecnica.cultivo_id == cultivo_ref_uuid)
                     .order_by(FichaTecnica.updated_at.desc())
-                    .limit(1)
+                    .limit(3)
                 )
-            ).scalars().first()
+            ).scalars().all()
+            ficha = next(
+                (f for f in fichas if getattr(f.estado, "value", f.estado) == EstadoFicha.PUBLICADO.value),
+                fichas[0] if fichas else None,
+            )
             if ficha is not None and ficha.datos_economicos:
                 ficha_economicos = dict(ficha.datos_economicos)
 
