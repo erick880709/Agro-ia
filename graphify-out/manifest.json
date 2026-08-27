@@ -3695,8 +3695,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/main.py": {
-    "mtime": 1787748799.846471,
-    "ast_hash": "25942b7cfdd3bfbd64a440e8253f3eaf",
+    "mtime": 1787801462.0806406,
+    "ast_hash": "97c5c316205898ee5b6a21ee0b8892ce",
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
@@ -3925,8 +3925,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/recomendaciones.py": {
-    "mtime": 1787691942.3186154,
-    "ast_hash": "c1d06d6c9e23b3a988e6a16bbd97122e",
+    "mtime": 1787801488.476462,
+    "ast_hash": "7e5a4214c4980f5d68bf8324ff1b6e2d",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/__init__.py": {
@@ -4515,8 +4515,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/reportes.py": {
-    "mtime": 1787750104.328647,
-    "ast_hash": "734eef5822629fd0a96f980e3453435a",
+    "mtime": 1787801517.6677973,
+    "ast_hash": "6fe4cc300b5c7837c6227d8541404df8",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/sensor_api.py": {
@@ -4777,6 +4777,26 @@
   "reports/plano_clima_preview.png": {
     "mtime": 1787749865.487394,
     "ast_hash": "ae6f0a898a0dab89facab9c1f07f3900",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/ml.py": {
+    "mtime": 1787801448.967604,
+    "ast_hash": "100e52ee8524d860490605c13f090d93",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/ml_oracle.py": {
+    "mtime": 1787803992.8724625,
+    "ast_hash": "f0a1ce50861decd6740d9c58daef0480",
+    "semantic_hash": ""
+  },
+  "apps/ml/agroia_ml/train_colombia.py": {
+    "mtime": 1787803662.386569,
+    "ast_hash": "658cfe9e789db0b927932e8bfbbb1882",
+    "semantic_hash": ""
+  },
+  "apps/ml/models/ml_meta.json": {
+    "mtime": 1787803694.3056154,
+    "ast_hash": "2bdbbc2a4b020c7a950d5c01a2e147e4",
     "semantic_hash": ""
   }
 }

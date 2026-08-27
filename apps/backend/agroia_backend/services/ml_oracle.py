@@ -11,8 +11,6 @@ solo con reglas (comportamiento actual).
 
 from pathlib import Path
 
-import numpy as np
-
 from agroia.logging import get_logger
 
 logger = get_logger(__name__)
@@ -62,7 +60,11 @@ class MLOracleService:
         self._cargar()
         return len(self._modelos) > 0
 
-    def _features(self, soil_dict: dict, cultivo_idx: int) -> np.ndarray:
+    def _features(self, soil_dict: dict, cultivo_idx: int):
+        try:
+            import numpy as np
+        except ImportError:
+            return None
         X = np.full((1, len(VARIABLES) + 1), -1.0, dtype=float)
         for j, var in enumerate(VARIABLES):
             if soil_dict.get(var) is not None:
@@ -81,8 +83,12 @@ class MLOracleService:
         if not self._modelos:
             return None
         try:
+            import numpy as np
+
             idx = 0 if cultivo_id is None else (abs(hash(str(cultivo_id))) % 5)
             X = self._features(soil_dict, idx)
+            if X is None:
+                return None
             diagnostico = {}
             confianzas = []
             for nombre, modelo in self._modelos.items():

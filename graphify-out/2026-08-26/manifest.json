@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787748994.3284163,
-    "ast_hash": "24acf9f15ec1483c126b29bf981ad717",
+    "mtime": 1787750309.257164,
+    "ast_hash": "682e049441ddc505a566b600b9d2d0bc",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
