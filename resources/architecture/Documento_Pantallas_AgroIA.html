@@ -69,7 +69,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
   <h1>Pantallas del sistema y su propósito</h1>
-  <div class="meta">Versión 1.0 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+  <div class="meta">Versión 1.1 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
 </header>
 
 <div class="wrap">
@@ -180,18 +180,26 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   <div class="cab"><span class="icono">📡</span><span class="titulo">P3 · Sensores IoT</span>
     <span class="rol">Todos los roles</span></div>
   <div class="objetivo"><b>Objetivo:</b> monitorear en tiempo real las lecturas de los sensores
-  de la finca y su estado de conexión.</div>
-  <p><b>Qué muestra:</b> tabla con las últimas lecturas (pH, N, P, K, CE, humedad, temperatura,
-  fecha) por finca —incluye nombre de finca y mini-ID copiable—, indicador de actualización y
-  estado por dispositivo (<code>online</code> &lt; 12 h · <code>datos_desactualizados</code> &lt; 24 h ·
-  <code>offline</code>).</p>
+  de la finca, su estado de conexión y probar tramas contra el endpoint real.</div>
+  <p><b>Qué muestra:</b></p>
+  <ul>
+    <li><b>🔗 API de sensores — simulador de trama</b>: textarea precargado con el formato real del
+    firmware (<code>device_id</code>, <code>finca_id</code>, <code>ph</code>, <code>nitrogen</code>/
+    <code>phosphorus</code>/<code>potassium</code>, <code>conductivity</code>, <code>soil_humidity</code>/
+    <code>soil_temperature</code>, <code>humidity</code>/<code>temperature</code> DHT22, <code>rssi</code>,
+    <code>uptime_s</code>, <code>pos_x</code>/<code>pos_y</code>) y botón <b>«📡 Enviar trama»</b> que llama a
+    <code>POST /api/sensor</code> y muestra el resultado (dispositivo, finca asociada, variables recibidas, advertencias).</li>
+    <li>Tabla con las últimas lecturas (pH, N, P, K, CE, humedad, temperatura, fecha) por finca,
+    indicador de actualización y estado por dispositivo (<code>online</code> &lt; 12 h ·
+    <code>datos_desactualizados</code> &lt; 24 h · <code>offline</code>).</li>
+  </ul>
   <p><b>Acciones:</b> refresco automático cada 10 s (solo con la pestaña activa).</p>
   <p><b>Servicios que llama:</b> <code>GET /api/v1/lecturas/{finca_id}?limite=10</code> ·
-  <code>GET /api/v1/sensores/{finca_id}/status</code>.</p>
-  <p><b>Cómo llegan los datos:</b> el sensor envía tramas a <code>POST /api/sensor</code> (firmware ESP32:
-  <code>device_id, humidity, temperature, conductivity, ph, nitrogen, phosphorus, potassium, rssi</code>);
-  el backend normaliza (µS/cm → dS/m), asocia la finca (trama → dispositivo → auto-registro) y persiste
-  en <code>sensor_readings</code>.</p>
+  <code>GET /api/v1/sensores/{finca_id}/status</code> · <code>POST /api/sensor</code>.</p>
+  <p><b>Cómo llegan los datos:</b> el sensor envía tramas a <code>POST /api/sensor</code>; el backend
+  normaliza (µS/cm → dS/m, <code>soil_humidity→humedad</code>, <code>soil_temperature→temperatura_suelo</code>),
+  asocia la finca (trama → dispositivo → auto-registro) y persiste en <code>sensor_readings</code>.
+  Si el <code>device_id</code> no está registrado, se auto-registra.</p>
   <p><span class="siguiente">Siguiente → P5 Recomendaciones (o P4 si el sensor perdió datos).</span></p>
 </div>
 
@@ -217,17 +225,26 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   <div class="objetivo"><b>Objetivo:</b> generar el diagnóstico del suelo con el motor híbrido
   (sistema experto UPRA/Cenicafé/AGROSAVIA + ML en sombra) y, si corresponde, aceptar la recomendación
   para retroalimentar al modelo.</div>
-  <p><b>Qué muestra:</b> selector de finca y cultivo (vacío = «¿qué me conviene sembrar?», UC1) y
-  el resultado del análisis:</p>
+  <p><b>Qué muestra:</b> selector de finca y cultivo (vacío = «¿qué me conviene sembrar?», UC1),
+  campo opcional de <b>presupuesto de fertilización ($/ha)</b> y el resultado del análisis:</p>
   <ul>
     <li><b>Cabecera</b>: cultivo, clasificación UPRA + badge de estado de validación
     (Validada / Preliminar / Pendiente de validación técnica / Sujeta a confirmación de textura),
     barra de confianza (final y real) y respaldos de expertos.</li>
-    <li><b>Tabla de diagnóstico</b> (UC2): Variable · Estado (DÉFICIT/EXCESO) · Lectura · Rango ideal ·
+    <li><b>Avisos</b>: fenología por etapa + <b>GDD faltante</b> («⏳ Faltan ~N GDD para cosecha,
+    optimice riego»), variables de fertilidad sin dato, advertencia y discordancia.</li>
+    <li><b>Bloque «📝 Complete los parámetros esenciales»</b>: cuando el análisis es preliminar por
+    datos faltantes, muestra inputs para pH, N, P, K y conductividad; «💾 Guardar y reanalizar»
+    ingesta los valores vía <code>POST /api/sensor</code> y reejecuta el análisis. Sin datos, el
+    análisis NO se bloquea: sale preliminar con aviso de que <b>requiere el aval de un agrónomo</b>.</li>
+    <li><b>Tabla de diagnóstico</b> (UC2): Variable · Estado (DÉFICIT/EXCESO/SIN DATO) · Lectura · Rango ideal ·
     Acción (con <i>condicional a confirmación de laboratorio</i> cuando el NPK no está validado y
     contexto del pH por cultivo) · Prioridad · <b>Confiabilidad</b> · <b>Plan sugerido</b> (fuente, frecuencia, dosis).</li>
+    <li><b>Bloque «💰 Plan económico vs. plan ideal»</b> (si se declaró presupuesto): costo del plan,
+    costo ideal, cobertura %, diferencia de rendimiento estimada y acciones Incluidas/Aplazadas.</li>
     <li><b>Ranking «Cultivos sugeridos»</b> (UC1): score, clasificación, confianza, nº de reglas y
-    <b>descripción de las reglas aplicadas</b>.</li>
+    <b>descripción de las reglas aplicadas</b> (incluye la limitante de profundidad radicular si el
+    lote es más somero que lo requerido por el cultivo).</li>
     <li><b>Panel de aceptación</b> (Admin/Agrónomo): botón «✅ Aceptar recomendación» + caja de texto
     para ampliar acciones. Cada aceptación suma <b>+0.02 de confianza</b> al modelo (máx +0.10).</li>
   </ul>
@@ -254,21 +271,29 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   <div class="cab"><span class="icono">📄</span><span class="titulo">P7 · Reportes</span>
     <span class="rol">Todos los roles</span></div>
   <div class="objetivo"><b>Objetivo:</b> producir el documento formal del análisis de suelo
-  (HTML imprimible a PDF) para compartir con el productor o un técnico.</div>
-  <p><b>Qué muestra:</b> selector de finca y tipo de reporte (<code>siembra</code> ·
+  (HTML imprimible a PDF) para compartir con el productor o un técnico. <b>El reporte se genera
+  siempre</b>: si faltan datos, sale en modo preliminar con aviso de aval de agrónomo.</div>
+  <p><b>Qué muestra:</b> selector de finca, tipo de reporte (<code>siembra</code> ·
   <code>cultivo</code> · <code>completo</code>), vista previa del HTML y botones para abrir y descargar.</p>
   <p><b>Contenido del reporte generado</b> (secciones):</p>
   <ul>
     <li><b>T · Telemetría</b> — dispositivo, señal RSSI, calidad NPK en 3 niveles
     (Validado en laboratorio / Calibrado de fábrica / Sin validar), validación lab.</li>
-    <li><b>01 · Diagnóstico UC2</b> — clasificación + estado de validación, tabla con plan sugerido.</li>
+    <li><b>P · Parámetros faltantes</b> — si el análisis es preliminar, lista los parámetros que
+    «sería bueno contar» para un mayor detalle y el aviso de aval de un agrónomo.</li>
+    <li><b>01 · Diagnóstico UC2</b> — clasificación + estado de validación, tabla con plan sugerido,
+    fenología + GDD y bloque «💰 Plan económico vs. plan ideal».</li>
     <li><b>02 · Recomendación UC1</b> — ranking de cultivos.</li>
     <li><b>M · Mapa de calor</b> — intensidad por parámetro según pos_x/pos_y (en PDF se imprimen todas las variables).</li>
     <li><b>N · Plano del lote</b> — silueta, área/perímetro, pendiente, drenaje, metodología de muestreo,
     clima IDEAM del día de la muestra con alerta fitosanitaria específica e historial de manejo.</li>
+    <li><b>E · Análisis económico proyectado</b> — ganancia esperada si se aplica el plan (+15 %),
+    ROI = (ganancia − costo fertilización) ÷ costo; si el ROI &lt; 1,2 muestra la alerta
+    «⚠️ Inversión justa, considere subvenciones».</li>
     <li><b>04/05 · Advertencias y próximos pasos</b>.</li>
   </ul>
-  <p><b>Servicio que llama:</b> <code>POST /api/v1/reportes/generar</code>.</p>
+  <p><b>Servicio que llama:</b> <code>POST /api/v1/reportes/generar</code> (admite
+  <code>presupuesto_cop</code> opcional para el plan económico).</p>
   <p><span class="siguiente">Apoyo permanente → P8 Chat asesor.</span></p>
 </div>
 
@@ -279,11 +304,15 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   <div class="objetivo"><b>Objetivo:</b> resolver preguntas agronómicas sobre la finca con
   respuestas fundamentadas en los datos reales del sistema.</div>
   <p><b>Qué muestra:</b> conversación con sugerencias rápidas («¿Cuánto fertilizante aplico?»,
-  «¿Por qué me recomienda este cultivo?»…) y memoria por finca.</p>
+  «¿Por qué me recomienda este cultivo?»…), memoria por finca y botón <b>📎</b> para
+  <b>adjuntar una foto del cultivo</b> (JPG/PNG, máx. 4,5 MB) con vista previa y miniatura en el historial.</p>
   <p><b>Servicio que llama:</b> <code>POST /api/v1/chat/consultar</code> — ejecuta el orquestador
   para contexto real, enruta la pregunta a la base de conocimiento (cal/fertilización/riego,
   clima, diagnóstico diferencial) y responde con fuentes y confianza. Con
-  <code>OPENAI_API_KEY</code> usa LLM; si no, el motor local determinista.</p>
+  <code>OPENAI_API_KEY</code> usa LLM; si no, el motor local determinista.
+  <b>Foto adjunta:</b> si la API tiene modelo con visión (gpt-4o y afines), la imagen se analiza
+  con el prompt «Analiza esta foto de cultivo y da un diagnóstico»; sin visión, queda guardada
+  como referencia en la memoria de la finca y el prompt textual lo indica.</p>
 </div>
 
 <!-- ─────────── P9 ─────────── -->
@@ -303,9 +332,11 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
     <span class="rol">Consulta: todos · Gestión: Admin/Agrónomo</span></div>
   <div class="objetivo"><b>Objetivo:</b> consultar y mantener la base de conocimiento agronómica
   que alimenta el motor de recomendaciones.</div>
-  <p><b>Qué muestra:</b> los 30 cultivos activos con icono y ficha técnica (requerimientos, rangos
-  ideales, fuentes UPRA/Cenicafé/AGROSAVIA).</p>
+  <p><b>Qué muestra:</b> los 30 cultivos activos con icono, ficha técnica (requerimientos, rangos
+  ideales, fuentes UPRA/Cenicafé/AGROSAVIA) y la línea de <b>fisiología</b> del cultivo
+  («🌱 raíz ≥ N cm · G GDD · D días») cuando está registrada.</p>
   <p><b>Servicios que llama:</b> <code>GET /api/v1/cultivos</code> · <code>GET /api/v1/cultivos/{id}</code> ·
+  <code>POST /api/v1/cultivos</code> · <code>PATCH /api/v1/cultivos/{id}</code> (fisiología/datos agronómicos) ·
   <code>GET/POST/PUT /api/v1/fichas/…</code> · flujo editorial
   <code>POST /fichas/{id}/enviar-revision | aprobar | rechazar</code>.</p>
   <p class="muted" style="font-size:.85rem">El catálogo + las 54 reglas agronómicas son la fuente de verdad
@@ -315,7 +346,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.0 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v1.1 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

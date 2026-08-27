@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 1.1 · **Fecha:** 2026-08-27
+**Versión:** 1.2 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -21,7 +21,8 @@
 12. [Persistencia y base de datos](#12-persistencia-y-base-de-datos)
 13. [Despliegue y CI/CD](#13-despliegue-y-cicd)
 14. [Seguridad y limitaciones conocidas](#14-seguridad-y-limitaciones-conocidas)
-15. [Glosario](#15-glosario)
+15. [Demo y restablecimiento de datos](#15-demo-y-restablecimiento-de-datos)
+16. [Glosario](#16-glosario)
 
 ---
 
@@ -227,11 +228,12 @@ Cada petición `fetch` lleva:
 
 ### 6.2 📡 Sensores IoT
 
-**Qué hace el usuario:** monitorea las lecturas en tiempo real (auto-refresco cada 10 s solo con la pestaña activa) y el estado de conexión de los dispositivos.
+**Qué hace el usuario:** monitorea las lecturas en tiempo real (auto-refresco cada 10 s solo con la pestaña activa), el estado de conexión de los dispositivos, y **prueba tramas con el simulador** («🔗 API de sensores — simulador de trama»): un textarea precargado con el formato real del firmware y botón «📡 Enviar trama» que llama a `POST /api/sensor` y muestra el resultado (dispositivo, finca asociada, variables recibidas, advertencias).
 
 **Servicios que llama:**
 - `GET /api/v1/lecturas/{finca_id}?limite=10` — últimas lecturas de `sensor_readings` (con pos_x/pos_y, calidad, 17 variables).
 - `GET /api/v1/sensores/{finca_id}/status` — por cada sensor: última transmisión y estado (`online` < 12 h, `datos_desactualizados` < 24 h, `offline`).
+- `POST /api/sensor` — envío de la trama desde el simulador (mismo endpoint de los sensores físicos).
 
 **Qué hace la UI:** pinta la tabla de lecturas (incluye nombre de finca y mini-ID con botón copiar), indicador "actualizando…" y guarda contra dobles peticiones (`state.cargandoSensores`).
 
@@ -257,19 +259,20 @@ Cada petición `fetch` lleva:
 
 ### 6.4 🧪 Recomendaciones (la sección central)
 
-**Qué hace el usuario:** elige finca y, opcionalmente, cultivo, y pulsa «Analizar suelo».
+**Qué hace el usuario:** elige finca y, opcionalmente, cultivo y **presupuesto de fertilización ($/ha)** , y pulsa «Analizar suelo».
 
 **Servicio que llama:** `POST /api/v1/recomendaciones/analyze`
 
 **Parámetros (body):**
 ```json
-{ "finca_id": "uuid", "cultivo_id": "uuid | null" }
+{ "finca_id": "uuid", "cultivo_id": "uuid | null", "presupuesto_cop": 500000 }
 ```
 
 - `cultivo_id = null` → **UC1** (¿qué me conviene sembrar?).
 - `cultivo_id` presente → **UC2** (diagnóstico para el cultivo sembrado).
+- `presupuesto_cop` (opcional, ≥ 0) → activa el **plan económico de fertilización** (sección 8.9).
 
-**Qué hace el servicio y el orquestador:** ver sección 8 (el detalle completo del pipeline y del modelo).
+**Qué hace el servicio y el orquestador:** ver sección 8 (el detalle completo del pipeline y del modelo). **Importante:** el análisis **nunca se bloquea por datos faltantes** — si faltan parámetros esenciales o no hay lecturas, devuelve una recomendación preliminar con `variables_faltantes_esenciales` y el requisito de aval de un agrónomo (sección 8.10).
 
 **Respuesta clave:**
 ```json
@@ -278,11 +281,15 @@ Cada petición `fetch` lleva:
   "clasificacion_upra": "Moderadamente apta (sujeta a confirmación de textura)",
   "confianza": 0.571, "confianza_real": 0.55, "estado_validacion": "sujeta a confirmación de textura",
   "respaldos": 1, "variables_faltantes_fertilidad": ["calcio", …],
+  "variables_faltantes_esenciales": [],
+  "fenologia_ajustada": "Etapa Fructificación: … ⏳ Faltan ~N GDD para cosecha, optimice riego (…)",
+  "plan_economico": { "presupuesto_cop", "costo_ideal", "costo_plan", "cobertura_pct",
+      "diferencia_rendimiento_pct", "incluidos[]", "aplazados[]" },
   "recomendaciones": [ { "variable": "pH", "estado": "DEFICIT", "valor_actual": 4.9,
       "rango_ideal": "[5.5 - 6.5]", "accion": "…", "prioridad": "Alta", "fuente": "Cenicafé",
       "confiabilidad": "Sin validar", "condicional": true,
       "contexto": "pH 4.9 — ácido en escala general, pero fuera del rango óptimo para Aguacate [5.5–6.5]",
-      "plan": { "fuente": "Cal dolomítica…", "frecuencia": "…", "dosis": "Dosis a definir por técnico agrónomo…" } } ],
+      "plan": { "fuente": "Cal dolomítica…", "frecuencia": "…", "dosis": "…" } } ],
   "sugerencias_cultivos": [ { "cultivo_id", "cultivo", "icono", "score", "confianza",
       "clasificacion", "reglas_especificas", "ajustes[]" } ],
   "justificacion": { "resumen", "variables_analizadas", "reglas_aplicadas", "faltantes", "excesos", "confianza", "confianza_real", "respaldos_expertos" },
@@ -292,8 +299,10 @@ Cada petición `fetch` lleva:
 
 **Qué hace la UI con la respuesta (`renderAnalisis`):**
 - Cabecera: cultivo, badge de clasificación + badge de estado de validación, barra de confianza (final y real), respaldos de expertos.
-- Avisos: fenología ajustada, variables de fertilidad faltantes, advertencia, discordancia.
-- Tabla de diagnóstico: Variable · Estado · Lectura · Rango ideal · Acción (con marcador *condicional a confirmación de laboratorio* y contexto de pH) · Prioridad · **Confiabilidad** · **Plan sugerido** (fuente, frecuencia, dosis).
+- Avisos: fenología ajustada (incluye GDD), variables de fertilidad faltantes, advertencia, discordancia.
+- **Bloque «📝 Complete los parámetros esenciales»**: si la respuesta trae `variables_faltantes_esenciales`, se muestran inputs para cada valor faltante (pH, N, P, K, CE) y el botón «💾 Guardar y reanalizar» ingesta los valores vía `POST /api/sensor` y reejecuta el análisis automáticamente.
+- Tabla de diagnóstico: Variable · Estado (DÉFICIT/EXCESO/**SIN DATO**) · Lectura · Rango ideal · Acción (con marcador *condicional a confirmación de laboratorio* y contexto de pH) · Prioridad · **Confiabilidad** · **Plan sugerido** (fuente, frecuencia, dosis).
+- **Bloque «💰 Plan económico vs. plan ideal»**: costo del plan, costo ideal, presupuesto, cobertura %, diferencia de rendimiento estimada y listas de acciones Incluidas/Aplazadas.
 - Ranking «🌾 Cultivos sugeridos (ranking del motor)»: #, cultivo, score, clasificación, confianza, nº de reglas y **columna de descripción de reglas aplicadas** (variable, estado, rango, acción, prioridad).
 
 **Panel de aceptación (Admin/Agrónomo):** al final aparece «✅ Aceptar recomendación» + caja de texto para ampliar acciones (ver sección 9).
@@ -310,15 +319,18 @@ Cada petición `fetch` lleva:
 
 **Parámetros (body):**
 ```json
-{ "finca_id": "uuid", "tipo": "siembra | cultivo | completo", "cultivo_id": "uuid | null" }
+{ "finca_id": "uuid", "tipo": "siembra | cultivo | completo",
+  "cultivo_id": "uuid | null", "presupuesto_cop": 500000 }
 ```
 
 **Qué hace el servicio (`api/reportes.py`):**
-1. Verifica acceso; valida finca y que exista al menos una lectura (`SIN_LECTURAS` si no).
+1. Verifica acceso y valida la finca. **No se bloquea por falta de lecturas**: si no las hay, el análisis corre en modo preliminar (sección 8.10) y el reporte se genera igual.
 2. Construye el orquestador y ejecuta UC1 (`siembra`/`completo`) y UC2 (`cultivo`/`completo`, usando el `cultivo_id` o el top del ranking).
-3. `_muestras_geo`: lecturas con `pos_x/pos_y` para mapa de calor y plano.
-4. Resuelve **clima IDEAM** del día de la muestra (`external_apis.fetch_ideam_clima_fecha`) a partir de coordenadas de la finca (parser de enlaces Google + fallback lat/lng; sin ubicación se omite).
-5. Llama a `generar_reporte_html()` (sección 11) y devuelve `{titulo, tipo, html}`.
+3. Recopila los **parámetros esenciales faltantes** (`variables_faltantes_esenciales` de UC1/UC2, o los 4 esenciales si no hay lecturas) para la sección «P» del reporte.
+4. Calcula el plan económico para el ROI (plan del análisis o plan ideal si no se declaró presupuesto) y carga los **precios de referencia de la ficha técnica** del cultivo analizado.
+5. `_muestras_geo`: lecturas con `pos_x/pos_y` para mapa de calor y plano.
+6. Resuelve **clima IDEAM** del día de la muestra (`external_apis.fetch_ideam_clima_fecha`) a partir de coordenadas de la finca (parser de enlaces Google + fallback lat/lng; sin ubicación se omite).
+7. Llama a `generar_reporte_html()` (sección 11) y devuelve `{titulo, tipo, html, parametros_faltantes[], preliminar}`.
 
 **Qué hace la UI:** muestra el HTML en un iframe/pestaña nueva y ofrece **descargar PDF** (impresión del navegador con `@media print` del propio HTML).
 
@@ -368,10 +380,13 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 ### 6.9 🌾 Catálogo (Admin/Agrónomo gestionan; Cliente consulta)
 
 **Servicios:**
-- `GET /api/v1/cultivos` — 30 cultivos activos con icono y ficha técnica.
-- `GET /api/v1/cultivos/{id}` / `POST /cultivos` — detalle y alta.
+- `GET /api/v1/cultivos` — 30 cultivos activos con icono, ficha técnica y **fisiología** (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`).
+- `GET /api/v1/cultivos/{id}` / `POST /cultivos` — detalle y alta (con fisiología opcional).
+- `PATCH /api/v1/cultivos/{id}` — editar fisiología/datos agronómicos del cultivo.
 - `GET /api/v1/fichas`, `GET/POST/PUT /fichas/…` — fichas técnicas.
 - `POST /fichas/{id}/enviar-revision | aprobar | rechazar` — flujo editorial de fichas.
+
+**Qué hace la UI:** cada tarjeta del catálogo muestra la línea de fisiología «🌱 raíz ≥ N cm · G GDD · D días» cuando el cultivo la tiene registrada.
 
 ### 6.10 💬 Chat asesor (pestaña Reportes)
 
@@ -380,15 +395,17 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 **Parámetros (body):**
 ```json
 { "finca_id": "uuid", "mensaje": "¿Cuánto fertilizante aplico?",
-  "cultivo_id": "uuid | null", "historial": [ { "rol": "user|assistant", "contenido": "…" } ] }
+  "cultivo_id": "uuid | null", "historial": [ { "rol": "user|assistant", "contenido": "…" } ],
+  "imagen_base64": "… (foto JPG/PNG, opcional, ≤ ~4,5 MB)" }
 ```
 
 **Qué hace (`api/chat.py` + `services/agronomo_chat.py` + `agronomo_kb.py`):**
 1. Verifica acceso a la finca y carga la última lectura.
 2. Ejecuta el orquestador (UC1 o UC2) para tener contexto real.
 3. Enruta la pregunta a la **base de conocimiento** (cal/fertilización/riego, clima por época, diagnóstico diferencial, "por qué este cultivo").
-4. Si `OPENAI_API_KEY` está configurado usa LLM; si no, responde el **motor local determinista** con respuesta fundamentada (fuentes, confianza, datos utilizados, qué falta).
-5. Guarda memoria conversacional en `chat_memoria` (`GET /chat/memoria/{finca_id}`).
+4. **Foto adjunta (botón 📎 en la UI)**: si hay `OPENAI_API_KEY` con modelo de visión (gpt-4o, gpt-4.1, gpt-4o-mini…), la imagen se envía multimodal con el prompt *«Analiza esta foto de cultivo y da un diagnóstico»*. Sin visión, la foto queda guardada como referencia en `chat_memoria.imagen_base64` y el prompt textual lo indica. La respuesta incluye `imagen_guardada` / `imagen_analizada`.
+5. Si `OPENAI_API_KEY` está configurado usa LLM; si no, responde el **motor local determinista** con respuesta fundamentada (fuentes, confianza, datos utilizados, qué falta).
+6. Guarda memoria conversacional en `chat_memoria` (`GET /chat/memoria/{finca_id}`).
 
 ---
 
@@ -401,12 +418,18 @@ Doble ruta (ambas montadas): `api/sensor_api.py` (formato firmware, **la que usa
 ```json
 {
   "device_id": "esp32-npk-001",
-  "humidity": 0.0, "temperature": 26.8, "conductivity": 0.0,
-  "ph": 8.6, "nitrogen": 0.0, "phosphorus": 0.0, "potassium": 0.0,
-  "rssi": -41, "uptime_s": 64
+  "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
+  "pos_x": 20.0, "pos_y": 50.0,
+  "ph": 6.1, "conductivity": 620,
+  "nitrogen": 260, "phosphorus": 28, "potassium": 95,
+  "soil_humidity": 31.0, "soil_temperature": 19.5,
+  "humidity": 72.0, "temperature": 21.2,
+  "rssi": -45, "uptime_s": 604800
 }
 ```
-Campos opcionales: `finca_id` (UUID de la finca), `pos_x`, `pos_y` (muestreo en cuadrícula), y cualquier variable de suelo del `MAPA_CAMPOS`.
+
+- Obligatorio: `device_id`. Opcionales: `finca_id` (UUID, asocia el dispositivo a la finca), `pos_x`/`pos_y` (punto de muestreo en el lote), `soil_humidity`/`soil_temperature` (humedad/temperatura **del suelo**; se guardan como `humedad`/`temperatura_suelo`), y cualquier variable del `MAPA_CAMPOS`.
+- `humidity`/`temperature` se guardan como **ambientales** (DHT22). Este es el formato precargado en el simulador de la pestaña Sensores IoT.
 
 ### 7.2 Procesamiento (paso a paso)
 
@@ -465,8 +488,9 @@ sequenceDiagram
 
 - `SueloAdapter.get_latest(finca_id)` trae la última `SensorReading` y la convierte en `SoilData` (18 variables: `ph, nitrogeno, fosforo, potasio, calcio, magnesio, azufre, hierro, manganeso, zinc, cobre, boro, materia_organica, cic, textura, humedad, temperatura_suelo, conductividad_electrica`).
 - `validate_soil_reading`: valida rangos físicos (`SOIL_RANGES`, p. ej. pH 0–14, N 0–500); valores fuera de rango → `calidad = "out_of_range"`. Clasifica faltantes:
-  - **Bloqueantes** (sin ellos no hay recomendación → `422 INSUFFICIENT_DATA`): `ph`, `conductividad_electrica`.
+  - **Bloqueantes** (`missing_blocking`): `ph`, `conductividad_electrica`. **Ya no producen 422**: el análisis sigue con los datos disponibles y la advertencia «faltan parámetros esenciales… requiere el aval de un agrónomo» (sección 8.10).
   - **No bloqueantes**: el resto (generan advertencia de "recomendación parcial").
+- Si **no hay ninguna lectura** (`soil_data is None`), el orquestador devuelve la **recomendación preliminar sin datos** (sección 8.10) en lugar de fallar.
 - `to_dict()` devuelve solo variables presentes.
 
 ### 8.3 Paso 2 — Sistema experto: RulesEngine (`services/rules_engine.py`)
@@ -480,6 +504,7 @@ sequenceDiagram
 
 Para cada cultivo evaluable (con ≥1 regla específica):
 - **Penalización** = Σ pesos por violación/warning: Critica=30, Alta=20, Media=10, Baja=5.
+- **Profundidad radicular (fisiología del cultivo)**: si el cultivo declara `profundidad_radicular_min_cm` y la profundidad efectiva del lote es menor, se suma `min(40, 10 + déficit×0.5)` (prioridad Crítica si el déficit ≥ 15 cm) con ajuste «profundidad_suelo» y rango «≥ N cm para Cultivo». Cultivos de raíz profunda sin dato usan el fallback de 60 cm.
 - **Score** = `max(0, 100 − min(penalización, 100))`.
 - **Clasificación UPRA**: ≥80 Apta · ≥60 Moderadamente apta · ≥40 Marginalmente apta · <40 No apta.
 - **Confianza base** = `min(0.99, max(0.05, (100−penalización)/100 × (0.75 + 0.25 × cobertura)))`.
@@ -530,12 +555,14 @@ Si el ML predice bloqueo y las reglas también, se registra `discordancia {tipo:
 | Factor | Fórmula |
 |---|---|
 | Fertilidad faltante | `factor = max(0.6, 1 − 0.04 × n_faltantes)` sobre las 10 variables de fertilidad (MO, CIC, Ca, Mg, S, Fe, Mn, Zn, Cu, B) |
+| Esenciales faltantes | `factor = max(0.55, 1 − 0.15 × n_esenciales)` (ph/CE sin dato) |
 | Sensor NPK sin calibrar | `× 0.9` |
 | Respaldo humano | `+ min(0.10, 0.02 × aceptaciones)` (máx +0.10) |
 
-`confianza_real = base × factor_fertilidad × factor_sensor` · `confianza_final = min(0.99, confianza_real + respaldo)`.
+`confianza_real = base × factor_fertilidad × factor_esenciales × factor_sensor` · `confianza_final = min(0.99, confianza_real + respaldo)`.
 
 **Estado de validación (umbral duro):**
+0. Faltan **parámetros esenciales** → `pendiente_validacion` (requiere aval de un agrónomo).
 1. Cultivo sensible a drenaje (aguacate, cacao, cítricos, palma) **sin textura** → `sujeta a confirmación de textura`.
 2. `confianza_final < 0.80` → `pendiente_validacion` (la clasificación se muestra **"Pendiente de validación técnica"**, nunca "Apta" a secas).
 3. Hay variables de fertilidad faltantes → `preliminar` ("Apta (preliminar)").
@@ -548,6 +575,23 @@ Si el ML predice bloqueo y las reglas también, se registra `discordancia {tipo:
 - **Contexto pH**: "pH 4.9 — ácido en escala general, pero fuera del rango óptimo para Aguacate [5.5–6.5]" (consulta el rango de pH del cultivo, filtrando en Python para no emitir casts de enum frágiles).
 - **Plan ejecutable**: fuente + frecuencia por variable (`PLAN_FERTILIZACION`: urea/DAP/KCl/cal dolomítica…); dosis = "Dosis a definir por técnico agrónomo tras análisis de laboratorio" salvo validación lab.
 - **Fenología**: si la finca registra cultivo sembrado/edad/etapa, se añade el ajuste de manejo por etapa (vegetativa → priorizar N; floración → P y B; fructificación → K y Ca; cosecha → respetar carencias).
+- **GDD acumulado (IDEAM)**: con la fisiología del cultivo (`gdd_total_requerido` + `dias_ciclo`) y la etapa fenológica de la finca, se estima el GDD acumulado (GDD diario = máx(0, T_promedio − 10 °C) con la climatología IDEAM según las coordenadas) y se compara con el requerido; si falta, se avisa *«⏳ Faltan ~N GDD para cosecha, optimice riego»*.
+- **Filas SIN DATO**: cada parámetro esencial faltante aparece como fila «SIN DATO» con la acción de suministrarlo para una recomendación certera.
+
+### 8.9 Plan económico de fertilización (brecha económica)
+
+`services/economia.py::calcular_plan_economico(recomendaciones, presupuesto_cop)` — cuando el productor declara `presupuesto_cop` ($/ha):
+
+1. **Costo por variable** (`COSTOS_VARIABLE`, COP/ha estimados): pH 350 k, N 180 k, P 150 k, K 160 k, MO 200 k, Ca 120 k, Mg 100 k, S 80 k, micros (Fe/Mn/Zn/Cu/B) 60 k, CIC 100 k, CE/humedad 0.
+2. **Plan ideal** = todas las acciones (costo_ideal).
+3. **Plan optimizado al presupuesto**: las obligatorias (prioridad **Crítica** o pH/CE) siempre entran; el resto se ordena por **severidad** (prioridad×10 + desviación relativa al rango ideal) y se incluye hasta agotar el presupuesto; el resto queda **aplazado** con su motivo.
+4. Salida: `costo_ideal`, `costo_plan`, `cobertura_pct`, `diferencia_rendimiento_pct` (proporción no cubierta × 40 %), `incluidos[]`, `aplazados[]`. Si hay aplazados se añade la advertencia «💰 El presupuesto no cubre todo el plan ideal…». Sin presupuesto, el plan equivale al ideal (cobertura 100 %).
+
+### 8.10 Recomendación sin datos: nunca se bloquea
+
+- **Sin ninguna lectura**: `_recomendacion_sin_datos()` devuelve un resultado **preliminar** (confianza 5 %, `estado_validacion=pendiente_validacion`): UC1 → ranking del catálogo prioritario (Café, Maíz, Arroz, Plátano, Papa) con score 50 y ajuste «sin lecturas»; UC2 → filas «SIN DATO» por cada parámetro esencial (ph, nitrogeno, fosforo, potasio).
+- **Con datos parciales**: el motor corre con lo disponible (las reglas sin dato se omiten) y la respuesta incluye `variables_faltantes_esenciales`, la advertencia *«la recomendación no tiene el 100% de certeza y requiere el aval de un agrónomo»* y el estado `pendiente_validacion`.
+- **Pantalla de captura**: la UI ofrece el bloque «📝 Complete los parámetros esenciales» que ingesta los valores vía `POST /api/sensor` y reanaliza al instante.
 
 ---
 
@@ -609,11 +653,13 @@ Si el ML predice bloqueo y las reglas también, se registra `discordancia {tipo:
 |---|---|---|
 | T | Telemetría | Dispositivo, finca, última transmisión, RSSI, uptime, **Calidad NPK en 3 niveles**, validación lab, pH, CE, N, P, K, HR/T ambiente |
 | pH | Escala | Barra de pH con marcador y etiqueta ácido/neutro/alcalino |
-| 01 | Diagnóstico UC2 | Badge de clasificación + **badge de estado de validación** (PENDIENTE/PRELIMINAR/SUJETA A TEXTURA/VALIDADA), tabla con Acción, Prioridad, **Confiabilidad** y **Plan sugerido**, contexto pH, condicional NPK, respaldos y fenología |
+| P | **Parámetros faltantes** | Si el análisis es preliminar: lista de parámetros que «sería bueno contar» para mayor detalle y aviso de aval de agrónomo |
+| 01 | Diagnóstico UC2 | Badge de clasificación + **badge de estado de validación** (PENDIENTE/PRELIMINAR/SUJETA A TEXTURA/VALIDADA), tabla con Acción, Prioridad, **Confiabilidad** y **Plan sugerido**, contexto pH, condicional NPK, respaldos, fenología + GDD, y bloque **«💰 Plan económico vs. plan ideal»** |
 | 02 | Recomendación UC1 | Ranking top 5 con scorebar, badge de estado, confianza real y faltantes de fertilidad |
 | M | Mapa de calor | Matriz de puntos `pos_x/pos_y` por variable, rampa de intensidad `#e8f5e9→#1b5e20` normalizada por parámetro; en PDF se imprimen **todas las variables** |
 | N | Plano del lote | SVG con puntos, cierre convexo, **perímetro/área**, pendiente y drenaje del lote, metodología de muestreo, clima IDEAM del día de la muestra con **alerta fitosanitaria específica** (HR > 78 %) y **historial de manejo** |
-| 04 | Advertencias | Calidad de datos y limitaciones (NPK sin validar, faltantes, textura) |
+| E | **Análisis económico proyectado** | Ganancia esperada = (rendimiento × precio de cosecha) × 1,15 si se aplica el plan · ROI = (ganancia − costo fertilización) ÷ costo · alerta «⚠️ Inversión justa, considere subvenciones» si ROI < 1,2 |
+| 04 | Advertencias | Calidad de datos y limitaciones (NPK sin validar, faltantes, textura, presupuesto) |
 | 05 | Próximos pasos | Plan de acción (incluye completar variables de fertilidad y umbral del 80 %) |
 
 Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3 niveles sin "Calibrado" a secas · 2) pH contextualizado por cultivo · 3) acciones condicionales por confiabilidad del sensor · 4) faltantes de fertilidad bajan la confianza y marcan "preliminar" · 5) textura obligatoria para cultivos sensibles · 6) pendiente/drenaje en el plano · 7) historial de manejo · 8) plan ejecutable con fuente/frecuencia/dosis · 9) fenología · 10) alerta fitosanitaria cruzada con clima · 11) metodología de muestreo del mapa de calor · 12) umbral duro de confianza < 80 % → "Pendiente de validación técnica".
@@ -630,26 +676,26 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 | Tabla | Uso |
 |---|---|
 | `usuarios` | Cuentas (rol enum, password_hash, activo, membresía) |
-| `fincas` | Predios (+ coordenadas, área, pendiente, drenaje, historial JSONB, validación lab, cultivo sembrado/edad/etapa, **vereda, precision_gps, fuente_geolocalizacion, geometria GeoJSON, área declarada/calculada, perímetro, tipo_area, tiene_multiples_lotes, fecha_georreferenciacion**) |
-| `lotes` | **Unidades productivas dentro de una finca** (nombre, área, geometría) — separación Finca ≠ Lote |
+| `fincas` | Predios (+ coordenadas, área, pendiente, drenaje, historial JSONB, validación lab, cultivo sembrado/edad/etapa, **tipo_riego**, **vereda, precision_gps, fuente_geolocalizacion, geometria GeoJSON, área declarada/calculada, perímetro, tipo_area, tiene_multiples_lotes, fecha_georreferenciacion**) |
+| `lotes` | **Unidades productivas dentro de una finca** (nombre, área, geometría, **profundidad_suelo_cm, pedregosidad**) — separación Finca ≠ Lote |
 | `dispositivos_iot` | Sensores registrados (device_id, telemetría, npk_calibrado) |
 | `sensor_readings` | Cada medición (17 variables + pos_x/pos_y + textura + calidad) |
-| `cultivos` | Catálogo (30 activos, icono, nombre científico) |
+| `cultivos` | Catálogo (30 activos, icono, nombre científico, **fisiología: profundidad_radicular_min_cm, gdd_total_requerido, dias_ciclo**) |
 | `fichas_tecnicas` | Fichas agronómicas con flujo editorial |
 | `reglas_agronomicas` | Sistema experto (54 activas; `cultivo_id NULL` = universal) |
 | `recomendaciones` | Historial de análisis persistidos (clasificación enum, confianza, estado) |
 | `discordancias` | Registro de discordancia ML vs reglas (SLA) |
 | `modelos_ml` / `metricas_modelo` | Registro de entrenamientos y métricas (stage) |
-| `chat_memoria` | Memoria conversacional del chat por finca |
+| `chat_memoria` | Memoria conversacional del chat por finca (+ **imagen_base64** de la foto adjunta) |
 | `aceptaciones_recomendacion` | Feedback humano (rol, comentario, resumen, confianza previa) |
 
 ### 12.2 Enums (12 tipos en schema `agroia`)
 
 `clasificacionupra, estadodiscordancia, estadoficha, estadomembresia, estadorecomendacion, planmembresia, prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo`.
 
-### 12.3 Migraciones (001 → 011)
+### 12.3 Migraciones (001 → 014)
 
-- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes`.
+- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`).
 - **Auto-reparación al arranque**: `asegurar_enums()` crea tipos enum faltantes y `asegurar_reglas()` siembra reglas faltantes (idempotentes, corren en el `lifespan` de `main.py`).
 
 ### 12.4 Gotchas de Neon (lecciones aprendidas)
@@ -674,12 +720,19 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 - **Autenticación MVP**: sin JWT; el rol viaja en cabeceras confiadas (`X-User-Role`). Pendiente: Auth Service.
 - **ML en sombra**: no decide; la fuente de verdad son las reglas. La promoción a PRODUCTION exige concordancia ≥ 0.85 con datos reales.
 - **Sensor NPK sin calibrar**: N/P/K llegan como 0 (sensor real) y se tratan como no confiables hasta validación de laboratorio.
-- **Datos dispersos**: con ~7 variables de 18, la confianza real baja y la clasificación se marca preliminar o pendiente de validación (comportamiento deseado).
-- **Render Free / Neon Free**: límites de memoria y suspensión por inactividad.
+- **Datos dispersos**: con ~7 variables de 18, la confianza real baja y la clasificación se marca preliminar o pendiente de validación (comportamiento deseado). **El análisis y el reporte nunca se bloquean por datos faltantes**: se generan en modo preliminar con aviso de aval de agrónomo.
+- **Render Free / Neon Free**: límites de memoria y suspensión por inactividad; bajo carga pueden aparecer **502/500 intermitentes** que se resuelven reintentando (no son errores del aplicativo).
 
 ---
 
-## 15. Glosario
+## 15. Demo y restablecimiento de datos
+
+- **`POST /api/v1/demo/reset`** (solo rol Admin, `api/demo.py` + `services/demo_reset.py`): restablece los datos operativos para demostraciones — elimina fincas, lotes, recomendaciones, chat/memoria, aceptaciones y dispositivos de prueba; **conserva únicamente las lecturas del sensor real `esp32-npk-001`** y crea la finca demo completa **«Finca Demo — El Vergel»** (Quindío/Armenia, Café 4 años en Fructificación, riego por goteo, validación de laboratorio, historial agronómico y lote de 2,5 ha con suelo de 100 cm) reasociando el sensor y sus lecturas a ella.
+- No toca usuarios/roles, catálogo, fichas ni reglas. Aplicado en local y producción; cada base queda con una sola finca demo con datos reales del sensor.
+
+---
+
+## 16. Glosario
 
 | Término | Significado |
 |---|---|
@@ -689,6 +742,10 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 | **Oráculo ML (sombra)** | Modelos RandomForest que predicen en paralelo para comparación/discordancia |
 | **Confianza real** | Confianza base ajustada por cobertura de fertilidad y confiabilidad del sensor |
 | **Estado de validación** | `validada` / `preliminar` / `pendiente_validacion` / `sujeta a confirmación de textura` |
+| **Parámetros esenciales** | `ph` y `conductividad_electrica` (bloqueantes de calidad); sin ellos el análisis es preliminar con aval de agrónomo |
+| **Plan económico** | Plan de fertilización optimizado al presupuesto del productor (costo ideal vs. plan, cobertura %, acciones incluidas/aplazadas) |
+| **ROI** | Retorno de inversión del plan: (Ganancia esperada − Costo fertilización) ÷ Costo; < 1,2 → «considere subvenciones» |
+| **GDD** | Grados-día acumulados (T base 10 °C) para madurez; se estima con la temperatura IDEAM y la etapa fenológica |
 | **Respaldo** | Aceptación humana registrada; refuerza la confianza (+0.02 c/u, máx +0.10) |
 | **Imputación por medianas** | Relleno de variables faltantes con la mediana calculada en entrenamiento |
 | **Discordancia** | Desacuerdo ML vs reglas; se registra con SLA de 10 días |
