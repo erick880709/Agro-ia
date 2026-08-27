@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.7 · **Fecha:** 2026-08-27
+**Versión:** 2.8 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -13,7 +13,7 @@
 4. [Autenticación y sesión (lo más básico)](#4-autenticación-y-sesión-lo-más-básico)
 5. [El frontend SPA: navegación y utilidades](#5-el-frontend-spa-navegación-y-utilidades)
 6. [Recorrido sección por sección](#6-recorrido-sección-por-sección)
-   - [6.11 🕵️ Auditoría](#611--auditoría-de-acciones-solo-admin) · [6.12 🔄 Ciclos productivos](#612--ciclos-productivos-por-lote-historial_ciclos_lote) · [6.13 ⛅ Alertas climáticas](#613--alertas-climáticas-proactivas) · [6.14 🗺️ Enriquecimiento SIG IGAC/UPRA](#614--enriquecimiento-sig-igacupra)
+   - [6.11 🕵️ Auditoría](#611--auditoría-de-acciones-solo-admin) · [6.12 🔄 Ciclos productivos](#612--ciclos-productivos-por-lote-historial_ciclos_lote) · [6.13 ⛅ Alertas climáticas](#613--alertas-climáticas-proactivas) · [6.14 🗺️ Enriquecimiento SIG IGAC/UPRA](#614--enriquecimiento-sig-igacupra) · [6.15 💰 Precios de insumos dinámicos](#615--precios-de-insumos-dinámicos-roi)
 7. [Ingesta de datos IoT — `POST /api/sensor`](#7-ingesta-de-datos-iot--post-apisensor)
 8. [El motor de recomendaciones (corazón del sistema)](#8-el-motor-de-recomendaciones-corazón-del-sistema)
 9. [Aceptación humana de recomendaciones (human-in-the-loop)](#9-aceptación-humana-de-recomendaciones-human-in-the-loop)
@@ -495,6 +495,22 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 
 **Impacto**: textura/MO/CIC dejan de ser faltantes; el análisis «preliminar» queda solo para variables dinámicas (pH y CE), que sí requieren medición.
 
+### 6.15 💰 Precios de insumos dinámicos (ROI actualizable)
+
+**Problema que resuelve**: los costos del plan económico estaban quemados en `economia.py::COSTOS_VARIABLE` (pH 350k, N 180k COP/ha); una subida del 40 % de la urea en 3 meses dejaba el ROI inválido.
+
+**Tabla `agroia.precios_insumos`** (migración 021): `producto` (clave única, ej. «Urea», «DAP», «KCl», «Cal dolomítica»), `precio_kg_cop`, `fecha_actualizacion` y `fuente` (cotización). El modelo es `models/precio_insumo.py`.
+
+**Cálculo dinámico** (`services/economia.py`): `calcular_plan_economico(recomendaciones, presupuesto_cop, precios_insumos=None)` convierte el precio por kg a costo por ha con `DOSIS_PRODUCTO_VARIABLE` (ej. N = Urea 60 kg/ha → costo = 60 × precio_kg). `cargar_precios_insumos(db)` lee la tabla; el orquestador (UC1 y UC2) y el reporte la consultan en cada análisis.
+
+**Fallback honesto**: si un producto no tiene registro, se usa el costo estático de referencia y el resultado incluye `advertencia_precios = «⚠️ Precios de referencia desactualizados: sin registro en precios_insumos para …»` (mostrada en P5 y en el bloque del plan económico del reporte) junto con `precios_faltantes` y `precios_fuente`.
+
+**Endpoints (solo Admin)** — `api/admin_precios.py`:
+- `GET /api/v1/admin/precios-insumos` — precios vigentes con fecha de actualización.
+- `PUT /api/v1/admin/precios-insumos` — upsert `{precios: [{producto, precio_kg_cop, fuente?}]}`; `fecha_actualizacion = hoy`. Auditoría `precios.actualizar`.
+
+**UI**: panel «💰 Precios de insumos» en la pestaña Usuarios (Admin) con tabla editable de los 14 insumos del plan y botón «💾 Guardar precios».
+
 ---
 
 ## 7. Ingesta de datos IoT — `POST /api/sensor`
@@ -828,6 +844,12 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 - **Caso exigido verificado**: finca en Cundinamarca con polígono → textura **Franco-arcillosa** + capa limitante **fragipán** precargados con `calidad = estimado_por_sig` (MO 7.5 %, CIC 28.0).
 - **Fix `tipo_riego`**: normalización al nombre del enum evita el 500 por valores en minúscula.
 
+### 11.8 Precios de insumos dinámicos (v2.8)
+
+- **El ROI deja de estar quemado**: el plan económico lee `precios_insumos` (COP/kg) y calcula costo/ha con la dosis por variable; ejemplo validado: subida de Urea a 3 500 COP/kg → N pasa de 180 000 a 210 000 COP/ha; DAP 4 800 → P de 150 000 a 168 000; KCl 4 200 → K de 160 000 a 189 000.
+- **Sin registro → fallback estático con advertencia** «Precios de referencia desactualizados» en P5 y en el reporte.
+- **Admin**: `GET/PUT /api/v1/admin/precios-insumos` + panel «💰 Precios de insumos» en Usuarios (tabla editable de 14 insumos).
+
 ---
 
 ## 12. Persistencia y base de datos
@@ -856,14 +878,15 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 | `labores` | **Órdenes de trabajo**: título, tipo, producto/dosis, fechas programada/ejecución, responsable, estado y observaciones — FK lotes y recomendaciones |
 | `alertas_climaticas` | **Alertas meteorológicas proactivas**: tipo (lluvia_aplicacion/helada_floracion), severidad, mensaje, fecha, pronóstico JSONB y flag `activa` — FK fincas CASCADE |
 | `auditoria` | **Bitácora de acciones**: usuario (email/nombre/rol), acción, entidad, entidad_id, detalle JSONB, IP, fecha |
+| `precios_insumos` | **Precios dinámicos de insumos**: producto (clave), COP/kg, fecha de actualización y fuente — alimenta el ROI del plan económico |
 
 ### 12.2 Enums (12 tipos en schema `agroia`)
 
 `clasificacionupra, estadodiscordancia, estadoficha, estadomembresia, estadorecomendacion, planmembresia, prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo`.
 
-### 12.3 Migraciones (001 → 020)
+### 12.3 Migraciones (001 → 021)
 
-- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` + índice `idx_ciclos_lote` · `017` inicio de ciclo: `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes` y en `historial_ciclos_lote` · `018` tabla `labores` · `019` tabla `alertas_climaticas` · `020` enum `texturasuelo` ampliado con clases IGAC (FRANCA, FRANCO_ARENOSA, FRANCO_ARCILLOSA, FRANCO_LIMOSA).
+- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` + índice `idx_ciclos_lote` · `017` inicio de ciclo: `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes` y en `historial_ciclos_lote` · `018` tabla `labores` · `019` tabla `alertas_climaticas` · `020` enum `texturasuelo` ampliado con clases IGAC (FRANCA, FRANCO_ARENOSA, FRANCO_ARCILLOSA, FRANCO_LIMOSA) · `021` tabla `precios_insumos`.
 - **Auto-reparación al arranque**: `asegurar_enums()` crea tipos enum faltantes y `asegurar_reglas()` siembra reglas faltantes (idempotentes, corren en el `lifespan` de `main.py`).
 
 ### 12.4 Gotchas de Neon (lecciones aprendidas)

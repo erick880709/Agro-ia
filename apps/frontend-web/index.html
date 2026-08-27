@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AgroIA · AgroInteligente Colombia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="/styles.css?v=20260827-sig" />
+  <link rel="stylesheet" href="/styles.css?v=20260827-precios" />
 </head>
 <body>
   <!-- ============ PANTALLA DE AUTENTICACIÓN ============ -->
@@ -558,6 +558,13 @@
           <h2>🗂️ Usuarios registrados</h2>
           <div id="usuarios-lista"></div>
         </div>
+        <div class="card" style="grid-column: 1 / -1">
+          <h2>💰 Precios de insumos <span class="muted">(solo administrador — alimenta el ROI)</span></h2>
+          <p class="muted">Precio por kilogramo en COP. Si un producto no tiene registro, el plan
+          económico usa el costo estático de referencia y lo advierte en el análisis/reporte.</p>
+          <div id="precios-lista"></div>
+          <div id="precios-msg"></div>
+        </div>
       </div>
     </section>
     <!-- ============ AUDITORÍA (solo administrador) ============ -->
@@ -611,7 +618,7 @@
     AgroIA v0.1.0 · Motor: sistema experto (reglas UPRA/Cenicafé/AGROSAVIA) · ML en modo sombra
   </footer>
 
-  <script src="/departamentos.js?v=20260827-sig"></script>
-  <script src="/app.js?v=20260827-sig"></script>
+  <script src="/departamentos.js?v=20260827-precios"></script>
+  <script src="/app.js?v=20260827-precios"></script>
 </body>
 </html>

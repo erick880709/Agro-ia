@@ -182,7 +182,10 @@ function goTab(name) {
   if (name === 'sensores') cargarSensores();
   if (name === 'inicio') cargarDashboard();
   if (name === 'fincas' && state.rol.toLowerCase() === 'admin') renderFincasList();
-  if (name === 'usuarios' && state.rol.toLowerCase() === 'admin') cargarUsuarios();
+  if (name === 'usuarios' && state.rol.toLowerCase() === 'admin') {
+    cargarUsuarios();
+    cargarPreciosInsumos();
+  }
   if (name === 'auditoria' && state.rol.toLowerCase() === 'admin') cargarAuditoria();
 }
 
@@ -2230,6 +2233,7 @@ function renderPlanEconomico(pe) {
     <h3>💰 Plan económico vs. plan ideal</h3>
     <p><b>Plan económico:</b> ${fmtCOP(pe.costo_plan)}/ha · <b>Plan ideal:</b> ${fmtCOP(pe.costo_ideal)}/ha ·
     presupuesto ${fmtCOP(pe.presupuesto_cop)}/ha · cobertura ${fmtNum(pe.cobertura_pct, 1)}%</p>
+    ${pe.advertencia_precios ? `<div class="advertencia" style="margin:8px 0">${esc(pe.advertencia_precios)}</div>` : ''}
     ${dif}
     <div class="plan-eco-col">
       <div><b>✅ Incluidas (${(pe.incluidos || []).length}):</b><ul>${lisInc || '<li>Ninguna</li>'}</ul></div>
@@ -2470,6 +2474,80 @@ async function cargarUsuarios() {
     renderMultiSelectFincas();
   } catch (e) {
     document.getElementById('usuarios-lista').innerHTML = errorBanner(e.message);
+  }
+}
+
+/* ────────────────────── precios de insumos (admin, ROI) ────────────────────── */
+
+const PRODUCTOS_INSUMOS = [
+  ['Cal dolomítica', 'pH (enmienda)'],
+  ['Urea', 'Nitrógeno (N)'],
+  ['DAP', 'Fósforo (P)'],
+  ['KCl', 'Potasio (K)'],
+  ['Compost', 'Materia orgánica (MO)'],
+  ['Yeso agrícola', 'Calcio (Ca)'],
+  ['Sulfato de magnesio', 'Magnesio (Mg)'],
+  ['Azufre elemental', 'Azufre (S)'],
+  ['Quelato de hierro', 'Hierro (Fe)'],
+  ['Sulfato de manganeso', 'Manganeso (Mn)'],
+  ['Sulfato de zinc', 'Zinc (Zn)'],
+  ['Sulfato de cobre', 'Cobre (Cu)'],
+  ['Bórax', 'Boro (B)'],
+  ['Enmienda orgánica', 'CIC (gradual)'],
+];
+
+async function cargarPreciosInsumos() {
+  const div = document.getElementById('precios-lista');
+  if (!div || (state.rol || '').toLowerCase() !== 'admin') return;
+  div.innerHTML = '<p class="muted">Cargando precios…</p>';
+  let precios = [];
+  try {
+    const r = await api('/admin/precios-insumos');
+    precios = r.data || [];
+  } catch (e) {
+    div.innerHTML = errorBanner(e.message);
+    return;
+  }
+  const porProducto = {};
+  precios.forEach(p => { porProducto[p.producto] = p; });
+  div.innerHTML = `
+    <div class="table-wrap"><table>
+      <tr><th>Producto</th><th>Uso</th><th>Precio (COP/kg)</th><th>Actualizado</th></tr>
+      ${PRODUCTOS_INSUMOS.map(([prod, uso]) => {
+        const p = porProducto[prod];
+        return `<tr>
+          <td><b>${esc(prod)}</b></td>
+          <td>${esc(uso)}</td>
+          <td><input type="number" min="0.01" step="0.01" data-precio-prod="${esc(prod)}" value="${p ? p.precio_kg_cop : ''}" placeholder="Sin registro" /></td>
+          <td>${p ? esc(p.fecha_actualizacion) : badge('estático', 'warning')}</td>
+        </tr>`;
+      }).join('')}
+    </table></div>
+    <button type="button" class="btn btn-primary" onclick="guardarPreciosInsumos()" style="margin-top:10px">💾 Guardar precios</button>`;
+}
+
+async function guardarPreciosInsumos() {
+  const msg = document.getElementById('precios-msg');
+  const items = [];
+  document.querySelectorAll('[data-precio-prod]').forEach(el => {
+    const val = parseFloat(el.value);
+    if (Number.isFinite(val) && val > 0) {
+      items.push({ producto: el.dataset.precioProd, precio_kg_cop: val });
+    }
+  });
+  if (!items.length) {
+    msg.innerHTML = errorBanner('Ingrese al menos un precio válido.');
+    return;
+  }
+  try {
+    const r = await api('/admin/precios-insumos', {
+      method: 'PUT', headers: headers(),
+      body: JSON.stringify({ precios: items }),
+    });
+    msg.innerHTML = okBanner(`💰 ${r.actualizados.length} precio(s) actualizado(s) (${esc(r.fecha_actualizacion)}). El ROI usará estas cotizaciones.`);
+    await cargarPreciosInsumos();
+  } catch (e) {
+    msg.innerHTML = errorBanner(e.message);
   }
 }
 

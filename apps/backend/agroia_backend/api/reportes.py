@@ -252,7 +252,11 @@ async def generar_reporte(
         uc1.plan_economico if uc1 else None
     )
     if plan_economico is None and recs:
-        plan_economico = calcular_plan_economico(recs, None)
+        from agroia_backend.services.economia import cargar_precios_insumos
+
+        plan_economico = calcular_plan_economico(
+            recs, None, precios_insumos=await cargar_precios_insumos(db)
+        )
 
     # ── Ficha técnica del cultivo analizado (precios de referencia) ──
     ficha_economicos = None

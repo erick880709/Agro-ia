@@ -44,6 +44,47 @@ PESOS_PRIORIDAD_ECO = {"Critica": 4, "Alta": 3, "Media": 2, "Baja": 1}
 
 VARIABLES_OBLIGATORIAS = {"pH", "CE"}
 
+# ── Insumo representativo y dosis (kg/ha) por variable — el precio por kg
+#    se toma de la tabla `precios_insumos` (Admin) para el ROI dinámico ──
+DOSIS_PRODUCTO_VARIABLE: dict[str, tuple[str, float]] = {
+    "pH": ("Cal dolomítica", 1000.0),
+    "N": ("Urea", 60.0),
+    "P": ("DAP", 35.0),
+    "K": ("KCl", 45.0),
+    "MO": ("Compost", 2000.0),
+    "Ca": ("Yeso agrícola", 500.0),
+    "Mg": ("Sulfato de magnesio", 60.0),
+    "S": ("Azufre elemental", 30.0),
+    "Fe": ("Quelato de hierro", 5.0),
+    "Mn": ("Sulfato de manganeso", 5.0),
+    "Zn": ("Sulfato de zinc", 5.0),
+    "Cu": ("Sulfato de cobre", 3.0),
+    "B": ("Bórax", 3.0),
+    "CIC": ("Enmienda orgánica", 2000.0),
+}
+
+
+async def cargar_precios_insumos(db) -> dict[str, float]:
+    """Precios vigentes (COP/kg) desde `precios_insumos`.
+
+    Devuelve {producto: precio_kg_cop}; si la tabla no tiene filas,
+    devuelve {} y el plan económico degrada al fallback estático.
+    """
+    from sqlalchemy import select
+
+    from agroia_backend.models.precio_insumo import PrecioInsumo
+
+    try:
+        filas = (
+            await db.execute(
+                select(PrecioInsumo).order_by(PrecioInsumo.producto)
+            )
+        ).scalars().all()
+        return {p.producto: float(p.precio_kg_cop) for p in filas}
+    except Exception as e:  # noqa: BLE001 — la economía no se bloquea
+        logger.warning("precios_insumos_no_disponibles", error=str(e))
+        return {}
+
 
 def _severidad(fila: dict) -> float:
     """Severidad de la violación: prioridad + desviación relativa al rango."""
@@ -77,6 +118,7 @@ def _severidad(fila: dict) -> float:
 def calcular_plan_economico(
     recomendaciones: list[dict],
     presupuesto_cop: float,
+    precios_insumos: dict[str, float] | None = None,
 ) -> dict:
     """Construye el plan ideal vs. el plan optimizado al presupuesto.
 
@@ -84,21 +126,47 @@ def calcular_plan_economico(
         recomendaciones: filas del diagnóstico (variable, prioridad, valor,
             rango_ideal, accion, …).
         presupuesto_cop: presupuesto del productor en COP por hectárea.
+        precios_insumos: {producto: precio_kg_cop} desde `precios_insumos`
+            (Admin). Si un producto no tiene registro, se usa el costo
+            estático de referencia y se advierte en el resultado.
 
     Returns:
         dict con costo_ideal, costo_plan, cobertura_pct,
-        diferencia_rendimiento_pct, incluidos[], aplazados[].
+        diferencia_rendimiento_pct, incluidos[], aplazados[] y
+        advertencia_precios (None si todos los precios son dinámicos).
     """
+    precios = precios_insumos or {}
+    productos_faltantes: list[str] = []
     filas: list[dict] = []
     for r in recomendaciones:
         variable = str(r.get("variable") or "")
         costo = COSTOS_VARIABLE.get(variable, 60_000.0)
+        origen = "estatico"
+        dosis_info = DOSIS_PRODUCTO_VARIABLE.get(variable)
+        if dosis_info is not None:
+            producto, dosis_kg = dosis_info
+            precio_kg = precios.get(producto)
+            if precio_kg is not None and precio_kg > 0:
+                costo = round(dosis_kg * float(precio_kg), 2)
+                origen = "precios_insumos"
+            else:
+                if producto not in productos_faltantes:
+                    productos_faltantes.append(producto)
         prioridad = str(r.get("prioridad") or "Baja")
         filas.append({
             **r,
             "costo_cop": costo,
+            "costo_origen": origen,
             "obligatoria": variable in VARIABLES_OBLIGATORIAS or prioridad == "Critica",
         })
+
+    advertencia_precios = None
+    if productos_faltantes:
+        advertencia_precios = (
+            "⚠️ Precios de referencia desactualizados: sin registro en "
+            "precios_insumos para " + ", ".join(productos_faltantes) +
+            ". El plan económico usa costos estáticos de referencia."
+        )
 
     costo_ideal = sum(f["costo_cop"] for f in filas)
     if costo_ideal <= 0 or presupuesto_cop is None or presupuesto_cop <= 0:
@@ -111,6 +179,9 @@ def calcular_plan_economico(
             "incluidos": [{"variable": f["variable"], "prioridad": f["prioridad"],
                           "costo_cop": f["costo_cop"], "motivo": None} for f in filas],
             "aplazados": [],
+            "precios_fuente": "precios_insumos" if precios else "estaticos",
+            "precios_faltantes": productos_faltantes,
+            "advertencia_precios": advertencia_precios,
         }
 
     # 1) Obligatorias (Críticas + pH/CE) siempre van
@@ -162,4 +233,7 @@ def calcular_plan_economico(
              "costo_cop": f["costo_cop"], "accion": f.get("accion"), "motivo": f["motivo"]}
             for f in aplazados
         ],
+        "precios_fuente": "precios_insumos" if precios else "estaticos",
+        "precios_faltantes": productos_faltantes,
+        "advertencia_precios": advertencia_precios,
     }

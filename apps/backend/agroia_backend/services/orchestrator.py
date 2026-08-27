@@ -436,10 +436,15 @@ class RecommendationOrchestrator:
         # ── Plan económico de fertilización (brecha económica) ──
         plan_economico = None
         if presupuesto_cop is not None:
-            from agroia_backend.services.economia import calcular_plan_economico
+            from agroia_backend.services.economia import (
+                calcular_plan_economico,
+                cargar_precios_insumos,
+            )
 
             plan_economico = calcular_plan_economico(
-                recomendaciones, float(presupuesto_cop)
+                recomendaciones,
+                float(presupuesto_cop),
+                precios_insumos=await cargar_precios_insumos(self.db),
             )
             if plan_economico["aplazados"]:
                 advertencia = self._combinar_advertencias(
@@ -788,10 +793,14 @@ class RecommendationOrchestrator:
         # ── Plan económico de fertilización (brecha económica) ──
         plan_economico = None
         if request.presupuesto_cop is not None:
-            from agroia_backend.services.economia import calcular_plan_economico
+            from agroia_backend.services.economia import (
+                calcular_plan_economico,
+                cargar_precios_insumos,
+            )
 
             plan_economico = calcular_plan_economico(
-                recomendaciones, float(request.presupuesto_cop)
+                recomendaciones, float(request.presupuesto_cop),
+                precios_insumos=await cargar_precios_insumos(self.db),
             )
             if plan_economico["aplazados"]:
                 advertencia = self._combinar_advertencias(

@@ -247,6 +247,13 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Endpoints**: `POST /fincas/{id}/enriquecer-sig` (manual, idempotente, auditoría `sig.enriquecer`), `GET /fincas/{id}/enriquecimiento-sig`; `POST /fincas` lo ejecuta automáticamente si hay coordenadas. Geoservicio WMS/WFS real opcional vía `SIG_IGAC_WMS_URL`.
 - Validado local y en producción: enriquecimiento Eje Cafetero (Franco-arcillosa, MO 9.5 %, CIC 24), violaciones SIG → filas con confiabilidad «Estimado por SIG (IGAC/UPRA)», sensor (MO 3.0/CIC 5.0) sobreescribe al SIG, badge «🗺️ estimado SIG» en Dashboard (local y prod) y UI sirviendo `v=20260827-sig`.
 
+### Precios de insumos dinámicos — ROI actualizable (2026-08-27)
+
+- **Tabla `agroia.precios_insumos`** (migración 021): `producto` (clave única), `precio_kg_cop`, `fecha_actualizacion`, `fuente`.
+- **Cálculo dinámico** en `services/economia.py`: `calcular_plan_economico(..., precios_insumos)` convierte COP/kg → COP/ha con `DOSIS_PRODUCTO_VARIABLE` (N = Urea 60 kg/ha, P = DAP 35 kg/ha, K = KCl 45 kg/ha…); el orquestador (UC1/UC2) y el reporte cargan la tabla en cada análisis. Sin registro → fallback estático + `advertencia_precios` «Precios de referencia desactualizados» (P5 y reporte).
+- **Endpoints solo Admin**: `GET/PUT /api/v1/admin/precios-insumos` (upsert con fecha = hoy, auditoría `precios.actualizar`); panel «💰 Precios de insumos» en la pestaña Usuarios (tabla editable de 14 insumos).
+- Validado local: 403 para Cliente, advertencia con tabla vacía, tras PUT (Urea 3 500) el costo de N pasa 180 000 → 210 000 COP/ha, P 150 000 → 168 000 (DAP 4 800), K 160 000 → 189 000 (KCl 4 200), sin advertencia — pendiente validación en producción.
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).
@@ -257,6 +264,7 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - `018_labores` — tabla `agroia.labores` (órdenes de trabajo con estado, responsable y fechas).
 - `019_alertas_climaticas` — tabla `agroia.alertas_climaticas` (alertas meteorológicas proactivas con pronóstico JSONB).
 - `020_texturas_sig` — enum `agroia.texturasuelo` ampliado con clases granulométricas IGAC (FRANCA, FRANCO_ARENOSA, FRANCO_ARCILLOSA, FRANCO_LIMOSA).
+- `021_precios_insumos` — tabla `agroia.precios_insumos` (precios dinámicos COP/kg para el ROI del plan económico).
 
 ### Límites del tier gratuito (validados 2026-08-25)
 

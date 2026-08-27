@@ -300,7 +300,10 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
     Acción (con <i>condicional a confirmación de laboratorio</i> cuando el NPK no está validado y
     contexto del pH por cultivo) · Prioridad · <b>Confiabilidad</b> · <b>Plan sugerido</b> (fuente, frecuencia, dosis).</li>
     <li><b>Bloque «💰 Plan económico vs. plan ideal»</b> (si se declaró presupuesto): costo del plan,
-    costo ideal, cobertura %, diferencia de rendimiento estimada y acciones Incluidas/Aplazadas.</li>
+    costo ideal, cobertura %, diferencia de rendimiento estimada y acciones Incluidas/Aplazadas.
+    Los costos por hectárea se calculan con los <b>precios dinámicos de insumos</b>
+    (<code>precios_insumos</code>, COP/kg × dosis por variable); si un insumo no tiene registro,
+    aparece la advertencia «⚠️ Precios de referencia desactualizados…» y se usa el costo estático.</li>
     <li><b>Semáforo de confianza de 4 barras</b>: 🟢 calibración del sensor · 🟡 cobertura de
     fertilidad · 🔴 violaciones activas · 🟣 respaldo humano, con la nota «Para subir la confianza
     al 80%, …» — transparencia del porqué de la confianza y de cómo mejorarla. Cuando hay
@@ -433,6 +436,15 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   <p><b>Servicios que llama:</b> <code>GET /api/v1/usuarios</code> · <code>POST /api/v1/usuarios</code> ·
   <code>PUT /api/v1/usuarios/{id}</code> · <code>DELETE /api/v1/usuarios/{id}</code> ·
   <code>PUT /api/v1/admin/usuarios/{id}/rol</code> · perfil propio en <code>/usuarios/me</code>.</p>
+  <p><b>💰 Precios de insumos</b> (tarjeta inferior de la misma pestaña, solo Admin): tabla
+  editable con los 14 insumos del plan económico (Cal dolomítica, Urea, DAP, KCl, Compost,
+  Yeso agrícola, sulfatos, quelatos, Bórax y enmienda orgánica) con su uso y el <b>precio en
+  COP/kg</b>; los productos sin registro muestran el badge «estático». El botón
+  <b>«💾 Guardar precios»</b> invoca <code>PUT /api/v1/admin/precios-insumos</code>
+  (upsert con <code>fecha_actualizacion</code> = hoy y auditoría <code>precios.actualizar</code>).
+  Desde el siguiente análisis, el plan económico usa esas cotizaciones (costo/ha = dosis ×
+  precio/kg); sin registro se usa el costo estático con la advertencia «Precios de referencia
+  desactualizados» en P5 y en el reporte. Otros roles reciben 403 en estos endpoints.</p>
 </div>
 
 <!-- ─────────── P10 ─────────── -->
@@ -473,7 +485,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.6 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.7 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

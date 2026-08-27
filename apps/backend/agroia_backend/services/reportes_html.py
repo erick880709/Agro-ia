@@ -134,6 +134,7 @@ _CSS = """
   .ctx { font-size: .8rem; margin-top: 4px; line-height: 1.45; }
   td.plan { font-size: .8rem; color: #36593f; line-height: 1.45; min-width: 220px; }
   .dos-listas { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 6px; }
+  .advertencia-inline { background: #fef3c7; border: 1px solid #f59e0b; color: #92400e; padding: 8px 12px; border-radius: 10px; margin: 8px 0; }
   @media (max-width: 720px) { .dos-listas { grid-template-columns: 1fr; } }
   .eco-alerta { margin-top: 12px; padding: 10px 14px; border: 1px solid var(--clay);
     border-radius: 8px; background: rgba(192,91,69,.08); color: #7c2d12; font-size: .86rem; }
@@ -447,6 +448,13 @@ def _seccion_plan_economico(pe: dict | None) -> str:
         f"Diferencia de rendimiento estimada: <b>{_num(diferencia, 1)}%</b>."
         if diferencia is not None else ""
     )
+    adv_precios = ""
+    if pe.get("advertencia_precios"):
+        adv_precios = (
+            f'<p class="advertencia-inline">⚠️ {esc(pe["advertencia_precios"])} '
+            'Actualice los precios en el panel de administración para que el '
+            "ROI y el plan económico reflejen la cotización real.</p>"
+        )
     return f"""
     <div class="clima-muestra" style="margin-top:14px">
       <div class="heat-title">💰 Plan económico vs. plan ideal (fertilización)</div>
@@ -454,6 +462,7 @@ def _seccion_plan_economico(pe: dict | None) -> str:
       presupuesto declarado {presupuesto} COP/ha · cobertura {_num(cobertura, 1)}%.<br>
       {dif_txt} Los costos son estimaciones por hectárea; las acciones de prioridad
       Crítica (pH, CE) siempre se incluyen.</p>
+      {adv_precios}
       <div class="dos-listas">
         <div><b>Incluidas ({len(incluidos)}):</b><ul class="warnings">{lis_inc or '<li>Ninguna</li>'}</ul></div>
         <div><b>Aplazadas ({len(aplazados)}):</b><ul class="warnings">{lis_apl or '<li>Ninguna</li>'}</ul></div>
