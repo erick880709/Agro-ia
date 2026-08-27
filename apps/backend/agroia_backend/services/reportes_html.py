@@ -135,6 +135,8 @@ _CSS = """
   td.plan { font-size: .8rem; color: #36593f; line-height: 1.45; min-width: 220px; }
   .dos-listas { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 6px; }
   @media (max-width: 720px) { .dos-listas { grid-template-columns: 1fr; } }
+  .eco-alerta { margin-top: 12px; padding: 10px 14px; border: 1px solid var(--clay);
+    border-radius: 8px; background: rgba(192,91,69,.08); color: #7c2d12; font-size: .86rem; }
   .alerta-fito { margin: 10px 0 4px; padding: 10px 12px; border: 1px solid #d97706;
     border-radius: 8px; background: rgba(217,119,6,.08); color: #7c2d12; font-size: .86rem; }
   .ft-intro { font-family: var(--serif); font-size: 1.08rem; margin-bottom: 16px; }
@@ -413,6 +415,127 @@ def _seccion_plan_economico(pe: dict | None) -> str:
         <div><b>Aplazadas ({len(aplazados)}):</b><ul class="warnings">{lis_apl or '<li>Ninguna</li>'}</ul></div>
       </div>
     </div>"""
+
+
+def _ingreso_bruto_ha(ficha_econ: dict | None) -> tuple[float | None, float | None]:
+    """Ingreso bruto estimado (COP/ha) y precio por tonelada desde la ficha.
+
+    Usa rendimiento_esperado (ton/ha) × precio_referencia normalizado a
+    COP/tonelada según la unidad_precio (carga, bulto, tonelada…).
+    """
+    import re
+
+    if not isinstance(ficha_econ, dict):
+        return None, None
+    try:
+        rend_ton = float(ficha_econ.get("rendimiento_esperado") or 0)
+        precio = float(ficha_econ.get("precio_referencia") or 0)
+    except (TypeError, ValueError):
+        return None, None
+    if rend_ton <= 0 or precio <= 0:
+        return None, None
+    unidad = str(ficha_econ.get("unidad_precio") or "").lower()
+    precio_ton: float | None = None
+    m = re.search(r"(\d+(?:\.\d+)?)\s*kg", unidad)
+    if m:
+        precio_ton = precio * (1000.0 / float(m.group(1)))
+    elif "ton" in unidad:
+        precio_ton = precio
+    if not precio_ton:
+        return None, None
+    return rend_ton * precio_ton, precio_ton
+
+
+def _seccion_analisis_economico(
+    pe: dict | None,
+    ficha_economicos: dict | None,
+    cultivo_nombre: str | None,
+) -> str:
+    """Análisis económico proyectado: ganancia esperada y ROI del plan.
+
+    Ganancia_esperada = (Rendimiento × Precio de cosecha) × 1,15 si se
+    aplica el plan. ROI = (Ganancia − Costo fertilizantes) ÷ Costo.
+    ROI < 1,2 → «Inversión justa, considere subvenciones».
+    """
+    if not pe:
+        return ""
+    presupuesto = pe.get("presupuesto_cop")
+    try:
+        costo_fert = (
+            float(pe.get("costo_plan") or 0) if presupuesto
+            else float(pe.get("costo_ideal") or pe.get("costo_plan") or 0)
+        )
+    except (TypeError, ValueError):
+        costo_fert = 0.0
+
+    nombre = esc(cultivo_nombre or "el cultivo")
+    ingreso_bruto, precio_ton = _ingreso_bruto_ha(ficha_economicos)
+
+    notas = []
+    if not isinstance(ficha_economicos, dict) or not ficha_economicos:
+        notas.append(
+            "La ficha técnica del cultivo no tiene datos económicos de "
+            "referencia; no se pudo proyectar la ganancia."
+        )
+    elif precio_ton is None:
+        notas.append(
+            "La unidad del precio de referencia de la ficha no permite "
+            "proyectar la ganancia por hectárea; se muestra solo el costo "
+            "del plan."
+        )
+
+    tiles = ""
+    if ingreso_bruto and precio_ton and costo_fert > 0:
+        ganancia = ingreso_bruto * 1.15  # +15 % si se aplica el plan
+        roi = (ganancia - costo_fert) / costo_fert
+        tiles = f"""
+      <div class="plano-stats">
+        <div class="plano-stat">Ingreso bruto sin plan<b>{_fmt_cop(ingreso_bruto)}/ha</b></div>
+        <div class="plano-stat">Ganancia esperada con plan<b>{_fmt_cop(ganancia)}/ha</b></div>
+        <div class="plano-stat">Costo de fertilización<b>{_fmt_cop(costo_fert)}/ha</b></div>
+        <div class="plano-stat">ROI del plan<b>{_num(roi, 1)}×</b></div>
+      </div>"""
+        if roi < 1.2:
+            tiles += (
+                '<div class="eco-alerta">⚠️ <b>Inversión justa, considere '
+                "subvenciones.</b> El retorno proyectado es bajo frente al "
+                "costo del plan: explore apoyo institucional o postergue las "
+                "acciones aplazadas.</div>"
+            )
+        else:
+            tiles += (
+                '<p class="muted" style="margin-top:8px">✅ La ganancia '
+                "proyectada supera el costo del plan de fertilización: "
+                "la inversión es rentable.</p>"
+            )
+    elif costo_fert <= 0:
+        notas.insert(0, (
+            "El diagnóstico no tiene acciones de corrección con costo "
+            "asociado: no aplica cálculo de retorno de inversión."
+        ))
+    else:
+        notas.insert(0, (
+            "Costo del plan de fertilización: "
+            f"<b>{_fmt_cop(costo_fert)}/ha</b>."
+        ))
+
+    notas_html = (
+        '<ul class="warnings">' + "".join(f"<li>{n}</li>" for n in notas) + "</ul>"
+        if notas else ""
+    )
+    return f"""
+  <section class="block">
+    <div class="block-head"><span class="block-num">E</span>
+      <div><div class="block-title">Análisis económico proyectado — retorno de inversión</div>
+      <div class="block-sub">¿La fertilización recomendada le genera ganancia a {nombre}?</div></div>
+    </div>
+    {tiles}
+    {notas_html}
+    <p class="muted" style="margin-top:8px">Cálculo: Ganancia esperada = (rendimiento de
+    referencia × precio de cosecha) × 1,15 si se aplica el plan · ROI = (Ganancia esperada −
+    Costo de fertilización) ÷ Costo de fertilización. Precios de referencia de la ficha técnica
+    del cultivo (COP 2026); estimación de apoyo, no cotización comercial.</p>
+  </section>"""
 
 
 def _seccion_uc1(a) -> str:
@@ -1149,6 +1272,8 @@ def generar_reporte_html(
     muestras: list | None = None,
     umbrales: dict | None = None,
     clima: dict | None = None,
+    plan_economico: dict | None = None,
+    ficha_economicos: dict | None = None,
 ) -> str:
     """Construye el documento HTML completo del reporte."""
     fecha = datetime.now(timezone.utc).astimezone().strftime("%d/%m/%Y %H:%M")
@@ -1172,6 +1297,14 @@ def generar_reporte_html(
         (uc2 or {}).get("cultivo") or (uc1 or {}).get("cultivo")
     )
     seccion_plano = _seccion_plano_lote(muestras, finca, clima, cultivo_nombre)
+
+    # Análisis económico proyectado (retorno de inversión del plan)
+    pe = (
+        plan_economico
+        or (uc2 or {}).get("plan_economico")
+        or (uc1 or {}).get("plan_economico")
+    )
+    seccion_roi = _seccion_analisis_economico(pe, ficha_economicos, cultivo_nombre)
 
     # Explicación en lenguaje campesino (siempre que haya análisis)
     explicacion_campo = generar_explicacion_campesina(uc1=uc1, uc2=uc2, lectura=lectura)
@@ -1231,6 +1364,7 @@ def generar_reporte_html(
   {secciones}
   {seccion_mapa}
   {seccion_plano}
+  {seccion_roi}
   {explicacion_campo}
   <section class="block">
     <div class="block-head"><span class="block-num">04</span>

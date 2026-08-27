@@ -17,6 +17,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from agroia_backend.models.cultivo import EstadoFicha, FichaTecnica
 from agroia_backend.models.dispositivo_iot import DispositivoIoT
 from agroia_backend.models.finca import Finca
 from agroia_backend.models.sensor_reading import SensorReading
@@ -24,6 +25,7 @@ from agroia_backend.services.acceso import verificar_acceso_finca
 from agroia_backend.services.aptitud import AptitudService
 from agroia_backend.services.ml_oracle import MLOracleService
 from agroia_backend.services.data_adapters import SueloAdapter
+from agroia_backend.services.economia import calcular_plan_economico
 from agroia_backend.services.orchestrator import (
     RecommendationOrchestrator,
     RecommendationRequest,
@@ -109,6 +111,7 @@ async def generar_reporte(
         ))
 
     uc1 = uc2 = None
+    cultivo_analizado = None
     try:
         if body.tipo in ("siembra", "completo"):
             uc1 = await _analizar(None)
@@ -123,12 +126,49 @@ async def generar_reporte(
                 })
             if cultivo:
                 uc2 = await _analizar(cultivo)
+                cultivo_analizado = cultivo
     except InsufficientDataError as e:
         raise HTTPException(status_code=422, detail={
             "code": "INSUFFICIENT_DATA",
             "message": "Datos insuficientes para el reporte. Variables faltantes: " + ", ".join(e.missing_vars),
             "missing_variables": e.missing_vars,
         })
+
+    # ── Plan económico para el ROI (ideal si no se declaró presupuesto) ──
+    recs = (
+        uc2.recomendaciones if (uc2 and uc2.recomendaciones)
+        else (uc1.recomendaciones if uc1 else [])
+    )
+    plan_economico = (uc2.plan_economico if uc2 else None) or (
+        uc1.plan_economico if uc1 else None
+    )
+    if plan_economico is None and recs:
+        plan_economico = calcular_plan_economico(recs, None)
+
+    # ── Ficha técnica del cultivo analizado (precios de referencia) ──
+    ficha_economicos = None
+    cultivo_ref = cultivo_analizado
+    if not cultivo_ref and body.tipo == "siembra" and uc1 and uc1.sugerencias_cultivos:
+        cultivo_ref = uc1.sugerencias_cultivos[0].get("cultivo_id")
+    if cultivo_ref:
+        try:
+            cultivo_ref_uuid = uuid_mod.UUID(str(cultivo_ref))
+        except ValueError:
+            cultivo_ref_uuid = None
+        if cultivo_ref_uuid:
+            ficha = (
+                await db.execute(
+                    select(FichaTecnica)
+                    .where(
+                        FichaTecnica.cultivo_id == cultivo_ref_uuid,
+                        FichaTecnica.estado == EstadoFicha.PUBLICADO,
+                    )
+                    .order_by(FichaTecnica.updated_at.desc())
+                    .limit(1)
+                )
+            ).scalars().first()
+            if ficha is not None and ficha.datos_economicos:
+                ficha_economicos = dict(ficha.datos_economicos)
 
     muestras_geo = await _muestras_geo(db, finca_uuid)
 
@@ -214,6 +254,8 @@ async def generar_reporte(
         muestras=muestras_geo,
         umbrales=_umbrales_de_analisis(uc1, uc2),
         clima=clima,
+        plan_economico=plan_economico,
+        ficha_economicos=ficha_economicos,
     )
 
     titulo = {
