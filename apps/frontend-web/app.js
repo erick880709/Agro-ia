@@ -74,9 +74,14 @@ if (state.sesion) {
 }
 
 function headers(json = true) {
-  const h = { 'X-User-Role': state.rol };
-  if (state.email) {
-    h['X-User-Email'] = state.email;
+  const h = {};
+  const token = state.sesion && state.sesion.access_token;
+  if (token) {
+    h['Authorization'] = 'Bearer ' + token;
+  } else {
+    // Fallback demo (solo entornos de desarrollo sin token)
+    h['X-User-Role'] = state.rol;
+    if (state.email) h['X-User-Email'] = state.email;
     if (state.nombre) h['X-User-Nombre'] = state.nombre;
   }
   if (json) h['Content-Type'] = 'application/json';
@@ -85,13 +90,55 @@ function headers(json = true) {
 
 /* ─────────────────────────── utilidades ─────────────────────────── */
 
-async function api(path, opts = {}) {
-  const h = { ...(opts.headers || {}), 'X-User-Role': state.rol };
-  if (state.email) {
-    h['X-User-Email'] = state.email;
+let _refreshEnCurso = null;
+
+async function renovarSesion() {
+  // Renueva el access token con el refresh token (una sola llamada concurrente).
+  if (!_refreshEnCurso) {
+    _refreshEnCurso = (async () => {
+      const rt = state.sesion && state.sesion.refresh_token;
+      if (!rt) throw new Error('Sin refresh token');
+      const res = await fetch(API + '/auth/refresh', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh_token: rt }),
+      });
+      if (!res.ok) throw new Error('Refresh fallido');
+      const data = await res.json();
+      state.sesion = { ...state.sesion, ...data };
+      localStorage.setItem(SESION_KEY, JSON.stringify(state.sesion));
+      return data.access_token;
+    })().finally(() => { _refreshEnCurso = null; });
+  }
+  return _refreshEnCurso;
+}
+
+async function _fetchApi(path, opts) {
+  const h = { ...(opts.headers || {}) };
+  const token = state.sesion && state.sesion.access_token;
+  if (token) {
+    h['Authorization'] = 'Bearer ' + token;
+  } else {
+    h['X-User-Role'] = state.rol;
+    if (state.email) h['X-User-Email'] = state.email;
     if (state.nombre) h['X-User-Nombre'] = state.nombre;
   }
-  const res = await fetch(API + path, { ...opts, headers: h });
+  return fetch(API + path, { ...opts, headers: h });
+}
+
+async function api(path, opts = {}) {
+  const esRutaAuth = path.startsWith('/auth/');
+  let res = await _fetchApi(path, opts);
+  // 401 con token vigente/vencido → intentar renovar la sesión una vez
+  if (res.status === 401 && !esRutaAuth && state.sesion && state.sesion.access_token) {
+    try {
+      await renovarSesion();
+      res = await _fetchApi(path, opts);
+    } catch {
+      cerrarSesion();
+      throw new Error('La sesión expiró. Inicia sesión nuevamente.');
+    }
+  }
   let body = null;
   try { body = await res.json(); } catch { /* sin cuerpo */ }
   if (!res.ok) {
@@ -159,6 +206,18 @@ function aplicarSesion(data) {
 }
 
 function cerrarSesion() {
+  // Revoca tokens en el servidor (fire-and-forget) y limpia la sesión local
+  const sesion = state.sesion || {};
+  if (sesion.refresh_token) {
+    fetch(API + '/auth/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(sesion.access_token ? { 'Authorization': 'Bearer ' + sesion.access_token } : {}),
+      },
+      body: JSON.stringify({ refresh_token: sesion.refresh_token }),
+    }).catch(() => { /* sin red: se limpia local de todas formas */ });
+  }
   localStorage.removeItem(SESION_KEY);
   location.reload();
 }

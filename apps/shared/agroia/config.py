@@ -31,11 +31,13 @@ class Settings(BaseSettings):
     rabbitmq_queue_iot: str = "sensor.data.received"
 
     # ── JWT ──
+    jwt_secret: str = ""  # HS256: clave 32+ chars (JWT_SECRET). Si existen las claves PEM, se usa RS256.
     jwt_private_key_path: str = "./keys/private.pem"
     jwt_public_key_path: str = "./keys/public.pem"
-    jwt_algorithm: str = "RS256"
-    jwt_access_token_expire_minutes: int = 60
-    jwt_refresh_token_expire_days: int = 7
+    jwt_algorithm: str = "HS256"
+    jwt_access_token_expire_minutes: int = 480  # 8 horas
+    jwt_refresh_token_expire_days: int = 30
+    auth_allow_legacy_headers: bool | None = None  # None = automático (solo fuera de producción)
 
     # ── OpenAI ──
     openai_api_key: str = ""
@@ -56,7 +58,6 @@ class Settings(BaseSettings):
     # ── Observabilidad ──
     log_level: str = "INFO"
     environment: str = "development"
-
 
 @lru_cache
 def get_settings() -> Settings:

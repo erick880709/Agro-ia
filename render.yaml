@@ -24,3 +24,5 @@ services:
         value: "1"
       - key: LOG_LEVEL
         value: INFO
+      - key: JWT_SECRET
+        sync: false # Pegar una clave de 32+ caracteres en el dashboard de Render

@@ -44,6 +44,7 @@ import agroia_backend.models.modelo_ml  # noqa: F401
 import agroia_backend.models.recomendacion  # noqa: F401
 import agroia_backend.models.regla_agronomica  # noqa: F401
 import agroia_backend.models.sensor_reading  # noqa: F401
+import agroia_backend.models.token_auth  # noqa: F401
 import agroia_backend.models.usuario  # noqa: F401
 
 from agroia_backend.api.auth import router as auth_router
@@ -137,6 +138,7 @@ async def lifespan(app: FastAPI):
         await asyncio.sleep(120)  # primer ciclo 2 min después del arranque
         while True:
             try:
+                from agroia_backend.services.jwt_auth import limpiar_tokens_expirados
                 from agroia_backend.services.mantenimiento import limpiar_imagenes_chat
                 from agroia_backend.services.notificador_jobs import notificar_labores_proximas
 
@@ -144,6 +146,10 @@ async def lifespan(app: FastAPI):
                     await limpiar_imagenes_chat(db, dias=90)
                 async with async_session_factory() as db:
                     await notificar_labores_proximas(db)
+                async with async_session_factory() as db:
+                    n = await limpiar_tokens_expirados(db)
+                    await db.commit()
+                    logger.info("tokens_limpiados", total=n)
             except Exception as e:  # noqa: BLE001 — el ciclo sigue vivo
                 logger.error("tarea_mantenimiento_error", error=str(e))
             await asyncio.sleep(24 * 3600)  # cada 24 horas
@@ -171,6 +177,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# ── Autenticación JWT (v3) ──
+# Valida el Bearer y sobrescribe las cabeceras de identidad con las claims.
+# Rutas públicas: /health, /docs, /auth/login, /auth/refresh, /api/sensor y estáticos.
+@app.middleware("http")
+async def _middleware_auth(request, call_next):
+    from agroia_backend.services.jwt_auth import middleware_autenticacion
+
+    return await middleware_autenticacion(request, call_next)
 
 # ── Health check ──
 app.include_router(health_router, prefix="/api/v1")
