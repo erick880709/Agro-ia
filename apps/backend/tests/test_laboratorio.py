@@ -1,9 +1,6 @@
 """Tests del módulo de Laboratorios ICA (v3): ingesta, historial y eliminación."""
-import pytest
 from agroia_backend.main import app
 from httpx import ASGITransport, AsyncClient
-
-pytestmark = pytest.mark.asyncio(loop_scope="module")
 
 FINCA_DEMO = "3a47d0c6-fb00-4106-91ba-0a707f612e86"
 ADMIN = {"email": "admin@agroia.co", "password": "Admin123!"}

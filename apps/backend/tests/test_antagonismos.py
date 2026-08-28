@@ -1,9 +1,6 @@
 """Tests de reglas de antagonismo/sinergia nutricional (v3, Ola 1)."""
-import pytest
 from agroia.database import async_session_factory
 from agroia_backend.services.rules_engine import RulesEngine
-
-pytestmark = pytest.mark.asyncio(loop_scope="module")
 
 
 async def test_antagonismos_detecta_interacciones():
