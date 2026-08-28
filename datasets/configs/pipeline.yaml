@@ -1,0 +1,27 @@
+# Configuración por defecto del pipeline AgroVision (RNF-02).
+version: 1
+splits:
+  default: [0.70, 0.15, 0.15]
+  group_priority: [farm_id, plant_id, leaf_id, source_url, dataset_id]
+  seed: 42
+dedup:
+  phash_threshold: 8
+inspect:
+  min_size_px: 32
+  allowed_extensions: [.jpg, .jpeg, .png, .webp, .tif, .tiff]
+normalize:
+  max_side: 512
+  rgb_format: jpeg
+quality_gate:
+  min_size_px: 64
+  blur_variance_min: 40.0
+  min_brightness: 30
+  max_brightness: 245
+fallback:
+  abstain_confidence: 0.6
+  severity_thresholds:
+    none: 0.01
+    mild: 0.05
+    moderate: 0.15
+    severe: 0.35
+    critical: 0.55

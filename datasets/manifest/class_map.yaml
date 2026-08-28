@@ -1,0 +1,45 @@
+# Taxonomía canónica AgroVision (RF-08).
+# Desacopla el nombre original del dataset de la etiqueta del modelo.
+# Las claves de `aliases` son clases canónicas; los valores, nombres vistos
+# en los datasets de origen.
+version: 1
+taxonomy:
+  crop: [coffee, cacao, banana, plantain, potato, tomato, avocado, maize, other]
+  plant_part: [leaf, pod, fruit, stem, whole_plant, unknown]
+  health_state: [healthy, symptomatic, unknown]
+  severity: [none, mild, moderate, severe, critical, unknown]
+  diagnostic_class:
+    - coffee_rust
+    - coffee_phoma
+    - coffee_cercospora
+    - coffee_miner
+    - red_spider_mite
+    - cocoa_monilia_m1
+    - cocoa_monilia_m2
+    - cocoa_monilia_m3
+    - cocoa_black_pod
+    - cocoa_phytophthora
+    - other_disease
+    - other_pest
+aliases:
+  healthy: [healthy, Healthy, Sana, sana, no_rust, NoRust, rust_no, sin_sintomas]
+  coffee_rust: [rust, Rust, coffee_leaf_rust, Coffee Leaf Rust, roya, Roya, coffee_rust_leaf]
+  coffee_phoma: [phoma, Phoma, coffee_phoma_leaf]
+  coffee_cercospora: [cercospora, Cercospora, coffee_cercospora_leaf]
+  coffee_miner: [miner, Miner, leaf_miner, Leaf Miner, minador, minador_de_la_hoja]
+  red_spider_mite: [red_spider_mite, Red spider mite, arana_roja, araña_roja]
+  coffee_leaf_spot: [coffee_leaf_spot, mancha_de_cafe, Mycena citricolor]
+  cocoa_monilia_m1: [m1, monilia_m1, Monilia M1]
+  cocoa_monilia_m2: [m2, monilia_m2, Monilia M2]
+  cocoa_monilia_m3: [m3, monilia_m3, Monilia M3]
+  cocoa_black_pod: [black_pod, black_pod_rot, pudricion_negra, l1, l2, l3, l4, l5]
+  cocoa_phytophthora: [phytophthora, Phytophthora]
+crop_hints:
+  coffee: [cafe, café, coffea, arabica, robusta]
+  cacao: [cacao, cocoa, cacaotero]
+  banana: [banana, banano]
+  plantain: [plantain, platano, plátano]
+  potato: [potato, papa]
+  tomato: [tomato, tomate]
+  avocado: [avocado, aguacate]
+  maize: [maize, corn, maiz, maíz]

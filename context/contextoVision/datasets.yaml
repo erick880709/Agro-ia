@@ -1,0 +1,201 @@
+version: 1
+generated_at: 2026-08-28
+datasets:
+  - id: DS01
+    name: "Colombian Coffee Tree Leaves Multispectral"
+    source_url: https://www.kaggle.com/ds/5644659
+    download_url: https://www.kaggle.com/ds/5644659
+    download_type: kaggle
+    license: "CC BY 4.0"
+    priority: P0
+    enabled: true
+    tasks: [context]
+  - id: DS02
+    name: "CocoaMoniliaDataSet v2"
+    source_url: https://zenodo.org/records/17716661
+    download_url: https://zenodo.org/records/17716661/files/CocoaMoniliaDataSet.zip?download=1
+    download_type: zenodo
+    license: "CC BY 4.0"
+    priority: P0
+    enabled: true
+    tasks: [detection, segmentation]
+  - id: DS03
+    name: "Coffee Leaf Disease Dataset - Uganda"
+    source_url: https://data.mendeley.com/datasets/k36wnd6knb/1
+    download_url: https://data.mendeley.com/datasets/k36wnd6knb/1
+    download_type: mendeley
+    license: "CC BY 4.0"
+    priority: P1
+    enabled: true
+    tasks: [context]
+  - id: DS04
+    name: "Coffee Leaf Dataset by Phytosanitary Class - Saposoa"
+    source_url: https://data.mendeley.com/datasets/mfpxg4y65r/1
+    download_url: https://data.mendeley.com/datasets/mfpxg4y65r/1
+    download_type: mendeley
+    license: "CC BY 4.0"
+    priority: P1
+    enabled: true
+    tasks: [context]
+  - id: DS05
+    name: "JMuBEN"
+    source_url: https://data.mendeley.com/datasets/t2r6rszp5c/1
+    download_url: https://data.mendeley.com/datasets/t2r6rszp5c/1
+    download_type: mendeley
+    license: "CC BY 4.0"
+    priority: P0
+    enabled: true
+    tasks: [context]
+  - id: DS06
+    name: "RoCoLe - Robusta Coffee Leaf"
+    source_url: https://doi.org/10.17632/c5yvn32dzg.2
+    download_url: https://doi.org/10.17632/c5yvn32dzg.2
+    download_type: mendeley
+    license: "CC BY 4.0"
+    priority: P0
+    enabled: true
+    tasks: [segmentation]
+  - id: DS07
+    name: "PlantVillage"
+    source_url: https://huggingface.co/datasets/mohanty/PlantVillage
+    download_url: https://huggingface.co/datasets/mohanty/PlantVillage/resolve/main/data.zip
+    download_type: huggingface
+    license: "CC BY-SA 3.0 (mirror oficial HF actual)"
+    priority: P0
+    enabled: true
+    tasks: [context]
+  - id: DS08
+    name: "PlantVillageVQA"
+    source_url: https://huggingface.co/datasets/SyedNazmusSakib/PlantVillageVQA
+    download_url: https://huggingface.co/datasets/SyedNazmusSakib/PlantVillageVQA
+    download_type: huggingface
+    license: "CC BY 4.0"
+    priority: P1
+    enabled: true
+    tasks: [context]
+  - id: DS09
+    name: "PlantDoc"
+    source_url: https://github.com/pratikkayal/PlantDoc-Dataset
+    download_url: https://github.com/pratikkayal/PlantDoc-Dataset
+    download_type: git
+    license: "CC BY 4.0"
+    priority: P0
+    enabled: true
+    tasks: [detection]
+  - id: DS10
+    name: "PlantWild v2"
+    source_url: https://tqwei05.github.io/PlantWild/access_v2
+    download_url: https://huggingface.co/datasets/Voxel51/PlantWild
+    download_type: huggingface
+    license: "CC BY-NC-ND 4.0"
+    priority: P0
+    enabled: true
+    tasks: [context]
+  - id: DS11
+    name: "PlantSeg"
+    source_url: https://doi.org/10.5281/zenodo.17719108
+    download_url: https://doi.org/10.5281/zenodo.17719108
+    download_type: zenodo
+    license: "CC BY-NC 4.0"
+    priority: P0
+    enabled: true
+    tasks: [detection]
+  - id: DS12
+    name: "IP102"
+    source_url: https://github.com/xpwu95/IP102
+    download_url: https://github.com/xpwu95/IP102
+    download_type: http
+    license: "Libre para uso académico; contacto para otros usos"
+    priority: P0
+    enabled: true
+    tasks: [detection]
+  - id: DS13
+    name: "Black Pod Rot Levels"
+    source_url: https://www.kaggle.com/datasets/zaldyjr/black-pod-rot-levels
+    download_url: https://www.kaggle.com/datasets/zaldyjr/black-pod-rot-levels
+    download_type: kaggle
+    license: "CC BY-SA 4.0"
+    priority: P1
+    enabled: true
+    tasks: [context]
+  - id: DS14
+    name: "Cacao diseases - Roboflow Universe"
+    source_url: https://universe.roboflow.com/cacao-mev33/cacao-diseases-hrb5y
+    download_url: https://universe.roboflow.com/cacao-mev33/cacao-diseases-hrb5y
+    download_type: roboflow
+    license: "CC BY 4.0"
+    priority: P1
+    enabled: true
+    tasks: [detection]
+  - id: DS15
+    name: "Coffee Leaf Computer Vision Dataset - Roboflow"
+    source_url: https://universe.roboflow.com/coffeleaf/coffee-leaf-y9jn4
+    download_url: https://universe.roboflow.com/coffeleaf/coffee-leaf-y9jn4
+    download_type: roboflow
+    license: "CC BY 4.0"
+    priority: P1
+    enabled: true
+    tasks: [detection]
+  - id: DS16
+    name: "AgriPath-LF16 (full)"
+    source_url: https://huggingface.co/datasets/hamzamooraj99/AgriPath-LF16
+    download_url: https://huggingface.co/datasets/hamzamooraj99/AgriPath-LF16
+    download_type: huggingface
+    license: "Revisar ficha/README antes de uso comercial"
+    priority: P1
+    enabled: true
+    tasks: [context]
+  - id: DS17
+    name: "AgriPath-LF16-30k (subset balanceado)"
+    source_url: https://huggingface.co/datasets/hamzamooraj99/AgriPath-LF16
+    download_url: https://huggingface.co/datasets/hamzamooraj99/AgriPath-LF16
+    download_type: huggingface
+    license: "Revisar ficha/README antes de uso comercial"
+    priority: P1
+    enabled: true
+    tasks: [context]
+  - id: DS18
+    name: "AGROSAVIA - Resultados de Análisis de Laboratorio Suelos en Colombia"
+    source_url: https://www.agrosavia.co/nosotros/transparencia-y-acceso-a-informaci%C3%B3n-p%C3%BAblica/datos-abiertos
+    download_url: https://www.datos.gov.co/
+    download_type: portal
+    license: "Revisar ficha individual del conjunto"
+    priority: P0
+    enabled: true
+    tasks: [context]
+  - id: DS19
+    name: "AGROSAVIA - Análisis vegetal (foliar)"
+    source_url: https://www.agrosavia.co/nosotros/transparencia-y-acceso-a-informaci%C3%B3n-p%C3%BAblica/datos-abiertos
+    download_url: https://www.datos.gov.co/
+    download_type: portal
+    license: "Revisar ficha individual del conjunto"
+    priority: P0
+    enabled: true
+    tasks: [context]
+  - id: DS20
+    name: "ICA SISFITO"
+    source_url: https://sisfito.ica.gov.co/
+    download_url: https://sisfito.ica.gov.co/
+    download_type: http
+    license: "Revisar términos/permiso de uso de los datos"
+    priority: P0
+    enabled: true
+    tasks: [context]
+  - id: DS21
+    name: "SIOC / MinAgricultura - Cacao, cifras sectoriales e histórica"
+    source_url: https://sioc.minagricultura.gov.co/Cacao/
+    download_url: https://sioc.minagricultura.gov.co/Cacao/
+    download_type: portal
+    license: "Revisar ficha/condiciones de cada recurso"
+    priority: P1
+    enabled: true
+    tasks: [context]
+  - id: DS22
+    name: "Open Plant Disease Dataset (referencia de literatura)"
+    source_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC10070872/
+    download_url: No identificado como repositorio único verificable
+    download_type: http
+    license: "No asumir una única licencia; revisar procedencia"
+    priority: P2
+    enabled: true
+    tasks: [context]

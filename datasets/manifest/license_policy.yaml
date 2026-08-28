@@ -1,0 +1,30 @@
+# Política de licencias AgroVision — Commercial-use gate.
+# Una licencia no verificada bloquea el paso a curated/production.
+# `action`:
+#   allow       -> puede pasar a curated/production (con requisitos).
+#   research    -> permitido para experimentación; bloqueado para producción.
+#   quarantine  -> no se promueve hasta verificación manual de la ficha.
+version: 1
+policy:
+  default_action: quarantine
+  rules:
+    - pattern: "CC BY 4.0"
+      action: allow
+      requirements: [attribution]
+    - pattern: "CC BY-SA"
+      action: allow
+      requirements: [attribution, share_alike]
+    - pattern: "CC BY-NC"
+      action: research
+      note: "Sin uso comercial; solo investigación y benchmark."
+    - pattern: "académico"
+      action: research
+      note: "Requiere contacto con el titular para otros usos."
+    - pattern: "Revisar"
+      action: quarantine
+      note: "Revisar ficha individual antes de promover."
+    - pattern: "No asumir"
+      action: quarantine
+      note: "Procedencia/licencia no resuelta."
+blocked_from_curated: [DS10, DS11, DS12, DS16, DS17, DS22]
+review_required: [DS18, DS19, DS20, DS21]

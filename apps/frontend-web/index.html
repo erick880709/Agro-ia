@@ -132,7 +132,7 @@
     <section id="view-vision" class="view">
       <div class="card">
         <h2>🔬 Visión plagas <span class="muted">(diagnóstico desde foto — P12)</span></h2>
-        <p class="muted">Sube una foto del síntoma o del cultivo afectado. El modelo propio AgroIA v1.0 está en entrenamiento: mientras tanto el diagnóstico se registra con degradación graciosa y puedes solicitar dictamen experto en el chat.</p>
+        <p class="muted">Sube una foto del síntoma o del cultivo afectado. El motor AgroVision entrega un diagnóstico visual <b>preliminar</b> (fallback de visión tradicional) que no es confirmatorio; ante fotos no válidas o confianza baja se abstiene y pide nueva evidencia. Confirma siempre el dictamen con un agrónomo.</p>
         <form id="form-vision" class="form-grid" onsubmit="analizarFotoPlaga(event)">
           <label class="field"><span>Finca</span><select id="vision-finca"><option value="">— Seleccione finca —</option></select></label>
           <label class="field"><span>Foto (JPEG/PNG/WebP, máx 5 MB)</span><input id="vision-foto" type="file" accept="image/jpeg,image/png,image/webp" required /></label>

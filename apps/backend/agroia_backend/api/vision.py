@@ -1,9 +1,9 @@
 """API de visión por computadora — diagnóstico de plagas desde foto (P12).
 
-Modelo de inferencia: el modelo propio AgroIA v1.0 está en entrenamiento.
-Mientras tanto el endpoint entrega una respuesta de DEGRADACIÓN GRACIOSA
-(estructura definitiva del contrato) para que el flujo completo
-carga → persistencia → historial quede operativo.
+AgroVision (contextoVision): el modelo propio entrena progresivamente;
+mientras tanto, el motor entrega diagnóstico visual PRELIMINAR vía fallback
+OpenCV (sección 14 de la especificación) y abstención explicada cuando la
+foto no es válida o la confianza es insuficiente (sección 24).
 """
 
 import os
@@ -14,6 +14,7 @@ from pathlib import Path
 from agroia.database import get_db
 from agroia.logging import get_logger
 from fastapi import APIRouter, Depends, File, Header, HTTPException, Request, UploadFile
+from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -21,13 +22,20 @@ from agroia_backend.models.usuario import Usuario
 from agroia_backend.models.vision_diagnostico import VisionDiagnostico
 from agroia_backend.services.acceso import exigir_no_cliente, verificar_acceso_finca
 from agroia_backend.services.auditoria import registrar_auditoria
+from agroia_backend.services.vision_engine import diagnosticar_imagen
 
 logger = get_logger(__name__)
 router = APIRouter(prefix="/api/v1/vision", tags=["vision-plagas"])
 
 TIPOS_IMAGEN = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp"}
 MAX_FOTO_BYTES = 5 * 1024 * 1024  # 5 MB
-FUENTE_MODELO = "modelo_agroia_v1_stub"
+
+
+def _media_root() -> Path:
+    return Path(
+        os.environ.get("AGROIA_MEDIA_DIR")
+        or Path(__file__).resolve().parents[4] / "media"
+    )
 
 
 async def _usuario_por_email(db, email: str | None) -> Usuario | None:
@@ -49,8 +57,9 @@ async def analizar_plaga(
 ):
     """Sube una foto de cultivo/síntoma y registra un diagnóstico.
 
-    Contrato de respuesta definitivo (el stub de inferencia lo respeta):
-    plaga, confianza (0-1), severidad, recomendacion, fuente, imagen_url.
+    Contrato de respuesta: plaga, confianza (0-1), severidad, recomendacion,
+    fuente, imagen_url + estado (preliminary/abstain), modelo_version,
+    evidencia y requiere_revision (sección 24).
     """
     exigir_no_cliente(x_user_role)
     await verificar_acceso_finca(db, x_user_role, x_user_email, finca_id)
@@ -71,26 +80,15 @@ async def analizar_plaga(
             "message": "La foto supera el límite de 5 MB.",
         })
 
-    media_root = Path(
-        os.environ.get("AGROIA_MEDIA_DIR") or Path(__file__).resolve().parents[4] / "media"
-    )
+    media_root = _media_root()
     dir_vision = media_root / "vision"
     dir_vision.mkdir(parents=True, exist_ok=True)
     nombre = f"plaga_{uuid_mod.uuid4().hex[:10]}_{int(time.time())}{ext}"
     (dir_vision / nombre).write_bytes(contenido)
     imagen_url = f"/media/vision/{nombre}"
 
-    # ── Inferencia: degradación graciosa hasta que el modelo v1.0 entrene ──
-    resultado = {
-        "plaga": "No determinada",
-        "confianza": 0.0,
-        "severidad": "desconocida",
-        "recomendacion": (
-            "El modelo propio AgroIA v1.0 está en entrenamiento. "
-            "Envía la imagen a un agrónomo desde el chat para un dictamen experto."
-        ),
-        "fuente": FUENTE_MODELO,
-    }
+    # ── Inferencia: motor AgroVision (modelo → fallback OpenCV → abstención) ──
+    resultado = diagnosticar_imagen(contenido)
 
     usuario = await _usuario_por_email(db, x_user_email)
     diagnostico = VisionDiagnostico(
@@ -107,7 +105,7 @@ async def analizar_plaga(
         accion="vision.analizar_plaga",
         entidad="vision_diagnostico",
         entidad_id=str(diagnostico.id),
-        detalle={"finca_id": finca_id, "imagen_url": imagen_url, "fuente": FUENTE_MODELO},
+        detalle={"finca_id": finca_id, "imagen_url": imagen_url, "fuente": resultado["fuente"]},
         ip=request.client.host if request and request.client else None,
     )
     await db.commit()
@@ -115,18 +113,74 @@ async def analizar_plaga(
         "vision_diagnostico_guardado",
         diagnostico_id=str(diagnostico.id),
         finca_id=finca_id,
-        fuente=FUENTE_MODELO,
+        fuente=resultado["fuente"],
+        estado=resultado["estado"],
     )
     return {
         "diagnostico_id": str(diagnostico.id),
         "finca_id": finca_id,
         "imagen_url": imagen_url,
+        "estado": resultado["estado"],
+        "modelo_version": resultado["modelo_version"],
         "plaga": resultado["plaga"],
         "confianza": resultado["confianza"],
         "severidad": resultado["severidad"],
         "recomendacion": resultado["recomendacion"],
-        "fuente": FUENTE_MODELO,
-        "nota": "Inferencia pendiente del modelo propio AgroIA v1.0 (degradación graciosa).",
+        "evidencia": resultado["evidence"],
+        "requiere_revision": resultado["requiere_revision"],
+        "fuente": resultado["fuente"],
+        "nota": "Diagnóstico visual preliminar (no confirmatorio) — sección 24.",
+    }
+
+
+class DiagnoseRequest(BaseModel):
+    """Contrato de inferencia (sección 18): POST /api/v1/vision/diagnose."""
+
+    image_uri: str = Field(..., description="Ruta relativa /media/... de la imagen.")
+    crop_hint: str | None = Field(None, description="Cultivo sugerido, p.ej. coffee.")
+    location: dict | None = None
+    capture_timestamp: str | None = None
+
+
+@router.post("/diagnose")
+async def diagnose(
+    body: DiagnoseRequest,
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+):
+    """Inferencia del motor AgroVision (modelo → fallback OpenCV → abstención).
+
+    Devuelve el contrato de la sección 18: diagnóstico preliminar, confianza,
+    evidencia visual y estado de seguridad. Sin persistencia (para persistir
+    por finca usar POST /analizar-plaga).
+    """
+    exigir_no_cliente(x_user_role)
+    uri = body.image_uri
+    if not uri.startswith("/media/"):
+        raise HTTPException(status_code=422, detail={
+            "code": "IMAGE_URI_NO_SOPORTADO",
+            "message": "image_uri debe ser una ruta relativa /media/... del repositorio.",
+        })
+    ruta = _media_root() / uri.removeprefix("/media/").lstrip("/")
+    if not ruta.is_file():
+        raise HTTPException(status_code=404, detail={
+            "code": "IMAGEN_NO_ENCONTRADA", "message": "La imagen indicada no existe.",
+        })
+    contenido = ruta.read_bytes()
+    if len(contenido) > MAX_FOTO_BYTES:
+        raise HTTPException(status_code=413, detail={
+            "code": "FOTO_MUY_GRANDE",
+            "message": "La foto supera el límite de 5 MB.",
+        })
+    resultado = diagnosticar_imagen(contenido, crop_hint=body.crop_hint)
+    return {
+        "model_version": resultado["modelo_version"],
+        "status": resultado["estado"],
+        "crop": resultado["crop"],
+        "diagnosis": resultado["diagnosis"],
+        "severity": resultado["severity"],
+        "evidence": [{"type": "texto", "detalle": e} for e in resultado["evidence"]],
+        "recommend_review": resultado["requiere_revision"],
+        "dataset_lineage": [],
     }
 
 
@@ -177,10 +231,9 @@ async def reentrenar_modelo(
 ):
     """Solicita el reentrenamiento del modelo de visión (solo admin).
 
-    Stub de orquestación: registra la solicitud y devuelve el estado del
-    pipeline de entrenamiento (MLflow). El entrenamiento real se ejecuta
-    fuera del ciclo de la API.
-    """
+    Orquestación del pipeline AgroVision (datasets/scripts): registra la
+    solicitud y devuelve el estado. El entrenamiento real corre fuera del
+    ciclo de la API (datasets/scripts/train.py + MLflow)."""
     if (x_user_role or "").lower() not in ("admin", "administrador"):
         raise HTTPException(status_code=403, detail={
             "code": "SOLO_ADMIN",
@@ -189,10 +242,10 @@ async def reentrenar_modelo(
     estado = {
         "estado": "programado",
         "modelo": "agroia-vision-v1",
-        "pipeline": "mlflow",
+        "pipeline": "agrovision",
         "mensaje": (
-            "Reentrenamiento programado. El modelo propio AgroIA v1.0 "
-            "entrenará con las imágenes etiquetadas del dataset."
+            "Reentrenamiento programado. El pipeline AgroVision entrenará "
+            "con los datasets curados (datasets/curated)."
         ),
     }
     await registrar_auditoria(

@@ -1737,18 +1737,23 @@ async function analizarFotoPlaga(e) {
   try {
     const fd = new FormData();
     fd.append('file', foto);
+    // headers(false): NO fijar Content-Type para que el navegador ponga el
+    // boundary multipart (con 'application/json' FastAPI no ve el campo file).
     const res = await fetch(`/api/v1/vision/analizar-plaga?finca_id=${encodeURIComponent(fincaId)}`, {
-      method: 'POST', headers: headers(), body: fd,
+      method: 'POST', headers: headers(false), body: fd,
     });
     const r = await res.json();
     if (!res.ok) {
       const d = r && r.detail;
       throw new Error((d && (d.message || JSON.stringify(d))) || `HTTP ${res.status}`);
     }
+    const estado = r.estado || '';
+    const evidencia = Array.isArray(r.evidencia) ? r.evidencia : [];
     msg.innerHTML = okBanner(
       `Diagnóstico <b>${esc(r.plaga)}</b> (${r.confianza != null ? Math.round(r.confianza * 100) + '%' : '—'}) · ` +
-      `severidad: ${esc(r.severidad)}. ${esc(r.recomendacion)} ` +
-      `<i>(${esc(r.nota || '')})</i>`
+      `severidad: ${esc(r.severidad)}${estado ? ` · estado: <b>${esc(estado)}</b>` : ''}.<br>` +
+      `${esc(r.recomendacion)} <i>(${esc(r.nota || '')})</i>` +
+      (evidencia.length ? `<ul>${evidencia.map(e => `<li>${esc(e)}</li>`).join('')}</ul>` : '')
     );
     document.getElementById('vision-foto').value = '';
     await cargarVision();
