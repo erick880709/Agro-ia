@@ -560,16 +560,21 @@ Doble ruta (ambas montadas): `api/sensor_api.py` (formato firmware, **la que usa
 {
   "device_id": "esp32-npk-001",
   "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
-  "latitude": 20.0, "longitude": 50.0,
-  "ph": 6.1, "conductivity": 620,
-  "nitrogen": 260, "phosphorus": 28, "potassium": 95,
-  "soil_humidity": 31.0, "soil_temperature": 19.5,
-  "humidity": 72.0, "temperature": 21.2,
-  "rssi": -45, "uptime_s": 604800
+  "latitude": 4.578333,
+  "longitude": -75.666944,
+  "humidity": 94.0,
+  "temperature": 22.8,
+  "conductivity": 126.0,
+  "ph": 7.0,
+  "nitrogen": 5.0,
+  "phosphorus": 8.0,
+  "potassium": 20.0,
+  "rssi": -45,
+  "uptime_s": 3600
 }
 ```
 
-- Obligatorio: `device_id`. Opcionales: `finca_id` (UUID, asocia el dispositivo a la finca), `latitude`/`longitude` (punto de muestreo en el lote; se guardan en las columnas internas `pos_x`/`pos_y` y se aceptan también los nombres antiguos `pos_x`/`pos_y` por retrocompatibilidad), `soil_humidity`/`soil_temperature` (humedad/temperatura **del suelo**; se guardan como `humedad`/`temperatura_suelo`), y cualquier variable del `MAPA_CAMPOS`.
+- Obligatorio: `device_id` (string). Opcionales: `finca_id` (UUID, asocia el dispositivo a la finca), `latitude`/`longitude` (**grados decimales WGS84** del punto de toma, tipo float; se guardan en las columnas internas `pos_x`/`pos_y` y se aceptan también los nombres antiguos `pos_x`/`pos_y` por retrocompatibilidad), `humidity` (% HR ambiente, float), `temperature` (°C ambiente, float), `conductivity` (µS/cm, float), `ph`, `nitrogen`/`phosphorus`/`potassium` (ppm, float), `rssi` (dBm, int) y `uptime_s` (s, int). Opcionales de suelo: `soil_humidity`/`soil_temperature` (se guardan como `humedad`/`temperatura_suelo`), y cualquier variable del `MAPA_CAMPOS`.
 - `humidity`/`temperature` se guardan como **ambientales** (DHT22). Este es el formato precargado en el simulador de la pestaña Sensores IoT.
 
 ### 7.2 Procesamiento (paso a paso)

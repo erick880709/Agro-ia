@@ -6,9 +6,18 @@ exacto del firmware (ver log del dispositivo):
     POST /api/sensor
     {
       "device_id": "esp32-npk-001",
-      "humidity": 0.0, "temperature": 26.8, "conductivity": 0.0,
-      "ph": 8.6, "nitrogen": 0.0, "phosphorus": 0.0, "potassium": 0.0,
-      "rssi": -41, "uptime_s": 64
+      "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
+      "latitude": 4.578333,
+      "longitude": -75.666944,
+      "humidity": 94.0,
+      "temperature": 22.8,
+      "conductivity": 126.0,
+      "ph": 7.0,
+      "nitrogen": 5.0,
+      "phosphorus": 8.0,
+      "potassium": 20.0,
+      "rssi": -45,
+      "uptime_s": 3600
     }
 
 La trama se normaliza (µS/cm → dS/m, variables en español canónicas),
@@ -53,10 +62,10 @@ class SensorFrame(BaseModel, extra="allow"):
     nitrogen: float | None = Field(None, description="ppm")
     phosphorus: float | None = Field(None, description="ppm")
     potassium: float | None = Field(None, description="ppm")
-    rssi: int | None = Field(None, description="dBm de la señal")
-    uptime_s: int | None = Field(None, description="Segundos desde encendido")
-    latitude: float | None = Field(None, description="Latitud X del punto de toma en el lote (metros, muestreo en cuadrícula)")
-    longitude: float | None = Field(None, description="Longitud Y del punto de toma en el lote (metros, muestreo en cuadrícula)")
+    rssi: int | float | None = Field(None, description="dBm de la señal del enlace de radio")
+    uptime_s: int | float | None = Field(None, description="Segundos desde encendido del sensor")
+    latitude: float | None = Field(None, description="Latitud WGS84 en grados decimales del punto de toma (ej. 4.578333)")
+    longitude: float | None = Field(None, description="Longitud WGS84 en grados decimales del punto de toma (ej. -75.666944)")
 
 
 @router.post("/sensor", status_code=202)

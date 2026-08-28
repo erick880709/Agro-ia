@@ -379,24 +379,22 @@ async function arrancarAplicacion() {
   renderChat();
   document.getElementById('sim-enviar').addEventListener('click', enviarTramaSimulada);
   // Trama de ejemplo con el formato REAL del firmware (POST /api/sensor),
-  // incluyendo finca_id, posición de la toma (latitude/longitude) y
-  // humedad/temperatura de suelo.
+  // incluyendo finca_id y posición geográfica del punto de toma
+  // (latitude/longitude en grados decimales WGS84).
   document.getElementById('sim-trama').value = JSON.stringify({
     device_id: 'esp32-npk-001',
     finca_id: '8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936',
-    latitude: 20.0,
-    longitude: 50.0,
-    ph: 6.1,
-    conductivity: 620,
-    nitrogen: 260,
-    phosphorus: 28,
-    potassium: 95,
-    soil_humidity: 31.0,
-    soil_temperature: 19.5,
-    humidity: 72.0,
-    temperature: 21.2,
+    latitude: 4.578333,
+    longitude: -75.666944,
+    humidity: 94.0,
+    temperature: 22.8,
+    conductivity: 126.0,
+    ph: 7.0,
+    nitrogen: 5.0,
+    phosphorus: 8.0,
+    potassium: 20.0,
     rssi: -45,
-    uptime_s: 604800,
+    uptime_s: 3600,
   }, null, 2);
   document.getElementById('catalogo-search').addEventListener('input', e => renderCatalogo(e.target.value));
 

@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787878137.7594795,
-    "ast_hash": "3bac5590190adbb00d10b1cdcdbbadbb",
+    "mtime": 1787879417.577878,
+    "ast_hash": "25db4895a2c52a3ca6d925e0cc941b8f",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787878084.783152,
-    "ast_hash": "11bb5f762548a3b23b18da773e79a0a5",
+    "mtime": 1787878786.1211762,
+    "ast_hash": "e9c098304f747356a47958fd71480cce",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787878089.9936776,
-    "ast_hash": "061713f373a9f764daccf7b9e5972094",
+    "mtime": 1787878766.0845523,
+    "ast_hash": "a4b2d1836039f0961918d89f0ccd13ac",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4830,8 +4830,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1787878137.7006812,
-    "ast_hash": "da7ff29d051c97238a0187b7de6ac60d",
+    "mtime": 1787879417.5820599,
+    "ast_hash": "5f99c43df3de076d02f4967c274f5ecb",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {
@@ -4855,8 +4855,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Pantallas_AgroIA.html": {
-    "mtime": 1787878137.738428,
-    "ast_hash": "a177ef55ecd07a4c503a48c4dc49bf2b",
+    "mtime": 1787879417.583092,
+    "ast_hash": "c2759daafe29181a3ff9c5bf0c41ac34",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/economia.py": {
@@ -5022,6 +5022,171 @@
   "apps/backend/alembic/versions/022_imagenes_y_validacion_rendimiento.py": {
     "mtime": 1787875515.4516187,
     "ast_hash": "6e0b81ac15ada1e09dc6a4175c7ecc1c",
+    "semantic_hash": ""
+  },
+  "scripts/gen_ayuda_gifs.py": {
+    "mtime": 1787879156.5843737,
+    "ast_hash": "d3cdd2e3dd2f1cda1599094ad06c116e",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/ayuda-admin.html": {
+    "mtime": 1787879272.6470866,
+    "ast_hash": "b8a66a1396a2716ffea95ddaf622feb3",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/ayuda-agronomo.html": {
+    "mtime": 1787879319.9660227,
+    "ast_hash": "43d8b50395f0d7194cc2e2aabac29f7d",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/ayuda-cliente.html": {
+    "mtime": 1787879345.8338912,
+    "ast_hash": "cdf4ad0211b80cca64e14343676bf2ac",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/admin-menu.png": {
+    "mtime": 1787879000.3827157,
+    "ast_hash": "fec2c1e0712c7c766beb951760115c95",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/agro-historial.png": {
+    "mtime": 1787879020.5961876,
+    "ast_hash": "964c3f78fbd69cff51f5288ac0fcf032",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/agro-inicio.png": {
+    "mtime": 1787879018.5728874,
+    "ast_hash": "467c70dd5b52c7f19f5836204ab9ab9e",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/agro-recomendaciones.png": {
+    "mtime": 1787879019.5665593,
+    "ast_hash": "d72a8012119825f744b4bfc3a105066d",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/auditoria.png": {
+    "mtime": 1787879007.0284266,
+    "ast_hash": "24c506d381cfe8b02441c34e4cdfe3a5",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/carga.png": {
+    "mtime": 1787878872.3965857,
+    "ast_hash": "d36e9f8953f068e549f4195968e70e12",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/catalogo.png": {
+    "mtime": 1787878957.7796588,
+    "ast_hash": "d154bb3aa82bde0c346dc86e611cf66d",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/chat.png": {
+    "mtime": 1787878956.4139369,
+    "ast_hash": "9031a7bb1abf4cdbb175f662bbc78fcd",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/cliente-catalogo.png": {
+    "mtime": 1787879026.0947523,
+    "ast_hash": "5f0cfe731a024efae018f7d1ed482cf8",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/cliente-historial.png": {
+    "mtime": 1787879025.0650582,
+    "ast_hash": "43f9f74a5b97807b26f345f54fd0d935",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/cliente-inicio.png": {
+    "mtime": 1787879024.0861135,
+    "ast_hash": "987cf2746f53b1ff6849685a37b78f50",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/fincas.png": {
+    "mtime": 1787879003.3964696,
+    "ast_hash": "399b77b809dcf759eab6d49c3d56b2a4",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/gif-analisis.gif": {
+    "mtime": 1787879162.3334687,
+    "ast_hash": "e0d8d96221a98040593c43d541801168",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/gif-ayuda.gif": {
+    "mtime": 1787879164.5706592,
+    "ast_hash": "d5d00effd07a3fc57bc9effb94d254ec",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/gif-login.gif": {
+    "mtime": 1787879156.4538999,
+    "ast_hash": "d806a74cab68d84437da54d9f08c4fbb",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/gif-precios.gif": {
+    "mtime": 1787879163.5547044,
+    "ast_hash": "a2ffa5ee07e3a8c25528cc1c29bea36c",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/gif-registro-finca.gif": {
+    "mtime": 1787879159.201871,
+    "ast_hash": "2f5ed4e1aa9bed3bc0ad03c93161053c",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/historial.png": {
+    "mtime": 1787878923.5685189,
+    "ast_hash": "76cee643656f44a5406916dc26f48d08",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/inicio.png": {
+    "mtime": 1787878862.469744,
+    "ast_hash": "d4d390d44b6e7bbc3ca4699c01383a2f",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/insumos.png": {
+    "mtime": 1787879005.810081,
+    "ast_hash": "ae99276c9bd4b344d156689228767cc3",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/login.png": {
+    "mtime": 1787878859.3064141,
+    "ast_hash": "2b585716331b6634a505dd8b9b3ef513",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/recomendaciones-resultado.png": {
+    "mtime": 1787878901.2708268,
+    "ast_hash": "a557fa233b8418f6d11f1fecbc08e172",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/recomendaciones.png": {
+    "mtime": 1787878873.7411337,
+    "ast_hash": "8ce8224c71bbc2ba67515e29811aebf5",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/registrar-finca-1.png": {
+    "mtime": 1787879001.3489385,
+    "ast_hash": "ae53c9ad36960ce9f42a664a28795da9",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/registrar-finca-2.png": {
+    "mtime": 1787879001.7935195,
+    "ast_hash": "95e663b1c9dc90d56ca285b4ddc1daa1",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/registrar-finca-3.png": {
+    "mtime": 1787879002.2493303,
+    "ast_hash": "efd9b76d9aeb5a6878f3c78e2852a5fc",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/reportes.png": {
+    "mtime": 1787878956.2310686,
+    "ast_hash": "4d60d9303480c702d51b3148133e8f12",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/sensores.png": {
+    "mtime": 1787878871.054325,
+    "ast_hash": "f39e01a2a8a421b3f4c82da671282bed",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/media-ayuda/usuarios.png": {
+    "mtime": 1787879004.5844798,
+    "ast_hash": "5d57eabbae3ca0916fd9e79747ca239a",
     "semantic_hash": ""
   }
 }

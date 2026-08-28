@@ -131,11 +131,11 @@
           Conexión real de los sensores: <code>POST /api/sensor</code>. El firmware envía un JSON con
           <code>device_id</code> obligatorio y estos campos: <code>ph</code> (0–14), <code>nitrogen</code>,
           <code>phosphorus</code> y <code>potassium</code> (ppm), <code>conductivity</code> (µS/cm),
-          <code>humidity</code> (% HR ambiente, DHT22) y <code>temperature</code> (°C). Si el sensor mide suelo,
-          envía <code>soil_humidity</code> y <code>soil_temperature</code> (se guardan como humedad y temperatura
-          del suelo). <code>finca_id</code> (UUID) asocia el dispositivo a tu finca, y <code>latitude</code>/<code>longitude</code>
-          registran el punto de muestreo para el mapa de calor. Si el <code>device_id</code> no está registrado,
-          el API lo auto-registra. Pega una trama y pruébala:
+          <code>humidity</code> (% HR ambiente, DHT22), <code>temperature</code> (°C ambiente),
+          <code>rssi</code> (dBm) y <code>uptime_s</code> (s). <code>finca_id</code> (UUID) asocia el dispositivo
+          a tu finca, y <code>latitude</code>/<code>longitude</code> (grados decimales WGS84) registran el punto
+          de muestreo para el mapa de calor. Si el <code>device_id</code> no está registrado, el API lo
+          auto-registra. Pega una trama y pruébala:
         </p>
         <textarea id="sim-trama" class="sim-trama" rows="12" spellcheck="false"></textarea>
         <button class="btn" id="sim-enviar">📡 Enviar trama</button>

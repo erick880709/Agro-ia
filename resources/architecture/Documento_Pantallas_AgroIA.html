@@ -250,11 +250,12 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   <p><b>Qué muestra:</b></p>
   <ul>
     <li><b>🔗 API de sensores — simulador de trama</b>: textarea precargado con el formato real del
-    firmware (<code>device_id</code>, <code>finca_id</code>, <code>ph</code>, <code>nitrogen</code>/
-    <code>phosphorus</code>/<code>potassium</code>, <code>conductivity</code>, <code>soil_humidity</code>/
-    <code>soil_temperature</code>, <code>humidity</code>/<code>temperature</code> DHT22, <code>rssi</code>,
-    <code>uptime_s</code>, <code>latitude</code>/<code>longitude</code>) y botón <b>«📡 Enviar trama»</b> que llama a
-    <code>POST /api/sensor</code> y muestra el resultado (dispositivo, finca asociada, variables recibidas, advertencias).</li>
+    firmware (<code>device_id</code>, <code>finca_id</code>, <code>latitude</code>/<code>longitude</code>
+    en grados decimales WGS84, <code>humidity</code> (% HR) / <code>temperature</code> (°C) ambiente,
+    <code>conductivity</code> (µS/cm), <code>ph</code>, <code>nitrogen</code>/
+    <code>phosphorus</code>/<code>potassium</code> (ppm), <code>rssi</code>, <code>uptime_s</code>) y botón
+    <b>«📡 Enviar trama»</b> que llama a <code>POST /api/sensor</code> y muestra el resultado (dispositivo,
+    finca asociada, variables recibidas, advertencias).</li>
     <li>Tabla con las últimas lecturas (pH, N, P, K, CE, humedad, temperatura, fecha) por finca,
     indicador de actualización y estado por dispositivo (<code>online</code> &lt; 12 h ·
     <code>datos_desactualizados</code> &lt; 24 h · <code>offline</code>).</li>
@@ -263,7 +264,8 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   <p><b>Servicios que llama:</b> <code>GET /api/v1/lecturas/{finca_id}?limite=10</code> ·
   <code>GET /api/v1/sensores/{finca_id}/status</code> · <code>POST /api/sensor</code>.</p>
   <p><b>Cómo llegan los datos:</b> el sensor envía tramas a <code>POST /api/sensor</code>; el backend
-  normaliza (µS/cm → dS/m, <code>soil_humidity→humedad</code>, <code>soil_temperature→temperatura_suelo</code>),
+  normaliza (µS/cm → dS/m, <code>humidity→humedad_ambiental</code>, <code>temperature→temperatura_ambiental</code>;
+  si vienen <code>soil_humidity→humedad</code>, <code>soil_temperature→temperatura_suelo</code>),
   asocia la finca (trama → dispositivo → auto-registro) y persiste en <code>sensor_readings</code>.
   Si el <code>device_id</code> no está registrado, se auto-registra.</p>
   <p><span class="siguiente">Siguiente → P5 Recomendaciones (o P4 si el sensor perdió datos).</span></p>

@@ -136,7 +136,10 @@ def _build_alertas(readings: list, ultima_rec) -> list[dict]:
         alertas.append({"tipo": "warning", "mensaje": "No hay datos de sensor en los últimos 30 días."})
     else:
         latest = readings[-1]
-        if latest.ts and (datetime.utcnow() - latest.ts).total_seconds() > 86400:
+        # `ts` puede venir con o sin zona horaria según el driver; se normaliza
+        # a UTC naive para restar contra `datetime.utcnow()`.
+        ts = latest.ts.replace(tzinfo=None) if latest.ts and latest.ts.tzinfo else latest.ts
+        if ts and (datetime.utcnow() - ts).total_seconds() > 86400:
             alertas.append({"tipo": "warning", "mensaje": "Datos desactualizados (>24h). Verifique los sensores."})
 
     # Alerta: baja confianza

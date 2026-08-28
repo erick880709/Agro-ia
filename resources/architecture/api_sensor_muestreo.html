@@ -98,25 +98,24 @@ refleja en el mapa de calor del reporte.</p>
 </tbody>
 </table>
 <p>Cada trama representa <strong>una toma de muestra en un punto del lote</strong>. Si se
-incluyen las coordenadas <code>latitude</code> y <code>longitude</code> (posición del punto dentro del
-terreno), la plataforma pinta el <strong>mapa de calor por parámetro</strong> en el reporte.</p>
+incluyen las coordenadas <code>latitude</code> y <code>longitude</code> (posición geográfica WGS84
+del punto de toma, en grados decimales), la plataforma pinta el <strong>mapa de
+calor por parámetro</strong> en el reporte.</p>
 <h3 id="body-de-prueba-copie-y-pegue">🧪 Body de prueba — copie y pegue</h3>
 <pre><code class="language-json">{
   &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
   &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
-  &quot;latitude&quot;: 20.0,
-  &quot;longitude&quot;: 50.0,
-  &quot;ph&quot;: 6.1,
-  &quot;conductivity&quot;: 620,
-  &quot;nitrogen&quot;: 260,
-  &quot;phosphorus&quot;: 28,
-  &quot;potassium&quot;: 95,
-  &quot;soil_humidity&quot;: 31.0,
-  &quot;soil_temperature&quot;: 19.5,
-  &quot;humidity&quot;: 72.0,
-  &quot;temperature&quot;: 21.2,
+  &quot;latitude&quot;: 4.578333,
+  &quot;longitude&quot;: -75.666944,
+  &quot;humidity&quot;: 94.0,
+  &quot;temperature&quot;: 22.8,
+  &quot;conductivity&quot;: 126.0,
+  &quot;ph&quot;: 7.0,
+  &quot;nitrogen&quot;: 5.0,
+  &quot;phosphorus&quot;: 8.0,
+  &quot;potassium&quot;: 20.0,
   &quot;rssi&quot;: -45,
-  &quot;uptime_s&quot;: 604800
+  &quot;uptime_s&quot;: 3600
 }
 </code></pre>
 <blockquote>
@@ -128,10 +127,10 @@ plataforma (pestaña Fincas → botón «📋 Copiar» en la tarjeta de la finca
 <p><strong>Prueba rápida — bash (macOS / Linux):</strong></p>
 <pre><code class="language-bash">curl -X POST https://agroia-backend.onrender.com/api/sensor \
   -H &quot;Content-Type: application/json&quot; \
-  -d '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;latitude&quot;:20.0,&quot;longitude&quot;:50.0,&quot;ph&quot;:6.1,&quot;conductivity&quot;:620,&quot;nitrogen&quot;:260,&quot;phosphorus&quot;:28,&quot;potassium&quot;:95,&quot;soil_humidity&quot;:31.0,&quot;soil_temperature&quot;:19.5,&quot;humidity&quot;:72.0,&quot;temperature&quot;:21.2,&quot;rssi&quot;:-45,&quot;uptime_s&quot;:604800}'
+  -d '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;latitude&quot;:4.578333,&quot;longitude&quot;:-75.666944,&quot;humidity&quot;:94.0,&quot;temperature&quot;:22.8,&quot;conductivity&quot;:126.0,&quot;ph&quot;:7.0,&quot;nitrogen&quot;:5.0,&quot;phosphorus&quot;:8.0,&quot;potassium&quot;:20.0,&quot;rssi&quot;:-45,&quot;uptime_s&quot;:3600}'
 </code></pre>
 <p><strong>Prueba rápida — PowerShell (Windows):</strong></p>
-<pre><code class="language-powershell">$body = '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;latitude&quot;:20.0,&quot;longitude&quot;:50.0,&quot;ph&quot;:6.1,&quot;conductivity&quot;:620,&quot;nitrogen&quot;:260,&quot;phosphorus&quot;:28,&quot;potassium&quot;:95,&quot;soil_humidity&quot;:31.0,&quot;soil_temperature&quot;:19.5,&quot;humidity&quot;:72.0,&quot;temperature&quot;:21.2,&quot;rssi&quot;:-45,&quot;uptime_s&quot;:604800}'
+<pre><code class="language-powershell">$body = '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;latitude&quot;:4.578333,&quot;longitude&quot;:-75.666944,&quot;humidity&quot;:94.0,&quot;temperature&quot;:22.8,&quot;conductivity&quot;:126.0,&quot;ph&quot;:7.0,&quot;nitrogen&quot;:5.0,&quot;phosphorus&quot;:8.0,&quot;potassium&quot;:20.0,&quot;rssi&quot;:-45,&quot;uptime_s&quot;:3600}'
 Invoke-RestMethod -Uri &quot;https://agroia-backend.onrender.com/api/sensor&quot; -Method Post -ContentType &quot;application/json&quot; -Body $body
 </code></pre>
 <p><strong>Respuesta esperada:</strong></p>
@@ -140,7 +139,7 @@ Invoke-RestMethod -Uri &quot;https://agroia-backend.onrender.com/api/sensor&quot
   &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
   &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
   &quot;auto_registrado&quot;: false,
-  &quot;variables_recibidas&quot;: [&quot;conductividad_electrica&quot;, &quot;fosforo&quot;, &quot;humedad&quot;, &quot;humedad_ambiental&quot;, &quot;nitrogeno&quot;, &quot;ph&quot;, &quot;potasio&quot;, &quot;temperatura_ambiental&quot;, &quot;temperatura_suelo&quot;],
+  &quot;variables_recibidas&quot;: [&quot;conductividad_electrica&quot;, &quot;fosforo&quot;, &quot;humedad_ambiental&quot;, &quot;nitrogeno&quot;, &quot;ph&quot;, &quot;potasio&quot;, &quot;temperatura_ambiental&quot;],
   &quot;advertencias&quot;: [&quot;npk_sin_calibrar&quot;],
   &quot;recibida_en&quot;: &quot;2026-08-25T22:00:00+00:00&quot;
 }
@@ -158,17 +157,17 @@ Invoke-RestMethod -Uri &quot;https://agroia-backend.onrender.com/api/sensor&quot
 <pre><code class="language-json">{
   &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
   &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
-  &quot;latitude&quot;: 20.0,
-  &quot;longitude&quot;: 50.0,
-  &quot;humidity&quot;: 72.0,
-  &quot;temperature&quot;: 21.2,
-  &quot;conductivity&quot;: 620,
-  &quot;ph&quot;: 6.1,
-  &quot;nitrogen&quot;: 260,
-  &quot;phosphorus&quot;: 28,
-  &quot;potassium&quot;: 95,
+  &quot;latitude&quot;: 4.578333,
+  &quot;longitude&quot;: -75.666944,
+  &quot;humidity&quot;: 94.0,
+  &quot;temperature&quot;: 22.8,
+  &quot;conductivity&quot;: 126.0,
+  &quot;ph&quot;: 7.0,
+  &quot;nitrogen&quot;: 5.0,
+  &quot;phosphorus&quot;: 8.0,
+  &quot;potassium&quot;: 20.0,
   &quot;rssi&quot;: -45,
-  &quot;uptime_s&quot;: 604800
+  &quot;uptime_s&quot;: 3600
 }
 </code></pre>
 <h3 id="a-que-finca-corresponde-la-trama-resolucion">¿A qué finca corresponde la trama? (resolución)</h3>
@@ -219,15 +218,15 @@ botón «Copiar». También aparece en la tarjeta de cada finca. Use ese ID como
 <td><code>latitude</code></td>
 <td>float</td>
 <td>❌ (necesario para el mapa de calor)</td>
-<td>metros</td>
-<td>Posición X del punto de toma dentro del lote, medida desde una esquina (se acepta también <code>pos_x</code>)</td>
+<td>grados decimales (WGS84)</td>
+<td>Latitud geográfica del punto de toma (ej. <code>4.578333</code>; se acepta también <code>pos_x</code>)</td>
 </tr>
 <tr>
 <td><code>longitude</code></td>
 <td>float</td>
 <td>❌ (necesario para el mapa de calor)</td>
-<td>metros</td>
-<td>Posición Y del punto de toma dentro del lote (se acepta también <code>pos_y</code>)</td>
+<td>grados decimales (WGS84)</td>
+<td>Longitud geográfica del punto de toma (ej. <code>-75.666944</code>; se acepta también <code>pos_y</code>)</td>
 </tr>
 <tr>
 <td><code>ph</code></td>
@@ -321,11 +320,11 @@ motor de recomendaciones.</p>
   -d '{
     &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
     &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
-    &quot;latitude&quot;: 20.0, &quot;longitude&quot;: 50.0,
-    &quot;ph&quot;: 6.1, &quot;conductivity&quot;: 620,
-    &quot;nitrogen&quot;: 260, &quot;phosphorus&quot;: 28, &quot;potassium&quot;: 95,
-    &quot;humidity&quot;: 72.0, &quot;temperature&quot;: 21.2,
-    &quot;rssi&quot;: -45, &quot;uptime_s&quot;: 604800
+    &quot;latitude&quot;: 4.578333, &quot;longitude&quot;: -75.666944,
+    &quot;humidity&quot;: 94.0, &quot;temperature&quot;: 22.8,
+    &quot;conductivity&quot;: 126.0, &quot;ph&quot;: 7.0,
+    &quot;nitrogen&quot;: 5.0, &quot;phosphorus&quot;: 8.0, &quot;potassium&quot;: 20.0,
+    &quot;rssi&quot;: -45, &quot;uptime_s&quot;: 3600
   }'
 </code></pre>
 <h3 id="esp32-arduino-esp-idf-referencia">ESP32 (Arduino / ESP-IDF) — referencia</h3>
@@ -338,7 +337,7 @@ const char* API_URL = &quot;https://agroia-backend.onrender.com/api/sensor&quot;
 const char* DEVICE_ID = &quot;esp32-npk-001&quot;;
 const char* FINCA_ID  = &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;; // ID de la finca
 
-void enviarMedicion(float posX, float posY, float ph, float ceUsCm,
+void enviarMedicion(float lat, float lng, float ph, float ceUsCm,
                     float nPpm, float pPpm, float kPpm,
                     float hrAmb, float tempAmb, int rssi) {
   if (WiFi.status() != WL_CONNECTED) return;
@@ -346,8 +345,8 @@ void enviarMedicion(float posX, float posY, float ph, float ceUsCm,
   StaticJsonDocument&lt;512&gt; doc;
   doc[&quot;device_id&quot;]  = DEVICE_ID;
   doc[&quot;finca_id&quot;]   = FINCA_ID;   // finca a la que corresponde
-  doc[&quot;latitude&quot;]  = posX;      // metros dentro del lote
-  doc[&quot;longitude&quot;] = posY;
+  doc[&quot;latitude&quot;]  = lat;       // grados decimales WGS84 (GPS del punto de toma)
+  doc[&quot;longitude&quot;] = lng;
   doc[&quot;ph&quot;]         = ph;
   doc[&quot;conductivity&quot;] = ceUsCm;  // µS/cm
   doc[&quot;nitrogen&quot;]   = nPpm;      // ppm
@@ -374,13 +373,16 @@ void enviarMedicion(float posX, float posY, float ph, float ceUsCm,
 <p>Para que el mapa de calor sea representativo:</p>
 <ol>
 <li>Divida el lote como una <strong>matriz</strong> (ej. 3×3, 4×3 según el tamaño).</li>
-<li>Defina una esquina del lote como origen <code>(0, 0)</code>.</li>
-<li>Mida las coordenadas de cada punto en <strong>metros</strong> (<code>latitude</code>, <code>longitude</code>).</li>
+<li>En cada punto de la matriz, registre las coordenadas <strong>GPS</strong> (grados
+   decimales WGS84) con el móvil o un receptor GPS/RTK.</li>
+<li>Envíe una trama por punto con ese <code>latitude</code>/<code>longitude</code> (se aceptan
+   también <code>pos_x</code>/<code>pos_y</code> si el firmware maneja metros locales).</li>
 <li>En cada punto tome la muestra y envíe una trama con esas coordenadas.</li>
 <li>Envíe todas las tramas en una sola jornada de muestreo (mismo día) para que
    el reporte compare puntos comparables.</li>
 </ol>
-<p>Ejemplo de cuadrícula 3×3 en un lote de 250 × 100 m:</p>
+<p>Ejemplo de cuadrícula 3×3 en un lote de 250 × 100 m (cada punto lleva sus
+coordenadas GPS reales, ej. lat 4.5783, lng -75.6669):</p>
 <pre><code>(0,100) ─────────────── (250,100)
   │  x=20   x=125  x=230   │
   │ y=90   y=90   y=90     │
