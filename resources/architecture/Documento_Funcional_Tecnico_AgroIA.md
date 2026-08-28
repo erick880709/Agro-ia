@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 3.0 · **Fecha:** 2026-08-28
+**Versión:** 3.1 · **Fecha:** 2026-08-28
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -124,6 +124,8 @@ flowchart LR
 | `services/normalizacion_iot.py` | Normaliza tramas del firmware al esquema canónico. |
 | `services/geografia.py` | Catálogo departamentos/municipios con centroides, cadena de validación de fincas y cálculo de área/perímetro de polígonos. |
 | `services/puente_iot.py` | Puente de import del consumidor IoT (portable dev/contenedor). |
+| `services/vision_engine.py` | Motor AgroVision: orquesta modelo empaquetado → fallback → abstención y mapea el contrato público de inferencia. |
+| `services/vision_fallback.py` | Fallback de visión tradicional (OpenCV/numpy): quality gate, segmentación HSV, clorosis/necrosis, severidad y abstención explicada. |
 | `models/*.py` | Modelos SQLAlchemy (42 tablas en schema `agroia`). |
 | `alembic/versions/` | Migraciones 001 → 041. |
 
@@ -635,13 +637,16 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 
 **Problema que resuelve**: identificar plagas/enfermedades desde una foto tomada en campo.
 
-- **Tabla `vision_diagnosticos`** (migración 041): finca, usuario, `imagen_url`, `resultado_json`, fecha.
+- **Tabla `vision_diagnosticos`** (migración 041): finca, usuario, `imagen_url`, `resultado_json` (incluye `estado`, `modelo_version`, `evidence` y `requiere_revision`), fecha.
 - **Endpoints** (`api/vision.py`):
-  - `POST /api/v1/vision/analizar-plaga?finca_id=` (multipart `file`, JPEG/PNG/WebP máx 5 MB): guarda la imagen en `media/vision/` (servida en `/media/vision/...`), registra el diagnóstico y responde con el **contrato definitivo** `{plaga, confianza, severidad, recomendacion, fuente, imagen_url}`.
+  - `POST /api/v1/vision/analizar-plaga?finca_id=` (multipart `file`, JPEG/PNG/WebP máx 5 MB): guarda la imagen en `media/vision/` (servida en `/media/vision/...`), registra el diagnóstico y responde `{diagnostico_id, finca_id, imagen_url, estado, modelo_version, plaga, confianza, severidad, recomendacion, evidencia, requiere_revision, fuente, nota}`.
+  - `POST /api/v1/vision/diagnose` (JSON `{image_uri, crop_hint?, location?, capture_timestamp?}`): **contrato de inferencia** (sección 18 de la especificación AgroVision) `{model_version, status, crop, diagnosis, severity, evidence, recommend_review, dataset_lineage}`; sin persistencia, para consumidores de API.
   - `GET /api/v1/vision/diagnosticos/{finca_id}` — historial (acceso por rol a la finca).
-  - `POST /api/v1/vision/admin/reentrenar` — solicitud de reentrenamiento (solo Admin, stub de orquestación MLflow).
-- **Degradación graciosa**: el modelo propio **AgroIA v1.0 está en entrenamiento**; mientras tanto la inferencia responde `fuente: "modelo_agroia_v1_stub"` con plaga «No determinada» y recomendación de dictamen experto vía chat, de modo que el flujo completo (carga → persistencia → historial) queda operativo desde ya.
-- **UI**: pestaña «🔬 Visión plagas» (Admin/Agrónomo/Extensionista): selector de finca, carga de foto e historial con tabla de resultados.
+  - `POST /api/v1/vision/admin/reentrenar` — solicitud de reentrenamiento (solo Admin; orquesta el pipeline `datasets/scripts/train.py`).
+- **Motor AgroVision** (`services/vision_engine.py` + `services/vision_fallback.py`): jerarquía **modelo empaquetado → fallback de visión tradicional (OpenCV/numpy) → abstención explicada** (sección 24 de `context/contextoVision/especi.md`). El fallback ejecuta **quality gate** (tamaño/nitidez/exposición/presencia de hoja), segmentación HSV del follaje, medición de clorosis/necrosis/textura y área afectada, estima severidad (`none…critical`) y emite diagnóstico compatible por cultivo (`coffee_rust_compatible`, `cocoa_black_pod_compatible`, `sin_sintomas_visibles`, …). Todo resultado del fallback es **preliminar y no confirmatorio** (`requiere_review=true`); con confianza bajo el umbral (0.6) o foto inválida responde `estado=abstain` con motivo. `fuente: "agrovision_opencv_v1"`, `modelo_version: "agrovision-fallback-1.0.0"`.
+- **Decodificación**: `pillow` (dependencia del backend) decodifica JPEG/PNG/WebP; `cv2` es opcional. Sin decodificador, el motor degrada a abstención explicada.
+- **Pipeline de datos (`datasets/`)**: ingesta/curación/entrenamiento declarativo para entrenar el modelo propio (manifest DS01–DS22, `class_map.yaml`, `license_policy.yaml` con commercial-use gate; scripts `discover → download → inspect → dedup → normalize → convert_annotations → split → train → evaluate → package_model` + CLI `fallback_opencv.py`). Ver `datasets/VISION.md`.
+- **UI**: pestaña «🔬 Visión plagas» (Admin/Agrónomo/Extensionista): selector de finca, carga de foto, banner con estado/evidencia del diagnóstico e historial con tabla de resultados.
 
 ---
 
@@ -1026,7 +1031,7 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 - **Antagonismos (038)**: reglas `tipo='antagonismo'` separadas de las primarias; hallazgos `INTERACCION` secundarios («AJUSTE NUTRICIONAL») en diagnóstico y reporte; 4 interacciones (K-Ca-Mg, P-Zn, N-maduración, pH ácido+Mg).
 - **Precios de cosecha (039)**: upsert por cultivo+departamento (Admin); `ingreso_bruto_cop_ha`, `utilidad_estimada_cop_ha` y `score_ponderado` en las sugerencias con badge «Más rentable».
 - **PWA offline (040)**: `manifest.json` + `sw.js` (network-first para el shell), cola IndexedDB con `idempotency_key`, banner de pendientes, reintento al volver la señal; `GET /api/v1/sync/estado`, `POST /api/v1/sync/sensor-readings` y `POST /api/v1/sync/labores` idempotentes (tabla `sync_registro`).
-- **Visión plagas (041)**: subida de foto → diagnóstico con contrato definitivo y **degradación graciosa** (`modelo_agroia_v1_stub`) mientras entrena el modelo propio v1.0; historial por finca y reentrenamiento admin.
+- **Visión plagas (041)**: subida de foto → **motor AgroVision** (modelo → fallback OpenCV → abstención): diagnóstico **preliminar no confirmatorio** con evidencia (clorosis/necrosis/área afectada) y `requiere_review`; contrato de inferencia `POST /api/v1/vision/diagnose`; historial por finca y reentrenamiento admin.
 
 ---
 - **Chat**: job diario borra `imagen_base64` con más de 90 días (`POST /api/v1/admin/chat/limpiar-imagenes` para disparo manual).
@@ -1074,7 +1079,7 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 | `precios_cosecha` | **Precio promedio por cultivo y departamento** (COP/kg, rendimiento t/ha, fuente) — alimenta utilidad estimada de las sugerencias |
 | `token_blacklist` / `refresh_tokens` | Revocación JWT por `jti` y hashes SHA-256 de refresh tokens activos |
 | `sync_registro` | **Idempotencia del sync offline** (idempotency_key, tipo, usuario, resultado) |
-| `vision_diagnosticos` | **Diagnósticos de visión** (finca, usuario, imagen_url, resultado_json) |
+| `vision_diagnosticos` | **Diagnósticos de visión** (finca, usuario, imagen_url, resultado_json con estado/modelo_version/evidencia/requiere_revision) |
 
 ### 12.2 Enums (12 tipos en schema `agroia`)
 
@@ -1099,7 +1104,7 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 - **Dockerfile** (`apps/backend/`): instala con Poetry, `PYTHONPATH` incluye `/app/apps/iot`, y en `CMD` ejecuta **`alembic upgrade head` y luego uvicorn en `$PORT`**.
 - **Render** (Free): web service `agroia-backend` con auto-deploy en cada push a `master`; se duerme tras inactividad (cold start ~1 min). Health check `/api/v1/health`.
 - **Neon**: Postgres Free con SSL; conexión normalizada por `database.py`.
-- **CI (GitHub Actions)**: `ruff` (lint) → `pytest` (migraciones + tests) → build Docker.
+- **CI (GitHub Actions)**: `ruff` (lint) → `pytest` (migraciones + seeds base `load_seeds`/`seed_cloud` + tests, con `PYTHONPATH` raíz para el puente IoT) → build Docker.
 - **Frontend**: servido por el mismo backend en `/` (StaticFiles). Un middleware sirve los estáticos con `Cache-Control: no-cache, no-store, must-revalidate` y los assets se versionan en `index.html` (`?v=…`) para evitar caché mixta tras cada deploy (HTML nuevo con CSS/JS viejos).
 
 ---
@@ -1108,7 +1113,7 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 
 - **Autenticación**: JWT con access token (8 h) y refresh rotatorio (30 días), revocación por blacklist, anti-suplantación de cabeceras y refresh-reuse que revoca la cadena. Modo legado por cabeceras solo cuando no hay Bearer. **En producción configurar `JWT_SECRET`** (variable de entorno en Render) antes del primer despliegue.
 - **ML en sombra**: no decide; la fuente de verdad son las reglas. La promoción a PRODUCTION exige concordancia ≥ 0.85 con datos reales.
-- **Visión plagas**: el modelo propio AgroIA v1.0 está en entrenamiento; el endpoint entrega degradación graciosa (contrato definitivo, inferencia stub) — sin dependencias pesadas (torch/tf) en el servicio web.
+- **Visión plagas**: el modelo propio entrena con el pipeline de `datasets/`; mientras tanto el motor AgroVision entrega diagnóstico visual **preliminar no confirmatorio** vía fallback OpenCV/numpy con abstención explicada — sin dependencias pesadas (torch/tf) en el servicio web (`pillow` + `numpy`).
 - **Sensor NPK sin calibrar**: N/P/K llegan como 0 (sensor real) y se tratan como no confiables hasta validación de laboratorio.
 - **Datos dispersos**: con ~7 variables de 18, la confianza real baja y la clasificación se marca preliminar o pendiente de validación (comportamiento deseado). **El análisis y el reporte nunca se bloquean por datos faltantes**: se generan en modo preliminar con aviso de aval de agrónomo.
 - **Render Free / Neon Free**: límites de memoria y suspensión por inactividad; bajo carga pueden aparecer **502/500 intermitentes** que se resuelven reintentando (no son errores del aplicativo).

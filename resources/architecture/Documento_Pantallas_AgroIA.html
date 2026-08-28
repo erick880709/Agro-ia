@@ -220,16 +220,28 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   tomada en campo y conservar el historial por finca.</div>
   <p><b>Qué muestra:</b> formulario con <b>selector de finca</b> y <b>carga de foto</b>
   (JPEG/PNG/WebP, máx 5 MB), y debajo el <b>historial de diagnósticos</b> de la finca
-  seleccionada: miniatura de la foto, plaga, confianza, severidad, fuente y fecha.</p>
-  <p><b>Cómo funciona:</b> al enviar, la foto se guarda en <code>media/vision/</code> y se
-  registra el diagnóstico con el contrato definitivo {plaga, confianza, severidad,
-  recomendacion, fuente}. El modelo propio <b>AgroIA v1.0 está en entrenamiento</b>: mientras
-  tanto la respuesta llega con <b>degradación graciosa</b> («No determinada»,
-  <code>fuente: modelo_agroia_v1_stub</code>) y la recomendación de pedir dictamen experto
-  por el chat. El flujo completo queda operativo desde ya.</p>
+  seleccionada: miniatura de la foto, plaga, confianza, severidad, fuente y fecha.
+  El banner de resultado muestra además el <b>estado</b> (<code>preliminary</code> o
+  <code>abstain</code>), la <b>evidencia visual</b> (hoja segmentada, % de clorosis,
+  % de necrosis, área afectada, textura) y la recomendación.</p>
+  <p><b>Cómo funciona:</b> al enviar, la foto se guarda en <code>media/vision/</code> y el
+  <b>motor AgroVision</b> (<code>vision_engine</code> + <code>vision_fallback</code>) ejecuta un
+  <b>quality gate</b> (tamaño/nitidez/exposición/presencia de hoja) y, si la foto es válida,
+  un análisis de visión tradicional (segmentación HSV, clorosis/necrosis, severidad)
+  que produce un diagnóstico <b>preliminar y no confirmatorio</b> (p. ej.
+  <code>coffee_rust_compatible</code>) con <code>requiere_review=true</code> y
+  <code>fuente: agrovision_opencv_v1</code>. Si la foto es inválida o la confianza queda
+  bajo el umbral (0.6), responde <b>abstención explicada</b> (<code>estado=abstain</code>
+  con motivo) y pide una nueva foto. Nunca presenta «No determinada» como resultado de
+  una foto válida: siempre hay diagnóstico preliminar con evidencia o abstención con
+  explicación. Mientras el modelo propio entrena con el pipeline de
+  <code>datasets/</code>, el fallback cubre el flujo completo (carga → persistencia →
+  historial).</p>
   <p><b>Servicios que llama:</b> <code>POST /api/v1/vision/analizar-plaga</code> (multipart)
+  · <code>POST /api/v1/vision/diagnose</code> (contrato de inferencia, sección 18)
   · <code>GET /api/v1/vision/diagnosticos/{finca_id}</code>. El reentrenamiento lo dispara el
-  Admin desde <code>POST /api/v1/vision/admin/reentrenar</code> (stub de orquestación MLflow).</p>
+  Admin desde <code>POST /api/v1/vision/admin/reentrenar</code> (orquesta el pipeline
+  <code>datasets/scripts/train.py</code>).</p>
   <p><span class="siguiente">Siguiente → P2 Fincas.</span></p>
 </div>
 
@@ -757,7 +769,7 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v3.0 · 2026-08-28<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v3.1 · 2026-08-28<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

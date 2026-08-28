@@ -61,7 +61,7 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
 </header>
 <div class="wrap">
 <h1 id="documento-funcional-tecnico-agroia-agrointeligente-colombia">Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)</h1>
-<p><strong>Versión:</strong> 3.0 · <strong>Fecha:</strong> 2026-08-28
+<p><strong>Versión:</strong> 3.1 · <strong>Fecha:</strong> 2026-08-28
 <strong>Alcance:</strong> Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.</p>
 <hr />
 <h2 id="tabla-de-contenidos">Tabla de contenidos</h2>
@@ -262,6 +262,14 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
 <td>Puente de import del consumidor IoT (portable dev/contenedor).</td>
 </tr>
 <tr>
+<td><code>services/vision_engine.py</code></td>
+<td>Motor AgroVision: orquesta modelo empaquetado → fallback → abstención y mapea el contrato público de inferencia.</td>
+</tr>
+<tr>
+<td><code>services/vision_fallback.py</code></td>
+<td>Fallback de visión tradicional (OpenCV/numpy): quality gate, segmentación HSV, clorosis/necrosis, severidad y abstención explicada.</td>
+</tr>
+<tr>
 <td><code>models/*.py</code></td>
 <td>Modelos SQLAlchemy (42 tablas en schema <code>agroia</code>).</td>
 </tr>
@@ -309,7 +317,7 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
 - <strong><code>POST /api/v1/auth/refresh</code></strong>: rota el par; un refresh <strong>reusado</strong> (ya rotado) revoca toda la cadena y responde 401 (<code>REFRESH_REUSADO</code>).
 - <strong><code>POST /api/v1/auth/logout</code></strong>: mete el <code>jti</code> del access token en <code>token_blacklist</code> (revocación real).
 - <strong><code>GET /api/v1/auth/me</code></strong> devuelve el usuario del token; <code>_sobrescribir_cabeceras()</code> descarta cabeceras <code>X-User-*</code> enviadas por el cliente cuando hay Bearer (anti-suplantación: el rol/email salen del token firmado, no de cabeceras confiadas).
-- <strong>Middleware HTTP</strong>: valida el Bearer en toda la app salvo rutas públicas (<code>/api/v1/health</code>, <code>/api/v1/auth/login</code>, <code>/api/v1/auth/refresh</code>, <code>/api/sensor</code>, <code>/docs</code>, <code>/openapi.json</code>, <code>/redoc</code>, <code>/media</code>).
+- <strong>Middleware HTTP</strong>: valida el Bearer en toda la app salvo rutas públicas (<code>/api/v1/health</code>, <code>/api/v1/auth/login</code>, <code>/api/v1/auth/refresh</code>, <code>/api/sensor</code>, <code>/api/v1/iot/sensor</code>, <code>/api/v1/iot/ingest</code> — ingesta de tramas sin credenciales —, <code>/docs</code>, <code>/openapi.json</code>, <code>/redoc</code>, <code>/media</code>).
 - <strong>Compatibilidad</strong>: si no hay Bearer, se aceptan las cabeceras heredadas <code>X-User-Role</code>/<code>X-User-Email</code> (modo transición, <code>auth_allow_legacy_headers=true</code>).
 - <strong>Tablas</strong> (migración 036): <code>token_blacklist</code> (jti) y <code>refresh_tokens</code> (hash SHA-256 del token; nunca se guarda el token en claro). El job de mantenimiento limpia expirados (<code>limpiar_tokens_expirados</code>).</p>
 <h3 id="43-sesion-en-el-cliente">4.3 Sesión en el cliente</h3>
@@ -846,13 +854,16 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 <h3 id="622-vision-plagas-diagnostico-desde-foto-p12">6.22 🔬 Visión plagas (diagnóstico desde foto — P12)</h3>
 <p><strong>Problema que resuelve</strong>: identificar plagas/enfermedades desde una foto tomada en campo.</p>
 <ul>
-<li><strong>Tabla <code>vision_diagnosticos</code></strong> (migración 041): finca, usuario, <code>imagen_url</code>, <code>resultado_json</code>, fecha.</li>
+<li><strong>Tabla <code>vision_diagnosticos</code></strong> (migración 041): finca, usuario, <code>imagen_url</code>, <code>resultado_json</code> (incluye <code>estado</code>, <code>modelo_version</code>, <code>evidence</code> y <code>requiere_revision</code>), fecha.</li>
 <li><strong>Endpoints</strong> (<code>api/vision.py</code>):</li>
-<li><code>POST /api/v1/vision/analizar-plaga?finca_id=</code> (multipart <code>file</code>, JPEG/PNG/WebP máx 5 MB): guarda la imagen en <code>media/vision/</code> (servida en <code>/media/vision/...</code>), registra el diagnóstico y responde con el <strong>contrato definitivo</strong> <code>{plaga, confianza, severidad, recomendacion, fuente, imagen_url}</code>.</li>
+<li><code>POST /api/v1/vision/analizar-plaga?finca_id=</code> (multipart <code>file</code>, JPEG/PNG/WebP máx 5 MB): guarda la imagen en <code>media/vision/</code> (servida en <code>/media/vision/...</code>), registra el diagnóstico y responde <code>{diagnostico_id, finca_id, imagen_url, estado, modelo_version, plaga, confianza, severidad, recomendacion, evidencia, requiere_revision, fuente, nota}</code>.</li>
+<li><code>POST /api/v1/vision/diagnose</code> (JSON <code>{image_uri, crop_hint?, location?, capture_timestamp?}</code>): <strong>contrato de inferencia</strong> (sección 18 de la especificación AgroVision) <code>{model_version, status, crop, diagnosis, severity, evidence, recommend_review, dataset_lineage}</code>; sin persistencia, para consumidores de API.</li>
 <li><code>GET /api/v1/vision/diagnosticos/{finca_id}</code> — historial (acceso por rol a la finca).</li>
-<li><code>POST /api/v1/vision/admin/reentrenar</code> — solicitud de reentrenamiento (solo Admin, stub de orquestación MLflow).</li>
-<li><strong>Degradación graciosa</strong>: el modelo propio <strong>AgroIA v1.0 está en entrenamiento</strong>; mientras tanto la inferencia responde <code>fuente: "modelo_agroia_v1_stub"</code> con plaga «No determinada» y recomendación de dictamen experto vía chat, de modo que el flujo completo (carga → persistencia → historial) queda operativo desde ya.</li>
-<li><strong>UI</strong>: pestaña «🔬 Visión plagas» (Admin/Agrónomo/Extensionista): selector de finca, carga de foto e historial con tabla de resultados.</li>
+<li><code>POST /api/v1/vision/admin/reentrenar</code> — solicitud de reentrenamiento (solo Admin; orquesta el pipeline <code>datasets/scripts/train.py</code>).</li>
+<li><strong>Motor AgroVision</strong> (<code>services/vision_engine.py</code> + <code>services/vision_fallback.py</code>): jerarquía <strong>modelo empaquetado → fallback de visión tradicional (OpenCV/numpy) → abstención explicada</strong> (sección 24 de <code>context/contextoVision/especi.md</code>). El fallback ejecuta <strong>quality gate</strong> (tamaño/nitidez/exposición/presencia de hoja), segmentación HSV del follaje, medición de clorosis/necrosis/textura y área afectada, estima severidad (<code>none…critical</code>) y emite diagnóstico compatible por cultivo (<code>coffee_rust_compatible</code>, <code>cocoa_black_pod_compatible</code>, <code>sin_sintomas_visibles</code>, …). Todo resultado del fallback es <strong>preliminar y no confirmatorio</strong> (<code>requiere_review=true</code>); con confianza bajo el umbral (0.6) o foto inválida responde <code>estado=abstain</code> con motivo. <code>fuente: "agrovision_opencv_v1"</code>, <code>modelo_version: "agrovision-fallback-1.0.0"</code>.</li>
+<li><strong>Decodificación</strong>: <code>pillow</code> (dependencia del backend) decodifica JPEG/PNG/WebP; <code>cv2</code> es opcional. Sin decodificador, el motor degrada a abstención explicada.</li>
+<li><strong>Pipeline de datos (<code>datasets/</code>)</strong>: ingesta/curación/entrenamiento declarativo para entrenar el modelo propio (manifest DS01–DS22, <code>class_map.yaml</code>, <code>license_policy.yaml</code> con commercial-use gate; scripts <code>discover → download → inspect → dedup → normalize → convert_annotations → split → train → evaluate → package_model</code> + CLI <code>fallback_opencv.py</code>). Ver <code>datasets/VISION.md</code>.</li>
+<li><strong>UI</strong>: pestaña «🔬 Visión plagas» (Admin/Agrónomo/Extensionista): selector de finca, carga de foto, banner con estado/evidencia del diagnóstico e historial con tabla de resultados.</li>
 </ul>
 <hr />
 <h2 id="7-ingesta-de-datos-iot-post-apisensor">7. Ingesta de datos IoT — <code>POST /api/sensor</code></h2>
@@ -1274,7 +1285,7 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 <li><strong>Antagonismos (038)</strong>: reglas <code>tipo='antagonismo'</code> separadas de las primarias; hallazgos <code>INTERACCION</code> secundarios («AJUSTE NUTRICIONAL») en diagnóstico y reporte; 4 interacciones (K-Ca-Mg, P-Zn, N-maduración, pH ácido+Mg).</li>
 <li><strong>Precios de cosecha (039)</strong>: upsert por cultivo+departamento (Admin); <code>ingreso_bruto_cop_ha</code>, <code>utilidad_estimada_cop_ha</code> y <code>score_ponderado</code> en las sugerencias con badge «Más rentable».</li>
 <li><strong>PWA offline (040)</strong>: <code>manifest.json</code> + <code>sw.js</code> (network-first para el shell), cola IndexedDB con <code>idempotency_key</code>, banner de pendientes, reintento al volver la señal; <code>GET /api/v1/sync/estado</code>, <code>POST /api/v1/sync/sensor-readings</code> y <code>POST /api/v1/sync/labores</code> idempotentes (tabla <code>sync_registro</code>).</li>
-<li><strong>Visión plagas (041)</strong>: subida de foto → diagnóstico con contrato definitivo y <strong>degradación graciosa</strong> (<code>modelo_agroia_v1_stub</code>) mientras entrena el modelo propio v1.0; historial por finca y reentrenamiento admin.</li>
+<li><strong>Visión plagas (041)</strong>: subida de foto → <strong>motor AgroVision</strong> (modelo → fallback OpenCV → abstención): diagnóstico <strong>preliminar no confirmatorio</strong> con evidencia (clorosis/necrosis/área afectada) y <code>requiere_review</code>; contrato de inferencia <code>POST /api/v1/vision/diagnose</code>; historial por finca y reentrenamiento admin.</li>
 </ul>
 <hr />
 <ul>
@@ -1419,7 +1430,7 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 </tr>
 <tr>
 <td><code>vision_diagnosticos</code></td>
-<td><strong>Diagnósticos de visión</strong> (finca, usuario, imagen_url, resultado_json)</td>
+<td><strong>Diagnósticos de visión</strong> (finca, usuario, imagen_url, resultado_json con estado/modelo_version/evidencia/requiere_revision)</td>
 </tr>
 </tbody>
 </table>
@@ -1443,7 +1454,7 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 <li><strong>Dockerfile</strong> (<code>apps/backend/</code>): instala con Poetry, <code>PYTHONPATH</code> incluye <code>/app/apps/iot</code>, y en <code>CMD</code> ejecuta <strong><code>alembic upgrade head</code> y luego uvicorn en <code>$PORT</code></strong>.</li>
 <li><strong>Render</strong> (Free): web service <code>agroia-backend</code> con auto-deploy en cada push a <code>master</code>; se duerme tras inactividad (cold start ~1 min). Health check <code>/api/v1/health</code>.</li>
 <li><strong>Neon</strong>: Postgres Free con SSL; conexión normalizada por <code>database.py</code>.</li>
-<li><strong>CI (GitHub Actions)</strong>: <code>ruff</code> (lint) → <code>pytest</code> (migraciones + tests) → build Docker.</li>
+<li><strong>CI (GitHub Actions)</strong>: <code>ruff</code> (lint) → <code>pytest</code> (migraciones + seeds base <code>load_seeds</code>/<code>seed_cloud</code> + tests, con <code>PYTHONPATH</code> raíz para el puente IoT) → build Docker.</li>
 <li><strong>Frontend</strong>: servido por el mismo backend en <code>/</code> (StaticFiles). Un middleware sirve los estáticos con <code>Cache-Control: no-cache, no-store, must-revalidate</code> y los assets se versionan en <code>index.html</code> (<code>?v=…</code>) para evitar caché mixta tras cada deploy (HTML nuevo con CSS/JS viejos).</li>
 </ul>
 <hr />
@@ -1451,7 +1462,7 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 <ul>
 <li><strong>Autenticación</strong>: JWT con access token (8 h) y refresh rotatorio (30 días), revocación por blacklist, anti-suplantación de cabeceras y refresh-reuse que revoca la cadena. Modo legado por cabeceras solo cuando no hay Bearer. <strong>En producción configurar <code>JWT_SECRET</code></strong> (variable de entorno en Render) antes del primer despliegue.</li>
 <li><strong>ML en sombra</strong>: no decide; la fuente de verdad son las reglas. La promoción a PRODUCTION exige concordancia ≥ 0.85 con datos reales.</li>
-<li><strong>Visión plagas</strong>: el modelo propio AgroIA v1.0 está en entrenamiento; el endpoint entrega degradación graciosa (contrato definitivo, inferencia stub) — sin dependencias pesadas (torch/tf) en el servicio web.</li>
+<li><strong>Visión plagas</strong>: el modelo propio entrena con el pipeline de <code>datasets/</code>; mientras tanto el motor AgroVision entrega diagnóstico visual <strong>preliminar no confirmatorio</strong> vía fallback OpenCV/numpy con abstención explicada — sin dependencias pesadas (torch/tf) en el servicio web (<code>pillow</code> + <code>numpy</code>).</li>
 <li><strong>Sensor NPK sin calibrar</strong>: N/P/K llegan como 0 (sensor real) y se tratan como no confiables hasta validación de laboratorio.</li>
 <li><strong>Datos dispersos</strong>: con ~7 variables de 18, la confianza real baja y la clasificación se marca preliminar o pendiente de validación (comportamiento deseado). <strong>El análisis y el reporte nunca se bloquean por datos faltantes</strong>: se generan en modo preliminar con aviso de aval de agrónomo.</li>
 <li><strong>Render Free / Neon Free</strong>: límites de memoria y suspensión por inactividad; bajo carga pueden aparecer <strong>502/500 intermitentes</strong> que se resuelven reintentando (no son errores del aplicativo).</li>
