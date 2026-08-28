@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.13 · **Fecha:** 2026-08-28
+**Versión:** 2.14 · **Fecha:** 2026-08-28
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -65,7 +65,7 @@ AgroIA es un sistema de **agricultura de precisión para Colombia**: sensores Io
 flowchart LR
   subgraph Frontend["Frontend (apps/frontend-web)"]
     LOGIN[Pantalla de login]
-    UI[SPA 18 vistas: Inicio · Sensores · Carga · Recomendaciones · Historial · Reportes · Fincas · Catálogo · Chat · Mi zona · BPA · Equipo · Comisiones · Lista de trabajos · Reentrenar]
+    UI[SPA 19 vistas: Inicio · Alertas clima · Sensores · Carga · Recomendaciones · Historial · Reportes · Fincas · Catálogo · Chat · Mi zona · BPA · Equipo · Comisiones · Lista de trabajos · Reentrenar]
   end
   subgraph Backend["Backend FastAPI (apps/backend)"]
     API[35 routers REST /api/v1]
@@ -205,6 +205,7 @@ Cada petición `fetch` lleva:
 | `historial` | `cargarHistorial()` |
 | `sensores` | `cargarSensores()` |
 | `inicio` | `cargarDashboard()` |
+| `alertas` | `cargarAlertasClima()` (todas las alertas activas de las fincas visibles según rol, agrupadas por ubicación) |
 | `fincas` (solo admin) | `renderFincasList()` |
 | `usuarios` (solo admin) | `cargarUsuarios()` |
 | `insumos` (solo admin) | `cargarPreciosInsumos()` |
@@ -510,9 +511,10 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 
 **Endpoints**:
 - `GET /api/v1/fincas/{finca_id}/alertas-climaticas/activas` — alertas activas de hoy (banner del Dashboard P1).
+- `GET /api/v1/alertas-climaticas` — **listado global «⛅ Alertas clima» (todos los roles)**: alertas activas de las fincas visibles para el rol (`fincas_permitidas_ids`: Cliente → solo sus fincas, Extensionista → su zona, Admin/Agrónomo → todas) con `finca_nombre`, `departamento`, `municipio`, `latitud` y `longitud` para agrupar por ubicación.
 - `POST /api/v1/alertas-climaticas/evaluar` (solo Admin) — disparo manual; acepta `{finca_id?, pronostico?}` con **pronóstico inyectado** para pruebas deterministas/demos.
 
-**UI**: P1 muestra el contenedor `#dashboard-alertas` sobre los KPIs con banners de colores (azul = lluvia/lixiviación, rojo = helada). El **reporte (sección N)** agrega «⛅ Pronóstico extendido (7 días)» con tabla de fecha/lluvia/T mín/T máx y avisos ⚠️/🥶 cuando supera los umbrales. El selector del reporte trae **`ambos` por defecto**: consulta Open-Meteo (mejor modelo) y **ECMWF (IFS 0.25°, datos abiertos CC BY 4.0)** y muestra ambas tablas; la de ECMWF se etiqueta «Pronóstico según el modelo internacional ECMWF».
+**UI**: P1 muestra el contenedor `#dashboard-alertas` sobre los KPIs con banners de colores (azul = lluvia/lixiviación, rojo = helada). **Menú «⛅ Alertas clima» (v2.14, todos los roles)**: pestaña propia en la barra superior que lista las alertas activas de las fincas visibles según el rol; el frontend **agrupa por ubicación** (tipo de alerta + departamento/municipio): si varias fincas comparten la misma zona, se muestra **una sola tarjeta con «📍 {municipio}, {departamento}»** y un desplegable con las fincas; con una sola finca, muestra el nombre de la finca. El Admin ve además el botón **«🔄 Evaluar ahora»** (dispara el endpoint manual). El **reporte (sección N)** agrega «⛅ Pronóstico extendido (7 días)» con tabla de fecha/lluvia/T mín/T máx y avisos ⚠️/🥶 cuando supera los umbrales. El selector del reporte trae **`ambos` por defecto**: consulta Open-Meteo (mejor modelo) y **ECMWF (IFS 0.25°, datos abiertos CC BY 4.0)** y muestra ambas tablas; la de ECMWF se etiqueta «Pronóstico según el modelo internacional ECMWF».
 
 ### 6.14 🗺️ Enriquecimiento SIG IGAC/UPRA
 

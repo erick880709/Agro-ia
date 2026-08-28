@@ -69,7 +69,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
   <h1>Pantallas del sistema y su propósito</h1>
-  <div class="meta">Versión 2.13 · 2026-08-28 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+  <div class="meta">Versión 2.14 · 2026-08-28 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
 </header>
 
 <div class="wrap">
@@ -78,6 +78,7 @@
   <a href="#ruta">🧭 Ruta natural de trabajo</a>
   <a href="#p0">P0 · Inicio de sesión</a>
   <a href="#p1">P1 · Inicio (Dashboard)</a>
+  <a href="#p1b">P1b · Alertas clima</a>
   <a href="#p2">P2 · Fincas (registro)</a>
   <a href="#p3">P3 · Sensores IoT</a>
   <a href="#p4">P4 · Cargar archivo</a>
@@ -135,8 +136,8 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   </ul>
   <p><b>Qué ocurre después:</b> la sesión se guarda en <code>localStorage</code>
   (<code>agroia_sesion</code>) y se carga el menú según el rol
-  (Admin: 6 pestañas + menús ⚙️ Administración y ❓ Ayuda — Fincas e Historial viven solo en el
-  menú para el Admin — · Agrónomo: 7 · Cliente: 5).
+  (Admin: 7 pestañas + menús ⚙️ Administración y ❓ Ayuda — Fincas e Historial viven solo en el
+  menú para el Admin — · Agrónomo: 8 · Cliente: 6).
   El menú Administración es un <b>panel flotante</b> que se despliega sobre el contenido de la
   página (aunque la pantalla sea pequeña, se abre hacia arriba si no cabe abajo) y se cierra
   al elegir una opción o al hacer clic fuera. El menú <b>❓ Ayuda</b> (todos los roles) abre el
@@ -182,6 +183,31 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   <p><b>Servicios que llama:</b> <code>GET /api/v1/dashboard/{finca_id}?modo=agricultor|experto</code>
   (modo agricultor: lenguaje coloquial con semáforo; modo experto: datos crudos + exportación csv/json/excel).</p>
   <p><span class="siguiente">Siguiente → P2 Fincas (si no hay finca) o P3 Sensores.</span></p>
+</div>
+
+<!-- ─────────── P1b ─────────── -->
+<div class="pantalla" id="p1b">
+  <div class="cab"><span class="icono">⛅</span><span class="titulo">P1b · Alertas clima</span>
+    <span class="rol">Todos los roles</span></div>
+  <div class="objetivo"><b>Objetivo:</b> consultar en un solo lugar las alertas climáticas
+  activas de las fincas visibles para el rol, sin depender del banner del Dashboard.</div>
+  <p><b>Qué muestra:</b> una tarjeta por alerta activa (generadas cada 6 h por el servicio de
+  pronóstico), con el tipo (⛅ lluvia/lixiviación o 🥶 helada), severidad, fecha, mensaje y la
+  <b>📍 ubicación</b> de la finca (municipio, departamento).</p>
+  <ul>
+    <li><b>Cliente</b> — ve solo las alertas de <b>sus fincas</b> (según la posición de cada una).</li>
+    <li><b>Agrónomo / Administrador</b> — ven las alertas de <b>todas las fincas</b>.</li>
+    <li><b>Extensionista</b> — ve las de las fincas de sus municipios asignados.</li>
+    <li><b>Varias fincas en la misma ubicación</b>: se agrupan en una sola tarjeta que indica
+    «📍 {municipio}, {departamento}» con un desplegable «🏡 N fincas en esta ubicación».
+    Con una sola finca, se muestra el nombre de la finca.</li>
+  </ul>
+  <p><b>Acciones:</b> el Administrador dispone del botón <b>«🔄 Evaluar ahora»</b>, que dispara
+  la evaluación manual (<code>POST /api/v1/alertas-climaticas/evaluar</code>); el resto de roles
+  solo consulta. Si no hay alertas activas, aparece el aviso correspondiente.</p>
+  <p><b>Servicios que llama:</b> <code>GET /api/v1/alertas-climaticas</code> — alertas activas
+  de las fincas visibles (<code>fincas_permitidas_ids</code>) con ubicación para agrupar.</p>
+  <p><span class="siguiente">Siguiente → P2 Fincas.</span></p>
 </div>
 
 <!-- ─────────── P2 ─────────── -->
@@ -690,7 +716,7 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.13 · 2026-08-28<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.14 · 2026-08-28<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

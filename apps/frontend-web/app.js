@@ -7,10 +7,10 @@ const API = '/api/v1';
 const SESION_KEY = 'agroia_sesion';
 
 const TABS_POR_ROL = {
-  admin: ['inicio', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'equipo', 'comisiones', 'lista-trabajos', 'reentrenar', 'catalogo'],
-  agronomo: ['inicio', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'catalogo'],
-  cliente: ['inicio', 'sensores', 'historial', 'reportes', 'catalogo'],
-  extensionista: ['inicio', 'zona', 'sensores', 'historial', 'reportes', 'catalogo'],
+  admin: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'equipo', 'comisiones', 'lista-trabajos', 'reentrenar', 'catalogo'],
+  agronomo: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'catalogo'],
+  cliente: ['inicio', 'alertas', 'sensores', 'historial', 'reportes', 'catalogo'],
+  extensionista: ['inicio', 'alertas', 'zona', 'sensores', 'historial', 'reportes', 'catalogo'],
 };
 
 const ICONOS_APROXIMADOS = {
@@ -221,6 +221,7 @@ function goTab(name) {
   if (name === 'historial') cargarHistorial();
   if (name === 'sensores') cargarSensores();
   if (name === 'inicio') cargarDashboard();
+  if (name === 'alertas') cargarAlertasClima();
   if (name === 'fincas' && state.rol.toLowerCase() === 'admin') renderFincasList();
   if (name === 'usuarios' && state.rol.toLowerCase() === 'admin') cargarUsuarios();
   if (name === 'insumos' && state.rol.toLowerCase() === 'admin') cargarPreciosInsumos();
@@ -1454,6 +1455,92 @@ async function renderAlertasClimaticas() {
         </div>
       </div>`).join('');
   } catch { /* sin alertas o error: no mostrar */ }
+}
+
+/* ────────────────────── menú «⛅ Alertas clima» (todos los roles) ────────────────────── */
+
+const TITULOS_ALERTA = {
+  lluvia_aplicacion: 'Lluvia fuerte / lixiviación',
+  helada_floracion: 'Riesgo de helada',
+};
+
+function _etiquetaUbicacion(a) {
+  const depto = (a.departamento || '').trim();
+  const muni = (a.municipio || '').trim();
+  if (depto && muni) return `${muni}, ${depto}`;
+  if (depto) return depto;
+  if (muni) return muni;
+  return 'Ubicación sin registro';
+}
+
+function _claveUbicacion(a) {
+  const depto = (a.departamento || '').trim();
+  const muni = (a.municipio || '').trim();
+  if (depto && muni) return `${depto}|${muni}`;
+  if (a.latitud != null && a.longitud != null) return `coord|${a.latitud},${a.longitud}`;
+  return `finca|${a.finca_id}`;
+}
+
+async function cargarAlertasClima() {
+  const cont = document.getElementById('alertas-clima-listado');
+  if (!cont) return;
+  cont.innerHTML = '<p class="muted">Cargando…</p>';
+  try {
+    const r = await api('/alertas-climaticas');
+    const alertas = r.data || [];
+    if (!alertas.length) {
+      cont.innerHTML = '<div class="advertencia">🌤️ No hay alertas climáticas activas para las fincas visibles. Las alertas se generan automáticamente cada 6 horas.</div>';
+      return;
+    }
+    // Agrupar por tipo de alerta + ubicación: varias fincas en la misma zona
+    // (departamento + municipio) comparten una sola tarjeta que muestra la ciudad.
+    const grupos = new Map();
+    alertas.forEach(a => {
+      const clave = `${a.tipo}|${_claveUbicacion(a)}`;
+      if (!grupos.has(clave)) grupos.set(clave, []);
+      grupos.get(clave).push(a);
+    });
+    cont.innerHTML = [...grupos.values()].map(gs => {
+      const a = gs[0];
+      const varias = gs.length > 1;
+      const ubicacion = _etiquetaUbicacion(a);
+      const detalle = varias
+        ? `<details class="alerta-clima-fincas">
+             <summary>🏡 ${gs.length} fincas en esta ubicación</summary>
+             <ul>${gs.map(g => `<li>${esc(g.finca_nombre)}</li>`).join('')}</ul>
+           </details>`
+        : `<div class="alerta-clima-finca">Finca: ${esc(a.finca_nombre)}</div>`;
+      return `
+        <div class="alerta-clima alerta-clima-bloque alerta-${esc(a.tipo)}">
+          <span class="alerta-clima-ico">${ICONOS_ALERTA[a.tipo] || '⚠️'}</span>
+          <div class="alerta-clima-cuerpo">
+            <div class="alerta-clima-titulo">${TITULOS_ALERTA[a.tipo] || esc(a.tipo)} · ${esc(a.severidad)} · ${esc(a.fecha_alerta || '')}</div>
+            <div class="alerta-clima-msg">${esc(a.mensaje)}</div>
+            <div class="alerta-clima-ubi">📍 ${esc(ubicacion)}</div>
+            ${detalle}
+          </div>
+        </div>`;
+    }).join('');
+  } catch (e) {
+    cont.innerHTML = errorBanner(e.message);
+  }
+}
+
+async function evaluarAlertasAhora() {
+  if (!confirm('¿Evaluar ahora las alertas climáticas de todas las fincas?')) return;
+  const btn = document.getElementById('btn-evaluar-alertas');
+  if (btn) { btn.disabled = true; btn.textContent = 'Evaluando…'; }
+  try {
+    await api('/alertas-climaticas/evaluar', {
+      method: 'POST', headers: headers(),
+      body: JSON.stringify({ finca_id: null }),
+    });
+    await cargarAlertasClima();
+  } catch (e) {
+    alert('No se pudo evaluar: ' + e.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '🔄 Evaluar ahora'; }
+  }
 }
 
 async function actualizarLabor(laborId, estado) {

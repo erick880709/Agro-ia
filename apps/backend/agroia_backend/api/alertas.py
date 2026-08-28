@@ -11,7 +11,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia_backend.models.alerta_climatica import AlertaClimatica
 from agroia_backend.models.finca import Finca
-from agroia_backend.services.acceso import verificar_acceso_finca
+from agroia_backend.services.acceso import (
+    fincas_permitidas_ids,
+    verificar_acceso_finca,
+)
 from agroia_backend.services.clima_alertas import evaluar_alertas_finca, evaluar_todas_fincas
 
 logger = get_logger(__name__)
@@ -61,6 +64,53 @@ async def alertas_activas(
         )
     ).scalars().all()
     return {"data": [_alerta_a_dict(a) for a in alertas], "total": len(alertas)}
+
+
+@router.get("/alertas-climaticas")
+async def alertas_globales(
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+):
+    """Listado «⛅ Alertas clima»: alertas activas de las fincas visibles para el rol.
+
+    - Cliente → solo sus fincas (según `fincas_permitidas_ids`).
+    - Extensionista → solo fincas de sus municipios asignados.
+    - Agrónomo / Admin → todas las fincas.
+    Cada alerta incluye `finca_nombre`, `departamento`, `municipio`, `latitud` y
+    `longitud` para que el frontend agrupe las fincas que comparten ubicación y
+    muestre la alerta con el departamento y la ciudad.
+    """
+
+    query = (
+        select(AlertaClimatica, Finca)
+        .join(Finca, Finca.id == AlertaClimatica.finca_id)
+        .where(AlertaClimatica.activa.is_(True))
+        .order_by(
+            AlertaClimatica.fecha_alerta.desc(),
+            AlertaClimatica.created_at.desc(),
+        )
+    )
+
+    permitidas = await fincas_permitidas_ids(db, x_user_role, x_user_email)
+    if permitidas is not None:
+        if not permitidas:
+            return {"data": [], "total": 0}
+        query = query.where(AlertaClimatica.finca_id.in_(permitidas))
+
+    filas = (await db.execute(query)).all()
+    data: list[dict] = []
+    for alerta, finca in filas:
+        item = _alerta_a_dict(alerta)
+        item.update({
+            "finca_nombre": finca.nombre,
+            "departamento": finca.departamento,
+            "municipio": finca.municipio,
+            "latitud": float(finca.latitud) if finca.latitud is not None else None,
+            "longitud": float(finca.longitud) if finca.longitud is not None else None,
+        })
+        data.append(item)
+    return {"data": data, "total": len(data)}
 
 
 @router.post("/alertas-climaticas/evaluar")

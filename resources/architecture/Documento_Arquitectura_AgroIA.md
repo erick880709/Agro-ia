@@ -39,9 +39,10 @@
   novedades/incapacidades con reemplazo), **Comisiones** (órdenes de campo por finca:
   1 instrumentador + N cadeneros, fin de medición obligatorio) y **Lista de trabajos** (semáforo
   por etapa: registro → asignación de comisión → toma de muestras → recomendación → reporte → finalizada).
-- **Otras:** alertas climáticas proactivas, enriquecimiento SIG IGAC/UPRA, precios dinámicos de
-  insumos, ciclos productivos por lote, labores por orden, validación de rendimiento real
-  anti-outliers, auditoría de acciones, demo reset y manuales de usuario + capacitación end-to-end.
+- **Otras:** alertas climáticas proactivas (banner del dashboard + **menú «⛅ Alertas clima» por rol**),
+  enriquecimiento SIG IGAC/UPRA, precios dinámicos de insumos, ciclos productivos por lote,
+  labores por orden, validación de rendimiento real anti-outliers, auditoría de acciones,
+  demo reset y manuales de usuario + capacitación end-to-end.
 
 ### 0.3 Documentos vivos del sistema construido
 

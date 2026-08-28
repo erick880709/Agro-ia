@@ -59,6 +59,7 @@
 
   <nav class="tabs" id="tabs">
     <button class="tab active" data-tab="inicio">🏠 Inicio</button>
+    <button class="tab" data-tab="alertas">⛅ Alertas clima</button>
     <button class="tab" data-tab="zona">🗺️ Mi zona</button>
     <button class="tab" data-tab="sensores">📡 Sensores IoT</button>
     <button class="tab" data-tab="carga">📂 Cargar archivo</button>
@@ -95,6 +96,17 @@
   </nav>
 
   <main>
+    <!-- ============ ALERTAS CLIMA ============ -->
+    <section id="view-alertas" class="view">
+      <div class="card">
+        <div class="alertas-head">
+          <h2>⛅ Alertas clima <span class="muted">(pronóstico 7 días × labores y fenología)</span></h2>
+          <button type="button" class="btn" id="btn-evaluar-alertas" data-roles="admin" onclick="evaluarAlertasAhora()">🔄 Evaluar ahora</button>
+        </div>
+        <p class="muted">Las alertas se agrupan por ubicación: si varias fincas comparten la misma zona, se muestra el departamento y la ciudad con la lista de fincas.</p>
+        <div id="alertas-clima-listado"><p class="muted">Cargando…</p></div>
+      </div>
+    </section>
     <!-- ============ INICIO ============ -->
     <section id="view-inicio" class="view active">
       <div id="dashboard-alertas"></div>
