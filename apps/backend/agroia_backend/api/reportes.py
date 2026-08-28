@@ -145,8 +145,11 @@ class ReporteRequest(BaseModel):
     tipo: str = Field("completo", pattern="^(siembra|cultivo|completo)$")
     cultivo_id: str | None = Field(None, description="UUID del cultivo sembrado (obligatorio en tipo 'cultivo')")
     modelo_pronostico: str = Field(
-        "auto", pattern="^(auto|ecmwf)$",
-        description="Modelo del pronóstico: auto (mejor disponible) o ecmwf (ECMWF IFS 0.25°)",
+        "ambos", pattern="^(auto|ecmwf|ambos)$",
+        description=(
+            "Modelo del pronóstico: ambos (Open-Meteo + ECMWF IFS 0.25°, por defecto), "
+            "auto (mejor disponible) o ecmwf (solo ECMWF IFS 0.25°)"
+        ),
     )
     presupuesto_cop: float | None = Field(
         None, ge=0, description="Presupuesto de fertilización ($/ha) para el plan económico (opcional)"
@@ -380,20 +383,28 @@ async def generar_reporte(
                     logger.warning("clima_ideam_no_disponible", error=str(e))
 
     # ── Pronóstico extendido (7 días) para la sección N ──
+    # Por defecto (ambos) se consultan las dos fuentes y se muestran las dos
+    # tablas en el reporte; con auto/ecmwf se muestra una sola.
     pronostico_extendido = None
+    pronostico_ecmwf = None
     if finca.latitud is not None and finca.longitud is not None:
         from agroia_backend.services.external_apis import fetch_pronostico_open_meteo
 
-        pronostico_extendido = await fetch_pronostico_open_meteo(
-            float(finca.latitud), float(finca.longitud), dias=7,
-            modelo=body.modelo_pronostico,
-        )
+        modelo = body.modelo_pronostico or "ambos"
+        lat_f, lng_f = float(finca.latitud), float(finca.longitud)
+        if modelo in ("auto", "ambos"):
+            pronostico_extendido = await fetch_pronostico_open_meteo(lat_f, lng_f, dias=7, modelo="auto")
+        if modelo in ("ecmwf", "ambos"):
+            pronostico_ecmwf = await fetch_pronostico_open_meteo(lat_f, lng_f, dias=7, modelo="ecmwf")
 
     # ── v4: balance hídrico, rotación y avance BPA para el reporte ──
     from agroia_backend.api.rotacion import calcular_rotacion
     from agroia_backend.services.balance_hidrico import calcular_balance_hidrico
 
-    balance_hidrico = await calcular_balance_hidrico(db, finca, dias=7, modelo=body.modelo_pronostico)
+    balance_hidrico = await calcular_balance_hidrico(
+        db, finca, dias=7,
+        modelo=body.modelo_pronostico if body.modelo_pronostico in ("auto", "ecmwf") else "auto",
+    )
     rotacion = await calcular_rotacion(db, finca_uuid)
     checklist = (
         await db.execute(select(ChecklistBpa).where(ChecklistBpa.finca_id == finca_uuid))
@@ -464,6 +475,7 @@ async def generar_reporte(
         prediccion_rendimiento=prediccion_rendimiento,
         advertencia_acumulacion=advertencia_acumulacion,
         pronostico_extendido=pronostico_extendido,
+        pronostico_ecmwf=pronostico_ecmwf,
         modelo_pronostico=body.modelo_pronostico,
         labores=labores_report,
         balance_hidrico=balance_hidrico,

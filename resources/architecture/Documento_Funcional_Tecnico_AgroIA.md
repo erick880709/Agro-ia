@@ -496,7 +496,7 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 - `GET /api/v1/fincas/{finca_id}/alertas-climaticas/activas` — alertas activas de hoy (banner del Dashboard P1).
 - `POST /api/v1/alertas-climaticas/evaluar` (solo Admin) — disparo manual; acepta `{finca_id?, pronostico?}` con **pronóstico inyectado** para pruebas deterministas/demos.
 
-**UI**: P1 muestra el contenedor `#dashboard-alertas` sobre los KPIs con banners de colores (azul = lluvia/lixiviación, rojo = helada). El **reporte (sección N)** agrega «⛅ Pronóstico extendido (7 días)» con tabla de fecha/lluvia/T mín/T máx y avisos ⚠️/🥶 cuando supera los umbrales; con `modelo_pronostico=ecmwf` la fuente dice **«Pronóstico según el modelo internacional ECMWF (IFS 0.25°, datos abiertos CC BY 4.0) vía Open-Meteo»**.
+**UI**: P1 muestra el contenedor `#dashboard-alertas` sobre los KPIs con banners de colores (azul = lluvia/lixiviación, rojo = helada). El **reporte (sección N)** agrega «⛅ Pronóstico extendido (7 días)» con tabla de fecha/lluvia/T mín/T máx y avisos ⚠️/🥶 cuando supera los umbrales. El selector del reporte trae **`ambos` por defecto**: consulta Open-Meteo (mejor modelo) y **ECMWF (IFS 0.25°, datos abiertos CC BY 4.0)** y muestra ambas tablas; la de ECMWF se etiqueta «Pronóstico según el modelo internacional ECMWF».
 
 ### 6.14 🗺️ Enriquecimiento SIG IGAC/UPRA
 
@@ -912,7 +912,7 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 - **1.J Extensionista**: `GET /api/v1/extensionista/dashboard-zona` filtra fincas por `municipios_asignados`; `acceso.py` extiende `fincas_permitidas_ids`; pestaña «🗺️ Mi zona» (landing tras login) y demo de un clic.
 - **2 Catálogo ampliado**: 15 cultivos (panela, ñame, chontaduro, lulo, mora, guayaba, granadilla/curuba, arveja, habichuela, ahuyama, fresa, coco, caucho, fique, quinua) con Kc; `POST /catalogo/cultivos` ahora exige `icono` (422 `ICONO_REQUERIDO`). Los 9 productos sin emoji exacto tienen **íconos vectoriales SVG propios** en `apps/frontend-web/img/iconos/` (panela, chontaduro, lulo, guayaba, granadilla, habichuela, ahuyama, caucho, fique) que el catálogo muestra como imagen; el resto de la UI usa el emoji aproximado.
 - **3 Reentrenamiento ML**: `POST /api/v1/admin/ml/reentrenar` (Admin) encola `train_colombia.py` en background; página «🤖 Reentrenar modelo» en Administración. Siembra idempotente vía `POST /api/v1/admin/v4/sembrar` y `scripts/seed_v4.py`.
-- **Reporte**: nuevas secciones R (riego), S (rotación), B (BPA) junto a Q (labores). Regla de degradación: sin datos, las secciones se omiten sin bloquear el análisis. El formulario de generación incluye selector de **modelo del pronóstico** (`auto` | **ECMWF IFS 0.25°**) que marca la sección N con «Pronóstico según el modelo internacional ECMWF».
+- **Reporte**: nuevas secciones R (riego), S (rotación), B (BPA) junto a Q (labores). Regla de degradación: sin datos, las secciones se omiten sin bloquear el análisis. El formulario de generación incluye selector de **modelo del pronóstico** con **`ambos` por defecto** (consulta y muestra las dos fuentes: Open-Meteo mejor disponible y **ECMWF IFS 0.25°** —esta última etiquetada «Pronóstico según el modelo internacional ECMWF»—); también `auto` o `ecmwf` para una sola fuente.
 
 ---
 - **Chat**: job diario borra `imagen_base64` con más de 90 días (`POST /api/v1/admin/chat/limpiar-imagenes` para disparo manual).

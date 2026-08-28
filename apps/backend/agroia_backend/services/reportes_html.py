@@ -975,7 +975,8 @@ def _seccion_plano_lote(
     cultivo_nombre: str | None = None,
     historial_ciclos: list[dict] | None = None,
     pronostico_extendido: list[dict] | None = None,
-    modelo_pronostico: str = "auto",
+    pronostico_ecmwf: list[dict] | None = None,
+    modelo_pronostico: str = "ambos",
 ) -> str:
     """Plano del lote: dibujo de los puntos de muestreo (pos_x, pos_y).
 
@@ -1251,42 +1252,54 @@ def _seccion_plano_lote(
         )
 
     # ── Pronóstico extendido (7 días) para la sección N ──
+    # Con `modelo_pronostico=ambos` (por defecto) se muestran las dos fuentes:
+    # Open-Meteo (mejor modelo disponible) y ECMWF (IFS 0.25°).
     pronostico_html = ""
-    if pronostico_extendido:
-        fuente = (
-            "Pronóstico según el modelo internacional <b>ECMWF</b> (IFS 0.25°, datos abiertos CC BY 4.0) vía Open-Meteo."
-            if (modelo_pronostico or "auto").lower() == "ecmwf"
-            else "Fuente: Open-Meteo (mejor modelo disponible)."
-        )
-        filas_pron = []
-        for d in pronostico_extendido:
-            lluvia = d.get("precipitacion_mm")
-            tmin = d.get("temp_min_c")
-            tmax = d.get("temp_max_c")
-            aviso = ""
-            if lluvia is not None and float(lluvia) > 20:
-                aviso = ' <b>⚠️ lluvia fuerte</b>'
-            if tmin is not None and float(tmin) < 5:
-                aviso = ' <b>🥶 riesgo de helada</b>'
-            filas_pron.append(
-                "<tr>"
-                f"<td>{esc(d.get('fecha') or '')}</td>"
-                f"<td class='num'>{_num(lluvia, 1)} mm{aviso}</td>"
-                f"<td class='num'>{_num(tmin, 1)} °C</td>"
-                f"<td class='num'>{_num(tmax, 1)} °C</td>"
-                "</tr>"
+    if pronostico_extendido or pronostico_ecmwf:
+        def _tabla_pron(pron: list[dict], fuente_html: str) -> str:
+            filas_pron = []
+            for d in pron:
+                lluvia = d.get("precipitacion_mm")
+                tmin = d.get("temp_min_c")
+                tmax = d.get("temp_max_c")
+                aviso = ""
+                if lluvia is not None and float(lluvia) > 20:
+                    aviso = ' <b>⚠️ lluvia fuerte</b>'
+                if tmin is not None and float(tmin) < 5:
+                    aviso = ' <b>🥶 riesgo de helada</b>'
+                filas_pron.append(
+                    "<tr>"
+                    f"<td>{esc(d.get('fecha') or '')}</td>"
+                    f"<td class='num'>{_num(lluvia, 1)} mm{aviso}</td>"
+                    f"<td class='num'>{_num(tmin, 1)} °C</td>"
+                    f"<td class='num'>{_num(tmax, 1)} °C</td>"
+                    "</tr>"
+                )
+            return (
+                '<div class="clima-muestra">'
+                '<div class="heat-title">⛅ Pronóstico extendido (7 días)</div>'
+                '<div class="table-wrap"><table class="tabla-ciclos">'
+                '<tr><th>Fecha</th><th>Lluvia</th><th>T mín</th><th>T máx</th></tr>'
+                + "".join(filas_pron)
+                + '</table></div>'
+                f'<p class="muted">{fuente_html} Lluvias > 20 mm/24h pueden '
+                'lavar fertilizantes; temperaturas < 5 °C en floración generan '
+                'alerta de helada.</p></div>'
             )
-        pronostico_html = (
-            '<div class="clima-muestra">'
-            '<div class="heat-title">⛅ Pronóstico extendido (7 días)</div>'
-            '<div class="table-wrap"><table class="tabla-ciclos">'
-            '<tr><th>Fecha</th><th>Lluvia</th><th>T mín</th><th>T máx</th></tr>'
-            + "".join(filas_pron)
-            + '</table></div>'
-            f'<p class="muted">{fuente} Lluvias > 20 mm/24h pueden '
-            'lavar fertilizantes; temperaturas < 5 °C en floración generan '
-            'alerta de helada.</p></div>'
-        )
+
+        bloques = []
+        if pronostico_extendido:
+            bloques.append(_tabla_pron(
+                pronostico_extendido,
+                "Fuente: Open-Meteo (mejor modelo disponible).",
+            ))
+        if pronostico_ecmwf:
+            bloques.append(_tabla_pron(
+                pronostico_ecmwf,
+                "Pronóstico según el modelo internacional <b>ECMWF</b> "
+                "(IFS 0.25°, datos abiertos CC BY 4.0) vía Open-Meteo.",
+            ))
+        pronostico_html = "".join(bloques)
 
     return f"""
   <section class="block plano-lote">
@@ -1543,7 +1556,8 @@ def generar_reporte_html(
     prediccion_rendimiento: dict | None = None,
     advertencia_acumulacion: str | None = None,
     pronostico_extendido: list[dict] | None = None,
-    modelo_pronostico: str = "auto",
+    pronostico_ecmwf: list[dict] | None = None,
+    modelo_pronostico: str = "ambos",
     labores: list[dict] | None = None,
     balance_hidrico: dict | None = None,
     rotacion: dict | None = None,
@@ -1574,6 +1588,7 @@ def generar_reporte_html(
         muestras, finca, clima, cultivo_nombre,
         historial_ciclos=historial_ciclos,
         pronostico_extendido=pronostico_extendido,
+        pronostico_ecmwf=pronostico_ecmwf,
         modelo_pronostico=modelo_pronostico,
     )
 

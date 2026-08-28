@@ -395,8 +395,10 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   siempre</b>: si faltan datos, sale en modo preliminar con aviso de aval de agrónomo.</div>
   <p><b>Qué muestra:</b> selector de finca, tipo de reporte (<code>siembra</code> ·
   <code>cultivo</code> · <code>completo</code>), <b>selector de modelo del pronóstico del clima</b>
-  (<code>Auto</code> | <code>ECMWF — IFS 0.25°</code>), campos opcionales de presupuesto ($/ha) y
-  <b>rendimiento actual (t/ha)</b>, vista previa del HTML y botones para abrir y descargar.
+  con <b>«Ambos (Open-Meteo + ECMWF)» por defecto</b> —consulta las dos fuentes y agrega las dos
+  tablas a la sección N— (también <code>Auto</code> o <code>ECMWF — IFS 0.25°</code> para una sola),
+  campos opcionales de presupuesto ($/ha) y <b>rendimiento actual (t/ha)</b>, vista previa del HTML
+  y botones para abrir y descargar.
   Al generar el reporte se activa el panel colapsable <b>«🧪 Simular enmienda (what-if)»</b>:
   4 sliders (pH, N, P, K) precargados con el suelo del reporte que, al moverlos, consultan
   <code>POST /api/v1/reportes/simular</code> y muestran al instante la nueva clasificación,
@@ -420,8 +422,9 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
     Incluye la tabla <b>«📜 Historial de ciclos»</b> con los últimos 3 ciclos del lote
     (Siembra → Aplicaciones destacadas → Cosecha → Rendimiento) y el bloque
     <b>«⛅ Pronóstico extendido (7 días)»</b> (fecha, lluvia, T mín/T máx) con avisos
-    ⚠️ lluvia fuerte (&gt; 20 mm/24h) y 🥶 riesgo de helada (&lt; 5 °C) por día. Si se eligió
-    ECMWF, la fuente dice «Pronóstico según el modelo internacional ECMWF (IFS 0.25°)».</li>
+    ⚠️ lluvia fuerte (&gt; 20 mm/24h) y 🥶 riesgo de helada (&lt; 5 °C) por día. Con la opción
+    por defecto <b>Ambos</b> se muestran dos tablas: Open-Meteo (mejor modelo) y
+    «Pronóstico según el modelo internacional ECMWF (IFS 0.25°)».</li>
     <li><b>R/S/B · Secciones v4</b> — R «💧 Necesidad de riego» (balance ETo×Kc−lluvia),
     S «🔄 Rotación sugerida» y B «📋 Trazabilidad BPA»; junto a Q «🛠️ Órdenes de trabajo».</li>
     <li><b>E · Análisis económico proyectado</b> — ganancia esperada si se aplica el plan (+15 %),
@@ -435,7 +438,7 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
     últimos 2 ciclos superan 120 kg/ha de fósforo.</li>
   </ul>
   <p><b>Servicio que llama:</b> <code>POST /api/v1/reportes/generar</code> (admite
-  <code>presupuesto_cop</code> y <code>modelo_pronostico=auto|ecmwf</code>).</p>
+  <code>presupuesto_cop</code> y <code>modelo_pronostico=ambos|auto|ecmwf</code>; por defecto <code>ambos</code>).</p>
   <p><span class="siguiente">Apoyo permanente → P8 Chat asesor.</span></p>
 </div>
 

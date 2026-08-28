@@ -3244,7 +3244,7 @@ async function enviarReporte(e) {
   const modeloEl = document.getElementById('repo-modelo');
   const presupuesto = presEl && presEl.value ? Number(presEl.value) : null;
   const rendimiento = rendEl && rendEl.value ? Number(rendEl.value) : null;
-  const modeloPronostico = modeloEl ? modeloEl.value : 'auto';
+  const modeloPronostico = modeloEl && modeloEl.value ? modeloEl.value : 'ambos';
 
   if (!finca) {
     document.getElementById('reporte-preview-card').style.display = 'none';
