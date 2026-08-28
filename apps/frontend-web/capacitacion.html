@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>🎓 Capacitación AgroIA — del registro de la finca al reporte final</title>
+<style>
+  :root { --verde-900:#14532d; --verde-700:#166534; --verde-500:#22c55e; --verde-100:#dcfce7;
+          --crema:#f5f8f4; --texto:#1f2a22; --line:#d7e2da; --ambar:#f0ad4e; --azul:#5bc0de; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:"Segoe UI",system-ui,sans-serif; background:var(--crema); color:var(--texto); }
+  header.portada { background:linear-gradient(120deg,var(--verde-900),var(--verde-700)); color:#fff; padding:34px 30px 26px; }
+  header.portada .volver { display:inline-block; color:#d9f0dd; text-decoration:none; font-size:.9rem; margin-bottom:14px; border:1px solid rgba(255,255,255,.4); border-radius:999px; padding:4px 14px; }
+  header.portada h1 { margin:0 0 8px; font-size:1.9rem; }
+  header.portada p { margin:0; color:#d9f0dd; max-width:950px; line-height:1.5; }
+  .wrap { max-width:1040px; margin:0 auto; padding:22px 18px 70px; }
+  nav.toc { background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px 20px; margin-bottom:24px; }
+  nav.toc h2 { margin:0 0 10px; font-size:1.05rem; }
+  nav.toc ol { margin:0; padding-left:22px; columns:2; column-gap:30px; }
+  nav.toc a { color:var(--verde-700); text-decoration:none; }
+  nav.toc a:hover { text-decoration:underline; }
+  section.paso { background:#fff; border:1px solid var(--line); border-radius:16px; padding:24px 26px; margin-bottom:24px; box-shadow:0 2px 10px rgba(20,60,30,.05); }
+  section.paso h2 { display:flex; align-items:center; gap:12px; margin:0 0 6px; font-size:1.3rem; }
+  section.paso h2 .num { background:var(--verde-700); color:#fff; min-width:36px; height:36px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:1rem; flex:0 0 auto; }
+  section.paso .sub { color:#5a6a5e; margin:0 0 14px; }
+  section.paso p, section.paso li { line-height:1.6; }
+  section.paso h3 { margin:16px 0 6px; font-size:1.05rem; color:var(--verde-900); }
+  .nota { background:#f0f9f1; border-left:4px solid var(--verde-500); padding:10px 14px; border-radius:0 8px 8px 0; margin:12px 0; }
+  .alerta { background:#fff7e8; border-left:4px solid var(--ambar); padding:10px 14px; border-radius:0 8px 8px 0; margin:12px 0; }
+  .estado { display:inline-block; border-radius:999px; padding:4px 12px; font-size:.82rem; font-weight:700; margin:4px 6px 4px 0; }
+  .estado.ok { background:var(--verde-100); color:var(--verde-900); border:1px solid var(--verde-500); }
+  .estado.amarillo { background:#fff3e0; color:#8a5a00; border:1px solid var(--ambar); }
+  .estado.azul { background:#e8f6fa; color:#14566b; border:1px solid var(--azul); }
+  .estado.gris { background:#eef1ee; color:#4a5a50; border:1px solid #b9c4bc; }
+  table { width:100%; border-collapse:collapse; margin:12px 0; font-size:.92rem; }
+  th, td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:#eef7ef; }
+  /* ── Maqueta de pantalla (mock) ── */
+  .pantalla-mock { border:1px solid var(--line); border-radius:12px; overflow:hidden; margin:14px 0; background:#fbfdfb; }
+  .pantalla-mock .barra { background:var(--verde-900); color:#fff; padding:8px 12px; font-size:.85rem; display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+  .pantalla-mock .barra b { color:#fff; }
+  .pantalla-mock .tabs { background:#f2f7f2; border-bottom:1px solid var(--line); padding:6px 10px; font-size:.78rem; color:#3d5c46; display:flex; gap:8px; flex-wrap:wrap; }
+  .pantalla-mock .tabs span { background:#fff; border:1px solid var(--line); border-radius:999px; padding:3px 10px; }
+  .pantalla-mock .tabs span.activo { background:var(--verde-100); border-color:var(--verde-500); font-weight:700; }
+  .pantalla-mock .cuerpo { padding:12px 14px; font-size:.85rem; display:grid; gap:8px; }
+  .pantalla-mock .campo { border:1px dashed #c3d2c7; border-radius:8px; padding:8px 10px; color:#46604e; }
+  .pantalla-mock .campo b { color:var(--verde-900); }
+  .pantalla-mock .boton { display:inline-block; background:var(--verde-700); color:#fff; border-radius:8px; padding:6px 14px; font-size:.8rem; font-weight:700; width:max-content; }
+  .pantalla-mock .boton.secundario { background:#fff; color:var(--verde-700); border:1px solid var(--verde-500); }
+  /* ── Flujo ── */
+  .flujo { display:flex; flex-wrap:wrap; gap:8px; align-items:stretch; margin:14px 0; }
+  .flujo .etapa { flex:1; min-width:150px; border:1px solid var(--line); border-radius:12px; padding:10px 12px; background:#fff; }
+  .flujo .etapa .circulo { width:14px; height:14px; border-radius:50%; display:inline-block; margin-right:6px; vertical-align:middle; }
+  .flujo .etapa b { font-size:.86rem; }
+  .flujo .etapa p { font-size:.78rem; color:#5a6a5e; margin:6px 0 0; }
+  .flecha { align-self:center; color:#8aa392; font-weight:700; }
+  footer { text-align:center; padding:22px; color:#5a6a5e; font-size:.85rem; }
+  @media (max-width:640px){ nav.toc ol { columns:1; } .flecha { display:none; } }
+</style>
+</head>
+<body>
+<header class="portada">
+  <a class="volver" href="/">← Volver a AgroIA</a>
+  <h1>🎓 Capacitación AgroIA</h1>
+  <p>Guía completa para operar la plataforma de principio a fin: desde el <b>registro de la finca</b>
+  hasta el <b>fin del proceso de medición y la generación del reporte</b>. Cada pantalla explica
+  qué se logra, cómo se opera y en qué estado queda la orden de trabajo.</p>
+</header>
+<div class="wrap">
+
+<nav class="toc">
+  <h2>Índice</h2>
+  <ol>
+    <li><a href="#s1">El ciclo de vida de una orden de trabajo</a></li>
+    <li><a href="#s2">Roles: quién hace qué</a></li>
+    <li><a href="#s3">Paso 1 · Iniciar sesión</a></li>
+    <li><a href="#s4">Paso 2 · Registrar la finca</a></li>
+    <li><a href="#s5">Paso 3 · Lotes y datos agronómicos</a></li>
+    <li><a href="#s6">Paso 4 · Equipo de trabajo y tarifas</a></li>
+    <li><a href="#s7">Paso 5 · Crear la comisión</a></li>
+    <li><a href="#s8">Paso 6 · Configurar los sensores (instrumentador)</a></li>
+    <li><a href="#s9">Paso 7 · Toma de muestras en campo (cadeneros)</a></li>
+    <li><a href="#s10">Paso 8 · Recomendaciones</a></li>
+    <li><a href="#s11">Paso 9 · Registrar el fin de la medición</a></li>
+    <li><a href="#s12">Paso 10 · Generar el reporte</a></li>
+    <li><a href="#s13">El reporte explicado sección por sección</a></li>
+    <li><a href="#s14">Trazabilidad BPA (visitas)</a></li>
+    <li><a href="#s15">Lista de trabajos: leer el semáforo</a></li>
+    <li><a href="#s16">Resumen: pantalla → estado resultante</a></li>
+    <li><a href="#s17">Errores comunes</a></li>
+  </ol>
+</nav>
+
+<!-- ═══════════ 1 · Ciclo de vida ═══════════ -->
+<section class="paso" id="s1">
+  <h2><span class="num">1</span> El ciclo de vida de una orden de trabajo</h2>
+  <p class="sub">Cada finca registrada es una <b>orden de trabajo</b> que avanza por etapas con un semáforo.</p>
+  <div class="flujo">
+    <div class="etapa"><span class="circulo" style="background:#9aa4b2"></span><b>Registro</b>
+      <p>La finca existe; falta crear el lote y completar datos agronómicos.</p></div>
+    <span class="flecha">→</span>
+    <div class="etapa"><span class="circulo" style="background:#f0ad4e"></span><b>Asignación de comisión</b>
+      <p>El administrador crea la comisión con instrumentador y cadeneros.</p></div>
+    <span class="flecha">→</span>
+    <div class="etapa"><span class="circulo" style="background:#f0ad4e"></span><b>Toma de muestras</b>
+      <p>El equipo sale a campo: configura sensores y toma medidas de suelo.</p></div>
+    <span class="flecha">→</span>
+    <div class="etapa"><span class="circulo" style="background:#5bc0de"></span><b>Recomendación</b>
+      <p>El motor experto emite el diagnóstico agronómico con plan de acciones.</p></div>
+    <span class="flecha">→</span>
+    <div class="etapa"><span class="circulo" style="background:#5cb85c"></span><b>Reporte</b>
+      <p>Se genera el documento completo del análisis de suelo.</p></div>
+    <span class="flecha">→</span>
+    <div class="etapa"><span class="circulo" style="background:#1b5e20"></span><b>Fin de actividad</b>
+      <p>Orden de trabajo finalizada (el reporte queda en auditoría).</p></div>
+  </div>
+  <div class="nota">La 📊 <b>Lista de trabajos</b> (menú ⚙️ Administración) muestra este semáforo para cada
+  finca, las actividades que faltan y un gráfico de órdenes por etapa. El <b>fin de medición</b> se
+  registra en la comisión y el <b>fin de actividad</b> lo marca la generación del reporte.</div>
+</section>
+
+<!-- ═══════════ 2 · Roles ═══════════ -->
+<section class="paso" id="s2">
+  <h2><span class="num">2</span> Roles: quién hace qué</h2>
+  <table>
+    <tr><th>Rol</th><th>Qué hace en el flujo</th><th>Pantallas clave</th></tr>
+    <tr><td><b>👑 Admin</b></td><td>Registra fincas y lotes, crea el equipo de trabajo, arma las comisiones,
+      valida recomendaciones y genera el reporte. Ve la traza completa.</td><td>Fincas · Equipo de trabajo ·
+      Comisiones · Lista de trabajos · Reportes · Auditoría</td></tr>
+    <tr><td><b>🧑‍🔧 Instrumentador</b> (empleado)</td><td>Configura los sensores y les asigna la finca que será
+      medida (<code>device_id → finca_id</code>).</td><td>Sensores IoT (simulador de trama)</td></tr>
+    <tr><td><b>🥾 Cadenero sensorista</b> (empleado)</td><td>Recorre el terreno tomando las medidas de
+      parámetros del suelo punto a punto.</td><td>Cargar archivo / tramas del sensor</td></tr>
+    <tr><td><b>🧑‍🌾 Agrónomo</b></td><td>Revisa y avala los análisis preliminares, acepta recomendaciones,
+      registra agua de riego y plagas.</td><td>Recomendaciones · Reportes · Historial</td></tr>
+    <tr><td><b>👤 Cliente</b></td><td>Consulta el estado de su finca y sus reportes (solo lectura).</td><td>Inicio · Historial · Reportes</td></tr>
+    <tr><td><b>🗺️ Extensionista</b></td><td>Ve varias fincas de su zona; escribe (agua/plagas/BPA) solo en su zona.</td><td>Mi zona · Reportes</td></tr>
+  </table>
+  <p>Los roles <b>instrumentador</b>, <b>cadenero sensorista</b>, <b>chofer</b> y <b>agrónomo</b> son
+  empleados que el administrador registra en <b>Equipo de trabajo</b> y asigna a las comisiones.</p>
+</section>
+
+<!-- ═══════════ 3 · Login ═══════════ -->
+<section class="paso" id="s3">
+  <h2><span class="num">3</span> Paso 1 · Iniciar sesión</h2>
+  <div class="pantalla-mock">
+    <div class="barra"><b>🌱 AgroIA — Inicio de sesión</b><span>AgroInteligente Colombia</span></div>
+    <div class="cuerpo">
+      <div class="campo"><b>Email</b><br/>correo@ejemplo.co</div>
+      <div class="campo"><b>Contraseña</b><br/>••••••••</div>
+      <span class="boton">Entrar</span>
+      <div class="campo"><b>Cuentas demo (un clic):</b> 👑 Administrador · 🧑‍🌾 Agrónomo · 👤 Cliente · 🗺️ Extensionista</div>
+    </div>
+  </div>
+  <h3>Qué se logra</h3>
+  <p>Ingresar a la plataforma con su rol. El sistema carga su perfil, sus permisos y las fincas que puede ver.</p>
+  <h3>Estado en que queda</h3>
+  <p><span class="estado ok">Sesión iniciada</span> El menú se adapta al rol: solo el Administrador ve
+  <b>⚙️ Administración ▾</b>; el Extensionista aterriza en «🗺️ Mi zona».</p>
+</section>
+
+<!-- ═══════════ 4 · Registrar finca ═══════════ -->
+<section class="paso" id="s4">
+  <h2><span class="num">4</span> Paso 2 · Registrar la finca (Admin)</h2>
+  <p class="sub">Menú <b>⚙️ Administración → 🏡 Registrar finca</b> — asistente de 3 secciones.</p>
+  <div class="pantalla-mock">
+    <div class="barra"><b>🏡 Registrar finca</b><span>1 Información · 2 Ubicación · 3 Predio</span></div>
+    <div class="cuerpo">
+      <div class="campo"><b>Información básica:</b> nombre, propietario, teléfono, email, departamento, municipio, vereda</div>
+      <div class="campo"><b>Ubicación:</b> 📍 GPS del navegador · 🗺️ mapa con polígono · 🔗 enlace Google Maps</div>
+      <div class="campo"><b>Predio:</b> área, profundidad efectiva, pedregosidad, riego, largo × ancho del lote</div>
+      <span class="boton">💾 Guardar finca</span>
+    </div>
+  </div>
+  <h3>Qué se logra</h3>
+  <ul>
+    <li>La finca queda registrada con coordenadas (GPS o polígono).</li>
+    <li>El sistema valida departamento/municipio, coordenadas y área (✅/⚠️/❌).</li>
+    <li>🗺️ Se cruza con las capas oficiales <b>IGAC/UPRA</b>: precarga textura, materia orgánica y CIC
+    como «estimado_por_sig».</li>
+  </ul>
+  <h3>Estado en que queda</h3>
+  <p><span class="estado gris">Etapa: Registro</span> En la 📊 Lista de trabajos la finca aparece con
+  semáforo <b>gris</b> y la actividad faltante «Registro de lote» (hasta completar el Paso 3).</p>
+  <div class="nota">El ID de la finca (cópielo con 📋 en la tarjeta de 🗂️ Fincas) es el
+  <code>finca_id</code> que el <b>instrumentador</b> configura en el sensor.</div>
+</section>
+
+<!-- ═══════════ 5 · Lotes ═══════════ -->
+<section class="paso" id="s5">
+  <h2><span class="num">5</span> Paso 3 · Lotes y datos agronómicos</h2>
+  <p class="sub">Menú <b>⚙️ Administración → 🗂️ Fincas</b> → botón <b>🗂️ Lotes</b> de la finca.</p>
+  <div class="pantalla-mock">
+    <div class="barra"><b>🗂️ Fincas</b><span>Listado de predios</span></div>
+    <div class="cuerpo">
+      <div class="campo"><b>Finca Demo — El Vergel</b> · ID 📋 <code>a0562767…</code><br/>
+      <span class="boton secundario">🗂️ Lotes</span> <span class="boton secundario">✏️ Editar</span>
+      <span class="boton secundario">🗑️ Eliminar</span></div>
+    </div>
+  </div>
+  <h3>Qué se logra</h3>
+  <p>Crear el lote productivo de la finca (nombre, área, geometría), registrar cultivo sembrado,
+  etapa fenológica y demás datos agronómicos. Cada lote puede tener su <b>🔄 Ciclos</b> (historial
+  siembra → cosecha → rendimiento).</p>
+  <h3>Estado en que queda</h3>
+  <p><span class="estado amarillo">Etapa: Asignación de comisión</span> Ya existe lote: la Lista de
+  trabajos muestra la actividad faltante «Asignación de comisión».</p>
+</section>
+
+<!-- ═══════════ 6 · Equipo ═══════════ -->
+<section class="paso" id="s6">
+  <h2><span class="num">6</span> Paso 4 · Equipo de trabajo y tarifas (Admin)</h2>
+  <p class="sub">Menú <b>⚙️ Administración → 🧑‍🤝‍🧑 Equipo de trabajo</b>.</p>
+  <div class="pantalla-mock">
+    <div class="barra"><b>🧑‍🤝‍🧑 Equipo de trabajo</b><span>➕ Registrar empleado</span></div>
+    <div class="cuerpo">
+      <div class="campo"><b>➕ Registrar empleado:</b> nombres, apellidos, tipo y número de documento,
+      domicilio, contacto, contacto de emergencia (nombre + teléfono), <b>rol</b> (instrumentador ·
+      cadenero sensorista · chofer · agrónomo), fecha de ingreso, estado</div>
+      <div class="campo"><b>💰 Tarifas por rol:</b> valor por día de trabajo (ej. instrumentador $120.000/día)</div>
+      <div class="campo"><b>🏥 Novedades:</b> incapacidad/ausencia con fechas y <b>reemplazo</b> (el sustituto
+      entra a la comisión con el mismo rol) · ✅ Cerrar novedad</div>
+    </div>
+  </div>
+  <h3>Qué se logra</h3>
+  <p>Dejar listo el personal de campo que ejecutará las mediciones y las tarifas con las que se
+  calcula el costo del equipo.</p>
+  <h3>Estado en que queda</h3>
+  <p><span class="estado ok">Equipo disponible</span> Empleados <b>activos</b> listos para asignarse
+  a comisiones. Toda alta/edición/desvinculación/novedad queda en 🕵️ Auditoría con fecha de registro
+  y modificación.</p>
+</section>
+
+<!-- ═══════════ 7 · Comisión ═══════════ -->
+<section class="paso" id="s7">
+  <h2><span class="num">7</span> Paso 5 · Crear la comisión (Admin)</h2>
+  <p class="sub">Menú <b>⚙️ Administración → 🗂️ Comisiones</b> → <b>➕ Crear comisión</b>.</p>
+  <div class="pantalla-mock">
+    <div class="barra"><b>🗂️ Crear comisión</b><span>Orden de trabajo por finca</span></div>
+    <div class="cuerpo">
+      <div class="campo"><b>Finca *</b> · <b>Servicio / tipo de reporte</b> (muestreo de suelos, reporte completo…)</div>
+      <div class="campo"><b>Fechas:</b> asignación * · inicio de tomas</div>
+      <div class="campo"><b>Equipo:</b> Instrumentador * (1) · Cadeneros sensoristas * (1 o más, Ctrl+clic)
+      · Chofer · Agrónomo</div>
+      <div class="campo"><b>Valores (COP):</b> comisión · cobro del servicio · validación del estudio · plataforma</div>
+      <span class="boton">💾 Crear comisión</span>
+    </div>
+  </div>
+  <h3>Reglas que aplica el sistema</h3>
+  <ul>
+    <li>Exactamente <b>1 instrumentador</b> y <b>≥ 1 cadenero sensorista</b>.</li>
+    <li>Si un empleado ya está en otra comisión activa → rechazo <b>EMPLEADO_OCUPADO</b>
+    (debe finalizarse su comisión actual).</li>
+    <li>Pueden existir <b>varias comisiones en paralelo</b> (una por finca).</li>
+  </ul>
+  <h3>Estado en que queda</h3>
+  <p><span class="estado amarillo">Comisión: asignada</span> La finca pasa en la Lista de trabajos a
+  «Toma de muestras» cuando se asignan las fechas; el equipo puede salir a campo.</p>
+  <div class="alerta">Una comisión <b>no puede tomar otra finca</b> hasta registrar el
+  <b>✅ fin de la medición</b> (Paso 9). Eso libera al equipo.</div>
+</section>
+
+<!-- ═══════════ 8 · Sensores ═══════════ -->
+<section class="paso" id="s8">
+  <h2><span class="num">8</span> Paso 6 · Configurar los sensores (instrumentador)</h2>
+  <p class="sub">Pestaña <b>📡 Sensores IoT</b> — simulador de trama con el contrato real <code>POST /api/sensor</code>.</p>
+  <div class="pantalla-mock">
+    <div class="barra"><b>📡 Sensores IoT</b><span>🔗 API de sensores — simulador de trama</span></div>
+    <div class="cuerpo">
+      <div class="campo"><code>{ "device_id": "esp32-npk-001", "finca_id": "a0562767…",
+      "latitude": 4.5306, "longitude": -75.6809, "ph": 6.2, "nitrogen": 42, … }</code></div>
+      <span class="boton">📡 Enviar trama</span>
+    </div>
+  </div>
+  <h3>Qué se logra</h3>
+  <ul>
+    <li>Asociar cada sensor (<code>device_id</code>) a la <b>finca que será medida</b> (finca_id).</li>
+    <li>Probar que el dispositivo transmite y que la lectura se persiste correctamente.</li>
+    <li>El GPS en grados se convierte automáticamente a <b>metros relativos al centroide de la finca</b>
+    (advertencia <code>gps_convertido_a_relativo</code>), para que el mapa de calor y el plano del lote
+    se dibujen bien.</li>
+  </ul>
+  <h3>Estado en que queda</h3>
+  <p><span class="estado azul">Sensor asociado a la finca</span> La tabla de dispositivos muestra
+  online/desactualizado/offline y las lecturas entran a la finca correcta.</p>
+</section>
+
+<!-- ═══════════ 9 · Toma de muestras ═══════════ -->
+<section class="paso" id="s9">
+  <h2><span class="num">9</span> Paso 7 · Toma de muestras en campo (cadeneros)</h2>
+  <p class="sub">Los cadeneros recorren el lote por <b>cuadrícula</b> y cada punto genera una trama.</p>
+  <div class="pantalla-mock">
+    <div class="barra"><b>📂 Cargar archivo</b><span>Mediciones en campo</span></div>
+    <div class="cuerpo">
+      <div class="campo"><b>Cuadrícula de muestreo (ej. 3×3):</b> cada punto lleva su GPS o su posición
+      local (x, y en metros) y las variables medidas (pH, NPK, CE, humedad…)</div>
+      <div class="campo"><b>Sin conexión:</b> suba el CSV/TXT/JSON con las tramas del día</div>
+      <span class="boton">📤 Subir archivo</span>
+    </div>
+  </div>
+  <h3>Qué se logra</h3>
+  <p>Poblar las lecturas de suelo de la finca (tabla <code>sensor_readings</code> con pos_x/pos_y en
+  metros). Cada lectura normaliza las variables (µS/cm → dS/m) y avisa si el NPK no está calibrado
+  contra laboratorio (<code>npk_sin_calibrar</code>).</p>
+  <h3>Estado en que queda</h3>
+  <p><span class="estado amarillo">Etapa: Toma de muestras completa</span> Con lecturas ≥ 1, la Lista
+  de trabajos pide la «Generación de recomendación». El mapa de calor (sección M) y el plano del lote
+  (sección N) ya tienen puntos para dibujar.</p>
+</section>
+
+<!-- ═══════════ 10 · Recomendaciones ═══════════ -->
+<section class="paso" id="s10">
+  <h2><span class="num">10</span> Paso 8 · Recomendaciones</h2>
+  <p class="sub">Pestaña <b>🧪 Recomendaciones</b>: finca + cultivo (vacío = ¿qué sembrar?) → 🧪 Analizar suelo.</p>
+  <div class="pantalla-mock">
+    <div class="barra"><b>🧪 Recomendaciones</b><span>Sistema experto + ML en sombra</span></div>
+    <div class="cuerpo">
+      <div class="campo"><b>Resultado:</b> clasificación (Apta / Moderada / Marginal / No apta), confianza,
+      tabla de diagnóstico por variable, plan de acciones con prioridad y confiabilidad</div>
+      <span class="boton">✅ Aceptar recomendación</span>
+      <span class="boton secundario">📋 Generar órdenes de trabajo</span>
+    </div>
+  </div>
+  <h3>Qué se logra</h3>
+  <ul>
+    <li>El diagnóstico agronómico con el sistema experto (reglas UPRA/Cenicafé/AGROSAVIA).</li>
+    <li>Si faltan datos, el análisis sale <b>preliminar</b> y lista los parámetros faltantes (sección P).</li>
+    <li><b>✅ Aceptar</b> deja el aval humano (el modelo aprende); <b>📋 Órdenes de trabajo</b> crea labores.</li>
+    <li>El botón <b>🌱 Registrar nuevo ciclo</b> incluye el bloque <b>🔄 Rotación sugerida</b>.</li>
+  </ul>
+  <h3>Estado en que queda</h3>
+  <p><span class="estado azul">Etapa: Recomendación generada</span> Queda en Historial y la Lista de
+  trabajos pide la «Generación de reporte (fin de actividad)».</p>
+</section>
+
+<!-- ═══════════ 11 · Fin de medición ═══════════ -->
+<section class="paso" id="s11">
+  <h2><span class="num">11</span> Paso 9 · Registrar el fin de la medición</h2>
+  <p class="sub">Menú <b>⚙️ Administración → 🗂️ Comisiones</b> → botón <b>✅ Registrar fin de medición</b>.</p>
+  <div class="pantalla-mock">
+    <div class="barra"><b>🗂️ Comisiones</b><span>Finca Demo — El Vergel · estado: asignada</span></div>
+    <div class="cuerpo">
+      <div class="campo"><b>Miembros:</b> Luis Torres (instrumentador) · Marta Ríos y Pedro López (cadeneros)</div>
+      <span class="boton">✅ Registrar fin de medición</span>
+    </div>
+  </div>
+  <h3>Qué se logra</h3>
+  <p>Cierra la toma de datos: la comisión queda <b>finalizada</b> con su <code>fecha_fin_tomas</code> y el
+  equipo queda <b>libre para otra finca</b>. El costo estimado del equipo se calcula con los días y las
+  tarifas por rol.</p>
+  <h3>Estado en que queda</h3>
+  <p><span class="estado ok">Comisión: finalizada</span> Si un empleado tenía una novedad abierta, puede
+  cerrarse con «✅ Cerrar novedad» al reintegrarse.</p>
+</section>
+
+<!-- ═══════════ 12 · Reporte ═══════════ -->
+<section class="paso" id="s12">
+  <h2><span class="num">12</span> Paso 10 · Generar el reporte</h2>
+  <p class="sub">Pestaña <b>📄 Reportes</b>: finca + tipo + modelo de pronóstico → 📄 Generar reporte.</p>
+  <div class="pantalla-mock">
+    <div class="barra"><b>📄 Reportes</b><span>Generación del documento</span></div>
+    <div class="cuerpo">
+      <div class="campo"><b>Tipo:</b> 🌱 Recomendación de siembra · 🌾 Cultivo sembrado · 📊 Completo</div>
+      <div class="campo"><b>Modelo del pronóstico:</b> <b>Ambos (Open-Meteo + ECMWF)</b> · Auto · ECMWF (IFS 0.25°)</div>
+      <div class="campo"><b>Opcionales:</b> presupuesto ($/ha) · rendimiento actual (t/ha)</div>
+      <span class="boton">📄 Generar reporte</span>
+      <span class="boton secundario">🧪 Simular enmienda (what-if)</span>
+    </div>
+  </div>
+  <h3>Qué se logra</h3>
+  <ul>
+    <li>El documento HTML autocontenido (imprimible a PDF) con todas las secciones del análisis.</li>
+    <li>Con «Ambos» (por defecto) la sección N trae <b>dos tablas de pronóstico</b>: Open-Meteo y
+    «Pronóstico según el modelo internacional <b>ECMWF</b> (IFS 0.25°)».</li>
+    <li>Vista previa + 🔗 abrir + ⬇ descargar.</li>
+  </ul>
+  <h3>Estado en que queda</h3>
+  <p><span class="estado ok">Etapa: Fin de actividad</span> La generación queda en auditoría
+  (<code>reporte.generar</code>) y la Lista de trabajos muestra el semáforo <b>verde</b> con
+  fecha de fin. La orden de trabajo está completa.</p>
+</section>
+
+<!-- ═══════════ 13 · Reporte explicado ═══════════ -->
+<section class="paso" id="s13">
+  <h2><span class="num">13</span> El reporte explicado sección por sección</h2>
+  <table>
+    <tr><th>#</th><th>Sección</th><th>Qué muestra y para qué sirve</th></tr>
+    <tr><td><b>T</b></td><td>Telemetría</td><td>Dispositivo, finca, última transmisión, RSSI, uptime,
+    <b>calidad NPK en 3 niveles</b> (validado en laboratorio / calibrado de fábrica / sin validar),
+    validación de laboratorio y los 17 parámetros medidos.</td></tr>
+    <tr><td><b>pH</b></td><td>Escala</td><td>Barra de pH con marcador y etiqueta ácido/neutro/alcalino
+    para lectura rápida.</td></tr>
+    <tr><td><b>01</b></td><td>Diagnóstico UC2 (cultivo sembrado)</td><td>Clasificación, estado de
+    validación, tabla Acción · Prioridad · Confiabilidad · Plan sugerido, contexto de pH por cultivo,
+    NPK condicional y fenología.</td></tr>
+    <tr><td><b>02</b></td><td>Recomendación UC1 (siembra)</td><td>Ranking de los 5 mejores cultivos con
+    scorebar, badge de estado y confianza real.</td></tr>
+    <tr><td><b>M</b></td><td>Mapa de calor</td><td>Matriz de puntos pos_x/pos_y por variable con rampa de
+    color (verde→intenso) para ver la variabilidad espacial del suelo.</td></tr>
+    <tr><td><b>N</b></td><td>Plano del lote</td><td>Silueta del lote, área y perímetro estimados,
+    pendiente y drenaje, metodología de muestreo, clima IDEAM del día de la muestra, historial de ciclos
+    y <b>⛅ pronóstico extendido (7 días)</b> con una o dos fuentes (Open-Meteo / ECMWF).</td></tr>
+    <tr><td><b>E</b></td><td>Análisis económico</td><td>Plan de fertilización al presupuesto, ganancia
+    esperada, <b>ROI</b> = (ganancia − costo) ÷ costo y comparación con el rendimiento declarado.</td></tr>
+    <tr><td><b>R</b></td><td>Necesidad de riego</td><td>Balance hídrico ETo × Kc − lluvia (7 días) con
+    déficit acumulado y recomendación de riego (modelo auto o ECMWF).</td></tr>
+    <tr><td><b>S</b></td><td>Rotación sugerida</td><td>Siguiente cultivo según el último ciclo cerrado y
+    las reglas de compatibilidad (fijación de N, ruptura de plagas…).</td></tr>
+    <tr><td><b>B</b></td><td>Trazabilidad BPA</td><td>Resumen del checklist ICA 30021 por finca.</td></tr>
+    <tr><td><b>Q</b></td><td>Órdenes de trabajo</td><td>Labores generadas desde la recomendación con
+    fechas, dosis y estado.</td></tr>
+    <tr><td><b>P</b></td><td>Parámetros faltantes</td><td>Si el análisis es preliminar: qué falta medir,
+    aviso de aval de agrónomo y muestreo inteligente con GeoJSON descargable.</td></tr>
+    <tr><td><b>04/05</b></td><td>Advertencias y próximos pasos</td><td>Calidad de datos, alerta de P alto
+    y predicción de rendimiento según historial de ciclos.</td></tr>
+  </table>
+  <div class="nota">Regla general del sistema: <b>ningún reporte se bloquea por falta de datos</b> — el
+  dato faltante se lista en la sección P y el análisis se marca como preliminar.</div>
+</section>
+
+<!-- ═══════════ 14 · BPA ═══════════ -->
+<section class="paso" id="s14">
+  <h2><span class="num">14</span> Trazabilidad BPA (visitas de verificación)</h2>
+  <p class="sub">Menú <b>⚙️ Administración → 📋 Trazabilidad / BPA</b>.</p>
+  <div class="pantalla-mock">
+    <div class="barra"><b>📋 Trazabilidad / BPA</b><span>Checklist ICA 30021 + visitas</span></div>
+    <div class="cuerpo">
+      <div class="campo"><b>Checklist vigente:</b> 11 ítems (suelo/agua · agroquímicos · trabajadores ·
+      poscosecha) con ✅ Cumple / ❌ No cumple → 💾 Guardar checklist</div>
+      <div class="campo"><b>➕ Registrar visita:</b> fecha + evaluación de los ítems de esa visita</div>
+      <div class="campo"><b>🗓️ Línea de tiempo:</b> cada visita con quién, cuándo y qué se evaluó · 🗑️ Quitar</div>
+    </div>
+  </div>
+  <h3>Qué se logra</h3>
+  <p>Trazabilidad para certificación: cada visita deja constancia de qué prácticas se cumplen, con
+  fecha y verificador, y actualiza el checklist vigente.</p>
+  <h3>Estado en que queda</h3>
+  <p><span class="estado ok">Visita registrada</span> La visita queda en la línea de tiempo y el
+  avance BPA se actualiza (sección B del reporte).</p>
+</section>
+
+<!-- ═══════════ 15 · Lista de trabajos ═══════════ -->
+<section class="paso" id="s15">
+  <h2><span class="num">15</span> Lista de trabajos: leer el semáforo</h2>
+  <div class="pantalla-mock">
+    <div class="barra"><b>📊 Lista de trabajos</b><span>Filtros: etapa · estado · fechas</span></div>
+    <div class="cuerpo">
+      <div class="campo"><b>🏡 Finca Demo — El Vergel</b> · etapa <b>Asignación de comisión</b> ·
+      estado <i>pendiente</i> · ⚠️ Faltan: Asignación de comisión</div>
+      <div class="campo"><b>📈 Gráfico:</b> órdenes por etapa + resumen pendientes / en proceso / finalizadas</div>
+    </div>
+  </div>
+  <ul>
+    <li><b>Gris</b> = Registro · <b>Ámbar</b> = Asignación / Toma de muestras ·
+    <b>Azul</b> = Recomendación · <b>Verde claro</b> = Reporte · <b>Verde oscuro</b> = Fin de actividad.</li>
+    <li>Cada fila muestra fecha de inicio (asignación de comisión) y fecha de fin (reporte generado).</li>
+    <li>Filtre por <b>etapa</b>, por <b>estado</b> (inicio/fin) y por fechas para contabilizar órdenes de trabajo.</li>
+  </ul>
+</section>
+
+<!-- ═══════════ 16 · Resumen ═══════════ -->
+<section class="paso" id="s16">
+  <h2><span class="num">16</span> Resumen: pantalla → estado resultante</h2>
+  <table>
+    <tr><th>Pantalla</th><th>Qué se logra</th><th>Estado en que queda</th></tr>
+    <tr><td>🏡 Registrar finca</td><td>Finca con coordenadas y SIG IGAC/UPRA</td><td>Etapa Registro (falta lote)</td></tr>
+    <tr><td>🗂️ Fincas → Lotes</td><td>Lote productivo + datos agronómicos</td><td>Falta asignar comisión</td></tr>
+    <tr><td>🧑‍🤝‍🧑 Equipo de trabajo</td><td>Empleados activos + tarifas por rol</td><td>Equipo listo para asignar</td></tr>
+    <tr><td>🗂️ Comisiones</td><td>Equipo asignado a la finca con fechas y valores</td><td>Comisión asignada</td></tr>
+    <tr><td>📡 Sensores IoT</td><td>Sensor asociado a la finca</td><td>Listo para medir</td></tr>
+    <tr><td>📂 Cargar archivo / tramas</td><td>Lecturas de suelo por cuadrícula</td><td>Toma de muestras completa</td></tr>
+    <tr><td>🧪 Recomendaciones</td><td>Diagnóstico + plan + aval humano</td><td>Recomendación generada</td></tr>
+    <tr><td>🗂️ Comisiones → ✅ Fin de medición</td><td>Cierre de campo y equipo liberado</td><td>Comisión finalizada</td></tr>
+    <tr><td>📄 Reportes</td><td>Documento completo del análisis</td><td><b>Fin de actividad</b> (auditado)</td></tr>
+    <tr><td>📋 Trazabilidad / BPA</td><td>Visitas de verificación por fecha</td><td>Línea de tiempo BPA</td></tr>
+  </table>
+</section>
+
+<!-- ═══════════ 17 · Errores comunes ═══════════ -->
+<section class="paso" id="s17">
+  <h2><span class="num">17</span> Errores comunes y cómo resolverlos</h2>
+  <table>
+    <tr><th>Situación</th><th>Qué está pasando</th><th>Cómo se resuelve</th></tr>
+    <tr><td>No veo ⚙️ Administración</td><td>Su usuario no tiene rol Admin (o la sesión guardada es antigua)</td>
+      <td>Verifique el rol en 👤 Usuarios y vuelva a iniciar sesión.</td></tr>
+    <tr><td>Al crear comisión: «EMPLEADO_OCUPADO»</td><td>El empleado está en otra comisión activa</td>
+      <td>Finalice (✅ fin de medición) o cancele su comisión actual.</td></tr>
+    <tr><td>No puedo crear comisión sin instrumentador</td><td>Regla de negocio: 1 instrumentador y ≥ 1 cadenero</td>
+      <td>Registre los empleados en Equipo de trabajo y asígnelos.</td></tr>
+    <tr><td>La trama rechaza el GPS / el mapa de calor se ve raro</td><td>El GPS en grados se convierte a metros
+      desde el centroide de la finca</td><td>Envíe latitude/longitude (se convierten solas) o pos_x/pos_y en metros;
+      si la finca no tiene coordenadas, regístrelas.</td></tr>
+    <tr><td>El reporte sale «preliminar»</td><td>Faltan parámetros esenciales</td><td>Complete las mediciones
+      (sección P del reporte) y vuelva a generar.</td></tr>
+    <tr><td>La finca no pasa a «Fin de actividad»</td><td>El reporte no se ha generado tras la recomendación</td>
+      <td>Genere el reporte en 📄 Reportes (queda auditado).</td></tr>
+    <tr><td>La comisión no aparece libre</td><td>No se registró el fin de medición</td>
+      <td>Use ✅ Registrar fin de medición en la comisión.</td></tr>
+  </table>
+</section>
+
+</div>
+<footer>AgroIA — AgroInteligente Colombia · 🎓 Guía de capacitación · 2026-08-28 ·
+<a href="/">Volver a la plataforma</a></footer>
+</body>
+</html>

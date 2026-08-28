@@ -61,14 +61,19 @@
     <li><a href="#p6">Administrar usuarios</a></li>
     <li><a href="#p7">Administrar insumos (precios)</a></li>
     <li><a href="#p8">Auditoría de acciones</a></li>
+    <li><a href="#p8a">Equipo de trabajo</a></li>
+    <li><a href="#p8b">Comisiones</a></li>
+    <li><a href="#p8c">Lista de trabajos</a></li>
     <li><a href="#p9">Sensores IoT</a></li>
     <li><a href="#p10">Cargar archivo</a></li>
     <li><a href="#p11">Recomendaciones y aceptación</a></li>
     <li><a href="#p12">Historial</a></li>
     <li><a href="#p13">Reportes</a></li>
+    <li><a href="#p13b">Trazabilidad / BPA</a></li>
     <li><a href="#p14">Chat asesor</a></li>
     <li><a href="#p15">Catálogo de cultivos</a></li>
     <li><a href="#p16">Video — flujo completo</a></li>
+    <li><a href="/capacitacion.html" target="_blank">🎓 Capacitación completa (flujo end-to-end)</a></li>
   </ol>
 </nav>
 
@@ -95,6 +100,8 @@
     <li><b>🔄 Ciclo activo</b> con botón «✏️ Cosechar ciclo» (rendimiento y calidad).</li>
     <li><b>📋 Tareas pendientes de hoy</b> (labores) con ✔️ Completar y 🚫 Cancelar.</li>
     <li><b>⛅ Alertas climáticas</b> (lluvia/helada) cuando el pronóstico detecta riesgo.</li>
+    <li><b>💧 Necesidad de riego (7 días)</b> con selector de modelo del pronóstico
+    (<b>Auto</b> o <b>ECMWF IFS 0.25°</b>) y la fuente usada.</li>
   </ul>
   <figure><img class="captura" src="/media-ayuda/inicio.png" alt="Panel de inicio con KPIs, lecturas y tareas" />
   <figcaption>Figura 1 — Panel de Inicio del Administrador.</figcaption></figure>
@@ -107,7 +114,8 @@
   Elija una opción para navegar; el menú se cierra solo. Para cerrarlo sin elegir, haga clic fuera.</p>
   <ul>
     <li><b>⚙️ Administración</b> (solo Admin): 🏡 Registrar finca · 🗂️ Fincas · 📜 Historial ·
-    👥 Administrar usuarios · 💰 Administrar insumos · 🕵️ Auditoría.</li>
+    👥 Administrar usuarios · 💰 Administrar insumos · 🕵️ Auditoría · 📋 Trazabilidad / BPA ·
+    🧑‍🤝‍🧑 Equipo de trabajo · 🗂️ Comisiones · 📊 Lista de trabajos · 🤖 Reentrenar modelo.</li>
     <li><b>❓ Ayuda</b>: abre este manual u otros según el rol (el Administrador ve los tres manuales).</li>
   </ul>
   <figure><img class="captura" src="/media-ayuda/admin-menu.png" alt="Menú Administración desplegado sobre el contenido" />
@@ -181,6 +189,50 @@
   <figcaption>Figura 5 — Auditoría de acciones con filtros y búsqueda.</figcaption></figure>
 </section>
 
+<section class="paso" id="p8a">
+  <h2><span class="num">8A</span> Equipo de trabajo</h2>
+  <p>En <b>⚙️ Administración → 🧑‍🤝‍🧑 Equipo de trabajo</b> registre los empleados de campo:</p>
+  <ul>
+    <li><b>➕ Registrar empleado</b>: nombres, apellidos, tipo y número de documento, domicilio,
+    contacto, contacto de emergencia (nombre + teléfono), <b>rol</b> (instrumentador, cadenero
+    sensorista, chofer, agrónomo), fecha de ingreso y estado (activo/desvinculado).</li>
+    <li><b>✏️ Editar</b> y <b>🗑️ Desvincular</b> (borrado lógico: conserva la trazabilidad).</li>
+    <li><b>💰 Tarifas por rol</b>: valor por día de trabajo de cada rol (alimenta el costo del equipo).</li>
+    <li><b>🏥 Novedades</b>: registrar incapacidad/ausencia con fechas, comisión afectada y
+    <b>reemplazo opcional</b> (el sustituto entra a la comisión con el mismo rol) y
+    «✅ Cerrar novedad» al reintegrarse.</li>
+  </ul>
+  <div class="nota">Todo queda en 🕵️ Auditoría con fecha de registro y modificación.</div>
+</section>
+
+<section class="paso" id="p8b">
+  <h2><span class="num">8B</span> Comisiones</h2>
+  <p>En <b>⚙️ Administración → 🗂️ Comisiones</b> cree la comisión que tomará las medidas en cada finca:</p>
+  <ul>
+    <li><b>➕ Crear comisión</b>: finca, servicio/tipo de reporte, fecha de asignación, fecha de
+    inicio de tomas, <b>1 instrumentador</b> (configura los sensores y les asigna la finca) y
+    <b>uno o más cadeneros sensoristas</b> (recorren el terreno tomando medidas); chofer y agrónomo opcionales.</li>
+    <li><b>Valores</b>: comisión, cobro del servicio, validación del estudio y plataforma.</li>
+    <li><b>✅ Registrar fin de medición</b>: obligatorio para liberar el equipo a otra finca.
+    Pueden trabajar varias comisiones en paralelo.</li>
+    <li><b>🗑️ Cancelar</b> deja la comisión cancelada y libera el equipo.</li>
+  </ul>
+  <div class="nota">Si asigna un empleado que ya está en otra comisión activa, el sistema lo rechaza
+  (EMPLEADO_OCUPADO) indicando a quiénes debe liberar primero.</div>
+</section>
+
+<section class="paso" id="p8c">
+  <h2><span class="num">8C</span> Lista de trabajos</h2>
+  <p>En <b>⚙️ Administración → 📊 Lista de trabajos</b> siga la traza de cada finca/cliente:</p>
+  <ul>
+    <li><b>Semáforo por etapa</b>: Registro → Asignación de comisión → Toma de muestras →
+    Generación de recomendación → Generación de reporte → <b>Fin de actividad</b>.</li>
+    <li><b>Actividades faltantes</b> por finca (lote, comisión, muestras, recomendación, reporte).</li>
+    <li><b>Filtros</b> por etapa, estado (pendiente / en proceso / finalizada) y fechas de inicio.</li>
+    <li><b>📈 Gráfico</b> de órdenes de trabajo por etapa y resumen de estados.</li>
+  </ul>
+</section>
+
 <section class="paso" id="p9">
   <h2><span class="num">9</span> Sensores IoT</h2>
   <p>En <b>📡 Sensores IoT</b> monitoree las lecturas en vivo y pruebe tramas reales:</p>
@@ -191,6 +243,9 @@
     <li><b>Tabla de últimas lecturas</b> con estado por dispositivo (online /
     datos desactualizados / offline).</li>
   </ul>
+  <div class="nota">El GPS (grados) se convierte automáticamente a metros relativos al centroide de
+  la finca antes de guardarse en pos_x/pos_y, para que el mapa de calor y el plano del lote dibujen
+  correctamente (advertencia <code>gps_convertido_a_relativo</code> en la respuesta).</div>
   <figure><img class="captura" src="/media-ayuda/sensores.png" alt="Simulador de trama y estado de sensores" />
   <figcaption>Figura 6 — Simulador de trama y monitoreo de sensores.</figcaption></figure>
 </section>
@@ -234,10 +289,31 @@
   <h2><span class="num">13</span> Reportes</h2>
   <p>En <b>📄 Reportes</b> genere el documento completo del análisis de suelo: diagnóstico,
   plano del lote, mapa de calor, sección económica con <b>ROI</b>, historial de ciclos y
-  advertencias. Puede <b>🔗 abrirlo en pestaña nueva</b> o <b>⬇ descargarlo</b> (HTML, listo
+  advertencias. El formulario incluye:</p>
+  <ul>
+    <li><b>Modelo del pronóstico del clima</b>: <b>Ambos (Open-Meteo + ECMWF)</b> por defecto —
+    consulta las dos fuentes y agrega las dos tablas a la sección N; también «Auto» o
+    «ECMWF — IFS 0.25°» para una sola.</li>
+    <li><b>Presupuesto ($/ha)</b> y <b>rendimiento actual (t/ha)</b> opcionales.</li>
+  </ul>
+  <p>Puede <b>🔗 abrirlo en pestaña nueva</b> o <b>⬇ descargarlo</b> (HTML, listo
   para imprimir en PDF). También puede <b>🧪 simular enmiendas (what-if)</b> antes de generarlo.</p>
+  <div class="nota">Generar el reporte registra <code>reporte.generar</code> en auditoría: en la
+  📊 Lista de trabajos esa finca pasa a <b>Fin de actividad</b>.</div>
   <figure><img class="captura" src="/media-ayuda/reportes.png" alt="Formulario de generación de reportes" />
   <figcaption>Figura 9 — Generación del reporte de análisis.</figcaption></figure>
+</section>
+
+<section class="paso" id="p13b">
+  <h2><span class="num">13B</span> Trazabilidad / BPA</h2>
+  <p>En <b>⚙️ Administración → 📋 Trazabilidad / BPA</b> gestione las Buenas Prácticas Agrícolas
+  (Res. ICA 30021/2017):</p>
+  <ul>
+    <li><b>Checklist vigente</b> (11 ítems): marque ✅ Cumple / ❌ No cumple y pulse <b>💾 Guardar checklist</b>.</li>
+    <li><b>➕ Registrar visita de verificación</b>: fecha + evaluación de los ítems; la visita queda en la
+    <b>línea de tiempo de trazabilidad</b> y actualiza el checklist vigente.</li>
+    <li><b>🗓️ Visitas de verificación</b>: historial con <b>🗑️ Quitar</b> (sin tocar el checklist vigente).</li>
+  </ul>
 </section>
 
 <section class="paso" id="p14">
@@ -272,7 +348,8 @@
 </section>
 
 </div>
-<footer>AgroIA — AgroInteligente Colombia · Manual de usuario Administrador · 2026-08-27</footer>
+<footer>AgroIA — AgroInteligente Colombia · Manual de usuario Administrador · 2026-08-28 ·
+<a href="/capacitacion.html" style="color:inherit">🎓 Guía de capacitación completa</a></footer>
 <script>
 (function () {
   var frames = [
