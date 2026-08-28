@@ -98,14 +98,14 @@ refleja en el mapa de calor del reporte.</p>
 </tbody>
 </table>
 <p>Cada trama representa <strong>una toma de muestra en un punto del lote</strong>. Si se
-incluyen las coordenadas <code>pos_x</code> y <code>pos_y</code> (posición del punto dentro del
+incluyen las coordenadas <code>latitude</code> y <code>longitude</code> (posición del punto dentro del
 terreno), la plataforma pinta el <strong>mapa de calor por parámetro</strong> en el reporte.</p>
 <h3 id="body-de-prueba-copie-y-pegue">🧪 Body de prueba — copie y pegue</h3>
 <pre><code class="language-json">{
   &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
   &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
-  &quot;pos_x&quot;: 20.0,
-  &quot;pos_y&quot;: 50.0,
+  &quot;latitude&quot;: 20.0,
+  &quot;longitude&quot;: 50.0,
   &quot;ph&quot;: 6.1,
   &quot;conductivity&quot;: 620,
   &quot;nitrogen&quot;: 260,
@@ -128,10 +128,10 @@ plataforma (pestaña Fincas → botón «📋 Copiar» en la tarjeta de la finca
 <p><strong>Prueba rápida — bash (macOS / Linux):</strong></p>
 <pre><code class="language-bash">curl -X POST https://agroia-backend.onrender.com/api/sensor \
   -H &quot;Content-Type: application/json&quot; \
-  -d '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;pos_x&quot;:20.0,&quot;pos_y&quot;:50.0,&quot;ph&quot;:6.1,&quot;conductivity&quot;:620,&quot;nitrogen&quot;:260,&quot;phosphorus&quot;:28,&quot;potassium&quot;:95,&quot;soil_humidity&quot;:31.0,&quot;soil_temperature&quot;:19.5,&quot;humidity&quot;:72.0,&quot;temperature&quot;:21.2,&quot;rssi&quot;:-45,&quot;uptime_s&quot;:604800}'
+  -d '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;latitude&quot;:20.0,&quot;longitude&quot;:50.0,&quot;ph&quot;:6.1,&quot;conductivity&quot;:620,&quot;nitrogen&quot;:260,&quot;phosphorus&quot;:28,&quot;potassium&quot;:95,&quot;soil_humidity&quot;:31.0,&quot;soil_temperature&quot;:19.5,&quot;humidity&quot;:72.0,&quot;temperature&quot;:21.2,&quot;rssi&quot;:-45,&quot;uptime_s&quot;:604800}'
 </code></pre>
 <p><strong>Prueba rápida — PowerShell (Windows):</strong></p>
-<pre><code class="language-powershell">$body = '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;pos_x&quot;:20.0,&quot;pos_y&quot;:50.0,&quot;ph&quot;:6.1,&quot;conductivity&quot;:620,&quot;nitrogen&quot;:260,&quot;phosphorus&quot;:28,&quot;potassium&quot;:95,&quot;soil_humidity&quot;:31.0,&quot;soil_temperature&quot;:19.5,&quot;humidity&quot;:72.0,&quot;temperature&quot;:21.2,&quot;rssi&quot;:-45,&quot;uptime_s&quot;:604800}'
+<pre><code class="language-powershell">$body = '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;latitude&quot;:20.0,&quot;longitude&quot;:50.0,&quot;ph&quot;:6.1,&quot;conductivity&quot;:620,&quot;nitrogen&quot;:260,&quot;phosphorus&quot;:28,&quot;potassium&quot;:95,&quot;soil_humidity&quot;:31.0,&quot;soil_temperature&quot;:19.5,&quot;humidity&quot;:72.0,&quot;temperature&quot;:21.2,&quot;rssi&quot;:-45,&quot;uptime_s&quot;:604800}'
 Invoke-RestMethod -Uri &quot;https://agroia-backend.onrender.com/api/sensor&quot; -Method Post -ContentType &quot;application/json&quot; -Body $body
 </code></pre>
 <p><strong>Respuesta esperada:</strong></p>
@@ -158,8 +158,8 @@ Invoke-RestMethod -Uri &quot;https://agroia-backend.onrender.com/api/sensor&quot
 <pre><code class="language-json">{
   &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
   &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
-  &quot;pos_x&quot;: 20.0,
-  &quot;pos_y&quot;: 50.0,
+  &quot;latitude&quot;: 20.0,
+  &quot;longitude&quot;: 50.0,
   &quot;humidity&quot;: 72.0,
   &quot;temperature&quot;: 21.2,
   &quot;conductivity&quot;: 620,
@@ -216,18 +216,18 @@ botón «Copiar». También aparece en la tarjeta de cada finca. Use ese ID como
 <td>UUID de la finca a la que corresponde la medición (se obtiene al crear la finca en la plataforma)</td>
 </tr>
 <tr>
-<td><code>pos_x</code></td>
+<td><code>latitude</code></td>
 <td>float</td>
 <td>❌ (necesario para el mapa de calor)</td>
 <td>metros</td>
-<td>Posición X del punto de toma dentro del lote, medida desde una esquina</td>
+<td>Posición X del punto de toma dentro del lote, medida desde una esquina (se acepta también <code>pos_x</code>)</td>
 </tr>
 <tr>
-<td><code>pos_y</code></td>
+<td><code>longitude</code></td>
 <td>float</td>
 <td>❌ (necesario para el mapa de calor)</td>
 <td>metros</td>
-<td>Posición Y del punto de toma dentro del lote</td>
+<td>Posición Y del punto de toma dentro del lote (se acepta también <code>pos_y</code>)</td>
 </tr>
 <tr>
 <td><code>ph</code></td>
@@ -321,7 +321,7 @@ motor de recomendaciones.</p>
   -d '{
     &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
     &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
-    &quot;pos_x&quot;: 20.0, &quot;pos_y&quot;: 50.0,
+    &quot;latitude&quot;: 20.0, &quot;longitude&quot;: 50.0,
     &quot;ph&quot;: 6.1, &quot;conductivity&quot;: 620,
     &quot;nitrogen&quot;: 260, &quot;phosphorus&quot;: 28, &quot;potassium&quot;: 95,
     &quot;humidity&quot;: 72.0, &quot;temperature&quot;: 21.2,
@@ -346,8 +346,8 @@ void enviarMedicion(float posX, float posY, float ph, float ceUsCm,
   StaticJsonDocument&lt;512&gt; doc;
   doc[&quot;device_id&quot;]  = DEVICE_ID;
   doc[&quot;finca_id&quot;]   = FINCA_ID;   // finca a la que corresponde
-  doc[&quot;pos_x&quot;]      = posX;      // metros dentro del lote
-  doc[&quot;pos_y&quot;]      = posY;
+  doc[&quot;latitude&quot;]  = posX;      // metros dentro del lote
+  doc[&quot;longitude&quot;] = posY;
   doc[&quot;ph&quot;]         = ph;
   doc[&quot;conductivity&quot;] = ceUsCm;  // µS/cm
   doc[&quot;nitrogen&quot;]   = nPpm;      // ppm
@@ -375,7 +375,7 @@ void enviarMedicion(float posX, float posY, float ph, float ceUsCm,
 <ol>
 <li>Divida el lote como una <strong>matriz</strong> (ej. 3×3, 4×3 según el tamaño).</li>
 <li>Defina una esquina del lote como origen <code>(0, 0)</code>.</li>
-<li>Mida las coordenadas de cada punto en <strong>metros</strong> (<code>pos_x</code>, <code>pos_y</code>).</li>
+<li>Mida las coordenadas de cada punto en <strong>metros</strong> (<code>latitude</code>, <code>longitude</code>).</li>
 <li>En cada punto tome la muestra y envíe una trama con esas coordenadas.</li>
 <li>Envíe todas las tramas en una sola jornada de muestreo (mismo día) para que
    el reporte compare puntos comparables.</li>
@@ -487,7 +487,7 @@ opcional). Formatos aceptados:</p>
 125,10,6.4,610,175,30,101,35,20.0
 230,10,6.7,670,155,34,111,39,20.8
 </code></pre>
-<p>(Se aceptan también los nombres <code>pos_x,pos_y</code>, <code>coordenada_x,coordenada_y</code>,
+<p>(Se aceptan también los nombres <code>latitude,longitude</code>, <code>pos_x,pos_y</code>, <code>coordenada_x,coordenada_y</code>,
 <code>columna,fila</code>.)</p>
 <h3 id="json-lista-de-tramas-una-por-punto">JSON — lista de tramas (una por punto)</h3>
 <pre><code class="language-json">[

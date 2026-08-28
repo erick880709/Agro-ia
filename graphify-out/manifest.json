@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787875730.4636488,
-    "ast_hash": "5d5f0592798a46f06130479487b052f7",
+    "mtime": 1787876000.2081752,
+    "ast_hash": "b04b16f04ece714700f5a6d005bf5722",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -5022,11 +5022,6 @@
   "apps/backend/alembic/versions/022_imagenes_y_validacion_rendimiento.py": {
     "mtime": 1787875515.4516187,
     "ast_hash": "6e0b81ac15ada1e09dc6a4175c7ecc1c",
-    "semantic_hash": ""
-  },
-  "media/labores/labor_4141d1bf_1787875577.png": {
-    "mtime": 1787875577.3436446,
-    "ast_hash": "b26b54932ddc1fe476d8a3cb213156d9",
     "semantic_hash": ""
   }
 }

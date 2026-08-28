@@ -322,12 +322,13 @@ async function arrancarAplicacion() {
   renderChat();
   document.getElementById('sim-enviar').addEventListener('click', enviarTramaSimulada);
   // Trama de ejemplo con el formato REAL del firmware (POST /api/sensor),
-  // incluyendo finca_id, posición de la toma y humedad/temperatura de suelo.
+  // incluyendo finca_id, posición de la toma (latitude/longitude) y
+  // humedad/temperatura de suelo.
   document.getElementById('sim-trama').value = JSON.stringify({
     device_id: 'esp32-npk-001',
     finca_id: '8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936',
-    pos_x: 20.0,
-    pos_y: 50.0,
+    latitude: 20.0,
+    longitude: 50.0,
     ph: 6.1,
     conductivity: 620,
     nitrogen: 260,

@@ -537,7 +537,7 @@ Doble ruta (ambas montadas): `api/sensor_api.py` (formato firmware, **la que usa
 {
   "device_id": "esp32-npk-001",
   "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
-  "pos_x": 20.0, "pos_y": 50.0,
+  "latitude": 20.0, "longitude": 50.0,
   "ph": 6.1, "conductivity": 620,
   "nitrogen": 260, "phosphorus": 28, "potassium": 95,
   "soil_humidity": 31.0, "soil_temperature": 19.5,
@@ -546,7 +546,7 @@ Doble ruta (ambas montadas): `api/sensor_api.py` (formato firmware, **la que usa
 }
 ```
 
-- Obligatorio: `device_id`. Opcionales: `finca_id` (UUID, asocia el dispositivo a la finca), `pos_x`/`pos_y` (punto de muestreo en el lote), `soil_humidity`/`soil_temperature` (humedad/temperatura **del suelo**; se guardan como `humedad`/`temperatura_suelo`), y cualquier variable del `MAPA_CAMPOS`.
+- Obligatorio: `device_id`. Opcionales: `finca_id` (UUID, asocia el dispositivo a la finca), `latitude`/`longitude` (punto de muestreo en el lote; se guardan en las columnas internas `pos_x`/`pos_y` y se aceptan también los nombres antiguos `pos_x`/`pos_y` por retrocompatibilidad), `soil_humidity`/`soil_temperature` (humedad/temperatura **del suelo**; se guardan como `humedad`/`temperatura_suelo`), y cualquier variable del `MAPA_CAMPOS`.
 - `humidity`/`temperature` se guardan como **ambientales** (DHT22). Este es el formato precargado en el simulador de la pestaña Sensores IoT.
 
 ### 7.2 Procesamiento (paso a paso)

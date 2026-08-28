@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AgroIA · AgroInteligente Colombia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="/styles.css?v=20260827-media" />
+  <link rel="stylesheet" href="/styles.css?v=20260827-latlng" />
 </head>
 <body>
   <!-- ============ PANTALLA DE AUTENTICACIÓN ============ -->
@@ -116,7 +116,7 @@
           <code>phosphorus</code> y <code>potassium</code> (ppm), <code>conductivity</code> (µS/cm),
           <code>humidity</code> (% HR ambiente, DHT22) y <code>temperature</code> (°C). Si el sensor mide suelo,
           envía <code>soil_humidity</code> y <code>soil_temperature</code> (se guardan como humedad y temperatura
-          del suelo). <code>finca_id</code> (UUID) asocia el dispositivo a tu finca, y <code>pos_x</code>/<code>pos_y</code>
+          del suelo). <code>finca_id</code> (UUID) asocia el dispositivo a tu finca, y <code>latitude</code>/<code>longitude</code>
           registran el punto de muestreo para el mapa de calor. Si el <code>device_id</code> no está registrado,
           el API lo auto-registra. Pega una trama y pruébala:
         </p>
@@ -618,7 +618,7 @@
     AgroIA v0.1.0 · Motor: sistema experto (reglas UPRA/Cenicafé/AGROSAVIA) · ML en modo sombra
   </footer>
 
-  <script src="/departamentos.js?v=20260827-media"></script>
-  <script src="/app.js?v=20260827-media"></script>
+  <script src="/departamentos.js?v=20260827-latlng"></script>
+  <script src="/app.js?v=20260827-latlng"></script>
 </body>
 </html>

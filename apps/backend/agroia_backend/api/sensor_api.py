@@ -55,8 +55,8 @@ class SensorFrame(BaseModel, extra="allow"):
     potassium: float | None = Field(None, description="ppm")
     rssi: int | None = Field(None, description="dBm de la señal")
     uptime_s: int | None = Field(None, description="Segundos desde encendido")
-    pos_x: float | None = Field(None, description="Posición X de la toma en el lote (metros, muestreo en cuadrícula)")
-    pos_y: float | None = Field(None, description="Posición Y de la toma en el lote (metros, muestreo en cuadrícula)")
+    latitude: float | None = Field(None, description="Latitud X del punto de toma en el lote (metros, muestreo en cuadrícula)")
+    longitude: float | None = Field(None, description="Longitud Y del punto de toma en el lote (metros, muestreo en cuadrícula)")
 
 
 @router.post("/sensor", status_code=202)
@@ -70,6 +70,17 @@ async def ingesta_sensor(frame: SensorFrame):
             return int(float(v)) if v is not None else None
         except (TypeError, ValueError):
             return None
+
+    def _a_flotante(v):
+        try:
+            return float(v) if v not in (None, "") else None
+        except (TypeError, ValueError):
+            return None
+
+    # Nombres nuevos (latitude/longitude) con retrocompatibilidad pos_x/pos_y
+    extras = getattr(frame, "model_extra", None) or {}
+    lat = frame.latitude if frame.latitude is not None else extras.get("pos_x")
+    lng = frame.longitude if frame.longitude is not None else extras.get("pos_y")
 
     payload, advertencias = normalizar_trama(frame.model_dump())
 
@@ -148,8 +159,8 @@ async def ingesta_sensor(frame: SensorFrame):
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "rssi": _a_entero(frame.rssi),
             "uptime_s": _a_entero(frame.uptime_s),
-            "pos_x": frame.pos_x,
-            "pos_y": frame.pos_y,
+            "latitude": _a_flotante(lat),
+            "longitude": _a_flotante(lng),
             "payload": payload,
         })
         if not success:

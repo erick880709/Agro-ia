@@ -233,8 +233,8 @@ async def cargar_archivo_sensor(
 
     def _posicion(frame: dict, eje: str):
         claves = {
-            "x": ("pos_x", "x", "coordenada_x", "punto_x", "columna"),
-            "y": ("pos_y", "y", "coordenada_y", "punto_y", "fila"),
+            "x": ("latitude", "pos_x", "x", "coordenada_x", "punto_x", "columna"),
+            "y": ("longitude", "pos_y", "y", "coordenada_y", "punto_y", "fila"),
         }[eje]
         for clave in claves:
             if clave in frame and frame[clave] not in (None, ""):
@@ -318,8 +318,8 @@ async def cargar_archivo_sensor(
                 "timestamp": None,
                 "rssi": rssi,
                 "uptime_s": uptime_s,
-                "pos_x": _posicion(frame, "x"),
-                "pos_y": _posicion(frame, "y"),
+                "latitude": _posicion(frame, "x"),
+                "longitude": _posicion(frame, "y"),
                 "payload": payload,
             })
             if not success:

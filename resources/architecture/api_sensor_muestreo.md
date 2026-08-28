@@ -19,7 +19,7 @@
 | Latencia del free tier | La primera petición tras inactividad puede tardar ~50 s (el servicio se "despierta") |
 
 Cada trama representa **una toma de muestra en un punto del lote**. Si se
-incluyen las coordenadas `pos_x` y `pos_y` (posición del punto dentro del
+incluyen las coordenadas `latitude` y `longitude` (posición del punto dentro del
 terreno), la plataforma pinta el **mapa de calor por parámetro** en el reporte.
 
 ### 🧪 Body de prueba — copie y pegue
@@ -28,8 +28,8 @@ terreno), la plataforma pinta el **mapa de calor por parámetro** en el reporte.
 {
   "device_id": "esp32-npk-001",
   "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
-  "pos_x": 20.0,
-  "pos_y": 50.0,
+  "latitude": 20.0,
+  "longitude": 50.0,
   "ph": 6.1,
   "conductivity": 620,
   "nitrogen": 260,
@@ -54,13 +54,13 @@ terreno), la plataforma pinta el **mapa de calor por parámetro** en el reporte.
 ```bash
 curl -X POST https://agroia-backend.onrender.com/api/sensor \
   -H "Content-Type: application/json" \
-  -d '{"device_id":"esp32-npk-001","finca_id":"8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936","pos_x":20.0,"pos_y":50.0,"ph":6.1,"conductivity":620,"nitrogen":260,"phosphorus":28,"potassium":95,"soil_humidity":31.0,"soil_temperature":19.5,"humidity":72.0,"temperature":21.2,"rssi":-45,"uptime_s":604800}'
+  -d '{"device_id":"esp32-npk-001","finca_id":"8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936","latitude":20.0,"longitude":50.0,"ph":6.1,"conductivity":620,"nitrogen":260,"phosphorus":28,"potassium":95,"soil_humidity":31.0,"soil_temperature":19.5,"humidity":72.0,"temperature":21.2,"rssi":-45,"uptime_s":604800}'
 ```
 
 **Prueba rápida — PowerShell (Windows):**
 
 ```powershell
-$body = '{"device_id":"esp32-npk-001","finca_id":"8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936","pos_x":20.0,"pos_y":50.0,"ph":6.1,"conductivity":620,"nitrogen":260,"phosphorus":28,"potassium":95,"soil_humidity":31.0,"soil_temperature":19.5,"humidity":72.0,"temperature":21.2,"rssi":-45,"uptime_s":604800}'
+$body = '{"device_id":"esp32-npk-001","finca_id":"8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936","latitude":20.0,"longitude":50.0,"ph":6.1,"conductivity":620,"nitrogen":260,"phosphorus":28,"potassium":95,"soil_humidity":31.0,"soil_temperature":19.5,"humidity":72.0,"temperature":21.2,"rssi":-45,"uptime_s":604800}'
 Invoke-RestMethod -Uri "https://agroia-backend.onrender.com/api/sensor" -Method Post -ContentType "application/json" -Body $body
 ```
 
@@ -93,8 +93,8 @@ Invoke-RestMethod -Uri "https://agroia-backend.onrender.com/api/sensor" -Method 
 {
   "device_id": "esp32-npk-001",
   "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
-  "pos_x": 20.0,
-  "pos_y": 50.0,
+  "latitude": 20.0,
+  "longitude": 50.0,
   "humidity": 72.0,
   "temperature": 21.2,
   "conductivity": 620,
@@ -131,8 +131,8 @@ El orden de resolución es el siguiente:
 |---|---|---|---|---|
 | `device_id` | string | ✅ | — | ID único del sensor (ej. `esp32-npk-001`) |
 | `finca_id` | string | ❌ (recomendado) | — | UUID de la finca a la que corresponde la medición (se obtiene al crear la finca en la plataforma) |
-| `pos_x` | float | ❌ (necesario para el mapa de calor) | metros | Posición X del punto de toma dentro del lote, medida desde una esquina |
-| `pos_y` | float | ❌ (necesario para el mapa de calor) | metros | Posición Y del punto de toma dentro del lote |
+| `latitude` | float | ❌ (necesario para el mapa de calor) | metros | Posición X del punto de toma dentro del lote, medida desde una esquina (se acepta también `pos_x`) |
+| `longitude` | float | ❌ (necesario para el mapa de calor) | metros | Posición Y del punto de toma dentro del lote (se acepta también `pos_y`) |
 | `ph` | float | ❌ | 0–14 | pH del suelo |
 | `conductivity` | float | ❌ | µS/cm | Conductividad eléctrica (el servidor la convierte a dS/m) |
 | `nitrogen` | float | ❌ | ppm | Nitrógeno (N) |
@@ -174,7 +174,7 @@ curl -X POST https://agroia-backend.onrender.com/api/sensor \
   -d '{
     "device_id": "esp32-npk-001",
     "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
-    "pos_x": 20.0, "pos_y": 50.0,
+    "latitude": 20.0, "longitude": 50.0,
     "ph": 6.1, "conductivity": 620,
     "nitrogen": 260, "phosphorus": 28, "potassium": 95,
     "humidity": 72.0, "temperature": 21.2,
@@ -202,8 +202,8 @@ void enviarMedicion(float posX, float posY, float ph, float ceUsCm,
   StaticJsonDocument<512> doc;
   doc["device_id"]  = DEVICE_ID;
   doc["finca_id"]   = FINCA_ID;   // finca a la que corresponde
-  doc["pos_x"]      = posX;      // metros dentro del lote
-  doc["pos_y"]      = posY;
+  doc["latitude"]   = posX;      // metros dentro del lote
+  doc["longitude"]  = posY;
   doc["ph"]         = ph;
   doc["conductivity"] = ceUsCm;  // µS/cm
   doc["nitrogen"]   = nPpm;      // ppm
@@ -234,7 +234,7 @@ Para que el mapa de calor sea representativo:
 
 1. Divida el lote como una **matriz** (ej. 3×3, 4×3 según el tamaño).
 2. Defina una esquina del lote como origen `(0, 0)`.
-3. Mida las coordenadas de cada punto en **metros** (`pos_x`, `pos_y`).
+3. Mida las coordenadas de cada punto en **metros** (`latitude`, `longitude`).
 4. En cada punto tome la muestra y envíe una trama con esas coordenadas.
 5. Envíe todas las tramas en una sola jornada de muestreo (mismo día) para que
    el reporte compare puntos comparables.
@@ -345,8 +345,8 @@ x,y,ph,conductividad,n,p,k,humedad,temperatura
 230,10,6.7,670,155,34,111,39,20.8
 ```
 
-(Se aceptan también los nombres `pos_x,pos_y`, `coordenada_x,coordenada_y`,
-`columna,fila`.)
+(Se aceptan también los nombres `latitude,longitude`, `pos_x,pos_y`,
+`coordenada_x,coordenada_y`, `columna,fila`.)
 
 ### JSON — lista de tramas (una por punto)
 
