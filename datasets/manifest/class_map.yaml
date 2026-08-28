@@ -2,7 +2,7 @@
 # Desacopla el nombre original del dataset de la etiqueta del modelo.
 # Las claves de `aliases` son clases canónicas; los valores, nombres vistos
 # en los datasets de origen.
-version: 1
+version: "1"
 taxonomy:
   crop: [coffee, cacao, banana, plantain, potato, tomato, avocado, maize, other]
   plant_part: [leaf, pod, fruit, stem, whole_plant, unknown]

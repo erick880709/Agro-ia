@@ -4,7 +4,7 @@
 #   allow       -> puede pasar a curated/production (con requisitos).
 #   research    -> permitido para experimentación; bloqueado para producción.
 #   quarantine  -> no se promueve hasta verificación manual de la ficha.
-version: 1
+version: "1"
 policy:
   default_action: quarantine
   rules:

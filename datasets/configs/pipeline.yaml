@@ -1,5 +1,5 @@
 # Configuración por defecto del pipeline AgroVision (RNF-02).
-version: 1
+version: "1"
 splits:
   default: [0.70, 0.15, 0.15]
   group_priority: [farm_id, plant_id, leaf_id, source_url, dataset_id]

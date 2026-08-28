@@ -2,7 +2,7 @@
 # Fuente canónica: inventario_datasets_agrovision_colombia.csv (28-ago-2026).
 # Nota: la URL puede ser un recurso de acceso y no una URL binaria estática.
 # El software debe usar el mecanismo de descarga documentado por el proveedor.
-version: 1
+version: "1"
 generated_at: "2026-08-28"
 datasets:
   - id: DS01
