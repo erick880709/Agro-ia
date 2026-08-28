@@ -327,6 +327,12 @@ async function arrancarAplicacion() {
   // ── Modal de edición (fincas/lotes/usuarios) y controles de auditoría ──
   document.getElementById('modal-cerrar').addEventListener('click', cerrarModal);
   document.getElementById('modal-cancelar').addEventListener('click', cerrarModal);
+  const mLabor = document.getElementById('modal-labor');
+  if (mLabor) {
+    document.getElementById('modal-labor-cerrar').addEventListener('click', cerrarModalLabor);
+    document.getElementById('modal-labor-cancelar').addEventListener('click', cerrarModalLabor);
+    mLabor.addEventListener('click', e => { if (e.target === mLabor) cerrarModalLabor(); });
+  }
   document.getElementById('audit-refrescar').addEventListener('click', () => cargarAuditoria(1));
   document.getElementById('audit-anterior').addEventListener('click', () => {
     if (auditState.page > 1) cargarAuditoria(auditState.page - 1);
@@ -1233,29 +1239,82 @@ async function renderLaboresPendientes() {
     }
     const rol = state.rol.toLowerCase();
     const puedeGestionar = ['admin', 'administrador', 'agronomo', 'agrónomo'].includes(rol);
+    const porId = {};
+    labores.forEach(l => { porId[l.id] = l; });
+    div._labores = porId;
     div.innerHTML = labores.map(l => `
-      <div class="labor-row">
+      <div class="labor-row" data-labor-fila="${esc(l.id)}">
         <div class="labor-info">
           <b>${TIPO_LABOR_ICONO[l.tipo] || '📋'} ${esc(l.tipo)}</b>
           <span>${esc(l.titulo)}</span>
+          <span class="labor-finca">🏡 ${esc(l.finca_nombre || 'Finca')}${l.lote_nombre ? ` · 🗂️ ${esc(l.lote_nombre)}` : ''}</span>
           <span class="muted">programada ${esc(l.fecha_programada || '?')}</span>
           <span class="muted">${badge(l.estado, l.estado === 'Pendiente' ? 'warning' : 'ok')}</span>
         </div>
-        ${puedeGestionar ? `
         <div class="device-actions">
+          <button class="btn btn-ghost" data-labor-detalle="${esc(l.id)}">👁️ Ver detalle</button>
+          ${puedeGestionar ? `
           <button class="btn btn-ghost" data-labor-completar="${esc(l.id)}">✔️ Completar</button>
-          <button class="btn btn-ghost" data-labor-cancelar="${esc(l.id)}">🚫 Cancelar</button>
-        </div>` : ''}
+          <button class="btn btn-ghost" data-labor-cancelar="${esc(l.id)}">🚫 Cancelar</button>` : ''}
+        </div>
       </div>`).join('');
+    div.querySelectorAll('[data-labor-fila]').forEach(fila => {
+      fila.addEventListener('click', () => {
+        const labor = (div._labores || {})[fila.dataset.laborFila];
+        if (labor) verDetalleLabor(labor);
+      });
+    });
+    div.querySelectorAll('[data-labor-detalle]').forEach(b => {
+      b.addEventListener('click', e => {
+        e.stopPropagation();
+        const labor = (div._labores || {})[b.dataset.laborDetalle];
+        if (labor) verDetalleLabor(labor);
+      });
+    });
     div.querySelectorAll('[data-labor-completar]').forEach(b => {
-      b.addEventListener('click', () => actualizarLabor(b.dataset.laborCompletar, 'Completada'));
+      b.addEventListener('click', e => { e.stopPropagation(); actualizarLabor(b.dataset.laborCompletar, 'Completada'); });
     });
     div.querySelectorAll('[data-labor-cancelar]').forEach(b => {
-      b.addEventListener('click', () => actualizarLabor(b.dataset.laborCancelar, 'Cancelada'));
+      b.addEventListener('click', e => { e.stopPropagation(); actualizarLabor(b.dataset.laborCancelar, 'Cancelada'); });
     });
   } catch {
     div.innerHTML = '<p class="muted">No se pudieron cargar las tareas pendientes.</p>';
   }
+}
+
+/* ── Detalle de una orden de trabajo (modal) ── */
+
+function verDetalleLabor(l) {
+  const m = document.getElementById('modal-labor');
+  if (!m) return;
+  document.getElementById('modal-labor-titulo').textContent = `📋 ${l.tipo || 'Labor'} — ${l.titulo || 'Orden de trabajo'}`;
+  const img = l.imagen_url
+    ? `<img src="${esc(l.imagen_url)}" alt="Foto de la labor" style="max-width:100%;border-radius:10px;margin-top:8px" />`
+    : '<p class="muted">Sin foto adjunta.</p>';
+  document.getElementById('modal-labor-cuerpo').innerHTML = `
+    <div class="labor-detalle">
+      <div class="labor-detalle-grid">
+        <div><span class="muted">Finca</span><br/><b>🏡 ${esc(l.finca_nombre || '—')}</b></div>
+        <div><span class="muted">Lote</span><br/><b>🗂️ ${esc(l.lote_nombre || '—')}</b></div>
+        <div><span class="muted">Tipo</span><br/><b>${TIPO_LABOR_ICONO[l.tipo] || '📋'} ${esc(l.tipo || '—')}</b></div>
+        <div><span class="muted">Estado</span><br/>${badge(l.estado, l.estado === 'Pendiente' ? 'warning' : l.estado === 'Completada' ? 'ok' : 'critical')}</div>
+        <div><span class="muted">Producto</span><br/><b>${esc(l.producto || '—')}</b></div>
+        <div><span class="muted">Dosis</span><br/><b>${l.dosis_kg_ha != null ? esc(l.dosis_kg_ha) + ' kg/ha' : '—'}</b></div>
+        <div><span class="muted">Fecha programada</span><br/><b>📅 ${esc(l.fecha_programada || '—')}</b></div>
+        <div><span class="muted">Fecha de ejecución</span><br/><b>✅ ${esc(l.fecha_ejecucion || '—')}</b></div>
+      </div>
+      <div class="labor-detalle-obs">
+        <span class="muted">Observaciones de ejecución</span>
+        <p>${esc(l.observaciones_ejecucion || 'Sin observaciones registradas.')}</p>
+      </div>
+      <div class="labor-detalle-foto">${img}</div>
+    </div>`;
+  m.classList.remove('hidden');
+}
+
+function cerrarModalLabor() {
+  const m = document.getElementById('modal-labor');
+  if (m) m.classList.add('hidden');
 }
 
 /* ────────────────────── alertas climáticas proactivas (P1) ────────────────────── */

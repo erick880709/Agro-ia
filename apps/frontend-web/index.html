@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AgroIA · AgroInteligente Colombia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="/styles.css?v=20260827-trama2" />
+  <link rel="stylesheet" href="/styles.css?v=20260827-labores" />
 </head>
 <body>
   <!-- ============ PANTALLA DE AUTENTICACIÓN ============ -->
@@ -638,11 +638,25 @@
     </div>
   </div>
 
+  <!-- ============ Modal de detalle de labor / orden de trabajo ============ -->
+  <div class="modal-overlay hidden" id="modal-labor">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="modal-labor-titulo">📋 Orden de trabajo</h2>
+        <button class="btn-ghost-sm" id="modal-labor-cerrar" title="Cerrar">✕</button>
+      </div>
+      <div id="modal-labor-cuerpo"></div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="modal-labor-cancelar">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="footer">
     AgroIA v0.1.0 · Motor: sistema experto (reglas UPRA/Cenicafé/AGROSAVIA) · ML en modo sombra
   </footer>
 
-  <script src="/departamentos.js?v=20260827-trama2"></script>
-  <script src="/app.js?v=20260827-trama2"></script>
+  <script src="/departamentos.js?v=20260827-labores"></script>
+  <script src="/app.js?v=20260827-labores"></script>
 </body>
 </html>

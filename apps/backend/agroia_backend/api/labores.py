@@ -69,10 +69,13 @@ def _exigir_rol(rol: str | None, permitidos: set[str], mensaje: str) -> str:
     return rol_norm
 
 
-def _labor_a_dict(labor) -> dict:
+def _labor_a_dict(labor, finca_id=None, finca_nombre=None, lote_nombre=None):
     return {
         "id": str(labor.id),
         "lote_id": str(labor.lote_id),
+        "finca_id": finca_id or None,
+        "finca_nombre": finca_nombre or None,
+        "lote_nombre": lote_nombre or None,
         "recomendacion_id": str(labor.recomendacion_id) if labor.recomendacion_id else None,
         "titulo": labor.titulo,
         "tipo": labor.tipo,
@@ -86,6 +89,22 @@ def _labor_a_dict(labor) -> dict:
         "imagen_url": labor.imagen_url,
         "created_at": labor.created_at.isoformat() if labor.created_at else None,
     }
+
+
+async def _info_finca_lotes(db, finca_uuid):
+    """Devuelve (finca_nombre, {lote_id: lote_nombre}, [lote_id, ...])."""
+    finca = (
+        await db.execute(select(Finca).where(Finca.id == finca_uuid))
+    ).scalar_one_or_none()
+    filas = (
+        await db.execute(select(Lote.id, Lote.nombre).where(Lote.finca_id == finca_uuid))
+    ).all()
+    lote_nombres = {str(lid): nombre for lid, nombre in filas}
+    return (
+        finca.nombre if finca else None,
+        lote_nombres,
+        [lid for lid, _ in filas],
+    )
 
 
 TIPOS_IMAGEN = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp"}
@@ -295,16 +314,25 @@ async def labores_de_finca(
         raise HTTPException(status_code=422, detail={
             "code": "FINCA_INVALIDA", "message": "finca_id no es un UUID válido.",
         })
-    lotes = (
-        await db.execute(select(Lote.id).where(Lote.finca_id == finca_uuid))
-    ).scalars().all()
+    finca_nombre, lote_nombres, lotes = await _info_finca_lotes(db, finca_uuid)
     stmt = select(Labor).where(Labor.lote_id.in_(lotes)).order_by(
         Labor.fecha_programada.desc(), Labor.created_at.desc()
     )
     if estado:
         stmt = stmt.where(Labor.estado == estado)
     labores = (await db.execute(stmt.limit(100))).scalars().all()
-    return {"data": [_labor_a_dict(labor) for labor in labores], "total": len(labores)}
+    return {
+        "data": [
+            _labor_a_dict(
+                labor,
+                finca_id=str(finca_uuid),
+                finca_nombre=finca_nombre,
+                lote_nombre=lote_nombres.get(str(labor.lote_id)),
+            )
+            for labor in labores
+        ],
+        "total": len(labores),
+    }
 
 
 @router.get("/fincas/{finca_id}/labores/pendientes-hoy")
@@ -323,9 +351,7 @@ async def labores_pendientes(
             "code": "FINCA_INVALIDA", "message": "finca_id no es un UUID válido.",
         })
     hoy = datetime.now(timezone.utc).date()
-    lotes = (
-        await db.execute(select(Lote.id).where(Lote.finca_id == finca_uuid))
-    ).scalars().all()
+    finca_nombre, lote_nombres, lotes = await _info_finca_lotes(db, finca_uuid)
     labores = (
         await db.execute(
             select(Labor)
@@ -338,7 +364,18 @@ async def labores_pendientes(
             .limit(10)
         )
     ).scalars().all()
-    return {"data": [_labor_a_dict(labor) for labor in labores], "total": len(labores)}
+    return {
+        "data": [
+            _labor_a_dict(
+                labor,
+                finca_id=str(finca_uuid),
+                finca_nombre=finca_nombre,
+                lote_nombre=lote_nombres.get(str(labor.lote_id)),
+            )
+            for labor in labores
+        ],
+        "total": len(labores),
+    }
 
 
 @router.patch("/labores/{labor_id}")

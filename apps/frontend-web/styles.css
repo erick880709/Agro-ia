@@ -826,9 +826,16 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
   padding: 8px 0;
   border-bottom: 1px dashed #d3e5d6;
   flex-wrap: wrap;
+  cursor: pointer;
 }
+.labor-row:hover { background: #f2f8f4; }
 .labor-row:last-of-type { border-bottom: none; }
 .labor-info { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; font-size: 0.88rem; }
+.labor-finca { background: var(--verde-100); color: var(--verde-800); padding: 2px 8px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+/* Detalle de labor (modal) */
+.labor-detalle { display: flex; flex-direction: column; gap: 14px; }
+.labor-detalle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 16px; }
+.labor-detalle-obs p { margin: 6px 0 0; background: #f8faf8; border: 1px solid #e4ece6; border-radius: 10px; padding: 10px 12px; }
 /* ─────────────────────────── Alertas climáticas proactivas ─────────────────────────── */
 #dashboard-alertas { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
 .alerta-clima { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; border: 1px solid; }

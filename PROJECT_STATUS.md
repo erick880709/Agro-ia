@@ -219,6 +219,8 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Tabla `agroia.labores`** (migración 018): título, tipo (Fertilización/Enmienda/Riego/Control Fitosanitario), producto/dosis, fechas programada/ejecución, responsable, estado y observaciones — FK a lotes y recomendaciones.
 - **P5**: botón «📋 Generar órdenes de trabajo» junto a «Aceptar recomendación» → cada acción del diagnóstico se vuelve una labor individual (`POST /fincas/{id}/labores/generar`, tipo inferido del texto).
 - **P1**: widget «📋 Tareas pendientes de hoy» con «✔️ Completar» (fecha de ejecución automática) y «🚫 Cancelar» (`PATCH /labores/{id}`).
+- **Identificación y detalle (2026-08-27)**: cada orden del widget muestra su **finca y lote** (🏡/🗂️ — la API responde `finca_nombre`/`lote_nombre` en `GET /fincas/{id}/labores` y `pendientes-hoy`); al **seleccionar una orden** (clic en la fila o «👁️ Ver detalle») se abre el modal con finca, lote, tipo, producto, dosis, fechas, observaciones y foto.
+- **Reporte**: nueva sección **«Q — Órdenes de trabajo (labores)»** con la tabla Finca · Lote · Tipo · Tarea · Producto · Dosis · Programada · Ejecución · Estado.
 - Auditoría `labor.generar/actualizar/completar/eliminar`. La PWA (punto 5) se conectará a estos endpoints con geolocalización y foto.
 - Validado local (API: 6 acciones → 6 labores con tipos correctos; completar registra fecha; auditoría) y UI (generar desde P5 y completar en P1) — pendiente validación en producción.
 

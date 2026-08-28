@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787881656.4818559,
-    "ast_hash": "2262bcad1f1cdb57ae5a5c110b5125f7",
+    "mtime": 1787882443.999529,
+    "ast_hash": "a762c129e9bacb1fbb95fc19a984ecf3",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787881656.4788587,
-    "ast_hash": "5529acd089fad011e9faee189d8e8829",
+    "mtime": 1787882487.4500613,
+    "ast_hash": "904dafa607bc4d489cba7ae692997fbc",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4705,8 +4705,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/api_sensor_muestreo.md": {
-    "mtime": 1787881703.9493654,
-    "ast_hash": "72235ad2a51354eb145f284ff46924b3",
+    "mtime": 1787882443.999529,
+    "ast_hash": "e327d72b98fe00d3b571f5836abdcdd2",
     "semantic_hash": ""
   },
   "scripts/md_to_html.py": {
@@ -4715,8 +4715,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/api_sensor_muestreo.html": {
-    "mtime": 1787881763.4845872,
-    "ast_hash": "170f54dea26b9b358b228b0046e6195f",
+    "mtime": 1787882474.6434019,
+    "ast_hash": "5861e1e45c6b0e4901dd1f4c6509a046",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/puente_iot.py": {
@@ -4830,8 +4830,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1787881798.051911,
-    "ast_hash": "5140d76fe4208c07c48b4b81fa7d384d",
+    "mtime": 1787882480.2876089,
+    "ast_hash": "9647ba1ac07fc6fe2ca1f9dfbe707983",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {

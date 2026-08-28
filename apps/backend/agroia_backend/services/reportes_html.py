@@ -1412,6 +1412,44 @@ def _bloque_clima_muestra(
     </div>"""
 
 
+def _seccion_labores(labores: list | None) -> str:
+    """Sección Q — órdenes de trabajo / labores de la finca."""
+    if not labores:
+        return ""
+    _badge_labor = {
+        "Pendiente": "badge-pendiente",
+        "En Progreso": "badge-preliminar",
+        "Completada": "badge-ok",
+        "Cancelada": "badge-exceso",
+    }
+    filas = "".join(
+        f"<tr>"
+        f"<td>{esc(labor.get('finca_nombre') or '—')}</td>"
+        f"<td>{esc(labor.get('lote_nombre') or '—')}</td>"
+        f"<td>{esc(labor.get('tipo') or '—')}</td>"
+        f"<td>{esc(labor.get('titulo') or '—')}</td>"
+        f"<td>{esc(labor.get('producto') or '—')}</td>"
+        f"<td>{_num(labor.get('dosis_kg_ha'), 1) if labor.get('dosis_kg_ha') is not None else '—'}</td>"
+        f"<td>{esc(labor.get('fecha_programada') or '—')}</td>"
+        f"<td>{esc(labor.get('fecha_ejecucion') or '—')}</td>"
+        f"<td><span class=\"badge {_badge_labor.get(labor.get('estado'), 'badge-ok')}\">{esc(labor.get('estado') or '—')}</span></td>"
+        f"</tr>"
+        for labor in labores
+    )
+    pendientes = sum(1 for labor in labores if labor.get("estado") in ("Pendiente", "En Progreso"))
+    return f"""
+  <section class="block">
+    <div class="block-head"><span class="block-num">Q</span>
+      <div><div class="block-title">Órdenes de trabajo (labores)</div>
+      <div class="block-sub">Plan de ejecución por lote · {len(labores)} órdenes · {pendientes} pendientes</div></div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Finca</th><th>Lote</th><th>Tipo</th><th>Tarea</th><th>Producto</th><th>Dosis (kg/ha)</th><th>Programada</th><th>Ejecución</th><th>Estado</th></tr></thead>
+      <tbody>{filas}</tbody>
+    </table></div>
+  </section>"""
+
+
 def generar_reporte_html(
     *,
     finca: dict,
@@ -1433,6 +1471,7 @@ def generar_reporte_html(
     prediccion_rendimiento: dict | None = None,
     advertencia_acumulacion: str | None = None,
     pronostico_extendido: list[dict] | None = None,
+    labores: list[dict] | None = None,
 ) -> str:
     """Construye el documento HTML completo del reporte."""
     fecha = datetime.now(timezone.utc).astimezone().strftime("%d/%m/%Y %H:%M")
@@ -1538,6 +1577,9 @@ def generar_reporte_html(
         pe, ficha_economicos, cultivo_nombre, rendimiento_actual_t_ha
     )
 
+    # Órdenes de trabajo / labores de la finca
+    seccion_labores = _seccion_labores(labores)
+
     # Explicación en lenguaje campesino (siempre que haya análisis)
     explicacion_campo = generar_explicacion_campesina(uc1=uc1, uc2=uc2, lectura=lectura)
 
@@ -1630,6 +1672,7 @@ def generar_reporte_html(
   {secciones}
   {seccion_mapa}
   {seccion_plano}
+  {seccion_labores}
   {seccion_roi}
   {explicacion_campo}
   <section class="block">

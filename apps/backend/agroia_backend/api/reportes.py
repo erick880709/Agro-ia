@@ -19,6 +19,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from agroia_backend.models.cultivo import Cultivo, EstadoFicha, FichaTecnica
 from agroia_backend.models.dispositivo_iot import DispositivoIoT
 from agroia_backend.models.finca import Finca
+from agroia_backend.models.labor import Labor
+from agroia_backend.models.lote import Lote
 from agroia_backend.models.sensor_reading import SensorReading
 from agroia_backend.services.acceso import verificar_acceso_finca
 from agroia_backend.services.aptitud import AptitudService
@@ -289,6 +291,37 @@ async def generar_reporte(
 
     muestras_geo = await _muestras_geo(db, finca_uuid)
 
+    # ── Órdenes de trabajo / labores de la finca (para la sección Q) ──
+    filas_lotes = (
+        await db.execute(select(Lote.id, Lote.nombre).where(Lote.finca_id == finca_uuid))
+    ).all()
+    lote_nombres = {str(lid): nombre for lid, nombre in filas_lotes}
+    labores_report = []
+    if filas_lotes:
+        labores_rows = (
+            await db.execute(
+                select(Labor)
+                .where(Labor.lote_id.in_([lid for lid, _ in filas_lotes]))
+                .order_by(Labor.fecha_programada.desc(), Labor.created_at.desc())
+                .limit(50)
+            )
+        ).scalars().all()
+        labores_report = [
+            {
+                "titulo": labor.titulo,
+                "tipo": labor.tipo,
+                "producto": labor.producto,
+                "dosis_kg_ha": labor.dosis_kg_ha,
+                "fecha_programada": labor.fecha_programada.isoformat() if labor.fecha_programada else None,
+                "fecha_ejecucion": labor.fecha_ejecucion.isoformat() if labor.fecha_ejecucion else None,
+                "estado": labor.estado,
+                "finca_nombre": finca.nombre,
+                "lote_nombre": lote_nombres.get(str(labor.lote_id)),
+                "observaciones_ejecucion": labor.observaciones_ejecucion,
+            }
+            for labor in labores_rows
+        ]
+
     # ── Historial de ciclos (últimos 3) + predicción de rendimiento ──
     historial = await _historial_ciclos_reporte(db, finca_uuid)
     historial_ciclos = historial["ciclos"]
@@ -407,6 +440,7 @@ async def generar_reporte(
         prediccion_rendimiento=prediccion_rendimiento,
         advertencia_acumulacion=advertencia_acumulacion,
         pronostico_extendido=pronostico_extendido,
+        labores=labores_report,
     )
 
     titulo = {
