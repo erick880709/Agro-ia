@@ -259,7 +259,7 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Chat — job programado**: `services/mantenimiento.py::limpiar_imagenes_chat()` (UPDATE `imagen_base64 = NULL` para `ts` > 90 días) corre cada 24 h en el lifespan y manualmente vía `POST /api/v1/admin/chat/limpiar-imagenes` (Admin). Validado: 2 imágenes viejas liberadas.
 - **Labores — fotos en disco**: migración 022 agrega `labores.imagen_url`; `POST /api/v1/labores/{id}/foto` (multipart, JPEG/PNG/WebP, máx 5 MB) guarda el archivo en `media/labores/` (o `AGROIA_MEDIA_DIR`) y solo persiste la ruta; FastAPI sirve `/media`. Validado: subida y descarga de PNG con `imagen_url` en la BD.
 - **Rendimiento atípico (anti-outliers)**: al cosechar, si declarado > esperado×2 o < esperado×0.3 → `rendimiento_atipico = true` (migración 022) + `advertencia_rendimiento` (banner amarillo en la UI, no bloquea). `ml_labels.etiquetas_ciclos` excluye los atípicos del Ground Truth. Validado: café 50 t/ha → atípico excluido; 2.1 t/ha → normal incluido (doradas = normales).
-- Pendiente validación en producción.
+- Validado en producción: job chat (200, 0 liberadas), foto de labor subida a disco y servida por `/media` (200 image/png) con solo `imagen_url` en BD, y cosecha de 50 t/ha marcada atípica con advertencia (ciclo/labor de prueba limpiados).
 
 ### Migraciones destacadas
 
