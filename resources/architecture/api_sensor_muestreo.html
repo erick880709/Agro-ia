@@ -219,14 +219,14 @@ botón «Copiar». También aparece en la tarjeta de cada finca. Use ese ID como
 <td>float</td>
 <td>❌ (necesario para el mapa de calor)</td>
 <td>grados decimales (WGS84)</td>
-<td>Latitud geográfica del punto de toma (ej. <code>4.578333</code>; se acepta también <code>pos_x</code>)</td>
+<td>Latitud geográfica del punto de toma (ej. <code>4.578333</code>). El servidor la <strong>convierte automáticamente</strong> a metros relativos al centroide de la finca y la guarda en <code>pos_x</code></td>
 </tr>
 <tr>
 <td><code>longitude</code></td>
 <td>float</td>
 <td>❌ (necesario para el mapa de calor)</td>
 <td>grados decimales (WGS84)</td>
-<td>Longitud geográfica del punto de toma (ej. <code>-75.666944</code>; se acepta también <code>pos_y</code>)</td>
+<td>Longitud geográfica del punto de toma (ej. <code>-75.666944</code>). Se convierte igual que <code>latitude</code> a metros relativos (<code>pos_y</code>)</td>
 </tr>
 <tr>
 <td><code>ph</code></td>
@@ -375,8 +375,10 @@ void enviarMedicion(float lat, float lng, float ph, float ceUsCm,
 <li>Divida el lote como una <strong>matriz</strong> (ej. 3×3, 4×3 según el tamaño).</li>
 <li>En cada punto de la matriz, registre las coordenadas <strong>GPS</strong> (grados
    decimales WGS84) con el móvil o un receptor GPS/RTK.</li>
-<li>Envíe una trama por punto con ese <code>latitude</code>/<code>longitude</code> (se aceptan
-   también <code>pos_x</code>/<code>pos_y</code> si el firmware maneja metros locales).</li>
+<li>Envíe una trama por punto con ese <code>latitude</code>/<code>longitude</code>. El servidor
+   convierte el GPS a <strong>metros relativos al centroide de la finca</strong> (haversine)
+   y los guarda en <code>pos_x</code>/<code>pos_y</code> (si el firmware ya maneja metros locales,
+   envíe <code>pos_x</code>/<code>pos_y</code> directamente y se guardan tal cual).</li>
 <li>En cada punto tome la muestra y envíe una trama con esas coordenadas.</li>
 <li>Envíe todas las tramas en una sola jornada de muestreo (mismo día) para que
    el reporte compare puntos comparables.</li>
@@ -491,6 +493,15 @@ opcional). Formatos aceptados:</p>
 </code></pre>
 <p>(Se aceptan también los nombres <code>latitude,longitude</code>, <code>pos_x,pos_y</code>, <code>coordenada_x,coordenada_y</code>,
 <code>columna,fila</code>.)</p>
+<blockquote>
+<p><strong>Conversión GPS → metros</strong>: cuando la trama trae <code>latitude</code>/<code>longitude</code> en
+ grados y <strong>no</strong> trae <code>pos_x</code>/<code>pos_y</code>, el servidor calcula el desplazamiento
+ Este/Norte (m) desde el centroide de la finca (<code>latitud</code>/<code>longitud</code> de la
+ finca) y guarda el resultado en <code>pos_x</code>/<code>pos_y</code>. La respuesta incluye la
+ advertencia <code>gps_convertido_a_relativo</code>. Si la finca no tiene coordenadas,
+ la lectura se guarda con <code>pos_x</code>/<code>pos_y</code> = <code>NULL</code> y la advertencia
+ <code>gps_sin_centroide_finca</code>.</p>
+</blockquote>
 <h3 id="json-lista-de-tramas-una-por-punto">JSON — lista de tramas (una por punto)</h3>
 <pre><code class="language-json">[
   {&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;a0562767-13a8-4a49-bd98-e8097d5b2674&quot;,&quot;x&quot;:20,&quot;y&quot;:90,&quot;ph&quot;:5.6,&quot;conductivity&quot;:410,&quot;nitrogen&quot;:250},

@@ -130,8 +130,8 @@ El orden de resolución es el siguiente:
 |---|---|---|---|---|
 | `device_id` | string | ✅ | — | ID único del sensor (ej. `esp32-npk-001`) |
 | `finca_id` | string | ❌ (recomendado) | — | UUID de la finca a la que corresponde la medición (se obtiene al crear la finca en la plataforma) |
-| `latitude` | float | ❌ (necesario para el mapa de calor) | grados decimales (WGS84) | Latitud geográfica del punto de toma (ej. `4.578333`; se acepta también `pos_x`) |
-| `longitude` | float | ❌ (necesario para el mapa de calor) | grados decimales (WGS84) | Longitud geográfica del punto de toma (ej. `-75.666944`; se acepta también `pos_y`) |
+| `latitude` | float | ❌ (necesario para el mapa de calor) | grados decimales (WGS84) | Latitud geográfica del punto de toma (ej. `4.578333`). El servidor la **convierte automáticamente** a metros relativos al centroide de la finca antes de guardarla en `pos_x`/`pos_y` |
+| `longitude` | float | ❌ (necesario para el mapa de calor) | grados decimales (WGS84) | Longitud geográfica del punto de toma (ej. `-75.666944`). Se convierte igual que `latitude` a metros relativos |
 | `ph` | float | ❌ | 0–14 | pH del suelo |
 | `conductivity` | float | ❌ | µS/cm | Conductividad eléctrica (el servidor la convierte a dS/m) |
 | `nitrogen` | float | ❌ | ppm | Nitrógeno (N) |
@@ -234,8 +234,10 @@ Para que el mapa de calor sea representativo:
 1. Divida el lote como una **matriz** (ej. 3×3, 4×3 según el tamaño).
 2. En cada punto de la matriz, registre las coordenadas **GPS** (grados
    decimales WGS84) con el móvil o un receptor GPS/RTK.
-3. Envíe una trama por punto con ese `latitude`/`longitude` (se aceptan
-   también `pos_x`/`pos_y` si el firmware maneja metros locales).
+3. Envíe una trama por punto con ese `latitude`/`longitude`. El servidor
+   convierte el GPS a **metros relativos al centroide de la finca**
+   (haversine) y los guarda en `pos_x`/`pos_y` (si el firmware ya maneja
+   metros locales, envíe `pos_x`/`pos_y` directamente y se guardan tal cual).
 4. En cada punto tome la muestra y envíe una trama con esas coordenadas.
 5. Envíe todas las tramas en una sola jornada de muestreo (mismo día) para que
    el reporte compare puntos comparables.
@@ -349,6 +351,14 @@ x,y,ph,conductividad,n,p,k,humedad,temperatura
 
 (Se aceptan también los nombres `latitude,longitude`, `pos_x,pos_y`,
 `coordenada_x,coordenada_y`, `columna,fila`.)
+
+> **Conversión GPS → metros**: cuando la trama trae `latitude`/`longitude` en
+> grados y **no** trae `pos_x`/`pos_y`, el servidor calcula el desplazamiento
+> Este/Norte (m) desde el centroide de la finca (`latitud`/`longitud` de la
+> finca) con la fórmula equirectangular y guarda ese resultado en
+> `pos_x`/`pos_y`. La respuesta incluye la advertencia
+> `gps_convertido_a_relativo`. Si la finca no tiene coordenadas, la lectura se
+> guarda con `pos_x`/`pos_y` = `NULL` y la advertencia `gps_sin_centroide_finca`.
 
 ### JSON — lista de tramas (una por punto)
 

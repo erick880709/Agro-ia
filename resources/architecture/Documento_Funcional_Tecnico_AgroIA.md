@@ -574,7 +574,7 @@ Doble ruta (ambas montadas): `api/sensor_api.py` (formato firmware, **la que usa
 }
 ```
 
-- Obligatorio: `device_id` (string). Opcionales: `finca_id` (UUID, asocia el dispositivo a la finca), `latitude`/`longitude` (**grados decimales WGS84** del punto de toma, tipo float; se guardan en las columnas internas `pos_x`/`pos_y` y se aceptan también los nombres antiguos `pos_x`/`pos_y` por retrocompatibilidad), `humidity` (% HR ambiente, float), `temperature` (°C ambiente, float), `conductivity` (µS/cm, float), `ph`, `nitrogen`/`phosphorus`/`potassium` (ppm, float), `rssi` (dBm, int) y `uptime_s` (s, int). Opcionales de suelo: `soil_humidity`/`soil_temperature` (se guardan como `humedad`/`temperatura_suelo`), y cualquier variable del `MAPA_CAMPOS`.
+- Obligatorio: `device_id` (string). Opcionales: `finca_id` (UUID, asocia el dispositivo a la finca), `latitude`/`longitude` (**grados decimales WGS84** del punto de toma, tipo float; el servidor los **convierte a metros relativos al centroide de la finca** antes de guardarlos en `pos_x`/`pos_y`; si el firmware ya envía `pos_x`/`pos_y` en metros locales se guardan tal cual), `humidity` (% HR ambiente, float), `temperature` (°C ambiente, float), `conductivity` (µS/cm, float), `ph`, `nitrogen`/`phosphorus`/`potassium` (ppm, float), `rssi` (dBm, int) y `uptime_s` (s, int). Opcionales de suelo: `soil_humidity`/`soil_temperature` (se guardan como `humedad`/`temperatura_suelo`), y cualquier variable del `MAPA_CAMPOS`.
 - `humidity`/`temperature` se guardan como **ambientales** (DHT22). Este es el formato precargado en el simulador de la pestaña Sensores IoT.
 
 ### 7.2 Procesamiento (paso a paso)
@@ -584,8 +584,9 @@ Doble ruta (ambas montadas): `api/sensor_api.py` (formato firmware, **la que usa
    - Campos de telemetría (`device_id, rssi, uptime_s, firmware, timestamp`) se excluyen.
    - Si vienen N/P/K → advertencia **`npk_sin_calibrar`** (el sensor NPK no está validado contra laboratorio).
 2. **Resolución de finca**: `finca_id` de la trama → finca del `device_id` registrado → auto-registro del dispositivo a la primera finca. Si la trama trae un `finca_id` inexistente → `422 FINCA_NOT_FOUND`. Si el dispositivo cambió de finca, se reasocia (`sensor_finca_actualizada`).
-3. **Persistencia** (`services/puente_iot.py → apps/iot/agroia_iot/consumer.py::process_sensor_message`): inserta `SensorReading` ejecutando antes `SET LOCAL search_path TO public, agroia` (protección contra el search_path frágil de Neon/pgBouncer), actualiza telemetría del `DispositivoIoT` (rssi, uptime).
-4. **Respuesta 202**: `{status, device_id, finca_id, auto_registrado, variables_recibidas[], advertencias[], recibida_en}`.
+3. **Georreferencia** (`services/geo_utils.py`): si la trama trae `latitude`/`longitude` (grados) sin `pos_x`/`pos_y`, se calcula el desplazamiento Este/Norte (m) desde el centroide de la finca (fórmula equirectangular, R=6 371 km) y el resultado se guarda en `pos_x`/`pos_y`; la respuesta añade la advertencia **`gps_convertido_a_relativo`**. Si la finca no tiene coordenadas → advertencia `gps_sin_centroide_finca` y `pos_x`/`pos_y` = NULL. Así, el mapa de calor (sección M) y el plano del lote (sección N) siempre reciben metros.
+4. **Persistencia** (`services/puente_iot.py → apps/iot/agroia_iot/consumer.py::process_sensor_message`): inserta `SensorReading` ejecutando antes `SET LOCAL search_path TO public, agroia` (protección contra el search_path frágil de Neon/pgBouncer), actualiza telemetría del `DispositivoIoT` (rssi, uptime).
+5. **Respuesta 202**: `{status, device_id, finca_id, auto_registrado, variables_recibidas[], advertencias[], recibida_en}`.
 
 ---
 

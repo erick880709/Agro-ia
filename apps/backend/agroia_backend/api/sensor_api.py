@@ -86,10 +86,14 @@ async def ingesta_sensor(frame: SensorFrame):
         except (TypeError, ValueError):
             return None
 
-    # Nombres nuevos (latitude/longitude) con retrocompatibilidad pos_x/pos_y
+    # Nombres nuevos (latitude/longitude) con retrocompatibilidad pos_x/pos_y.
+    # El mapa de calor usa pos_x/pos_y en METROS: el GPS absoluto se convierte
+    # a desplazamientos relativos al centroide de la finca (geo_utils).
     extras = getattr(frame, "model_extra", None) or {}
-    lat = frame.latitude if frame.latitude is not None else extras.get("pos_x")
-    lng = frame.longitude if frame.longitude is not None else extras.get("pos_y")
+    lat_abs = frame.latitude if frame.latitude is not None else None
+    lng_abs = frame.longitude if frame.longitude is not None else None
+    pos_x_raw = extras.get("pos_x")
+    pos_y_raw = extras.get("pos_y")
 
     payload, advertencias = normalizar_trama(frame.model_dump())
 
@@ -162,16 +166,40 @@ async def ingesta_sensor(frame: SensorFrame):
             dispositivo.finca_id = finca_indicada.id
             await db.commit()
 
-        success = await process_sensor_message({
+        # ── GPS absoluto → metros relativos al centroide de la finca ──
+        from agroia_backend.services.geo_utils import centroide_finca, haversine_relativa
+
+        pos_x = _a_flotante(pos_x_raw)
+        pos_y = _a_flotante(pos_y_raw)
+        gps_convertido = False
+        if lat_abs is not None and lng_abs is not None and pos_x is None and pos_y is None:
+            finca_geo = finca_indicada or (
+                await db.execute(select(Finca).where(Finca.id == dispositivo.finca_id))
+            ).scalar_one_or_none()
+            centro = centroide_finca(finca_geo) if finca_geo is not None else None
+            if centro is not None:
+                pos_x, pos_y = haversine_relativa(centro[0], centro[1], lat_abs, lng_abs)
+                gps_convertido = True
+                advertencias.append("gps_convertido_a_relativo")
+            else:
+                advertencias.append("gps_sin_centroide_finca")
+
+        mensaje = {
             "device_id": frame.device_id,
             "finca_id": str(dispositivo.finca_id),
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "rssi": _a_entero(frame.rssi),
             "uptime_s": _a_entero(frame.uptime_s),
-            "latitude": _a_flotante(lat),
-            "longitude": _a_flotante(lng),
             "payload": payload,
-        })
+        }
+        if gps_convertido:
+            mensaje["pos_x"] = pos_x
+            mensaje["pos_y"] = pos_y
+        else:
+            mensaje["latitude"] = pos_x if pos_x is not None else lat_abs
+            mensaje["longitude"] = pos_y if pos_y is not None else lng_abs
+
+        success = await process_sensor_message(mensaje)
         if not success:
             raise HTTPException(status_code=422, detail={
                 "code": "INGEST_ERROR",

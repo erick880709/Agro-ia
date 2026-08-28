@@ -351,7 +351,11 @@ respuesta fundamentada (fuentes, confianza, datos utilizados, qué falta). Guard
   "ph": 8.6, "nitrogen": 0.0, "phosphorus": 0.0, "potassium": 0.0,
   "rssi": -41, "uptime_s": 64
 }</code></pre>
-<p>Opcionales: <code>finca_id</code>, <code>pos_x/pos_y</code> (muestreo en cuadrícula) y cualquier variable de suelo del <code>MAPA_CAMPOS</code>.</p>
+<p>Opcionales: <code>finca_id</code>, <code>latitude/longitude</code> (grados decimales WGS84 del punto de toma) y
+<code>pos_x/pos_y</code> (metros locales del muestreo en cuadrícula), además de cualquier variable de suelo del
+<code>MAPA_CAMPOS</code>. Si vienen <code>latitude/longitude</code> sin <code>pos_x/pos_y</code>, el servidor los
+<b>convierte a metros relativos al centroide de la finca</b> antes de guardarlos en <code>pos_x/pos_y</code>
+(advertencia <code>gps_convertido_a_relativo</code>).</p>
 <h3>7.2 Procesamiento (paso a paso)</h3>
 <ol>
   <li><b>Normalización</b> (<code>normalizacion_iot.py</code>): <code>MAPA_CAMPOS</code> traduce nombres del firmware al
@@ -361,6 +365,11 @@ respuesta fundamentada (fuentes, confianza, datos utilizados, qué falta). Guard
   advertencia <code>npk_sin_calibrar</code>.</li>
   <li><b>Resolución de finca</b>: <code>finca_id</code> de la trama → finca del <code>device_id</code> → auto-registro
   a la primera finca. <code>finca_id</code> inexistente → <code>422 FINCA_NOT_FOUND</code>; cambio de finca → reasocia.</li>
+  <li><b>Georreferencia</b> (<code>geo_utils.py</code>): si la trama trae <code>latitude/longitude</code> (grados) sin
+  <code>pos_x/pos_y</code>, se calcula el desplazamiento Este/Norte (m) desde el centroide de la finca (fórmula
+  equirectangular, R=6 371 km) y se guarda en <code>pos_x/pos_y</code> → advertencia <code>gps_convertido_a_relativo</code>.
+  Si la finca no tiene coordenadas → <code>gps_sin_centroide_finca</code> y <code>pos_x/pos_y</code> = NULL. Así, el mapa de
+  calor (sección M) y el plano del lote (sección N) siempre reciben metros.</li>
   <li><b>Persistencia</b> (<code>puente_iot → consumer.process_sensor_message</code>): inserta <code>SensorReading</code>
   ejecutando antes <code>SET LOCAL search_path TO public, agroia</code>; actualiza telemetría del <code>DispositivoIoT</code>.</li>
   <li><b>Respuesta 202</b>: <code>{status, device_id, finca_id, auto_registrado, variables_recibidas[], advertencias[], recibida_en}</code>.</li>

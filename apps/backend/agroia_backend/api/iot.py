@@ -232,9 +232,10 @@ async def cargar_archivo_sensor(
             return None
 
     def _posicion(frame: dict, eje: str):
+        # Prioridad: coordenadas locales en metros (pos_x/pos_y) sobre GPS absoluto
         claves = {
-            "x": ("latitude", "pos_x", "x", "coordenada_x", "punto_x", "columna"),
-            "y": ("longitude", "pos_y", "y", "coordenada_y", "punto_y", "fila"),
+            "x": ("pos_x", "x", "coordenada_x", "punto_x", "columna", "latitude"),
+            "y": ("pos_y", "y", "coordenada_y", "punto_y", "fila", "longitude"),
         }[eje]
         for clave in claves:
             if clave in frame and frame[clave] not in (None, ""):
@@ -306,22 +307,39 @@ async def cargar_archivo_sensor(
         device_final = dispositivo.device_id if dispositivo else None
 
         # ── Normalizar y persistir cada muestra (cuadrícula) ──
+        from agroia_backend.services.geo_utils import centroide_finca, haversine_relativa
         from agroia_backend.services.puente_iot import process_sensor_message
 
         variables_recibidas: set[str] = set()
         numero_muestras = 0
         for frame in frames:
             payload, advertencias = normalizar_trama(frame)
-            success = await process_sensor_message({
+            pos_x = _posicion(frame, "x")
+            pos_y = _posicion(frame, "y")
+            lat_abs = _a_flotante(frame.get("latitude"))
+            lng_abs = _a_flotante(frame.get("longitude"))
+            gps_convertido = False
+            if lat_abs is not None and lng_abs is not None and pos_x is None and pos_y is None and finca is not None:
+                centro = centroide_finca(finca)
+                if centro is not None:
+                    pos_x, pos_y = haversine_relativa(centro[0], centro[1], lat_abs, lng_abs)
+                    gps_convertido = True
+                    advertencias.append("gps_convertido_a_relativo")
+            mensaje = {
                 "device_id": device_final,
                 "finca_id": finca_final,
                 "timestamp": None,
                 "rssi": rssi,
                 "uptime_s": uptime_s,
-                "latitude": _posicion(frame, "x"),
-                "longitude": _posicion(frame, "y"),
                 "payload": payload,
-            })
+            }
+            if gps_convertido:
+                mensaje["pos_x"] = pos_x
+                mensaje["pos_y"] = pos_y
+            else:
+                mensaje["latitude"] = pos_x if pos_x is not None else lat_abs
+                mensaje["longitude"] = pos_y if pos_y is not None else lng_abs
+            success = await process_sensor_message(mensaje)
             if not success:
                 raise HTTPException(status_code=422, detail={
                     "code": "INGEST_ERROR",
