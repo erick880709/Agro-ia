@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787891477.8498774,
-    "ast_hash": "eb4a859f228be9cd8f69707e563487b4",
+    "mtime": 1787891988.8662386,
+    "ast_hash": "4203f8bbe2852e9b8c0682388b7c26f7",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787889709.093407,
-    "ast_hash": "9a8f587dbbe17f80441d3d430ecaa28d",
+    "mtime": 1787891988.8521793,
+    "ast_hash": "f8c5f4863bae2b36148a30bb7f72a86e",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4830,8 +4830,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1787890044.3586702,
-    "ast_hash": "e3ffa49a9e40a3141baeea7829321791",
+    "mtime": 1787891988.8692384,
+    "ast_hash": "d3c98d9b268abe032b882d1421b66c5f",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {
@@ -5300,8 +5300,53 @@
     "semantic_hash": ""
   },
   "context/contextoFuncional/AgroIA_Especificacion_Tecnica_v4.md": {
-    "mtime": 1787888292.3105843,
-    "ast_hash": "be4770009da179397ef7ae179d25cdf4",
+    "mtime": 1787891988.9140983,
+    "ast_hash": "ccca4ff21dd9de7561f23c21eb5c2dc8",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/img/iconos/ahuyama.svg": {
+    "mtime": 1787891988.8834734,
+    "ast_hash": "08bf73bf3177ea5292a09049353e67a0",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/img/iconos/caucho.svg": {
+    "mtime": 1787891988.8834734,
+    "ast_hash": "a733f943afca507cbb374c233a977463",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/img/iconos/chontaduro.svg": {
+    "mtime": 1787891988.8804479,
+    "ast_hash": "62132e5c00559f0d1a32611955fd31ad",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/img/iconos/fique.svg": {
+    "mtime": 1787891988.8834734,
+    "ast_hash": "f71411f51359df0cb55d1f1a87306859",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/img/iconos/granadilla.svg": {
+    "mtime": 1787891988.8834734,
+    "ast_hash": "bd84d41c916299f42523e1e32398fd7b",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/img/iconos/guayaba.svg": {
+    "mtime": 1787891988.8834734,
+    "ast_hash": "e6d4cb93b79d928dbb3a9a22e581cc12",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/img/iconos/habichuela.svg": {
+    "mtime": 1787891988.8834734,
+    "ast_hash": "505f4b151d67531b2a3d3999399f67f4",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/img/iconos/lulo.svg": {
+    "mtime": 1787891988.8834734,
+    "ast_hash": "97d1781d735b106754686c36e3c04893",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/img/iconos/panela.svg": {
+    "mtime": 1787891988.8692384,
+    "ast_hash": "e0569a0955d4967c1c4b300c2f9b86d8",
     "semantic_hash": ""
   }
 }

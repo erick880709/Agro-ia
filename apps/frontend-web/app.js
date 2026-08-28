@@ -2209,6 +2209,57 @@ async function verVariedades(cultivoId, nombre) {
   m.classList.remove('hidden');
 }
 
+/* ── 📏 Detalle de medición con el sensor (por cultivo) ── */
+
+function _profundidadMedicion(raizCm) {
+  // Profundidad de inserción del sensor según la zona de raíces activas
+  if (raizCm == null) return { principal: null, secundaria: null, nota: 'Sin dato de profundidad radicular en la ficha.' };
+  const principal = Math.max(8, Math.min(30, Math.round(raizCm * 0.4)));
+  const secundaria = Math.max(4, Math.round(raizCm * 0.2));
+  return { principal, secundaria, nota: null };
+}
+
+function verDetalleMedicion(c) {
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = `📏 Detalle medición — ${c.nombre}`;
+  document.getElementById('modal-msg').innerHTML = '';
+  document.getElementById('modal-guardar').style.display = 'none';
+  document.getElementById('modal-cancelar').textContent = 'Cerrar';
+  const raiz = c.profundidad_radicular_min_cm;
+  const p = _profundidadMedicion(raiz);
+  const filaRaiz = raiz != null ? `<b>≥ ${raiz} cm</b>` : '<span class="muted">sin dato en ficha</span>';
+  const filaPrincipal = p.principal != null
+    ? `<b>${p.principal} cm</b> <span class="muted">(zona de raíces activas)</span>`
+    : '<span class="muted">use el valor genérico de 10–15 cm</span>';
+  const filaSecundaria = p.secundaria != null
+    ? `<b>${p.secundaria} cm</b> <span class="muted">(lectura superficial de control)</span>`
+    : '—';
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <div class="labor-detalle">
+      <div class="labor-detalle-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr))">
+        <div><span class="muted">Profundidad radicular del cultivo</span><br/>${filaRaiz}</div>
+        <div><span class="muted">Profundidad de inserción del sensor</span><br/>${filaPrincipal}</div>
+        <div><span class="muted">Segunda lectura (control)</span><br/>${filaSecundaria}</div>
+      </div>
+      <div class="labor-detalle-obs">
+        <span class="muted">Procedimiento de medición</span>
+        <ol class="steps" style="margin:6px 0 0; padding-left:18px">
+          <li>Elija el punto: a 20–30 cm del tallo, sin piedras, raíces gruesas ni residuos.</li>
+          <li>Si el suelo está muy seco, humedezca ligeramente y espere 10–15 minutos (los sensores NPK capacitivos necesitan contacto con el suelo).</li>
+          <li>Entierre el sensor <b>verticalmente</b> hasta la profundidad indicada y presione para que las sondas queden en contacto total.</li>
+          <li>Espere 30–60 segundos hasta que la lectura se estabilice.</li>
+          <li>Tome <b>2–3 lecturas por zona</b> (misma profundidad) y registre el promedio en la plataforma.</li>
+          <li>Limpie las sondas después de cada punto y cambie de punto si nota piedras o huecos de aire.</li>
+        </ol>
+      </div>
+      <div class="labor-detalle-obs">
+        <span class="muted">Frecuencia sugerida</span>
+        <p>Mida al menos <b>1 vez al mes</b> y siempre antes de cada fertilización y en cambio de etapa fenológica. Envía cada trama con <code>latitude</code>/<code>longitude</code> del punto para el mapa de calor del lote.</p>
+      </div>
+    </div>`;
+  m.classList.remove('hidden');
+}
+
 async function cargarZona() {
   const div = document.getElementById('zona-lista');
   if (!div) return;
@@ -3456,12 +3507,19 @@ function renderCatalogo(q) {
         ${fisio.length ? `<p class="muted mono">🌱 ${fisio.join(' · ')}</p>` : ''}
         ${c.activo === false ? badge('Inactivo', 'critical') : badge('Activo', 'ok')}
         <div class="device-actions">
+          <button type="button" class="btn btn-ghost" data-cultivo-medicion="${esc(c.id)}">📏 Detalle medición</button>
           <button type="button" class="btn btn-ghost" data-cultivo-curva="${esc(c.id)}" data-nombre="${esc(c.nombre)}">📈 Curva de extracción</button>
           <button type="button" class="btn btn-ghost" data-cultivo-variedades="${esc(c.id)}" data-nombre="${esc(c.nombre)}">🌾 Variedades</button>
         </div>
       </div>`;
     }).join('')
     : '<p class="muted">Sin resultados.</p>';
+  div.querySelectorAll('[data-cultivo-medicion]').forEach(b => {
+    b.addEventListener('click', () => {
+      const c = state.catalogo.find(x => x.id === b.dataset.cultivoMedicion);
+      if (c) verDetalleMedicion(c);
+    });
+  });
   div.querySelectorAll('[data-cultivo-curva]').forEach(b => {
     b.addEventListener('click', () => verCurva(b.dataset.cultivoCurva, b.dataset.nombre || ''));
   });
