@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.9 · **Fecha:** 2026-08-27
+**Versión:** 2.10 · **Fecha:** 2026-08-28
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -178,8 +178,8 @@ Cada petición `fetch` lleva:
 
 | Rol | Pestañas visibles | Fincas visibles | Acciones de escritura |
 |---|---|---|---|
-| **Admin** | Inicio, Sensores, Carga, Recomendaciones, Historial, Reportes, **Fincas**, **Usuarios**, Catálogo | Todas | Registrar/editar fincas, aceptar recomendaciones, cambiar roles, fichas del catálogo |
-| **Agrónomo** | Igual sin Fincas ni Usuarios | Todas | Aceptar recomendaciones, actualizar datos agronómicos de fincas |
+| **Admin** | Inicio, Sensores, Carga, Recomendaciones, Historial, Reportes, Fincas, Catálogo + menú **⚙️ Administración** (Registrar finca, Usuarios, Insumos, Auditoría) | Todas | Registrar/editar fincas, aceptar recomendaciones, cambiar roles, precios de insumos, fichas del catálogo |
+| Agrónomo | Igual sin Fincas ni el menú Administración | Todas | Aceptar recomendaciones, actualizar datos agronómicos de fincas |
 | **Cliente** | Inicio, Sensores, Historial, Reportes, Catálogo | Solo las ligadas a su email (`fincas_permitidas_ids`) | **Solo lectura** (`exigir_no_cliente` bloquea) |
 
 `services/acceso.py` expone tres funciones:
@@ -206,6 +206,16 @@ Cada petición `fetch` lleva:
 | `inicio` | `cargarDashboard()` |
 | `fincas` (solo admin) | `renderFincasList()` |
 | `usuarios` (solo admin) | `cargarUsuarios()` |
+| `insumos` (solo admin) | `cargarPreciosInsumos()` |
+| `auditoria` (solo admin) | `cargarAuditoria()` |
+| `reg-finca` (solo admin) | — (wizard de registro estático en su propia vista) |
+
+**Menú «⚙️ Administración» (solo Admin, v2.10):** la barra de navegación agrupa en un
+**desplegable** las secciones administrativas: **🏡 Registrar finca** (wizard completo de 3 pasos
+en su propia vista), **👥 Administrar usuarios**, **💰 Administrar insumos** (página propia con
+la tabla de precios dinámicos) y **🕵️ Auditoría**. La pestaña «Fincas» quedó solo con el
+listado de fincas registradas. El desplegable se abre con clic en el botón «⚙️ Administración ▾»,
+se cierra al elegir una opción o al hacer clic fuera, y no aparece para Agrónomo ni Cliente.
 
 ---
 

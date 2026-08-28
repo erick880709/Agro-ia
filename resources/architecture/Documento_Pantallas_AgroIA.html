@@ -69,7 +69,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
   <h1>Pantallas del sistema y su propósito</h1>
-  <div class="meta">Versión 2.2 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+  <div class="meta">Versión 2.9 · 2026-08-28 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
 </header>
 
 <div class="wrap">
@@ -86,6 +86,7 @@
   <a href="#p7">P7 · Reportes</a>
   <a href="#p8">P8 · Chat asesor</a>
   <a href="#p9">P9 · Usuarios</a>
+  <a href="#p9b">P9b · Insumos</a>
   <a href="#p10">P10 · Catálogo</a>
   <a href="#p11">P11 · Auditoría</a>
 </nav>
@@ -103,7 +104,9 @@ operación diaria de monitoreo y análisis:</p>
   <div class="caja">P7 · Reportes</div>
 </div>
 <p style="font-size:.86rem;color:var(--muted)">Apoyos transversales: P4 (Cargar archivo) cuando el sensor pierde conexión ·
-P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10 (Catálogo) para administración y referencia.</p>
+P8 (Chat asesor) para resolver dudas en cualquier momento · el menú <b>⚙️ Administración</b>
+(solo Admin) agrupa P2-Registrar finca, P9 (Usuarios), P9b (Insumos) y P11 (Auditoría) ·
+P10 (Catálogo) para consulta y referencia.</p>
 
 <!-- ─────────── P0 ─────────── -->
 <div class="pantalla" id="p0">
@@ -122,7 +125,8 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   </ul>
   <p><b>Qué ocurre después:</b> la sesión se guarda en <code>localStorage</code>
   (<code>agroia_sesion</code>) y se carga el menú según el rol
-  (Admin: 10 pestañas · Agrónomo: 7 · Cliente: 5). <span class="siguiente">Siguiente → P1 Inicio.</span></p>
+  (Admin: 8 pestañas + menú ⚙️ Administración con 4 opciones · Agrónomo: 7 · Cliente: 5).
+  <span class="siguiente">Siguiente → P1 Inicio.</span></p>
 </div>
 
 <!-- ─────────── P1 ─────────── -->
@@ -169,6 +173,10 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   sensores, muestras y análisis.</div>
   <p><b>Qué muestra:</b> el listado de fincas (tarjetas con ID copiable para el firmware) y el
   <b>formulario wizard de 3 secciones</b>:</p>
+  <p class="muted" style="font-size:.85rem"><b>Dónde está (v2.9):</b> el <b>formulario de registro</b>
+  vive en su propia vista, abierta desde el menú <b>⚙️ Administración → 🏡 Registrar finca</b>
+  (solo Admin). La pestaña «🏡 Fincas» muestra únicamente el <b>listado</b> de fincas
+  registradas con sus botones de administración.</p>
   <ol>
     <li><b>Información básica</b> — nombre, propietario, teléfono, email, departamento, municipio, vereda.</li>
     <li><b>Ubicación</b> — 📍 GPS del navegador · 🗺️ mapa (Leaflet/OSM, marcar lindero y «Cerrar polígono») ·
@@ -430,7 +438,8 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 <div class="pantalla" id="p9">
   <div class="cab"><span class="icono">👥</span><span class="titulo">P9 · Usuarios</span>
     <span class="rol">Solo Admin</span></div>
-  <div class="objetivo"><b>Objetivo:</b> administrar las cuentas del sistema y sus permisos.</div>
+  <div class="objetivo"><b>Objetivo:</b> administrar las cuentas del sistema y sus permisos.
+  Se abre desde el menú <b>⚙️ Administración</b> (solo Admin).</div>
   <p><b>Qué muestra:</b> listado de usuarios con rol, estado y fincas asignadas; formulario de alta
   con multi-selector de fincas a las que tendrá acceso.</p>
   <p><b>Administración de cuentas:</b> cada tarjeta de usuario tiene botones <b>✏️ Editar</b>
@@ -440,11 +449,23 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   <p><b>Servicios que llama:</b> <code>GET /api/v1/usuarios</code> · <code>POST /api/v1/usuarios</code> ·
   <code>PUT /api/v1/usuarios/{id}</code> · <code>DELETE /api/v1/usuarios/{id}</code> ·
   <code>PUT /api/v1/admin/usuarios/{id}/rol</code> · perfil propio en <code>/usuarios/me</code>.</p>
-  <p><b>💰 Precios de insumos</b> (tarjeta inferior de la misma pestaña, solo Admin): tabla
-  editable con los 14 insumos del plan económico (Cal dolomítica, Urea, DAP, KCl, Compost,
-  Yeso agrícola, sulfatos, quelatos, Bórax y enmienda orgánica) con su uso y el <b>precio en
-  COP/kg</b>; los productos sin registro muestran el badge «estático». El botón
-  <b>«💾 Guardar precios»</b> invoca <code>PUT /api/v1/admin/precios-insumos</code>
+  <p class="muted" style="font-size:.85rem">La tarjeta de <b>precios de insumos</b> que antes estaba
+  aquí se movió a su propia página: <a href="#p9b">P9b · Insumos</a> (también dentro del menú
+  ⚙️ Administración).</p>
+</div>
+
+<!-- ─────────── P9b ─────────── -->
+<div class="pantalla" id="p9b">
+  <div class="cab"><span class="icono">💰</span><span class="titulo">P9b · Insumos (precios dinámicos)</span>
+    <span class="rol">Solo Admin</span></div>
+  <div class="objetivo"><b>Objetivo:</b> mantener al día el costo de los insumos que alimentan el
+  plan económico y el ROI. Se abre desde el menú <b>⚙️ Administración</b>.</div>
+  <p><b>Qué muestra:</b> página propia con la tabla editable de los 14 insumos del plan económico
+  (Cal dolomítica, Urea, DAP, KCl, Compost, Yeso agrícola, sulfatos, quelatos, Bórax y enmienda
+  orgánica) con su uso y el <b>precio en COP/kg</b>; los productos sin registro muestran el
+  badge «estático».</p>
+  <p><b>Acciones:</b> el botón <b>«💾 Guardar precios»</b> invoca
+  <code>PUT /api/v1/admin/precios-insumos</code>
   (upsert con <code>fecha_actualizacion</code> = hoy y auditoría <code>precios.actualizar</code>).
   Desde el siguiente análisis, el plan económico usa esas cotizaciones (costo/ha = dosis ×
   precio/kg); sin registro se usa el costo estático con la advertencia «Precios de referencia
@@ -473,7 +494,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   <div class="cab"><span class="icono">🕵️</span><span class="titulo">P11 · Auditoría de acciones</span>
     <span class="rol">Solo Admin</span></div>
   <div class="objetivo"><b>Objetivo:</b> trazabilidad total — saber <b>quién</b> hizo <b>qué</b>,
-  sobre <b>qué entidad</b> y <b>cuándo</b>.</div>
+  sobre <b>qué entidad</b> y <b>cuándo</b>. Se abre desde el menú <b>⚙️ Administración</b>.</div>
   <p><b>Qué muestra:</b> bitácora paginada con filtros por entidad (🏡 fincas · 🗂️ lotes · 👥 usuarios ·
   🔐 inicios de sesión · 🧪 demo) y búsqueda por email/nombre/ID. Cada fila: fecha y hora,
   usuario (nombre, email, rol), acción (<code>finca.crear</code>, <code>usuario.eliminar</code>,
@@ -489,7 +510,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.8 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.9 · 2026-08-28<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

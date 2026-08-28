@@ -1,6 +1,6 @@
 # AgroIA — Estado del Proyecto
 
-> **Fecha:** 2026-08-27 | **Versión:** 0.1.0 | **Pipeline:** janus → epicureo → archi → genesis → builder | **CI:** 🟢 verde | **Producción:** 🌐 https://agroia-backend.onrender.com (Render Free + Neon)
+> **Fecha:** 2026-08-28 | **Versión:** 0.1.0 | **Pipeline:** janus → epicureo → archi → genesis → builder | **CI:** 🟢 verde | **Producción:** 🌐 https://agroia-backend.onrender.com (Render Free + Neon)
 
 ## 🎯 Objetivo
 
@@ -251,8 +251,15 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 
 - **Tabla `agroia.precios_insumos`** (migración 021): `producto` (clave única), `precio_kg_cop`, `fecha_actualizacion`, `fuente`.
 - **Cálculo dinámico** en `services/economia.py`: `calcular_plan_economico(..., precios_insumos)` convierte COP/kg → COP/ha con `DOSIS_PRODUCTO_VARIABLE` (N = Urea 60 kg/ha, P = DAP 35 kg/ha, K = KCl 45 kg/ha…); el orquestador (UC1/UC2) y el reporte cargan la tabla en cada análisis. Sin registro → fallback estático + `advertencia_precios` «Precios de referencia desactualizados» (P5 y reporte).
-- **Endpoints solo Admin**: `GET/PUT /api/v1/admin/precios-insumos` (upsert con fecha = hoy, auditoría `precios.actualizar`); panel «💰 Precios de insumos» en la pestaña Usuarios (tabla editable de 14 insumos).
+- **Endpoints solo Admin**: `GET/PUT /api/v1/admin/precios-insumos` (upsert con fecha = hoy, auditoría `precios.actualizar`); página propia **«💰 Administrar insumos»** dentro del menú ⚙️ Administración (tabla editable de 14 insumos).
 - Validado local y en producción: 403 para Cliente, advertencia con tabla vacía, tras PUT (Urea 3 500) el costo de N pasa 180 000 → 210 000 COP/ha, P 150 000 → 168 000 (DAP 4 800), K 160 000 → 189 000 (KCl 4 200), sin advertencia; en prod el analyze usa `precios_fuente = precios_insumos` (ideal 357 000) y el panel admin sirve con `v=20260827-precios`.
+
+### Menú «Administración» y página propia de insumos (2026-08-28)
+
+- **Nueva navegación (Admin):** las secciones administrativas se agrupan en un **desplegable ⚙️ Administración** con submenús: **🏡 Registrar finca** (wizard completo de 3 pasos en su propia vista), **👥 Administrar usuarios**, **💰 Administrar insumos** (página propia con la tabla de precios dinámicos) y **🕵️ Auditoría**. La pestaña «🏡 Fincas» quedó solo con el listado de fincas registradas.
+- **Comportamiento del menú:** abre con clic en «⚙️ Administración ▾», se cierra al elegir una opción o al hacer clic fuera; el desplegable no aparece para Agrónomo ni Cliente (el botón no compite con la lógica de pestañas por rol).
+- **Assets**: `app.js`/`styles.css` con cache-busting `?v=20260827-adminnav`.
+- Validado local y en producción: submenú abre/cierra, navegación a registrar-finca (wizard visible), usuarios (7 tarjetas), insumos (15 filas con precios guardados) y fincas (solo listado); en prod servido `v=20260827-adminnav` con tabla de precios cargada.
 
 ### Imágenes fuera de la BD y validación de rendimiento (2026-08-27)
 
