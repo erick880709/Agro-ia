@@ -69,7 +69,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
   <h1>Pantallas del sistema y su propósito</h1>
-  <div class="meta">Versión 2.14 · 2026-08-28 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+  <div class="meta">Versión 3.0 · 2026-08-28 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
 </header>
 
 <div class="wrap">
@@ -79,6 +79,7 @@
   <a href="#p0">P0 · Inicio de sesión</a>
   <a href="#p1">P1 · Inicio (Dashboard)</a>
   <a href="#p1b">P1b · Alertas clima</a>
+  <a href="#p1c">P1c · Visión plagas</a>
   <a href="#p2">P2 · Fincas (registro)</a>
   <a href="#p3">P3 · Sensores IoT</a>
   <a href="#p4">P4 · Cargar archivo</a>
@@ -100,6 +101,7 @@
   <a href="#p12h">P12H · Equipo de trabajo</a>
   <a href="#p12i">P12I · Comisiones</a>
   <a href="#p12j">P12J · Lista de trabajos</a>
+  <a href="#p12k">P12K · Precios de cosecha</a>
 </nav>
 
 <h2 id="ruta">🧭 Ruta natural de trabajo</h2>
@@ -207,6 +209,27 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   solo consulta. Si no hay alertas activas, aparece el aviso correspondiente.</p>
   <p><b>Servicios que llama:</b> <code>GET /api/v1/alertas-climaticas</code> — alertas activas
   de las fincas visibles (<code>fincas_permitidas_ids</code>) con ubicación para agrupar.</p>
+  <p><span class="siguiente">Siguiente → P2 Fincas.</span></p>
+</div>
+
+<!-- ─────────── P1c ─────────── -->
+<div class="pantalla" id="p1c">
+  <div class="cab"><span class="icono">🔬</span><span class="titulo">P1c · Visión plagas (P12)</span>
+    <span class="rol">Admin · Agrónomo · Extensionista</span></div>
+  <div class="objetivo"><b>Objetivo:</b> diagnosticar plagas o enfermedades desde una foto
+  tomada en campo y conservar el historial por finca.</div>
+  <p><b>Qué muestra:</b> formulario con <b>selector de finca</b> y <b>carga de foto</b>
+  (JPEG/PNG/WebP, máx 5 MB), y debajo el <b>historial de diagnósticos</b> de la finca
+  seleccionada: miniatura de la foto, plaga, confianza, severidad, fuente y fecha.</p>
+  <p><b>Cómo funciona:</b> al enviar, la foto se guarda en <code>media/vision/</code> y se
+  registra el diagnóstico con el contrato definitivo {plaga, confianza, severidad,
+  recomendacion, fuente}. El modelo propio <b>AgroIA v1.0 está en entrenamiento</b>: mientras
+  tanto la respuesta llega con <b>degradación graciosa</b> («No determinada»,
+  <code>fuente: modelo_agroia_v1_stub</code>) y la recomendación de pedir dictamen experto
+  por el chat. El flujo completo queda operativo desde ya.</p>
+  <p><b>Servicios que llama:</b> <code>POST /api/v1/vision/analizar-plaga</code> (multipart)
+  · <code>GET /api/v1/vision/diagnosticos/{finca_id}</code>. El reentrenamiento lo dispara el
+  Admin desde <code>POST /api/v1/vision/admin/reentrenar</code> (stub de orquestación MLflow).</p>
   <p><span class="siguiente">Siguiente → P2 Fincas.</span></p>
 </div>
 
@@ -713,10 +736,28 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   (cruza lotes, comisiones, lecturas, recomendaciones y la auditoría <code>reporte.generar</code>).</p>
 </div>
 
+<!-- ─────────── P12K ─────────── -->
+<div class="pantalla" id="p12k">
+  <div class="cab"><span class="icono">🌾</span><span class="titulo">P12K · Precios de cosecha (inteligencia de mercado — UC1)</span>
+    <span class="rol">Admin</span></div>
+  <div class="objetivo"><b>Objetivo:</b> registrar el precio promedio de venta por cultivo y
+  departamento para que las recomendaciones incluyan <b>utilidad estimada (COP/ha)</b> y
+  destaquen el cultivo más rentable de la zona.</div>
+  <p><b>Qué muestra:</b> formulario (cultivo, departamento, precio COP/kg y rendimiento de
+  referencia t/ha opcional) y la <b>tabla de precios registrados</b> con fuente y fecha de
+  actualización. Se accede desde <b>⚙️ Administración → 🌾 Precios de cosecha</b>.</p>
+  <p><b>Efecto en recomendaciones:</b> la tabla de sugerencias (P5) agrega columnas de
+  <b>precio</b> e <b>utilidad estimada</b> y marca con el badge «🏆 Más rentable» el cultivo con
+  mejor <code>score_ponderado</code> (aptitud 70 % + rentabilidad normalizada 30 %). El cálculo
+  usa <code>ingreso_bruto_cop_ha = rendimiento × precio × 1000</code>.</p>
+  <p><b>Servicios que llama:</b> <code>GET /api/v1/cultivos/precios</code> ·
+  <code>PUT /api/v1/admin/precios-cosecha</code> (upsert por cultivo + departamento).</p>
+</div>
+
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.14 · 2026-08-28<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v3.0 · 2026-08-28<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

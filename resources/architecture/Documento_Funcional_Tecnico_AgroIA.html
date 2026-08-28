@@ -61,7 +61,7 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
 </header>
 <div class="wrap">
 <h1 id="documento-funcional-tecnico-agroia-agrointeligente-colombia">Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)</h1>
-<p><strong>Versión:</strong> 2.14 · <strong>Fecha:</strong> 2026-08-28
+<p><strong>Versión:</strong> 3.0 · <strong>Fecha:</strong> 2026-08-28
 <strong>Alcance:</strong> Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.</p>
 <hr />
 <h2 id="tabla-de-contenidos">Tabla de contenidos</h2>
@@ -72,7 +72,7 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
 <li><a href="#4-autenticación-y-sesión-lo-más-básico">Autenticación y sesión (lo más básico)</a></li>
 <li><a href="#5-el-frontend-spa-navegación-y-utilidades">El frontend SPA: navegación y utilidades</a></li>
 <li><a href="#6-recorrido-sección-por-sección">Recorrido sección por sección</a>
-   - <a href="#611--auditoría-de-acciones-solo-admin">6.11 🕵️ Auditoría</a> · <a href="#612--ciclos-productivos-por-lote-historial_ciclos_lote">6.12 🔄 Ciclos productivos</a> · <a href="#613--alertas-climáticas-proactivas">6.13 ⛅ Alertas climáticas</a> · <a href="#614--enriquecimiento-sig-igacupra">6.14 🗺️ Enriquecimiento SIG IGAC/UPRA</a> · <a href="#615--precios-de-insumos-dinámicos-roi">6.15 💰 Precios de insumos dinámicos</a> · <a href="#616--almacenamiento-de-imágenes-chat-y-labores">6.16 🖼️ Almacenamiento de imágenes</a> · <a href="#617--validación-de-rendimiento-real-anti-outliers">6.17 🧪 Validación de rendimiento real</a></li>
+   - <a href="#611--auditoría-de-acciones-solo-admin">6.11 🕵️ Auditoría</a> · <a href="#612--ciclos-productivos-por-lote-historial_ciclos_lote">6.12 🔄 Ciclos productivos</a> · <a href="#613--alertas-climáticas-proactivas">6.13 ⛅ Alertas climáticas</a> · <a href="#614--enriquecimiento-sig-igacupra">6.14 🗺️ Enriquecimiento SIG IGAC/UPRA</a> · <a href="#615--precios-de-insumos-dinámicos-roi">6.15 💰 Precios de insumos dinámicos</a> · <a href="#616--almacenamiento-de-imágenes-chat-y-labores">6.16 🖼️ Almacenamiento de imágenes</a> · <a href="#617--validación-de-rendimiento-real-anti-outliers">6.17 🧪 Validación de rendimiento real</a> · <a href="#618--análisis-de-laboratorio-ica">6.18 🧪 Análisis de laboratorio</a> · <a href="#619--antagonismos-nutricionales">6.19 ⚖️ Antagonismos nutricionales</a> · <a href="#620--precios-de-cosecha-inteligencia-de-mercado-uc1">6.20 🌾 Precios de cosecha</a> · <a href="#621--pwa-offline-first">6.21 📡 PWA offline</a> · <a href="#622--visión-plagas-diagnóstico-desde-foto">6.22 🔬 Visión plagas</a></li>
 <li><a href="#7-ingesta-de-datos-iot--post-apisensor">Ingesta de datos IoT — <code>POST /api/sensor</code></a></li>
 <li><a href="#8-el-motor-de-recomendaciones-corazón-del-sistema">El motor de recomendaciones (corazón del sistema)</a></li>
 <li><a href="#9-aceptación-humana-de-recomendaciones-human-in-the-loop">Aceptación humana de recomendaciones (human-in-the-loop)</a></li>
@@ -156,16 +156,20 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
 <div class="mermaid">flowchart LR
   subgraph Frontend[&quot;Frontend (apps/frontend-web)&quot;]
     LOGIN[Pantalla de login]
-    UI[SPA 19 vistas: Inicio · Alertas clima · Sensores · Carga · Recomendaciones · Historial · Reportes · Fincas · Catálogo · Chat · Mi zona · BPA · Equipo · Comisiones · Lista de trabajos · Reentrenar]
+    UI[SPA 20 vistas: Inicio · Alertas clima · Sensores · Carga · Recomendaciones · Historial · Reportes · Fincas · Visión plagas · Catálogo · Chat · Mi zona · BPA · Equipo · Comisiones · Lista de trabajos · Reentrenar]
+    PWA[PWA offline: Service Worker + IndexedDB&lt;br/&gt;manifiesto, banner de sincronización]
   end
   subgraph Backend[&quot;Backend FastAPI (apps/backend)&quot;]
-    API[35 routers REST /api/v1]
+    API[36 routers REST /api/v1]
     ORCH[RecommendationOrchestrator]
     RULES[RulesEngine + AptitudService&lt;br/&gt;sistema experto]
     ML[MLOracleService&lt;br/&gt;modo sombra]
     ADAPTER[SueloAdapter / validación]
     REPORTES[generador HTML reportes]
     ENUMS[asegurar_enums + asegurar_reglas&lt;br/&gt;auto-reparación al arranque]
+    JWT[JWT auth: login/refresh/revocación]
+    SYNC[Sync offline idempotente&lt;br/&gt;tramas y labores]
+    VISION[Visión plagas&lt;br/&gt;diagnóstico desde foto]
   end
   subgraph ML_Train[&quot;Entrenamiento (apps/ml)&quot;]
     TRAIN[train_colombia.py]
@@ -176,9 +180,13 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
   end
   DB[(PostgreSQL&lt;br/&gt;schema agroia&lt;br/&gt;local :5434 / Neon)]
 
-  UI --&gt;|fetch /api/v1 + X-User-Role| API
+  UI --&gt;|fetch /api/v1 + Bearer JWT| API
+  PWA --&gt;|sync offline| SYNC
   SENSOR --&gt; API
   API --&gt; ORCH
+  API --&gt; JWT
+  API --&gt; SYNC
+  API --&gt; VISION
   ORCH --&gt; ADAPTER --&gt; DB
   ORCH --&gt; RULES --&gt; DB
   ORCH --&gt; ML --&gt; ARTIFACTS
@@ -199,11 +207,11 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
 <tbody>
 <tr>
 <td><code>main.py</code></td>
-<td>Crea la app FastAPI, monta los 35 routers, sirve el frontend estático en <code>/</code>, y en el arranque (<code>lifespan</code>) ejecuta <code>asegurar_enums()</code> y <code>asegurar_reglas()</code>.</td>
+<td>Crea la app FastAPI, monta los 36 routers, sirve el frontend estático en <code>/</code>, y en el arranque (<code>lifespan</code>) ejecuta <code>asegurar_enums()</code> y <code>asegurar_reglas()</code>.</td>
 </tr>
 <tr>
 <td><code>api/*.py</code></td>
-<td>35 routers HTTP: <code>auth</code>, <code>sensor_api</code>, <code>iot</code>, <code>fincas</code>, <code>ciclos</code>, <code>labores</code>, <code>recomendaciones</code>, <code>reportes</code>, <code>ml</code>, <code>chat</code>, <code>dashboard</code>, <code>catalogo</code>, <code>usuarios</code>, <code>location</code>, <code>sig</code>, <code>admin_precios</code>, <code>alertas</code>, <code>auditoria</code>, <code>demo</code>, <code>mantenimiento</code>, <code>agua_riego</code>, <code>balance_hidrico</code>, <code>bpa</code>, <code>curvas</code>, <code>extensionista</code>, <code>notificaciones</code>, <code>plagas</code>, <code>rotacion</code>, <code>variedades</code>, <code>equipo</code>, <code>comisiones</code>, <code>lista_trabajos</code>, <code>health</code>.</td>
+<td>36 routers HTTP: <code>auth</code>, <code>sensor_api</code>, <code>iot</code>, <code>fincas</code>, <code>ciclos</code>, <code>labores</code>, <code>recomendaciones</code>, <code>reportes</code>, <code>ml</code>, <code>chat</code>, <code>dashboard</code>, <code>catalogo</code>, <code>usuarios</code>, <code>location</code>, <code>sig</code>, <code>admin_precios</code>, <code>alertas</code>, <code>auditoria</code>, <code>demo</code>, <code>mantenimiento</code>, <code>agua_riego</code>, <code>balance_hidrico</code>, <code>bpa</code>, <code>curvas</code>, <code>extensionista</code>, <code>notificaciones</code>, <code>plagas</code>, <code>rotacion</code>, <code>variedades</code>, <code>equipo</code>, <code>comisiones</code>, <code>lista_trabajos</code>, <code>laboratorio</code>, <code>precios_cosecha</code>, <code>sync</code>, <code>vision</code>, <code>health</code>.</td>
 </tr>
 <tr>
 <td><code>services/orchestrator.py</code></td>
@@ -235,7 +243,11 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
 </tr>
 <tr>
 <td><code>services/acceso.py</code></td>
-<td>Control de acceso a fincas por rol (MVP sin JWT).</td>
+<td>Control de acceso a fincas por rol (roles totales vs fincas permitidas).</td>
+</tr>
+<tr>
+<td><code>services/jwt_auth.py</code></td>
+<td>JWT v3: creación/validación de access+refresh tokens (HS256/RS256), rotación, revocación y middleware de autenticación con anti-suplantación.</td>
 </tr>
 <tr>
 <td><code>services/normalizacion_iot.py</code></td>
@@ -251,11 +263,11 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
 </tr>
 <tr>
 <td><code>models/*.py</code></td>
-<td>Modelos SQLAlchemy (35 tablas en schema <code>agroia</code>).</td>
+<td>Modelos SQLAlchemy (42 tablas en schema <code>agroia</code>).</td>
 </tr>
 <tr>
 <td><code>alembic/versions/</code></td>
-<td>Migraciones 001 → 035.</td>
+<td>Migraciones 001 → 041.</td>
 </tr>
 </tbody>
 </table>
@@ -278,19 +290,28 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
 3. Verifica la contraseña con <code>verify_password()</code> (<code>services/auth_utils.py</code>, hash bcrypt sobre <code>password_hash</code>).
    - Credenciales inválidas → <code>401 CREDENCIALES_INVALIDAS</code>.
 4. Verifica que la cuenta esté activa (<code>usuario.activo</code>) → si no, <code>403 USUARIO_INACTIVO</code>.
-5. Devuelve los datos de sesión.</p>
-<p><strong>Respuesta:</strong></p>
+5. Emite los tokens JWT y devuelve los datos de sesión.</p>
+<p><strong>Respuesta (JWT v3):</strong></p>
 <pre><code class="language-json">{
   &quot;id&quot;: &quot;uuid&quot;,
   &quot;nombre&quot;: &quot;Administrador Demo&quot;,
   &quot;email&quot;: &quot;…&quot;,
   &quot;rol&quot;: &quot;Admin&quot;,
-  &quot;activo&quot;: true
+  &quot;activo&quot;: true,
+  &quot;access_token&quot;: &quot;eyJ…&quot;,
+  &quot;refresh_token&quot;: &quot;…&quot;,
+  &quot;token_type&quot;: &quot;bearer&quot;,
+  &quot;expira_en_segundos&quot;: 28800
 }
 </div>
-<blockquote>
-<p>Nota MVP: no hay token JWT todavía. El rol viaja en cabeceras (ver 4.4). El endpoint está preparado para ser reemplazado por un Auth Service con OAuth2.</p>
-</blockquote>
+<p><strong>Autenticación JWT (v3.0, <code>services/jwt_auth.py</code>):</strong>
+- <strong>Access token</strong> (8 h, <code>jwt_access_token_expire_minutes=480</code>) y <strong>refresh token</strong> (30 días) firmados con <code>JWT_SECRET</code> (HS256; RS256 si se configuran claves PEM). Sin secreto configurado se usa un secreto de desarrollo (advertencia en logs).
+- <strong><code>POST /api/v1/auth/refresh</code></strong>: rota el par; un refresh <strong>reusado</strong> (ya rotado) revoca toda la cadena y responde 401 (<code>REFRESH_REUSADO</code>).
+- <strong><code>POST /api/v1/auth/logout</code></strong>: mete el <code>jti</code> del access token en <code>token_blacklist</code> (revocación real).
+- <strong><code>GET /api/v1/auth/me</code></strong> devuelve el usuario del token; <code>_sobrescribir_cabeceras()</code> descarta cabeceras <code>X-User-*</code> enviadas por el cliente cuando hay Bearer (anti-suplantación: el rol/email salen del token firmado, no de cabeceras confiadas).
+- <strong>Middleware HTTP</strong>: valida el Bearer en toda la app salvo rutas públicas (<code>/api/v1/health</code>, <code>/api/v1/auth/login</code>, <code>/api/v1/auth/refresh</code>, <code>/api/sensor</code>, <code>/docs</code>, <code>/openapi.json</code>, <code>/redoc</code>, <code>/media</code>).
+- <strong>Compatibilidad</strong>: si no hay Bearer, se aceptan las cabeceras heredadas <code>X-User-Role</code>/<code>X-User-Email</code> (modo transición, <code>auth_allow_legacy_headers=true</code>).
+- <strong>Tablas</strong> (migración 036): <code>token_blacklist</code> (jti) y <code>refresh_tokens</code> (hash SHA-256 del token; nunca se guarda el token en claro). El job de mantenimiento limpia expirados (<code>limpiar_tokens_expirados</code>).</p>
 <h3 id="43-sesion-en-el-cliente">4.3 Sesión en el cliente</h3>
 <ul>
 <li>La respuesta se guarda en <code>localStorage</code> bajo la clave <code>agroia_sesion</code>.</li>
@@ -309,13 +330,18 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
 </thead>
 <tbody>
 <tr>
+<td><code>Authorization: Bearer &lt;access_token&gt;</code></td>
+<td>Siempre (JWT v3)</td>
+<td>Autenticación real; el frontend renueva automáticamente con el refresh antes de que expire (single-flight <code>_refreshEnCurso</code>).</td>
+</tr>
+<tr>
 <td><code>X-User-Role</code></td>
-<td>Siempre</td>
+<td>Modo legado sin Bearer</td>
 <td>Rol activo (<code>Admin</code>, <code>Agronomo</code>, <code>Cliente</code>, …)</td>
 </tr>
 <tr>
 <td><code>X-User-Email</code></td>
-<td>Solo rol Cliente</td>
+<td>Solo rol Cliente (legado)</td>
 <td>Identificar al cliente para filtrar sus fincas</td>
 </tr>
 </tbody>
@@ -778,6 +804,56 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 <li><strong>Al cosechar</strong> (<code>POST …/ciclo/cosechar</code>): se compara el rendimiento normalizado (t/ha) contra el <code>rendimiento_esperado</code> de la ficha técnica. Si <code>declarado &gt; esperado × 2</code> o <code>&lt; esperado × 0.3</code> → <strong>no se bloquea el guardado</strong>, pero el ciclo queda marcado <code>rendimiento_atipico = true</code> (migración 022) y la respuesta incluye <code>advertencia_rendimiento</code> («Este rendimiento es atípico para este cultivo en Colombia… Verifique el dato…»), que la UI muestra en un banner amarillo tras guardar.</li>
 <li><strong>Ground Truth protegido</strong>: <code>services/ml_labels.py::etiquetas_ciclos</code> excluye los ciclos atípicos (marca + recálculo defensivo de la regla) — el ML nunca aprende de outliers humanos.</li>
 </ul>
+<h3 id="618-analisis-de-laboratorio-ica">6.18 🧪 Análisis de laboratorio ICA</h3>
+<p><strong>Problema que resuelve</strong>: los sensores NPK sin calibrar degradan la confianza del diagnóstico; el análisis de laboratorio es la fuente de verdad para N/P/K/pH/MO.</p>
+<ul>
+<li><strong>Tabla <code>analisis_laboratorio</code></strong> (migración 037): <code>resultados</code> JSONB normalizado, <code>fecha_muestreo</code>/<code>fecha_resultado</code>, <code>laboratorio_nombre</code>, <code>fuente</code>.</li>
+<li><strong>Endpoints</strong> (<code>api/laboratorio.py</code>):</li>
+<li><code>POST /api/v1/fincas/{id}/lab/ingestar</code> — recibe el informe de laboratorio (diccionario variable→valor) y lo <strong>normaliza por alias</strong> (<code>ALIASES</code>: pH/N/P/K/MO/MateriaOrgánica…), valida cada variable contra los rangos físicos (<code>SOIL_RANGES</code>) y lo persiste.</li>
+<li><code>GET /api/v1/fincas/{id}/lab/analisis</code> — historial de análisis de la finca.</li>
+<li><code>DELETE /api/v1/fincas/{id}/lab/analisis/{id}</code> — elimina un análisis (experto).</li>
+<li><strong>Efecto en el motor</strong>: si N/P/K/pH/MO están validados, la finca queda <code>validacion_laboratorio=true</code>; el orquestador toma el análisis <strong>reciente (ventana 90 días)</strong> como fuente prioritaria sobre el sensor, elimina la penalización <code>npk_sin_calibrar</code> y lo registra en la justificación (<code>laboratorio_reciente</code>).</li>
+<li><strong>Confiabilidad</strong>: las variables respaldadas por laboratorio pasan a «Validado en laboratorio» en el diagnóstico y el reporte.</li>
+</ul>
+<h3 id="619-antagonismos-nutricionales">6.19 ⚖️ Antagonismos nutricionales</h3>
+<p><strong>Problema que resuelve</strong>: corregir un nutriente sin mirar interacciones puede empeorar otro (exceso de K bloquea Ca/Mg; exceso de P bloquea Zn).</p>
+<ul>
+<li><strong>Reglas <code>tipo='antagonismo'</code></strong> (migración 038): <code>asegurar_reglas()</code> siembra 4 reglas idempotentes (K-Ca-Mg, P-Zn, N-maduración, pH-ácido con Mg) marcadas <code>tipo='antagonismo'</code>; <code>rules_engine.load_rules()</code> las separa de las primarias.</li>
+<li><strong>Evaluación</strong>: <code>evaluar_antagonismos()</code> corre después de las violaciones primarias y <strong>agrega hallazgos con estado <code>INTERACCION</code> y <code>secundaria=true</code></strong> — se muestran como «AJUSTE NUTRICIONAL» (badge distintivo) sin desordenar el diagnóstico principal.</li>
+<li><strong>Justificación</strong>: el reporte incluye <code>interacciones_nutricionales</code> para trazabilidad de por qué se ajustó una recomendación.</li>
+</ul>
+<h3 id="620-precios-de-cosecha-inteligencia-de-mercado-uc1">6.20 🌾 Precios de cosecha (inteligencia de mercado — UC1)</h3>
+<p><strong>Problema que resuelve</strong>: recomendar un cultivo apto pero no rentable en la región.</p>
+<ul>
+<li><strong>Tabla <code>precios_cosecha</code></strong> (migración 039): <code>precio_promedio_cop_kg</code>, <code>rendimiento_promedio_t_ha</code>, <code>departamento</code>, <code>fecha_actualizacion</code>, <code>fuente</code>.</li>
+<li><strong>Endpoints</strong> (<code>api/precios_cosecha.py</code>):</li>
+<li><code>GET /api/v1/cultivos/precios?departamento=</code> — precios por cultivo y departamento.</li>
+<li><code>PUT /api/v1/admin/precios-cosecha</code> — upsert por cultivo+departamento (solo Admin).</li>
+<li><strong>Enriquecimiento de sugerencias</strong> (<code>services/precios_cosecha.py::enriquecer_sugerencias</code>): calcula <code>ingreso_bruto_cop_ha = rendimiento × precio × 1000</code>, <code>utilidad_estimada_cop_ha</code> (ingreso menos costo del plan cuando existe) y <code>score_ponderado = score×0.7 + utilidad_norm×30</code>; marca el mejor como <code>mas_rentable</code> (badge «Más rentable» en la tabla de sugerencias).</li>
+<li><strong>Panel admin</strong>: pestaña «🌾 Precios de cosecha» en Administración (cultivo + departamento + precio + rendimiento).</li>
+</ul>
+<h3 id="621-pwa-offline-first">6.21 📡 PWA offline-first</h3>
+<p><strong>Problema que resuelve</strong>: en campo no siempre hay señal; las tramas y labores deben capturarse sin conexión y sincronizarse al volver.</p>
+<ul>
+<li><strong>Shell PWA</strong> (<code>apps/frontend-web/</code>): <code>manifest.json</code> (instalable, tema verde AgroIA) + <code>sw.js</code> (Service Worker, <strong>network-first con respaldo de caché</strong> para el shell estático; la API nunca se cachea).</li>
+<li><strong>Cola IndexedDB</strong> (<code>offline.js</code>): <code>encolarOffline(tipo, payload)</code> guarda en <code>agroia-offline/pendientes</code> con <code>idempotency_key</code> (UUID). Al perder conexión, el simulador de tramas y la actualización de labores encolan en lugar de fallar. Banner «📡 N registro(s) pendientes de sincronizar». Reintento automático: evento <code>online</code> + <code>setInterval</code> cada 30 s (fallback de Background Sync).</li>
+<li><strong>Backend de sync</strong> (<code>api/sync.py</code>, migración 040 <code>sync_registro</code>):</li>
+<li><code>GET /api/v1/sync/estado</code> — salud y hora del servidor.</li>
+<li><code>POST /api/v1/sync/sensor-readings</code> — batch de tramas: cada una se reenvía por el pipeline normal (<code>SensorFrame</code> → <code>ingesta_sensor</code>); duplicados detectados por <code>idempotency_key</code> → <code>{aceptados, duplicados, errores}</code>.</li>
+<li><code>POST /api/v1/sync/labores</code> — batch de labores completadas offline (estado/observaciones/fecha de ejecución), idempotente, con auditoría <code>labor.actualizar_offline</code>.</li>
+<li><strong>Seguridad</strong>: los endpoints de sync exigen rol no-cliente (las tramas y labores son escritura de expertos).</li>
+</ul>
+<h3 id="622-vision-plagas-diagnostico-desde-foto-p12">6.22 🔬 Visión plagas (diagnóstico desde foto — P12)</h3>
+<p><strong>Problema que resuelve</strong>: identificar plagas/enfermedades desde una foto tomada en campo.</p>
+<ul>
+<li><strong>Tabla <code>vision_diagnosticos</code></strong> (migración 041): finca, usuario, <code>imagen_url</code>, <code>resultado_json</code>, fecha.</li>
+<li><strong>Endpoints</strong> (<code>api/vision.py</code>):</li>
+<li><code>POST /api/v1/vision/analizar-plaga?finca_id=</code> (multipart <code>file</code>, JPEG/PNG/WebP máx 5 MB): guarda la imagen en <code>media/vision/</code> (servida en <code>/media/vision/...</code>), registra el diagnóstico y responde con el <strong>contrato definitivo</strong> <code>{plaga, confianza, severidad, recomendacion, fuente, imagen_url}</code>.</li>
+<li><code>GET /api/v1/vision/diagnosticos/{finca_id}</code> — historial (acceso por rol a la finca).</li>
+<li><code>POST /api/v1/vision/admin/reentrenar</code> — solicitud de reentrenamiento (solo Admin, stub de orquestación MLflow).</li>
+<li><strong>Degradación graciosa</strong>: el modelo propio <strong>AgroIA v1.0 está en entrenamiento</strong>; mientras tanto la inferencia responde <code>fuente: "modelo_agroia_v1_stub"</code> con plaga «No determinada» y recomendación de dictamen experto vía chat, de modo que el flujo completo (carga → persistencia → historial) queda operativo desde ya.</li>
+<li><strong>UI</strong>: pestaña «🔬 Visión plagas» (Admin/Agrónomo/Extensionista): selector de finca, carga de foto e historial con tabla de resultados.</li>
+</ul>
 <hr />
 <h2 id="7-ingesta-de-datos-iot-post-apisensor">7. Ingesta de datos IoT — <code>POST /api/sensor</code></h2>
 <p>Doble ruta (ambas montadas): <code>api/sensor_api.py</code> (formato firmware, <strong>la que usan los sensores</strong>) y <code>api/iot.py::/sensor</code> (trama canónica).</p>
@@ -1191,6 +1267,15 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 <li><code>GET /api/v1/admin/lista-trabajos?etapa=&amp;estado=&amp;desde=&amp;hasta=</code> — cada finca como <strong>orden de trabajo</strong>: semáforo de etapa (<code>registro → asignacion_comision → toma_muestras → recomendacion → reporte → finalizada</code>), actividades faltantes, fechas de inicio/fin y conteos por etapa/estado para gráficos.</li>
 <li><strong>Decisión de reporte (validada)</strong>: la lista de trabajos se presenta como <strong>una sola vista completa con filtros</strong> (por etapa, estado y fechas) + gráfico de barras por etapa, en lugar de separarla por tipo/finalidad: es una herramienta operativa de traza (“cómo estamos frente a cada cliente”) y la separación por finalidad ya la cubren los filtros; separar en varios reportes duplicaría la misma consulta con menos contexto.</li>
 </ul>
+<h3 id="1112-jwt-laboratorio-ica-antagonismos-precios-de-cosecha-pwa-y-vision-v30">11.12 JWT, laboratorio ICA, antagonismos, precios de cosecha, PWA y visión (v3.0)</h3>
+<ul>
+<li><strong>JWT (036)</strong>: login emite access (8 h) + refresh (30 d); refresh rotatorio con revocación de cadena ante reuso; logout con blacklist de <code>jti</code>; middleware con anti-suplantación (las cabeceras <code>X-User-*</code> del cliente se ignoran cuando hay Bearer); tablas <code>token_blacklist</code> y <code>refresh_tokens</code> (hash). <code>jwt_secret</code>, <code>jwt_access_token_expire_minutes=480</code>, <code>jwt_refresh_token_expire_days=30</code> en config y <code>JWT_SECRET</code> en <code>.env.example</code>/<code>render.yaml</code>.</li>
+<li><strong>Laboratorio ICA (037)</strong>: ingesta de análisis de suelo normalizada por alias con validación de rangos; fuente prioritaria sobre el sensor con ventana de 90 días; finca <code>validacion_laboratorio=true</code> al validar N/P/K/pH/MO; sin penalización <code>npk_sin_calibrar</code>.</li>
+<li><strong>Antagonismos (038)</strong>: reglas <code>tipo='antagonismo'</code> separadas de las primarias; hallazgos <code>INTERACCION</code> secundarios («AJUSTE NUTRICIONAL») en diagnóstico y reporte; 4 interacciones (K-Ca-Mg, P-Zn, N-maduración, pH ácido+Mg).</li>
+<li><strong>Precios de cosecha (039)</strong>: upsert por cultivo+departamento (Admin); <code>ingreso_bruto_cop_ha</code>, <code>utilidad_estimada_cop_ha</code> y <code>score_ponderado</code> en las sugerencias con badge «Más rentable».</li>
+<li><strong>PWA offline (040)</strong>: <code>manifest.json</code> + <code>sw.js</code> (network-first para el shell), cola IndexedDB con <code>idempotency_key</code>, banner de pendientes, reintento al volver la señal; <code>GET /api/v1/sync/estado</code>, <code>POST /api/v1/sync/sensor-readings</code> y <code>POST /api/v1/sync/labores</code> idempotentes (tabla <code>sync_registro</code>).</li>
+<li><strong>Visión plagas (041)</strong>: subida de foto → diagnóstico con contrato definitivo y <strong>degradación graciosa</strong> (<code>modelo_agroia_v1_stub</code>) mientras entrena el modelo propio v1.0; historial por finca y reentrenamiento admin.</li>
+</ul>
 <hr />
 <ul>
 <li><strong>Chat</strong>: job diario borra <code>imagen_base64</code> con más de 90 días (<code>POST /api/v1/admin/chat/limpiar-imagenes</code> para disparo manual).</li>
@@ -1316,14 +1401,35 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 <td><code>comisiones</code> / <code>comision_miembros</code></td>
 <td>Órdenes de trabajo de campo por finca: 1 instrumentador + N cadeneros, valores y fin de medición</td>
 </tr>
+<tr>
+<td><code>analisis_laboratorio</code></td>
+<td><strong>Análisis de suelo ICA</strong> normalizado por alias (resultados JSONB, fechas de muestreo/resultado, laboratorio) — fuente prioritaria sobre el sensor</td>
+</tr>
+<tr>
+<td><code>precios_cosecha</code></td>
+<td><strong>Precio promedio por cultivo y departamento</strong> (COP/kg, rendimiento t/ha, fuente) — alimenta utilidad estimada de las sugerencias</td>
+</tr>
+<tr>
+<td><code>token_blacklist</code> / <code>refresh_tokens</code></td>
+<td>Revocación JWT por <code>jti</code> y hashes SHA-256 de refresh tokens activos</td>
+</tr>
+<tr>
+<td><code>sync_registro</code></td>
+<td><strong>Idempotencia del sync offline</strong> (idempotency_key, tipo, usuario, resultado)</td>
+</tr>
+<tr>
+<td><code>vision_diagnosticos</code></td>
+<td><strong>Diagnósticos de visión</strong> (finca, usuario, imagen_url, resultado_json)</td>
+</tr>
 </tbody>
 </table>
 <h3 id="122-enums-12-tipos-en-schema-agroia">12.2 Enums (12 tipos en schema <code>agroia</code>)</h3>
 <p><code>clasificacionupra, estadodiscordancia, estadoficha, estadomembresia, estadorecomendacion, planmembresia, prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo</code>.</p>
-<h3 id="123-migraciones-001-035">12.3 Migraciones (001 → 035)</h3>
+<h3 id="123-migraciones-001-041">12.3 Migraciones (001 → 041)</h3>
 <ul>
 <li><code>001–003</code> tablas base y dispositivos · <code>004/005</code> creación y corrección de enums · <code>006</code> posiciones de muestreo · <code>007</code> chat_memoria · <code>008/009</code> auto-reparación de enums · <code>010</code> campos agronómicos de finca + aceptaciones · <code>011</code> georreferenciación de fincas + tabla <code>lotes</code> · <code>012</code> profundidad/pedregosidad del lote + tipo de riego · <code>013</code> <code>chat_memoria.imagen_base64</code> · <code>014</code> fisiología de cultivos · <code>015</code> tabla <code>auditoria</code> · <code>016</code> tabla <code>historial_ciclos_lote</code> · <code>017</code> inicio de ciclo · <code>018</code> tabla <code>labores</code> · <code>019</code> tabla <code>alertas_climaticas</code> · <code>020</code> enum <code>texturasuelo</code> ampliado con clases IGAC · <code>021</code> tabla <code>precios_insumos</code> · <code>022</code> <code>labores.imagen_url</code> (fotos en disco) + <code>historial_ciclos_lote.rendimiento_atipico</code> (anti-outliers).</li>
 <li><code>023</code> módulos v4 (agrupa 023→032): agua de riego, curvas de extracción, monitoreo de plagas, variedades, rotación, checklist BPA, períodos de carencia, preferencias de notificación, <code>kc_inicial/medio/final</code> en <code>cultivos</code>, <code>resistencia_penetracion_kpa</code> en <code>lotes</code> y rol Extensionista · <code>033</code> reparación idempotente de <code>pos_x/pos_y</code> relativos al centroide · <code>034</code> visitas de verificación BPA (<code>checklist_bpa_visitas</code>) · <code>035</code> módulo operativo (<code>equipo_trabajo</code>, <code>tarifas_rol</code>, <code>novedades_equipo</code>, <code>comisiones</code>, <code>comision_miembros</code>).</li>
+<li><code>036</code> JWT (<code>token_blacklist</code>, <code>refresh_tokens</code>) · <code>037</code> <code>analisis_laboratorio</code> · <code>038</code> reglas <code>tipo='antagonismo'</code> · <code>039</code> <code>precios_cosecha</code> · <code>040</code> <code>sync_registro</code> · <code>041</code> <code>vision_diagnosticos</code>.</li>
 <li><strong>Auto-reparación al arranque</strong>: <code>asegurar_enums()</code> crea tipos enum faltantes y <code>asegurar_reglas()</code> siembra reglas faltantes (idempotentes, corren en el <code>lifespan</code> de <code>main.py</code>).</li>
 </ul>
 <h3 id="124-gotchas-de-neon-lecciones-aprendidas">12.4 Gotchas de Neon (lecciones aprendidas)</h3>
@@ -1343,8 +1449,9 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 <hr />
 <h2 id="14-seguridad-y-limitaciones-conocidas">14. Seguridad y limitaciones conocidas</h2>
 <ul>
-<li><strong>Autenticación MVP</strong>: sin JWT; el rol viaja en cabeceras confiadas (<code>X-User-Role</code>). Pendiente: Auth Service.</li>
+<li><strong>Autenticación</strong>: JWT con access token (8 h) y refresh rotatorio (30 días), revocación por blacklist, anti-suplantación de cabeceras y refresh-reuse que revoca la cadena. Modo legado por cabeceras solo cuando no hay Bearer. <strong>En producción configurar <code>JWT_SECRET</code></strong> (variable de entorno en Render) antes del primer despliegue.</li>
 <li><strong>ML en sombra</strong>: no decide; la fuente de verdad son las reglas. La promoción a PRODUCTION exige concordancia ≥ 0.85 con datos reales.</li>
+<li><strong>Visión plagas</strong>: el modelo propio AgroIA v1.0 está en entrenamiento; el endpoint entrega degradación graciosa (contrato definitivo, inferencia stub) — sin dependencias pesadas (torch/tf) en el servicio web.</li>
 <li><strong>Sensor NPK sin calibrar</strong>: N/P/K llegan como 0 (sensor real) y se tratan como no confiables hasta validación de laboratorio.</li>
 <li><strong>Datos dispersos</strong>: con ~7 variables de 18, la confianza real baja y la clasificación se marca preliminar o pendiente de validación (comportamiento deseado). <strong>El análisis y el reporte nunca se bloquean por datos faltantes</strong>: se generan en modo preliminar con aviso de aval de agrónomo.</li>
 <li><strong>Render Free / Neon Free</strong>: límites de memoria y suspensión por inactividad; bajo carga pueden aparecer <strong>502/500 intermitentes</strong> que se resuelven reintentando (no son errores del aplicativo).</li>

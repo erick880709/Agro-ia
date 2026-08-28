@@ -202,9 +202,6 @@ app.include_router(health_router, prefix="/api/v1")
 # ── Estado de modelos ML ──
 app.include_router(ml_router, prefix="/api/v1")
 
-# ── Estado de modelos ML ──
-app.include_router(ml_router, prefix="/api/v1")
-
 # ── Error handlers ──
 register_error_handlers(app)
 

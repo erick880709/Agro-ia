@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.14 · **Fecha:** 2026-08-28
+**Versión:** 3.0 · **Fecha:** 2026-08-28
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -13,7 +13,7 @@
 4. [Autenticación y sesión (lo más básico)](#4-autenticación-y-sesión-lo-más-básico)
 5. [El frontend SPA: navegación y utilidades](#5-el-frontend-spa-navegación-y-utilidades)
 6. [Recorrido sección por sección](#6-recorrido-sección-por-sección)
-   - [6.11 🕵️ Auditoría](#611--auditoría-de-acciones-solo-admin) · [6.12 🔄 Ciclos productivos](#612--ciclos-productivos-por-lote-historial_ciclos_lote) · [6.13 ⛅ Alertas climáticas](#613--alertas-climáticas-proactivas) · [6.14 🗺️ Enriquecimiento SIG IGAC/UPRA](#614--enriquecimiento-sig-igacupra) · [6.15 💰 Precios de insumos dinámicos](#615--precios-de-insumos-dinámicos-roi) · [6.16 🖼️ Almacenamiento de imágenes](#616--almacenamiento-de-imágenes-chat-y-labores) · [6.17 🧪 Validación de rendimiento real](#617--validación-de-rendimiento-real-anti-outliers)
+   - [6.11 🕵️ Auditoría](#611--auditoría-de-acciones-solo-admin) · [6.12 🔄 Ciclos productivos](#612--ciclos-productivos-por-lote-historial_ciclos_lote) · [6.13 ⛅ Alertas climáticas](#613--alertas-climáticas-proactivas) · [6.14 🗺️ Enriquecimiento SIG IGAC/UPRA](#614--enriquecimiento-sig-igacupra) · [6.15 💰 Precios de insumos dinámicos](#615--precios-de-insumos-dinámicos-roi) · [6.16 🖼️ Almacenamiento de imágenes](#616--almacenamiento-de-imágenes-chat-y-labores) · [6.17 🧪 Validación de rendimiento real](#617--validación-de-rendimiento-real-anti-outliers) · [6.18 🧪 Análisis de laboratorio](#618--análisis-de-laboratorio-ica) · [6.19 ⚖️ Antagonismos nutricionales](#619--antagonismos-nutricionales) · [6.20 🌾 Precios de cosecha](#620--precios-de-cosecha-inteligencia-de-mercado-uc1) · [6.21 📡 PWA offline](#621--pwa-offline-first) · [6.22 🔬 Visión plagas](#622--visión-plagas-diagnóstico-desde-foto)
 7. [Ingesta de datos IoT — `POST /api/sensor`](#7-ingesta-de-datos-iot--post-apisensor)
 8. [El motor de recomendaciones (corazón del sistema)](#8-el-motor-de-recomendaciones-corazón-del-sistema)
 9. [Aceptación humana de recomendaciones (human-in-the-loop)](#9-aceptación-humana-de-recomendaciones-human-in-the-loop)
@@ -65,16 +65,20 @@ AgroIA es un sistema de **agricultura de precisión para Colombia**: sensores Io
 flowchart LR
   subgraph Frontend["Frontend (apps/frontend-web)"]
     LOGIN[Pantalla de login]
-    UI[SPA 19 vistas: Inicio · Alertas clima · Sensores · Carga · Recomendaciones · Historial · Reportes · Fincas · Catálogo · Chat · Mi zona · BPA · Equipo · Comisiones · Lista de trabajos · Reentrenar]
+    UI[SPA 20 vistas: Inicio · Alertas clima · Sensores · Carga · Recomendaciones · Historial · Reportes · Fincas · Visión plagas · Catálogo · Chat · Mi zona · BPA · Equipo · Comisiones · Lista de trabajos · Reentrenar]
+    PWA[PWA offline: Service Worker + IndexedDB<br/>manifiesto, banner de sincronización]
   end
   subgraph Backend["Backend FastAPI (apps/backend)"]
-    API[35 routers REST /api/v1]
+    API[36 routers REST /api/v1]
     ORCH[RecommendationOrchestrator]
     RULES[RulesEngine + AptitudService<br/>sistema experto]
     ML[MLOracleService<br/>modo sombra]
     ADAPTER[SueloAdapter / validación]
     REPORTES[generador HTML reportes]
     ENUMS[asegurar_enums + asegurar_reglas<br/>auto-reparación al arranque]
+    JWT[JWT auth: login/refresh/revocación]
+    SYNC[Sync offline idempotente<br/>tramas y labores]
+    VISION[Visión plagas<br/>diagnóstico desde foto]
   end
   subgraph ML_Train["Entrenamiento (apps/ml)"]
     TRAIN[train_colombia.py]
@@ -85,9 +89,13 @@ flowchart LR
   end
   DB[(PostgreSQL<br/>schema agroia<br/>local :5434 / Neon)]
 
-  UI -->|fetch /api/v1 + X-User-Role| API
+  UI -->|fetch /api/v1 + Bearer JWT| API
+  PWA -->|sync offline| SYNC
   SENSOR --> API
   API --> ORCH
+  API --> JWT
+  API --> SYNC
+  API --> VISION
   ORCH --> ADAPTER --> DB
   ORCH --> RULES --> DB
   ORCH --> ML --> ARTIFACTS
@@ -102,8 +110,8 @@ flowchart LR
 
 | Módulo | Responsabilidad |
 |---|---|
-| `main.py` | Crea la app FastAPI, monta los 35 routers, sirve el frontend estático en `/`, y en el arranque (`lifespan`) ejecuta `asegurar_enums()` y `asegurar_reglas()`. |
-| `api/*.py` | 35 routers HTTP: `auth`, `sensor_api`, `iot`, `fincas`, `ciclos`, `labores`, `recomendaciones`, `reportes`, `ml`, `chat`, `dashboard`, `catalogo`, `usuarios`, `location`, `sig`, `admin_precios`, `alertas`, `auditoria`, `demo`, `mantenimiento`, `agua_riego`, `balance_hidrico`, `bpa`, `curvas`, `extensionista`, `notificaciones`, `plagas`, `rotacion`, `variedades`, `equipo`, `comisiones`, `lista_trabajos`, `health`. |
+| `main.py` | Crea la app FastAPI, monta los 36 routers, sirve el frontend estático en `/`, y en el arranque (`lifespan`) ejecuta `asegurar_enums()` y `asegurar_reglas()`. |
+| `api/*.py` | 36 routers HTTP: `auth`, `sensor_api`, `iot`, `fincas`, `ciclos`, `labores`, `recomendaciones`, `reportes`, `ml`, `chat`, `dashboard`, `catalogo`, `usuarios`, `location`, `sig`, `admin_precios`, `alertas`, `auditoria`, `demo`, `mantenimiento`, `agua_riego`, `balance_hidrico`, `bpa`, `curvas`, `extensionista`, `notificaciones`, `plagas`, `rotacion`, `variedades`, `equipo`, `comisiones`, `lista_trabajos`, `laboratorio`, `precios_cosecha`, `sync`, `vision`, `health`. |
 | `services/orchestrator.py` | Orquesta el pipeline completo de recomendación (datos → reglas → ML → discordancia → confianza → respuesta). |
 | `services/rules_engine.py` | Sistema experto: evalúa reglas agronómicas contra los datos de suelo. |
 | `services/aptitud.py` | UC1: puntúa todos los cultivos y los ordena por aptitud. |
@@ -111,12 +119,13 @@ flowchart LR
 | `services/data_adapters.py` | Adapter de datos de suelo + validación de rangos físicos. |
 | `services/reportes_html.py` | Genera el documento HTML del reporte (mapa de calor, plano, clima…). |
 | `services/asegurar_enums.py` / `asegurar_reglas.py` | Auto-reparación idempotente de tipos enum y reglas en la BD al arrancar. |
-| `services/acceso.py` | Control de acceso a fincas por rol (MVP sin JWT). |
+| `services/acceso.py` | Control de acceso a fincas por rol (roles totales vs fincas permitidas). |
+| `services/jwt_auth.py` | JWT v3: creación/validación de access+refresh tokens (HS256/RS256), rotación, revocación y middleware de autenticación con anti-suplantación. |
 | `services/normalizacion_iot.py` | Normaliza tramas del firmware al esquema canónico. |
 | `services/geografia.py` | Catálogo departamentos/municipios con centroides, cadena de validación de fincas y cálculo de área/perímetro de polígonos. |
 | `services/puente_iot.py` | Puente de import del consumidor IoT (portable dev/contenedor). |
-| `models/*.py` | Modelos SQLAlchemy (35 tablas en schema `agroia`). |
-| `alembic/versions/` | Migraciones 001 → 035. |
+| `models/*.py` | Modelos SQLAlchemy (42 tablas en schema `agroia`). |
+| `alembic/versions/` | Migraciones 001 → 041. |
 
 ---
 
@@ -144,20 +153,31 @@ El frontend muestra `login-screen` si no hay sesión guardada. Ofrece:
 3. Verifica la contraseña con `verify_password()` (`services/auth_utils.py`, hash bcrypt sobre `password_hash`).
    - Credenciales inválidas → `401 CREDENCIALES_INVALIDAS`.
 4. Verifica que la cuenta esté activa (`usuario.activo`) → si no, `403 USUARIO_INACTIVO`.
-5. Devuelve los datos de sesión.
+5. Emite los tokens JWT y devuelve los datos de sesión.
 
-**Respuesta:**
+**Respuesta (JWT v3):**
 ```json
 {
   "id": "uuid",
   "nombre": "Administrador Demo",
   "email": "…",
   "rol": "Admin",
-  "activo": true
+  "activo": true,
+  "access_token": "eyJ…",
+  "refresh_token": "…",
+  "token_type": "bearer",
+  "expira_en_segundos": 28800
 }
 ```
 
-> Nota MVP: no hay token JWT todavía. El rol viaja en cabeceras (ver 4.4). El endpoint está preparado para ser reemplazado por un Auth Service con OAuth2.
+**Autenticación JWT (v3.0, `services/jwt_auth.py`):**
+- **Access token** (8 h, `jwt_access_token_expire_minutes=480`) y **refresh token** (30 días) firmados con `JWT_SECRET` (HS256; RS256 si se configuran claves PEM). Sin secreto configurado se usa un secreto de desarrollo (advertencia en logs).
+- **`POST /api/v1/auth/refresh`**: rota el par; un refresh **reusado** (ya rotado) revoca toda la cadena y responde 401 (`REFRESH_REUSADO`).
+- **`POST /api/v1/auth/logout`**: mete el `jti` del access token en `token_blacklist` (revocación real).
+- **`GET /api/v1/auth/me`** devuelve el usuario del token; `_sobrescribir_cabeceras()` descarta cabeceras `X-User-*` enviadas por el cliente cuando hay Bearer (anti-suplantación: el rol/email salen del token firmado, no de cabeceras confiadas).
+- **Middleware HTTP**: valida el Bearer en toda la app salvo rutas públicas (`/api/v1/health`, `/api/v1/auth/login`, `/api/v1/auth/refresh`, `/api/sensor`, `/docs`, `/openapi.json`, `/redoc`, `/media`).
+- **Compatibilidad**: si no hay Bearer, se aceptan las cabeceras heredadas `X-User-Role`/`X-User-Email` (modo transición, `auth_allow_legacy_headers=true`).
+- **Tablas** (migración 036): `token_blacklist` (jti) y `refresh_tokens` (hash SHA-256 del token; nunca se guarda el token en claro). El job de mantenimiento limpia expirados (`limpiar_tokens_expirados`).
 
 ### 4.3 Sesión en el cliente
 
@@ -171,8 +191,9 @@ Cada petición `fetch` lleva:
 
 | Cabecera | Cuándo | Propósito |
 |---|---|---|
-| `X-User-Role` | Siempre | Rol activo (`Admin`, `Agronomo`, `Cliente`, …) |
-| `X-User-Email` | Solo rol Cliente | Identificar al cliente para filtrar sus fincas |
+| `Authorization: Bearer <access_token>` | Siempre (JWT v3) | Autenticación real; el frontend renueva automáticamente con el refresh antes de que expire (single-flight `_refreshEnCurso`). |
+| `X-User-Role` | Modo legado sin Bearer | Rol activo (`Admin`, `Agronomo`, `Cliente`, …) |
+| `X-User-Email` | Solo rol Cliente (legado) | Identificar al cliente para filtrar sus fincas |
 
 **Matriz de acceso** (implementada en `services/acceso.py` y en el frontend):
 
@@ -567,6 +588,61 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 - **Al cosechar** (`POST …/ciclo/cosechar`): se compara el rendimiento normalizado (t/ha) contra el `rendimiento_esperado` de la ficha técnica. Si `declarado > esperado × 2` o `< esperado × 0.3` → **no se bloquea el guardado**, pero el ciclo queda marcado `rendimiento_atipico = true` (migración 022) y la respuesta incluye `advertencia_rendimiento` («Este rendimiento es atípico para este cultivo en Colombia… Verifique el dato…»), que la UI muestra en un banner amarillo tras guardar.
 - **Ground Truth protegido**: `services/ml_labels.py::etiquetas_ciclos` excluye los ciclos atípicos (marca + recálculo defensivo de la regla) — el ML nunca aprende de outliers humanos.
 
+### 6.18 🧪 Análisis de laboratorio ICA
+
+**Problema que resuelve**: los sensores NPK sin calibrar degradan la confianza del diagnóstico; el análisis de laboratorio es la fuente de verdad para N/P/K/pH/MO.
+
+- **Tabla `analisis_laboratorio`** (migración 037): `resultados` JSONB normalizado, `fecha_muestreo`/`fecha_resultado`, `laboratorio_nombre`, `fuente`.
+- **Endpoints** (`api/laboratorio.py`):
+  - `POST /api/v1/fincas/{id}/lab/ingestar` — recibe el informe de laboratorio (diccionario variable→valor) y lo **normaliza por alias** (`ALIASES`: pH/N/P/K/MO/MateriaOrgánica…), valida cada variable contra los rangos físicos (`SOIL_RANGES`) y lo persiste.
+  - `GET /api/v1/fincas/{id}/lab/analisis` — historial de análisis de la finca.
+  - `DELETE /api/v1/fincas/{id}/lab/analisis/{id}` — elimina un análisis (experto).
+- **Efecto en el motor**: si N/P/K/pH/MO están validados, la finca queda `validacion_laboratorio=true`; el orquestador toma el análisis **reciente (ventana 90 días)** como fuente prioritaria sobre el sensor, elimina la penalización `npk_sin_calibrar` y lo registra en la justificación (`laboratorio_reciente`).
+- **Confiabilidad**: las variables respaldadas por laboratorio pasan a «Validado en laboratorio» en el diagnóstico y el reporte.
+
+### 6.19 ⚖️ Antagonismos nutricionales
+
+**Problema que resuelve**: corregir un nutriente sin mirar interacciones puede empeorar otro (exceso de K bloquea Ca/Mg; exceso de P bloquea Zn).
+
+- **Reglas `tipo='antagonismo'`** (migración 038): `asegurar_reglas()` siembra 4 reglas idempotentes (K-Ca-Mg, P-Zn, N-maduración, pH-ácido con Mg) marcadas `tipo='antagonismo'`; `rules_engine.load_rules()` las separa de las primarias.
+- **Evaluación**: `evaluar_antagonismos()` corre después de las violaciones primarias y **agrega hallazgos con estado `INTERACCION` y `secundaria=true`** — se muestran como «AJUSTE NUTRICIONAL» (badge distintivo) sin desordenar el diagnóstico principal.
+- **Justificación**: el reporte incluye `interacciones_nutricionales` para trazabilidad de por qué se ajustó una recomendación.
+
+### 6.20 🌾 Precios de cosecha (inteligencia de mercado — UC1)
+
+**Problema que resuelve**: recomendar un cultivo apto pero no rentable en la región.
+
+- **Tabla `precios_cosecha`** (migración 039): `precio_promedio_cop_kg`, `rendimiento_promedio_t_ha`, `departamento`, `fecha_actualizacion`, `fuente`.
+- **Endpoints** (`api/precios_cosecha.py`):
+  - `GET /api/v1/cultivos/precios?departamento=` — precios por cultivo y departamento.
+  - `PUT /api/v1/admin/precios-cosecha` — upsert por cultivo+departamento (solo Admin).
+- **Enriquecimiento de sugerencias** (`services/precios_cosecha.py::enriquecer_sugerencias`): calcula `ingreso_bruto_cop_ha = rendimiento × precio × 1000`, `utilidad_estimada_cop_ha` (ingreso menos costo del plan cuando existe) y `score_ponderado = score×0.7 + utilidad_norm×30`; marca el mejor como `mas_rentable` (badge «Más rentable» en la tabla de sugerencias).
+- **Panel admin**: pestaña «🌾 Precios de cosecha» en Administración (cultivo + departamento + precio + rendimiento).
+
+### 6.21 📡 PWA offline-first
+
+**Problema que resuelve**: en campo no siempre hay señal; las tramas y labores deben capturarse sin conexión y sincronizarse al volver.
+
+- **Shell PWA** (`apps/frontend-web/`): `manifest.json` (instalable, tema verde AgroIA) + `sw.js` (Service Worker, **network-first con respaldo de caché** para el shell estático; la API nunca se cachea).
+- **Cola IndexedDB** (`offline.js`): `encolarOffline(tipo, payload)` guarda en `agroia-offline/pendientes` con `idempotency_key` (UUID). Al perder conexión, el simulador de tramas y la actualización de labores encolan en lugar de fallar. Banner «📡 N registro(s) pendientes de sincronizar». Reintento automático: evento `online` + `setInterval` cada 30 s (fallback de Background Sync).
+- **Backend de sync** (`api/sync.py`, migración 040 `sync_registro`):
+  - `GET /api/v1/sync/estado` — salud y hora del servidor.
+  - `POST /api/v1/sync/sensor-readings` — batch de tramas: cada una se reenvía por el pipeline normal (`SensorFrame` → `ingesta_sensor`); duplicados detectados por `idempotency_key` → `{aceptados, duplicados, errores}`.
+  - `POST /api/v1/sync/labores` — batch de labores completadas offline (estado/observaciones/fecha de ejecución), idempotente, con auditoría `labor.actualizar_offline`.
+- **Seguridad**: los endpoints de sync exigen rol no-cliente (las tramas y labores son escritura de expertos).
+
+### 6.22 🔬 Visión plagas (diagnóstico desde foto — P12)
+
+**Problema que resuelve**: identificar plagas/enfermedades desde una foto tomada en campo.
+
+- **Tabla `vision_diagnosticos`** (migración 041): finca, usuario, `imagen_url`, `resultado_json`, fecha.
+- **Endpoints** (`api/vision.py`):
+  - `POST /api/v1/vision/analizar-plaga?finca_id=` (multipart `file`, JPEG/PNG/WebP máx 5 MB): guarda la imagen en `media/vision/` (servida en `/media/vision/...`), registra el diagnóstico y responde con el **contrato definitivo** `{plaga, confianza, severidad, recomendacion, fuente, imagen_url}`.
+  - `GET /api/v1/vision/diagnosticos/{finca_id}` — historial (acceso por rol a la finca).
+  - `POST /api/v1/vision/admin/reentrenar` — solicitud de reentrenamiento (solo Admin, stub de orquestación MLflow).
+- **Degradación graciosa**: el modelo propio **AgroIA v1.0 está en entrenamiento**; mientras tanto la inferencia responde `fuente: "modelo_agroia_v1_stub"` con plaga «No determinada» y recomendación de dictamen experto vía chat, de modo que el flujo completo (carga → persistencia → historial) queda operativo desde ya.
+- **UI**: pestaña «🔬 Visión plagas» (Admin/Agrónomo/Extensionista): selector de finca, carga de foto e historial con tabla de resultados.
+
 ---
 
 ## 7. Ingesta de datos IoT — `POST /api/sensor`
@@ -943,6 +1019,15 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
   - `GET /api/v1/admin/lista-trabajos?etapa=&estado=&desde=&hasta=` — cada finca como **orden de trabajo**: semáforo de etapa (`registro → asignacion_comision → toma_muestras → recomendacion → reporte → finalizada`), actividades faltantes, fechas de inicio/fin y conteos por etapa/estado para gráficos.
 - **Decisión de reporte (validada)**: la lista de trabajos se presenta como **una sola vista completa con filtros** (por etapa, estado y fechas) + gráfico de barras por etapa, en lugar de separarla por tipo/finalidad: es una herramienta operativa de traza (“cómo estamos frente a cada cliente”) y la separación por finalidad ya la cubren los filtros; separar en varios reportes duplicaría la misma consulta con menos contexto.
 
+### 11.12 JWT, laboratorio ICA, antagonismos, precios de cosecha, PWA y visión (v3.0)
+
+- **JWT (036)**: login emite access (8 h) + refresh (30 d); refresh rotatorio con revocación de cadena ante reuso; logout con blacklist de `jti`; middleware con anti-suplantación (las cabeceras `X-User-*` del cliente se ignoran cuando hay Bearer); tablas `token_blacklist` y `refresh_tokens` (hash). `jwt_secret`, `jwt_access_token_expire_minutes=480`, `jwt_refresh_token_expire_days=30` en config y `JWT_SECRET` en `.env.example`/`render.yaml`.
+- **Laboratorio ICA (037)**: ingesta de análisis de suelo normalizada por alias con validación de rangos; fuente prioritaria sobre el sensor con ventana de 90 días; finca `validacion_laboratorio=true` al validar N/P/K/pH/MO; sin penalización `npk_sin_calibrar`.
+- **Antagonismos (038)**: reglas `tipo='antagonismo'` separadas de las primarias; hallazgos `INTERACCION` secundarios («AJUSTE NUTRICIONAL») en diagnóstico y reporte; 4 interacciones (K-Ca-Mg, P-Zn, N-maduración, pH ácido+Mg).
+- **Precios de cosecha (039)**: upsert por cultivo+departamento (Admin); `ingreso_bruto_cop_ha`, `utilidad_estimada_cop_ha` y `score_ponderado` en las sugerencias con badge «Más rentable».
+- **PWA offline (040)**: `manifest.json` + `sw.js` (network-first para el shell), cola IndexedDB con `idempotency_key`, banner de pendientes, reintento al volver la señal; `GET /api/v1/sync/estado`, `POST /api/v1/sync/sensor-readings` y `POST /api/v1/sync/labores` idempotentes (tabla `sync_registro`).
+- **Visión plagas (041)**: subida de foto → diagnóstico con contrato definitivo y **degradación graciosa** (`modelo_agroia_v1_stub`) mientras entrena el modelo propio v1.0; historial por finca y reentrenamiento admin.
+
 ---
 - **Chat**: job diario borra `imagen_base64` con más de 90 días (`POST /api/v1/admin/chat/limpiar-imagenes` para disparo manual).
 - **Labores**: fotos en disco (`media/labores/`, servidas en `/media`); en BD solo `labores.imagen_url` (migración 022). Límite 5 MB, JPEG/PNG/WebP.
@@ -985,15 +1070,21 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 | `preferencias_notificacion` | Canal preferido por finca (whatsapp/sms/email/ninguno) para alertas |
 | `equipo_trabajo` / `tarifas_rol` / `novedades_equipo` | Empleados (datos personales y de emergencia), tarifas por rol y novedades/incapacidades con reemplazo |
 | `comisiones` / `comision_miembros` | Órdenes de trabajo de campo por finca: 1 instrumentador + N cadeneros, valores y fin de medición |
+| `analisis_laboratorio` | **Análisis de suelo ICA** normalizado por alias (resultados JSONB, fechas de muestreo/resultado, laboratorio) — fuente prioritaria sobre el sensor |
+| `precios_cosecha` | **Precio promedio por cultivo y departamento** (COP/kg, rendimiento t/ha, fuente) — alimenta utilidad estimada de las sugerencias |
+| `token_blacklist` / `refresh_tokens` | Revocación JWT por `jti` y hashes SHA-256 de refresh tokens activos |
+| `sync_registro` | **Idempotencia del sync offline** (idempotency_key, tipo, usuario, resultado) |
+| `vision_diagnosticos` | **Diagnósticos de visión** (finca, usuario, imagen_url, resultado_json) |
 
 ### 12.2 Enums (12 tipos en schema `agroia`)
 
 `clasificacionupra, estadodiscordancia, estadoficha, estadomembresia, estadorecomendacion, planmembresia, prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo`.
 
-### 12.3 Migraciones (001 → 035)
+### 12.3 Migraciones (001 → 041)
 
 - `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` · `017` inicio de ciclo · `018` tabla `labores` · `019` tabla `alertas_climaticas` · `020` enum `texturasuelo` ampliado con clases IGAC · `021` tabla `precios_insumos` · `022` `labores.imagen_url` (fotos en disco) + `historial_ciclos_lote.rendimiento_atipico` (anti-outliers).
 - `023` módulos v4 (agrupa 023→032): agua de riego, curvas de extracción, monitoreo de plagas, variedades, rotación, checklist BPA, períodos de carencia, preferencias de notificación, `kc_inicial/medio/final` en `cultivos`, `resistencia_penetracion_kpa` en `lotes` y rol Extensionista · `033` reparación idempotente de `pos_x/pos_y` relativos al centroide · `034` visitas de verificación BPA (`checklist_bpa_visitas`) · `035` módulo operativo (`equipo_trabajo`, `tarifas_rol`, `novedades_equipo`, `comisiones`, `comision_miembros`).
+- `036` JWT (`token_blacklist`, `refresh_tokens`) · `037` `analisis_laboratorio` · `038` reglas `tipo='antagonismo'` · `039` `precios_cosecha` · `040` `sync_registro` · `041` `vision_diagnosticos`.
 - **Auto-reparación al arranque**: `asegurar_enums()` crea tipos enum faltantes y `asegurar_reglas()` siembra reglas faltantes (idempotentes, corren en el `lifespan` de `main.py`).
 
 ### 12.4 Gotchas de Neon (lecciones aprendidas)
@@ -1015,8 +1106,9 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 
 ## 14. Seguridad y limitaciones conocidas
 
-- **Autenticación MVP**: sin JWT; el rol viaja en cabeceras confiadas (`X-User-Role`). Pendiente: Auth Service.
+- **Autenticación**: JWT con access token (8 h) y refresh rotatorio (30 días), revocación por blacklist, anti-suplantación de cabeceras y refresh-reuse que revoca la cadena. Modo legado por cabeceras solo cuando no hay Bearer. **En producción configurar `JWT_SECRET`** (variable de entorno en Render) antes del primer despliegue.
 - **ML en sombra**: no decide; la fuente de verdad son las reglas. La promoción a PRODUCTION exige concordancia ≥ 0.85 con datos reales.
+- **Visión plagas**: el modelo propio AgroIA v1.0 está en entrenamiento; el endpoint entrega degradación graciosa (contrato definitivo, inferencia stub) — sin dependencias pesadas (torch/tf) en el servicio web.
 - **Sensor NPK sin calibrar**: N/P/K llegan como 0 (sensor real) y se tratan como no confiables hasta validación de laboratorio.
 - **Datos dispersos**: con ~7 variables de 18, la confianza real baja y la clasificación se marca preliminar o pendiente de validación (comportamiento deseado). **El análisis y el reporte nunca se bloquean por datos faltantes**: se generan en modo preliminar con aviso de aval de agrónomo.
 - **Render Free / Neon Free**: límites de memoria y suspensión por inactividad; bajo carga pueden aparecer **502/500 intermitentes** que se resuelven reintentando (no son errores del aplicativo).
