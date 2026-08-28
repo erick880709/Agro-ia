@@ -266,6 +266,8 @@ class RecommendationOrchestrator:
             "tipo_riego": finca.tipo_riego.value if finca.tipo_riego else None,
             "latitud": finca.latitud,
             "longitud": finca.longitud,
+            "departamento": finca.departamento,
+            "municipio": finca.municipio,
             "lote": lote,
         }
 
@@ -432,6 +434,13 @@ class RecommendationOrchestrator:
                 "reservorios o riego complementario."
             )
 
+        # ── Inteligencia de mercado: precios de cosecha y utilidad (UC1) ──
+        from agroia_backend.services.precios_cosecha import enriquecer_sugerencias
+
+        sugerencias = await enriquecer_sugerencias(
+            self.db, sugerencias, finca_ctx.get("departamento"),
+        )
+
         top = sugerencias[0] if sugerencias else None
 
         cultivo = top["cultivo"] if top else "No determinado"
@@ -515,6 +524,7 @@ class RecommendationOrchestrator:
             "confianza": confianza_final,
             "confianza_real": confianza_real,
             "respaldos_expertos": respaldos,
+            "mercado_departamento": finca_ctx.get("departamento"),
         }
         if finca_ctx.get("lab_reciente"):
             justificacion["laboratorio_reciente"] = finca_ctx["lab_reciente"]

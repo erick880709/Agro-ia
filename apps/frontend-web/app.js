@@ -7,7 +7,7 @@ const API = '/api/v1';
 const SESION_KEY = 'agroia_sesion';
 
 const TABS_POR_ROL = {
-  admin: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'equipo', 'comisiones', 'lista-trabajos', 'reentrenar', 'catalogo'],
+  admin: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'equipo', 'comisiones', 'lista-trabajos', 'reentrenar', 'precios-cosecha', 'catalogo'],
   agronomo: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'catalogo'],
   cliente: ['inicio', 'alertas', 'sensores', 'historial', 'reportes', 'catalogo'],
   extensionista: ['inicio', 'alertas', 'zona', 'sensores', 'historial', 'reportes', 'catalogo'],
@@ -290,6 +290,7 @@ function goTab(name) {
   if (name === 'equipo' && state.rol.toLowerCase() === 'admin') cargarEquipo();
   if (name === 'comisiones' && state.rol.toLowerCase() === 'admin') cargarComisiones();
   if (name === 'lista-trabajos' && state.rol.toLowerCase() === 'admin') cargarListaTrabajos();
+  if (name === 'precios-cosecha' && state.rol.toLowerCase() === 'admin') cargarPreciosCosecha();
   document.querySelectorAll('.tab-submenu.open').forEach(s => s.classList.remove('open'));
 }
 
@@ -386,6 +387,11 @@ async function arrancarAplicacion() {
   depSel.innerHTML = '<option value="">— Seleccione —</option>' +
     Object.keys(DEPARTAMENTOS).sort().map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('');
   depSel.addEventListener('change', poblarMunicipios);
+  const pcDepSel = document.getElementById('pc-departamento');
+  if (pcDepSel) {
+    pcDepSel.innerHTML = '<option value="">— Seleccione —</option>' +
+      Object.keys(DEPARTAMENTOS).sort().map(d => `<option value="${esc(d)}">${esc(d)}</option>`).join('');
+  }
   const munSel = document.getElementById('f-municipio');
   munSel.addEventListener('change', () => {
     document.getElementById('f-municipio-otro-wrap').style.display =
@@ -1599,6 +1605,74 @@ async function evaluarAlertasAhora() {
     alert('No se pudo evaluar: ' + e.message);
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = '🔄 Evaluar ahora'; }
+  }
+}
+
+/* ────────────────────── Precios de cosecha (admin, UC1 mercado) ────────────────────── */
+
+async function cargarPreciosCosecha() {
+  const lista = document.getElementById('precios-cosecha-lista');
+  const cultivoSel = document.getElementById('pc-cultivo');
+  if (!lista) return;
+  try {
+    const [precios, cultivos] = await Promise.all([
+      api('/cultivos/precios'),
+      api('/catalogo/cultivos?limite=200'),
+    ]);
+    if (cultivoSel && cultivoSel.options.length <= 1) {
+      cultivoSel.innerHTML = '<option value="">— Seleccione cultivo —</option>' +
+        (cultivos.data || []).map(c => `<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');
+    }
+    const filas = precios.data || [];
+    if (!filas.length) {
+      lista.innerHTML = '<p class="muted">Sin precios registrados. Registra el precio por cultivo y departamento para habilitar la utilidad estimada en las recomendaciones (UC1).</p>';
+      return;
+    }
+    lista.innerHTML = `
+      <div class="table-wrap"><table>
+        <tr><th>Cultivo</th><th>Departamento</th><th>Precio COP/kg</th><th>Rendimiento t/ha</th><th>Fuente</th><th>Actualizado</th></tr>
+        ${filas.map(p => `
+          <tr>
+            <td>${esc(p.cultivo || '—')}</td>
+            <td>${esc(p.departamento)}</td>
+            <td>$ ${fmtNum(p.precio_promedio_cop_kg, 0)}</td>
+            <td>${p.rendimiento_promedio_t_ha != null ? fmtNum(p.rendimiento_promedio_t_ha, 1) : '—'}</td>
+            <td>${esc(p.fuente || '—')}</td>
+            <td>${esc(p.fecha_actualizacion || '—')}</td>
+          </tr>`).join('')}
+      </table></div>`;
+  } catch (e) {
+    lista.innerHTML = errorBanner(e.message);
+  }
+}
+
+async function guardarPrecioCosecha(e) {
+  e.preventDefault();
+  const msg = document.getElementById('pc-msg');
+  msg.innerHTML = '';
+  const cultivoId = document.getElementById('pc-cultivo').value;
+  const departamento = document.getElementById('pc-departamento').value.trim();
+  const precio = parseFloat(document.getElementById('pc-precio').value);
+  const rendimiento = document.getElementById('pc-rendimiento').value;
+  if (!cultivoId || !departamento || !(precio > 0)) {
+    msg.innerHTML = errorBanner('Selecciona cultivo, departamento y un precio mayor a 0.');
+    return;
+  }
+  try {
+    await api('/admin/precios-cosecha', {
+      method: 'PUT', headers: headers(),
+      body: JSON.stringify({
+        cultivo_id: cultivoId,
+        departamento,
+        precio_promedio_cop_kg: precio,
+        rendimiento_promedio_t_ha: rendimiento ? parseFloat(rendimiento) : null,
+        fuente: 'Ingreso manual (panel admin)',
+      }),
+    });
+    msg.innerHTML = okBanner('Precio actualizado.');
+    await cargarPreciosCosecha();
+  } catch (err) {
+    msg.innerHTML = errorBanner(err.message);
   }
 }
 
@@ -3466,17 +3540,19 @@ function renderAnalisis(a) {
   }
 
   if (a.sugerencias_cultivos && a.sugerencias_cultivos.length) {
+    const conMercado = a.sugerencias_cultivos.some(s => s.precio_promedio_cop_kg != null);
     html += `<h3 style="margin-top:18px">🌾 Cultivos sugeridos (ranking del motor)</h3>`;
     html += `
       <div class="table-wrap"><table>
-        <tr><th>#</th><th>Cultivo</th><th>Score</th><th>Clasificación</th><th>Confianza</th><th>Reglas</th><th>Descripción de reglas aplicadas</th></tr>
+        <tr><th>#</th><th>Cultivo</th><th>Score</th><th>Clasificación</th><th>Confianza</th>${conMercado ? '<th>Precio COP/kg</th><th>Utilidad COP/ha</th>' : ''}<th>Reglas</th><th>Descripción de reglas aplicadas</th></tr>
         ${a.sugerencias_cultivos.map((s, i) => `
           <tr>
             <td>${i + 1}</td>
-            <td>${esc(s.icono || '')} ${esc(s.cultivo)}${s.nota_secano ? `<div class="muted" style="font-size:0.75rem">${esc(s.nota_secano)}</div>` : ''}</td>
+            <td>${esc(s.icono || '')} ${esc(s.cultivo)}${s.mas_rentable ? ' <span class="badge ok">Más rentable</span>' : ''}${s.nota_secano ? `<div class="muted" style="font-size:0.75rem">${esc(s.nota_secano)}</div>` : ''}</td>
             <td>${fmtNum(s.score, 1)}</td>
             <td>${badge(s.clasificacion, badgeClase(s.clasificacion))}</td>
             <td>${Math.round((s.confianza || 0) * 100)}%</td>
+            ${conMercado ? `<td>${s.precio_promedio_cop_kg != null ? '$ ' + fmtNum(s.precio_promedio_cop_kg, 0) : '—'}</td><td>${s.utilidad_estimada_cop_ha != null ? '$ ' + fmtNum(s.utilidad_estimada_cop_ha, 0) : '—'}</td>` : ''}
             <td>${s.reglas_especificas ?? '—'}</td>
             <td class="ajustes-desc">${descAjustes(s.ajustes)}</td>
           </tr>`).join('')}

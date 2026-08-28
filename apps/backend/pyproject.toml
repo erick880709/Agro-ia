@@ -36,6 +36,10 @@ ruff = "^0.8"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+# El pool global de asyncpg se enlaza al primer event loop que lo usa:
+# compartir un único loop de sesión evita "Event loop is closed" entre módulos.
+asyncio_default_test_loop_scope = "session"
+asyncio_default_fixture_loop_scope = "session"
 
 [build-system]
 requires = ["poetry-core"]

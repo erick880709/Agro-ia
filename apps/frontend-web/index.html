@@ -76,6 +76,7 @@
         <button class="tab submenu-item" data-tab="historial">📜 Historial</button>
         <button class="tab submenu-item" data-tab="usuarios">👥 Administrar usuarios</button>
         <button class="tab submenu-item" data-tab="insumos">💰 Administrar insumos</button>
+        <button class="tab submenu-item" data-tab="precios-cosecha">🌾 Precios de cosecha</button>
         <button class="tab submenu-item" data-tab="auditoria">🕵️ Auditoría</button>
         <button class="tab submenu-item" data-tab="bpa">📋 Trazabilidad / BPA</button>
         <button class="tab submenu-item" data-tab="equipo">🧑‍🤝‍🧑 Equipo de trabajo</button>
@@ -105,6 +106,22 @@
         </div>
         <p class="muted">Las alertas se agrupan por ubicación: si varias fincas comparten la misma zona, se muestra el departamento y la ciudad con la lista de fincas.</p>
         <div id="alertas-clima-listado"><p class="muted">Cargando…</p></div>
+      </div>
+    </section>
+    <!-- ============ PRECIOS DE COSECHA (admin) ============ -->
+    <section id="view-precios-cosecha" class="view">
+      <div class="card">
+        <h2>🌾 Precios de cosecha <span class="muted">(inteligencia de mercado — UC1)</span></h2>
+        <p class="muted">Registra el precio promedio de venta por cultivo y departamento para que las recomendaciones incluyan utilidad estimada (COP/ha).</p>
+        <form id="form-precio-cosecha" class="form-grid" onsubmit="guardarPrecioCosecha(event)">
+          <label class="field"><span>Cultivo</span><select id="pc-cultivo"><option value="">— Seleccione cultivo —</option></select></label>
+          <label class="field"><span>Departamento</span><select id="pc-departamento"><option value="">— Seleccione —</option></select></label>
+          <label class="field"><span>Precio promedio (COP/kg)</span><input id="pc-precio" type="number" step="1" min="1" placeholder="ej. 9500" /></label>
+          <label class="field"><span>Rendimiento referencia (t/ha, opcional)</span><input id="pc-rendimiento" type="number" step="0.1" min="0" placeholder="ej. 5.2" /></label>
+          <button type="submit" class="btn">💾 Guardar precio</button>
+        </form>
+        <div id="pc-msg"></div>
+        <div id="precios-cosecha-lista" style="margin-top:14px"><p class="muted">Cargando…</p></div>
       </div>
     </section>
     <!-- ============ INICIO ============ -->
