@@ -2,7 +2,6 @@
 
 Requieren la BD local (Docker agroia-postgres en :5434) con los usuarios demo.
 """
-import pytest
 from agroia.config import get_settings
 from agroia_backend.main import app
 from httpx import ASGITransport, AsyncClient
@@ -10,7 +9,6 @@ from httpx import ASGITransport, AsyncClient
 settings = get_settings()
 
 # El pool global de asyncpg se enlaza al event loop: compartir uno por mÃ³dulo
-pytestmark = pytest.mark.asyncio(loop_scope="module")
 
 ADMIN = {"email": "admin@agroia.co", "password": "Admin123!"}
 AGRONOMO = {"email": "agronomo@agroia.co", "password": "Agronomo123!"}
@@ -108,3 +106,26 @@ async def test_sin_token_401_en_produccion():
         assert res.status_code == 401
     finally:
         settings.auth_allow_legacy_headers = None
+
+
+async def test_rutas_ingesta_iot_siguen_publicas():
+    """Las rutas de ingesta de tramas NO deben exigir Bearer (firmware ESP32).
+
+    Sin token deben llegar a su propia validación de negocio (422/404),
+    nunca 401 del middleware JWT.
+    """
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        # 1) Ruta del firmware: POST /api/sensor sin device_id → 422 de Pydantic
+        r1 = await client.post("/api/sensor", json={"humidity": 50.0})
+        assert r1.status_code == 422, r1.text
+        # 2) Ruta canónica: POST /api/v1/iot/sensor con device no registrado
+        r2 = await client.post(
+            "/api/v1/iot/sensor",
+            json={"device_id": "esp32-no-registrado-test", "ph": 6.0},
+        )
+        assert r2.status_code == 404, r2.text
+        assert r2.json()["detail"]["code"] == "DEVICE_NOT_REGISTERED"
+        # 3) Ingesta del consumidor: POST /api/v1/iot/ingest sin payload → 422
+        r3 = await client.post("/api/v1/iot/ingest", json={"device_id": "x"})
+        assert r3.status_code == 422, r3.text

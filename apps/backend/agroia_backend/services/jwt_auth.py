@@ -36,6 +36,10 @@ RUTAS_PUBLICAS = {
     "/api/v1/auth/login",
     "/api/v1/auth/refresh",
     "/api/sensor",
+    # Ingesta IoT sin credenciales (firmware ESP32 y consumidor): eran
+    # públicas antes del middleware JWT y deben seguir siéndolo.
+    "/api/v1/iot/sensor",
+    "/api/v1/iot/ingest",
 }
 PREFIJOS_PUBLICOS = ("/docs", "/openapi.json", "/redoc", "/media")
 

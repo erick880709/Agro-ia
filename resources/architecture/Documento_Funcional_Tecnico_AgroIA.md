@@ -175,7 +175,7 @@ El frontend muestra `login-screen` si no hay sesión guardada. Ofrece:
 - **`POST /api/v1/auth/refresh`**: rota el par; un refresh **reusado** (ya rotado) revoca toda la cadena y responde 401 (`REFRESH_REUSADO`).
 - **`POST /api/v1/auth/logout`**: mete el `jti` del access token en `token_blacklist` (revocación real).
 - **`GET /api/v1/auth/me`** devuelve el usuario del token; `_sobrescribir_cabeceras()` descarta cabeceras `X-User-*` enviadas por el cliente cuando hay Bearer (anti-suplantación: el rol/email salen del token firmado, no de cabeceras confiadas).
-- **Middleware HTTP**: valida el Bearer en toda la app salvo rutas públicas (`/api/v1/health`, `/api/v1/auth/login`, `/api/v1/auth/refresh`, `/api/sensor`, `/docs`, `/openapi.json`, `/redoc`, `/media`).
+- **Middleware HTTP**: valida el Bearer en toda la app salvo rutas públicas (`/api/v1/health`, `/api/v1/auth/login`, `/api/v1/auth/refresh`, `/api/sensor`, `/api/v1/iot/sensor`, `/api/v1/iot/ingest` — ingesta de tramas sin credenciales —, `/docs`, `/openapi.json`, `/redoc`, `/media`).
 - **Compatibilidad**: si no hay Bearer, se aceptan las cabeceras heredadas `X-User-Role`/`X-User-Email` (modo transición, `auth_allow_legacy_headers=true`).
 - **Tablas** (migración 036): `token_blacklist` (jti) y `refresh_tokens` (hash SHA-256 del token; nunca se guarda el token en claro). El job de mantenimiento limpia expirados (`limpiar_tokens_expirados`).
 
