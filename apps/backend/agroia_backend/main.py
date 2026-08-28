@@ -102,6 +102,14 @@ async def lifespan(app: FastAPI):
     except Exception as e:  # noqa: BLE001 — no bloquear el arranque
         logger.error("asegurar_reglas_fallo", error=str(e))
 
+    # Lecturas históricas con GPS en grados → metros relativos (idempotente)
+    from agroia_backend.services.reparacion_geo import reparar_gps_legado
+
+    try:
+        await reparar_gps_legado()
+    except Exception as e:  # noqa: BLE001 — no bloquear el arranque
+        logger.error("reparar_gps_legado_fallo", error=str(e))
+
     # ── Servicio programado: alertas climáticas proactivas (cada 6 h) ──
     import asyncio
 
