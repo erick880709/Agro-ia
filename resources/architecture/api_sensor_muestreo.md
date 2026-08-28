@@ -28,7 +28,7 @@ calor por parámetro** en el reporte.
 ```json
 {
   "device_id": "esp32-npk-001",
-  "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
+  "finca_id": "a0562767-13a8-4a49-bd98-e8097d5b2674",
   "latitude": 4.578333,
   "longitude": -75.666944,
   "humidity": 94.0,
@@ -53,13 +53,13 @@ calor por parámetro** en el reporte.
 ```bash
 curl -X POST https://agroia-backend.onrender.com/api/sensor \
   -H "Content-Type: application/json" \
-  -d '{"device_id":"esp32-npk-001","finca_id":"8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936","latitude":4.578333,"longitude":-75.666944,"humidity":94.0,"temperature":22.8,"conductivity":126.0,"ph":7.0,"nitrogen":5.0,"phosphorus":8.0,"potassium":20.0,"rssi":-45,"uptime_s":3600}'
+  -d '{"device_id":"esp32-npk-001","finca_id":"a0562767-13a8-4a49-bd98-e8097d5b2674","latitude":4.578333,"longitude":-75.666944,"humidity":94.0,"temperature":22.8,"conductivity":126.0,"ph":7.0,"nitrogen":5.0,"phosphorus":8.0,"potassium":20.0,"rssi":-45,"uptime_s":3600}'
 ```
 
 **Prueba rápida — PowerShell (Windows):**
 
 ```powershell
-$body = '{"device_id":"esp32-npk-001","finca_id":"8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936","latitude":4.578333,"longitude":-75.666944,"humidity":94.0,"temperature":22.8,"conductivity":126.0,"ph":7.0,"nitrogen":5.0,"phosphorus":8.0,"potassium":20.0,"rssi":-45,"uptime_s":3600}'
+$body = '{"device_id":"esp32-npk-001","finca_id":"a0562767-13a8-4a49-bd98-e8097d5b2674","latitude":4.578333,"longitude":-75.666944,"humidity":94.0,"temperature":22.8,"conductivity":126.0,"ph":7.0,"nitrogen":5.0,"phosphorus":8.0,"potassium":20.0,"rssi":-45,"uptime_s":3600}'
 Invoke-RestMethod -Uri "https://agroia-backend.onrender.com/api/sensor" -Method Post -ContentType "application/json" -Body $body
 ```
 
@@ -69,7 +69,7 @@ Invoke-RestMethod -Uri "https://agroia-backend.onrender.com/api/sensor" -Method 
 {
   "status": "accepted",
   "device_id": "esp32-npk-001",
-  "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
+  "finca_id": "a0562767-13a8-4a49-bd98-e8097d5b2674",
   "auto_registrado": false,
   "variables_recibidas": ["conductividad_electrica", "fosforo", "humedad_ambiental", "nitrogeno", "ph", "potasio", "temperatura_ambiental"],
   "advertencias": ["npk_sin_calibrar"],
@@ -91,7 +91,7 @@ Invoke-RestMethod -Uri "https://agroia-backend.onrender.com/api/sensor" -Method 
 ```json
 {
   "device_id": "esp32-npk-001",
-  "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
+  "finca_id": "a0562767-13a8-4a49-bd98-e8097d5b2674",
   "latitude": 4.578333,
   "longitude": -75.666944,
   "humidity": 94.0,
@@ -172,7 +172,7 @@ curl -X POST https://agroia-backend.onrender.com/api/sensor \
   -H "Content-Type: application/json" \
   -d '{
     "device_id": "esp32-npk-001",
-    "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
+    "finca_id": "a0562767-13a8-4a49-bd98-e8097d5b2674",
     "latitude": 4.578333, "longitude": -75.666944,
     "humidity": 94.0, "temperature": 22.8,
     "conductivity": 126.0, "ph": 7.0,
@@ -191,7 +191,7 @@ curl -X POST https://agroia-backend.onrender.com/api/sensor \
 
 const char* API_URL = "https://agroia-backend.onrender.com/api/sensor";
 const char* DEVICE_ID = "esp32-npk-001";
-const char* FINCA_ID  = "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936"; // ID de la finca
+const char* FINCA_ID  = "a0562767-13a8-4a49-bd98-e8097d5b2674"; // ID de la finca
 
 void enviarMedicion(float lat, float lng, float ph, float ceUsCm,
                     float nPpm, float pPpm, float kPpm,
@@ -271,7 +271,7 @@ coordenadas GPS reales, ej. lat 4.5783, lng -75.6669):
 {
   "status": "accepted",
   "device_id": "esp32-npk-001",
-  "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
+  "finca_id": "a0562767-13a8-4a49-bd98-e8097d5b2674",
   "auto_registrado": false,
   "variables_recibidas": ["conductividad_electrica", "fosforo", "nitrogeno", "ph", "potasio"],
   "advertencias": [],
@@ -306,7 +306,7 @@ plataforma aplica los **factores de calibración** a cada trama:
 POST /api/v1/iot/dispositivos
 {
   "device_id": "esp32-npk-001",
-  "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
+  "finca_id": "a0562767-13a8-4a49-bd98-e8097d5b2674",
   "nombre": "Sensor cuadrícula lote 1",
   "npk_calibrado": true
 }
@@ -354,8 +354,8 @@ x,y,ph,conductividad,n,p,k,humedad,temperatura
 
 ```json
 [
-  {"device_id":"esp32-npk-001","finca_id":"8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936","x":20,"y":90,"ph":5.6,"conductivity":410,"nitrogen":250},
-  {"device_id":"esp32-npk-001","finca_id":"8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936","x":125,"y":90,"ph":5.9,"conductivity":470,"nitrogen":230}
+  {"device_id":"esp32-npk-001","finca_id":"a0562767-13a8-4a49-bd98-e8097d5b2674","x":20,"y":90,"ph":5.6,"conductivity":410,"nitrogen":250},
+  {"device_id":"esp32-npk-001","finca_id":"a0562767-13a8-4a49-bd98-e8097d5b2674","x":125,"y":90,"ph":5.9,"conductivity":470,"nitrogen":230}
 ]
 ```
 

@@ -104,7 +104,7 @@ calor por parámetro</strong> en el reporte.</p>
 <h3 id="body-de-prueba-copie-y-pegue">🧪 Body de prueba — copie y pegue</h3>
 <pre><code class="language-json">{
   &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
-  &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
+  &quot;finca_id&quot;: &quot;a0562767-13a8-4a49-bd98-e8097d5b2674&quot;,
   &quot;latitude&quot;: 4.578333,
   &quot;longitude&quot;: -75.666944,
   &quot;humidity&quot;: 94.0,
@@ -127,17 +127,17 @@ plataforma (pestaña Fincas → botón «📋 Copiar» en la tarjeta de la finca
 <p><strong>Prueba rápida — bash (macOS / Linux):</strong></p>
 <pre><code class="language-bash">curl -X POST https://agroia-backend.onrender.com/api/sensor \
   -H &quot;Content-Type: application/json&quot; \
-  -d '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;latitude&quot;:4.578333,&quot;longitude&quot;:-75.666944,&quot;humidity&quot;:94.0,&quot;temperature&quot;:22.8,&quot;conductivity&quot;:126.0,&quot;ph&quot;:7.0,&quot;nitrogen&quot;:5.0,&quot;phosphorus&quot;:8.0,&quot;potassium&quot;:20.0,&quot;rssi&quot;:-45,&quot;uptime_s&quot;:3600}'
+  -d '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;a0562767-13a8-4a49-bd98-e8097d5b2674&quot;,&quot;latitude&quot;:4.578333,&quot;longitude&quot;:-75.666944,&quot;humidity&quot;:94.0,&quot;temperature&quot;:22.8,&quot;conductivity&quot;:126.0,&quot;ph&quot;:7.0,&quot;nitrogen&quot;:5.0,&quot;phosphorus&quot;:8.0,&quot;potassium&quot;:20.0,&quot;rssi&quot;:-45,&quot;uptime_s&quot;:3600}'
 </code></pre>
 <p><strong>Prueba rápida — PowerShell (Windows):</strong></p>
-<pre><code class="language-powershell">$body = '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;latitude&quot;:4.578333,&quot;longitude&quot;:-75.666944,&quot;humidity&quot;:94.0,&quot;temperature&quot;:22.8,&quot;conductivity&quot;:126.0,&quot;ph&quot;:7.0,&quot;nitrogen&quot;:5.0,&quot;phosphorus&quot;:8.0,&quot;potassium&quot;:20.0,&quot;rssi&quot;:-45,&quot;uptime_s&quot;:3600}'
+<pre><code class="language-powershell">$body = '{&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;a0562767-13a8-4a49-bd98-e8097d5b2674&quot;,&quot;latitude&quot;:4.578333,&quot;longitude&quot;:-75.666944,&quot;humidity&quot;:94.0,&quot;temperature&quot;:22.8,&quot;conductivity&quot;:126.0,&quot;ph&quot;:7.0,&quot;nitrogen&quot;:5.0,&quot;phosphorus&quot;:8.0,&quot;potassium&quot;:20.0,&quot;rssi&quot;:-45,&quot;uptime_s&quot;:3600}'
 Invoke-RestMethod -Uri &quot;https://agroia-backend.onrender.com/api/sensor&quot; -Method Post -ContentType &quot;application/json&quot; -Body $body
 </code></pre>
 <p><strong>Respuesta esperada:</strong></p>
 <pre><code class="language-json">{
   &quot;status&quot;: &quot;accepted&quot;,
   &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
-  &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
+  &quot;finca_id&quot;: &quot;a0562767-13a8-4a49-bd98-e8097d5b2674&quot;,
   &quot;auto_registrado&quot;: false,
   &quot;variables_recibidas&quot;: [&quot;conductividad_electrica&quot;, &quot;fosforo&quot;, &quot;humedad_ambiental&quot;, &quot;nitrogeno&quot;, &quot;ph&quot;, &quot;potasio&quot;, &quot;temperatura_ambiental&quot;],
   &quot;advertencias&quot;: [&quot;npk_sin_calibrar&quot;],
@@ -156,7 +156,7 @@ Invoke-RestMethod -Uri &quot;https://agroia-backend.onrender.com/api/sensor&quot
 <h2 id="2-formato-de-la-trama-json">2. Formato de la trama (JSON)</h2>
 <pre><code class="language-json">{
   &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
-  &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
+  &quot;finca_id&quot;: &quot;a0562767-13a8-4a49-bd98-e8097d5b2674&quot;,
   &quot;latitude&quot;: 4.578333,
   &quot;longitude&quot;: -75.666944,
   &quot;humidity&quot;: 94.0,
@@ -319,7 +319,7 @@ motor de recomendaciones.</p>
   -H &quot;Content-Type: application/json&quot; \
   -d '{
     &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
-    &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
+    &quot;finca_id&quot;: &quot;a0562767-13a8-4a49-bd98-e8097d5b2674&quot;,
     &quot;latitude&quot;: 4.578333, &quot;longitude&quot;: -75.666944,
     &quot;humidity&quot;: 94.0, &quot;temperature&quot;: 22.8,
     &quot;conductivity&quot;: 126.0, &quot;ph&quot;: 7.0,
@@ -335,7 +335,7 @@ motor de recomendaciones.</p>
 
 const char* API_URL = &quot;https://agroia-backend.onrender.com/api/sensor&quot;;
 const char* DEVICE_ID = &quot;esp32-npk-001&quot;;
-const char* FINCA_ID  = &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;; // ID de la finca
+const char* FINCA_ID  = &quot;a0562767-13a8-4a49-bd98-e8097d5b2674&quot;; // ID de la finca
 
 void enviarMedicion(float lat, float lng, float ph, float ceUsCm,
                     float nPpm, float pPpm, float kPpm,
@@ -406,7 +406,7 @@ están fuera del ideal en cada punto.</p>
 <pre><code class="language-json">{
   &quot;status&quot;: &quot;accepted&quot;,
   &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
-  &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
+  &quot;finca_id&quot;: &quot;a0562767-13a8-4a49-bd98-e8097d5b2674&quot;,
   &quot;auto_registrado&quot;: false,
   &quot;variables_recibidas&quot;: [&quot;conductividad_electrica&quot;, &quot;fosforo&quot;, &quot;nitrogeno&quot;, &quot;ph&quot;, &quot;potasio&quot;],
   &quot;advertencias&quot;: [],
@@ -460,7 +460,7 @@ plataforma aplica los <strong>factores de calibración</strong> a cada trama:</p
 <pre><code class="language-json">POST /api/v1/iot/dispositivos
 {
   &quot;device_id&quot;: &quot;esp32-npk-001&quot;,
-  &quot;finca_id&quot;: &quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,
+  &quot;finca_id&quot;: &quot;a0562767-13a8-4a49-bd98-e8097d5b2674&quot;,
   &quot;nombre&quot;: &quot;Sensor cuadrícula lote 1&quot;,
   &quot;npk_calibrado&quot;: true
 }
@@ -493,8 +493,8 @@ opcional). Formatos aceptados:</p>
 <code>columna,fila</code>.)</p>
 <h3 id="json-lista-de-tramas-una-por-punto">JSON — lista de tramas (una por punto)</h3>
 <pre><code class="language-json">[
-  {&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;x&quot;:20,&quot;y&quot;:90,&quot;ph&quot;:5.6,&quot;conductivity&quot;:410,&quot;nitrogen&quot;:250},
-  {&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936&quot;,&quot;x&quot;:125,&quot;y&quot;:90,&quot;ph&quot;:5.9,&quot;conductivity&quot;:470,&quot;nitrogen&quot;:230}
+  {&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;a0562767-13a8-4a49-bd98-e8097d5b2674&quot;,&quot;x&quot;:20,&quot;y&quot;:90,&quot;ph&quot;:5.6,&quot;conductivity&quot;:410,&quot;nitrogen&quot;:250},
+  {&quot;device_id&quot;:&quot;esp32-npk-001&quot;,&quot;finca_id&quot;:&quot;a0562767-13a8-4a49-bd98-e8097d5b2674&quot;,&quot;x&quot;:125,&quot;y&quot;:90,&quot;ph&quot;:5.9,&quot;conductivity&quot;:470,&quot;nitrogen&quot;:230}
 ]
 </code></pre>
 <p>Respuesta: <code>{status:"accepted", numero_muestras: 9, variables_recibidas:[...], analisis:{...}}</code>.

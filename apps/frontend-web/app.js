@@ -383,7 +383,7 @@ async function arrancarAplicacion() {
   // (latitude/longitude en grados decimales WGS84).
   document.getElementById('sim-trama').value = JSON.stringify({
     device_id: 'esp32-npk-001',
-    finca_id: '8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936',
+    finca_id: 'a0562767-13a8-4a49-bd98-e8097d5b2674',
     latitude: 4.578333,
     longitude: -75.666944,
     humidity: 94.0,
