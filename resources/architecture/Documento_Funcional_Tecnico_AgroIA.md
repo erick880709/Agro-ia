@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.10 · **Fecha:** 2026-08-28
+**Versión:** 2.11 · **Fecha:** 2026-08-28
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -220,6 +220,15 @@ pestañas en la barra superior** (solo en el menú, sin duplicarlas); para Agró
 El desplegable es **flotante**: se posiciona con `position: fixed` sobre el contenido de la
 página (escapa del `overflow` del nav), se abre hacia arriba cuando no cabe abajo, se
 reposiciona en `scroll`/`resize` y se cierra al elegir una opción o al hacer clic fuera.
+
+**Menú «❓ Ayuda» (todos los roles, v2.11):** segundo desplegable de la barra con los
+**manuales de usuario por rol** (archivos estáticos en `apps/frontend-web/ayuda-*.html`):
+👑 Administrador, 🧑‍🌾 Agrónomo y 👤 Cliente. La visibilidad es por rol: el Admin ve los tres;
+Agrónomo y Cliente solo el suyo (los enlaces llevan `data-roles` y se filtran en `aplicarRol`).
+Cada manual es una guía paso a paso del alcance de su rol, con capturas reales de la app,
+**GIF animados** de los flujos principales y un **reproductor de video** (carrusel de pantallas
+con ▶/⏸ y barra de progreso) — generados con `scripts/gen_ayuda_gifs.py` (Pillow) y servidos
+desde `/media-ayuda/` bajo el mount estático del frontend.
 
 ---
 

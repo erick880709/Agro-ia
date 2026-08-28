@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Manual de usuario — Agrónomo · AgroIA</title>
+<style>
+  :root { --verde-900:#14532d; --verde-700:#166534; --verde-500:#22c55e; --verde-100:#dcfce7; --crema:#f5f8f4; --texto:#1f2a22; --line:#d7e2da; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:"Segoe UI",system-ui,sans-serif; background:var(--crema); color:var(--texto); }
+  header.portada { background:linear-gradient(120deg,var(--verde-900),var(--verde-700)); color:#fff; padding:34px 30px 30px; }
+  header.portada .volver { display:inline-block; color:#d9f0dd; text-decoration:none; font-size:.9rem; margin-bottom:14px; border:1px solid rgba(255,255,255,.4); border-radius:999px; padding:4px 14px; }
+  header.portada h1 { margin:0 0 6px; font-size:1.9rem; }
+  header.portada p { margin:0; color:#d9f0dd; max-width:900px; }
+  .wrap { max-width:1000px; margin:0 auto; padding:22px 18px 60px; }
+  nav.toc { background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px 20px; margin-bottom:24px; }
+  nav.toc h2 { margin:0 0 10px; font-size:1.05rem; }
+  nav.toc ol { margin:0; padding-left:22px; columns:2; column-gap:30px; }
+  nav.toc a { color:var(--verde-700); text-decoration:none; }
+  nav.toc a:hover { text-decoration:underline; }
+  .paso { background:#fff; border:1px solid var(--line); border-radius:16px; padding:22px 24px; margin-bottom:22px; box-shadow:0 2px 10px rgba(20,60,30,.05); }
+  .paso h2 { display:flex; align-items:center; gap:12px; margin:0 0 10px; font-size:1.25rem; }
+  .paso h2 .num { background:var(--verde-700); color:#fff; min-width:34px; height:34px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:1rem; }
+  .paso p, .paso li { line-height:1.55; }
+  .paso .nota { background:#f0f9f1; border-left:4px solid var(--verde-500); padding:10px 14px; border-radius:0 8px 8px 0; margin:10px 0; }
+  figure { margin:14px 0 4px; }
+  img.captura { width:100%; border:1px solid var(--line); border-radius:10px; display:block; }
+  img.gif { width:100%; border:1px solid var(--line); border-radius:10px; display:block; }
+  figcaption { font-size:.82rem; color:#5a6a5e; margin-top:6px; }
+  .video-box { background:#0f2a18; border-radius:16px; padding:16px; color:#e7f5ea; }
+  .video-box h2 { margin:0 0 8px; font-size:1.2rem; }
+  .video-cuadro { background:#000; border-radius:10px; overflow:hidden; }
+  .video-cuadro img { width:100%; display:block; }
+  .video-controles { display:flex; align-items:center; gap:12px; margin-top:10px; flex-wrap:wrap; }
+  .video-controles button { background:var(--verde-500); color:#052e12; border:none; border-radius:999px; padding:8px 18px; font-weight:700; cursor:pointer; }
+  .video-controles .barra { flex:1; min-width:120px; height:8px; background:#1d4d2c; border-radius:999px; overflow:hidden; }
+  .video-controles .barra span { display:block; height:100%; width:0; background:var(--verde-500); }
+  .video-controles small { color:#bfe3c8; }
+  footer { text-align:center; padding:22px; color:#5a6a5e; font-size:.85rem; }
+  @media (max-width:640px){ nav.toc ol { columns:1; } }
+</style>
+</head>
+<body>
+<header class="portada">
+  <a class="volver" href="/">← Volver a AgroIA</a>
+  <h1>🧑‍🌾 Manual de usuario — Agrónomo</h1>
+  <p>Guía paso a paso para operar AgroIA con el rol Agrónomo: monitoreo de fincas, análisis de
+  suelo, aceptación de recomendaciones y seguimiento de ciclos productivos.</p>
+</header>
+<div class="wrap">
+
+<nav class="toc">
+  <h2>Índice</h2>
+  <ol>
+    <li><a href="#p1">Iniciar sesión</a></li>
+    <li><a href="#p2">Panel de Inicio</a></li>
+    <li><a href="#p3">Sensores IoT</a></li>
+    <li><a href="#p4">Cargar archivo</a></li>
+    <li><a href="#p5">Recomendaciones y aceptación</a></li>
+    <li><a href="#p6">Historial</a></li>
+    <li><a href="#p7">Reportes</a></li>
+    <li><a href="#p8">Chat asesor</a></li>
+    <li><a href="#p9">Catálogo de cultivos</a></li>
+    <li><a href="#p10">Video — flujo completo</a></li>
+  </ol>
+</nav>
+
+<section class="paso" id="p1">
+  <h2><span class="num">1</span> Iniciar sesión</h2>
+  <p>Ingrese su <b>email</b> y <b>contraseña</b> y pulse <b>Entrar</b>, o use la cuenta demo
+  🧑‍🌾 <b>Agrónomo</b>. Con este rol verá las pestañas Inicio, Sensores IoT, Cargar archivo,
+  Recomendaciones, Historial, Reportes y Catálogo, además del menú <b>❓ Ayuda</b> (que solo le
+  muestra este manual). El Agrónomo no ve el menú ⚙️ Administración.</p>
+  <figure><img class="gif" src="/media-ayuda/gif-login.gif" alt="Animación: iniciar sesión y entrar al panel" />
+  <figcaption>Animación 1 — Inicio de sesión y llegada al panel de Inicio.</figcaption></figure>
+</section>
+
+<section class="paso" id="p2">
+  <h2><span class="num">2</span> Panel de Inicio (Dashboard)</h2>
+  <p>El Inicio reúne la operación diaria:</p>
+  <ul>
+    <li><b>📍 Finca de análisis</b>: cambie de predio para ver sus datos.</li>
+    <li><b>KPIs y semáforo</b> de aptitud con alertas.</li>
+    <li><b>📊 Últimas lecturas</b> de los sensores.</li>
+    <li><b>🔄 Ciclo activo</b>: botón «✏️ Cosechar ciclo» para registrar rendimiento (kg/ha o t/ha)
+    y calidad — ese dato alimenta el ROI futuro.</li>
+    <li><b>📋 Tareas pendientes de hoy</b>: complete ✔️ o cancele 🚫 labores.</li>
+    <li><b>⛅ Alertas climáticas</b> cuando el pronóstico detecta riesgo de lixiviación o helada.</li>
+  </ul>
+  <figure><img class="captura" src="/media-ayuda/agro-inicio.png" alt="Panel de inicio del Agrónomo" />
+  <figcaption>Figura 1 — Panel de Inicio visto por el Agrónomo.</figcaption></figure>
+</section>
+
+<section class="paso" id="p3">
+  <h2><span class="num">3</span> Sensores IoT</h2>
+  <p>En <b>📡 Sensores IoT</b> monitoree las lecturas en vivo y pruebe tramas con el
+  <b>simulador de trama</b>: el textarea trae el formato real del firmware
+  (<code>device_id</code>, <code>finca_id</code>, pH, NPK, <code>latitude</code>/<code>longitude</code>…);
+  pulse <b>📡 Enviar trama</b> y revise el resultado. La tabla muestra el estado de cada dispositivo
+  (online / datos desactualizados / offline).</p>
+  <figure><img class="captura" src="/media-ayuda/sensores.png" alt="Simulador de trama y estado de sensores" />
+  <figcaption>Figura 2 — Monitoreo y simulación de tramas IoT.</figcaption></figure>
+</section>
+
+<section class="paso" id="p4">
+  <h2><span class="num">4</span> Cargar archivo de mediciones</h2>
+  <p>Cuando el sensor pierda conexión, use <b>📂 Cargar archivo</b> para subir las mediciones en
+  CSV, TXT o JSON y obtener la recomendación al instante. También puede hacer la
+  <b>carga masiva del historial de ciclos</b> (CSV) para fincas grandes.</p>
+  <figure><img class="captura" src="/media-ayuda/carga.png" alt="Formulario de carga de archivos" />
+  <figcaption>Figura 3 — Carga manual de mediciones.</figcaption></figure>
+</section>
+
+<section class="paso" id="p5">
+  <h2><span class="num">5</span> Recomendaciones y aceptación</h2>
+  <p>En <b>🧪 Recomendaciones</b>:</p>
+  <ol>
+    <li>Elija la <b>finca</b> y el <b>cultivo</b> (vacío = «¿qué me conviene sembrar?»).</li>
+    <li>Opcional: presupuesto de fertilización ($/ha) y rendimiento actual (t/ha).</li>
+    <li>Pulse <b>🧪 Analizar suelo</b> y revise clasificación, confianza, tabla de diagnóstico y plan.</li>
+  </ol>
+  <div class="nota">Si faltan datos, el análisis sale <b>preliminar</b> y requiere su aval técnico.
+  Complete los parámetros esenciales y pulse «💾 Guardar y reanalizar».</div>
+  <p>Use <b>✅ Aceptar recomendación</b> para validar el diagnóstico (el modelo aprende de su
+  aval) o <b>📋 Generar órdenes de trabajo</b> para crear las labores del plan.</p>
+  <figure><img class="gif" src="/media-ayuda/gif-analisis.gif" alt="Animación del flujo de análisis de suelo" />
+  <figcaption>Animación 2 — Flujo: finca → analizar → diagnóstico.</figcaption></figure>
+</section>
+
+<section class="paso" id="p6">
+  <h2><span class="num">6</span> Historial de recomendaciones</h2>
+  <p>En <b>📜 Historial</b> consulte todas las recomendaciones con fecha, cultivo, clasificación,
+  confianza y estado, y el ciclo productivo activo de la finca.</p>
+  <figure><img class="captura" src="/media-ayuda/agro-historial.png" alt="Historial de recomendaciones del Agrónomo" />
+  <figcaption>Figura 4 — Historial de recomendaciones.</figcaption></figure>
+</section>
+
+<section class="paso" id="p7">
+  <h2><span class="num">7</span> Reportes</h2>
+  <p>En <b>📄 Reportes</b> genere el informe completo de suelo: diagnóstico, plano del lote,
+  mapa de calor, análisis económico con <b>ROI</b> y advertencias. Ábralo en pestaña nueva o
+  descárguelo (HTML listo para imprimir en PDF). Puede <b>🧪 simular enmiendas</b> antes de generarlo.</p>
+  <figure><img class="captura" src="/media-ayuda/reportes.png" alt="Formulario de generación de reportes" />
+  <figcaption>Figura 5 — Generación del reporte de análisis.</figcaption></figure>
+</section>
+
+<section class="paso" id="p8">
+  <h2><span class="num">8</span> Chat asesor agronómico</h2>
+  <p>El 💬 <b>Asesor agronómico</b> responde sus dudas con la base de conocimiento de AgroIA
+  (cal, fertilización, riego, diagnóstico). Escriba su pregunta y pulse Enviar; puede
+  <b>📎 adjuntar una foto</b> del cultivo para que se analice o quede como referencia de la finca.</p>
+  <figure><img class="captura" src="/media-ayuda/chat.png" alt="Chat asesor agronómico" />
+  <figcaption>Figura 6 — Chat asesor.</figcaption></figure>
+</section>
+
+<section class="paso" id="p9">
+  <h2><span class="num">9</span> Catálogo de cultivos</h2>
+  <p>En <b>🌾 Catálogo</b> consulte las fichas técnicas de los 30 cultivos (rangos ideales y
+  fuentes UPRA/Cenicafé/AGROSAVIA) para fundamentar sus recomendaciones.</p>
+  <figure><img class="captura" src="/media-ayuda/catalogo.png" alt="Catálogo de cultivos" />
+  <figcaption>Figura 7 — Catálogo de cultivos.</figcaption></figure>
+</section>
+
+<section class="paso" id="p10">
+  <div class="video-box">
+    <h2>📽️ Video — Flujo completo del Agrónomo</h2>
+    <div class="video-cuadro"><img id="video-img" src="/media-ayuda/login.png" alt="Video demostrativo del flujo completo" /></div>
+    <div class="video-controles">
+      <button id="video-btn">⏸ Pausar</button>
+      <div class="barra"><span id="video-barra"></span></div>
+      <small id="video-paso">Paso 1 de 8</small>
+    </div>
+  </div>
+</section>
+
+</div>
+<footer>AgroIA — AgroInteligente Colombia · Manual de usuario Agrónomo · 2026-08-27</footer>
+<script>
+(function () {
+  var frames = [
+    'login.png','agro-inicio.png','sensores.png','carga.png','agro-recomendaciones.png',
+    'agro-historial.png','reportes.png','catalogo.png'
+  ];
+  var idx = 0, reproduciendo = true, timer = null;
+  var img = document.getElementById('video-img');
+  var btn = document.getElementById('video-btn');
+  var barra = document.getElementById('video-barra');
+  var paso = document.getElementById('video-paso');
+  function pintar() {
+    img.src = '/media-ayuda/' + frames[idx];
+    barra.style.width = Math.round(((idx + 1) / frames.length) * 100) + '%';
+    paso.textContent = 'Paso ' + (idx + 1) + ' de ' + frames.length;
+  }
+  function siguiente() { idx = (idx + 1) % frames.length; pintar(); }
+  function alternar() {
+    reproduciendo = !reproduciendo;
+    btn.textContent = reproduciendo ? '⏸ Pausar' : '▶ Reproducir';
+    if (reproduciendo) { timer = setInterval(siguiente, 1600); }
+    else { clearInterval(timer); }
+  }
+  btn.addEventListener('click', alternar);
+  timer = setInterval(siguiente, 1600);
+})();
+</script>
+</body>
+</html>

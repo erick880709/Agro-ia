@@ -258,8 +258,16 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 
 - **Nueva navegación (Admin):** las secciones administrativas se agrupan en un **desplegable ⚙️ Administración** con submenús: **🏡 Registrar finca** (wizard completo de 3 pasos en su propia vista), **🗂️ Fincas**, **📜 Historial**, **👥 Administrar usuarios**, **💰 Administrar insumos** (página propia con la tabla de precios dinámicos) y **🕵️ Auditoría**. Para el Admin, «Fincas» e «Historial» **se quitaron de la barra superior** (quedan solo en el menú, sin duplicarse); para Agrónomo y Cliente, «Historial» sigue en la barra superior.
 - **Comportamiento del menú:** panel <b>flotante</b> (`position: fixed`) que se despliega <b>sobre el body</b> (escapa del `overflow-x` del nav), se abre hacia arriba si no cabe abajo, se reposiciona en scroll/resize y se cierra al elegir una opción o al hacer clic fuera. El desplegable no aparece para Agrónomo ni Cliente (el botón no compite con la lógica de pestañas por rol).
-- **Assets**: `app.js`/`styles.css` con cache-busting `?v=20260827-adminnav3`.
+- **Assets**: `app.js`/`styles.css` con cache-busting `?v=20260827-adminnav4`.
 - Validado local y en producción: submenú abre/cierra flotando sobre el contenido, navegación a registrar-finca (wizard visible), fincas (solo listado), historial (12 filas), usuarios (7 tarjetas), insumos (15 filas con precios guardados) y fincas (solo listado).
+
+### Menú «Ayuda» — manuales de usuario por rol (2026-08-28)
+
+- **Nuevo menú ❓ Ayuda** (todos los roles) con los manuales de usuario según el rol: 👑 Administrador, 🧑‍🌾 Agrónomo y 👤 Cliente. El Admin ve los tres; Agrónomo y Cliente solo el suyo (filtrado por `data-roles`). Solo el Admin ve el menú ⚙️ Administración.
+- **Manuales** (`ayuda-admin.html`, `ayuda-agronomo.html`, `ayuda-cliente.html`): guías paso a paso en orden lógico según el alcance de cada rol, con capturas reales de la aplicación, **GIF animados** de los flujos principales (login, registro de finca, análisis, precios) y un **reproductor de video** (▶/⏸ con barra de progreso).
+- **Media**: capturas y GIF en `apps/frontend-web/media-ayuda/` servidos por el mount estático del frontend; GIF generados con `scripts/gen_ayuda_gifs.py` (Pillow).
+- **Assets**: `?v=20260827-adminnav4`.
+- Validado local: menú Ayuda flotante por rol (Admin 3 opciones, Agrónomo/Cliente solo la suya), los 3 manuales cargan con 0 imágenes rotas (16/10/8 pasos) y el reproductor de video funciona.
 
 ### Imágenes fuera de la BD y validación de rendimiento (2026-08-27)
 

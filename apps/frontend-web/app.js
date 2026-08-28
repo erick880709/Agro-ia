@@ -185,8 +185,7 @@ function goTab(name) {
   if (name === 'usuarios' && state.rol.toLowerCase() === 'admin') cargarUsuarios();
   if (name === 'insumos' && state.rol.toLowerCase() === 'admin') cargarPreciosInsumos();
   if (name === 'auditoria' && state.rol.toLowerCase() === 'admin') cargarAuditoria();
-  const sub = document.getElementById('admin-submenu');
-  if (sub) sub.classList.remove('open');
+  document.querySelectorAll('.tab-submenu.open').forEach(s => s.classList.remove('open'));
 }
 
 /* ─────────────────────────── carga inicial ─────────────────────────── */
@@ -214,14 +213,16 @@ async function arrancarAplicacion() {
     t.addEventListener('click', () => goTab(t.dataset.tab));
   });
 
-  // ── Menú desplegable de Administración (flotante sobre el contenido) ──
-  const adminBtn = document.getElementById('admin-menu-btn');
-  const adminSub = document.getElementById('admin-submenu');
-  if (adminBtn && adminSub) {
+  // ── Menús desplegables (Administración y Ayuda) — flotantes sobre el contenido ──
+  document.querySelectorAll('.tab-dropdown').forEach(dd => {
+    const btn = dd.querySelector(':scope > button.tab, :scope > .tab');
+    const sub = dd.querySelector('.tab-submenu');
+    if (!btn || !sub) return;
+
     const posicionar = () => {
-      const r = adminBtn.getBoundingClientRect();
-      const width = Math.max(adminSub.offsetWidth || 230, 230);
-      const height = Math.max(adminSub.offsetHeight || 0, 0);
+      const r = btn.getBoundingClientRect();
+      const width = Math.max(sub.offsetWidth || 230, 230);
+      const height = Math.max(sub.offsetHeight || 0, 0);
       let left = r.right - width;
       if (left < 8) left = 8;
       if (left + width > window.innerWidth - 8) left = window.innerWidth - width - 8;
@@ -231,34 +232,42 @@ async function arrancarAplicacion() {
         top = r.top - 6 - height;
         if (top < 8) top = 8;
       }
-      adminSub.style.position = 'fixed';   // escapa del overflow del nav y flota sobre el body
-      adminSub.style.top = `${top}px`;
-      adminSub.style.left = `${left}px`;
-      adminSub.style.right = 'auto';
+      sub.style.position = 'fixed';   // escapa del overflow del nav y flota sobre el body
+      sub.style.top = `${top}px`;
+      sub.style.left = `${left}px`;
+      sub.style.right = 'auto';
     };
     const sincronizar = () => {
-      if (!adminSub.classList.contains('open')) return;
-      const r = adminBtn.getBoundingClientRect();
+      if (!sub.classList.contains('open')) return;
+      const r = btn.getBoundingClientRect();
       if (r.bottom < 0 || r.top > window.innerHeight) {
-        adminSub.classList.remove('open');  // el botón quedó fuera de pantalla
+        sub.classList.remove('open');  // el botón quedó fuera de pantalla
         return;
       }
       posicionar();
     };
-    adminBtn.addEventListener('click', e => {
+    btn.addEventListener('click', e => {
       e.stopPropagation();
-      const abrir = !adminSub.classList.contains('open');
-      adminSub.classList.toggle('open');
+      const abrir = !sub.classList.contains('open');
+      // Al abrir uno se cierra el otro
+      document.querySelectorAll('.tab-submenu.open').forEach(s => {
+        if (s !== sub) s.classList.remove('open');
+      });
+      sub.classList.toggle('open');
       if (abrir) posicionar();
-    });
-    document.addEventListener('click', e => {
-      if (!adminSub.contains(e.target) && e.target !== adminBtn) {
-        adminSub.classList.remove('open');
-      }
     });
     window.addEventListener('resize', sincronizar);
     window.addEventListener('scroll', sincronizar, true);
-  }
+  });
+  document.addEventListener('click', e => {
+    document.querySelectorAll('.tab-submenu.open').forEach(sub => {
+      if (sub.contains(e.target)) return;
+      const dd = sub.closest('.tab-dropdown');
+      const btn = dd ? dd.querySelector(':scope > button.tab, :scope > .tab') : null;
+      if (btn === e.target) return;
+      sub.classList.remove('open');
+    });
+  });
 
   aplicarRol();
 

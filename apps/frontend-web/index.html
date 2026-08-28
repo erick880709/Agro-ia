@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AgroIA · AgroInteligente Colombia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="/styles.css?v=20260827-adminnav3" />
+  <link rel="stylesheet" href="/styles.css?v=20260827-adminnav4" />
 </head>
 <body>
   <!-- ============ PANTALLA DE AUTENTICACIÓN ============ -->
@@ -74,6 +74,14 @@
         <button class="tab submenu-item" data-tab="usuarios">👥 Administrar usuarios</button>
         <button class="tab submenu-item" data-tab="insumos">💰 Administrar insumos</button>
         <button class="tab submenu-item" data-tab="auditoria">🕵️ Auditoría</button>
+      </div>
+    </div>
+    <div class="tab-dropdown" id="ayuda-dropdown">
+      <button type="button" class="tab" id="ayuda-menu-btn">❓ Ayuda ▾</button>
+      <div class="tab-submenu" id="ayuda-submenu">
+        <a class="tab submenu-item" data-roles="admin" href="/ayuda-admin.html" target="_blank">👑 Manual de usuario Administrador</a>
+        <a class="tab submenu-item" data-roles="admin,agronomo" href="/ayuda-agronomo.html" target="_blank">🧑‍🌾 Manual de usuario Agrónomo</a>
+        <a class="tab submenu-item" data-roles="admin,cliente" href="/ayuda-cliente.html" target="_blank">👤 Manual de usuario Cliente</a>
       </div>
     </div>
   </nav>
@@ -634,7 +642,7 @@
     AgroIA v0.1.0 · Motor: sistema experto (reglas UPRA/Cenicafé/AGROSAVIA) · ML en modo sombra
   </footer>
 
-  <script src="/departamentos.js?v=20260827-adminnav3"></script>
-  <script src="/app.js?v=20260827-adminnav3"></script>
+  <script src="/departamentos.js?v=20260827-adminnav4"></script>
+  <script src="/app.js?v=20260827-adminnav4"></script>
 </body>
 </html>

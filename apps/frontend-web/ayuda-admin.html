@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Manual de usuario — Administrador · AgroIA</title>
+<style>
+  :root { --verde-900:#14532d; --verde-700:#166534; --verde-500:#22c55e; --verde-100:#dcfce7; --crema:#f5f8f4; --texto:#1f2a22; --line:#d7e2da; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:"Segoe UI",system-ui,sans-serif; background:var(--crema); color:var(--texto); }
+  header.portada { background:linear-gradient(120deg,var(--verde-900),var(--verde-700)); color:#fff; padding:34px 30px 30px; }
+  header.portada .volver { display:inline-block; color:#d9f0dd; text-decoration:none; font-size:.9rem; margin-bottom:14px; border:1px solid rgba(255,255,255,.4); border-radius:999px; padding:4px 14px; }
+  header.portada h1 { margin:0 0 6px; font-size:1.9rem; }
+  header.portada p { margin:0; color:#d9f0dd; max-width:900px; }
+  .wrap { max-width:1000px; margin:0 auto; padding:22px 18px 60px; }
+  nav.toc { background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px 20px; margin-bottom:24px; }
+  nav.toc h2 { margin:0 0 10px; font-size:1.05rem; }
+  nav.toc ol { margin:0; padding-left:22px; columns:2; column-gap:30px; }
+  nav.toc a { color:var(--verde-700); text-decoration:none; }
+  nav.toc a:hover { text-decoration:underline; }
+  .paso { background:#fff; border:1px solid var(--line); border-radius:16px; padding:22px 24px; margin-bottom:22px; box-shadow:0 2px 10px rgba(20,60,30,.05); }
+  .paso h2 { display:flex; align-items:center; gap:12px; margin:0 0 10px; font-size:1.25rem; }
+  .paso h2 .num { background:var(--verde-700); color:#fff; min-width:34px; height:34px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:1rem; }
+  .paso p, .paso li { line-height:1.55; }
+  .paso .nota { background:#f0f9f1; border-left:4px solid var(--verde-500); padding:10px 14px; border-radius:0 8px 8px 0; margin:10px 0; }
+  figure { margin:14px 0 4px; }
+  img.captura { width:100%; border:1px solid var(--line); border-radius:10px; display:block; }
+  img.gif { width:100%; border:1px solid var(--line); border-radius:10px; display:block; }
+  figcaption { font-size:.82rem; color:#5a6a5e; margin-top:6px; }
+  .rejilla { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; }
+  .video-box { background:#0f2a18; border-radius:16px; padding:16px; color:#e7f5ea; }
+  .video-box h2 { margin:0 0 8px; font-size:1.2rem; }
+  .video-cuadro { background:#000; border-radius:10px; overflow:hidden; }
+  .video-cuadro img { width:100%; display:block; }
+  .video-controles { display:flex; align-items:center; gap:12px; margin-top:10px; flex-wrap:wrap; }
+  .video-controles button { background:var(--verde-500); color:#052e12; border:none; border-radius:999px; padding:8px 18px; font-weight:700; cursor:pointer; }
+  .video-controles .barra { flex:1; min-width:120px; height:8px; background:#1d4d2c; border-radius:999px; overflow:hidden; }
+  .video-controles .barra span { display:block; height:100%; width:0; background:var(--verde-500); }
+  .video-controles small { color:#bfe3c8; }
+  footer { text-align:center; padding:22px; color:#5a6a5e; font-size:.85rem; }
+  @media (max-width:640px){ nav.toc ol { columns:1; } }
+</style>
+</head>
+<body>
+<header class="portada">
+  <a class="volver" href="/">← Volver a AgroIA</a>
+  <h1>👑 Manual de usuario — Administrador</h1>
+  <p>Guía paso a paso para operar AgroIA con el rol Administrador: registro y gestión de fincas,
+  usuarios, insumos, auditoría y toda la operación agronómica del sistema.</p>
+</header>
+<div class="wrap">
+
+<nav class="toc">
+  <h2>Índice</h2>
+  <ol>
+    <li><a href="#p1">Iniciar sesión</a></li>
+    <li><a href="#p2">Panel de Inicio</a></li>
+    <li><a href="#p3">Menús ⚙️ Administración y ❓ Ayuda</a></li>
+    <li><a href="#p4">Registrar una finca</a></li>
+    <li><a href="#p5">Gestionar fincas y lotes</a></li>
+    <li><a href="#p6">Administrar usuarios</a></li>
+    <li><a href="#p7">Administrar insumos (precios)</a></li>
+    <li><a href="#p8">Auditoría de acciones</a></li>
+    <li><a href="#p9">Sensores IoT</a></li>
+    <li><a href="#p10">Cargar archivo</a></li>
+    <li><a href="#p11">Recomendaciones y aceptación</a></li>
+    <li><a href="#p12">Historial</a></li>
+    <li><a href="#p13">Reportes</a></li>
+    <li><a href="#p14">Chat asesor</a></li>
+    <li><a href="#p15">Catálogo de cultivos</a></li>
+    <li><a href="#p16">Video — flujo completo</a></li>
+  </ol>
+</nav>
+
+<section class="paso" id="p1">
+  <h2><span class="num">1</span> Iniciar sesión</h2>
+  <p>Ingrese su <b>email</b> y <b>contraseña</b> y pulse <b>Entrar</b>. Si está probando el sistema,
+  use los botones de cuentas demo de un clic: 👑 <b>Administrador</b>, 🧑‍🌾 Agrónomo o 👤 Cliente.
+  Al entrar, AgroIA carga su perfil, su rol y las fincas que puede ver, y muestra el menú
+  correspondiente (el Administrador ve los menús <b>⚙️ Administración</b> y <b>❓ Ayuda</b>).</p>
+  <div class="nota">Si es Administrador, al final de la barra de navegación verá <b>⚙️ Administración ▾</b>
+  y <b>❓ Ayuda ▾</b>. Los demás roles no ven el menú Administración y en Ayuda solo ven su propio manual.</div>
+  <figure><img class="gif" src="/media-ayuda/gif-login.gif" alt="Animación: iniciar sesión y entrar al panel" />
+  <figcaption>Animación 1 — Inicio de sesión con cuenta demo y llegada al panel de Inicio.</figcaption></figure>
+</section>
+
+<section class="paso" id="p2">
+  <h2><span class="num">2</span> Panel de Inicio (Dashboard)</h2>
+  <p>El Inicio concentra la operación diaria de la finca:</p>
+  <ul>
+    <li><b>Semáforo y KPIs</b> de suelo (pH, N, P, K, CE, M.O., CIC) con alertas.</li>
+    <li><b>📍 Finca de análisis</b>: selector para cambiar de predio.</li>
+    <li><b>⚡ Acciones rápidas</b>: cargar archivo, generar recomendación o ver sensores.</li>
+    <li><b>📊 Últimas lecturas</b> de los sensores de la finca (las del SIG IGAC/UPRA se marcan «🗺️ estimado SIG»).</li>
+    <li><b>🔄 Ciclo activo</b> con botón «✏️ Cosechar ciclo» (rendimiento y calidad).</li>
+    <li><b>📋 Tareas pendientes de hoy</b> (labores) con ✔️ Completar y 🚫 Cancelar.</li>
+    <li><b>⛅ Alertas climáticas</b> (lluvia/helada) cuando el pronóstico detecta riesgo.</li>
+  </ul>
+  <figure><img class="captura" src="/media-ayuda/inicio.png" alt="Panel de inicio con KPIs, lecturas y tareas" />
+  <figcaption>Figura 1 — Panel de Inicio del Administrador.</figcaption></figure>
+</section>
+
+<section class="paso" id="p3">
+  <h2><span class="num">3</span> Menús ⚙️ Administración y ❓ Ayuda</h2>
+  <p>Ambos menús son <b>paneles flotantes</b>: haga clic en el botón y la lista se despliega
+  <b>sobre el contenido</b> de la página (si no cabe hacia abajo, se abre hacia arriba).
+  Elija una opción para navegar; el menú se cierra solo. Para cerrarlo sin elegir, haga clic fuera.</p>
+  <ul>
+    <li><b>⚙️ Administración</b> (solo Admin): 🏡 Registrar finca · 🗂️ Fincas · 📜 Historial ·
+    👥 Administrar usuarios · 💰 Administrar insumos · 🕵️ Auditoría.</li>
+    <li><b>❓ Ayuda</b>: abre este manual u otros según el rol (el Administrador ve los tres manuales).</li>
+  </ul>
+  <figure><img class="captura" src="/media-ayuda/admin-menu.png" alt="Menú Administración desplegado sobre el contenido" />
+  <figcaption>Figura 2 — Menú Administración flotando sobre la página.</figcaption></figure>
+</section>
+
+<section class="paso" id="p4">
+  <h2><span class="num">4</span> Registrar una finca</h2>
+  <p>Desde <b>⚙️ Administración → 🏡 Registrar finca</b> se abre el asistente de <b>3 secciones</b>:</p>
+  <ol>
+    <li><b>Información básica</b>: nombre, propietario, teléfono, email, departamento, municipio y vereda.</li>
+    <li><b>Ubicación</b>: 📍 GPS del navegador, 🗺️ mapa (marcar lindero y «🟩 Cerrar polígono») o 🔗 enlace de Google Maps.</li>
+    <li><b>Características del predio</b>: tipo de área, área, profundidad efectiva, pedregosidad,
+    tipo de riego y dimensiones del lote (largo × ancho).</li>
+  </ol>
+  <div class="nota">🗺️ Al guardar, AgroIA cruza el polígono con las <b>capas oficiales IGAC/UPRA</b>
+  (Estudio General de Suelos) y precarga textura, materia orgánica y CIC con calidad
+  «estimado_por_sig». El mensaje de éxito muestra el banner verde «Capas oficiales IGAC/UPRA aplicadas».</div>
+  <p>Antes de guardar, el sistema valida departamento, municipio, coordenadas (≤ 50 km del municipio),
+  área razonable y precisión GPS; cada validación se muestra con ✅/⚠️/❌.</p>
+  <figure><img class="gif" src="/media-ayuda/gif-registro-finca.gif" alt="Animación del registro de finca en 3 secciones" />
+  <figcaption>Animación 2 — Registro completo de una finca con sus 3 secciones y llegada al listado.</figcaption></figure>
+</section>
+
+<section class="paso" id="p5">
+  <h2><span class="num">5</span> Gestionar fincas y lotes</h2>
+  <p>En <b>⚙️ Administración → 🗂️ Fincas</b> aparece el listado de predios. Cada tarjeta muestra el
+  <b>ID de la finca</b> (cópielo con 📋 para configurarlo en el firmware del sensor) y tres botones:</p>
+  <ul>
+    <li><b>🗂️ Lotes</b> — agregar, editar y eliminar lotes; cada lote tiene botón <b>🔄 Ciclos</b>
+    con su historial productivo (siembra → cosecha, rendimiento, aplicaciones).</li>
+    <li><b>✏️ Editar</b> — datos básicos del predio.</li>
+    <li><b>🗑️ Eliminar</b> — borrado en cascada (con confirmación).</li>
+  </ul>
+  <figure><img class="captura" src="/media-ayuda/fincas.png" alt="Listado de fincas con ID y botones" />
+  <figcaption>Figura 3 — Listado de fincas registradas.</figcaption></figure>
+</section>
+
+<section class="paso" id="p6">
+  <h2><span class="num">6</span> Administrar usuarios</h2>
+  <p>En <b>⚙️ Administración → 👥 Administrar usuarios</b> puede:</p>
+  <ul>
+    <li><b>Crear</b> usuarios con nombre, email, rol (Admin/Agrónomo/Cliente) y fincas asignadas
+    (multi-selector: el Cliente solo ve las fincas ligadas a su email).</li>
+    <li><b>✏️ Editar</b> rol, estado y fincas.</li>
+    <li><b>🗑️ Desactivar</b> cuentas (quedan inactivas; el registro se conserva en auditoría).
+    No puede desactivar su propia cuenta.</li>
+  </ul>
+  <figure><img class="captura" src="/media-ayuda/usuarios.png" alt="Listado de usuarios con roles y estados" />
+  <figcaption>Figura 4 — Administración de usuarios y permisos.</figcaption></figure>
+</section>
+
+<section class="paso" id="p7">
+  <h2><span class="num">7</span> Administrar insumos (precios)</h2>
+  <p>En <b>⚙️ Administración → 💰 Administrar insumos</b> mantenga al día el <b>precio en COP/kg</b>
+  de los 14 insumos del plan económico (Urea, DAP, KCl, cal, compost, etc.). Pulse
+  <b>💾 Guardar precios</b>: desde el siguiente análisis, el plan económico y el ROI usan estas
+  cotizaciones. Los productos sin registro muestran el badge «estático» y el sistema usa el costo
+  de referencia con la advertencia «Precios de referencia desactualizados».</p>
+  <figure><img class="gif" src="/media-ayuda/gif-precios.gif" alt="Animación de actualización de precios de insumos" />
+  <figcaption>Animación 3 — Actualización de precios de insumos que alimentan el ROI.</figcaption></figure>
+</section>
+
+<section class="paso" id="p8">
+  <h2><span class="num">8</span> Auditoría de acciones</h2>
+  <p>En <b>⚙️ Administración → 🕵️ Auditoría</b> consulte la bitácora completa: quién hizo qué,
+  sobre qué entidad y cuándo. Filtre por entidad (finca/lote/usuario/auth/demo) y busque por
+  email, nombre o ID. Cada fila muestra fecha, usuario, acción (<code>finca.crear</code>,
+  <code>auth.login</code>…) y detalle, con IP de origen.</p>
+  <figure><img class="captura" src="/media-ayuda/auditoria.png" alt="Bitácora de auditoría paginada con filtros" />
+  <figcaption>Figura 5 — Auditoría de acciones con filtros y búsqueda.</figcaption></figure>
+</section>
+
+<section class="paso" id="p9">
+  <h2><span class="num">9</span> Sensores IoT</h2>
+  <p>En <b>📡 Sensores IoT</b> monitoree las lecturas en vivo y pruebe tramas reales:</p>
+  <ul>
+    <li><b>🔗 API de sensores — simulador de trama</b>: textarea precargado con el formato del
+    firmware (<code>device_id</code>, <code>finca_id</code>, pH, NPK, <code>latitude</code>/<code>longitude</code>…)
+    y botón <b>📡 Enviar trama</b> que llama a <code>POST /api/sensor</code>.</li>
+    <li><b>Tabla de últimas lecturas</b> con estado por dispositivo (online /
+    datos desactualizados / offline).</li>
+  </ul>
+  <figure><img class="captura" src="/media-ayuda/sensores.png" alt="Simulador de trama y estado de sensores" />
+  <figcaption>Figura 6 — Simulador de trama y monitoreo de sensores.</figcaption></figure>
+</section>
+
+<section class="paso" id="p10">
+  <h2><span class="num">10</span> Cargar archivo de mediciones</h2>
+  <p>Cuando el sensor pierde conexión, use <b>📂 Cargar archivo</b>: suba un CSV (pares o ancho),
+  TXT (<code>clave=valor</code>) o JSON (trama del firmware). El backend normaliza, persiste la
+  lectura y ejecuta la recomendación al instante. La segunda tarjeta permite la
+  <b>🗂️ Carga masiva del historial de ciclos</b> (CSV con lote, cultivo, fechas, rendimiento).</p>
+  <figure><img class="captura" src="/media-ayuda/carga.png" alt="Formulario de carga de archivos" />
+  <figcaption>Figura 7 — Carga manual de mediciones y de historial de ciclos.</figcaption></figure>
+</section>
+
+<section class="paso" id="p11">
+  <h2><span class="num">11</span> Recomendaciones y aceptación</h2>
+  <p>En <b>🧪 Recomendaciones</b> elija finca y cultivo (vacío = «¿qué me conviene sembrar?»),
+  agregue opcionalmente <b>presupuesto de fertilización</b> y <b>rendimiento actual</b>, y pulse
+  <b>🧪 Analizar suelo</b>. El motor híbrido (sistema experto UPRA/Cenicafé/AGROSAVIA + ML en sombra)
+  entrega clasificación, confianza, tabla de diagnóstico por variable y plan de acciones.</p>
+  <ul>
+    <li>Si faltan datos, el análisis sale <b>preliminar</b> con el bloque «📝 Complete los
+    parámetros esenciales» (guarde y reanalice).</li>
+    <li>Use <b>✅ Aceptar recomendación</b> para registrar el feedback (human-in-the-loop) o
+    <b>📋 Generar órdenes de trabajo</b> para crear labores.</li>
+  </ul>
+  <figure><img class="gif" src="/media-ayuda/gif-analisis.gif" alt="Animación del flujo de análisis de suelo" />
+  <figcaption>Animación 4 — Flujo completo: elegir finca → analizar → revisar el diagnóstico.</figcaption></figure>
+</section>
+
+<section class="paso" id="p12">
+  <h2><span class="num">12</span> Historial de recomendaciones</h2>
+  <p>En <b>⚙️ Administración → 📜 Historial</b> revise todas las recomendaciones emitidas con
+  fecha, cultivo, clasificación, confianza y estado. El bloque superior muestra el
+  <b>ciclo productivo activo</b> de la finca.</p>
+  <figure><img class="captura" src="/media-ayuda/historial.png" alt="Tabla del historial de recomendaciones" />
+  <figcaption>Figura 8 — Historial de recomendaciones.</figcaption></figure>
+</section>
+
+<section class="paso" id="p13">
+  <h2><span class="num">13</span> Reportes</h2>
+  <p>En <b>📄 Reportes</b> genere el documento completo del análisis de suelo: diagnóstico,
+  plano del lote, mapa de calor, sección económica con <b>ROI</b>, historial de ciclos y
+  advertencias. Puede <b>🔗 abrirlo en pestaña nueva</b> o <b>⬇ descargarlo</b> (HTML, listo
+  para imprimir en PDF). También puede <b>🧪 simular enmiendas (what-if)</b> antes de generarlo.</p>
+  <figure><img class="captura" src="/media-ayuda/reportes.png" alt="Formulario de generación de reportes" />
+  <figcaption>Figura 9 — Generación del reporte de análisis.</figcaption></figure>
+</section>
+
+<section class="paso" id="p14">
+  <h2><span class="num">14</span> Chat asesor agronómico</h2>
+  <p>El 💬 <b>Asesor agronómico</b> (en la vista de Reportes) resuelve dudas con la base de
+  conocimiento de AgroIA. Escriba su pregunta y pulse Enviar. Puede <b>📎 adjuntar una foto</b>
+  del cultivo (JPG/PNG): si la API tiene visión, la imagen se analiza; si no, queda guardada
+  como referencia de la finca.</p>
+  <figure><img class="captura" src="/media-ayuda/chat.png" alt="Chat asesor con adjunto de foto" />
+  <figcaption>Figura 10 — Chat asesor agronómico.</figcaption></figure>
+</section>
+
+<section class="paso" id="p15">
+  <h2><span class="num">15</span> Catálogo de cultivos</h2>
+  <p>En <b>🌾 Catálogo</b> consulte los 30 cultivos con sus fichas técnicas (requerimientos y
+  rangos ideales con fuentes UPRA/Cenicafé/AGROSAVIA) y gestione el flujo editorial de fichas:
+  crear, enviar a revisión, aprobar o rechazar.</p>
+  <figure><img class="captura" src="/media-ayuda/catalogo.png" alt="Catálogo de cultivos con fichas técnicas" />
+  <figcaption>Figura 11 — Catálogo de cultivos.</figcaption></figure>
+</section>
+
+<section class="paso" id="p16">
+  <div class="video-box">
+    <h2>📽️ Video — Flujo completo del Administrador</h2>
+    <div class="video-cuadro"><img id="video-img" src="/media-ayuda/login.png" alt="Video demostrativo del flujo completo" /></div>
+    <div class="video-controles">
+      <button id="video-btn">⏸ Pausar</button>
+      <div class="barra"><span id="video-barra"></span></div>
+      <small id="video-paso">Paso 1 de 13</small>
+    </div>
+  </div>
+</section>
+
+</div>
+<footer>AgroIA — AgroInteligente Colombia · Manual de usuario Administrador · 2026-08-27</footer>
+<script>
+(function () {
+  var frames = [
+    'login.png','inicio.png','sensores.png','recomendaciones.png','recomendaciones-resultado.png',
+    'historial.png','reportes.png','admin-menu.png','fincas.png','usuarios.png','insumos.png',
+    'auditoria.png','catalogo.png'
+  ];
+  var idx = 0, reproduciendo = true, timer = null;
+  var img = document.getElementById('video-img');
+  var btn = document.getElementById('video-btn');
+  var barra = document.getElementById('video-barra');
+  var paso = document.getElementById('video-paso');
+  function pintar() {
+    img.src = '/media-ayuda/' + frames[idx];
+    barra.style.width = Math.round(((idx + 1) / frames.length) * 100) + '%';
+    paso.textContent = 'Paso ' + (idx + 1) + ' de ' + frames.length;
+  }
+  function siguiente() { idx = (idx + 1) % frames.length; pintar(); }
+  function alternar() {
+    reproduciendo = !reproduciendo;
+    btn.textContent = reproduciendo ? '⏸ Pausar' : '▶ Reproducir';
+    if (reproduciendo) { timer = setInterval(siguiente, 1600); }
+    else { clearInterval(timer); }
+  }
+  btn.addEventListener('click', alternar);
+  timer = setInterval(siguiente, 1600);
+})();
+</script>
+</body>
+</html>
