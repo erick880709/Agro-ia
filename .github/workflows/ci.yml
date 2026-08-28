@@ -90,6 +90,16 @@ jobs:
         env:
           DATABASE_URL: postgresql+asyncpg://agroia:agroia_test@localhost:5432/agroia_test
 
+      - name: Seed base data (cultivos + reglas)
+        run: python load_seeds.py
+        env:
+          DATABASE_URL: postgresql+asyncpg://agroia:agroia_test@localhost:5432/agroia_test
+
+      - name: Seed usuarios y fincas demo
+        run: python scripts/seed_cloud.py
+        env:
+          DATABASE_URL: postgresql+asyncpg://agroia:agroia_test@localhost:5432/agroia_test
+
       - name: Run tests
         working-directory: apps/backend
         run: poetry run pytest tests/ -v --cov=agroia_backend --cov-report=xml
