@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787876000.2081752,
-    "ast_hash": "b04b16f04ece714700f5a6d005bf5722",
+    "mtime": 1787877324.4257462,
+    "ast_hash": "c9716cfdf478afe675be534a3717bb4c",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4830,8 +4830,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1787876345.4115098,
-    "ast_hash": "beec42038e9bd2323479fc767571f3d6",
+    "mtime": 1787877274.622891,
+    "ast_hash": "42983b6796b189181dd1c9b5b27a86ba",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {
@@ -4855,8 +4855,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Pantallas_AgroIA.html": {
-    "mtime": 1787876345.4149005,
-    "ast_hash": "5cd89f22ba27fe5228f0db144d8e65e0",
+    "mtime": 1787877303.1817446,
+    "ast_hash": "318e1eb9e275bbba009e5d9ecc5176ec",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/economia.py": {

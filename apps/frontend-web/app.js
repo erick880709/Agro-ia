@@ -419,9 +419,14 @@ function poblarMunicipios() {
 function aplicarRol() {
   const rol = (state.rol || '').toLowerCase();
   const permitidas = TABS_POR_ROL[rol] || [];
+  // Para Admin, «Fincas» e «Historial» ya están en el menú ⚙️ Administración:
+  // se ocultan de la barra superior para no duplicarlas.
+  const topOcultas = rol === 'admin' ? ['fincas', 'historial'] : [];
+  const enSubmenuAdmin = t => !!t.closest('#admin-submenu');
   document.querySelectorAll('.tab').forEach(t => {
-    if (!t.dataset.tab) return;  // botones de menú (dropdown) sin pestaña propia
-    t.style.display = permitidas.includes(t.dataset.tab) ? '' : 'none';
+    if (!t.dataset.tab || enSubmenuAdmin(t)) return;
+    const visible = permitidas.includes(t.dataset.tab) && !topOcultas.includes(t.dataset.tab);
+    t.style.display = visible ? '' : 'none';
   });
   const formCard = document.getElementById('finca-form-card');
   if (formCard) formCard.style.display = rol === 'admin' ? '' : 'none';

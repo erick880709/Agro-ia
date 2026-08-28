@@ -214,11 +214,12 @@ Cada petición `fetch` lleva:
 **desplegable** las secciones administrativas: **🏡 Registrar finca** (wizard completo de 3 pasos
 en su propia vista), **�️ Fincas** (listado de fincas), **📜 Historial** (recomendaciones),
 **👥 Administrar usuarios**, **💰 Administrar insumos** (página propia con la tabla de precios
-dinámicos) y **🕵️ Auditoría**. La pestaña «Fincas» quedó solo con el listado de fincas
-registradas. El desplegable es **flotante**: se posiciona con `position: fixed` sobre el
-contenido de la página (escapa del `overflow` del nav), se abre hacia arriba cuando no cabe
-abajo, se reposiciona en `scroll`/`resize` y se cierra al elegir una opción o al hacer clic
-fuera. No aparece para Agrónomo ni Cliente.
+dinámicos) y **🕵️ Auditoría**. Para el Admin, «Fincas» e «Historial» **ya no aparecen como
+pestañas en la barra superior** (solo en el menú, sin duplicarlas); para Agrónomo y Cliente,
+«Historial» sigue visible en la barra superior porque no tienen el menú Administración.
+El desplegable es **flotante**: se posiciona con `position: fixed` sobre el contenido de la
+página (escapa del `overflow` del nav), se abre hacia arriba cuando no cabe abajo, se
+reposiciona en `scroll`/`resize` y se cierra al elegir una opción o al hacer clic fuera.
 
 ---
 

@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787877324.4257462,
-    "ast_hash": "c9716cfdf478afe675be534a3717bb4c",
+    "mtime": 1787877651.9534223,
+    "ast_hash": "16465bfb30981ca7ed28198be28c5483",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787876972.9837365,
-    "ast_hash": "df26c89e557e0b806560f573eed31a72",
+    "mtime": 1787877594.3608391,
+    "ast_hash": "2dfeb699aaeccf52f4e1c03df7671885",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787876915.6614013,
-    "ast_hash": "c92972095036f7644376add48b5ba552",
+    "mtime": 1787877555.9310966,
+    "ast_hash": "9af94f7217726fb6ee82ce88d36be2a7",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4830,8 +4830,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1787877274.622891,
-    "ast_hash": "42983b6796b189181dd1c9b5b27a86ba",
+    "mtime": 1787877651.9555607,
+    "ast_hash": "bce4d445095c9a4c12cb72750f75bbca",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {
@@ -4855,8 +4855,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Pantallas_AgroIA.html": {
-    "mtime": 1787877303.1817446,
-    "ast_hash": "318e1eb9e275bbba009e5d9ecc5176ec",
+    "mtime": 1787877651.9600103,
+    "ast_hash": "9b00b12fa65390244057df9e993e1322",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/economia.py": {
