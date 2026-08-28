@@ -7,7 +7,7 @@ const API = '/api/v1';
 const SESION_KEY = 'agroia_sesion';
 
 const TABS_POR_ROL = {
-  admin: ['inicio', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'usuarios', 'auditoria', 'catalogo'],
+  admin: ['inicio', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'catalogo'],
   agronomo: ['inicio', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'catalogo'],
   cliente: ['inicio', 'sensores', 'historial', 'reportes', 'catalogo'],
 };
@@ -182,11 +182,11 @@ function goTab(name) {
   if (name === 'sensores') cargarSensores();
   if (name === 'inicio') cargarDashboard();
   if (name === 'fincas' && state.rol.toLowerCase() === 'admin') renderFincasList();
-  if (name === 'usuarios' && state.rol.toLowerCase() === 'admin') {
-    cargarUsuarios();
-    cargarPreciosInsumos();
-  }
+  if (name === 'usuarios' && state.rol.toLowerCase() === 'admin') cargarUsuarios();
+  if (name === 'insumos' && state.rol.toLowerCase() === 'admin') cargarPreciosInsumos();
   if (name === 'auditoria' && state.rol.toLowerCase() === 'admin') cargarAuditoria();
+  const sub = document.getElementById('admin-submenu');
+  if (sub) sub.classList.remove('open');
 }
 
 /* ─────────────────────────── carga inicial ─────────────────────────── */
@@ -209,8 +209,25 @@ async function init() {
 }
 
 async function arrancarAplicacion() {
-  document.querySelectorAll('.tab').forEach(t =>
-    t.addEventListener('click', () => goTab(t.dataset.tab)));
+  document.querySelectorAll('.tab').forEach(t => {
+    if (!t.dataset.tab) return;
+    t.addEventListener('click', () => goTab(t.dataset.tab));
+  });
+
+  // ── Menú desplegable de Administración ──
+  const adminBtn = document.getElementById('admin-menu-btn');
+  const adminSub = document.getElementById('admin-submenu');
+  if (adminBtn && adminSub) {
+    adminBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      adminSub.classList.toggle('open');
+    });
+    document.addEventListener('click', e => {
+      if (!adminSub.contains(e.target) && e.target !== adminBtn) {
+        adminSub.classList.remove('open');
+      }
+    });
+  }
 
   aplicarRol();
 
@@ -372,6 +389,7 @@ function aplicarRol() {
   const rol = (state.rol || '').toLowerCase();
   const permitidas = TABS_POR_ROL[rol] || [];
   document.querySelectorAll('.tab').forEach(t => {
+    if (!t.dataset.tab) return;  // botones de menú (dropdown) sin pestaña propia
     t.style.display = permitidas.includes(t.dataset.tab) ? '' : 'none';
   });
   const formCard = document.getElementById('finca-form-card');

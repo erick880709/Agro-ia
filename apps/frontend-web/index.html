@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AgroIA · AgroInteligente Colombia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="/styles.css?v=20260827-latlng" />
+  <link rel="stylesheet" href="/styles.css?v=20260827-adminnav" />
 </head>
 <body>
   <!-- ============ PANTALLA DE AUTENTICACIÓN ============ -->
@@ -64,9 +64,16 @@
     <button class="tab" data-tab="historial">📜 Historial</button>
     <button class="tab" data-tab="reportes">📄 Reportes</button>
     <button class="tab" data-tab="fincas">🏡 Fincas</button>
-    <button class="tab" data-tab="usuarios">👥 Usuarios</button>
-    <button class="tab" data-tab="auditoria">🕵️ Auditoría</button>
     <button class="tab" data-tab="catalogo">🌾 Catálogo</button>
+    <div class="tab-dropdown" data-roles="admin">
+      <button type="button" class="tab" id="admin-menu-btn">⚙️ Administración ▾</button>
+      <div class="tab-submenu" id="admin-submenu">
+        <button class="tab submenu-item" data-tab="reg-finca">🏡 Registrar finca</button>
+        <button class="tab submenu-item" data-tab="usuarios">👥 Administrar usuarios</button>
+        <button class="tab submenu-item" data-tab="insumos">💰 Administrar insumos</button>
+        <button class="tab submenu-item" data-tab="auditoria">🕵️ Auditoría</button>
+      </div>
+    </div>
   </nav>
 
   <main>
@@ -336,8 +343,8 @@
     </section>
 
     <!-- ============ FINCAS (solo administrador registra) ============ -->
-    <section id="view-fincas" class="view">
-      <div class="grid-2">
+    <!-- ============ REGISTRAR FINCA (Administración) ============ -->
+    <section id="view-reg-finca" class="view">
         <div class="card" id="finca-form-card">
           <h2>🏡 Registrar finca <span class="muted">(solo administrador)</span></h2>
           <form id="form-finca" class="form-grid" novalidate>
@@ -501,10 +508,13 @@
           <div id="finca-msg"></div>
           <div id="finca-validaciones"></div>
         </div>
-        <div class="card">
-          <h2>🗂️ Fincas registradas</h2>
-          <div id="fincas-lista"></div>
-        </div>
+    </section>
+
+    <!-- ============ FINCAS (listado y gestión de lotes/ciclos) ============ -->
+    <section id="view-fincas" class="view">
+      <div class="card">
+        <h2>🗂️ Fincas registradas</h2>
+        <div id="fincas-lista"></div>
       </div>
     </section>
 
@@ -558,13 +568,17 @@
           <h2>🗂️ Usuarios registrados</h2>
           <div id="usuarios-lista"></div>
         </div>
-        <div class="card" style="grid-column: 1 / -1">
-          <h2>💰 Precios de insumos <span class="muted">(solo administrador — alimenta el ROI)</span></h2>
-          <p class="muted">Precio por kilogramo en COP. Si un producto no tiene registro, el plan
-          económico usa el costo estático de referencia y lo advierte en el análisis/reporte.</p>
-          <div id="precios-lista"></div>
-          <div id="precios-msg"></div>
-        </div>
+      </div>
+    </section>
+
+    <!-- ============ INSUMOS (Administración) ============ -->
+    <section id="view-insumos" class="view">
+      <div class="card">
+        <h2>💰 Administrar insumos <span class="muted">(solo administrador — alimenta el ROI)</span></h2>
+        <p class="muted">Precio por kilogramo en COP. Si un producto no tiene registro, el plan
+        económico usa el costo estático de referencia y lo advierte en el análisis/reporte.</p>
+        <div id="precios-lista"></div>
+        <div id="precios-msg"></div>
       </div>
     </section>
     <!-- ============ AUDITORÍA (solo administrador) ============ -->
@@ -618,7 +632,7 @@
     AgroIA v0.1.0 · Motor: sistema experto (reglas UPRA/Cenicafé/AGROSAVIA) · ML en modo sombra
   </footer>
 
-  <script src="/departamentos.js?v=20260827-latlng"></script>
-  <script src="/app.js?v=20260827-latlng"></script>
+  <script src="/departamentos.js?v=20260827-adminnav"></script>
+  <script src="/app.js?v=20260827-adminnav"></script>
 </body>
 </html>

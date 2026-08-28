@@ -3695,8 +3695,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/main.py": {
-    "mtime": 1787874532.382493,
-    "ast_hash": "58e6cb07e52b3acafa30520948e3b866",
+    "mtime": 1787875187.7014751,
+    "ast_hash": "079235012e39259c4eed2e82069b1418",
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787874932.7760675,
-    "ast_hash": "33e314534d093f4152ca7619ce003a42",
+    "mtime": 1787876000.2081752,
+    "ast_hash": "b04b16f04ece714700f5a6d005bf5722",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787874532.4014006,
-    "ast_hash": "7db5e439d2a7432f1fe679828ed5be3d",
+    "mtime": 1787875248.0770965,
+    "ast_hash": "d96f754c98cc959282521bb3dad0720c",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787874532.3993807,
-    "ast_hash": "5b18152de2b901c877d597d75801986f",
+    "mtime": 1787875287.3179827,
+    "ast_hash": "bffeb4c1781c572f4de80e96cddd960b",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4830,8 +4830,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1787874647.9367013,
-    "ast_hash": "1d0553d7499c6d0ee97b3b50db9c51c5",
+    "mtime": 1787875711.1774013,
+    "ast_hash": "099d659a6cecede40e14e481c9a587cf",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {
@@ -4855,8 +4855,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Pantallas_AgroIA.html": {
-    "mtime": 1787874736.0018413,
-    "ast_hash": "8fe1bfa6d0264b1611338c722c04f5f8",
+    "mtime": 1787875730.4746006,
+    "ast_hash": "6fe867a4b41f24c66b6b6b6424b09c80",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/economia.py": {
@@ -4915,13 +4915,13 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/ciclos.py": {
-    "mtime": 1787863928.7750661,
-    "ast_hash": "634c4298ce040a22244c692f77c3608e",
+    "mtime": 1787875127.7587204,
+    "ast_hash": "d0f38539606bc2bc0f9093a731abfe88",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/ciclo_lote.py": {
-    "mtime": 1787862248.3154316,
-    "ast_hash": "579fd71cbafbb04f461b427a8970e312",
+    "mtime": 1787875079.480949,
+    "ast_hash": "a6af2357f0140c4953569f67ea5ccbab",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/016_historial_ciclos_lote.py": {
@@ -4940,13 +4940,13 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/labores.py": {
-    "mtime": 1787865714.6889563,
-    "ast_hash": "6126e6dfebfcddaf978a4f68cd291d4e",
+    "mtime": 1787875248.0888808,
+    "ast_hash": "e935ac6e2917493031374476e877b0ea",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/labor.py": {
-    "mtime": 1787865550.8399887,
-    "ast_hash": "4a65d1b11bbb8936080c2edcd55790c2",
+    "mtime": 1787875079.4829657,
+    "ast_hash": "c65398f06786fc1200089106271e24b4",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/018_labores.py": {
@@ -4975,8 +4975,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/ml_labels.py": {
-    "mtime": 1787870154.6573365,
-    "ast_hash": "29647ba45e73e47d18e99cddb7f0dfd2",
+    "mtime": 1787875118.1727471,
+    "ast_hash": "16baccd9ba0f3e9bfb61e4f43fd30b4f",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/sig.py": {
@@ -5007,6 +5007,21 @@
   "apps/backend/alembic/versions/021_precios_insumos.py": {
     "mtime": 1787874532.4174507,
     "ast_hash": "4ef6f943a058fc6ac3e5df304f09c402",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/mantenimiento.py": {
+    "mtime": 1787875147.2011578,
+    "ast_hash": "6ddc21b879dda452c9b9fdf7aa2d9aab",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/mantenimiento.py": {
+    "mtime": 1787875642.1291423,
+    "ast_hash": "188f9a7cffd1af742ec1198738979321",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/022_imagenes_y_validacion_rendimiento.py": {
+    "mtime": 1787875515.4516187,
+    "ast_hash": "6e0b81ac15ada1e09dc6a4175c7ecc1c",
     "semantic_hash": ""
   }
 }
