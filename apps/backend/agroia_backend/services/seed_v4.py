@@ -13,34 +13,34 @@ from agroia_backend.models.variedad_cultivo import VariedadCultivo
 
 CULTIVOS_NUEVOS = [
     {"nombre": "Panela / Caña panelera", "nombre_cientifico": "Saccharum officinarum (var. panelera)",
-     "icono": "custom:panela_v1",
+     "icono": "🟫",
      "descripcion": "Principal producto agrícola exclusivamente colombiano; ~200.000 ha, 350.000 familias (Fedepanela).",
      "profundidad_radicular_min_cm": 60, "dias_ciclo": 450, "kc": (0.40, 1.00, 0.75)},
     {"nombre": "Ñame", "nombre_cientifico": "Dioscorea alata", "icono": "🍠",
      "descripcion": "Tubérculo de la región Caribe (Córdoba, Sucre).",
      "profundidad_radicular_min_cm": 50, "dias_ciclo": 300, "kc": (0.50, 0.90, 0.65)},
-    {"nombre": "Chontaduro", "nombre_cientifico": "Bactris gasipaes", "icono": "custom:chontaduro_v1",
+    {"nombre": "Chontaduro", "nombre_cientifico": "Bactris gasipaes", "icono": "🌴",
      "descripcion": "Palma del Pacífico y Amazonía, fruto rico en proteína y aceite.",
      "profundidad_radicular_min_cm": 80, "dias_ciclo": 365, "kc": (0.70, 0.90, 0.80)},
-    {"nombre": "Lulo", "nombre_cientifico": "Solanum quitoense", "icono": "custom:lulo_v1",
+    {"nombre": "Lulo", "nombre_cientifico": "Solanum quitoense", "icono": "🍊",
      "descripcion": "Frutal andino de clima medio; lulo de Castilla (Agrosavia).",
      "profundidad_radicular_min_cm": 40, "dias_ciclo": 240, "kc": (0.60, 0.95, 0.75)},
     {"nombre": "Mora", "nombre_cientifico": "Rubus glaucus", "icono": "🫐",
      "descripcion": "Mora de Castilla, frutal de clima frío moderado (Agrosavia).",
      "profundidad_radicular_min_cm": 45, "dias_ciclo": 300, "kc": (0.55, 0.85, 0.70)},
-    {"nombre": "Guayaba", "nombre_cientifico": "Psidium guajava", "icono": "custom:guayaba_v1",
+    {"nombre": "Guayaba", "nombre_cientifico": "Psidium guajava", "icono": "🍐",
      "descripcion": "Cadena guayaba-bocadillo (Santander); Corpoica.",
      "profundidad_radicular_min_cm": 70, "dias_ciclo": 330, "kc": (0.60, 0.85, 0.75)},
-    {"nombre": "Granadilla / Curuba", "nombre_cientifico": "Passiflora ligularis", "icono": "custom:granadilla_v1",
+    {"nombre": "Granadilla / Curuba", "nombre_cientifico": "Passiflora ligularis", "icono": "🟠",
      "descripcion": "Frutales pasifloráceas de clima frío (Agrosavia).",
      "profundidad_radicular_min_cm": 50, "dias_ciclo": 270, "kc": (0.60, 0.85, 0.75)},
     {"nombre": "Arveja", "nombre_cientifico": "Pisum sativum", "icono": "🫛",
      "descripcion": "Leguminosa de clima frío (FAO/Agrosavia).",
      "profundidad_radicular_min_cm": 35, "dias_ciclo": 110, "kc": (0.50, 0.90, 0.60)},
-    {"nombre": "Habichuela", "nombre_cientifico": "Phaseolus vulgaris", "icono": "custom:habichuela_v1",
+    {"nombre": "Habichuela", "nombre_cientifico": "Phaseolus vulgaris", "icono": "🥬",
      "descripcion": "Hortaliza leguminosa de Cundinamarca-Boyacá (Agrosavia).",
      "profundidad_radicular_min_cm": 35, "dias_ciclo": 90, "kc": (0.50, 0.90, 0.60)},
-    {"nombre": "Ahuyama / Auyama", "nombre_cientifico": "Cucurbita maxima", "icono": "custom:ahuyama_v1",
+    {"nombre": "Ahuyama / Auyama", "nombre_cientifico": "Cucurbita maxima", "icono": "🟧",
      "descripcion": "Hortaliza de clima cálido y medio (Agrosavia).",
      "profundidad_radicular_min_cm": 45, "dias_ciclo": 120, "kc": (0.50, 0.95, 0.70)},
     {"nombre": "Fresa", "nombre_cientifico": "Fragaria × ananassa", "icono": "🍓",
@@ -49,10 +49,10 @@ CULTIVOS_NUEVOS = [
     {"nombre": "Coco", "nombre_cientifico": "Cocos nucifera", "icono": "🥥",
      "descripcion": "Palma del Caribe y Pacífico colombiano (Agrosavia).",
      "profundidad_radicular_min_cm": 100, "dias_ciclo": 1200, "kc": (0.65, 0.95, 0.85)},
-    {"nombre": "Caucho", "nombre_cientifico": "Hevea brasiliensis", "icono": "custom:caucho_v1",
+    {"nombre": "Caucho", "nombre_cientifico": "Hevea brasiliensis", "icono": "🌳",
      "descripcion": "Programas de sustitución de cultivos (Meta, Caquetá).",
      "profundidad_radicular_min_cm": 100, "dias_ciclo": 2500, "kc": (0.60, 0.95, 0.80)},
-    {"nombre": "Fique", "nombre_cientifico": "Furcraea andina", "icono": "custom:fique_v1",
+    {"nombre": "Fique", "nombre_cientifico": "Furcraea andina", "icono": "🌵",
      "descripcion": "Fibra natural del Cauca, Nariño y Santander (Agrosavia).",
      "profundidad_radicular_min_cm": 60, "dias_ciclo": 730, "kc": (0.45, 0.70, 0.55)},
     {"nombre": "Quinua", "nombre_cientifico": "Chenopodium quinoa", "icono": "🌾",
@@ -109,6 +109,9 @@ async def sembrar_v4(db) -> dict:
             await db.execute(select(Cultivo).where(Cultivo.nombre == datos["nombre"]))
         ).scalar_one_or_none()
         if existe is not None:
+            # Repara íconos 'custom:*' previos con el emoji representativo
+            if not existe.icono or str(existe.icono).startswith("custom:"):
+                existe.icono = datos["icono"]
             continue
         kc = datos["kc"]
         db.add(Cultivo(

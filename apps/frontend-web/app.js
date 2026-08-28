@@ -13,6 +13,25 @@ const TABS_POR_ROL = {
   extensionista: ['inicio', 'zona', 'sensores', 'historial', 'reportes', 'catalogo'],
 };
 
+const ICONOS_APROXIMADOS = {
+  'custom:panela_v1': '🟫',       // bloque de panela (aproximado)
+  'custom:chontaduro_v1': '🌴',   // palma de chontaduro (aproximado)
+  'custom:lulo_v1': '🍊',         // cítrico naranja (aproximado)
+  'custom:guayaba_v1': '🍐',      // fruto redondo (aproximado)
+  'custom:granadilla_v1': '🟠',   // fruto naranja de pasiflora (aproximado)
+  'custom:habichuela_v1': '🥬',   // vaina verde (aproximado)
+  'custom:ahuyama_v1': '🟧',      // cucurbitácea naranja (aproximado)
+  'custom:caucho_v1': '🌳',       // árbol de caucho (aproximado)
+  'custom:fique_v1': '🌵',        // agave/suculenta (aproximado)
+};
+
+/** Resuelve el ícono de un cultivo: emoji directo o aproximación para 'custom:*'. */
+function iconoCultivo(icono) {
+  if (!icono) return '🌱';
+  if (String(icono).startsWith('custom:')) return ICONOS_APROXIMADOS[icono] || '🌱';
+  return icono;
+}
+
 const state = {
   fincas: [],
   cultivos: [],
@@ -1929,13 +1948,13 @@ async function cargarCultivos() {
       const sel = document.getElementById(id);
       const prev = sel.value;
       sel.innerHTML = '<option value="">— Sin cultivo (UC1) —</option>' +
-        state.cultivos.map(c => `<option value="${esc(c.id)}">${esc(c.icono || '🌱')} ${esc(c.nombre)}</option>`).join('');
+        state.cultivos.map(c => `<option value="${esc(c.id)}">${iconoCultivo(c.icono)} ${esc(c.nombre)}</option>`).join('');
       if (prev) sel.value = prev;
     }
   // Cultivos para el selector de reportes
   const repoCultivo = document.getElementById('repo-cultivo');
   repoCultivo.innerHTML = '<option value="">— Auto (top del ranking) —</option>' +
-    state.cultivos.map(c => `<option value="${esc(c.id)}">${esc(c.icono || '🌱')} ${esc(c.nombre)}</option>`).join('');
+    state.cultivos.map(c => `<option value="${esc(c.id)}">${iconoCultivo(c.icono)} ${esc(c.nombre)}</option>`).join('');
   aplicarTipoReporte();
 
   document.getElementById('catalogo-count').textContent = `(${state.catalogo.length} cultivos)`;
@@ -2845,7 +2864,7 @@ async function cargarHistorial() {
     }
     const nombreCultivo = id => {
       const c = state.cultivos.find(x => x.id === id);
-      return c ? `${c.icono || ''} ${c.nombre}` : id;
+      return c ? `${iconoCultivo(c.icono)} ${c.nombre}` : id;
     };
     div.innerHTML = `
       <div class="table-wrap"><table>
@@ -3410,7 +3429,7 @@ function renderCatalogo(q) {
       ].filter(Boolean);
       return `
       <div class="cultivo-card">
-        <div class="icono">${esc(c.icono || '🌱')}</div>
+        <div class="icono">${iconoCultivo(c.icono)}</div>
         <h3>${esc(c.nombre)}</h3>
         ${c.nombre_cientifico ? `<p><i>${esc(c.nombre_cientifico)}</i></p>` : ''}
         ${c.descripcion ? `<p>${esc(c.descripcion)}</p>` : ''}

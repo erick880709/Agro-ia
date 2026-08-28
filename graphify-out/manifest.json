@@ -4765,8 +4765,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/asegurar_enums.py": {
-    "mtime": 1787888700.9591746,
-    "ast_hash": "9c7d12901bccfb0adb15dc0071ab46d0",
+    "mtime": 1787890449.032304,
+    "ast_hash": "3f4012b3ef05888097d4a6dd80a6c504",
     "semantic_hash": ""
   },
   "reports/test_plano_clima.html": {
@@ -4780,8 +4780,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/ml.py": {
-    "mtime": 1787889918.9723618,
-    "ast_hash": "c49903b10a87ba9e5b1a8b8194aee3fb",
+    "mtime": 1787890456.1734354,
+    "ast_hash": "19635ef38b304470171e3b93aec0b9f4",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/ml_oracle.py": {
