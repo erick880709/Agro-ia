@@ -64,3 +64,4 @@ datasets/agrosavia/
 
 # logs locales de uvicorn
 _uvicorn*.log
+media/

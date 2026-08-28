@@ -3695,8 +3695,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/main.py": {
-    "mtime": 1787871866.2425134,
-    "ast_hash": "04780e762f1fc7404c506d6e6058800c",
+    "mtime": 1787874532.382493,
+    "ast_hash": "58e6cb07e52b3acafa30520948e3b866",
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
@@ -3980,8 +3980,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/orchestrator.py": {
-    "mtime": 1787871942.4400828,
-    "ast_hash": "126e2215b58efe8f6d4fe25f74c1eeac",
+    "mtime": 1787874532.4100301,
+    "ast_hash": "de64a66722ac224b4c4d46749e5b3115",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/rules_engine.py": {
@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787872522.816242,
-    "ast_hash": "150d227244dea87cc0f354981cf86f56",
+    "mtime": 1787874932.7760675,
+    "ast_hash": "33e314534d093f4152ca7619ce003a42",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4515,8 +4515,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/reportes.py": {
-    "mtime": 1787867385.2605042,
-    "ast_hash": "c1302ad8b76d3b937006cf768d70cf62",
+    "mtime": 1787874532.4077744,
+    "ast_hash": "adaec8f55307470a9b5e39e0592a055b",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/sensor_api.py": {
@@ -4570,8 +4570,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/reportes_html.py": {
-    "mtime": 1787867385.2556965,
-    "ast_hash": "a16285b449c4fb71c2a118f126bd20d2",
+    "mtime": 1787874532.402803,
+    "ast_hash": "f703adf31f3acd86bc61b57b9d4f5f86",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/003_dispositivos_iot.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787872003.1203797,
-    "ast_hash": "2d1062d9ba8d2df82e98d23804d7e8d6",
+    "mtime": 1787874532.4014006,
+    "ast_hash": "7db5e439d2a7432f1fe679828ed5be3d",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787872008.7892203,
-    "ast_hash": "8a267c4c39ba42b679dd154ebd351272",
+    "mtime": 1787874532.3993807,
+    "ast_hash": "5b18152de2b901c877d597d75801986f",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4830,8 +4830,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1787873966.754209,
-    "ast_hash": "351e7ee3f00962476a63681b998ac700",
+    "mtime": 1787874647.9367013,
+    "ast_hash": "1d0553d7499c6d0ee97b3b50db9c51c5",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {
@@ -4855,13 +4855,13 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Pantallas_AgroIA.html": {
-    "mtime": 1787873986.0747,
-    "ast_hash": "bd86dbdce957836eeb14a51bd9b57793",
+    "mtime": 1787874736.0018413,
+    "ast_hash": "8fe1bfa6d0264b1611338c722c04f5f8",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/economia.py": {
-    "mtime": 1787843942.4460163,
-    "ast_hash": "de27149c367d98dd0ddb2b6a8b6220f9",
+    "mtime": 1787874532.4100301,
+    "ast_hash": "5260edaa7b0375ce1b3041213c8a8f10",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/013_chat_imagen.py": {
@@ -4992,6 +4992,21 @@
   "apps/backend/alembic/versions/020_texturas_sig.py": {
     "mtime": 1787871737.0726004,
     "ast_hash": "04a6687f1201f51e5272446edab3d9ba",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/admin_precios.py": {
+    "mtime": 1787874532.4184527,
+    "ast_hash": "87d0f00d949977015380bbcc7c50cfa1",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/models/precio_insumo.py": {
+    "mtime": 1787874532.4174507,
+    "ast_hash": "3d82cabc2bd19cd7d4a1dc00f990212e",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/021_precios_insumos.py": {
+    "mtime": 1787874532.4174507,
+    "ast_hash": "4ef6f943a058fc6ac3e5df304f09c402",
     "semantic_hash": ""
   }
 }
