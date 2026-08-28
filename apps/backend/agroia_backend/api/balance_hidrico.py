@@ -19,6 +19,7 @@ async def balance_hidrico(
     finca_id: str,
     lote_id: str | None = Query(None),
     dias: int = Query(7, ge=1, le=14),
+    modelo: str = Query("auto", pattern="^(auto|ecmwf)$"),
     db: AsyncSession = Depends(get_db),
     x_user_role: str | None = Header(None, alias="X-User-Role"),
     x_user_email: str | None = Header(None, alias="X-User-Email"),
@@ -38,7 +39,7 @@ async def balance_hidrico(
         raise HTTPException(status_code=404, detail={
             "code": "FINCA_NOT_FOUND", "message": "La finca no está registrada.",
         })
-    resultado = await calcular_balance_hidrico(db, finca, lote_id=lote_id, dias=dias)
+    resultado = await calcular_balance_hidrico(db, finca, lote_id=lote_id, dias=dias, modelo=modelo)
     if resultado is None:
         raise HTTPException(status_code=422, detail={
             "code": "SIN_COORDENADAS",

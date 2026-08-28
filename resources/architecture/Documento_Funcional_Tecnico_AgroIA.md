@@ -178,14 +178,15 @@ Cada petición `fetch` lleva:
 
 | Rol | Pestañas visibles | Fincas visibles | Acciones de escritura |
 |---|---|---|---|
-| **Admin** | Inicio, Sensores, Carga, Recomendaciones, Historial, Reportes, Fincas, Catálogo + menú **⚙️ Administración** (Registrar finca, Usuarios, Insumos, Auditoría) | Todas | Registrar/editar fincas, aceptar recomendaciones, cambiar roles, precios de insumos, fichas del catálogo |
-| Agrónomo | Igual sin Fincas ni el menú Administración | Todas | Aceptar recomendaciones, actualizar datos agronómicos de fincas |
+| **Admin** | Inicio, Sensores, Carga, Recomendaciones, Historial, Reportes, Fincas, Catálogo + menú **⚙️ Administración** (Registrar finca, Usuarios, Insumos, Auditoría, BPA, Reentrenar ML) | Todas | Registrar/editar fincas, aceptar recomendaciones, cambiar roles, precios de insumos, fichas del catálogo, checklist BPA, reentrenar ML |
+| Agrónomo | Inicio, Sensores, Carga, Recomendaciones, Historial, Reportes, Catálogo | Todas | Aceptar recomendaciones, actualizar datos agronómicos, registrar agua de riego, monitoreo de plagas y labores |
+| **Extensionista** (v4) | **Mi zona** (landing tras login), Inicio, Sensores, Historial, Reportes, Catálogo | Solo las de sus `municipios_asignados` | **Escritura en su zona**: agua de riego (`ROL_ESCRITURA` en `agua_riego.py`), monitoreo de plagas (`plagas.py`) y checklist BPA (`bpa.py`); sin acceso a catálogo global ni auditoría |
 | **Cliente** | Inicio, Sensores, Historial, Reportes, Catálogo | Solo las ligadas a su email (`fincas_permitidas_ids`) | **Solo lectura** (`exigir_no_cliente` bloquea) |
 
 `services/acceso.py` expone tres funciones:
-- `fincas_permitidas_ids(db, rol, email)`: para Admin/Agrónomo devuelve `None` (todas); para cliente, los IDs de fincas ligadas.
-- `verificar_acceso_finca(db, rol, email, finca_id)`: 403 `FINCA_NO_AUTORIZADA` si el cliente no tiene acceso.
-- `exigir_no_cliente(rol)`: bloquea acciones de escritura para clientes.
+- `fincas_permitidas_ids(db, rol, email)`: Admin/Agrónomo devuelven `None` (todas); Extensionista filtra por `finca.municipio ∈ usuario.municipios_asignados`; cliente, los IDs de fincas ligadas.
+- `verificar_acceso_finca(db, rol, email, finca_id)`: 403 `FINCA_NO_AUTORIZADA` si el rol no tiene acceso a la finca.
+- `exigir_no_cliente(rol)`: bloquea acciones de escritura para clientes (el Extensionista **sí** puede escribir en su zona).
 
 ---
 
@@ -482,7 +483,7 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 
 ### 6.13 ⛅ Alertas climáticas proactivas
 
-**Servicio programado** (tarea asyncio en el `lifespan` de `main.py`): cada **6 horas** (primer ciclo 45 s tras el arranque) evalúa todas las fincas con coordenadas contra el **pronóstico de 7 días de Open-Meteo** (gratis, sin API key; `services/external_apis.py::fetch_pronostico_open_meteo`, timeout 12 s, degradación con gracia si falla).
+**Servicio programado** (tarea asyncio en el `lifespan` de `main.py`): cada **6 horas** (primer ciclo 45 s tras el arranque) evalúa todas las fincas con coordenadas contra el **pronóstico de 7 días de Open-Meteo** (gratis, sin API key; `services/external_apis.py::fetch_pronostico_open_meteo`, timeout 12 s, degradación con gracia si falla). Desde v2.12 el servicio admite `modelo=auto|ecmwf`: `ecmwf` consume el **modelo internacional ECMWF (IFS 0.25°)** expuesto por Open-Meteo (`models=ecmwf_ifs025`), alimentado de los **datos abiertos de ECMWF** (`https://data.ecmwf.int/forecasts`, CC BY 4.0). Nota de investigación: `smartmet-server` (fmidev) es la infraestructura del FMI (Finlandia) y su frontend público `opendata.fmi.fi` sirve solo su dominio nacional; **no expone un endpoint público de ECMWF para Colombia**, por lo que la vía JSON pública es Open-Meteo con `ecmwf_ifs025` y el repositorio de datos crudos es `data.ecmwf.int`.
 
 **Reglas** (`services/clima_alertas.py`, umbrales configurables `UMBRAL_LLUVIA_MM=20` y `UMBRAL_HELADA_C=5`):
 
@@ -495,7 +496,7 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 - `GET /api/v1/fincas/{finca_id}/alertas-climaticas/activas` — alertas activas de hoy (banner del Dashboard P1).
 - `POST /api/v1/alertas-climaticas/evaluar` (solo Admin) — disparo manual; acepta `{finca_id?, pronostico?}` con **pronóstico inyectado** para pruebas deterministas/demos.
 
-**UI**: P1 muestra el contenedor `#dashboard-alertas` sobre los KPIs con banners de colores (azul = lluvia/lixiviación, rojo = helada). El **reporte (sección N)** agrega «⛅ Pronóstico extendido (7 días)» con tabla de fecha/lluvia/T mín/T máx y avisos ⚠️/🥶 cuando supera los umbrales.
+**UI**: P1 muestra el contenedor `#dashboard-alertas` sobre los KPIs con banners de colores (azul = lluvia/lixiviación, rojo = helada). El **reporte (sección N)** agrega «⛅ Pronóstico extendido (7 días)» con tabla de fecha/lluvia/T mín/T máx y avisos ⚠️/🥶 cuando supera los umbrales; con `modelo_pronostico=ecmwf` la fuente dice **«Pronóstico según el modelo internacional ECMWF (IFS 0.25°, datos abiertos CC BY 4.0) vía Open-Meteo»**.
 
 ### 6.14 🗺️ Enriquecimiento SIG IGAC/UPRA
 
@@ -896,22 +897,22 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 
 ### 11.9 Imágenes fuera de la BD y rendimiento verificado (v2.9)
 
-### 11.10 Módulos v4 — agua, curvas, riego, plagas, variedades, rotación, BPA, notificaciones, Extensionista y ML (v2.11)
+### 11.10 Módulos v4 — agua, curvas, riego, plagas, variedades, rotación, BPA, notificaciones, Extensionista y ML (v2.12)
 
 - **Migración `023_modulos_v4`** (agrupa 023→032): tablas `analisis_agua_riego`, `curvas_extraccion`, `monitoreo_plagas`, `variedades_cultivo`, `compatibilidad_rotacion`, `checklist_bpa`, `periodos_carencia`, `preferencias_notificacion`; columnas `kc_inicial/medio/final` en `cultivos` y `resistencia_penetracion_kpa` en `lotes`; enum `rolusuario` + `usuarios.municipios_asignados` (Extensionista).
 - **1.A Agua de riego (FAO-29)**: `POST/GET /api/v1/fincas/{id}/agua-riego` — clasifica CE/RAS/cloruros/boro en ninguna | leve_moderada | severa con recomendación; datos estáticos versionados, no API externa.
 - **1.B Curvas de extracción**: `GET/PUT /api/v1/cultivos/{id}/curva-extraccion` (también bajo `/api/v1/catalogo/...`); sin curva el motor usa el rango estático (degradación).
-- **1.C Balance hídrico ETo/Kc**: `GET /api/v1/fincas/{id}/balance-hidrico?dias=7` — Open-Meteo `et0_fao_evapotranspiration` × Kc (FAO-56, genérico por categoría si falta) − lluvia; bloque «💧 Necesidad de riego» en P1 y sección R del reporte.
-- **1.D Monitoreo de plagas (MIP)**: `POST/GET /api/v1/fincas/{id}/lotes/{lote_id}/monitoreo-plagas` con enriquecimiento informativo GBIF (`total_ocurencias_co`); botón «🐛 Plagas» en el panel de lote.
+- **1.C Balance hídrico ETo/Kc**: `GET /api/v1/fincas/{id}/balance-hidrico?dias=7&modelo=auto|ecmwf` — Open-Meteo `et0_fao_evapotranspiration` × Kc (FAO-56, genérico por categoría si falta) − lluvia; bloque «💧 Necesidad de riego» en P1 y sección R del reporte. `modelo=ecmwf` usa el **modelo internacional ECMWF (IFS 0.25°, open data CC BY 4.0)**. Nota de contrato: `lote_id` se acepta pero hoy `cultivo_sembrado`/`etapa_fenologica` viven a nivel de finca; cuando se muevan a nivel de lote (fincas multi-lote con cultivos distintos) el Kc se recalculará por lote.
+- **1.D Monitoreo de plagas (MIP)**: `POST/GET /api/v1/fincas/{id}/lotes/{lote_id}/monitoreo-plagas` con enriquecimiento informativo GBIF (`total_ocurrencias_co`); botón «🐛 Plagas» en el panel de lote.
 - **1.E Variedades**: `GET /api/v1/cultivos/{id}/variedades?altitud_msnm=` filtra por compatibilidad altitudinal (semilla café Cenicafé); botón «🌾 Variedades» en Catálogo.
-- **1.F Rotación**: `GET /api/v1/fincas/{id}/recomendacion-rotacion` (último ciclo cerrado × reglas `compatibilidad_rotacion`); sección S del reporte.
+- **1.F Rotación**: `GET /api/v1/fincas/{id}/recomendacion-rotacion` (último ciclo cerrado × reglas `compatibilidad_rotacion`); sección S del reporte **y bloque «🔄 Rotación sugerida» dentro del modal «Registrar nuevo ciclo»** (botón «Usar este cultivo»).
 - **1.G Trazabilidad BPA**: `GET/PUT /api/v1/fincas/{id}/bpa/checklist` (checklist ICA 30021/2017) y `GET .../bpa/reporte-trazabilidad` (labores + períodos de carencia); sección B del reporte y página «📋 Trazabilidad / BPA» en Administración.
 - **1.H Compactación**: `resistencia_penetracion_kpa` opcional en `PATCH /fincas/{id}/lotes/{lote_id}`.
 - **1.I Notificaciones**: `GET/PUT /api/v1/fincas/{id}/notificaciones/preferencias` (whatsapp|sms|email|ninguno); `services/notificaciones.py::enviar_whatsapp()` degrada a no-op sin `WHATSAPP_TOKEN/PHONE_NUMBER_ID`; el job de mantenimiento notifica labores que vencen en ≤ 2 días.
 - **1.J Extensionista**: `GET /api/v1/extensionista/dashboard-zona` filtra fincas por `municipios_asignados`; `acceso.py` extiende `fincas_permitidas_ids`; pestaña «🗺️ Mi zona» (landing tras login) y demo de un clic.
 - **2 Catálogo ampliado**: 15 cultivos (panela, ñame, chontaduro, lulo, mora, guayaba, granadilla/curuba, arveja, habichuela, ahuyama, fresa, coco, caucho, fique, quinua) con Kc; `POST /catalogo/cultivos` ahora exige `icono` (422 `ICONO_REQUERIDO`). Los 9 productos sin emoji exacto tienen **íconos vectoriales SVG propios** en `apps/frontend-web/img/iconos/` (panela, chontaduro, lulo, guayaba, granadilla, habichuela, ahuyama, caucho, fique) que el catálogo muestra como imagen; el resto de la UI usa el emoji aproximado.
 - **3 Reentrenamiento ML**: `POST /api/v1/admin/ml/reentrenar` (Admin) encola `train_colombia.py` en background; página «🤖 Reentrenar modelo» en Administración. Siembra idempotente vía `POST /api/v1/admin/v4/sembrar` y `scripts/seed_v4.py`.
-- **Reporte**: nuevas secciones R (riego), S (rotación), B (BPA) junto a Q (labores). Regla de degradación: sin datos, las secciones se omiten sin bloquear el análisis.
+- **Reporte**: nuevas secciones R (riego), S (rotación), B (BPA) junto a Q (labores). Regla de degradación: sin datos, las secciones se omiten sin bloquear el análisis. El formulario de generación incluye selector de **modelo del pronóstico** (`auto` | **ECMWF IFS 0.25°**) que marca la sección N con «Pronóstico según el modelo internacional ECMWF».
 
 ---
 - **Chat**: job diario borra `imagen_base64` con más de 90 días (`POST /api/v1/admin/chat/limpiar-imagenes` para disparo manual).

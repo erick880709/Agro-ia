@@ -975,6 +975,7 @@ def _seccion_plano_lote(
     cultivo_nombre: str | None = None,
     historial_ciclos: list[dict] | None = None,
     pronostico_extendido: list[dict] | None = None,
+    modelo_pronostico: str = "auto",
 ) -> str:
     """Plano del lote: dibujo de los puntos de muestreo (pos_x, pos_y).
 
@@ -1252,6 +1253,11 @@ def _seccion_plano_lote(
     # ── Pronóstico extendido (7 días) para la sección N ──
     pronostico_html = ""
     if pronostico_extendido:
+        fuente = (
+            "Pronóstico según el modelo internacional <b>ECMWF</b> (IFS 0.25°, datos abiertos CC BY 4.0) vía Open-Meteo."
+            if (modelo_pronostico or "auto").lower() == "ecmwf"
+            else "Fuente: Open-Meteo (mejor modelo disponible)."
+        )
         filas_pron = []
         for d in pronostico_extendido:
             lluvia = d.get("precipitacion_mm")
@@ -1277,8 +1283,8 @@ def _seccion_plano_lote(
             '<tr><th>Fecha</th><th>Lluvia</th><th>T mín</th><th>T máx</th></tr>'
             + "".join(filas_pron)
             + '</table></div>'
-            '<p class="muted">Fuente: Open-Meteo. Lluvias > 20 mm/24h pueden ' 
-            'lavar fertilizantes; temperaturas < 5 °C en floración generan ' 
+            f'<p class="muted">{fuente} Lluvias > 20 mm/24h pueden '
+            'lavar fertilizantes; temperaturas < 5 °C en floración generan '
             'alerta de helada.</p></div>'
         )
 
@@ -1537,6 +1543,7 @@ def generar_reporte_html(
     prediccion_rendimiento: dict | None = None,
     advertencia_acumulacion: str | None = None,
     pronostico_extendido: list[dict] | None = None,
+    modelo_pronostico: str = "auto",
     labores: list[dict] | None = None,
     balance_hidrico: dict | None = None,
     rotacion: dict | None = None,
@@ -1567,6 +1574,7 @@ def generar_reporte_html(
         muestras, finca, clima, cultivo_nombre,
         historial_ciclos=historial_ciclos,
         pronostico_extendido=pronostico_extendido,
+        modelo_pronostico=modelo_pronostico,
     )
 
     # Parámetros faltantes: aviso para un reporte con mayor detalle

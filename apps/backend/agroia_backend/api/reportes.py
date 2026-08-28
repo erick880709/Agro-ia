@@ -144,6 +144,10 @@ class ReporteRequest(BaseModel):
     finca_id: str = Field(..., description="UUID de la finca a reportar")
     tipo: str = Field("completo", pattern="^(siembra|cultivo|completo)$")
     cultivo_id: str | None = Field(None, description="UUID del cultivo sembrado (obligatorio en tipo 'cultivo')")
+    modelo_pronostico: str = Field(
+        "auto", pattern="^(auto|ecmwf)$",
+        description="Modelo del pronóstico: auto (mejor disponible) o ecmwf (ECMWF IFS 0.25°)",
+    )
     presupuesto_cop: float | None = Field(
         None, ge=0, description="Presupuesto de fertilización ($/ha) para el plan económico (opcional)"
     )
@@ -381,14 +385,15 @@ async def generar_reporte(
         from agroia_backend.services.external_apis import fetch_pronostico_open_meteo
 
         pronostico_extendido = await fetch_pronostico_open_meteo(
-            float(finca.latitud), float(finca.longitud), dias=7
+            float(finca.latitud), float(finca.longitud), dias=7,
+            modelo=body.modelo_pronostico,
         )
 
     # ── v4: balance hídrico, rotación y avance BPA para el reporte ──
     from agroia_backend.api.rotacion import calcular_rotacion
     from agroia_backend.services.balance_hidrico import calcular_balance_hidrico
 
-    balance_hidrico = await calcular_balance_hidrico(db, finca, dias=7)
+    balance_hidrico = await calcular_balance_hidrico(db, finca, dias=7, modelo=body.modelo_pronostico)
     rotacion = await calcular_rotacion(db, finca_uuid)
     checklist = (
         await db.execute(select(ChecklistBpa).where(ChecklistBpa.finca_id == finca_uuid))
@@ -459,6 +464,7 @@ async def generar_reporte(
         prediccion_rendimiento=prediccion_rendimiento,
         advertencia_acumulacion=advertencia_acumulacion,
         pronostico_extendido=pronostico_extendido,
+        modelo_pronostico=body.modelo_pronostico,
         labores=labores_report,
         balance_hidrico=balance_hidrico,
         rotacion=rotacion,

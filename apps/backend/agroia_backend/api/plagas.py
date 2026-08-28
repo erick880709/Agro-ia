@@ -35,7 +35,7 @@ class MonitoreoRequest(BaseModel):
     foto_url: str | None = Field(None, max_length=500)
 
 
-def _gbif_ocurencias(nombre_cientifico: str | None) -> dict | None:
+def _gbif_ocurrencias(nombre_cientifico: str | None) -> dict | None:
     """Conteo de ocurrencias reportadas en Colombia (GBIF, sin API key)."""
     if not nombre_cientifico:
         return None
@@ -49,7 +49,7 @@ def _gbif_ocurencias(nombre_cientifico: str | None) -> dict | None:
         req = urllib.request.Request(url, headers={"User-Agent": "AgroIA/0.1"})
         with urllib.request.urlopen(req, timeout=15) as r:
             data = json.loads(r.read().decode("utf-8"))
-        return {"total_ocurencias_co": int(data.get("count") or 0)}
+        return {"total_ocurrencias_co": int(data.get("count") or 0)}
     except Exception as e:  # noqa: BLE001 — enriquecimiento informativo
         logger.warning("gbif_no_disponible", error=str(e))
         return None
@@ -115,7 +115,7 @@ async def registrar_monitoreo(
     await db.commit()
     await db.refresh(registro)
 
-    enriquecimiento = await asyncio.to_thread(_gbif_ocurencias, body.plaga_nombre_cientifico)
+    enriquecimiento = await asyncio.to_thread(_gbif_ocurrencias, body.plaga_nombre_cientifico)
     logger.info("monitoreo_plaga_registrado", finca_id=finca_id, plaga=body.plaga_nombre, rol=rol)
     return {
         **{k: v for k, v in _a_dict(registro).items()},

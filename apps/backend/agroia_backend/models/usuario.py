@@ -9,7 +9,7 @@ from datetime import datetime
 from typing import Optional
 
 from agroia.database import Base
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, func
+from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Integer, String, func
 from sqlalchemy.dialects.postgresql import ARRAY, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -23,6 +23,12 @@ class RolUsuario(str, enum.Enum):
     TECNICO = "Tecnico"
     INVESTIGADOR = "Investigador"
     EXTENSIONISTA = "Extensionista"
+
+
+# Enum con schema explícito: evita que un tipo `rolusuario` residual en el
+# schema `public` (creado en deploys antiguos sin search_path) opaque el tipo
+# real `agroia.rolusuario` y reviente los UPDATE de rol en producción.
+_ROL_ENUM = Enum(RolUsuario, name="rolusuario", schema="agroia")
 
 
 class PlanMembresia(str, enum.Enum):
@@ -52,6 +58,7 @@ class Usuario(Base, TenantMixin, TimestampMixin):
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     nombre: Mapped[str] = mapped_column(String(200), nullable=False)
     rol: Mapped[RolUsuario] = mapped_column(
+        _ROL_ENUM,
         nullable=False,
         default=RolUsuario.CLIENTE,
     )

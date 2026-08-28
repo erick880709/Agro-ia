@@ -194,12 +194,13 @@ para ser reemplazado por un Auth Service con OAuth2.</div>
 </table>
 <table>
   <tr><th>Rol</th><th>Pestañas visibles</th><th>Fincas visibles</th><th>Escritura</th></tr>
-  <tr><td><b>Admin</b></td><td>Inicio, Sensores, Carga, Recomendaciones, Historial, Reportes, <b>Fincas</b>, <b>Usuarios</b>, Catálogo</td><td>Todas</td><td>Registrar/editar fincas, aceptar recomendaciones, cambiar roles, fichas</td></tr>
-  <tr><td><b>Agrónomo</b></td><td>Igual sin Fincas ni Usuarios</td><td>Todas</td><td>Aceptar recomendaciones, datos agronómicos de fincas</td></tr>
+  <tr><td><b>Admin</b></td><td>Inicio, Sensores, Carga, Recomendaciones, Historial, Reportes, <b>Fincas</b>, <b>Usuarios</b>, Catálogo + menú <b>⚙️ Administración</b> (Registrar finca, Usuarios, Insumos, Auditoría, BPA, Reentrenar ML)</td><td>Todas</td><td>Registrar/editar fincas, aceptar recomendaciones, cambiar roles, precios de insumos, fichas, checklist BPA, reentrenar ML</td></tr>
+  <tr><td><b>Agrónomo</b></td><td>Inicio, Sensores, Carga, Recomendaciones, Historial, Reportes, Catálogo</td><td>Todas</td><td>Aceptar recomendaciones, datos agronómicos de fincas, agua de riego, monitoreo de plagas, labores</td></tr>
+  <tr><td><b>Extensionista</b> (v4)</td><td><b>🗺️ Mi zona</b> (landing tras login), Inicio, Sensores, Historial, Reportes, Catálogo</td><td>Solo las de sus <code>municipios_asignados</code></td><td><b>En su zona</b>: agua de riego, monitoreo de plagas y checklist BPA (sin catálogo global ni auditoría)</td></tr>
   <tr><td><b>Cliente</b></td><td>Inicio, Sensores, Historial, Reportes, Catálogo</td><td>Solo las ligadas a su email</td><td><b>Solo lectura</b> (<code>exigir_no_cliente</code>)</td></tr>
 </table>
-<p><code>services/acceso.py</code> expone: <code>fincas_permitidas_ids()</code> (Admin/Agrónomo → todas),
-<code>verificar_acceso_finca()</code> (403 <code>FINCA_NO_AUTORIZADA</code>) y <code>exigir_no_cliente()</code>.</p>
+<p><code>services/acceso.py</code> expone: <code>fincas_permitidas_ids()</code> (Admin/Agrónomo → todas; Extensionista → por municipio de la zona),
+<code>verificar_acceso_finca()</code> (403 <code>FINCA_NO_AUTORIZADA</code>) y <code>exigir_no_cliente()</code> (el Extensionista sí puede escribir en su zona).</p>
 
 <h2 id="s5"><span class="num">5</span>El frontend SPA: navegación y utilidades</h2>
 <p><code>apps/frontend-web/app.js</code> es una SPA sin framework (~1.400 líneas).</p>
@@ -532,7 +533,10 @@ métricas, <code>artefactos_meta</code>, <code>n_artefactos</code>, <code>oracul
   <tr><td>01</td><td>Diagnóstico UC2</td><td>Badge de clasificación + <b>estado de validación</b>, tabla con Acción, Prioridad, <b>Confiabilidad</b> y <b>Plan sugerido</b>, contexto pH, condicional NPK, respaldos, fenología</td></tr>
   <tr><td>02</td><td>Recomendación UC1</td><td>Ranking top 5 con scorebar, badge de estado, confianza real y faltantes de fertilidad</td></tr>
   <tr><td>M</td><td>Mapa de calor</td><td>Matriz de puntos <code>pos_x/pos_y</code> por variable, rampa <code>#e8f5e9→#1b5e20</code> normalizada por parámetro; en PDF se imprimen <b>todas</b> las variables</td></tr>
-  <tr><td>N</td><td>Plano del lote</td><td>SVG con puntos, cierre convexo, <b>perímetro/área</b>, pendiente y drenaje, metodología de muestreo, clima IDEAM con <b>alerta fitosanitaria específica</b> (HR &gt; 78 %) e historial de manejo</td></tr>
+  <tr><td>N</td><td>Plano del lote</td><td>SVG con puntos, cierre convexo, <b>perímetro/área</b>, pendiente y drenaje, metodología de muestreo, clima IDEAM con <b>alerta fitosanitaria específica</b> (HR &gt; 78 %), <b>⛅ Pronóstico extendido (7 días)</b> —con selector de modelo <code>auto</code> | <b>ECMWF (IFS 0.25°, datos abiertos CC BY 4.0)</b>— e historial de manejo</td></tr>
+  <tr><td>R</td><td>Necesidad de riego (v4)</td><td>Balance hídrico ETo × Kc − lluvia (7 días); admite <code>modelo=ecmwf</code> (ECMWF IFS 0.25°)</td></tr>
+  <tr><td>S</td><td>Rotación sugerida (v4)</td><td>Siguiente cultivo según último ciclo cerrado × reglas de compatibilidad</td></tr>
+  <tr><td>B</td><td>Trazabilidad BPA (v4)</td><td>Resumen del checklist ICA 30021/2017 por finca</td></tr>
   <tr><td>04</td><td>Advertencias</td><td>Calidad de datos y limitaciones (NPK sin validar, faltantes, textura)</td></tr>
   <tr><td>05</td><td>Próximos pasos</td><td>Plan de acción (completar fertilidad, umbral del 80 %)</td></tr>
 </table>
@@ -625,7 +629,7 @@ Además, <b>auto-reparación al arranque</b>:
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Documento Funcional-Técnico v1.0 · generado 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Documento Funcional-Técnico v2.12 · actualizado 2026-08-28<br>
   Fuente: repositorio erick880709/Agro-ia (master) · aplica a producción https://agroia-backend.onrender.com
 </footer>
 </body>

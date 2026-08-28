@@ -57,6 +57,25 @@ body {
 }
 .btn-ghost-sm:hover { background: rgba(255, 255, 255, 0.22); }
 
+/* Selector inline en títulos de tarjeta (modelo del pronóstico) */
+.select-inline {
+  font-size: 0.78rem;
+  padding: 3px 8px;
+  border-radius: 8px;
+  border: 1px solid #cfe3d2;
+  background: #f4faf5;
+  color: var(--verde-800, #1b5e20);
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+/* ── Bloque «Rotación sugerida» en el modal de nuevo ciclo ── */
+.rotacion-sugerida .nota { background: #eef7ef; border: 1px solid #cfe3d2; border-radius: 10px; padding: 10px 14px; margin-top: 12px; }
+.rotacion-lista { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 6px; }
+.rotacion-lista li { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.rotacion-lista .btn-ghost-sm { color: var(--verde-700); border-color: #9fc4a8; background: #fff; }
+.rotacion-lista .btn-ghost-sm:hover { background: #dcefdd; }
+
 /* ── Pantalla de autenticación ── */
 .login-screen {
   position: fixed;

@@ -59,7 +59,37 @@ async def debug_enums(
             )
         )
     ).all()
-    return {nombre: list(valores) for nombre, valores in filas}
+    # Diagnóstico de columnas `rol` (tabla, tipo real y labels del tipo)
+    columnas = (
+        await db.execute(
+            text(
+                "SELECT c.table_name, c.column_name, c.udt_schema, c.udt_name, c.data_type "
+                "FROM information_schema.columns c "
+                "WHERE c.table_schema = 'agroia' AND c.column_name = 'rol'"
+            )
+        )
+    ).mappings().all()
+    rol_columnas = []
+    for col in columnas:
+        labels = None
+        if col["udt_name"]:
+            labels = list((
+                await db.execute(
+                    text(
+                        "SELECT e.enumlabel FROM pg_enum e "
+                        "JOIN pg_type t ON t.oid = e.enumtypid "
+                        "JOIN pg_namespace n ON n.oid = t.typnamespace "
+                        "WHERE n.nspname = :n AND t.typname = :t "
+                        "ORDER BY e.enumsortorder"
+                    ),
+                    {"n": col["udt_schema"], "t": col["udt_name"]},
+                )
+            ).scalars().all())
+        rol_columnas.append({**dict(col), "labels": labels})
+    return {
+        "enums": {nombre: list(valores) for nombre, valores in filas},
+        "rol_columnas": rol_columnas,
+    }
 
 
 @admin_router.post("/admin/v4/sembrar")

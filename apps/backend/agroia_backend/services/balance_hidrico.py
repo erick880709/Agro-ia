@@ -55,8 +55,12 @@ def _kc_por_etapa(cultivo, etapa: str | None) -> tuple[float | None, bool]:
     return KC_GENERICO.get(_categoria_cultivo(cultivo.nombre), KC_GENERICO["generico"]), True
 
 
-def _fetch_et0(lat: float, lng: float, dias: int = 7) -> dict | None:
-    """ETo + precipitación diaria desde Open-Meteo (sin API key)."""
+def _fetch_et0(lat: float, lng: float, dias: int = 7, modelo: str = "auto") -> dict | None:
+    """ETo + precipitación diaria desde Open-Meteo (sin API key).
+
+    `modelo="ecmwf"` usa el modelo internacional ECMWF (IFS 0.25°);
+    `auto` usa el mejor modelo disponible en la zona.
+    """
     import json
     import urllib.parse
     import urllib.request
@@ -69,19 +73,28 @@ def _fetch_et0(lat: float, lng: float, dias: int = 7) -> dict | None:
         "forecast_days": dias,
     })
     url = f"https://api.open-meteo.com/v1/forecast?{params}"
+    if (modelo or "auto").lower() == "ecmwf":
+        url += "&models=ecmwf_ifs025"
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "AgroIA/0.1"})
         with urllib.request.urlopen(req, timeout=20) as r:
             data = json.loads(r.read().decode("utf-8"))
         daily = data.get("daily") or {}
-        return daily
+        if daily:
+            return daily
+        return None
     except Exception as e:  # noqa: BLE001 — degradación silenciosa
         logger.warning("et0_no_disponible", error=str(e))
         return None
 
 
-async def calcular_balance_hidrico(db, finca, lote_id=None, dias=7) -> dict | None:
-    """Calcula el balance hídrico de la finca. None si no hay coordenadas."""
+async def calcular_balance_hidrico(db, finca, lote_id=None, dias=7, modelo: str = "auto") -> dict | None:
+    """Calcula el balance hídrico de la finca. None si no hay coordenadas.
+
+    Nota: `lote_id` se recibe por contrato (v4) pero hoy `cultivo_sembrado` y
+    `etapa_fenologica` viven a nivel de finca; cuando se muevan a nivel de lote
+    el Kc se recalculará por lote y este parámetro cobrará efecto real.
+    """
     if finca.latitud is None or finca.longitud is None:
         return None
 
@@ -98,7 +111,12 @@ async def calcular_balance_hidrico(db, finca, lote_id=None, dias=7) -> dict | No
     etapa_txt = str(getattr(etapa, "value", etapa)) if etapa else None
 
     kc, generico = _kc_por_etapa(cultivo, etapa_txt)
-    daily = await asyncio.to_thread(_fetch_et0, float(finca.latitud), float(finca.longitud), dias)
+    modelo_ok = (modelo or "auto").lower()
+    daily = await asyncio.to_thread(_fetch_et0, float(finca.latitud), float(finca.longitud), dias, modelo_ok)
+    # Degradación: si el modelo solicitado no entrega ETo, usar el mejor disponible
+    if not daily and modelo_ok == "ecmwf":
+        daily = await asyncio.to_thread(_fetch_et0, float(finca.latitud), float(finca.longitud), dias, "auto")
+        modelo_ok = "auto"
     if not daily:
         return None
 
@@ -134,6 +152,11 @@ async def calcular_balance_hidrico(db, finca, lote_id=None, dias=7) -> dict | No
         "etapa_fenologica": etapa_txt,
         "kc_aplicado": kc,
         "kc_aplicado_generico": generico,
+        "modelo": modelo_ok,
+        "fuente_pronostico": (
+            "ECMWF IFS 0.25° (datos abiertos, CC BY 4.0) vía Open-Meteo"
+            if modelo_ok == "ecmwf" else "Open-Meteo (mejor modelo disponible)"
+        ),
         "dias": filas,
         "deficit_acumulado_7d_mm": round(deficit_acumulado, 2),
         "recomendacion": recomendacion,

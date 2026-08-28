@@ -240,6 +240,8 @@ async function init() {
   document.querySelectorAll('.demo-login').forEach(btn => {
     btn.addEventListener('click', () => loginDemo({ email: btn.dataset.email, pass: btn.dataset.pass }));
   });
+  const balanceModelo = document.getElementById('balance-modelo');
+  if (balanceModelo) balanceModelo.addEventListener('change', () => renderBalanceHidrico());
 
   if (!state.sesion) {
     loginScreen.classList.remove('oculto');
@@ -1117,10 +1119,48 @@ function abrirModalIniciarCiclo() {
       <label class="field"><span>Fecha de siembra *</span><input id="ic-siembra" type="date" required /></label>
       <label class="field"><span>Variedad (opcional)</span><input id="ic-variedad" maxlength="100" placeholder="Ej. Castillo, Caturra…" /></label>
       <label class="field"><span>Densidad de siembra (plantas/ha, opcional)</span><input id="ic-densidad" type="number" min="0" step="1" placeholder="Ej. 5000" /></label>
-    </div>`;
+    </div>
+    <div id="ic-rotacion" class="rotacion-sugerida"></div>`;
   document.getElementById('modal-msg').innerHTML = '';
   m.classList.remove('hidden');
   document.getElementById('modal-guardar').onclick = () => iniciarCiclo(fincaId);
+  cargarRotacionModal(fincaId);
+}
+
+/** Bloque «🔄 Rotación sugerida» dentro del modal de nuevo ciclo (1.F). */
+async function cargarRotacionModal(fincaId) {
+  const div = document.getElementById('ic-rotacion');
+  if (!div) return;
+  div.innerHTML = '';
+  try {
+    const r = await api(`/fincas/${fincaId}/recomendacion-rotacion`);
+    const sugerencias = (r && r.sugerencias) || [];
+    if (!sugerencias.length) return;  // regla de degradación: bloque omitido
+    const opciones = (state.cultivos || []).map(c => ({ id: c.id, nombre: c.nombre }));
+    div.innerHTML = `
+      <div class="nota">
+        <b>🔄 Rotación sugerida</b> — el último ciclo fue
+        <b>${esc(r.cultivo_actual || '—')}</b>:
+        <ul class="rotacion-lista">
+          ${sugerencias.map(s => `
+            <li>
+              🌱 <b>${esc(s.cultivo)}</b>
+              <span class="muted">· ${esc(s.motivo || s.beneficio || '')}</span>
+              <button type="button" class="btn-ghost-sm" data-rot-cultivo="${esc(s.cultivo)}">Usar este cultivo</button>
+            </li>`).join('')}
+        </ul>
+      </div>`;
+    div.querySelectorAll('[data-rot-cultivo]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const nombre = btn.dataset.rotCultivo;
+        const match = opciones.find(c => c.nombre.toLowerCase() === nombre.toLowerCase());
+        const sel = document.getElementById('ic-cultivo');
+        if (sel && match) sel.value = match.id;
+      });
+    });
+  } catch {
+    /* sin reglas o sin acceso: el bloque simplemente se omite */
+  }
 }
 
 async function iniciarCiclo(fincaId) {
@@ -2025,7 +2065,9 @@ async function renderBalanceHidrico() {
   if (!div || !state.fincaId) return;
   div.innerHTML = '<p class="muted">Calculando…</p>';
   try {
-    const r = await api(`/fincas/${state.fincaId}/balance-hidrico?dias=7`);
+    const modelo = document.getElementById('balance-modelo');
+    const q = modelo ? `&modelo=${encodeURIComponent(modelo.value || 'auto')}` : '';
+    const r = await api(`/fincas/${state.fincaId}/balance-hidrico?dias=7${q}`);
     const filas = (r.dias || []).map(d => `
       <tr>
         <td>${esc(d.fecha)}</td>
@@ -2040,7 +2082,8 @@ async function renderBalanceHidrico() {
         <thead><tr><th>Fecha</th><th>ETo mm</th><th>ETc mm</th><th>Lluvia mm</th><th>Déficit mm</th></tr></thead>
         <tbody>${filas}</tbody>
       </table></div>
-      <p><b>💧 Déficit acumulado: ${r.deficit_acumulado_7d_mm} mm</b> — ${esc(r.recomendacion || '')}</p>`;
+      <p><b>💧 Déficit acumulado: ${r.deficit_acumulado_7d_mm} mm</b> — ${esc(r.recomendacion || '')}</p>
+      <p class="muted">Fuente: ${esc(r.fuente_pronostico || 'Open-Meteo')}</p>`;
   } catch (e) {
     div.innerHTML = `<p class="muted">💧 Balance hídrico no disponible: ${esc(e.message)}</p>`;
   }
@@ -2166,7 +2209,7 @@ async function verPlagas(fincaId, loteId) {
           observaciones: document.getElementById('pg-obs').value || null,
         }),
       });
-      const gbif = res.enriquecimiento_gbif ? ` · GBIF: ${res.enriquecimiento_gbif.total_ocurencias_co} ocurrencias reportadas en Colombia` : '';
+      const gbif = res.enriquecimiento_gbif ? ` · GBIF: ${res.enriquecimiento_gbif.total_ocurrencias_co} ocurrencias reportadas en Colombia` : '';
       document.getElementById('modal-msg').innerHTML = `<p class="ok">✅ Registro guardado${gbif}.</p>`;
       await verPlagas(fincaId, loteId);
     } catch (e) { document.getElementById('modal-msg').innerHTML = errorBanner(e.message); }
@@ -3198,8 +3241,10 @@ async function enviarReporte(e) {
   const finca = document.getElementById('repo-finca').value;
   const presEl = document.getElementById('repo-presupuesto');
   const rendEl = document.getElementById('repo-rendimiento');
+  const modeloEl = document.getElementById('repo-modelo');
   const presupuesto = presEl && presEl.value ? Number(presEl.value) : null;
   const rendimiento = rendEl && rendEl.value ? Number(rendEl.value) : null;
+  const modeloPronostico = modeloEl ? modeloEl.value : 'auto';
 
   if (!finca) {
     document.getElementById('reporte-preview-card').style.display = 'none';
@@ -3216,6 +3261,7 @@ async function enviarReporte(e) {
       body: JSON.stringify({
         finca_id: finca, tipo, cultivo_id: cultivo || null,
         presupuesto_cop: presupuesto, rendimiento_actual_t_ha: rendimiento,
+        modelo_pronostico: modeloPronostico,
       }),
     });
     reporteHtmlActual = r.html;

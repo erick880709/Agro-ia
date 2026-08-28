@@ -122,12 +122,17 @@
       </div>
 
       <div class="card">
-        <h2>� Necesidad de riego <span class="muted">(próximos 7 días)</span></h2>
+        <h2>💧 Necesidad de riego <span class="muted">(próximos 7 días)</span>
+          <select id="balance-modelo" class="select-inline" title="Modelo del pronóstico">
+            <option value="auto" selected>Auto (mejor modelo)</option>
+            <option value="ecmwf">ECMWF (IFS 0.25°)</option>
+          </select>
+        </h2>
         <div id="balance-hidrico"></div>
       </div>
 
       <div class="card">
-        <h2>�📋 Tareas pendientes de hoy <span class="muted">(labores / órdenes de trabajo)</span></h2>
+        <h2>📋 Tareas pendientes de hoy <span class="muted">(labores / órdenes de trabajo)</span></h2>
         <div id="dashboard-labores"></div>
       </div>
     </section>
@@ -296,6 +301,13 @@
           <label class="field" id="repo-cultivo-wrap" style="display:none">
             <span>Cultivo sembrado</span>
             <select id="repo-cultivo"><option value="">— Auto (top del ranking) —</option></select>
+          </label>
+          <label class="field">
+            <span>Modelo del pronóstico del clima</span>
+            <select id="repo-modelo">
+              <option value="auto" selected>Auto (mejor disponible)</option>
+              <option value="ecmwf">ECMWF — modelo internacional (IFS 0.25°)</option>
+            </select>
           </label>
           <label class="field">
             <span>Presupuesto ($/ha) — opcional</span>

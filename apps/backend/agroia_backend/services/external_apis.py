@@ -379,12 +379,22 @@ async def fetch_copernicus_ndvi(lat: float, lon: float) -> dict | None:
 
 TIMEOUT_PRONOSTICO = 12.0
 
+# Modelos seleccionables de Open-Meteo. `ecmwf` = ECMWF IFS 0.25° (open data,
+# CC BY 4.0, https://data.ecmwf.int/forecasts); `auto` = mejor modelo disponible.
+MODELOS_PRONOSTICO = {
+    "auto": None,
+    "ecmwf": "ecmwf_ifs025",
+}
 
-async def fetch_pronostico_open_meteo(lat: float, lon: float, dias: int = 7) -> list[dict] | None:
+
+async def fetch_pronostico_open_meteo(
+    lat: float, lon: float, dias: int = 7, modelo: str = "auto"
+) -> list[dict] | None:
     """Pronóstico diario (lluvia y temperaturas) para los próximos `dias` días.
 
-    Usa la API pública de Open-Meteo (sin clave). Si falla, devuelve None
-    para que el llamador degrade con gracia. Formato por día:
+    Usa la API pública de Open-Meteo (sin clave). Con `modelo="ecmwf"` la
+    respuesta proviene del modelo internacional ECMWF (IFS 0.25°). Si falla,
+    devuelve None para que el llamador degrade con gracia. Formato por día:
     {fecha, precipitacion_mm, temp_min_c, temp_max_c}.
     """
     url = "https://api.open-meteo.com/v1/forecast"
@@ -395,6 +405,9 @@ async def fetch_pronostico_open_meteo(lat: float, lon: float, dias: int = 7) -> 
         "timezone": "America/Bogota",
         "forecast_days": str(int(dias)),
     }
+    modelo_openmeteo = MODELOS_PRONOSTICO.get((modelo or "auto").lower())
+    if modelo_openmeteo:
+        params["models"] = modelo_openmeteo
     try:
         async with httpx.AsyncClient(timeout=TIMEOUT_PRONOSTICO) as client:
             r = await client.get(url, params=params)

@@ -89,6 +89,13 @@
   <a href="#p9b">P9b · Insumos</a>
   <a href="#p10">P10 · Catálogo</a>
   <a href="#p11">P11 · Auditoría</a>
+  <a href="#p12a">P12A · Agua de riego</a>
+  <a href="#p12b">P12B · Necesidad de riego</a>
+  <a href="#p12c">P12C · Monitoreo de plagas</a>
+  <a href="#p12d">P12D · Trazabilidad / BPA</a>
+  <a href="#p12e">P12E · Reentrenar modelo</a>
+  <a href="#p12f">P12F · Notificaciones</a>
+  <a href="#p12g">P12G · Mi zona (Extensionista)</a>
 </nav>
 
 <h2 id="ruta">🧭 Ruta natural de trabajo</h2>
@@ -387,7 +394,8 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   (HTML imprimible a PDF) para compartir con el productor o un técnico. <b>El reporte se genera
   siempre</b>: si faltan datos, sale en modo preliminar con aviso de aval de agrónomo.</div>
   <p><b>Qué muestra:</b> selector de finca, tipo de reporte (<code>siembra</code> ·
-  <code>cultivo</code> · <code>completo</code>), campos opcionales de presupuesto ($/ha) y
+  <code>cultivo</code> · <code>completo</code>), <b>selector de modelo del pronóstico del clima</b>
+  (<code>Auto</code> | <code>ECMWF — IFS 0.25°</code>), campos opcionales de presupuesto ($/ha) y
   <b>rendimiento actual (t/ha)</b>, vista previa del HTML y botones para abrir y descargar.
   Al generar el reporte se activa el panel colapsable <b>«🧪 Simular enmienda (what-if)»</b>:
   4 sliders (pH, N, P, K) precargados con el suelo del reporte que, al moverlos, consultan
@@ -412,7 +420,10 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
     Incluye la tabla <b>«📜 Historial de ciclos»</b> con los últimos 3 ciclos del lote
     (Siembra → Aplicaciones destacadas → Cosecha → Rendimiento) y el bloque
     <b>«⛅ Pronóstico extendido (7 días)»</b> (fecha, lluvia, T mín/T máx) con avisos
-    ⚠️ lluvia fuerte (&gt; 20 mm/24h) y 🥶 riesgo de helada (&lt; 5 °C) por día.</li>
+    ⚠️ lluvia fuerte (&gt; 20 mm/24h) y 🥶 riesgo de helada (&lt; 5 °C) por día. Si se eligió
+    ECMWF, la fuente dice «Pronóstico según el modelo internacional ECMWF (IFS 0.25°)».</li>
+    <li><b>R/S/B · Secciones v4</b> — R «💧 Necesidad de riego» (balance ETo×Kc−lluvia),
+    S «🔄 Rotación sugerida» y B «📋 Trazabilidad BPA»; junto a Q «🛠️ Órdenes de trabajo».</li>
     <li><b>E · Análisis económico proyectado</b> — ganancia esperada si se aplica el plan (+15 %),
     ROI = (ganancia − costo fertilización) ÷ costo; si el ROI &lt; 1,2 muestra la alerta
     «⚠️ Inversión justa, considere subvenciones». Si se declaró el rendimiento actual, compara
@@ -424,7 +435,7 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
     últimos 2 ciclos superan 120 kg/ha de fósforo.</li>
   </ul>
   <p><b>Servicio que llama:</b> <code>POST /api/v1/reportes/generar</code> (admite
-  <code>presupuesto_cop</code> opcional para el plan económico).</p>
+  <code>presupuesto_cop</code> y <code>modelo_pronostico=auto|ecmwf</code>).</p>
   <p><span class="siguiente">Apoyo permanente → P8 Chat asesor.</span></p>
 </div>
 
@@ -498,7 +509,10 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   <code>GET/POST/PUT /api/v1/fichas/…</code> · flujo editorial
   <code>POST /fichas/{id}/enviar-revision | aprobar | rechazar</code>.</p>
   <p class="muted" style="font-size:.85rem">El catálogo + las 54 reglas agronómicas son la fuente de verdad
-  del sistema experto que emite las recomendaciones de P5.</p>
+  del sistema experto que emite las recomendaciones de P5. Cada ficha de cultivo incluye las pestañas v4
+  <b>📈 Curva de extracción</b> (Admin/Agrónomo editan), <b>🌾 Variedades</b> (compatibilidad por altitud)
+  y <b>📏 Detalle medición</b> (profundidad radicular, profundidad de inserción del sensor, segunda
+  lectura de control, procedimiento y frecuencia).</p>
 </div>
 
 <!-- ─────────── P11 ─────────── -->
@@ -519,37 +533,102 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   (tabla <code>agroia.auditoria</code>).</p>
 </div>
 
-<!-- ─────────── P12 ─────────── -->
-<div class="pantalla" id="p12">
-  <div class="cab"><span class="icono">🧩</span><span class="titulo">P12 · Módulos v4 (agua, riego, plagas, BPA, zona)</span>
-    <span class="rol">Según matriz de roles</span></div>
-  <div class="objetivo"><b>Objetivo:</b> ampliar la cobertura funcional sin bloquear nunca el análisis
-  (regla de degradación: el dato faltante se lista, no detiene el reporte).</div>
-  <ul>
-    <li><b>💧 Agua de riego</b> (botón en la tarjeta de finca): historial + registro de CE/RAS/cloruros/boro
-    con clasificación FAO-29 (ninguna · leve-moderada · severa) y recomendación.</li>
-    <li><b>💧 Necesidad de riego (7 días)</b> (bloque en P1): balance ETo × Kc − lluvia desde Open-Meteo.
-    También en la sección R del reporte.</li>
-    <li><b>🐛 Monitoreo de plagas</b> (botón en el panel de lote): registro de campo con severidad/incidencia
-    y enriquecimiento informativo GBIF (ocurrencias en Colombia).</li>
-    <li><b>📈 Curva de extracción</b> y <b>🌾 Variedades</b> (botones en cada cultivo del Catálogo), junto con <b>📏 Detalle medición</b>:
-    guía por cultivo de cómo tomar la medida con el sensor (profundidad radicular de la ficha,
-    profundidad de inserción del sensor, segunda lectura de control, procedimiento paso a paso y frecuencia).</li>
-    <li><b>📋 Trazabilidad / BPA</b> (⚙️ Administración): checklist ICA 30021 y reporte de aplicaciones con
-    período de carencia; sección B del reporte.</li>
-    <li><b>🤖 Reentrenar modelo</b> (⚙️ Administración): encola <code>train_colombia.py</code> en background.</li>
-    <li><b>🔔 Notificaciones</b> (botón en la tarjeta de finca): canal WhatsApp/SMS/email con degradación a no-op.</li>
-    <li><b>🗺️ Mi zona</b> (pestaña exclusiva del rol Extensionista, landing tras login): fincas de sus
-    municipios asignados con alertas y recomendaciones pendientes.</li>
-  </ul>
-  <p><b>Reporte:</b> nuevas secciones R (riego), S (rotación sugerida) y B (trazabilidad BPA), junto a
-  Q (órdenes de trabajo).</p>
+<!-- ─────────── P12A · Agua de riego ─────────── -->
+<div class="pantalla" id="p12a">
+  <div class="cab"><span class="icono">💧</span><span class="titulo">P12A · Agua de riego (FAO-29)</span>
+    <span class="rol">Admin · Agrónomo · Extensionista (su zona)</span></div>
+  <div class="objetivo"><b>Objetivo:</b> evaluar la calidad del agua usada para riego (CE, RAS, cloruros,
+  boro, pH) contra las tablas FAO-29 y clasificar la restricción de uso.</div>
+  <p><b>Qué muestra:</b> historial de análisis de la finca con clasificación por parámetro
+  (ninguna · leve-moderada · severa) y recomendación. Sin análisis registrados, el reporte
+  lo lista en la sección P (parámetros faltantes) — no bloquea nada.</p>
+  <p><b>Servicios que llama:</b> <code>POST /api/v1/fincas/{id}/agua-riego</code> (registra y calcula)
+  · <code>GET /api/v1/fincas/{id}/agua-riego</code> (historial). Datos estáticos FAO-29 versionados.</p>
+</div>
+
+<!-- ─────────── P12B · Necesidad de riego ─────────── -->
+<div class="pantalla" id="p12b">
+  <div class="cab"><span class="icono">🌦️</span><span class="titulo">P12B · Necesidad de riego (7 días)</span>
+    <span class="rol">Lectura: todos los roles con acceso a la finca</span></div>
+  <div class="objetivo"><b>Objetivo:</b> pasar de “se pronostica lluvia” a “su cultivo necesita X mm esta
+  semana” cruzando ETo (FAO-56) con el Kc del cultivo y la lluvia pronosticada.</div>
+  <p><b>Qué muestra:</b> tabla diaria ETo / ETc / lluvia / déficit, déficit acumulado y recomendación
+  de riego. Selector de <b>modelo del pronóstico</b>: <b>Auto</b> (mejor disponible) o
+  <b>ECMWF (IFS 0.25°, datos abiertos CC BY 4.0)</b> — el bloque indica la fuente usada.
+  Si el cultivo no tiene Kc cargado se usa un Kc genérico por categoría (marcado como tal).</p>
+  <p><b>Servicio que llama:</b> <code>GET /api/v1/fincas/{id}/balance-hidrico?dias=7&amp;modelo=auto|ecmwf</code>.
+  Bloque visible en P1 (Dashboard) y sección R del reporte.</p>
+</div>
+
+<!-- ─────────── P12C · Monitoreo de plagas ─────────── -->
+<div class="pantalla" id="p12c">
+  <div class="cab"><span class="icono">🐛</span><span class="titulo">P12C · Monitoreo de plagas (MIP)</span>
+    <span class="rol">Admin · Agrónomo · Extensionista (su zona) registran; Cliente lectura</span></div>
+  <div class="objetivo"><b>Objetivo:</b> registro real de campo (trampas / inspección visual) que retroalimenta
+  las alertas fitosanitarias con incidencia observada.</div>
+  <p><b>Qué muestra:</b> historial por lote con plaga, severidad, incidencia %, método y observaciones;
+  el alta incluye enriquecimiento informativo GBIF (<code>total_ocurrencias_co</code> en Colombia).
+  Sin registros, la alerta climática existente sigue funcionando (degradación).</p>
+  <p><b>Servicios que llama:</b> <code>POST /api/v1/fincas/{id}/lotes/{lote}/monitoreo-plagas</code> ·
+  <code>GET …/monitoreo-plagas</code>. Enriquecimiento: <code>api.gbif.org</code> (gratis, sin key).</p>
+</div>
+
+<!-- ─────────── P12D · Trazabilidad / BPA ─────────── -->
+<div class="pantalla" id="p12d">
+  <div class="cab"><span class="icono">📋</span><span class="titulo">P12D · Trazabilidad / BPA</span>
+    <span class="rol">Admin diligencian; Agrónomo consulta</span></div>
+  <div class="objetivo"><b>Objetivo:</b> convertir el registro de labores en un reporte de trazabilidad usable
+  para certificación BPA (Resolución ICA 30021 de 2017).</div>
+  <p><b>Qué muestra:</b> checklist por finca (suelo/agua · agroquímicos · trabajadores · poscosecha)
+  y reporte que cruza labores (producto/dosis/fecha) con períodos de carencia.
+  Ítems sin diligenciar se marcan “pendiente de verificación” — no bloquea.</p>
+  <p><b>Servicios que llama:</b> <code>GET/PUT /api/v1/fincas/{id}/bpa/checklist</code> ·
+  <code>GET /api/v1/fincas/{id}/bpa/reporte-trazabilidad</code>. Sección B del reporte.</p>
+</div>
+
+<!-- ─────────── P12E · Reentrenar modelo ─────────── -->
+<div class="pantalla" id="p12e">
+  <div class="cab"><span class="icono">🤖</span><span class="titulo">P12E · Reentrenar modelo ML</span>
+    <span class="rol">Solo Admin</span></div>
+  <div class="objetivo"><b>Objetivo:</b> incluir los cultivos nuevos en el modelo ML en sombra con trazabilidad.</div>
+  <p><b>Qué muestra:</b> selector de cultivos pendientes y estado del último job.
+  Un cultivo sin modelo propio sigue recomendándose por el sistema experto de reglas (degradación).</p>
+  <p><b>Servicio que llama:</b> <code>POST /api/v1/admin/ml/reentrenar</code> (encola <code>train_colombia.py</code>
+  en background) · <code>GET /api/v1/ml/estado</code>.</p>
+</div>
+
+<!-- ─────────── P12F · Notificaciones ─────────── -->
+<div class="pantalla" id="p12f">
+  <div class="cab"><span class="icono">🔔</span><span class="titulo">P12F · Notificaciones</span>
+    <span class="rol">Cada usuario configura su canal; Admin el de cualquier finca</span></div>
+  <div class="objetivo"><b>Objetivo:</b> llevar alertas de clima y vencimiento de labores al canal real de uso
+  rural (WhatsApp).</div>
+  <p><b>Qué muestra:</b> preferencia por finca (whatsapp | sms | email | ninguno) y teléfono.
+  Sin canal configurado el sistema sigue funcionando solo con el dashboard (degradación).
+  La entrega usa plantillas de WhatsApp Business Cloud API; sin credenciales, degrada a no-op.</p>
+  <p><b>Servicio que llama:</b> <code>GET/PUT /api/v1/fincas/{id}/notificaciones/preferencias</code> ·
+  <code>services/notificaciones.py::enviar_whatsapp()</code> (disparado por el job de alertas y labores).</p>
+</div>
+
+<!-- ─────────── P12G · Mi zona ─────────── -->
+<div class="pantalla" id="p12g">
+  <div class="cab"><span class="icono">🗺️</span><span class="titulo">P12G · Mi zona (Extensionista)</span>
+    <span class="rol">Solo Extensionista (landing tras login)</span></div>
+  <div class="objetivo"><b>Objetivo:</b> dar al extensionista (Asatec, técnicos de asociaciones) una vista
+  multi-finca de su zona sin ser Admin global.</div>
+  <p><b>Qué muestra:</b> municipios asignados, tarjetas de fincas de la zona (cultivo, última
+  recomendación, alertas activas) y resumen: total de fincas, alertas climáticas y
+  recomendaciones pendientes de validación. Además puede <b>escribir en su zona</b>:
+  agua de riego, monitoreo de plagas y checklist BPA.</p>
+  <p><b>Servicio que llama:</b> <code>GET /api/v1/extensionista/dashboard-zona</code> ·
+  <code>GET /api/v1/extensionista/info</code>. Filtro de acceso por
+  <code>finca.municipio ∈ usuario.municipios_asignados</code>.</p>
 </div>
 
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.10 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.12 · 2026-08-28<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>
