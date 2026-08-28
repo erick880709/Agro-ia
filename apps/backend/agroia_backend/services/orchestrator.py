@@ -710,6 +710,25 @@ class RecommendationOrchestrator:
                     )
             recomendaciones.append(fila)
 
+        # ── Reglas de antagonismo/sinergia (ajustes nutricionales de 2º orden) ──
+        antagonismos = await self.rules.evaluar_antagonismos(
+            soil_dict, finca_ctx.get("etapa_fenologica")
+        )
+        for a in antagonismos:
+            recomendaciones.append({
+                "variable": a["variable"],
+                "estado": "INTERACCION",
+                "valor_actual": None,
+                "rango_ideal": "—",
+                "accion": a["accion"],
+                "prioridad": a["prioridad"],
+                "fuente": a["fuente"],
+                "confiabilidad": "Interacción entre nutrientes",
+                "condicional": False,
+                "secundaria": True,
+                "plan": None,
+            })
+
         # ── Parámetros esenciales faltantes: filas explícitas (aval) ──
         missing_esenciales = missing_esenciales or []
         for var in missing_esenciales:
@@ -876,6 +895,7 @@ class RecommendationOrchestrator:
             "reglas_aplicadas": rules_result.applied_rules,
             "faltantes": len(recs_deficit),
             "excesos": len(recs_exceso),
+            "interacciones_nutricionales": len(antagonismos),
             "confianza": confianza_final,
             "confianza_real": confianza_real,
             "respaldos_expertos": respaldos,

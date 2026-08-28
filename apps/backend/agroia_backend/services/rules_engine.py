@@ -79,7 +79,10 @@ class RulesEngine:
 
         from agroia_backend.models.regla_agronomica import ReglaAgronomica
 
-        stmt = select(ReglaAgronomica).where(ReglaAgronomica.activa.is_(True))
+        stmt = select(ReglaAgronomica).where(
+            ReglaAgronomica.activa.is_(True),
+            ReglaAgronomica.tipo == "primaria",
+        )
         if cultivo_id:
             stmt = stmt.where(
                 (ReglaAgronomica.cultivo_id == cultivo_id)
@@ -181,3 +184,105 @@ class RulesEngine:
             applied_rules=total_applied,
             total_rules=len(rules),
         )
+
+    async def _estado_variable(
+        self, soil_dict: dict, var_enum: str
+    ) -> tuple[float | None, str | None]:
+        """Devuelve (valor, estado) de una variable según las reglas primarias.
+
+        estado: "exceso" | "deficit" | None (sin dato o sin regla aplicable).
+        """
+        rules = await self.load_rules(None)
+        key = VARIABLE_KEY_MAP.get(var_enum, var_enum)
+        value = soil_dict.get(key)
+        if value is None:
+            return None, None
+        estados = []
+        for rule in rules:
+            if rule["variable"] != var_enum:
+                continue
+            if rule["umbral_min"] is not None and value < rule["umbral_min"]:
+                estados.append("deficit")
+            if rule["umbral_max"] is not None and value > rule["umbral_max"]:
+                estados.append("exceso")
+        if not estados:
+            return float(value), None
+        return float(value), "exceso" if "exceso" in estados else "deficit"
+
+    async def evaluar_antagonismos(
+        self, soil_dict: dict, etapa_fenologica: str | None = None
+    ) -> list[dict]:
+        """Reglas de segundo orden (antagonismo/sinergia nutricional).
+
+        Devuelve filas tipo {variable, estado, accion, prioridad, fuente} con
+        estado 'INTERACCION' listas para inyectarse como ajustes nutricionales.
+        """
+        from sqlalchemy import select
+
+        from agroia_backend.models.regla_agronomica import ReglaAgronomica
+
+        resultado = (
+            await self.db.execute(
+                select(ReglaAgronomica).where(
+                    ReglaAgronomica.activa.is_(True),
+                    ReglaAgronomica.tipo == "antagonismo",
+                )
+            )
+        ).scalars().all()
+        if not resultado:
+            return []
+
+        def regla_para(var_enum: str):
+            for r in resultado:
+                if getattr(r.variable, "value", r.variable) == var_enum:
+                    return r
+            return None
+
+        filas: list[dict] = []
+
+        def _agregar(variable: str, accion: str, prioridad: str, fuente: str) -> None:
+            filas.append({
+                "variable": variable,
+                "estado": "INTERACCION",
+                "valor_actual": None,
+                "accion": accion,
+                "prioridad": prioridad,
+                "fuente": fuente,
+            })
+
+        k_val, k_estado = await self._estado_variable(soil_dict, "K")
+        ca_val, ca_estado = await self._estado_variable(soil_dict, "Ca")
+        mg_val, mg_estado = await self._estado_variable(soil_dict, "Mg")
+        p_val, p_estado = await self._estado_variable(soil_dict, "P")
+        zn_val, zn_estado = await self._estado_variable(soil_dict, "Zn")
+        n_val, n_estado = await self._estado_variable(soil_dict, "N")
+        ph = soil_dict.get("ph")
+
+        # 1. K en exceso reduce absorción de Ca/Mg
+        if k_estado == "exceso" and (ca_estado == "deficit" or mg_estado == "deficit"):
+            r = regla_para("K")
+            if r:
+                _agregar("K-Ca-Mg", r.accion, r.prioridad.value, r.fuente)
+        # 2. P en exceso fija Zn
+        if p_estado == "exceso" and zn_estado == "deficit":
+            r = regla_para("P")
+            if r:
+                _agregar("P-Zn", r.accion, r.prioridad.value, r.fuente)
+        # 3. N en exceso en fructificación retrasa maduración
+        etapa = (etapa_fenologica or "").lower()
+        if n_estado == "exceso" and "ructificaci" in etapa:
+            r = regla_para("N")
+            if r:
+                _agregar("N-maduracion", r.accion, r.prioridad.value, r.fuente)
+        # 4. pH < 5.5 y Mg bajo → cal dolomítica
+        if ph is not None and float(ph) < 5.5 and mg_estado == "deficit":
+            r = regla_para("pH")
+            if r:
+                _agregar("pH-Ca-Mg", r.accion, r.prioridad.value, r.fuente)
+
+        if filas:
+            logger.info(
+                "antagonismos_evaluados", total=len(filas),
+                variables=[f["variable"] for f in filas],
+            )
+        return filas

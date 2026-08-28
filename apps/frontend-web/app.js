@@ -174,7 +174,7 @@ function badgeClase(clasificacion) {
 function badgeEstadoClase(estado) {
   const e = String(estado || '').toUpperCase();
   if (e === 'EXCESO' || e === 'CRITICA') return 'critical';
-  if (e === 'DEFICIT' || e === 'ALTA' || e === 'ADVERTENCIA' || e === 'MEDIA') return 'warning';
+  if (e === 'DEFICIT' || e === 'ALTA' || e === 'ADVERTENCIA' || e === 'MEDIA' || e === 'INTERACCION') return 'warning';
   return 'ok';
 }
 

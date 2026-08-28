@@ -79,6 +79,7 @@ _CSS = """
   .badge-preliminar { color: #92400e; border-color: #d97706; background: rgba(217,119,6,.10); }
   .badge-textura { color: #7c2d12; border-color: #c2410c; background: rgba(194,65,12,.10); }
   .badge-validada { color: #166534; border-color: #16a34a; background: rgba(22,163,74,.12); }
+  .badge-interaccion { color: #93c5fd; border-color: rgba(96,165,250,.55); background: rgba(96,165,250,.10); }
 
   .verdict { margin-top: 16px; padding: 12px 16px; border-left: 3px solid var(--clay); background: rgba(192,91,69,.08); font-family: var(--mono); font-size: .82rem; }
   .verdict b { font-weight: 500; }
@@ -181,7 +182,8 @@ _CSS = """
     td, th { border-color: #ccc; }
     .toolbar { display: none; }
     .badge-exceso, .badge-deficit, .badge-noapta, .badge-apta, .badge-ok,
-    .badge-pendiente, .badge-preliminar, .badge-textura, .badge-validada { background: none; }
+    .badge-pendiente, .badge-preliminar, .badge-textura, .badge-validada,
+    .badge-interaccion { background: none; }
     /* PDF: una matriz por parámetro, sin pestañas ni vista unificada */
     .heatmap .heat-tabs { display: none !important; }
     .heatmap .heat-var { display: block !important; }
@@ -213,6 +215,8 @@ def _badge(estado: str) -> str:
         return '<span class="badge badge-exceso">EXCESO</span>'
     if e == "DEFICIT":
         return '<span class="badge badge-deficit">DÉFICIT</span>'
+    if e == "INTERACCION":
+        return '<span class="badge badge-interaccion">AJUSTE NUTRICIONAL</span>'
     return '<span class="badge badge-ok">OK</span>'
 
 

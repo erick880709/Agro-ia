@@ -84,6 +84,24 @@ REGLAS_POR_CULTIVO = {
 }
 
 
+# (variable, accion, prioridad, fuente) — reglas de segundo orden evaluadas
+# en código (las condiciones lógicas dependen del estado de otras variables).
+REGLAS_ANTAGONISMO = [
+    ("K",
+     "El exceso de K puede reducir la absorción de Ca y Mg. Priorizar la aplicación de estos.",
+     "Media", "UPRA/Cenicafé"),
+    ("P",
+     "Alta disponibilidad de P puede fijar Zn. Considere aplicación foliar de Zn.",
+     "Media", "AGROSAVIA"),
+    ("N",
+     "Exceso de N en etapa de fructificación puede retrasar la maduración. Reducir la dosis de N.",
+     "Baja", "UPRA"),
+    ("pH",
+     "pH bajo (<5.5) con Mg bajo: usar cal dolomítica en lugar de cal agrícola.",
+     "Media", "Cenicafé"),
+]
+
+
 async def asegurar_reglas() -> dict:
     """Inserta las reglas faltantes. Retorna conteos {universales, cultivos}."""
     from sqlalchemy import select
@@ -130,7 +148,7 @@ async def asegurar_reglas() -> dict:
                 return True
             return False
 
-        async def _insertar(variable, umin, umax, accion, prioridad, fuente, cultivo):
+        async def _insertar(variable, umin, umax, accion, prioridad, fuente, cultivo, tipo="primaria"):
             if _existe(variable, umin, umax, cultivo.id if cultivo else None):
                 return False
             db.add(ReglaAgronomica(
@@ -141,6 +159,7 @@ async def asegurar_reglas() -> dict:
                 accion=accion,
                 prioridad=prioridad,
                 fuente=fuente,
+                tipo=tipo,
                 version=1,
                 activa=True,
             ))
@@ -159,6 +178,33 @@ async def asegurar_reglas() -> dict:
             if await _insertar(variable, umin, umax, accion, prioridad, fuente, None):
                 insertadas["universales"] += 1
 
+        # Reglas de antagonismo: condiciones lógicas evaluadas en código.
+        # Se evita duplicar con un chequeo por variable+tipo.
+        for variable, accion, prioridad, fuente in REGLAS_ANTAGONISMO:
+            ya_existe = any(
+                _variable_nombre(r) == variable and r.tipo == "antagonismo"
+                for r in existentes
+            )
+            if ya_existe:
+                continue
+            db.add(ReglaAgronomica(
+                cultivo_id=None,
+                variable=variable,
+                umbral_min=None,
+                umbral_max=None,
+                accion=accion,
+                prioridad=prioridad,
+                fuente=fuente,
+                tipo="antagonismo",
+                version=1,
+                activa=True,
+            ))
+            existentes.append(ReglaAgronomica(
+                cultivo_id=None, variable=variable, activa=True,
+            ))
+            insertadas.setdefault("antagonismo", 0)
+            insertadas["antagonismo"] += 1
+
         for nombre, reglas in REGLAS_POR_CULTIVO.items():
             cultivo = cultivos.get(nombre)
             if cultivo is None:
@@ -168,6 +214,6 @@ async def asegurar_reglas() -> dict:
                     insertadas["cultivos"] += 1
 
         await db.commit()
-    if insertadas["universales"] or insertadas["cultivos"]:
+    if any(insertadas.values()):
         logger.info("reglas_aseguradas", **insertadas)
     return insertadas

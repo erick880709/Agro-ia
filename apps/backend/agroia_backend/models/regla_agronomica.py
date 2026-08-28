@@ -69,6 +69,10 @@ class ReglaAgronomica(Base, TimestampMixin):
     fuente: Mapped[str] = mapped_column(
         String(100), nullable=False, comment="Origen: UPRA, Cenicafé, AGROSAVIA, Manual"
     )
+    tipo: Mapped[str] = mapped_column(
+        String(30), nullable=False, default="primaria", server_default="primaria",
+        comment="primaria | antagonismo",
+    )
     version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     activa: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
