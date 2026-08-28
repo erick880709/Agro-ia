@@ -214,19 +214,50 @@ async function arrancarAplicacion() {
     t.addEventListener('click', () => goTab(t.dataset.tab));
   });
 
-  // ── Menú desplegable de Administración ──
+  // ── Menú desplegable de Administración (flotante sobre el contenido) ──
   const adminBtn = document.getElementById('admin-menu-btn');
   const adminSub = document.getElementById('admin-submenu');
   if (adminBtn && adminSub) {
+    const posicionar = () => {
+      const r = adminBtn.getBoundingClientRect();
+      const width = Math.max(adminSub.offsetWidth || 230, 230);
+      const height = Math.max(adminSub.offsetHeight || 0, 0);
+      let left = r.right - width;
+      if (left < 8) left = 8;
+      if (left + width > window.innerWidth - 8) left = window.innerWidth - width - 8;
+      // Si no cabe hacia abajo, abre hacia arriba; si tampoco cabe, se pega arriba
+      let top = r.bottom + 6;
+      if (height && top + height > window.innerHeight - 8) {
+        top = r.top - 6 - height;
+        if (top < 8) top = 8;
+      }
+      adminSub.style.position = 'fixed';   // escapa del overflow del nav y flota sobre el body
+      adminSub.style.top = `${top}px`;
+      adminSub.style.left = `${left}px`;
+      adminSub.style.right = 'auto';
+    };
+    const sincronizar = () => {
+      if (!adminSub.classList.contains('open')) return;
+      const r = adminBtn.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > window.innerHeight) {
+        adminSub.classList.remove('open');  // el botón quedó fuera de pantalla
+        return;
+      }
+      posicionar();
+    };
     adminBtn.addEventListener('click', e => {
       e.stopPropagation();
+      const abrir = !adminSub.classList.contains('open');
       adminSub.classList.toggle('open');
+      if (abrir) posicionar();
     });
     document.addEventListener('click', e => {
       if (!adminSub.contains(e.target) && e.target !== adminBtn) {
         adminSub.classList.remove('open');
       }
     });
+    window.addEventListener('resize', sincronizar);
+    window.addEventListener('scroll', sincronizar, true);
   }
 
   aplicarRol();

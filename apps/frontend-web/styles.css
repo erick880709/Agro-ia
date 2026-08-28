@@ -845,7 +845,7 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
 /* ─────────────────────────── Menú Administración (dropdown) ─────────────────────────── */
 .tab-dropdown { position: relative; }
 #admin-menu-btn { cursor: pointer; }
-.tab-submenu { display: none; position: absolute; top: calc(100% + 6px); right: 0; min-width: 230px; background: var(--surface, #fff); border: 1px solid var(--line, #e2e8f0); border-radius: 12px; box-shadow: 0 16px 40px rgba(0,0,0,.14); z-index: 60; padding: 6px; }
+.tab-submenu { display: none; position: absolute; top: calc(100% + 6px); right: 0; min-width: 230px; max-width: calc(100vw - 16px); max-height: calc(100vh - 90px); overflow-y: auto; background: var(--surface, #fff); border: 1px solid var(--line, #e2e8f0); border-radius: 12px; box-shadow: 0 16px 40px rgba(0,0,0,.14); z-index: 60; padding: 6px; }
 .tab-submenu.open { display: block; }
 .tab-submenu .submenu-item { display: block; width: 100%; text-align: left; padding: 10px 14px; border: none; background: transparent; border-radius: 8px; font-size: 14px; color: inherit; }
 .tab-submenu .submenu-item:hover { background: #f1f5f9; }

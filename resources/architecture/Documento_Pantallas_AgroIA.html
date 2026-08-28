@@ -105,8 +105,8 @@ operación diaria de monitoreo y análisis:</p>
 </div>
 <p style="font-size:.86rem;color:var(--muted)">Apoyos transversales: P4 (Cargar archivo) cuando el sensor pierde conexión ·
 P8 (Chat asesor) para resolver dudas en cualquier momento · el menú <b>⚙️ Administración</b>
-(solo Admin) agrupa P2-Registrar finca, P9 (Usuarios), P9b (Insumos) y P11 (Auditoría) ·
-P10 (Catálogo) para consulta y referencia.</p>
+(solo Admin) agrupa P2-Registrar finca, P2-Fincas (listado), P6-Historial, P9 (Usuarios),
+P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.</p>
 
 <!-- ─────────── P0 ─────────── -->
 <div class="pantalla" id="p0">
@@ -125,7 +125,10 @@ P10 (Catálogo) para consulta y referencia.</p>
   </ul>
   <p><b>Qué ocurre después:</b> la sesión se guarda en <code>localStorage</code>
   (<code>agroia_sesion</code>) y se carga el menú según el rol
-  (Admin: 8 pestañas + menú ⚙️ Administración con 4 opciones · Agrónomo: 7 · Cliente: 5).
+  (Admin: 8 pestañas + menú ⚙️ Administración con 6 opciones · Agrónomo: 7 · Cliente: 5).
+  El menú Administración es un <b>panel flotante</b> que se despliega sobre el contenido de la
+  página (aunque la pantalla sea pequeña, se abre hacia arriba si no cabe abajo) y se cierra
+  al elegir una opción o al hacer clic fuera.
   <span class="siguiente">Siguiente → P1 Inicio.</span></p>
 </div>
 

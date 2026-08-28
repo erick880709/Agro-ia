@@ -212,10 +212,13 @@ Cada petición `fetch` lleva:
 
 **Menú «⚙️ Administración» (solo Admin, v2.10):** la barra de navegación agrupa en un
 **desplegable** las secciones administrativas: **🏡 Registrar finca** (wizard completo de 3 pasos
-en su propia vista), **👥 Administrar usuarios**, **💰 Administrar insumos** (página propia con
-la tabla de precios dinámicos) y **🕵️ Auditoría**. La pestaña «Fincas» quedó solo con el
-listado de fincas registradas. El desplegable se abre con clic en el botón «⚙️ Administración ▾»,
-se cierra al elegir una opción o al hacer clic fuera, y no aparece para Agrónomo ni Cliente.
+en su propia vista), **�️ Fincas** (listado de fincas), **📜 Historial** (recomendaciones),
+**👥 Administrar usuarios**, **💰 Administrar insumos** (página propia con la tabla de precios
+dinámicos) y **🕵️ Auditoría**. La pestaña «Fincas» quedó solo con el listado de fincas
+registradas. El desplegable es **flotante**: se posiciona con `position: fixed` sobre el
+contenido de la página (escapa del `overflow` del nav), se abre hacia arriba cuando no cabe
+abajo, se reposiciona en `scroll`/`resize` y se cierra al elegir una opción o al hacer clic
+fuera. No aparece para Agrónomo ni Cliente.
 
 ---
 

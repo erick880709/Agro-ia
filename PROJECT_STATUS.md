@@ -256,10 +256,10 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 
 ### Menú «Administración» y página propia de insumos (2026-08-28)
 
-- **Nueva navegación (Admin):** las secciones administrativas se agrupan en un **desplegable ⚙️ Administración** con submenús: **🏡 Registrar finca** (wizard completo de 3 pasos en su propia vista), **👥 Administrar usuarios**, **💰 Administrar insumos** (página propia con la tabla de precios dinámicos) y **🕵️ Auditoría**. La pestaña «🏡 Fincas» quedó solo con el listado de fincas registradas.
-- **Comportamiento del menú:** abre con clic en «⚙️ Administración ▾», se cierra al elegir una opción o al hacer clic fuera; el desplegable no aparece para Agrónomo ni Cliente (el botón no compite con la lógica de pestañas por rol).
-- **Assets**: `app.js`/`styles.css` con cache-busting `?v=20260827-adminnav`.
-- Validado local y en producción: submenú abre/cierra, navegación a registrar-finca (wizard visible), usuarios (7 tarjetas), insumos (15 filas con precios guardados) y fincas (solo listado); en prod servido `v=20260827-adminnav` con tabla de precios cargada.
+- **Nueva navegación (Admin):** las secciones administrativas se agrupan en un **desplegable ⚙️ Administración** con submenús: **🏡 Registrar finca** (wizard completo de 3 pasos en su propia vista), **�️ Fincas**, **📜 Historial**, **👥 Administrar usuarios**, **💰 Administrar insumos** (página propia con la tabla de precios dinámicos) y **🕵️ Auditoría**. La pestaña «🏡 Fincas» quedó solo con el listado de fincas registradas.
+- **Comportamiento del menú:** panel <b>flotante</b> (`position: fixed`) que se despliega <b>sobre el body</b> (escapa del `overflow-x` del nav), se abre hacia arriba si no cabe abajo, se reposiciona en scroll/resize y se cierra al elegir una opción o al hacer clic fuera. El desplegable no aparece para Agrónomo ni Cliente (el botón no compite con la lógica de pestañas por rol).
+- **Assets**: `app.js`/`styles.css` con cache-busting `?v=20260827-adminnav2`.
+- Validado local y en producción: submenú abre/cierra flotando sobre el contenido, navegación a registrar-finca (wizard visible), fincas (solo listado), historial (12 filas), usuarios (7 tarjetas), insumos (15 filas con precios guardados) y fincas (solo listado).
 
 ### Imágenes fuera de la BD y validación de rendimiento (2026-08-27)
 
