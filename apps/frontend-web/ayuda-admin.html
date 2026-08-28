@@ -72,6 +72,12 @@
     <li><a href="#p13b">Trazabilidad / BPA</a></li>
     <li><a href="#p14">Chat asesor</a></li>
     <li><a href="#p15">Catálogo de cultivos</a></li>
+    <li><a href="#p15a">Alertas clima</a></li>
+    <li><a href="#p15b">Precios de cosecha (UC1)</a></li>
+    <li><a href="#p15c">Laboratorio ICA</a></li>
+    <li><a href="#p15d">Visión plagas</a></li>
+    <li><a href="#p15e">Modo offline (PWA)</a></li>
+    <li><a href="#p15f">Sesión segura (JWT)</a></li>
     <li><a href="#p16">Video — flujo completo</a></li>
     <li><a href="/capacitacion.html" target="_blank">🎓 Capacitación completa (flujo end-to-end)</a></li>
   </ol>
@@ -333,6 +339,57 @@
   crear, enviar a revisión, aprobar o rechazar.</p>
   <figure><img class="captura" src="/media-ayuda/catalogo.png" alt="Catálogo de cultivos con fichas técnicas" />
   <figcaption>Figura 11 — Catálogo de cultivos.</figcaption></figure>
+</section>
+
+<section class="paso" id="p15a">
+  <h2><span class="num">15A</span> Alertas clima</h2>
+  <p>La pestaña <b>⛅ Alertas clima</b> (visible para todos los roles) lista las alertas activas
+  generadas por el pronóstico de 7 días: lluvia/lixiviación y helada. Si varias fincas comparten
+  ubicación, la alerta se agrupa y muestra <b>📍 departamento y ciudad</b> con la lista de fincas.
+  Como Administrador verá todas las fincas y dispondrá del botón <b>🔄 Evaluar ahora</b> para
+  forzar una evaluación manual.</p>
+</section>
+
+<section class="paso" id="p15b">
+  <h2><span class="num">15B</span> Precios de cosecha (inteligencia de mercado)</h2>
+  <p>En <b>⚙️ Administración → 🌾 Precios de cosecha</b> registre el precio promedio de venta
+  (COP/kg) por cultivo y departamento, con el rendimiento de referencia (t/ha). Estos datos
+  alimentan la <b>utilidad estimada (COP/ha)</b> de las recomendaciones: la tabla de sugerencias
+  muestra precio y utilidad por cultivo y destaca con el badge <b>🏆 Más rentable</b> el de mejor
+  rentabilidad ponderada (aptitud 70% + rentabilidad 30%).</p>
+</section>
+
+<section class="paso" id="p15c">
+  <h2><span class="num">15C</span> Laboratorio ICA (análisis de suelos)</h2>
+  <p>Cuando se registra el <b>análisis de laboratorio</b> de una finca (N, P, K, pH y materia
+  orgánica validados), el sistema marca la finca como <b>validada en laboratorio</b>: esas
+  variables suben su confiabilidad a «Validado en laboratorio», dejan de penalizarse como sensor
+  sin calibrar y tienen prioridad sobre la lectura del sensor durante <b>90 días</b> desde el
+  análisis. El historial de análisis queda asociado a la finca para trazabilidad.</p>
+</section>
+
+<section class="paso" id="p15d">
+  <h2><span class="num">15D</span> Visión plagas (diagnóstico desde foto)</h2>
+  <p>En la pestaña <b>🔬 Visión plagas</b> seleccione la finca, adjunte la foto del síntoma
+  (JPEG/PNG/WebP, máx 5 MB) y pulse <b>🔬 Analizar foto</b>. El diagnóstico se registra con
+  plaga, confianza, severidad y recomendación, y la foto queda guardada. <b>Nota:</b> el modelo
+  propio AgroIA v1.0 está en entrenamiento; mientras tanto el sistema entrega una respuesta
+  preliminar («No determinada») y recomienda el dictamen experto por el chat.</p>
+</section>
+
+<section class="paso" id="p15e">
+  <h2><span class="num">15E</span> Modo offline (PWA)</h2>
+  <p>La aplicación es instalable (menú del navegador → «Instalar») y funciona <b>sin conexión</b>:
+  si en campo no hay señal, las <b>tramas de sensores</b> y las <b>labores completadas</b> se
+  guardan localmente y aparece el banner <b>📡 «N registro(s) pendientes de sincronizar»</b>.
+  Al recuperar la señal se sincronizan automáticamente (reintento cada 30 s), sin duplicados.</p>
+</section>
+
+<section class="paso" id="p15f">
+  <h2><span class="num">15F</span> Sesión segura (JWT)</h2>
+  <p>El inicio de sesión entrega un <b>token de acceso (8 horas)</b> y uno de refresco (30 días)
+  que se renuevan automáticamente mientras use la aplicación. <b>Salir</b> revoca la sesión de
+  forma real. Si tras 30 días de inactividad debe volver a entrar, es el comportamiento esperado.</p>
 </section>
 
 <section class="paso" id="p16">

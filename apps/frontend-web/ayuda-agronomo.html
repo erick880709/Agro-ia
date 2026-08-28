@@ -61,6 +61,12 @@
     <li><a href="#p7">Reportes</a></li>
     <li><a href="#p8">Chat asesor</a></li>
     <li><a href="#p9">Catálogo de cultivos</a></li>
+    <li><a href="#p9a">Alertas clima</a></li>
+    <li><a href="#p9b">Laboratorio ICA</a></li>
+    <li><a href="#p9c">Ajustes nutricionales (antagonismos)</a></li>
+    <li><a href="#p9d">Visión plagas</a></li>
+    <li><a href="#p9e">Modo offline (PWA)</a></li>
+    <li><a href="#p9f">Sesión segura (JWT)</a></li>
     <li><a href="#p10">Video — flujo completo</a></li>
   </ol>
 </nav>
@@ -166,6 +172,53 @@
   <figcaption>Figura 7 — Catálogo de cultivos.</figcaption></figure>
 </section>
 
+<section class="paso" id="p9a">
+  <h2><span class="num">9A</span> Alertas clima</h2>
+  <p>En <b>⛅ Alertas clima</b> consulte las alertas activas de todas las fincas (lluvia y helada)
+  con su severidad y ubicación; las fincas cercanas se agrupan por <b>📍 departamento y ciudad</b>.
+  Use esta vista antes de programar labores de aplicación o cosecha.</p>
+</section>
+
+<section class="paso" id="p9b">
+  <h2><span class="num">9B</span> Laboratorio ICA (análisis de suelos)</h2>
+  <p>Cuando el informe de laboratorio de una finca queda registrado (N, P, K, pH y materia
+  orgánica), el diagnóstico muestra esas variables como <b>«Validado en laboratorio»</b> con
+  confiabilidad plena: el análisis reciente (≤ 90 días) tiene prioridad sobre el sensor y
+  desaparece la advertencia de sensor sin calibrar. Antes de recomendar dosis de N/P/K,
+  promueva la toma de muestras de laboratorio.</p>
+</section>
+
+<section class="paso" id="p9c">
+  <h2><span class="num">9C</span> Ajustes nutricionales (antagonismos)</h2>
+  <p>El diagnóstico ahora detecta <b>interacciones entre nutrientes</b>: exceso de potasio que
+  bloquea calcio/magnesio, exceso de fósforo que bloquea zinc, nitrógeno en maduración o pH
+  ácido con magnesio deficitario. Estas alertas aparecen marcadas <b>«AJUSTE NUTRICIONAL»</b> en
+  el diagnóstico y el reporte: corregir el nutriente primario sin atender el antagonismo puede
+  agravar el problema.</p>
+</section>
+
+<section class="paso" id="p9d">
+  <h2><span class="num">9D</span> Visión plagas (diagnóstico desde foto)</h2>
+  <p>En <b>🔬 Visión plagas</b> seleccione la finca y suba la foto del síntoma. El sistema
+  registra el diagnóstico (plaga, confianza, severidad, recomendación) y conserva el historial
+  por finca. Mientras entrena el modelo propio v1.0, la respuesta es preliminar: complemente
+  con el <b>dictamen experto</b> desde el chat y confirme en campo.</p>
+</section>
+
+<section class="paso" id="p9e">
+  <h2><span class="num">9E</span> Modo offline (PWA)</h2>
+  <p>En campo sin señal, las <b>labores completadas</b> y las <b>tramas del simulador</b> se
+  guardan localmente y se sincronizan solas al recuperar la conexión (banner 📡 de pendientes).
+  Instale la app desde el navegador para usarla como aplicación nativa.</p>
+</section>
+
+<section class="paso" id="p9f">
+  <h2><span class="num">9F</span> Sesión segura (JWT)</h2>
+  <p>La sesión usa tokens: acceso de 8 horas con renovación automática y refresco de 30 días.
+  Cierre sesión para revocarla en el servidor. Si pasó más de un mes sin entrar, vuelva a
+  iniciar sesión.</p>
+</section>
+
 <section class="paso" id="p10">
   <div class="video-box">
     <h2>📽️ Video — Flujo completo del Agrónomo</h2>
@@ -179,7 +232,7 @@
 </section>
 
 </div>
-<footer>AgroIA — AgroInteligente Colombia · Manual de usuario Agrónomo · 2026-08-27</footer>
+<footer>AgroIA — AgroInteligente Colombia · Manual de usuario Agrónomo · 2026-08-28</footer>
 <script>
 (function () {
   var frames = [

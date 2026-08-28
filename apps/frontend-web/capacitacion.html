@@ -88,6 +88,7 @@
     <li><a href="#s15">Lista de trabajos: leer el semáforo</a></li>
     <li><a href="#s16">Resumen: pantalla → estado resultante</a></li>
     <li><a href="#s17">Errores comunes</a></li>
+    <li><a href="#s18">Novedades v3.0: alertas, laboratorio, precios, visión y modo offline</a></li>
   </ol>
 </nav>
 
@@ -496,7 +497,38 @@
       <td>Genere el reporte en 📄 Reportes (queda auditado).</td></tr>
     <tr><td>La comisión no aparece libre</td><td>No se registró el fin de medición</td>
       <td>Use ✅ Registrar fin de medición en la comisión.</td></tr>
+    <tr><td>La sesión se cerró sola / «Autenticación requerida»</td><td>El token de acceso expiró y no pudo renovarse</td>
+      <td>Vuelva a iniciar sesión (los tokens duran 8 h con renovación automática y 30 días de refresco).</td></tr>
+    <tr><td>Trabajando en campo sin señal</td><td>La app quedó sin conexión</td>
+      <td>Continúe: las tramas y labores se guardan localmente (banner 📡) y se sincronizan solas al volver la señal.</td></tr>
   </table>
+</section>
+
+<!-- ═══════════ 18 · Novedades v3.0 ═══════════ -->
+<section class="paso" id="s18">
+  <h2><span class="num">18</span> Novedades v3.0 — alertas, laboratorio, precios, visión y modo offline</h2>
+  <p>La versión 3.0 agrega seis capacidades transversales al flujo de trabajo:</p>
+  <ul>
+    <li><b>⛅ Alertas clima</b> (todos los roles): alertas de lluvia/lixiviación y helada por
+    pronóstico de 7 días, agrupadas por <b>departamento y ciudad</b> cuando varias fincas
+    comparten ubicación. El Cliente solo ve sus fincas; el Admin puede «🔄 Evaluar ahora».</li>
+    <li><b>🧪 Laboratorio ICA</b>: cuando el análisis de suelo queda registrado, N/P/K/pH/MO pasan
+    a «Validado en laboratorio» con prioridad sobre el sensor durante 90 días y desaparece la
+    penalización de sensor sin calibrar — la confiabilidad del diagnóstico sube de 60 % a 100 %.</li>
+    <li><b>⚖️ Ajustes nutricionales</b>: el diagnóstico detecta antagonismos (K vs Ca/Mg, P vs Zn,
+    N en maduración, pH ácido + Mg deficitario) y los marca «AJUSTE NUTRICIONAL» en el reporte.</li>
+    <li><b>🌾 Precios de cosecha</b>: el Admin registra precio (COP/kg) y rendimiento por cultivo
+    y departamento; las recomendaciones muestran <b>utilidad estimada (COP/ha)</b> y destacan el
+    cultivo <b>🏆 Más rentable</b> (aptitud 70 % + rentabilidad 30 %).</li>
+    <li><b>🔬 Visión plagas</b>: foto del síntoma → diagnóstico con plaga, confianza, severidad y
+    recomendación, con historial por finca. Degradación graciosa mientras entrena el modelo
+    propio v1.0: use el chat para dictamen experto.</li>
+    <li><b>📡 Modo offline (PWA)</b>: app instalable; sin señal, las tramas y labores se encolan
+    localmente y se sincronizan automáticamente (banner de pendientes). <b>🔐 JWT:</b> sesión con
+    token de acceso (8 h) renovado automáticamente y cierre de sesión con revocación real.</li>
+  </ul>
+  <div class="nota">Estas funciones no cambian el orden de la ruta de trabajo (Paso 1 → Paso 10):
+  son apoyos que aparecen dentro de las mismas pantallas o como pestañas nuevas del menú.</div>
 </section>
 
 </div>
