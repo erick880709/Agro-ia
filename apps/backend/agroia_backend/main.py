@@ -57,12 +57,14 @@ from agroia_backend.api.catalogo import router as catalogo_router
 from agroia_backend.api.chat import router as chat_router
 from agroia_backend.api.ciclos import router as ciclos_router
 from agroia_backend.api.curvas import router as curvas_router
+from agroia_backend.api.comisiones import router as comisiones_router
 from agroia_backend.api.dashboard import router as dashboard_router
 from agroia_backend.api.demo import router as demo_router
 from agroia_backend.api.extensionista import router as extensionista_router
 from agroia_backend.api.fincas import router as fincas_router
 from agroia_backend.api.iot import router as iot_router
 from agroia_backend.api.labores import router as labores_router
+from agroia_backend.api.lista_trabajos import router as lista_trabajos_router
 from agroia_backend.api.location import router as location_router
 from agroia_backend.api.mantenimiento import router as mantenimiento_router
 from agroia_backend.api.ml import admin_router as ml_admin_router
@@ -76,6 +78,7 @@ from agroia_backend.api.sensor_api import router as sensor_api_router
 from agroia_backend.api.sig import router as sig_router
 from agroia_backend.api.usuarios import router as usuarios_router
 from agroia_backend.api.variedades import router as variedades_router
+from agroia_backend.api.equipo import router as equipo_router
 
 settings = get_settings()
 setup_logging()
@@ -211,6 +214,10 @@ app.include_router(notificaciones_router)
 app.include_router(plagas_router)
 app.include_router(rotacion_router)
 app.include_router(ml_admin_router)
+# ── Módulo operativo: equipo de trabajo, comisiones y lista de trabajos ──
+app.include_router(equipo_router)
+app.include_router(comisiones_router)
+app.include_router(lista_trabajos_router)
 # curvas/variedades: expuestas también bajo /api/v1/catalogo (catálogo)
 app.include_router(curvas_router, prefix="/api/v1")
 app.include_router(curvas_router, prefix="/api/v1/catalogo")

@@ -96,6 +96,9 @@
   <a href="#p12e">P12E · Reentrenar modelo</a>
   <a href="#p12f">P12F · Notificaciones</a>
   <a href="#p12g">P12G · Mi zona (Extensionista)</a>
+  <a href="#p12h">P12H · Equipo de trabajo</a>
+  <a href="#p12i">P12I · Comisiones</a>
+  <a href="#p12j">P12J · Lista de trabajos</a>
 </nav>
 
 <h2 id="ruta">🧭 Ruta natural de trabajo</h2>
@@ -634,10 +637,60 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   <code>finca.municipio ∈ usuario.municipios_asignados</code>.</p>
 </div>
 
+<!-- ─────────── P12H · Equipo de trabajo ─────────── -->
+<div class="pantalla" id="p12h">
+  <div class="cab"><span class="icono">🧑‍🤝‍🧑</span><span class="titulo">P12H · Equipo de trabajo</span>
+    <span class="rol">Solo Admin</span></div>
+  <div class="objetivo"><b>Objetivo:</b> registrar los empleados de campo (instrumentador, cadenero
+  sensorista, chofer, agrónomo) con sus datos personales y de emergencia para asignarlos a comisiones.</div>
+  <p><b>Qué muestra:</b> listado filtrable por rol/estado/búsqueda con nombres, apellidos, tipo y número
+  de documento, domicilio, contacto, contacto de emergencia, rol, fecha de ingreso y estado
+  (activo/desvinculado). Botones ✏️ Editar y 🗑️ Desvincular (borrado lógico que conserva la
+  trazabilidad). Sección de <b>💰 tarifas por rol</b> (valor por día de trabajo) y de
+  <b>🏥 novedades</b>: incapacidades/ausencias con fecha y <b>reemplazo opcional</b> (el sustituto
+  entra a la comisión con el mismo rol) y cierre de la novedad al reintegrarse.</p>
+  <p><b>Servicios que llama:</b> <code>GET/POST/PUT/DELETE /api/v1/admin/equipo-trabajo</code> ·
+  <code>GET/PUT /api/v1/admin/equipo-trabajo/tarifas[/{rol}]</code> ·
+  <code>GET/POST /api/v1/admin/equipo-trabajo/novedades</code> ·
+  <code>PUT .../novedades/{id}/cerrar</code>. Todo auditable con fecha de registro y modificación.</p>
+</div>
+
+<!-- ─────────── P12I · Comisiones ─────────── -->
+<div class="pantalla" id="p12i">
+  <div class="cab"><span class="icono">🗂️</span><span class="titulo">P12I · Comisiones</span>
+    <span class="rol">Solo Admin</span></div>
+  <div class="objetivo"><b>Objetivo:</b> crear la comisión que realizará la toma de medidas en una finca
+  y saber qué equipo está midiendo cada cliente.</div>
+  <p><b>Qué muestra:</b> listado con filtros por finca/estado; cada comisión muestra la finca, el
+  servicio/tipo de reporte, fechas de asignación/inicio/fin, estado, valores (comisión, cobro del
+  servicio, validación del estudio y plataforma) y sus miembros con rol. Reglas: exactamente un
+  <b>instrumentador</b> y uno o más <b>cadeneros sensoristas</b> (chofer/agrónomo opcionales); un
+  empleado en otra comisión activa se rechaza (409); el <b>✅ Registrar fin de medición</b> es
+  obligatorio para liberar el equipo a otra finca. Se pueden tener varias comisiones en paralelo.</p>
+  <p><b>Servicios que llama:</b> <code>GET/POST/PUT/DELETE /api/v1/admin/comisiones</code> ·
+  <code>POST /api/v1/admin/comisiones/{id}/finalizar</code>. Todo auditable.</p>
+</div>
+
+<!-- ─────────── P12J · Lista de trabajos ─────────── -->
+<div class="pantalla" id="p12j">
+  <div class="cab"><span class="icono">📊</span><span class="titulo">P12J · Lista de trabajos</span>
+    <span class="rol">Solo Admin</span></div>
+  <div class="objetivo"><b>Objetivo:</b> tener la traza de cómo va cada finca/cliente: semáforo de etapa,
+  actividades faltantes y contabilización de órdenes de trabajo.</div>
+  <p><b>Qué muestra:</b> una <b>sola vista completa</b> (decisión validada: con filtros, no separada por
+  tipo/finalidad) con filtros por <b>etapa</b> (<code>registro → asignación de comisión → toma de
+  muestras → recomendación → reporte → fin de actividad</code>), <b>estado</b> (pendiente/en
+  proceso/finalizada) y <b>fechas de inicio</b>; gráfico de barras «📈 Órdenes de trabajo por etapa»
+  y tabla con semáforo por finca, fechas de inicio/fin y la lista de actividades que faltan
+  (registro de lote, asignación de comisión, toma de muestras, recomendación, reporte).</p>
+  <p><b>Servicio que llama:</b> <code>GET /api/v1/admin/lista-trabajos?etapa=&amp;estado=&amp;desde=&amp;hasta=</code>
+  (cruza lotes, comisiones, lecturas, recomendaciones y la auditoría <code>reporte.generar</code>).</p>
+</div>
+
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.12 · 2026-08-28<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.13 · 2026-08-28<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

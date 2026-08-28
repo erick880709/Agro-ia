@@ -7,7 +7,7 @@ const API = '/api/v1';
 const SESION_KEY = 'agroia_sesion';
 
 const TABS_POR_ROL = {
-  admin: ['inicio', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'reentrenar', 'catalogo'],
+  admin: ['inicio', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'equipo', 'comisiones', 'lista-trabajos', 'reentrenar', 'catalogo'],
   agronomo: ['inicio', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'catalogo'],
   cliente: ['inicio', 'sensores', 'historial', 'reportes', 'catalogo'],
   extensionista: ['inicio', 'zona', 'sensores', 'historial', 'reportes', 'catalogo'],
@@ -227,6 +227,9 @@ function goTab(name) {
   if (name === 'auditoria' && state.rol.toLowerCase() === 'admin') cargarAuditoria();
   if (name === 'zona' && state.rol.toLowerCase() === 'extensionista') cargarZona();
   if (name === 'bpa' && state.rol.toLowerCase() === 'admin') cargarBpa();
+  if (name === 'equipo' && state.rol.toLowerCase() === 'admin') cargarEquipo();
+  if (name === 'comisiones' && state.rol.toLowerCase() === 'admin') cargarComisiones();
+  if (name === 'lista-trabajos' && state.rol.toLowerCase() === 'admin') cargarListaTrabajos();
   document.querySelectorAll('.tab-submenu.open').forEach(s => s.classList.remove('open'));
 }
 
@@ -382,6 +385,11 @@ async function arrancarAplicacion() {
   }
   document.getElementById('audit-refrescar').addEventListener('click', () => cargarAuditoria(1));
   document.getElementById('bpa-cargar').addEventListener('click', cargarBpa);
+  document.getElementById('equipo-cargar').addEventListener('click', cargarEquipo);
+  document.getElementById('equipo-nuevo').addEventListener('click', () => abrirModalEmpleado());
+  document.getElementById('com-cargar').addEventListener('click', cargarComisiones);
+  document.getElementById('com-nueva').addEventListener('click', () => abrirModalComision());
+  document.getElementById('lt-cargar').addEventListener('click', cargarListaTrabajos);
   document.getElementById('ml-reentrenar').addEventListener('click', reentrenarModelo);
   document.getElementById('audit-anterior').addEventListener('click', () => {
     if (auditState.page > 1) cargarAuditoria(auditState.page - 1);
@@ -2450,6 +2458,352 @@ async function quitarVisitaBpa(fincaId, visitaId) {
     await cargarBpa();
   } catch (e) {
     alert('No se pudo quitar la visita: ' + e.message);
+  }
+}
+
+/* ══════════════════ Equipo de trabajo, comisiones y lista de trabajos (Admin) ══════════════════ */
+
+const ROLES_EQUIPO_LABEL = {
+  instrumentador: 'Instrumentador',
+  cadenero_sensorista: 'Cadenero sensorista',
+  chofer: 'Chofer',
+  agronomo: 'Agrónomo',
+};
+
+async function cargarEquipo() {
+  const lista = document.getElementById('equipo-lista');
+  const tarifasDiv = document.getElementById('equipo-tarifas');
+  const novedadesDiv = document.getElementById('equipo-novedades');
+  lista.innerHTML = '<p class="muted">Cargando…</p>';
+  const params = new URLSearchParams();
+  const rol = document.getElementById('equipo-rol').value;
+  const estado = document.getElementById('equipo-estado').value;
+  const search = document.getElementById('equipo-search').value.trim();
+  if (rol) params.set('rol', rol);
+  if (estado) params.set('estado', estado);
+  if (search) params.set('search', search);
+  try {
+    const [r, t, n] = await Promise.all([
+      api(`/admin/equipo-trabajo?${params}`),
+      api('/admin/equipo-trabajo/tarifas'),
+      api('/admin/equipo-trabajo/novedades?estado=abierta'),
+    ]);
+    lista.innerHTML = (r.data || []).map(e => `
+      <div class="labor-row">
+        <div class="labor-info">
+          <b>${esc(e.nombre_completo)}</b>
+          <span class="muted">${esc(e.tipo_documento)} ${esc(e.numero_documento)} · ${esc(e.rol_etiqueta)}</span>
+          <span>${e.estado === 'activo' ? badge('Activo', 'ok') : badge('Desvinculado', 'warning')} ·
+            ingreso ${esc(e.fecha_ingreso)} · ${e.valor_dia_cop != null ? `$${fmtNum(e.valor_dia_cop, 0)}/día` : 'sin tarifa'}</span>
+          <span class="muted">☎ ${esc(e.numero_contacto || '—')} · emergencia: ${esc(e.contacto_emergencia_nombre || '—')} (${esc(e.contacto_emergencia_telefono || '—')})</span>
+        </div>
+        <div class="row-actions">
+          <button type="button" class="btn-ghost-sm" data-editar="${esc(e.id)}">✏️ Editar</button>
+          <button type="button" class="btn-ghost-sm" data-novedad="${esc(e.id)}" data-nombre="${esc(e.nombre_completo)}">🏥 Novedad</button>
+          ${e.estado === 'activo' ? `<button type="button" class="btn-ghost-sm" data-desvincular="${esc(e.id)}">🗑️ Desvincular</button>` : ''}
+        </div>
+      </div>`).join('') || '<p class="muted">Sin empleados registrados.</p>';
+    lista.querySelectorAll('[data-editar]').forEach(b => b.addEventListener('click', () => {
+      const emp = (r.data || []).find(e => e.id === b.dataset.editar);
+      if (emp) abrirModalEmpleado(emp);
+    }));
+    lista.querySelectorAll('[data-desvincular]').forEach(b => b.addEventListener('click', async () => {
+      if (!confirm('¿Desvincular este empleado? Queda conservado en la trazabilidad.')) return;
+      await api(`/admin/equipo-trabajo/${b.dataset.desvincular}`, { method: 'DELETE', headers: headers() });
+      await cargarEquipo();
+    }));
+    lista.querySelectorAll('[data-novedad]').forEach(b => b.addEventListener('click', () => abrirModalNovedad(b.dataset.novedad, b.dataset.nombre)));
+
+    tarifasDiv.innerHTML = (t.data || []).map(x => `
+      <div class="labor-row"><div class="labor-info"><b>${esc(x.rol_etiqueta)}</b>
+        <span class="muted">valor por día de trabajo</span></div>
+        <label class="field-inline"><span>$ COP</span><input type="number" min="0" step="1000"
+          data-tarifa-rol="${esc(x.rol)}" value="${x.valor_dia_cop ?? ''}" placeholder="Ej. 120000" /></label></div>`).join('');
+    tarifasDiv.querySelectorAll('[data-tarifa-rol]').forEach(inp => inp.addEventListener('change', async () => {
+      if (inp.value === '' || Number(inp.value) < 0) return;
+      await api(`/admin/equipo-trabajo/tarifas/${inp.dataset.tarifaRol}`, {
+        method: 'PUT', headers: headers(),
+        body: JSON.stringify({ valor_dia_cop: Number(inp.value) }),
+      });
+      await cargarEquipo();
+    }));
+
+    novedadesDiv.innerHTML = (n.data || []).map(x => `
+      <div class="labor-row"><div class="labor-info">
+        <b>🏥 ${esc(x.empleado_nombre)}</b>
+        <span class="muted">${esc(x.tipo)} · desde ${esc(x.fecha_inicio)}${x.fecha_fin ? ` hasta ${esc(x.fecha_fin)}` : ''}${x.reemplazo_nombre ? ` · reemplazo: ${esc(x.reemplazo_nombre)}` : ''}</span>
+      </div>
+      <button type="button" class="btn-ghost-sm" data-cerrar-nov="${esc(x.id)}">✅ Cerrar novedad</button></div>`).join('')
+      || '<p class="muted">Sin novedades abiertas.</p>';
+    novedadesDiv.querySelectorAll('[data-cerrar-nov]').forEach(b => b.addEventListener('click', async () => {
+      await api(`/admin/equipo-trabajo/novedades/${b.dataset.cerrarNov}/cerrar`, { method: 'PUT', headers: headers() });
+      await cargarEquipo();
+    }));
+  } catch (e) {
+    lista.innerHTML = errorBanner(e.message);
+  }
+}
+
+function abrirModalEmpleado(emp = null) {
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = emp ? '✏️ Editar empleado' : '➕ Registrar empleado';
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <div class="form-grid">
+      <label class="field"><span>Nombres *</span><input id="eq-nombres" maxlength="120" value="${esc(emp?.nombres || '')}" /></label>
+      <label class="field"><span>Apellidos *</span><input id="eq-apellidos" maxlength="120" value="${esc(emp?.apellidos || '')}" /></label>
+      <label class="field"><span>Tipo documento</span>
+        <select id="eq-tipo">${['CC', 'CE', 'TI', 'PASAPORTE', 'NIT'].map(t => `<option value="${t}" ${emp?.tipo_documento === t ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
+      <label class="field"><span>Número documento *</span><input id="eq-doc" maxlength="20" value="${esc(emp?.numero_documento || '')}" /></label>
+      <label class="field"><span>Lugar de domicilio</span><input id="eq-domicilio" maxlength="200" value="${esc(emp?.lugar_domicilio || '')}" /></label>
+      <label class="field"><span>Número de contacto</span><input id="eq-contacto" maxlength="20" value="${esc(emp?.numero_contacto || '')}" /></label>
+      <label class="field"><span>Contacto de emergencia (nombre)</span><input id="eq-emergencia-n" maxlength="200" value="${esc(emp?.contacto_emergencia_nombre || '')}" /></label>
+      <label class="field"><span>Contacto de emergencia (teléfono)</span><input id="eq-emergencia-t" maxlength="20" value="${esc(emp?.contacto_emergencia_telefono || '')}" /></label>
+      <label class="field"><span>Rol *</span>
+        <select id="eq-rol">${Object.entries(ROLES_EQUIPO_LABEL).map(([k, v]) => `<option value="${k}" ${emp?.rol === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
+      <label class="field"><span>Fecha de ingreso *</span><input id="eq-ingreso" type="date" value="${esc(emp?.fecha_ingreso || '')}" /></label>
+      <label class="field"><span>Estado</span>
+        <select id="eq-estado"><option value="activo" ${emp?.estado !== 'desvinculado' ? 'selected' : ''}>Activo</option>
+          <option value="desvinculado" ${emp?.estado === 'desvinculado' ? 'selected' : ''}>Desvinculado</option></select></label>
+      <label class="field"><span>Valor día (COP) — opcional</span><input id="eq-valor" type="number" min="0" step="1000" value="${emp?.valor_dia_cop ?? ''}" /></label>
+    </div>`;
+  document.getElementById('modal-msg').innerHTML = '';
+  m.classList.remove('hidden');
+  document.getElementById('modal-guardar').onclick = async () => {
+    const body = {
+      nombres: document.getElementById('eq-nombres').value.trim(),
+      apellidos: document.getElementById('eq-apellidos').value.trim(),
+      tipo_documento: document.getElementById('eq-tipo').value,
+      numero_documento: document.getElementById('eq-doc').value.trim(),
+      lugar_domicilio: document.getElementById('eq-domicilio').value.trim() || null,
+      numero_contacto: document.getElementById('eq-contacto').value.trim() || null,
+      contacto_emergencia_nombre: document.getElementById('eq-emergencia-n').value.trim() || null,
+      contacto_emergencia_telefono: document.getElementById('eq-emergencia-t').value.trim() || null,
+      rol: document.getElementById('eq-rol').value,
+      fecha_ingreso: document.getElementById('eq-ingreso').value,
+      estado: document.getElementById('eq-estado').value,
+    };
+    const valor = document.getElementById('eq-valor').value;
+    body.valor_dia_cop = valor === '' ? null : Number(valor);
+    if (!body.nombres || !body.apellidos || !body.numero_documento || !body.fecha_ingreso) {
+      document.getElementById('modal-msg').innerHTML = errorBanner('Complete los campos obligatorios (*).');
+      return;
+    }
+    try {
+      if (emp) {
+        await api(`/admin/equipo-trabajo/${emp.id}`, { method: 'PUT', headers: headers(), body: JSON.stringify(body) });
+      } else {
+        await api('/admin/equipo-trabajo', { method: 'POST', headers: headers(), body: JSON.stringify(body) });
+      }
+      cerrarModal();
+      await cargarEquipo();
+    } catch (e) {
+      document.getElementById('modal-msg').innerHTML = errorBanner(e.message);
+    }
+  };
+}
+
+async function abrirModalNovedad(empleadoId, nombre) {
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = `🏥 Novedad — ${nombre}`;
+  let coms = { data: [] };
+  let equipo = { data: [] };
+  try {
+    coms = await api('/admin/comisiones?estado=asignada');
+    equipo = await api('/admin/equipo-trabajo?estado=activo');
+  } catch { /* sin datos: modal sigue funcionando */ }
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <div class="form-grid">
+      <label class="field"><span>Tipo *</span>
+        <select id="nov-tipo"><option value="incapacidad">Incapacidad</option>
+          <option value="ausencia">Ausencia</option><option value="otro">Otro</option></select></label>
+      <label class="field"><span>Fecha inicio *</span><input id="nov-inicio" type="date" value="${new Date().toISOString().slice(0, 10)}" /></label>
+      <label class="field"><span>Fecha fin (opcional)</span><input id="nov-fin" type="date" /></label>
+      <label class="field"><span>Comisión afectada (opcional)</span>
+        <select id="nov-comision"><option value="">—</option>${(coms.data || []).map(c => `<option value="${esc(c.id)}">${esc(c.finca_nombre || c.finca_id)} · ${esc(c.estado)}</option>`).join('')}</select></label>
+      <label class="field"><span>Reemplazo (opcional)</span>
+        <select id="nov-reemplazo"><option value="">— Sin reemplazo —</option>${(equipo.data || []).filter(e => e.id !== empleadoId).map(e => `<option value="${esc(e.id)}">${esc(e.nombre_completo)} (${esc(e.rol_etiqueta)})</option>`).join('')}</select></label>
+      <label class="field"><span>Descripción</span><textarea id="nov-desc" rows="2"></textarea></label>
+    </div>`;
+  document.getElementById('modal-msg').innerHTML = '';
+  m.classList.remove('hidden');
+  document.getElementById('modal-guardar').onclick = async () => {
+    const body = {
+      tipo: document.getElementById('nov-tipo').value,
+      fecha_inicio: document.getElementById('nov-inicio').value,
+      fecha_fin: document.getElementById('nov-fin').value || null,
+      comision_id: document.getElementById('nov-comision').value || null,
+      reemplazo_empleado_id: document.getElementById('nov-reemplazo').value || null,
+      descripcion: document.getElementById('nov-desc').value.trim() || null,
+    };
+    if (!body.fecha_inicio) {
+      document.getElementById('modal-msg').innerHTML = errorBanner('Indique la fecha de inicio.');
+      return;
+    }
+    try {
+      await api(`/admin/equipo-trabajo/${empleadoId}/novedades`, { method: 'POST', headers: headers(), body: JSON.stringify(body) });
+      cerrarModal();
+      await cargarEquipo();
+    } catch (e) {
+      document.getElementById('modal-msg').innerHTML = errorBanner(e.message);
+    }
+  };
+}
+
+async function cargarComisiones() {
+  const sel = document.getElementById('com-finca');
+  if (sel && !sel.options.length) {
+    sel.innerHTML = '<option value="">Todas las fincas</option>' + state.fincas.map(f => `<option value="${esc(f.id)}">${esc(f.nombre)}</option>`).join('');
+  }
+  const params = new URLSearchParams();
+  if (sel.value) params.set('finca_id', sel.value);
+  const estado = document.getElementById('com-estado').value;
+  if (estado) params.set('estado', estado);
+  const lista = document.getElementById('com-lista');
+  lista.innerHTML = '<p class="muted">Cargando…</p>';
+  try {
+    const r = await api(`/admin/comisiones?${params}`);
+    lista.innerHTML = (r.data || []).map(c => `
+      <div class="labor-row">
+        <div class="labor-info">
+          <b>🗂️ ${esc(c.finca_nombre || c.finca_id)}</b>
+          <span class="muted">${esc(c.servicio || 'servicio sin especificar')} · asignada ${esc(c.fecha_asignacion)} · inicio ${esc(c.fecha_inicio_tomas || '—')} · fin ${esc(c.fecha_fin_tomas || '—')}</span>
+          <span>${badge(c.estado, c.estado === 'finalizada' ? 'ok' : c.estado === 'cancelada' ? 'warning' : '')}
+            · comisión ${c.valor_comision_cop != null ? `$${fmtNum(c.valor_comision_cop, 0)}` : '—'}
+            · cobro ${c.valor_cobro_servicio_cop != null ? `$${fmtNum(c.valor_cobro_servicio_cop, 0)}` : '—'}
+            · validación ${c.valor_validacion_cop != null ? `$${fmtNum(c.valor_validacion_cop, 0)}` : '—'}
+            · plataforma ${c.valor_plataforma_cop != null ? `$${fmtNum(c.valor_plataforma_cop, 0)}` : '—'}</span>
+          <span class="muted">${(c.miembros || []).map(x => `${esc(x.nombre)} (${esc(ROLES_EQUIPO_LABEL[x.rol_en_comision] || x.rol_en_comision)})`).join(' · ')}</span>
+        </div>
+        <div class="row-actions">
+          ${c.estado === 'asignada' ? `<button type="button" class="btn-ghost-sm" data-fin="${esc(c.id)}">✅ Registrar fin de medición</button>` : ''}
+          ${c.estado !== 'finalizada' ? `<button type="button" class="btn-ghost-sm" data-cancel="${esc(c.id)}">🗑️ Cancelar</button>` : ''}
+        </div>
+      </div>`).join('') || '<p class="muted">Sin comisiones registradas.</p>';
+    lista.querySelectorAll('[data-fin]').forEach(b => b.addEventListener('click', async () => {
+      if (!confirm('Registrar el fin de la medición de esta comisión (libera el equipo para otra finca)?')) return;
+      await api(`/admin/comisiones/${b.dataset.fin}/finalizar`, { method: 'POST', headers: headers(), body: JSON.stringify({}) });
+      await cargarComisiones();
+    }));
+    lista.querySelectorAll('[data-cancel]').forEach(b => b.addEventListener('click', async () => {
+      if (!confirm('¿Cancelar esta comisión?')) return;
+      await api(`/admin/comisiones/${b.dataset.cancel}`, { method: 'DELETE', headers: headers() });
+      await cargarComisiones();
+    }));
+  } catch (e) {
+    lista.innerHTML = errorBanner(e.message);
+  }
+}
+
+async function abrirModalComision() {
+  const m = document.getElementById('modal-editor');
+  const [equipo] = await Promise.all([api('/admin/equipo-trabajo?estado=activo')]);
+  const activos = equipo.data || [];
+  const porRol = (rol) => activos.filter(e => e.rol === rol);
+  document.getElementById('modal-titulo').textContent = '🗂️ Crear comisión';
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <div class="form-grid">
+      <label class="field"><span>Finca *</span>
+        <select id="com-f">${state.fincas.map(f => `<option value="${esc(f.id)}">${esc(f.nombre)}</option>`).join('')}</select></label>
+      <label class="field"><span>Servicio / tipo de reporte</span>
+        <select id="com-servicio"><option value="">—</option>
+          <option value="muestreo_suelos">Muestreo de suelos</option>
+          <option value="recomendacion_siembra">Recomendación de siembra</option>
+          <option value="reporte_completo">Reporte completo</option>
+          <option value="balance_hidrico">Balance hídrico</option>
+          <option value="trazabilidad_bpa">Trazabilidad BPA</option>
+          <option value="otro">Otro</option></select></label>
+      <label class="field"><span>Fecha de asignación *</span><input id="com-fasignacion" type="date" value="${new Date().toISOString().slice(0, 10)}" /></label>
+      <label class="field"><span>Fecha inicio de tomas</span><input id="com-finicio" type="date" /></label>
+      <label class="field"><span>Instrumentador *</span>
+        <select id="com-instrumentador">${porRol('instrumentador').map(e => `<option value="${esc(e.id)}">${esc(e.nombre_completo)}</option>`).join('')}</select></label>
+      <label class="field"><span>Cadeneros sensoristas * (Ctrl+clic para varios)</span>
+        <select id="com-cadeneros" multiple size="4">${porRol('cadenero_sensorista').map(e => `<option value="${esc(e.id)}">${esc(e.nombre_completo)}</option>`).join('')}</select></label>
+      <label class="field"><span>Chofer (opcional)</span>
+        <select id="com-chofer"><option value="">—</option>${porRol('chofer').map(e => `<option value="${esc(e.id)}">${esc(e.nombre_completo)}</option>`).join('')}</select></label>
+      <label class="field"><span>Agrónomo (opcional)</span>
+        <select id="com-agronomo"><option value="">—</option>${porRol('agronomo').map(e => `<option value="${esc(e.id)}">${esc(e.nombre_completo)}</option>`).join('')}</select></label>
+      <label class="field"><span>Valor comisión (COP)</span><input id="com-vcomision" type="number" min="0" step="10000" /></label>
+      <label class="field"><span>Valor cobro servicio (COP)</span><input id="com-vcobro" type="number" min="0" step="10000" /></label>
+      <label class="field"><span>Valor validación estudio (COP)</span><input id="com-vvalidacion" type="number" min="0" step="10000" /></label>
+      <label class="field"><span>Valor plataforma (COP)</span><input id="com-vplataforma" type="number" min="0" step="10000" /></label>
+      <label class="field"><span>Observaciones</span><textarea id="com-obs" rows="2"></textarea></label>
+    </div>`;
+  document.getElementById('modal-msg').innerHTML = '';
+  m.classList.remove('hidden');
+  document.getElementById('modal-guardar').onclick = async () => {
+    const miembros = [];
+    const instrumentador = document.getElementById('com-instrumentador').value;
+    if (instrumentador) miembros.push({ empleado_id: instrumentador, rol_en_comision: 'instrumentador' });
+    [...document.getElementById('com-cadeneros').selectedOptions].forEach(o => miembros.push({ empleado_id: o.value, rol_en_comision: 'cadenero_sensorista' }));
+    const chofer = document.getElementById('com-chofer').value;
+    if (chofer) miembros.push({ empleado_id: chofer, rol_en_comision: 'chofer' });
+    const agronomo = document.getElementById('com-agronomo').value;
+    if (agronomo) miembros.push({ empleado_id: agronomo, rol_en_comision: 'agronomo' });
+    const num = (id) => { const v = document.getElementById(id).value; return v === '' ? null : Number(v); };
+    const body = {
+      finca_id: document.getElementById('com-f').value,
+      servicio: document.getElementById('com-servicio').value || null,
+      fecha_asignacion: document.getElementById('com-fasignacion').value,
+      fecha_inicio_tomas: document.getElementById('com-finicio').value || null,
+      miembros,
+      valor_comision_cop: num('com-vcomision'),
+      valor_cobro_servicio_cop: num('com-vcobro'),
+      valor_validacion_cop: num('com-vvalidacion'),
+      valor_plataforma_cop: num('com-vplataforma'),
+      observaciones: document.getElementById('com-obs').value.trim() || null,
+    };
+    if (!body.fecha_asignacion) {
+      document.getElementById('modal-msg').innerHTML = errorBanner('Indique la fecha de asignación.');
+      return;
+    }
+    try {
+      await api('/admin/comisiones', { method: 'POST', headers: headers(), body: JSON.stringify(body) });
+      cerrarModal();
+      await cargarComisiones();
+    } catch (e) {
+      document.getElementById('modal-msg').innerHTML = errorBanner(e.message);
+    }
+  };
+}
+
+async function cargarListaTrabajos() {
+  const params = new URLSearchParams();
+  const etapa = document.getElementById('lt-etapa').value;
+  const estado = document.getElementById('lt-estado').value;
+  const desde = document.getElementById('lt-desde').value;
+  const hasta = document.getElementById('lt-hasta').value;
+  if (etapa) params.set('etapa', etapa);
+  if (estado) params.set('estado', estado);
+  if (desde) params.set('desde', desde);
+  if (hasta) params.set('hasta', hasta);
+  const lista = document.getElementById('lt-lista');
+  const chart = document.getElementById('lt-chart');
+  lista.innerHTML = '<p class="muted">Cargando…</p>';
+  try {
+    const r = await api(`/admin/lista-trabajos?${params}`);
+    const conteos = r.conteos_por_etapa || {};
+    const maxEtapa = Math.max(1, ...Object.values(conteos));
+    chart.innerHTML = `
+      <h3>📈 Órdenes de trabajo por etapa</h3>
+      ${Object.entries(r.etiquetas_etapa || {}).map(([k, v]) => `
+        <div class="chart-row">
+          <span class="chart-label">${esc(v)}</span>
+          <div class="chart-bar"><div style="width:${Math.round((conteos[k] || 0) * 100 / maxEtapa)}%"></div></div>
+          <span class="chart-num">${conteos[k] || 0}</span>
+        </div>`).join('')}
+      <p class="muted">Pendientes: ${(r.conteos_por_estado || {}).pendiente || 0} · En proceso: ${(r.conteos_por_estado || {}).en_proceso || 0} · Finalizadas: ${(r.conteos_por_estado || {}).finalizada || 0}</p>`;
+    lista.innerHTML = (r.data || []).map(d => `
+      <div class="labor-row" style="border-left:6px solid ${esc(d.semaforo)}">
+        <div class="labor-info">
+          <b>🏡 ${esc(d.nombre)}</b>
+          <span class="muted">${esc(d.municipio || '—')} · ${esc(d.cultivo_sembrado || 'sin cultivo')}</span>
+          <span>${badge(d.etapa_etiqueta, d.etapa === 'finalizada' ? 'ok' : d.etapa === 'reporte' ? 'ok' : 'warning')}
+            · estado: ${esc(d.estado)} · inicio ${esc(d.fecha_inicio || '—')} · fin ${esc(d.fecha_fin || '—')}</span>
+          ${(d.faltantes || []).length ? `<span class="muted">⚠️ Faltan: ${d.faltantes.map(esc).join(' · ')}</span>` : '<span>✅ Todas las actividades completas</span>'}
+        </div>
+      </div>`).join('') || '<p class="muted">No hay fincas que coincidan con los filtros.</p>';
+  } catch (e) {
+    lista.innerHTML = errorBanner(e.message);
   }
 }
 

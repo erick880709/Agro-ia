@@ -170,6 +170,7 @@ async def generar_reporte(
     db: AsyncSession = Depends(get_db),
     x_user_role: str | None = Header(None, alias="X-User-Role"),
     x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
 ):
     """Genera el HTML del reporte según el tipo solicitado."""
     await verificar_acceso_finca(db, x_user_role, x_user_email, body.finca_id)
@@ -490,6 +491,24 @@ async def generar_reporte(
     }.get(body.tipo, "Reporte AgroIA")
 
     logger.info("reporte_generado", finca_id=body.finca_id, tipo=body.tipo, rol=(x_user_role or "?"))
+    # Traza de la orden de trabajo: el reporte generado marca el fin de actividad
+    # de la finca en la lista de trabajos (Admin).
+    try:
+        from agroia_backend.services.auditoria import registrar_auditoria
+
+        await registrar_auditoria(
+            db,
+            usuario_email=(x_user_email or "desconocido@agroia.co").strip().lower(),
+            usuario_nombre=x_user_nombre,
+            rol=x_user_role,
+            accion="reporte.generar",
+            entidad="reporte",
+            entidad_id=body.finca_id,
+            detalle={"tipo": body.tipo, "modelo_pronostico": body.modelo_pronostico},
+        )
+        await db.commit()
+    except Exception as e:  # noqa: BLE001 — la traza no debe romper el reporte
+        logger.warning("reporte_auditoria_fallo", error=str(e))
     return {
         "titulo": titulo,
         "tipo": body.tipo,

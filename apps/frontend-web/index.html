@@ -77,6 +77,9 @@
         <button class="tab submenu-item" data-tab="insumos">💰 Administrar insumos</button>
         <button class="tab submenu-item" data-tab="auditoria">🕵️ Auditoría</button>
         <button class="tab submenu-item" data-tab="bpa">📋 Trazabilidad / BPA</button>
+        <button class="tab submenu-item" data-tab="equipo">🧑‍🤝‍🧑 Equipo de trabajo</button>
+        <button class="tab submenu-item" data-tab="comisiones">🗂️ Comisiones</button>
+        <button class="tab submenu-item" data-tab="lista-trabajos">📊 Lista de trabajos</button>
         <button class="tab submenu-item" data-tab="reentrenar">🤖 Reentrenar modelo</button>
       </div>
     </div>
@@ -665,6 +668,76 @@
         <div id="bpa-resumen"></div>
         <h3>🗓️ Visitas de verificación <span class="muted">(línea de tiempo de trazabilidad)</span></h3>
         <div id="bpa-visitas"></div>
+      </div>
+    </section>
+
+    <!-- ============ EQUIPO DE TRABAJO (Admin) ============ -->
+    <section id="view-equipo" class="view">
+      <div class="card">
+        <h2>🧑‍🤝‍🧑 Equipo de trabajo <span class="muted">(solo administrador)</span></h2>
+        <p class="muted">Empleados del equipo de campo (instrumentador, cadenero sensorista, chofer, agrónomo),
+        tarifas por rol y novedades (incapacidades con reemplazo). Todo queda en auditoría.</p>
+        <div class="audit-filtros">
+          <select id="equipo-rol"><option value="">Todos los roles</option>
+            <option value="instrumentador">Instrumentador</option>
+            <option value="cadenero_sensorista">Cadenero sensorista</option>
+            <option value="chofer">Chofer</option>
+            <option value="agronomo">Agrónomo</option></select>
+          <select id="equipo-estado"><option value="">Todos los estados</option>
+            <option value="activo">Activo</option><option value="desvinculado">Desvinculado</option></select>
+          <input id="equipo-search" placeholder="Nombre o documento…" />
+          <button class="btn" id="equipo-cargar">🔄 Consultar</button>
+          <button class="btn" id="equipo-nuevo">➕ Registrar empleado</button>
+        </div>
+        <div id="equipo-lista"></div>
+        <h3>💰 Tarifas por rol <span class="muted">(valor por día de trabajo)</span></h3>
+        <div id="equipo-tarifas"></div>
+        <h3>🏥 Novedades del equipo <span class="muted">(incapacidades / ausencias)</span></h3>
+        <div id="equipo-novedades"></div>
+      </div>
+    </section>
+
+    <!-- ============ COMISIONES (Admin) ============ -->
+    <section id="view-comisiones" class="view">
+      <div class="card">
+        <h2>🗂️ Comisiones <span class="muted">(solo administrador)</span></h2>
+        <p class="muted">Comisiones de toma de medidas por finca: equipo, fechas de asignación/inicio/fin,
+        valores de la comisión, cobro del servicio, validación y plataforma.</p>
+        <div class="audit-filtros">
+          <select id="com-finca"></select>
+          <select id="com-estado"><option value="">Todos los estados</option>
+            <option value="asignada">Asignada</option><option value="en_campo">En campo</option>
+            <option value="finalizada">Finalizada</option><option value="cancelada">Cancelada</option></select>
+          <button class="btn" id="com-cargar">🔄 Consultar</button>
+          <button class="btn" id="com-nueva">➕ Crear comisión</button>
+        </div>
+        <div id="com-lista"></div>
+      </div>
+    </section>
+
+    <!-- ============ LISTA DE TRABAJOS (Admin) ============ -->
+    <section id="view-lista-trabajos" class="view">
+      <div class="card">
+        <h2>📊 Lista de trabajos <span class="muted">(solo administrador)</span></h2>
+        <p class="muted">Cada finca es una orden de trabajo: semáforo de etapa, actividades faltantes y
+        contabilización por etapa/estado.</p>
+        <div class="audit-filtros">
+          <select id="lt-etapa"><option value="">Todas las etapas</option>
+            <option value="registro">Registro (finca/lote)</option>
+            <option value="asignacion_comision">Asignación de comisión</option>
+            <option value="toma_muestras">Toma de muestras</option>
+            <option value="recomendacion">Generación de recomendación</option>
+            <option value="reporte">Generación de reporte</option>
+            <option value="finalizada">Fin de actividad</option></select>
+          <select id="lt-estado"><option value="">Todos los estados</option>
+            <option value="pendiente">Pendiente</option><option value="en_proceso">En proceso</option>
+            <option value="finalizada">Finalizada</option></select>
+          <label class="field-inline"><span>Desde</span><input id="lt-desde" type="date" /></label>
+          <label class="field-inline"><span>Hasta</span><input id="lt-hasta" type="date" /></label>
+          <button class="btn" id="lt-cargar">🔄 Consultar</button>
+        </div>
+        <div id="lt-chart"></div>
+        <div id="lt-lista"></div>
       </div>
     </section>
 

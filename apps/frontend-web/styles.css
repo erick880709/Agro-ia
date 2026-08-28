@@ -79,6 +79,18 @@ body {
 }
 #bpa-visitas .labor-row { border-left: 3px solid #cfe3d2; }
 
+/* ── Equipo, comisiones y lista de trabajos (Admin) ── */
+.row-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.row-actions .btn-ghost-sm { color: var(--verde-700, #1b5e20); border-color: #9fc4a8; background: #fff; }
+.field-inline { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; }
+.field-inline span { color: #5b6b60; }
+.field-inline input { width: 130px; padding: 5px 8px; border: 1px solid #cfe3d2; border-radius: 8px; }
+.chart-row { display: flex; align-items: center; gap: 10px; margin: 6px 0; }
+.chart-label { width: 220px; font-size: 0.85rem; color: #3d4c43; }
+.chart-num { width: 40px; text-align: right; font-weight: 700; color: var(--verde-700, #1b5e20); }
+.chart-bar { flex: 1; background: #eef2ee; border-radius: 6px; height: 18px; overflow: hidden; }
+.chart-bar > div { height: 100%; background: linear-gradient(90deg, #7fc08a, #1b5e20); border-radius: 6px; }
+
 /* ── Bloque «Rotación sugerida» en el modal de nuevo ciclo ── */
 .rotacion-sugerida .nota { background: #eef7ef; border: 1px solid #cfe3d2; border-radius: 10px; padding: 10px 14px; margin-top: 12px; }
 .rotacion-lista { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 6px; }
