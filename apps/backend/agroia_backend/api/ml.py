@@ -37,6 +37,31 @@ class ReentrenarRequest(BaseModel):
     modo: str = Field("active-learning", pattern="^(active-learning|full)$")
 
 
+@admin_router.get("/admin/v4/debug-enums")
+async def debug_enums(
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+):
+    """Diagnóstico: valores actuales de los tipos enum en la BD (solo Admin)."""
+    if (x_user_role or "").strip().lower() != "admin":
+        raise HTTPException(status_code=403, detail={
+            "code": "FORBIDDEN_ROLE", "message": "Solo administrador.",
+        })
+    from sqlalchemy import text
+
+    filas = (
+        await db.execute(
+            text(
+                "SELECT t.typname, array_agg(e.enumlabel ORDER BY e.enumsortorder) "
+                "FROM pg_enum e JOIN pg_type t ON t.oid = e.enumtypid "
+                "JOIN pg_namespace n ON n.oid = t.typnamespace "
+                "WHERE n.nspname = 'agroia' GROUP BY t.typname"
+            )
+        )
+    ).all()
+    return {nombre: list(valores) for nombre, valores in filas}
+
+
 @admin_router.post("/admin/v4/sembrar")
 async def sembrar_v4(
     db: AsyncSession = Depends(get_db),

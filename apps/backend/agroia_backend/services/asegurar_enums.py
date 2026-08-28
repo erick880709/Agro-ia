@@ -22,7 +22,11 @@ ENUMS = {
     "estadorecomendacion": ["PUBLICADA", "ADVERTENCIA", "BLOQUEADA"],
     "planmembresia": ["MENSUAL", "SEMESTRAL", "ANUAL"],
     "prioridadregla": ["CRITICA", "ALTA", "MEDIA", "BAJA"],
-    "rolusuario": ["ADMIN", "CLIENTE", "TECNICO", "INVESTIGADOR", "AGRONOMO", "EXTENSIONISTA"],
+    "rolusuario": [
+        "ADMIN", "AGRONOMO", "CLIENTE", "TECNICO", "INVESTIGADOR", "EXTENSIONISTA",
+        # Estilo valor (BDs creadas con versiones antiguas que usaban .value)
+        "Admin", "Agronomo", "Cliente", "Tecnico", "Investigador", "Extensionista",
+    ],
     "stagemodelo": ["STAGING", "PRODUCTION", "ARCHIVED"],
     "texturasuelo": [
         "ARENA", "LIMO", "ARCILLA",
@@ -39,7 +43,7 @@ ENUMS = {
 
 
 async def asegurar_enums() -> list[str]:
-    """Crea los tipos enum faltantes. Retorna los nombres creados."""
+    """Crea los tipos enum faltantes y agrega valores faltantes. Retorna los creados."""
     creados: list[str] = []
     async with async_session_factory() as db:
         for nombre, valores in ENUMS.items():
@@ -53,13 +57,33 @@ async def asegurar_enums() -> list[str]:
                     {"n": nombre},
                 )
             ).first()
-            if existe is not None:
+            if existe is None:
+                valores_sql = ", ".join(f"'{v}'" for v in valores)
+                await db.execute(
+                    sa.text(f"CREATE TYPE agroia.{nombre} AS ENUM ({valores_sql})")
+                )
+                creados.append(nombre)
                 continue
-            valores_sql = ", ".join(f"'{v}'" for v in valores)
-            await db.execute(
-                sa.text(f"CREATE TYPE agroia.{nombre} AS ENUM ({valores_sql})")
+            # El tipo existe: agregar solo los valores faltantes (idempotente)
+            actuales = set(
+                (
+                    await db.execute(
+                        sa.text(
+                            "SELECT e.enumlabel FROM pg_enum e "
+                            "JOIN pg_type t ON t.oid = e.enumtypid "
+                            "JOIN pg_namespace n ON n.oid = t.typnamespace "
+                            "WHERE n.nspname = 'agroia' AND t.typname = :n"
+                        ),
+                        {"n": nombre},
+                    )
+                ).scalars().all()
             )
-            creados.append(nombre)
+            for valor in valores:
+                if valor in actuales:
+                    continue
+                await db.execute(
+                    sa.text(f"ALTER TYPE agroia.{nombre} ADD VALUE IF NOT EXISTS '{valor}'")
+                )
         await db.commit()
     if creados:
         logger.info("enums_creados_en_arranque", creados=creados)
