@@ -43,6 +43,18 @@ async def fincas_permitidas_ids(
     if r in ROLES_TOTALES:
         return None
 
+    # Extensionista (v4): fincas de los municipios asignados (multi-finca por zona)
+    if r == "extensionista":
+        usuario = await get_usuario(db, email)
+        if usuario is None or not usuario.municipios_asignados:
+            return []
+        fincas_zona = (
+            await db.execute(
+                select(Finca.id).where(Finca.municipio.in_(usuario.municipios_asignados))
+            )
+        ).scalars().all()
+        return list(fincas_zona)
+
     # Cliente (u otro rol restringido): requiere email registrado
     usuario = await get_usuario(db, email)
     if usuario is None:

@@ -10,7 +10,7 @@ from typing import Optional
 
 from agroia.database import Base
 from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, func
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import ARRAY, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from agroia_backend.models import TenantMixin, TimestampMixin
@@ -22,6 +22,7 @@ class RolUsuario(str, enum.Enum):
     CLIENTE = "Cliente"
     TECNICO = "Tecnico"
     INVESTIGADOR = "Investigador"
+    EXTENSIONISTA = "Extensionista"
 
 
 class PlanMembresia(str, enum.Enum):
@@ -60,6 +61,12 @@ class Usuario(Base, TenantMixin, TimestampMixin):
         comment="Consentimiento informado Ley 1581/2012"
     )
     email_verificado: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
+    # ── Rol Extensionista: municipios de su zona asignada (multi-finca) ──
+    municipios_asignados: Mapped[list[str] | None] = mapped_column(
+        ARRAY(String), nullable=True,
+        comment="Municipios asignados al extensionista (filtro de zona)",
+    )
 
     # Relaciones
     membresia: Mapped[Optional["Membresia"]] = relationship(

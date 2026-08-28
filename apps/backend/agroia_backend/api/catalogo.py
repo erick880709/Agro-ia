@@ -117,7 +117,15 @@ async def obtener_cultivo(cultivo_id: str, db: AsyncSession = Depends(get_db)):
 
 @router.post("/cultivos", response_model=CultivoResponse, status_code=201)
 async def crear_cultivo(body: CultivoCreate, db: AsyncSession = Depends(get_db)):
-    """Crea un nuevo cultivo."""
+    """Crea un nuevo cultivo. El ícono explícito es obligatorio (gobernanza v4)."""
+    if not body.icono:
+        raise HTTPException(status_code=422, detail={
+            "code": "ICONO_REQUERIDO",
+            "message": (
+                "Todo cultivo activo requiere un campo 'icono' explícito "
+                "(emoji exacto o 'custom:nombre_v1'). No se permite dejar el valor por defecto."
+            ),
+        })
     try:
         return await svc.crear_cultivo(db, **body.model_dump())
     except ValidationError as e:

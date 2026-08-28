@@ -17,6 +17,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia_backend.models.cultivo import Cultivo, EstadoFicha, FichaTecnica
+from agroia_backend.models.checklist_bpa import ChecklistBpa
 from agroia_backend.models.dispositivo_iot import DispositivoIoT
 from agroia_backend.models.finca import Finca
 from agroia_backend.models.labor import Labor
@@ -383,6 +384,24 @@ async def generar_reporte(
             float(finca.latitud), float(finca.longitud), dias=7
         )
 
+    # ── v4: balance hídrico, rotación y avance BPA para el reporte ──
+    from agroia_backend.api.rotacion import calcular_rotacion
+    from agroia_backend.services.balance_hidrico import calcular_balance_hidrico
+
+    balance_hidrico = await calcular_balance_hidrico(db, finca, dias=7)
+    rotacion = await calcular_rotacion(db, finca_uuid)
+    checklist = (
+        await db.execute(select(ChecklistBpa).where(ChecklistBpa.finca_id == finca_uuid))
+    ).scalars().all()
+    bpa_resumen = {
+        "total": len(checklist),
+        "cumplidos": sum(1 for c in checklist if c.cumple),
+        "pct": (
+            round(sum(1 for c in checklist if c.cumple) * 100 / len(checklist), 1)
+            if checklist else None
+        ),
+    }
+
     html = generar_reporte_html(
         finca={
             "nombre": finca.nombre,
@@ -441,6 +460,9 @@ async def generar_reporte(
         advertencia_acumulacion=advertencia_acumulacion,
         pronostico_extendido=pronostico_extendido,
         labores=labores_report,
+        balance_hidrico=balance_hidrico,
+        rotacion=rotacion,
+        bpa_resumen=bpa_resumen,
     )
 
     titulo = {

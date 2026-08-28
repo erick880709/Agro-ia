@@ -123,7 +123,7 @@ async def listar_usuarios(
 
 
 @router.put("/admin/usuarios/{user_id}/rol")
-async def cambiar_rol(user_id: str, rol: str = Query(..., pattern="^(Admin|Cliente|Tecnico|Investigador)$")):
+async def cambiar_rol(user_id: str, rol: str = Query(..., pattern="^(Admin|Agronomo|Cliente|Tecnico|Investigador|Extensionista)$")):
     """Cambia el rol de un usuario (solo Admin)."""
     logger.info("role_changed", user_id=user_id, new_rol=rol)
     return {"status": "updated", "user_id": user_id, "rol": rol}
@@ -135,8 +135,9 @@ class UsuarioCreate(BaseModel):
     nombre: str = Field(..., min_length=2, max_length=200)
     email: EmailStr
     password: str = Field(..., min_length=8)
-    rol: str = Field("Cliente", pattern="^(Cliente|Tecnico|Investigador)$")
+    rol: str = Field("Cliente", pattern="^(Cliente|Tecnico|Investigador|Agronomo|Extensionista)$")
     finca_ids: list[str] = Field(default_factory=list, description="UUIDs de fincas a relacionar")
+    municipios_asignados: list[str] | None = Field(None, description="Municipios del extensionista (solo rol Extensionista)")
 
 
 class UsuarioAdminResponse(BaseModel):
@@ -195,6 +196,7 @@ async def crear_usuario(
         activo=True,
         consentimiento_datos=True,
         email_verificado=False,
+        municipios_asignados=list(body.municipios_asignados) if body.municipios_asignados else None,
     )
     db.add(usuario)
     await db.flush()
@@ -297,10 +299,13 @@ class UsuarioUpdate(BaseModel):
 
     nombre: str | None = Field(None, min_length=2, max_length=200)
     email: EmailStr | None = None
-    rol: str | None = Field(None, pattern="^(Admin|Agronomo|Cliente|Tecnico|Investigador)$")
+    rol: str | None = Field(None, pattern="^(Admin|Agronomo|Cliente|Tecnico|Investigador|Extensionista)$")
     activo: bool | None = None
     finca_ids: list[str] | None = Field(
         None, description="Lista completa de fincas relacionadas (reemplaza la actual)"
+    )
+    municipios_asignados: list[str] | None = Field(
+        None, description="Municipios del extensionista (reemplaza la actual)"
     )
 
 
@@ -376,6 +381,8 @@ async def editar_usuario(
         usuario.rol = RolUsuario[cambios["rol"].upper()]
     if "activo" in cambios:
         usuario.activo = bool(cambios["activo"])
+    if "municipios_asignados" in cambios:
+        usuario.municipios_asignados = list(cambios["municipios_asignados"]) if cambios["municipios_asignados"] else None
     detalle["campos"] = sorted(cambios)
 
     # ── Reemplazo de relaciones con fincas (si vienen) ──

@@ -69,7 +69,7 @@
   <div class="brand">Agro<em>IA</em></div>
   <div class="kicker">AgroInteligente Colombia · Manual de pantallas</div>
   <h1>Pantallas del sistema y su propósito</h1>
-  <div class="meta">Versión 2.10 · 2026-08-28 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
+  <div class="meta">Versión 2.10 · 2026-08-27 · Orden natural de trabajo — del primer acceso al uso avanzado</div>
 </header>
 
 <div class="wrap">
@@ -519,10 +519,35 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   (tabla <code>agroia.auditoria</code>).</p>
 </div>
 
+<!-- ─────────── P12 ─────────── -->
+<div class="pantalla" id="p12">
+  <div class="cab"><span class="icono">🧩</span><span class="titulo">P12 · Módulos v4 (agua, riego, plagas, BPA, zona)</span>
+    <span class="rol">Según matriz de roles</span></div>
+  <div class="objetivo"><b>Objetivo:</b> ampliar la cobertura funcional sin bloquear nunca el análisis
+  (regla de degradación: el dato faltante se lista, no detiene el reporte).</div>
+  <ul>
+    <li><b>💧 Agua de riego</b> (botón en la tarjeta de finca): historial + registro de CE/RAS/cloruros/boro
+    con clasificación FAO-29 (ninguna · leve-moderada · severa) y recomendación.</li>
+    <li><b>💧 Necesidad de riego (7 días)</b> (bloque en P1): balance ETo × Kc − lluvia desde Open-Meteo.
+    También en la sección R del reporte.</li>
+    <li><b>🐛 Monitoreo de plagas</b> (botón en el panel de lote): registro de campo con severidad/incidencia
+    y enriquecimiento informativo GBIF (ocurrencias en Colombia).</li>
+    <li><b>📈 Curva de extracción</b> y <b>🌾 Variedades</b> (botones en cada cultivo del Catálogo).</li>
+    <li><b>📋 Trazabilidad / BPA</b> (⚙️ Administración): checklist ICA 30021 y reporte de aplicaciones con
+    período de carencia; sección B del reporte.</li>
+    <li><b>🤖 Reentrenar modelo</b> (⚙️ Administración): encola <code>train_colombia.py</code> en background.</li>
+    <li><b>🔔 Notificaciones</b> (botón en la tarjeta de finca): canal WhatsApp/SMS/email con degradación a no-op.</li>
+    <li><b>🗺️ Mi zona</b> (pestaña exclusiva del rol Extensionista, landing tras login): fincas de sus
+    municipios asignados con alertas y recomendaciones pendientes.</li>
+  </ul>
+  <p><b>Reporte:</b> nuevas secciones R (riego), S (rotación sugerida) y B (trazabilidad BPA), junto a
+  Q (órdenes de trabajo).</p>
+</div>
+
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.10 · 2026-08-28<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.10 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

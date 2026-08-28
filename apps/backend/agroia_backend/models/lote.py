@@ -47,6 +47,11 @@ class Lote(Base):
     pedregosidad: Mapped[Pedregosidad | None] = mapped_column(
         nullable=True, comment="Pedregosidad del lote"
     )
+    # ── Compactación: resistencia a la penetración (penetrómetro, kPa) ──
+    resistencia_penetracion_kpa: Mapped[float | None] = mapped_column(
+        Numeric(6, 2), nullable=True,
+        comment="Resistencia a la penetración (kPa); dato de campo con penetrómetro",
+    )
     activo: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=True, server_default="true"
     )

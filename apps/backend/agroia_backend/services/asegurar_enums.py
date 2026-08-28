@@ -22,7 +22,7 @@ ENUMS = {
     "estadorecomendacion": ["PUBLICADA", "ADVERTENCIA", "BLOQUEADA"],
     "planmembresia": ["MENSUAL", "SEMESTRAL", "ANUAL"],
     "prioridadregla": ["CRITICA", "ALTA", "MEDIA", "BAJA"],
-    "rolusuario": ["ADMIN", "CLIENTE", "TECNICO", "INVESTIGADOR", "AGRONOMO"],
+    "rolusuario": ["ADMIN", "CLIENTE", "TECNICO", "INVESTIGADOR", "AGRONOMO", "EXTENSIONISTA"],
     "stagemodelo": ["STAGING", "PRODUCTION", "ARCHIVED"],
     "texturasuelo": [
         "ARENA", "LIMO", "ARCILLA",

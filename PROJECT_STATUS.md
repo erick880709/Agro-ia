@@ -1,9 +1,18 @@
 # AgroIA — Estado del Proyecto
 
 > **Fecha:** 2026-08-28 | **Versión:** 0.1.0 | **Pipeline:** janus → epicureo → archi → genesis → builder | **CI:** 🟢 verde | **Producción:** 🌐 https://agroia-backend.onrender.com (Render Free + Neon)
+### Módulos v4 — cobertura funcional ampliada (2026-08-27)
+
+Implementación de `context/contextoFuncional/AgroIA_Especificacion_Tecnica_v4.md` (principio rector: ningún reporte se bloquea por falta de datos):
+
+- **Migración `023_modulos_v4`** (023→032): `analisis_agua_riego`, `curvas_extraccion`, `monitoreo_plagas`, `variedades_cultivo`, `compatibilidad_rotacion`, `checklist_bpa`, `periodos_carencia`, `preferencias_notificacion`, Kc en `cultivos`, `resistencia_penetracion_kpa` en `lotes`, rol `Extensionista` + `municipios_asignados`.
+- **1.A Agua de riego FAO-29** · **1.B Curvas de extracción** · **1.C Balance hídrico ETo/Kc** (Open-Meteo) · **1.D Monitoreo de plagas MIP** (GBIF) · **1.E Variedades** · **1.F Rotación** · **1.G Trazabilidad BPA** (ICA 30021 + carencias) · **1.H Compactación** · **1.I Notificaciones WhatsApp** (degradación total sin credenciales) · **1.J Rol Extensionista** con «🗺️ Mi zona».
+- **Catálogo**: 15 cultivos nuevos con Kc e íconos gobernados (`ICONO_REQUERIDO` en el alta); siembra idempotente `POST /api/v1/admin/v4/sembrar` + `scripts/seed_v4.py`.
+- **ML**: `POST /api/v1/admin/ml/reentrenar` encola `train_colombia.py`.
+- **Reporte**: secciones R (riego), S (rotación) y B (BPA) junto a Q (labores).
+- Validado local: 45 cultivos, balance real (Café Kc 0.85), rotación Maíz→Fríjol/Arveja, plagas con GBIF (20 ocurrencias broca), BPA con carencias, Extensionista ve solo Armenia, reentrenar 202, las 4 secciones del reporte presentes.
 
 ## 🎯 Objetivo
-
 Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la aptitud del suelo para cultivos usando IA, IoT y datos geoespaciales.
 
 ## 📊 Estado por épica

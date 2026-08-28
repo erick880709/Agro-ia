@@ -1450,6 +1450,72 @@ def _seccion_labores(labores: list | None) -> str:
   </section>"""
 
 
+def _seccion_riego(balance: dict | None) -> str:
+    """Sección R — necesidad de riego (balance hídrico ETo/Kc)."""
+    if not balance or not balance.get("dias"):
+        return ""
+    filas = "".join(
+        f"<tr><td>{esc(d['fecha'])}</td><td>{_num(d['et0_mm'], 2)}</td>"
+        f"<td>{_num(d['etc_mm'], 2)}</td><td>{_num(d['precipitacion_mm'], 1)}</td>"
+        f"<td>{_num(d['deficit_mm'], 2)}</td></tr>"
+        for d in balance["dias"]
+    )
+    generico = " (Kc genérico por categoría)" if balance.get("kc_aplicado_generico") else ""
+    return f"""
+  <section class="block">
+    <div class="block-head"><span class="block-num">R</span>
+      <div><div class="block-title">💧 Necesidad de riego (7 días)</div>
+      <div class="block-sub">Balance hídrico ETo × Kc − lluvia · cultivo {esc(balance.get('cultivo') or '—')} · Kc {_num(balance.get('kc_aplicado'), 2)}{generico}</div></div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Fecha</th><th>ETo (mm)</th><th>ETc (mm)</th><th>Lluvia (mm)</th><th>Déficit (mm)</th></tr></thead>
+      <tbody>{filas}</tbody>
+    </table></div>
+    <p><b>Déficit acumulado:</b> {_num(balance.get('deficit_acumulado_7d_mm'), 2)} mm · {esc(balance.get('recomendacion') or '')}</p>
+  </section>"""
+
+
+def _seccion_rotacion(rotacion: dict | None) -> str:
+    """Sección S — rotación de cultivos sugerida."""
+    if not rotacion or not rotacion.get("sugerencias"):
+        return ""
+    lista = "".join(
+        f"<li><b>{esc(s['cultivo'])}</b> — {esc(s.get('motivo') or '')}</li>"
+        for s in rotacion["sugerencias"]
+    )
+    return f"""
+  <section class="block">
+    <div class="block-head"><span class="block-num">S</span>
+      <div><div class="block-title">🔄 Rotación sugerida</div>
+      <div class="block-sub">Tras {esc(rotacion.get('cultivo_actual') or '—')} (último ciclo cerrado)</div></div>
+    </div>
+    <ul class="warnings">{lista}</ul>
+  </section>"""
+
+
+def _seccion_bpa(bpa: dict | None) -> str:
+    """Sección B — trazabilidad BPA (avance del checklist)."""
+    if not bpa:
+        return ""
+    if bpa.get("pct") is None:
+        estado = "Checklist sin diligenciar: todos los ítems quedan como pendientes de verificación."
+    else:
+        estado = (
+            f"Checklist BPA: {bpa['cumplidos']} de {bpa['total']} ítems cumplidos "
+            f"({bpa['pct']}%). Cada ítem pendiente queda marcado para verificación."
+        )
+    return f"""
+  <section class="block">
+    <div class="block-head"><span class="block-num">B</span>
+      <div><div class="block-title">📋 Trazabilidad BPA</div>
+      <div class="block-sub">Buenas Prácticas Agrícolas (Res. ICA 30021/2017)</div></div>
+    </div>
+    <p>{esc(estado)}</p>
+    <p class="muted">El detalle de aplicaciones con períodos de carencia está disponible en
+    Administración → Trazabilidad / BPA.</p>
+  </section>"""
+
+
 def generar_reporte_html(
     *,
     finca: dict,
@@ -1472,6 +1538,9 @@ def generar_reporte_html(
     advertencia_acumulacion: str | None = None,
     pronostico_extendido: list[dict] | None = None,
     labores: list[dict] | None = None,
+    balance_hidrico: dict | None = None,
+    rotacion: dict | None = None,
+    bpa_resumen: dict | None = None,
 ) -> str:
     """Construye el documento HTML completo del reporte."""
     fecha = datetime.now(timezone.utc).astimezone().strftime("%d/%m/%Y %H:%M")
@@ -1580,6 +1649,11 @@ def generar_reporte_html(
     # Órdenes de trabajo / labores de la finca
     seccion_labores = _seccion_labores(labores)
 
+    # v4: balance hídrico, rotación y BPA
+    seccion_riego = _seccion_riego(balance_hidrico)
+    seccion_rotacion = _seccion_rotacion(rotacion)
+    seccion_bpa = _seccion_bpa(bpa_resumen)
+
     # Explicación en lenguaje campesino (siempre que haya análisis)
     explicacion_campo = generar_explicacion_campesina(uc1=uc1, uc2=uc2, lectura=lectura)
 
@@ -1673,6 +1747,9 @@ def generar_reporte_html(
   {seccion_mapa}
   {seccion_plano}
   {seccion_labores}
+  {seccion_riego}
+  {seccion_rotacion}
+  {seccion_bpa}
   {seccion_roi}
   {explicacion_campo}
   <section class="block">

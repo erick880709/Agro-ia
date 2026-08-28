@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AgroIA · AgroInteligente Colombia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="/styles.css?v=20260827-labores" />
+  <link rel="stylesheet" href="/styles.css?v=20260827-v4" />
 </head>
 <body>
   <!-- ============ PANTALLA DE AUTENTICACIÓN ============ -->
@@ -31,6 +31,7 @@
         <button class="chip demo-login" data-email="agronomo@agroia.co" data-pass="Agronomo123!">🧑‍🌾 Agrónomo</button>
         <button class="chip demo-login" data-email="maria.cliente@agroia.co" data-pass="Cliente123!">👤 Cliente (María)</button>
         <button class="chip demo-login" data-email="clientedemo@agroia.co" data-pass="Cliente123!">🌱 Cliente (Finca Demo)</button>
+        <button class="chip demo-login" data-email="ext.demo@agroia.co" data-pass="Demo1234!">🗺️ Extensionista</button>
       </div>
     </div>
   </div>
@@ -58,6 +59,7 @@
 
   <nav class="tabs" id="tabs">
     <button class="tab active" data-tab="inicio">🏠 Inicio</button>
+    <button class="tab" data-tab="zona">🗺️ Mi zona</button>
     <button class="tab" data-tab="sensores">📡 Sensores IoT</button>
     <button class="tab" data-tab="carga">📂 Cargar archivo</button>
     <button class="tab" data-tab="recomendaciones">🧪 Recomendaciones</button>
@@ -74,6 +76,8 @@
         <button class="tab submenu-item" data-tab="usuarios">👥 Administrar usuarios</button>
         <button class="tab submenu-item" data-tab="insumos">💰 Administrar insumos</button>
         <button class="tab submenu-item" data-tab="auditoria">🕵️ Auditoría</button>
+        <button class="tab submenu-item" data-tab="bpa">📋 Trazabilidad / BPA</button>
+        <button class="tab submenu-item" data-tab="reentrenar">🤖 Reentrenar modelo</button>
       </div>
     </div>
     <div class="tab-dropdown" id="ayuda-dropdown">
@@ -118,7 +122,12 @@
       </div>
 
       <div class="card">
-        <h2>📋 Tareas pendientes de hoy <span class="muted">(labores / órdenes de trabajo)</span></h2>
+        <h2>� Necesidad de riego <span class="muted">(próximos 7 días)</span></h2>
+        <div id="balance-hidrico"></div>
+      </div>
+
+      <div class="card">
+        <h2>�📋 Tareas pendientes de hoy <span class="muted">(labores / órdenes de trabajo)</span></h2>
         <div id="dashboard-labores"></div>
       </div>
     </section>
@@ -620,6 +629,45 @@
         </div>
       </div>
     </section>
+
+    <!-- ============ MI ZONA (Extensionista) ============ -->
+    <section id="view-zona" class="view">
+      <div class="card">
+        <h2>🗺️ Mi zona <span class="muted">(rol Extensionista)</span></h2>
+        <p class="muted">Fincas de los municipios asignados a su cuenta.</p>
+        <div id="zona-lista"></div>
+      </div>
+    </section>
+
+    <!-- ============ TRAZABILIDAD / BPA (Admin) ============ -->
+    <section id="view-bpa" class="view">
+      <div class="card">
+        <h2>📋 Trazabilidad / BPA <span class="muted">(solo administrador)</span></h2>
+        <p class="muted">Checklist de Buenas Prácticas Agrícolas (Res. ICA 30021/2017) y reporte de aplicaciones con período de carencia.</p>
+        <div class="audit-filtros">
+          <select id="bpa-finca"></select>
+          <button class="btn" id="bpa-cargar">🔄 Cargar</button>
+        </div>
+        <div id="bpa-lista"></div>
+        <div id="bpa-resumen"></div>
+      </div>
+    </section>
+
+    <!-- ============ REENTRENAR MODELO (Admin) ============ -->
+    <section id="view-reentrenar" class="view">
+      <div class="card">
+        <h2>🤖 Reentrenar modelo <span class="muted">(solo administrador)</span></h2>
+        <p class="muted">Encola el reentrenamiento del modelo ML (train_colombia.py). Los cultivos sin modelo propio se siguen recomendando por el sistema experto de reglas.</p>
+        <div class="audit-filtros">
+          <select id="ml-modo">
+            <option value="active-learning">Active learning (recomendado)</option>
+            <option value="full">Completo</option>
+          </select>
+          <button class="btn btn-primary" id="ml-reentrenar">🚀 Encolar reentrenamiento</button>
+        </div>
+        <div id="ml-msg"></div>
+      </div>
+    </section>
   </main>
 
   <!-- ============ Modal de edición (fincas / usuarios) ============ -->
@@ -656,7 +704,7 @@
     AgroIA v0.1.0 · Motor: sistema experto (reglas UPRA/Cenicafé/AGROSAVIA) · ML en modo sombra
   </footer>
 
-  <script src="/departamentos.js?v=20260827-labores"></script>
-  <script src="/app.js?v=20260827-labores"></script>
+  <script src="/departamentos.js?v=20260827-v4"></script>
+  <script src="/app.js?v=20260827-v4"></script>
 </body>
 </html>

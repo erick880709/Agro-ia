@@ -22,11 +22,18 @@ from fastapi.staticfiles import StaticFiles
 # resolver claves foráneas entre modelos (ej. dispositivos_iot → fincas).
 import agroia_backend.models.aceptacion_recomendacion  # noqa: F401
 import agroia_backend.models.alerta_climatica  # noqa: F401
+import agroia_backend.models.analisis_agua_riego  # noqa: F401
 import agroia_backend.models.auditoria  # noqa: F401
 import agroia_backend.models.precio_insumo  # noqa: F401
+import agroia_backend.models.checklist_bpa  # noqa: F401
 import agroia_backend.models.chat_memoria  # noqa: F401
 import agroia_backend.models.ciclo_lote  # noqa: F401
+import agroia_backend.models.compatibilidad_rotacion  # noqa: F401
+import agroia_backend.models.curva_extraccion  # noqa: F401
 import agroia_backend.models.labor  # noqa: F401
+import agroia_backend.models.monitoreo_plaga  # noqa: F401
+import agroia_backend.models.preferencia_notificacion  # noqa: F401
+import agroia_backend.models.variedad_cultivo  # noqa: F401
 import agroia_backend.models.cultivo  # noqa: F401
 import agroia_backend.models.discordancia  # noqa: F401
 import agroia_backend.models.dispositivo_iot  # noqa: F401
@@ -41,24 +48,34 @@ import agroia_backend.models.usuario  # noqa: F401
 
 from agroia_backend.api.auth import router as auth_router
 from agroia_backend.api.admin_precios import router as admin_precios_router
+from agroia_backend.api.agua_riego import router as agua_riego_router
 from agroia_backend.api.alertas import router as alertas_router
 from agroia_backend.api.auditoria import router as auditoria_router
+from agroia_backend.api.balance_hidrico import router as balance_hidrico_router
+from agroia_backend.api.bpa import router as bpa_router
 from agroia_backend.api.catalogo import router as catalogo_router
 from agroia_backend.api.chat import router as chat_router
 from agroia_backend.api.ciclos import router as ciclos_router
+from agroia_backend.api.curvas import router as curvas_router
 from agroia_backend.api.dashboard import router as dashboard_router
 from agroia_backend.api.demo import router as demo_router
+from agroia_backend.api.extensionista import router as extensionista_router
 from agroia_backend.api.fincas import router as fincas_router
 from agroia_backend.api.iot import router as iot_router
 from agroia_backend.api.labores import router as labores_router
 from agroia_backend.api.location import router as location_router
 from agroia_backend.api.mantenimiento import router as mantenimiento_router
+from agroia_backend.api.ml import admin_router as ml_admin_router
 from agroia_backend.api.ml import router as ml_router
+from agroia_backend.api.notificaciones import router as notificaciones_router
+from agroia_backend.api.plagas import router as plagas_router
 from agroia_backend.api.recomendaciones import router as recomendaciones_router
 from agroia_backend.api.reportes import router as reportes_router
+from agroia_backend.api.rotacion import router as rotacion_router
 from agroia_backend.api.sensor_api import router as sensor_api_router
 from agroia_backend.api.sig import router as sig_router
 from agroia_backend.api.usuarios import router as usuarios_router
+from agroia_backend.api.variedades import router as variedades_router
 
 settings = get_settings()
 setup_logging()
@@ -110,9 +127,12 @@ async def lifespan(app: FastAPI):
         while True:
             try:
                 from agroia_backend.services.mantenimiento import limpiar_imagenes_chat
+                from agroia_backend.services.notificador_jobs import notificar_labores_proximas
 
                 async with async_session_factory() as db:
                     await limpiar_imagenes_chat(db, dias=90)
+                async with async_session_factory() as db:
+                    await notificar_labores_proximas(db)
             except Exception as e:  # noqa: BLE001 — el ciclo sigue vivo
                 logger.error("tarea_mantenimiento_error", error=str(e))
             await asyncio.sleep(24 * 3600)  # cada 24 horas
@@ -174,6 +194,20 @@ app.include_router(sig_router)
 app.include_router(admin_precios_router)
 app.include_router(mantenimiento_router)
 app.include_router(demo_router)
+# ── Módulos v4 (especificación técnica v4) ──
+app.include_router(agua_riego_router)
+app.include_router(balance_hidrico_router)
+app.include_router(bpa_router)
+app.include_router(extensionista_router)
+app.include_router(notificaciones_router)
+app.include_router(plagas_router)
+app.include_router(rotacion_router)
+app.include_router(ml_admin_router)
+# curvas/variedades: expuestas también bajo /api/v1/catalogo (catálogo)
+app.include_router(curvas_router, prefix="/api/v1")
+app.include_router(curvas_router, prefix="/api/v1/catalogo")
+app.include_router(variedades_router, prefix="/api/v1")
+app.include_router(variedades_router, prefix="/api/v1/catalogo")
 # app.include_router(catalogo_router, prefix="/api/v1")
 # app.include_router(usuarios_router, prefix="/api/v1")
 # app.include_router(dashboards_router, prefix="/api/v1")

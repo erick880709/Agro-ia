@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.11 · **Fecha:** 2026-08-28
+**Versión:** 2.11 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -895,6 +895,24 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 
 ### 11.9 Imágenes fuera de la BD y rendimiento verificado (v2.9)
 
+### 11.10 Módulos v4 — agua, curvas, riego, plagas, variedades, rotación, BPA, notificaciones, Extensionista y ML (v2.11)
+
+- **Migración `023_modulos_v4`** (agrupa 023→032): tablas `analisis_agua_riego`, `curvas_extraccion`, `monitoreo_plagas`, `variedades_cultivo`, `compatibilidad_rotacion`, `checklist_bpa`, `periodos_carencia`, `preferencias_notificacion`; columnas `kc_inicial/medio/final` en `cultivos` y `resistencia_penetracion_kpa` en `lotes`; enum `rolusuario` + `usuarios.municipios_asignados` (Extensionista).
+- **1.A Agua de riego (FAO-29)**: `POST/GET /api/v1/fincas/{id}/agua-riego` — clasifica CE/RAS/cloruros/boro en ninguna | leve_moderada | severa con recomendación; datos estáticos versionados, no API externa.
+- **1.B Curvas de extracción**: `GET/PUT /api/v1/cultivos/{id}/curva-extraccion` (también bajo `/api/v1/catalogo/...`); sin curva el motor usa el rango estático (degradación).
+- **1.C Balance hídrico ETo/Kc**: `GET /api/v1/fincas/{id}/balance-hidrico?dias=7` — Open-Meteo `et0_fao_evapotranspiration` × Kc (FAO-56, genérico por categoría si falta) − lluvia; bloque «💧 Necesidad de riego» en P1 y sección R del reporte.
+- **1.D Monitoreo de plagas (MIP)**: `POST/GET /api/v1/fincas/{id}/lotes/{lote_id}/monitoreo-plagas` con enriquecimiento informativo GBIF (`total_ocurencias_co`); botón «🐛 Plagas» en el panel de lote.
+- **1.E Variedades**: `GET /api/v1/cultivos/{id}/variedades?altitud_msnm=` filtra por compatibilidad altitudinal (semilla café Cenicafé); botón «🌾 Variedades» en Catálogo.
+- **1.F Rotación**: `GET /api/v1/fincas/{id}/recomendacion-rotacion` (último ciclo cerrado × reglas `compatibilidad_rotacion`); sección S del reporte.
+- **1.G Trazabilidad BPA**: `GET/PUT /api/v1/fincas/{id}/bpa/checklist` (checklist ICA 30021/2017) y `GET .../bpa/reporte-trazabilidad` (labores + períodos de carencia); sección B del reporte y página «📋 Trazabilidad / BPA» en Administración.
+- **1.H Compactación**: `resistencia_penetracion_kpa` opcional en `PATCH /fincas/{id}/lotes/{lote_id}`.
+- **1.I Notificaciones**: `GET/PUT /api/v1/fincas/{id}/notificaciones/preferencias` (whatsapp|sms|email|ninguno); `services/notificaciones.py::enviar_whatsapp()` degrada a no-op sin `WHATSAPP_TOKEN/PHONE_NUMBER_ID`; el job de mantenimiento notifica labores que vencen en ≤ 2 días.
+- **1.J Extensionista**: `GET /api/v1/extensionista/dashboard-zona` filtra fincas por `municipios_asignados`; `acceso.py` extiende `fincas_permitidas_ids`; pestaña «🗺️ Mi zona» (landing tras login) y demo de un clic.
+- **2 Catálogo ampliado**: 15 cultivos (panela, ñame, chontaduro, lulo, mora, guayaba, granadilla/curuba, arveja, habichuela, ahuyama, fresa, coco, caucho, fique, quinua) con Kc; `POST /catalogo/cultivos` ahora exige `icono` (422 `ICONO_REQUERIDO`).
+- **3 Reentrenamiento ML**: `POST /api/v1/admin/ml/reentrenar` (Admin) encola `train_colombia.py` en background; página «🤖 Reentrenar modelo» en Administración. Siembra idempotente vía `POST /api/v1/admin/v4/sembrar` y `scripts/seed_v4.py`.
+- **Reporte**: nuevas secciones R (riego), S (rotación), B (BPA) junto a Q (labores). Regla de degradación: sin datos, las secciones se omiten sin bloquear el análisis.
+
+---
 - **Chat**: job diario borra `imagen_base64` con más de 90 días (`POST /api/v1/admin/chat/limpiar-imagenes` para disparo manual).
 - **Labores**: fotos en disco (`media/labores/`, servidas en `/media`); en BD solo `labores.imagen_url` (migración 022). Límite 5 MB, JPEG/PNG/WebP.
 - **Rendimiento atípico**: al cosechar, si el rendimiento declarado es > 2× o < 0.3× el esperado de la ficha, se marca `rendimiento_atipico` y la UI muestra el banner amarillo (no bloquea el guardado); el Ground Truth del ML excluye esos ciclos.

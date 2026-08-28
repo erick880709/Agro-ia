@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime, timedelta
 
 from agroia.database import Base
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, Numeric, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -62,6 +62,20 @@ class Cultivo(Base, TimestampMixin):
         Integer,
         nullable=True,
         comment="Duración del ciclo (días, siembra→cosecha)",
+    )
+
+    # ── Coeficientes de cultivo FAO-56 (balance hídrico ETo/Kc) ──
+    kc_inicial: Mapped[float | None] = mapped_column(
+        Numeric(3, 2), nullable=True,
+        comment="Kc etapa inicial (FAO-56)",
+    )
+    kc_medio: Mapped[float | None] = mapped_column(
+        Numeric(3, 2), nullable=True,
+        comment="Kc etapa media (FAO-56)",
+    )
+    kc_final: Mapped[float | None] = mapped_column(
+        Numeric(3, 2), nullable=True,
+        comment="Kc etapa final (FAO-56)",
     )
 
     # Relaciones

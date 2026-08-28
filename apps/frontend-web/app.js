@@ -7,9 +7,10 @@ const API = '/api/v1';
 const SESION_KEY = 'agroia_sesion';
 
 const TABS_POR_ROL = {
-  admin: ['inicio', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'catalogo'],
+  admin: ['inicio', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'reentrenar', 'catalogo'],
   agronomo: ['inicio', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'catalogo'],
   cliente: ['inicio', 'sensores', 'historial', 'reportes', 'catalogo'],
+  extensionista: ['inicio', 'zona', 'sensores', 'historial', 'reportes', 'catalogo'],
 };
 
 const state = {
@@ -185,6 +186,8 @@ function goTab(name) {
   if (name === 'usuarios' && state.rol.toLowerCase() === 'admin') cargarUsuarios();
   if (name === 'insumos' && state.rol.toLowerCase() === 'admin') cargarPreciosInsumos();
   if (name === 'auditoria' && state.rol.toLowerCase() === 'admin') cargarAuditoria();
+  if (name === 'zona' && state.rol.toLowerCase() === 'extensionista') cargarZona();
+  if (name === 'bpa' && state.rol.toLowerCase() === 'admin') cargarBpa();
   document.querySelectorAll('.tab-submenu.open').forEach(s => s.classList.remove('open'));
 }
 
@@ -271,6 +274,9 @@ async function arrancarAplicacion() {
 
   aplicarRol();
 
+  // Extensionista: landing en «Mi zona» tras el login
+  if ((state.rol || '').toLowerCase() === 'extensionista') goTab('zona');
+
   // ── Combos ubicación ──
   const depSel = document.getElementById('f-departamento');
   depSel.innerHTML = '<option value="">— Seleccione —</option>' +
@@ -334,6 +340,8 @@ async function arrancarAplicacion() {
     mLabor.addEventListener('click', e => { if (e.target === mLabor) cerrarModalLabor(); });
   }
   document.getElementById('audit-refrescar').addEventListener('click', () => cargarAuditoria(1));
+  document.getElementById('bpa-cargar').addEventListener('click', cargarBpa);
+  document.getElementById('ml-reentrenar').addEventListener('click', reentrenarModelo);
   document.getElementById('audit-anterior').addEventListener('click', () => {
     if (auditState.page > 1) cargarAuditoria(auditState.page - 1);
   });
@@ -554,6 +562,8 @@ function renderFincasList() {
         </div>
         <div class="device-actions">
           <button type="button" class="btn btn-ghost" data-accion="lotes" data-id="${esc(f.id)}">🗂️ Lotes</button>
+          <button type="button" class="btn btn-ghost" data-accion="agua" data-id="${esc(f.id)}">💧 Agua de riego</button>
+          <button type="button" class="btn btn-ghost" data-accion="notif" data-id="${esc(f.id)}">🔔 Notificaciones</button>
           <button type="button" class="btn btn-ghost" data-accion="editar-finca" data-id="${esc(f.id)}">✏️ Editar</button>
           <button type="button" class="btn btn-ghost btn-danger" data-accion="eliminar-finca" data-id="${esc(f.id)}" data-nombre="${esc(f.nombre)}">🗑️ Eliminar</button>
         </div>
@@ -565,6 +575,12 @@ function renderFincasList() {
   });
   div.querySelectorAll('[data-accion="lotes"]').forEach(b => {
     b.addEventListener('click', () => toggleLotes(b.dataset.id));
+  });
+  div.querySelectorAll('[data-accion="agua"]').forEach(b => {
+    b.addEventListener('click', () => verAguaRiego(b.dataset.id));
+  });
+  div.querySelectorAll('[data-accion="notif"]').forEach(b => {
+    b.addEventListener('click', () => verNotificaciones(b.dataset.id));
   });
   div.querySelectorAll('[data-accion="editar-finca"]').forEach(b => {
     b.addEventListener('click', () => abrirEditarFinca(b.dataset.id));
@@ -596,7 +612,13 @@ function copiarTexto(texto, boton) {
 /* ────────────────────── edición/eliminación de fincas (admin) ────────────────────── */
 
 function cerrarModal() {
-  document.getElementById('modal-editor').classList.add('hidden');
+  const m = document.getElementById('modal-editor');
+  m.classList.add('hidden');
+  // Restaura los controles por si un modal de solo lectura los ocultó/cambió
+  const guardar = document.getElementById('modal-guardar');
+  if (guardar) guardar.style.display = '';
+  const cancelar = document.getElementById('modal-cancelar');
+  if (cancelar) cancelar.textContent = 'Cancelar';
 }
 
 async function abrirEditarFinca(id) {
@@ -694,6 +716,7 @@ function renderLotes(fincaId, lotes) {
       </div>
       <div class="device-actions">
         <button class="btn btn-ghost" data-lote-ciclos="${esc(l.id)}">🔄 Ciclos</button>
+        <button class="btn btn-ghost" data-lote-plagas="${esc(l.id)}">🐛 Plagas</button>
         <button class="btn btn-ghost" data-lote-editar="${esc(l.id)}" data-nombre="${esc(l.nombre)}">✏️</button>
         <button class="btn btn-ghost btn-danger" data-lote-eliminar="${esc(l.id)}" data-nombre="${esc(l.nombre)}">🗑️</button>
       </div>
@@ -729,6 +752,9 @@ function renderLotes(fincaId, lotes) {
     </details>`;
   panel.querySelectorAll('[data-lote-ciclos]').forEach(b => {
     b.addEventListener('click', () => toggleCiclos(fincaId, b.dataset.loteCiclos));
+  });
+  panel.querySelectorAll('[data-lote-plagas]').forEach(b => {
+    b.addEventListener('click', () => verPlagas(fincaId, b.dataset.lotePlagas));
   });
   panel.querySelectorAll('[data-lote-editar]').forEach(b => {
     b.addEventListener('click', () => abrirEditarLote(fincaId, b.dataset.loteEditar, lotes.find(l => l.id === b.dataset.loteEditar)));
@@ -1947,8 +1973,286 @@ async function cargarDashboard() {
     renderCicloActivo();
     renderLaboresPendientes();
     renderAlertasClimaticas();
+    renderBalanceHidrico();
   } catch (e) {
     kpis.innerHTML = errorBanner(e.message);
+  }
+}
+
+/* ── Balance hídrico ETo/Kc (1.C) — bloque del Dashboard ── */
+
+async function renderBalanceHidrico() {
+  const div = document.getElementById('balance-hidrico');
+  if (!div || !state.fincaId) return;
+  div.innerHTML = '<p class="muted">Calculando…</p>';
+  try {
+    const r = await api(`/fincas/${state.fincaId}/balance-hidrico?dias=7`);
+    const filas = (r.dias || []).map(d => `
+      <tr>
+        <td>${esc(d.fecha)}</td>
+        <td>${d.et0_mm}</td>
+        <td>${d.etc_mm}</td>
+        <td>${d.precipitacion_mm}</td>
+        <td>${d.deficit_mm}</td>
+      </tr>`).join('');
+    div.innerHTML = `
+      <p class="muted">Cultivo: <b>${esc(r.cultivo || '—')}</b> · etapa ${esc(r.etapa_fenologica || '—')} · Kc ${r.kc_aplicado}${r.kc_aplicado_generico ? ' (genérico)' : ''}</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Fecha</th><th>ETo mm</th><th>ETc mm</th><th>Lluvia mm</th><th>Déficit mm</th></tr></thead>
+        <tbody>${filas}</tbody>
+      </table></div>
+      <p><b>💧 Déficit acumulado: ${r.deficit_acumulado_7d_mm} mm</b> — ${esc(r.recomendacion || '')}</p>`;
+  } catch (e) {
+    div.innerHTML = `<p class="muted">💧 Balance hídrico no disponible: ${esc(e.message)}</p>`;
+  }
+}
+
+/* ══════════════════ Módulos v4: agua, plagas, BPA, notificaciones, zona ══════════════════ */
+
+async function verAguaRiego(fincaId) {
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = '💧 Agua de riego (FAO-29)';
+  document.getElementById('modal-msg').innerHTML = '';
+  const r = await api(`/fincas/${fincaId}/agua-riego`);
+  const historial = (r.data || []).slice(0, 5).map(a => `
+    <div class="labor-row"><div class="labor-info">
+      <b>${esc(a.fecha)}</b>
+      <span class="muted">CE ${a.ce_agua_ds_m ?? '—'} dS/m · RAS ${a.ras ?? '—'} · Cl ${a.cloruros_mg_l ?? '—'} · B ${a.boro_mg_l ?? '—'}</span>
+      <span>${badge(a.clasificacion_restriccion === 'ninguna' ? 'Sin restricción' : a.clasificacion_restriccion === 'leve_moderada' ? 'Leve-moderada' : 'Severa', a.clasificacion_restriccion === 'ninguna' ? 'ok' : 'warning')}</span>
+    </div></div>`).join('') || '<p class="muted">Sin análisis registrados.</p>';
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <div class="labor-detalle">
+      <div><span class="muted">Historial</span>${historial}</div>
+      <div class="form-grid">
+        <label class="field"><span>CE (dS/m)</span><input id="ag-ce" type="number" step="0.01" /></label>
+        <label class="field"><span>RAS</span><input id="ag-ras" type="number" step="0.1" /></label>
+        <label class="field"><span>Cloruros (mg/L)</span><input id="ag-cl" type="number" step="0.1" /></label>
+        <label class="field"><span>Boro (mg/L)</span><input id="ag-b" type="number" step="0.01" /></label>
+        <label class="field"><span>pH del agua</span><input id="ag-ph" type="number" step="0.1" /></label>
+        <label class="field"><span>Fuente</span>
+          <select id="ag-fuente"><option value="laboratorio">Laboratorio</option><option value="manual">Manual</option></select></label>
+      </div>
+      <div class="labor-detalle-obs"><span class="muted">Clasificación</span><p id="ag-resultado">Registre un análisis para ver la clasificación FAO-29.</p></div>
+    </div>`;
+  document.getElementById('modal-guardar').onclick = async () => {
+    const body = {
+      fecha: new Date().toISOString().slice(0, 10),
+      ce_agua_ds_m: parseFloat(document.getElementById('ag-ce').value) || null,
+      ras: parseFloat(document.getElementById('ag-ras').value) || null,
+      cloruros_mg_l: parseFloat(document.getElementById('ag-cl').value) || null,
+      boro_mg_l: parseFloat(document.getElementById('ag-b').value) || null,
+      ph_agua: parseFloat(document.getElementById('ag-ph').value) || null,
+      fuente: document.getElementById('ag-fuente').value,
+    };
+    try {
+      const res = await api(`/fincas/${fincaId}/agua-riego`, { method: 'POST', headers: headers(), body: JSON.stringify(body) });
+      document.getElementById('ag-resultado').innerHTML =
+        `✅ <b>${res.clasificacion_restriccion.replace('_', ' / ')}</b> — ${esc(res.recomendacion)}`;
+      await verAguaRiego(fincaId);
+    } catch (e) { document.getElementById('ag-resultado').textContent = '⚠️ ' + e.message; }
+  };
+  m.classList.remove('hidden');
+}
+
+async function verNotificaciones(fincaId) {
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = '🔔 Notificaciones de la finca';
+  document.getElementById('modal-msg').innerHTML = '';
+  const pref = await api(`/fincas/${fincaId}/notificaciones/preferencias`);
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <div class="form-grid">
+      <label class="field"><span>Canal</span>
+        <select id="nt-canal">
+          ${['whatsapp', 'sms', 'email', 'ninguno'].map(c => `<option value="${c}" ${pref.canal === c ? 'selected' : ''}>${c}</option>`).join('')}
+        </select></label>
+      <label class="field"><span>Teléfono (con indicativo)</span><input id="nt-tel" value="${esc(pref.telefono || '')}" placeholder="573001234567" /></label>
+      <label class="field"><span>Activo</span>
+        <select id="nt-activo"><option value="true" ${pref.activo !== false ? 'selected' : ''}>Sí</option><option value="false" ${pref.activo === false ? 'selected' : ''}>No</option></select></label>
+    </div>
+    <p class="muted">Las alertas climáticas y las labores próximas a vencer se envían por el canal configurado (WhatsApp requiere credenciales configuradas en el servidor).</p>`;
+  document.getElementById('modal-guardar').onclick = async () => {
+    try {
+      await api(`/fincas/${fincaId}/notificaciones/preferencias`, {
+        method: 'PUT', headers: headers(),
+        body: JSON.stringify({
+          canal: document.getElementById('nt-canal').value,
+          telefono: document.getElementById('nt-tel').value || null,
+          activo: document.getElementById('nt-activo').value === 'true',
+        }),
+      });
+      document.getElementById('modal-msg').innerHTML = '<p class="ok">✅ Preferencia guardada.</p>';
+    } catch (e) { document.getElementById('modal-msg').innerHTML = errorBanner(e.message); }
+  };
+  m.classList.remove('hidden');
+}
+
+async function verPlagas(fincaId, loteId) {
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = '🐛 Monitoreo de plagas (MIP)';
+  document.getElementById('modal-msg').innerHTML = '';
+  const r = await api(`/fincas/${fincaId}/lotes/${loteId}/monitoreo-plagas`);
+  const historial = (r.data || []).slice(0, 8).map(p => `
+    <div class="labor-row"><div class="labor-info">
+      <b>${esc(p.plaga_nombre)}</b>
+      ${p.plaga_nombre_cientifico ? `<span class="muted"><i>${esc(p.plaga_nombre_cientifico)}</i></span>` : ''}
+      <span class="muted">${esc(p.fecha)}</span>
+      ${p.incidencia_pct != null ? `<span class="muted">incidencia ${p.incidencia_pct}%</span>` : ''}
+      <span>${badge(p.severidad || '—', p.severidad === 'Alta' ? 'critical' : p.severidad === 'Media' ? 'warning' : 'ok')}</span>
+    </div></div>`).join('') || '<p class="muted">Sin monitoreos registrados.</p>';
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <div class="labor-detalle">
+      <div><span class="muted">Historial</span>${historial}</div>
+      <div class="form-grid">
+        <label class="field"><span>Plaga *</span><input id="pg-nombre" placeholder="Broca del café" required /></label>
+        <label class="field"><span>Nombre científico</span><input id="pg-cientifico" placeholder="Hypothenemus hampei" /></label>
+        <label class="field"><span>Severidad</span>
+          <select id="pg-sev"><option value="Baja">Baja</option><option value="Media">Media</option><option value="Alta">Alta</option></select></label>
+        <label class="field"><span>Incidencia (%)</span><input id="pg-inc" type="number" step="0.1" min="0" max="100" /></label>
+        <label class="field"><span>Método</span>
+          <select id="pg-metodo"><option value="trampa">Trampa</option><option value="inspeccion_visual">Inspección visual</option><option value="otro">Otro</option></select></label>
+      </div>
+      <label class="field"><span>Observaciones</span><input id="pg-obs" /></label>
+    </div>`;
+  document.getElementById('modal-guardar').onclick = async () => {
+    try {
+      const res = await api(`/fincas/${fincaId}/lotes/${loteId}/monitoreo-plagas`, {
+        method: 'POST', headers: headers(),
+        body: JSON.stringify({
+          fecha: new Date().toISOString().slice(0, 10),
+          plaga_nombre: document.getElementById('pg-nombre').value,
+          plaga_nombre_cientifico: document.getElementById('pg-cientifico').value || null,
+          severidad: document.getElementById('pg-sev').value,
+          incidencia_pct: parseFloat(document.getElementById('pg-inc').value) || null,
+          metodo: document.getElementById('pg-metodo').value,
+          observaciones: document.getElementById('pg-obs').value || null,
+        }),
+      });
+      const gbif = res.enriquecimiento_gbif ? ` · GBIF: ${res.enriquecimiento_gbif.total_ocurencias_co} ocurrencias reportadas en Colombia` : '';
+      document.getElementById('modal-msg').innerHTML = `<p class="ok">✅ Registro guardado${gbif}.</p>`;
+      await verPlagas(fincaId, loteId);
+    } catch (e) { document.getElementById('modal-msg').innerHTML = errorBanner(e.message); }
+  };
+  m.classList.remove('hidden');
+}
+
+async function verCurva(cultivoId, nombre) {
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = `📈 Curva de extracción — ${nombre}`;
+  document.getElementById('modal-msg').innerHTML = '';
+  document.getElementById('modal-guardar').style.display = 'none';
+  document.getElementById('modal-cancelar').textContent = 'Cerrar';
+  const r = await api(`/cultivos/${cultivoId}/curva-extraccion`);
+  const filas = (r.data || []).map(p => `
+    <tr><td>${esc(p.etapa_fenologica)}</td><td>${esc(p.nutriente)}</td><td>${p.pct_extraccion_acumulado}%</td><td>${esc(p.fuente || '—')}</td></tr>`).join('');
+  document.getElementById('modal-cuerpo').innerHTML = r.data && r.data.length
+    ? `<div class="table-wrap"><table><thead><tr><th>Etapa</th><th>Nutriente</th><th>% acumulado</th><th>Fuente</th></tr></thead><tbody>${filas}</tbody></table></div>`
+    : '<p class="muted">Sin curva cargada: el motor usa el rango estático genérico (comportamiento actual).</p>';
+  m.classList.remove('hidden');
+}
+
+async function verVariedades(cultivoId, nombre) {
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = `🌾 Variedades — ${nombre}`;
+  document.getElementById('modal-msg').innerHTML = '';
+  document.getElementById('modal-guardar').style.display = 'none';
+  document.getElementById('modal-cancelar').textContent = 'Cerrar';
+  const altitud = state.fincas.find(f => f.id === state.fincaId)?.altitud_msnm;
+  const r = await api(`/cultivos/${cultivoId}/variedades${altitud != null ? `?altitud_msnm=${Math.round(altitud)}` : ''}`);
+  const filas = (r.variedades_compatibles || []).map(v => `
+    <div class="labor-row"><div class="labor-info">
+      <b>${esc(v.nombre_variedad)}</b>
+      <span class="muted">${v.altitud_min_msnm ?? '?'}–${v.altitud_max_msnm ?? '?'} msnm</span>
+      ${v.resistencias ? `<span class="muted">${esc(v.resistencias)}</span>` : ''}
+      <span>${badge(v.mercado_objetivo || '—', 'ok')}</span>
+    </div></div>`).join('') || '<p class="muted">Sin variedades cargadas para este cultivo.</p>';
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <p class="muted">Filtradas por la altitud de la finca de análisis (${altitud != null ? Math.round(altitud) + ' msnm' : 'sin dato'}).</p>${filas}`;
+  m.classList.remove('hidden');
+}
+
+async function cargarZona() {
+  const div = document.getElementById('zona-lista');
+  if (!div) return;
+  div.innerHTML = '<p class="muted">Cargando zona…</p>';
+  try {
+    const r = await api('/extensionista/dashboard-zona');
+    const resumen = r.resumen || {};
+    div.innerHTML = `
+      <div class="grid-kpis">
+        ${kpi(resumen.total_fincas || 0, 'Fincas en mi zona')}
+        ${kpi(resumen.alertas_climaticas_activas || 0, 'Alertas activas')}
+        ${kpi(resumen.recomendaciones_pendientes_validacion || 0, 'Pendientes de validación')}
+      </div>
+      <p class="muted">Municipios asignados: ${(r.municipios || []).map(esc).join(', ') || 'ninguno'}.</p>
+      ${(r.fincas || []).map(f => `
+        <div class="device-card">
+          <h3>🏡 ${esc(f.nombre)} <span class="muted">${esc(f.municipio || '')}</span></h3>
+          <div class="device-meta">
+            <span>Cultivo: <b>${esc(f.cultivo_sembrado || '—')}</b></span>
+            ${f.ultima_recomendacion ? `<span>Última recomendación: ${esc(f.ultima_recomendacion.clasificacion || '—')} (${Math.round((f.ultima_recomendacion.confianza || 0) * 100)}%)</span>` : ''}
+            <span>Alertas activas: <b>${f.alertas_activas}</b></span>
+          </div>
+        </div>`).join('')}`;
+  } catch (e) {
+    div.innerHTML = errorBanner(e.message);
+  }
+}
+
+async function cargarBpa() {
+  const sel = document.getElementById('bpa-finca');
+  if (sel && !sel.options.length) {
+    sel.innerHTML = state.fincas.map(f => `<option value="${esc(f.id)}">${esc(f.nombre)}</option>`).join('');
+  }
+  if (!sel.value) return;
+  const lista = document.getElementById('bpa-lista');
+  const resumen = document.getElementById('bpa-resumen');
+  lista.innerHTML = '<p class="muted">Cargando checklist…</p>';
+  try {
+    const [check, traz] = await Promise.all([
+      api(`/fincas/${sel.value}/bpa/checklist`),
+      api(`/fincas/${sel.value}/bpa/reporte-trazabilidad`),
+    ]);
+    lista.innerHTML = (check.data || []).map((c, i) => `
+      <div class="labor-row">
+        <div class="labor-info"><b>${esc(c.categoria || '')}</b><span>${esc(c.item)}</span>
+          ${c.fecha_verificacion ? `<span class="muted">verificado ${esc(c.fecha_verificacion)}</span>` : '<span class="muted">pendiente de verificación</span>'}</div>
+        <select data-bpa-item="${esc(c.item)}">
+          <option value="">—</option>
+          <option value="true" ${c.cumple === true ? 'selected' : ''}>✅ Cumple</option>
+          <option value="false" ${c.cumple === false ? 'selected' : ''}>❌ No cumple</option>
+        </select>
+      </div>`).join('') || '<p class="muted">Sin checklist.</p>';
+    const t = traz.checklist || {};
+    resumen.innerHTML = `
+      <p><b>Avance BPA:</b> ${t.cumplidos || 0} de ${t.total || 0} ítems cumplidos${t.pct_avance != null ? ` (${t.pct_avance}%)` : ''}.</p>
+      <p class="muted">Aplicaciones con período de carencia: ${(traz.aplicaciones || []).filter(a => a.periodo_carencia_dias != null).length} · ${(traz.aplicaciones || []).filter(a => a.periodo_carencia_dias == null).length} sin carencia registrada.</p>
+      <button class="btn" id="bpa-guardar">💾 Guardar checklist</button>`;
+    document.getElementById('bpa-guardar').onclick = async () => {
+      const items = [...lista.querySelectorAll('[data-bpa-item]')].map(s => ({
+        item: s.dataset.bpaItem,
+        categoria: null,
+        cumple: s.value === 'true' ? true : (s.value === 'false' ? false : null),
+      })).filter(x => x.cumple !== null);
+      if (!items.length) { alert('Seleccione al menos un ítem para guardar.'); return; }
+      await api(`/fincas/${sel.value}/bpa/checklist`, { method: 'PUT', headers: headers(), body: JSON.stringify({ items }) });
+      await cargarBpa();
+    };
+  } catch (e) {
+    lista.innerHTML = errorBanner(e.message);
+  }
+}
+
+async function reentrenarModelo() {
+  const msg = document.getElementById('ml-msg');
+  msg.innerHTML = '<p class="muted">Encolando…</p>';
+  try {
+    const r = await api('/admin/ml/reentrenar', {
+      method: 'POST', headers: headers(),
+      body: JSON.stringify({ cultivos_incluidos: [], modo: document.getElementById('ml-modo').value }),
+    });
+    msg.innerHTML = `<p class="ok">✅ Job <code>${esc(r.job_id.slice(0, 8))}…</code> en cola (${esc(r.estado)}). ${esc(r.mensaje)}</p>`;
+  } catch (e) {
+    msg.innerHTML = errorBanner(e.message);
   }
 }
 
@@ -3112,9 +3416,19 @@ function renderCatalogo(q) {
         ${c.descripcion ? `<p>${esc(c.descripcion)}</p>` : ''}
         ${fisio.length ? `<p class="muted mono">🌱 ${fisio.join(' · ')}</p>` : ''}
         ${c.activo === false ? badge('Inactivo', 'critical') : badge('Activo', 'ok')}
+        <div class="device-actions">
+          <button type="button" class="btn btn-ghost" data-cultivo-curva="${esc(c.id)}" data-nombre="${esc(c.nombre)}">📈 Curva de extracción</button>
+          <button type="button" class="btn btn-ghost" data-cultivo-variedades="${esc(c.id)}" data-nombre="${esc(c.nombre)}">🌾 Variedades</button>
+        </div>
       </div>`;
     }).join('')
     : '<p class="muted">Sin resultados.</p>';
+  div.querySelectorAll('[data-cultivo-curva]').forEach(b => {
+    b.addEventListener('click', () => verCurva(b.dataset.cultivoCurva, b.dataset.nombre || ''));
+  });
+  div.querySelectorAll('[data-cultivo-variedades]').forEach(b => {
+    b.addEventListener('click', () => verVariedades(b.dataset.cultivoVariedades, b.dataset.nombre || ''));
+  });
 }
 
 document.addEventListener('DOMContentLoaded', init);
