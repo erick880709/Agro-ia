@@ -5,12 +5,15 @@ trazabilidad completa: estado, responsable, fechas programada/ejecución
 y observaciones del operario.
 """
 
+import os
+import time
 import uuid as uuid_mod
 from datetime import date, datetime, timezone
+from pathlib import Path
 
 from agroia.database import get_db
 from agroia.logging import get_logger
-from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, File, Header, HTTPException, Query, Request, UploadFile
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -80,7 +83,85 @@ def _labor_a_dict(labor) -> dict:
         "responsable_id": str(labor.responsable_id) if labor.responsable_id else None,
         "estado": labor.estado,
         "observaciones_ejecucion": labor.observaciones_ejecucion,
+        "imagen_url": labor.imagen_url,
         "created_at": labor.created_at.isoformat() if labor.created_at else None,
+    }
+
+
+TIPOS_IMAGEN = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp"}
+MAX_FOTO_BYTES = 5 * 1024 * 1024  # 5 MB
+
+
+@router.post("/labores/{labor_id}/foto")
+async def subir_foto_labor(
+    labor_id: str,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
+    file: UploadFile = File(...),
+):
+    """Adjunta una foto de ejecución a la labor.
+
+    La imagen se guarda como ARCHIVO en disco (o S3 en el futuro); en la BD
+    solo queda la ruta en `labores.imagen_url`. Límite 5 MB, formatos
+    JPEG/PNG/WebP. Pensado para la PWA con geolocalización y foto.
+    """
+    _exigir_rol(
+        x_user_role, ROL_EXPERTOS,
+        "Solo el administrador o el agrónomo pueden adjuntar fotos a las labores.",
+    )
+    try:
+        labor_uuid = uuid_mod.UUID(labor_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "LABOR_INVALIDA", "message": "labor_id no es un UUID válido.",
+        })
+    labor = (
+        await db.execute(select(Labor).where(Labor.id == labor_uuid))
+    ).scalar_one_or_none()
+    if labor is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "LABOR_NOT_FOUND", "message": "La labor no está registrada.",
+        })
+    ext = TIPOS_IMAGEN.get(file.content_type or "")
+    if ext is None:
+        raise HTTPException(status_code=415, detail={
+            "code": "FORMATO_NO_SOPORTADO",
+            "message": "Solo se admiten imágenes JPEG, PNG o WebP.",
+        })
+    contenido = await file.read()
+    if len(contenido) > MAX_FOTO_BYTES:
+        raise HTTPException(status_code=413, detail={
+            "code": "FOTO_MUY_GRANDE",
+            "message": "La foto supera el límite de 5 MB.",
+        })
+
+    media_root = Path(os.environ.get("AGROIA_MEDIA_DIR") or Path(__file__).resolve().parents[4] / "media")
+    dir_labores = media_root / "labores"
+    dir_labores.mkdir(parents=True, exist_ok=True)
+    nombre = f"labor_{labor.id.hex[:8]}_{int(time.time())}{ext}"
+    (dir_labores / nombre).write_bytes(contenido)
+
+    labor.imagen_url = f"/media/labores/{nombre}"
+    await registrar_auditoria(
+        db,
+        usuario_email=x_user_email or "desconocido@agroia.co",
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="labor.foto",
+        entidad="labor",
+        entidad_id=str(labor.id),
+        detalle={"imagen_url": labor.imagen_url, "bytes": len(contenido)},
+        ip=request.client.host if request and request.client else None,
+    )
+    await db.commit()
+    logger.info("labor_foto_guardada", labor_id=str(labor.id), imagen_url=labor.imagen_url)
+    return {
+        "status": "saved",
+        "imagen_url": labor.imagen_url,
+        "mensaje": "Foto guardada en disco; la BD solo conserva la ruta.",
     }
 
 

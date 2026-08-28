@@ -254,6 +254,13 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Endpoints solo Admin**: `GET/PUT /api/v1/admin/precios-insumos` (upsert con fecha = hoy, auditoría `precios.actualizar`); panel «💰 Precios de insumos» en la pestaña Usuarios (tabla editable de 14 insumos).
 - Validado local y en producción: 403 para Cliente, advertencia con tabla vacía, tras PUT (Urea 3 500) el costo de N pasa 180 000 → 210 000 COP/ha, P 150 000 → 168 000 (DAP 4 800), K 160 000 → 189 000 (KCl 4 200), sin advertencia; en prod el analyze usa `precios_fuente = precios_insumos` (ideal 357 000) y el panel admin sirve con `v=20260827-precios`.
 
+### Imágenes fuera de la BD y validación de rendimiento (2026-08-27)
+
+- **Chat — job programado**: `services/mantenimiento.py::limpiar_imagenes_chat()` (UPDATE `imagen_base64 = NULL` para `ts` > 90 días) corre cada 24 h en el lifespan y manualmente vía `POST /api/v1/admin/chat/limpiar-imagenes` (Admin). Validado: 2 imágenes viejas liberadas.
+- **Labores — fotos en disco**: migración 022 agrega `labores.imagen_url`; `POST /api/v1/labores/{id}/foto` (multipart, JPEG/PNG/WebP, máx 5 MB) guarda el archivo en `media/labores/` (o `AGROIA_MEDIA_DIR`) y solo persiste la ruta; FastAPI sirve `/media`. Validado: subida y descarga de PNG con `imagen_url` en la BD.
+- **Rendimiento atípico (anti-outliers)**: al cosechar, si declarado > esperado×2 o < esperado×0.3 → `rendimiento_atipico = true` (migración 022) + `advertencia_rendimiento` (banner amarillo en la UI, no bloquea). `ml_labels.etiquetas_ciclos` excluye los atípicos del Ground Truth. Validado: café 50 t/ha → atípico excluido; 2.1 t/ha → normal incluido (doradas = normales).
+- Pendiente validación en producción.
+
 ### Migraciones destacadas
 
 - `004_crear_enums` — crea los 12 tipos enum con los nombres que esperan los modelos SQLAlchemy (las migraciones 001/002 los referenciaban con `create_type=False` y nombres snake_case).
@@ -265,6 +272,7 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - `019_alertas_climaticas` — tabla `agroia.alertas_climaticas` (alertas meteorológicas proactivas con pronóstico JSONB).
 - `020_texturas_sig` — enum `agroia.texturasuelo` ampliado con clases granulométricas IGAC (FRANCA, FRANCO_ARENOSA, FRANCO_ARCILLOSA, FRANCO_LIMOSA).
 - `021_precios_insumos` — tabla `agroia.precios_insumos` (precios dinámicos COP/kg para el ROI del plan económico).
+- `022_imagenes_y_rendimiento` — `labores.imagen_url` (fotos en disco) y `historial_ciclos_lote.rendimiento_atipico` (anti-outliers del Ground Truth).
 
 ### Límites del tier gratuito (validados 2026-08-25)
 

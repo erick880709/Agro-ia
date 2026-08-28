@@ -116,7 +116,8 @@ def _aptitud_desde_rendimiento(rendimiento: float, esperado: float) -> str:
     return "No apta"
 
 
-async def _rendimiento_esperado(db, cultivo_id) -> float | None:
+async def rendimiento_esperado_cultivo(db, cultivo_id) -> float | None:
+    """Rendimiento esperado (t/ha) de la ficha técnica del cultivo."""
     from agroia_backend.models.cultivo import FichaTecnica
 
     fichas = (
@@ -135,6 +136,14 @@ async def _rendimiento_esperado(db, cultivo_id) -> float | None:
             except (TypeError, ValueError):
                 continue
     return None
+
+
+def es_rendimiento_atipico(declarado_tn_ha: float, esperado_tn_ha: float) -> bool:
+    """Outlier humano: rendimiento > 2× el esperado o < 0.3× el esperado."""
+    return (
+        declarado_tn_ha > esperado_tn_ha * 2.0
+        or declarado_tn_ha < esperado_tn_ha * 0.3
+    )
 
 
 async def etiquetas_ciclos(db) -> list[dict]:
@@ -158,11 +167,23 @@ async def etiquetas_ciclos(db) -> list[dict]:
         }
     filas: list[dict] = []
     for c in ciclos:
+        # ── Protección anti-envenenamiento: los rendimientos atípicos ──
+        #    (outliers humanos marcados al cosechar) NO son Ground Truth. ──
+        if c.rendimiento_atipico:
+            logger.info(
+                "ciclo_atipico_excluido_ground_truth",
+                ciclo_id=str(c.id), rendimiento=float(c.rendimiento_tn_ha),
+            )
+            continue
         lote = lotes.get(c.lote_id)
         if lote is None:
             continue
-        esperado = await _rendimiento_esperado(db, c.cultivo_id)
+        esperado = await rendimiento_esperado_cultivo(db, c.cultivo_id)
         if esperado is None:
+            continue
+        rendimiento = float(c.rendimiento_tn_ha)
+        # Defensa en profundidad: recalcular la regla aunque falte la marca
+        if es_rendimiento_atipico(rendimiento, esperado):
             continue
         lectura = await _ultima_lectura_finca(db, lote.finca_id)
         if lectura is None:
@@ -170,7 +191,6 @@ async def etiquetas_ciclos(db) -> list[dict]:
         features = _features_desde_lectura(lectura)
         if not features:
             continue
-        rendimiento = float(c.rendimiento_tn_ha)
         filas.append({
             "origen": "ciclo",
             "finca_id": str(lote.finca_id),

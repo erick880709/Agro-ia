@@ -59,6 +59,10 @@ class Labor(Base):
         comment="Pendiente | En Progreso | Completada | Cancelada",
     )
     observaciones_ejecucion: Mapped[str | None] = mapped_column(Text, nullable=True)
+    imagen_url: Mapped[str | None] = mapped_column(
+        String(500), nullable=True,
+        comment="Ruta del archivo de la foto (disco/S3); la imagen NO va en BD",
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False

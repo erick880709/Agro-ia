@@ -1,16 +1,16 @@
 # Graph Report - Agro-ia  (2026-08-27)
 
 ## Corpus Check
-- 925 files · ~719,742 words
+- 925 files · ~720,030 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 9598 nodes · 11750 edges · 950 communities (793 shown, 157 thin omitted)
+- 9599 nodes · 11751 edges · 948 communities (791 shown, 157 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 176 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2561de2a`
+- Built from commit: `63b09700`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -21,7 +21,7 @@
 - BaseSchemaValidator
 - gray
 - gray
-- search
+- BM25
 - search
 - .claude/skills/design-system/scripts/slide_search_core.py
 - assets/skills/design-system/scripts/slide_search_core.py
@@ -52,7 +52,7 @@
 - compilerOptions
 - card
 - BM25
-- BM25
+- search
 - assets/scripts/design_system.py
 - BM25
 - src/ui-ux-pro-max/scripts/design_system.py
@@ -916,16 +916,14 @@
 - Request
 - datetime
 - AgroIAError
-- BM25
+- .claude/skills/design/scripts/cip/generate.py
 - agroia_auth/main.py
 - modelo_ml.py
 - editar_usuario
-- search
 - crear_usuario
 - api/auditoria.py
 - agroia_backend/api/auth.py
 - FincaCreate
-- detect_domain
 - actualizar_perfil
 - download_colombia.py
 - test_health.py
@@ -961,7 +959,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (950 total, 157 thin omitted)
+## Communities (948 total, 157 thin omitted)
 
 ### Community 0 - "init.ts"
 Cohesion: 0.06
@@ -987,9 +985,9 @@ Nodes (53): $type, $value, $type, $value, $type, $value, $type, $value (+45 more
 Cohesion: 0.05
 Nodes (53): $type, $value, $type, $value, $type, $value, $type, $value (+45 more)
 
-### Community 6 - "search"
-Cohesion: 0.08
-Nodes (37): detect_domain(), get_cip_brief(), _load_csv(), Load CSV and return list of dicts, Core search function using BM25, Auto-detect the most relevant domain from query, Main search function with auto-domain detection, Search across all domains and combine results (+29 more)
+### Community 6 - "BM25"
+Cohesion: 0.09
+Nodes (29): BM25, detect_domain(), get_cip_brief(), _load_csv(), Load CSV and return list of dicts, Core search function using BM25, Auto-detect the most relevant domain from query, Main search function with auto-domain detection (+21 more)
 
 ### Community 7 - "search"
 Cohesion: 0.07
@@ -1108,16 +1106,16 @@ Cohesion: 0.20
 Nodes (12): $type, $value, bg, bg, padding, shadow, card, bg (+4 more)
 
 ### Community 36 - "BM25"
-Cohesion: 0.13
-Nodes (16): BM25, _domain_keywords(), _get_bm25(), _load_csv(), _load_product_keywords(), _normalize(), Apply synonym substitution before tokenizing., BM25 ranking algorithm for text search (+8 more)
+Cohesion: 0.15
+Nodes (9): BM25, _normalize(), Apply synonym substitution before tokenizing., BM25 ranking algorithm for text search, Lowercase, normalize synonyms, split, remove punctuation, filter stopwords, Build BM25 index from documents, Score all documents against query, All indexed terms, for suggestion/typo-recovery purposes. (+1 more)
 
-### Community 37 - "BM25"
-Cohesion: 0.10
-Nodes (21): BM25, _domain_keywords(), _get_bm25(), _load_csv(), _load_product_keywords(), _normalize(), Apply synonym substitution before tokenizing., BM25 ranking algorithm for text search (+13 more)
+### Community 37 - "search"
+Cohesion: 0.07
+Nodes (27): BM25, _domain_keywords(), _get_bm25(), _load_csv(), _load_product_keywords(), _normalize(), Apply synonym substitution before tokenizing., BM25 ranking algorithm for text search (+19 more)
 
 ### Community 38 - "assets/scripts/design_system.py"
-Cohesion: 0.10
-Nodes (25): ansi_ljust(), _detect_page_type(), format_ascii_box(), format_markdown(), format_master_md(), format_page_override_md(), generate_design_system(), _generate_intelligent_overrides() (+17 more)
+Cohesion: 0.08
+Nodes (28): detect_domain(), Auto-detect the most relevant domain from query. Matches are weighted by…, ansi_ljust(), _detect_page_type(), format_ascii_box(), format_markdown(), format_master_md(), format_page_override_md() (+20 more)
 
 ### Community 39 - "BM25"
 Cohesion: 0.15
@@ -3776,8 +3774,8 @@ Cohesion: 0.25
 Nodes (7): estimate_cost(), generate_justification(), Servicio de justificación de recomendaciones. Genera explicaciones en lenguaje…, Estima el costo de una recomendación en COP/ha. Valores de referencia (2026,…, Genera una justificación en lenguaje natural. Args: template_key: Clave de la…, Traduce un valor técnico a lenguaje coloquial., translate_soil_condition()
 
 ### Community 837 - "search"
-Cohesion: 0.14
-Nodes (11): All indexed terms, for suggestion/typo-recovery purposes., Nearest known vocabulary terms for a query that returned 0 hits, so the caller…, Main search function with auto-domain detection, Search stack-specific guidelines, search(), search_stack(), _suggest_terms(), format_output() (+3 more)
+Cohesion: 0.10
+Nodes (21): detect_domain(), _domain_keywords(), _get_bm25(), _load_csv(), _load_product_keywords(), Load CSV and return list of dicts, with mtime-based caching., Fitted BM25 index for this file+columns, with mtime-based caching., Core search function using BM25. Returns (results, bm25_or_none). (+13 more)
 
 ### Community 838 - "md"
 Cohesion: 0.67
@@ -3952,16 +3950,16 @@ Cohesion: 0.10
 Nodes (21): cargar_archivo_sensor(), enrich_location(), Esp32SensorMessage, ingest_esp32_sensor(), ingest_sensor_data(), listar_dispositivos(), API endpoints para ingesta IoT y estado de sensores., Endpoint de compatibilidad para tramas crudas del firmware ESP32 (brecha G1).… (+13 more)
 
 ### Community 925 - "11. Reportes: anatomía del HTML generado"
-Cohesion: 0.29
-Nodes (7): 11.1 Novedades v1.3 — muestreo inteligente, ROI realista y modo simulación, 11.2 Historial de ciclos en el reporte (v2.1), 11.3 Labores / órdenes de trabajo (ejecución con trazabilidad, v2.3), 11.4 Alertas climáticas proactivas (pronóstico + fenología + labores, v2.4), 11.5 Aprendizaje activo — promoción del ML por variable (v2.5), 11.6 Capas oficiales IGAC/UPRA — enriquecimiento SIG (v2.6), 11. Reportes: anatomía del HTML generado
+Cohesion: 0.25
+Nodes (8): 11.1 Novedades v1.3 — muestreo inteligente, ROI realista y modo simulación, 11.2 Historial de ciclos en el reporte (v2.1), 11.3 Labores / órdenes de trabajo (ejecución con trazabilidad, v2.3), 11.4 Alertas climáticas proactivas (pronóstico + fenología + labores, v2.4), 11.5 Aprendizaje activo — promoción del ML por variable (v2.5), 11.6 Capas oficiales IGAC/UPRA — enriquecimiento SIG (v2.6), 11.7 Refinamientos SIG y validación nacional (v2.7), 11. Reportes: anatomía del HTML generado
 
 ### Community 932 - "AgroIAError"
 Cohesion: 0.12
 Nodes (14): AgroIAError, ConflictError, ForbiddenError, InsufficientDataError, NotFoundError, Excepción base de dominio de AgroIA., Recurso no encontrado., Error de validación de negocio. (+6 more)
 
-### Community 933 - "BM25"
-Cohesion: 0.17
-Nodes (8): BM25, BM25 ranking algorithm for text search, Lowercase, split, remove punctuation, filter short words, Build BM25 index from documents, Score all documents against query, detect_domain(), Auto-detect the most relevant domain from query. Matches are weighted by…, TestDomainDetection
+### Community 933 - ".claude/skills/design/scripts/cip/generate.py"
+Cohesion: 0.23
+Nodes (13): build_cip_prompt(), check_logo_required(), generate_cip_set(), generate_with_nano_banana(), load_env(), load_logo_image(), main(), Generate image using Gemini Nano Banana (native image generation) Supports two… (+5 more)
 
 ### Community 934 - "agroia_auth/main.py"
 Cohesion: 0.21
@@ -3975,10 +3973,6 @@ Nodes (8): MetricaModelo, Modelo MetricaModelo — evolución de métricas para 
 Cohesion: 0.24
 Nodes (11): editar_usuario(), eliminar_cuenta(), eliminar_usuario(), _exigir_admin_usuarios(), _obtener_usuario(), delete, Request, Edita un usuario (datos, rol, estado y fincas). Solo administrador. (+3 more)
 
-### Community 937 - "search"
-Cohesion: 0.24
-Nodes (6): Main search function with auto-domain detection, search(), format_output(), Format results for Claude consumption (token-optimized), Known query -> expected top-domain sanity checks (not exact-row pinning, since…, TestSearchDomains
-
 ### Community 938 - "crear_usuario"
 Cohesion: 0.22
 Nodes (8): crear_usuario(), _hash_password(), listar_usuarios_reales(), AsyncSession, field_validator, Crea un usuario (cliente) relacionado a una o más fincas. Solo Admin., Lista usuarios con sus fincas relacionadas. Solo Admin., UsuarioAdminResponse
@@ -3990,10 +3984,6 @@ Nodes (7): _exigir_admin(), listar_auditoria(), AsyncSession, get, API de audito
 ### Community 940 - "agroia_backend/api/auth.py"
 Cohesion: 0.33
 Nodes (6): login(), LoginRequest, BaseModel, post, Autenticación demo contra la tabla usuarios (MVP). Login real contra los hashes…, Valida email/contraseña y devuelve los datos de sesión del usuario.
-
-### Community 942 - "detect_domain"
-Cohesion: 0.43
-Nodes (3): detect_domain(), Auto-detect the most relevant domain from query. Matches are weighted by…, TestDomainDetection
 
 ### Community 943 - "actualizar_perfil"
 Cohesion: 0.33
@@ -4008,7 +3998,7 @@ Cohesion: 0.50
 Nodes (3): Tests del health check del backend., Verifica que el endpoint de salud responde correctamente., test_health_check()
 
 ## Knowledge Gaps
-- **4267 isolated node(s):** `🎯 Objetivo`, `📊 Estado por épica`, `🏗️ Stack`, `Brecha económica — plan de fertilización por presupuesto (2026-08-25)`, `Retorno de inversión en el reporte (2026-08-27)` (+4262 more)
+- **4268 isolated node(s):** `Tabla de contenidos`, `1. Propósito del documento`, `2. Visión general y stack tecnológico`, `3. Arquitectura de componentes`, `4.1 Pantalla de login` (+4263 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **157 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -4019,8 +4009,8 @@ _Questions this graph is uniquely positioned to answer:_
   _`TailwindConfigGenerator` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 21 inferred relationships involving `arrancarAplicacion()` (e.g. with `abrirMapa()` and `abrirModalIniciarCiclo()`) actually correct?**
   _`arrancarAplicacion()` has 21 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `🎯 Objetivo`, `📊 Estado por épica`, `🏗️ Stack` to the rest of the system?**
-  _4267 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `Tabla de contenidos`, `1. Propósito del documento`, `2. Visión general y stack tecnológico` to the rest of the system?**
+  _4268 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `init.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.06080246913580247 - nodes in this community are weakly interconnected._
 - **Should `BaseSchemaValidator` be split into smaller, more focused modules?**

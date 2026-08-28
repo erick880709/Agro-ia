@@ -9,7 +9,7 @@ import uuid
 from datetime import date, datetime
 
 from agroia.database import Base
-from sqlalchemy import Date, DateTime, ForeignKey, Numeric, String, Text, func
+from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Numeric, String, Text, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -68,6 +68,20 @@ class CicloLote(Base):
         String(50), nullable=True, comment="Goteo | Gravedad | Aspersión | Secano"
     )
     observaciones: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    # ── Protección del Ground Truth del ML ──
+    rendimiento_atipico: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false",
+        comment="True si el rendimiento declarado es atípico vs ficha técnica "
+                "(outlier humano); no alimenta el aprendizaje activo",
+    )
+
+    # ── Protección del Ground Truth del ML ──
+    rendimiento_atipico: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false",
+        comment="True si el rendimiento declarado es atípico vs ficha técnica "
+                "(outlier humano); no alimenta el aprendizaje activo",
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False

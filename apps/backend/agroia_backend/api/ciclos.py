@@ -207,6 +207,7 @@ def _ciclo_a_dict(c, cultivo_nombre: str | None = None) -> dict:
             if c.densidad_siembra_plantas_ha is not None else None
         ),
         "rendimiento_tn_ha": float(c.rendimiento_tn_ha) if c.rendimiento_tn_ha is not None else None,
+        "rendimiento_atipico": bool(c.rendimiento_atipico),
         "calidad_cosecha": c.calidad_cosecha,
         "aplicaciones": c.aplicaciones or [],
         "incidencias": c.incidencias or [],
@@ -719,6 +720,31 @@ async def cosechar_ciclo(
     # Rendimiento normalizado a t/ha (unidad t_ha directa; kg_ha ÷ 1000)
     rendimiento_tn_ha = body.rendimiento if body.unidad_rendimiento == "t_ha" else body.rendimiento / 1000.0
 
+    # ── Protección del Ground Truth: rendimiento atípico vs. ficha técnica ──
+    # No se bloquea el guardado, pero se marca el ciclo y se advierte en la
+    # UI para que el usuario verifique antes de envenenar los modelos.
+    from agroia_backend.services.ml_labels import (
+        es_rendimiento_atipico,
+        rendimiento_esperado_cultivo,
+    )
+
+    esperado = await rendimiento_esperado_cultivo(db, ciclo.cultivo_id)
+    rendimiento_atipico = False
+    advertencia_rendimiento = None
+    if esperado:
+        rendimiento_atipico = es_rendimiento_atipico(rendimiento_tn_ha, esperado)
+        if rendimiento_atipico:
+            advertencia_rendimiento = (
+                f"Este rendimiento ({rendimiento_tn_ha:g} t/ha) es atípico para "
+                f"este cultivo en Colombia (esperado ≈ {esperado:g} t/ha). "
+                "Verifique el dato antes de guardar para no afectar los "
+                "modelos predictivos."
+            )
+            logger.warning(
+                "rendimiento_atipico_declarado", ciclo_id=str(ciclo.id),
+                rendimiento=rendimiento_tn_ha, esperado=esperado,
+            )
+
     aplicaciones = parsear_resumen_aplicaciones(body.resumen_aplicaciones)
     advertencias: list[str] = []
     if body.resumen_aplicaciones and body.resumen_aplicaciones.strip() and aplicaciones is None:
@@ -728,6 +754,7 @@ async def cosechar_ciclo(
 
     ciclo.fecha_cosecha = body.fecha_cosecha
     ciclo.rendimiento_tn_ha = rendimiento_tn_ha
+    ciclo.rendimiento_atipico = rendimiento_atipico
     ciclo.calidad_cosecha = body.calidad_cosecha
     if aplicaciones:
         ciclo.aplicaciones = aplicaciones
@@ -763,6 +790,8 @@ async def cosechar_ciclo(
         "status": "harvested",
         "ciclo": _ciclo_a_dict(ciclo, await _cultivo_nombre(db, ciclo.cultivo_id)),
         "advertencias": advertencias,
+        "rendimiento_atipico": rendimiento_atipico,
+        "advertencia_rendimiento": advertencia_rendimiento,
     }
 
 

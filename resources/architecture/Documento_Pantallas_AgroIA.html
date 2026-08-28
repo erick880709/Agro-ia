@@ -350,7 +350,11 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
   clasificación, confianza, estado PUBLICA/ADVERTENCIA). Si hay un <b>ciclo activo</b>,
   arriba aparece el bloque «🔄 Ciclo activo» con el botón <b>«✏️ Cosechar ciclo»</b>
   (Admin/Agrónomo): abre el mismo modal de cierre que el Dashboard (fecha de cosecha,
-  rendimiento obligatorio kg/ha o t/ha, calidad y resumen de aplicaciones por texto o CSV).</p>
+  rendimiento obligatorio kg/ha o t/ha, calidad y resumen de aplicaciones por texto o CSV).
+  Si el rendimiento declarado es <b>atípico</b> (&gt; 2× o &lt; 0.3× el esperado de la ficha),
+  tras guardar aparece un <b>banner amarillo</b>: «Este rendimiento es atípico para este
+  cultivo en Colombia. Verifique el dato…» — no bloquea el guardado, pero el ciclo queda
+  marcado `rendimiento_atipico` y <b>no alimenta</b> los modelos de ML.</p>
   <p><b>Servicio que llama:</b> <code>GET /api/v1/recomendaciones/historial/{finca_id}?page=&amp;page_size=&amp;cultivo_id=</code>.</p>
   <p><span class="siguiente">Siguiente → P7 Reportes.</span></p>
 </div>
@@ -485,7 +489,7 @@ P8 (Chat asesor) para resolver dudas en cualquier momento · P9 (Usuarios) y P10
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.7 · 2026-08-27<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v2.8 · 2026-08-27<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

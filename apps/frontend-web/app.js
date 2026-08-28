@@ -1134,12 +1134,16 @@ async function cosecharCiclo() {
       }),
     });
     const aplicaciones = (r.ciclo.aplicaciones || []).map(a => `${a.producto} ${a.dosis_kg_ha} ${a.unidad}`).join(', ');
+    let avisoAtipico = '';
+    if (r.advertencia_rendimiento) {
+      avisoAtipico = `<div class="advertencia" style="margin-top:8px">⚠️ ${esc(r.advertencia_rendimiento)}</div>`;
+    }
     msg.innerHTML = okBanner(
       `Ciclo cosechado: rendimiento <b>${r.ciclo.rendimiento_tn_ha} t/ha</b>` +
       (r.ciclo.calidad_cosecha ? ` · calidad ${esc(r.ciclo.calidad_cosecha)}` : '') +
       (aplicaciones ? `<br><span class="muted">Aplicaciones registradas: ${esc(aplicaciones)}</span>` : '') +
       ((r.advertencias || []).length ? `<br>⚠️ ${esc(r.advertencias.join(' '))}` : '')
-    );
+    ) + avisoAtipico;
     await cargarDashboard();
     if (state.tabActual === 'historial') await cargarHistorial();
     setTimeout(() => cerrarModal(), 1500);

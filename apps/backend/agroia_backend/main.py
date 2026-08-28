@@ -52,6 +52,7 @@ from agroia_backend.api.fincas import router as fincas_router
 from agroia_backend.api.iot import router as iot_router
 from agroia_backend.api.labores import router as labores_router
 from agroia_backend.api.location import router as location_router
+from agroia_backend.api.mantenimiento import router as mantenimiento_router
 from agroia_backend.api.ml import router as ml_router
 from agroia_backend.api.recomendaciones import router as recomendaciones_router
 from agroia_backend.api.reportes import router as reportes_router
@@ -102,8 +103,24 @@ async def lifespan(app: FastAPI):
             await asyncio.sleep(6 * 3600)  # cada 6 horas
 
     clima_task = asyncio.create_task(_tarea_clima_periodica())
+
+    # ── Mantenimiento: limpiar imágenes Base64 del chat (cada 24 h) ──
+    async def _tarea_mantenimiento():
+        await asyncio.sleep(120)  # primer ciclo 2 min después del arranque
+        while True:
+            try:
+                from agroia_backend.services.mantenimiento import limpiar_imagenes_chat
+
+                async with async_session_factory() as db:
+                    await limpiar_imagenes_chat(db, dias=90)
+            except Exception as e:  # noqa: BLE001 — el ciclo sigue vivo
+                logger.error("tarea_mantenimiento_error", error=str(e))
+            await asyncio.sleep(24 * 3600)  # cada 24 horas
+
+    mantenimiento_task = asyncio.create_task(_tarea_mantenimiento())
     yield
     clima_task.cancel()
+    mantenimiento_task.cancel()
     logger.info("backend_stopping")
 
 
@@ -155,10 +172,20 @@ app.include_router(reportes_router)
 app.include_router(sensor_api_router)
 app.include_router(sig_router)
 app.include_router(admin_precios_router)
+app.include_router(mantenimiento_router)
 app.include_router(demo_router)
 # app.include_router(catalogo_router, prefix="/api/v1")
 # app.include_router(usuarios_router, prefix="/api/v1")
 # app.include_router(dashboards_router, prefix="/api/v1")
+
+
+# ── Media (fotos de labores en disco; la BD solo guarda imagen_url) ──
+_MEDIA_DIR = os.environ.get("AGROIA_MEDIA_DIR") or os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
+    "media",
+)
+os.makedirs(_MEDIA_DIR, exist_ok=True)
+app.mount("/media", StaticFiles(directory=_MEDIA_DIR), name="media")
 
 
 # ── Frontend web integrado (SPA estática servida en la raíz) ──
@@ -180,7 +207,8 @@ if os.path.isdir(_FRONTEND_DIR):
         response = await call_next(request)
         path = request.url.path
         if not path.startswith("/api") and not path.startswith("/docs") \
-                and not path.startswith("/openapi") and not path.startswith("/redoc"):
+                and not path.startswith("/openapi") and not path.startswith("/redoc") \
+                and not path.startswith("/media"):
             response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
             response.headers["Pragma"] = "no-cache"
         return response

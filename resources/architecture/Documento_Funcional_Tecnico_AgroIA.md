@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.8 · **Fecha:** 2026-08-27
+**Versión:** 2.9 · **Fecha:** 2026-08-27
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -13,7 +13,7 @@
 4. [Autenticación y sesión (lo más básico)](#4-autenticación-y-sesión-lo-más-básico)
 5. [El frontend SPA: navegación y utilidades](#5-el-frontend-spa-navegación-y-utilidades)
 6. [Recorrido sección por sección](#6-recorrido-sección-por-sección)
-   - [6.11 🕵️ Auditoría](#611--auditoría-de-acciones-solo-admin) · [6.12 🔄 Ciclos productivos](#612--ciclos-productivos-por-lote-historial_ciclos_lote) · [6.13 ⛅ Alertas climáticas](#613--alertas-climáticas-proactivas) · [6.14 🗺️ Enriquecimiento SIG IGAC/UPRA](#614--enriquecimiento-sig-igacupra) · [6.15 💰 Precios de insumos dinámicos](#615--precios-de-insumos-dinámicos-roi)
+   - [6.11 🕵️ Auditoría](#611--auditoría-de-acciones-solo-admin) · [6.12 🔄 Ciclos productivos](#612--ciclos-productivos-por-lote-historial_ciclos_lote) · [6.13 ⛅ Alertas climáticas](#613--alertas-climáticas-proactivas) · [6.14 🗺️ Enriquecimiento SIG IGAC/UPRA](#614--enriquecimiento-sig-igacupra) · [6.15 💰 Precios de insumos dinámicos](#615--precios-de-insumos-dinámicos-roi) · [6.16 🖼️ Almacenamiento de imágenes](#616--almacenamiento-de-imágenes-chat-y-labores) · [6.17 🧪 Validación de rendimiento real](#617--validación-de-rendimiento-real-anti-outliers)
 7. [Ingesta de datos IoT — `POST /api/sensor`](#7-ingesta-de-datos-iot--post-apisensor)
 8. [El motor de recomendaciones (corazón del sistema)](#8-el-motor-de-recomendaciones-corazón-del-sistema)
 9. [Aceptación humana de recomendaciones (human-in-the-loop)](#9-aceptación-humana-de-recomendaciones-human-in-the-loop)
@@ -511,6 +511,20 @@ Cada paso se devuelve en la respuesta (`validaciones[]` con estado `ok/error/war
 
 **UI**: panel «💰 Precios de insumos» en la pestaña Usuarios (Admin) con tabla editable de los 14 insumos del plan y botón «💾 Guardar precios».
 
+### 6.16 🖼️ Almacenamiento de imágenes (chat y labores)
+
+**Problema que resuelve**: las imágenes en Base64 dentro de PostgreSQL inflan la BD (Neon Free) y ralentizan las consultas.
+
+- **Chat — job programado**: `services/mantenimiento.py::limpiar_imagenes_chat()` ejecuta `UPDATE agroia.chat_memoria SET imagen_base64 = NULL WHERE ts < NOW() - make_interval(days => 90)`. Corre **cada 24 h** en el `lifespan` (primer ciclo a los 2 min) y manualmente vía `POST /api/v1/admin/chat/limpiar-imagenes` (solo Admin, auditoría `mantenimiento.chat_imagenes`, responde `liberadas`).
+- **Labores — fotos en disco**: migración 022 agrega `labores.imagen_url` (ruta, máximo 500 caracteres). `POST /api/v1/labores/{id}/foto` (multipart `file`, Admin/Agrónomo) valida formato (JPEG/PNG/WebP) y tamaño (máx 5 MB), guarda el archivo en `media/labores/` (disco local o `AGROIA_MEDIA_DIR`; S3/R2 a futuro) y solo persiste la ruta. FastAPI sirve `/media` vía StaticFiles. Auditoría `labor.foto`. Pensado para la PWA con geolocalización y foto.
+
+### 6.17 🧪 Validación de rendimiento real (anti-outliers del Ground Truth)
+
+**Problema que resuelve**: un usuario que escribe «50 t/ha» de café (esperado ≈ 2 t/ha) envenena las etiquetas doradas del aprendizaje activo (sección 10.5).
+
+- **Al cosechar** (`POST …/ciclo/cosechar`): se compara el rendimiento normalizado (t/ha) contra el `rendimiento_esperado` de la ficha técnica. Si `declarado > esperado × 2` o `< esperado × 0.3` → **no se bloquea el guardado**, pero el ciclo queda marcado `rendimiento_atipico = true` (migración 022) y la respuesta incluye `advertencia_rendimiento` («Este rendimiento es atípico para este cultivo en Colombia… Verifique el dato…»), que la UI muestra en un banner amarillo tras guardar.
+- **Ground Truth protegido**: `services/ml_labels.py::etiquetas_ciclos` excluye los ciclos atípicos (marca + recálculo defensivo de la regla) — el ML nunca aprende de outliers humanos.
+
 ---
 
 ## 7. Ingesta de datos IoT — `POST /api/sensor`
@@ -850,6 +864,12 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 - **Sin registro → fallback estático con advertencia** «Precios de referencia desactualizados» en P5 y en el reporte.
 - **Admin**: `GET/PUT /api/v1/admin/precios-insumos` + panel «💰 Precios de insumos» en Usuarios (tabla editable de 14 insumos).
 
+### 11.9 Imágenes fuera de la BD y rendimiento verificado (v2.9)
+
+- **Chat**: job diario borra `imagen_base64` con más de 90 días (`POST /api/v1/admin/chat/limpiar-imagenes` para disparo manual).
+- **Labores**: fotos en disco (`media/labores/`, servidas en `/media`); en BD solo `labores.imagen_url` (migración 022). Límite 5 MB, JPEG/PNG/WebP.
+- **Rendimiento atípico**: al cosechar, si el rendimiento declarado es > 2× o < 0.3× el esperado de la ficha, se marca `rendimiento_atipico` y la UI muestra el banner amarillo (no bloquea el guardado); el Ground Truth del ML excluye esos ciclos.
+
 ---
 
 ## 12. Persistencia y base de datos
@@ -884,9 +904,9 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 
 `clasificacionupra, estadodiscordancia, estadoficha, estadomembresia, estadorecomendacion, planmembresia, prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo`.
 
-### 12.3 Migraciones (001 → 021)
+### 12.3 Migraciones (001 → 022)
 
-- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos (`profundidad_radicular_min_cm`, `gdd_total_requerido`, `dias_ciclo`) · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` + índice `idx_ciclos_lote` · `017` inicio de ciclo: `fecha_siembra`/`variedad`/`densidad_siembra_plantas_ha` en `lotes` y en `historial_ciclos_lote` · `018` tabla `labores` · `019` tabla `alertas_climaticas` · `020` enum `texturasuelo` ampliado con clases IGAC (FRANCA, FRANCO_ARENOSA, FRANCO_ARCILLOSA, FRANCO_LIMOSA) · `021` tabla `precios_insumos`.
+- `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` · `017` inicio de ciclo · `018` tabla `labores` · `019` tabla `alertas_climaticas` · `020` enum `texturasuelo` ampliado con clases IGAC · `021` tabla `precios_insumos` · `022` `labores.imagen_url` (fotos en disco) + `historial_ciclos_lote.rendimiento_atipico` (anti-outliers).
 - **Auto-reparación al arranque**: `asegurar_enums()` crea tipos enum faltantes y `asegurar_reglas()` siembra reglas faltantes (idempotentes, corren en el `lifespan` de `main.py`).
 
 ### 12.4 Gotchas de Neon (lecciones aprendidas)
