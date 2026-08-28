@@ -2,7 +2,7 @@
  * Shell estático cacheado (app shell); la API siempre va a la red
  * (la cola IndexedDB cubre los cortes de conexión).
  */
-const CACHE = 'agroia-shell-v1';
+const CACHE = 'agroia-shell-v2';
 const SHELL = [
   '/',
   '/index.html',
@@ -28,13 +28,17 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET' || url.pathname.startsWith('/api')) return;
+  // Network-first con respaldo de caché: la UI siempre ve la última versión
+  // online y solo usa la caché sin conexión.
   e.respondWith(
-    caches.match(e.request).then(hit =>
-      hit || fetch(e.request).then(res => {
+    fetch(e.request).then(res => {
+      if (res.ok) {
         const copy = res.clone();
         caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {});
-        return res;
-      }).catch(() => caches.match('/index.html'))
+      }
+      return res;
+    }).catch(() =>
+      caches.match(e.request).then(hit => hit || caches.match('/index.html'))
     )
   );
 });

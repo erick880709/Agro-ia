@@ -7,10 +7,10 @@ const API = '/api/v1';
 const SESION_KEY = 'agroia_sesion';
 
 const TABS_POR_ROL = {
-  admin: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'equipo', 'comisiones', 'lista-trabajos', 'reentrenar', 'precios-cosecha', 'catalogo'],
-  agronomo: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'catalogo'],
+  admin: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'equipo', 'comisiones', 'lista-trabajos', 'reentrenar', 'precios-cosecha', 'vision', 'catalogo'],
+  agronomo: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'vision', 'catalogo'],
   cliente: ['inicio', 'alertas', 'sensores', 'historial', 'reportes', 'catalogo'],
-  extensionista: ['inicio', 'alertas', 'zona', 'sensores', 'historial', 'reportes', 'catalogo'],
+  extensionista: ['inicio', 'alertas', 'zona', 'sensores', 'historial', 'reportes', 'vision', 'catalogo'],
 };
 
 const ICONOS_APROXIMADOS = {
@@ -291,6 +291,7 @@ function goTab(name) {
   if (name === 'comisiones' && state.rol.toLowerCase() === 'admin') cargarComisiones();
   if (name === 'lista-trabajos' && state.rol.toLowerCase() === 'admin') cargarListaTrabajos();
   if (name === 'precios-cosecha' && state.rol.toLowerCase() === 'admin') cargarPreciosCosecha();
+  if (name === 'vision' && state.rol.toLowerCase() !== 'cliente') cargarVision();
   document.querySelectorAll('.tab-submenu.open').forEach(s => s.classList.remove('open'));
 }
 
@@ -1672,6 +1673,85 @@ async function guardarPrecioCosecha(e) {
     });
     msg.innerHTML = okBanner('Precio actualizado.');
     await cargarPreciosCosecha();
+  } catch (err) {
+    msg.innerHTML = errorBanner(err.message);
+  }
+}
+
+/* ────────────────────── visión plagas (P12) ────────────────────── */
+
+async function cargarVision() {
+  const sel = document.getElementById('vision-finca');
+  if (!sel.dataset.listener) {
+    sel.dataset.listener = '1';
+    sel.addEventListener('change', cargarVision);
+  }
+  if (sel.options.length <= 1 && state.fincas.length) {
+    sel.innerHTML = '<option value="">— Seleccione finca —</option>' +
+      state.fincas.map(f => `<option value="${esc(f.id)}">${esc(f.nombre)}</option>`).join('');
+  }
+  const fincaId = sel && sel.value;
+  const cont = document.getElementById('vision-diagnosticos');
+  if (!cont) return;
+  if (!fincaId) {
+    cont.innerHTML = '<p class="muted">Selecciona una finca para ver su historial de diagnósticos.</p>';
+    return;
+  }
+  try {
+    const r = await api(`/vision/diagnosticos/${fincaId}`);
+    const diags = r.diagnosticos || [];
+    if (!diags.length) {
+      cont.innerHTML = '<p class="muted">Sin diagnósticos para esta finca.</p>';
+      return;
+    }
+    cont.innerHTML = `
+      <div class="table-wrap"><table>
+        <tr><th>Foto</th><th>Plaga</th><th>Confianza</th><th>Severidad</th><th>Fuente</th><th>Fecha</th></tr>
+        ${diags.map(d => {
+          const res = d.resultado || {};
+          return `<tr>
+            <td>${d.imagen_url ? `<img src="${esc(d.imagen_url)}" alt="foto plaga" style="max-width:64px;border-radius:6px" />` : '—'}</td>
+            <td>${esc(res.plaga || '—')}</td>
+            <td>${res.confianza != null ? Math.round(res.confianza * 100) + '%' : '—'}</td>
+            <td>${esc(res.severidad || '—')}</td>
+            <td>${esc(res.fuente || d.fuente || '—')}</td>
+            <td>${esc((d.created_at || '').slice(0, 16).replace('T', ' '))}</td>
+          </tr>`;
+        }).join('')}
+      </table></div>`;
+  } catch (e) {
+    cont.innerHTML = errorBanner(e.message);
+  }
+}
+
+async function analizarFotoPlaga(e) {
+  e.preventDefault();
+  const msg = document.getElementById('vision-msg');
+  msg.innerHTML = '';
+  const fincaId = document.getElementById('vision-finca').value;
+  const foto = document.getElementById('vision-foto').files[0];
+  if (!fincaId || !foto) {
+    msg.innerHTML = errorBanner('Selecciona la finca y la foto a analizar.');
+    return;
+  }
+  try {
+    const fd = new FormData();
+    fd.append('file', foto);
+    const res = await fetch(`/api/v1/vision/analizar-plaga?finca_id=${encodeURIComponent(fincaId)}`, {
+      method: 'POST', headers: headers(), body: fd,
+    });
+    const r = await res.json();
+    if (!res.ok) {
+      const d = r && r.detail;
+      throw new Error((d && (d.message || JSON.stringify(d))) || `HTTP ${res.status}`);
+    }
+    msg.innerHTML = okBanner(
+      `Diagnóstico <b>${esc(r.plaga)}</b> (${r.confianza != null ? Math.round(r.confianza * 100) + '%' : '—'}) · ` +
+      `severidad: ${esc(r.severidad)}. ${esc(r.recomendacion)} ` +
+      `<i>(${esc(r.nota || '')})</i>`
+    );
+    document.getElementById('vision-foto').value = '';
+    await cargarVision();
   } catch (err) {
     msg.innerHTML = errorBanner(err.message);
   }
