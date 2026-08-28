@@ -4,6 +4,12 @@
 **Categoría:** Stack tecnológico / Frontend
 **Fuente:** Instrucción directa del cliente (sobrescribe RFP original que sugería React/Next.js)
 
+> **Estado de implementación (2026-08-28):** el frontend productivo se implementó como
+> **SPA vanilla JS** (`apps/frontend-web`, 18 vistas) servida por el backend FastAPI.
+> Angular 21 quedó como prototipo parcial en `apps/frontend` (login, chat, cultivos,
+> dashboard, IoT, recomendaciones). Ver sección 0 de
+> `resources/architecture/Documento_Arquitectura_AgroIA.md`.
+
 ## Descripción
 El frontend de la plataforma debe desarrollarse utilizando **Angular 21** como framework principal. Este requisito técnico es vinculante y fue definido explícitamente por el cliente, sobrescribiendo la recomendación original del RFP que mencionaba React o Next.js.
 

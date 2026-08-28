@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 2.11 · **Fecha:** 2026-08-27
+**Versión:** 2.13 · **Fecha:** 2026-08-28
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -65,10 +65,10 @@ AgroIA es un sistema de **agricultura de precisión para Colombia**: sensores Io
 flowchart LR
   subgraph Frontend["Frontend (apps/frontend-web)"]
     LOGIN[Pantalla de login]
-    UI[SPA: Inicio · Sensores · Carga · Recomendaciones · Historial · Reportes · Fincas · Usuarios · Catálogo · Chat]
+    UI[SPA 18 vistas: Inicio · Sensores · Carga · Recomendaciones · Historial · Reportes · Fincas · Catálogo · Chat · Mi zona · BPA · Equipo · Comisiones · Lista de trabajos · Reentrenar]
   end
   subgraph Backend["Backend FastAPI (apps/backend)"]
-    API[14 routers REST /api/v1]
+    API[35 routers REST /api/v1]
     ORCH[RecommendationOrchestrator]
     RULES[RulesEngine + AptitudService<br/>sistema experto]
     ML[MLOracleService<br/>modo sombra]
@@ -102,8 +102,8 @@ flowchart LR
 
 | Módulo | Responsabilidad |
 |---|---|
-| `main.py` | Crea la app FastAPI, monta los 14 routers, sirve el frontend estático en `/`, y en el arranque (`lifespan`) ejecuta `asegurar_enums()` y `asegurar_reglas()`. |
-| `api/*.py` | Endpoints HTTP: `auth`, `sensor_api`, `iot`, `fincas`, `recomendaciones`, `reportes`, `ml`, `chat`, `dashboard`, `catalogo`, `usuarios`, `location`, `health`. |
+| `main.py` | Crea la app FastAPI, monta los 35 routers, sirve el frontend estático en `/`, y en el arranque (`lifespan`) ejecuta `asegurar_enums()` y `asegurar_reglas()`. |
+| `api/*.py` | 35 routers HTTP: `auth`, `sensor_api`, `iot`, `fincas`, `ciclos`, `labores`, `recomendaciones`, `reportes`, `ml`, `chat`, `dashboard`, `catalogo`, `usuarios`, `location`, `sig`, `admin_precios`, `alertas`, `auditoria`, `demo`, `mantenimiento`, `agua_riego`, `balance_hidrico`, `bpa`, `curvas`, `extensionista`, `notificaciones`, `plagas`, `rotacion`, `variedades`, `equipo`, `comisiones`, `lista_trabajos`, `health`. |
 | `services/orchestrator.py` | Orquesta el pipeline completo de recomendación (datos → reglas → ML → discordancia → confianza → respuesta). |
 | `services/rules_engine.py` | Sistema experto: evalúa reglas agronómicas contra los datos de suelo. |
 | `services/aptitud.py` | UC1: puntúa todos los cultivos y los ordena por aptitud. |
@@ -115,8 +115,8 @@ flowchart LR
 | `services/normalizacion_iot.py` | Normaliza tramas del firmware al esquema canónico. |
 | `services/geografia.py` | Catálogo departamentos/municipios con centroides, cadena de validación de fincas y cálculo de área/perímetro de polígonos. |
 | `services/puente_iot.py` | Puente de import del consumidor IoT (portable dev/contenedor). |
-| `models/*.py` | Modelos SQLAlchemy (15+ tablas). |
-| `alembic/versions/` | Migraciones 001 → 010. |
+| `models/*.py` | Modelos SQLAlchemy (35 tablas en schema `agroia`). |
+| `alembic/versions/` | Migraciones 001 → 035. |
 
 ---
 
@@ -178,7 +178,7 @@ Cada petición `fetch` lleva:
 
 | Rol | Pestañas visibles | Fincas visibles | Acciones de escritura |
 |---|---|---|---|
-| **Admin** | Inicio, Sensores, Carga, Recomendaciones, Historial, Reportes, Fincas, Catálogo + menú **⚙️ Administración** (Registrar finca, Usuarios, Insumos, Auditoría, BPA, Reentrenar ML) | Todas | Registrar/editar fincas, aceptar recomendaciones, cambiar roles, precios de insumos, fichas del catálogo, checklist BPA, reentrenar ML |
+| **Admin** | Inicio, Sensores, Carga, Recomendaciones, Historial, Reportes, Fincas, Catálogo + menú **⚙️ Administración** (Registrar finca, Usuarios, Insumos, Auditoría, BPA, **Equipo de trabajo, Comisiones, Lista de trabajos**, Reentrenar ML) | Todas | Registrar/editar fincas, aceptar recomendaciones, cambiar roles, precios de insumos, fichas del catálogo, checklist BPA, **equipo de trabajo, comisiones y novedades**, reentrenar ML |
 | Agrónomo | Inicio, Sensores, Carga, Recomendaciones, Historial, Reportes, Catálogo | Todas | Aceptar recomendaciones, actualizar datos agronómicos, registrar agua de riego, monitoreo de plagas y labores |
 | **Extensionista** (v4) | **Mi zona** (landing tras login), Inicio, Sensores, Historial, Reportes, Catálogo | Solo las de sus `municipios_asignados` | **Escritura en su zona**: agua de riego (`ROL_ESCRITURA` en `agua_riego.py`), monitoreo de plagas (`plagas.py`) y checklist BPA (`bpa.py`); sin acceso a catálogo global ni auditoría |
 | **Cliente** | Inicio, Sensores, Historial, Reportes, Catálogo | Solo las ligadas a su email (`fincas_permitidas_ids`) | **Solo lectura** (`exigir_no_cliente` bloquea) |
@@ -192,7 +192,7 @@ Cada petición `fetch` lleva:
 
 ## 5. El frontend SPA: navegación y utilidades
 
-`apps/frontend-web/app.js` es una SPA sin framework (~1.400 líneas).
+`apps/frontend-web/app.js` es una SPA sin framework (~3.700 líneas).
 
 **Estado global (`state`):** `fincas`, `cultivos`, `dispositivos`, `fincaId`, `catalogo`, `usuarios`, `sesion`, `rol`, `tabActual`, `cargandoSensores`, `ultimoAnalisis` (resultado del último análisis, usado por el panel de aceptación).
 
@@ -209,22 +209,38 @@ Cada petición `fetch` lleva:
 | `usuarios` (solo admin) | `cargarUsuarios()` |
 | `insumos` (solo admin) | `cargarPreciosInsumos()` |
 | `auditoria` (solo admin) | `cargarAuditoria()` |
+| `bpa` (solo admin) | `cargarBpa()` (checklist + visitas + reporte de trazabilidad) |
+| `equipo` (solo admin) | `cargarEquipo()` (empleados + tarifas + novedades) |
+| `comisiones` (solo admin) | `cargarComisiones()` |
+| `lista-trabajos` (solo admin) | `cargarListaTrabajos()` (semáforo + gráfico por etapa) |
 | `reg-finca` (solo admin) | — (wizard de registro estático en su propia vista) |
 
 **Menú «⚙️ Administración» (solo Admin, v2.10):** la barra de navegación agrupa en un
 **desplegable** las secciones administrativas: **🏡 Registrar finca** (wizard completo de 3 pasos
 en su propia vista), **�️ Fincas** (listado de fincas), **📜 Historial** (recomendaciones),
 **👥 Administrar usuarios**, **💰 Administrar insumos** (página propia con la tabla de precios
-dinámicos) y **🕵️ Auditoría**. Para el Admin, «Fincas» e «Historial» **ya no aparecen como
+dinámicos), **🕵️ Auditoría**, **📋 Trazabilidad / BPA** (checklist + visitas de verificación), **🧑‍🤝‍🧑 Equipo de trabajo**, **🗂️ Comisiones**, **📊 Lista de trabajos** y **🤖 Reentrenar modelo**. Para el Admin, «Fincas» e «Historial» **ya no aparecen como
 pestañas en la barra superior** (solo en el menú, sin duplicarlas); para Agrónomo y Cliente,
 «Historial» sigue visible en la barra superior porque no tienen el menú Administración.
+**Actualización v2.13 (menú ⚙️ Administración):** además de las opciones originales, el menú
+incluye ahora **📋 Trazabilidad / BPA** (checklist ICA 30021 + visitas de verificación con fecha y
+verificador), **🧑‍🤝‍🧑 Equipo de trabajo** (empleados con datos personales y de emergencia, tarifas
+por rol y novedades/incapacidades con reemplazo), **🗂️ Comisiones** (órdenes de trabajo de campo
+por finca: 1 instrumentador + N cadeneros sensoristas, valores de comisión/cobro del
+servicio/validación/plataforma y fin de medición obligatorio para liberar el equipo) y
+**📊 Lista de trabajos** (semáforo de etapa por finca, actividades faltantes, filtros y gráfico
+por etapa). Todo auditado con fecha de registro y modificación.
+
 El desplegable es **flotante**: se posiciona con `position: fixed` sobre el contenido de la
 página (escapa del `overflow` del nav), se abre hacia arriba cuando no cabe abajo, se
 reposiciona en `scroll`/`resize` y se cierra al elegir una opción o al hacer clic fuera.
 
-**Menú «❓ Ayuda» (todos los roles, v2.11):** segundo desplegable de la barra con los
+**Menú «❓ Ayuda» (todos los roles, v2.13):** segundo desplegable de la barra con los
 **manuales de usuario por rol** (archivos estáticos en `apps/frontend-web/ayuda-*.html`):
-👑 Administrador, 🧑‍🌾 Agrónomo y 👤 Cliente. La visibilidad es por rol: el Admin ve los tres;
+👑 Administrador, 🧑‍🌾 Agrónomo y 👤 Cliente, más el enlace **🎓 Capacitación — flujo completo**
+(`/capacitacion.html`), visible para todos los roles: guía end-to-end del registro de la finca
+hasta el reporte, con maquetas de pantalla, estados por etapa y el reporte explicado sección
+por sección. La visibilidad de los manuales es por rol: el Admin ve los tres;
 Agrónomo y Cliente solo el suyo (los enlaces llevan `data-roles` y se filtran en `aplicarRol`).
 Cada manual es una guía paso a paso del alcance de su rol, con capturas reales de la app,
 **GIF animados** de los flujos principales y un **reproductor de video** (carrusel de pantallas
@@ -959,14 +975,23 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 | `alertas_climaticas` | **Alertas meteorológicas proactivas**: tipo (lluvia_aplicacion/helada_floracion), severidad, mensaje, fecha, pronóstico JSONB y flag `activa` — FK fincas CASCADE |
 | `auditoria` | **Bitácora de acciones**: usuario (email/nombre/rol), acción, entidad, entidad_id, detalle JSONB, IP, fecha |
 | `precios_insumos` | **Precios dinámicos de insumos**: producto (clave), COP/kg, fecha de actualización y fuente — alimenta el ROI del plan económico |
+| `analisis_agua_riego` | **Análisis de agua de riego (FAO-29)**: pH, CE, iones, clasificación de riesgo por salinidad/sodio — alimenta la sección R del reporte |
+| `curvas_extraccion` | Curvas de extracción de nutrientes por cultivo y etapa (kg/t) |
+| `monitoreo_plagas` | Registros MIP de plagas/enfermedades por finca (incidencia y manejo) |
+| `variedades_cultivo` / `compatibilidad_rotacion` / `periodos_carencia` | Variedades por cultivo, reglas de rotación compatible y períodos de carencia de agroquímicos |
+| `checklist_bpa` / `checklist_bpa_visitas` | Checklist ICA 30021 por finca y **visitas de verificación por medición** (ítems ✅/❌, verificador y fecha) |
+| `preferencias_notificacion` | Canal preferido por finca (whatsapp/sms/email/ninguno) para alertas |
+| `equipo_trabajo` / `tarifas_rol` / `novedades_equipo` | Empleados (datos personales y de emergencia), tarifas por rol y novedades/incapacidades con reemplazo |
+| `comisiones` / `comision_miembros` | Órdenes de trabajo de campo por finca: 1 instrumentador + N cadeneros, valores y fin de medición |
 
 ### 12.2 Enums (12 tipos en schema `agroia`)
 
 `clasificacionupra, estadodiscordancia, estadoficha, estadomembresia, estadorecomendacion, planmembresia, prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo`.
 
-### 12.3 Migraciones (001 → 022)
+### 12.3 Migraciones (001 → 035)
 
 - `001–003` tablas base y dispositivos · `004/005` creación y corrección de enums · `006` posiciones de muestreo · `007` chat_memoria · `008/009` auto-reparación de enums · `010` campos agronómicos de finca + aceptaciones · `011` georreferenciación de fincas + tabla `lotes` · `012` profundidad/pedregosidad del lote + tipo de riego · `013` `chat_memoria.imagen_base64` · `014` fisiología de cultivos · `015` tabla `auditoria` · `016` tabla `historial_ciclos_lote` · `017` inicio de ciclo · `018` tabla `labores` · `019` tabla `alertas_climaticas` · `020` enum `texturasuelo` ampliado con clases IGAC · `021` tabla `precios_insumos` · `022` `labores.imagen_url` (fotos en disco) + `historial_ciclos_lote.rendimiento_atipico` (anti-outliers).
+- `023` módulos v4 (agrupa 023→032): agua de riego, curvas de extracción, monitoreo de plagas, variedades, rotación, checklist BPA, períodos de carencia, preferencias de notificación, `kc_inicial/medio/final` en `cultivos`, `resistencia_penetracion_kpa` en `lotes` y rol Extensionista · `033` reparación idempotente de `pos_x/pos_y` relativos al centroide · `034` visitas de verificación BPA (`checklist_bpa_visitas`) · `035` módulo operativo (`equipo_trabajo`, `tarifas_rol`, `novedades_equipo`, `comisiones`, `comision_miembros`).
 - **Auto-reparación al arranque**: `asegurar_enums()` crea tipos enum faltantes y `asegurar_reglas()` siembra reglas faltantes (idempotentes, corren en el `lifespan` de `main.py`).
 
 ### 12.4 Gotchas de Neon (lecciones aprendidas)

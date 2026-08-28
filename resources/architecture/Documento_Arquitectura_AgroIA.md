@@ -1,10 +1,54 @@
 # Documento de Arquitectura de Software: AgroInteligente Colombia (AgroIA)
 
-**Versión:** 1.0
-**Fecha:** 2026-08-03
-**Tipo de documento:** Arquitectura propuesta (Caso A — Greenfield con ML/IA)
+**Versión:** 1.1
+**Fecha:** 2026-08-28
+**Tipo de documento:** Arquitectura propuesta (Caso A — Greenfield con ML/IA) + estado actual de implementación (sección 0)
 **Autor:** Generado con asistencia de IA, revisado por —
 **Diagramas draw.io:** `resources/architecture/AgroIA-Arquitectura-C4.drawio` (6 pestañas)
+
+---
+
+## 0. Estado actual de implementación (2026-08-28)
+
+> Este documento conserva la **arquitectura propuesta** (Caso A — greenfield) y añade esta sección
+> que reconcilia la propuesta con **lo que hoy está implementado y desplegado** (rama `master`).
+> La sección «0» es la fuente de verdad del estado actual; las secciones 4–12 describen la
+> arquitectura objetivo y las decisiones, que siguen vigentes como norte de evolución.
+
+### 0.1 Qué hay implementado hoy
+
+| Dimensión | Propuesta original | Implementado hoy |
+|---|---|---|
+| Frontend | SPA Angular 21 | **SPA vanilla JS** (`apps/frontend-web`, ~3.700 líneas, **18 vistas**) servida por el backend en `/`; Angular 21 quedó como prototipo parcial en `apps/frontend` (login, chat, cultivos, dashboard, IoT, recomendaciones) |
+| Backend | Monolito modular + servicios separados (Auth, ML, RAG, IoT) | **Monolito modular FastAPI único** con **35 routers** (`apps/backend`): negocio + ML en modo sombra + RAG + ingesta IoT integrados |
+| Mensajería | RabbitMQ (AMQP) | **HTTP directo**: `POST /api/sensor` persiste las tramas (sin broker) |
+| Autenticación | JWT RS256 + Auth Service | Cabeceras confiadas `X-User-Role` / `X-User-Email` + bcrypt en login (MVP); JWT pendiente |
+| LLM del chat | OpenAI GPT-4 (obligatorio) | **Híbrido**: OpenAI opcional si hay `OPENAI_API_KEY` (con visión); si no, motor local de conocimiento (BM25 sobre corpus Cenicafé/AGROSAVIA/UPRA) |
+| Clima | IDEAM | IDEAM (offline/histórico) + **Open-Meteo** y **ECMWF IFS 0.25°** (selector con `ambos` por defecto) |
+| Despliegue | AWS EKS + S3 + ElastiCache + Amazon MQ | **Render Web Service (Free)** + **Neon PostgreSQL 15** (schema `agroia`, **35 tablas**, migraciones **001→035**); imágenes en disco (`/media`) |
+| Pagos / membresías | Fase 2 | No implementado (modelo de datos preparado) |
+
+### 0.2 Módulos agregados después de la propuesta (v4 y operativo)
+
+- **Módulos v4:** agua de riego (FAO-29), balance hídrico ETo/Kc, monitoreo de plagas (MIP),
+  variedades por cultivo, rotación compatible, períodos de carencia, checklist BPA (ICA 30021) con
+  **visitas de verificación por medición**, notificaciones (WhatsApp/SMS/email), rol **Extensionista**
+  con «Mi zona» por municipios asignados, reentrenamiento de modelos ML desde la UI, catálogo
+  ampliado (+15 cultivos) y secciones R/S/B/Q/N del reporte.
+- **Módulo operativo:** **Equipo de trabajo** (empleados, datos de emergencia, tarifas por rol,
+  novedades/incapacidades con reemplazo), **Comisiones** (órdenes de campo por finca:
+  1 instrumentador + N cadeneros, fin de medición obligatorio) y **Lista de trabajos** (semáforo
+  por etapa: registro → asignación de comisión → toma de muestras → recomendación → reporte → finalizada).
+- **Otras:** alertas climáticas proactivas, enriquecimiento SIG IGAC/UPRA, precios dinámicos de
+  insumos, ciclos productivos por lote, labores por orden, validación de rendimiento real
+  anti-outliers, auditoría de acciones, demo reset y manuales de usuario + capacitación end-to-end.
+
+### 0.3 Documentos vivos del sistema construido
+
+- `resources/architecture/Documento_Funcional_Tecnico_AgroIA.md` (v2.13) — detalle funcional/técnico por módulo y servicio.
+- `resources/architecture/Documento_Pantallas_AgroIA.html` (v2.13) — manual de 23 pantallas (P0–P12J).
+- `context/contextoFuncional/AgroIA_Especificacion_Tecnica_v4.md` — especificación de los módulos v4.
+- `resources/functional/requests/*` (RF) y `resources/architecture/definitions/*` (RNF/RT) — línea base de requerimientos.
 
 ---
 
@@ -27,6 +71,11 @@ AgroIA es una plataforma inteligente de diagnóstico agronómico que funciona co
 | RF-7 | Infraestructura DevOps/MLOps: AWS EKS, Terraform, GitHub Actions, MLflow, CloudWatch+X-Ray | [007](resources/functional/reqs/007-infraestructura-devops-mlops.md) |
 | RF-8 | Usuarios, roles y membresías (4 roles RBAC, auto-registro, planes) | [008](resources/functional/reqs/008-usuarios-roles-membresias.md) |
 | RF-9 | Requisitos transversales y post-MVP | [009](resources/functional/reqs/009-cierre-requisitos-transversales.md) |
+
+> **Nota (2026-08-28):** esta tabla es la línea base de requerimientos. El estado de implementación
+> de cada RF está en la sección 0 y en `resources/architecture/Documento_Funcional_Tecnico_AgroIA.md`
+> (v2.13). Módulos agregados después del MVP: agua de riego, balance hídrico, plagas MIP, BPA con
+> visitas, Extensionista, equipo de trabajo, comisiones y lista de trabajos.
 
 ### 1.3 Atributos de calidad
 
@@ -62,7 +111,7 @@ AgroIA es una plataforma inteligente de diagnóstico agronómico que funciona co
 
 | # | Restricción | Tipo | Impacto |
 |---|------------|------|---------|
-| R1 | Angular 21 para el frontend | Técnica (cliente vinculante) | Define el ecosistema frontend; incompatible con React/Vue |
+| R1 | Angular 21 para el frontend (restricción original del cliente) | Técnica (cliente vinculante) | **Superada en la práctica:** el frontend desplegado es una SPA vanilla JS (`apps/frontend-web`) servida por el backend; Angular 21 quedó como prototipo parcial en `apps/frontend` (ver sección 0) |
 | R2 | Python para backend y modelos de IA | Técnica (cliente vinculante) | FastAPI como framework natural; stack científico Python |
 | R3 | El agente conversacional no puede navegar por Internet | Funcional (RFP) | Arquitectura RAG cerrada sobre corpus documental; sin web search |
 | R4 | El sistema nunca debe inventar información ("no alucinación") | Funcional (RFP) | Circuito de "sin datos suficientes" obligatorio en ML y RAG |
@@ -160,7 +209,7 @@ C4Container
     Person(admin, "Administrador", "")
 
     System_Boundary(agroia, "AgroIA — AWS EKS sa-east-1 + Datos Colombia") {
-        Container(spa, "SPA Angular 21", "Angular 21, TypeScript", "Interfaz de usuario: dashboard por finca, mapas GIS, reportes PDF, chat RAG")
+        Container(spa, "SPA (vanilla JS)", "HTML+CSS+JS en apps/frontend-web, servida por el backend", "Interfaz de usuario: 18 vistas — dashboard, fincas, sensores, recomendaciones, reportes, catálogo, chat, BPA, equipo, comisiones, lista de trabajos")
         Container(gateway, "API Gateway", "AWS API Gateway", "Rate limiting, JWT validation, CORS")
         Container(auth, "Auth Service", "Python FastAPI", "JWT RS256 1h, OAuth2, RBAC 4 roles")
         Container(backend, "Backend FastAPI", "Python 3.11+ FastAPI", "Servicios de negocio: recomendaciones, catálogo, usuarios, dashboards, reportes")
@@ -195,11 +244,16 @@ C4Container
     Rel(rag, pg, "Búsqueda vectorial", "pgvector")
 ```
 
+> **Nota (2026-08-28):** el diagrama anterior es la **arquitectura objetivo**. El despliegue actual
+> es más simple: SPA vanilla servida por el backend FastAPI (monolito de 35 routers) sobre
+> **Render + Neon PostgreSQL** — sin API Gateway, RabbitMQ, Redis ni servicios separados
+> (detalle en la sección 0).
+
 ### 5.1 Responsabilidades y tecnología por contenedor
 
 | Contenedor | Responsabilidad | Tecnología | Por qué |
 |-----------|----------------|-----------|---------|
-| **SPA Angular 21** | UI completa: dashboards, mapas, chat, reportes, admin | Angular 21, TypeScript, Leaflet/Mapbox | Vinculante del cliente; ecosistema maduro para formularios complejos y SPA empresarial |
+| **SPA (vanilla JS)** | UI completa: dashboards, fincas, sensores, recomendaciones, reportes, catálogo, chat, BPA, equipo, comisiones, lista de trabajos | HTML + CSS + JS sin framework (`apps/frontend-web`), Leaflet para mapas | SPA estática servida por el backend en `/` (despliegue simple en Render, sin build de frontend) |
 | **API Gateway** | Rate limiting, validación JWT inicial, CORS, ruteo | AWS API Gateway | Servicio gestionado, integración nativa con EKS y CloudWatch |
 | **Auth Service** | Autenticación, emisión/refresh de tokens, RBAC | FastAPI, PyJWT, bcrypt/argon2 | Stateless, escalable horizontalmente, sin sesiones en servidor |
 | **Backend FastAPI** | Lógica de negocio: recomendaciones, catálogo, usuarios, dashboards, reportes, ingesta de datos externos | FastAPI, SQLAlchemy, Pydantic, Celery (tareas asíncronas) | Rendimiento async, tipado fuerte, ecosistema científico Python compatible |
@@ -223,7 +277,7 @@ C4Container
 C4Component
     title Componentes - Motor de Recomendaciones Inteligentes
 
-    Container(spa, "SPA Angular", "")
+    Container(spa, "SPA vanilla", "")
     Container(gateway, "API Gateway", "")
     ContainerDb(pg, "PostgreSQL+pgvector", "")
 
@@ -300,7 +354,7 @@ _No se incluye en esta versión del documento. Se generará para el componente R
 ```mermaid
 sequenceDiagram
     actor A as Agricultor
-    participant SPA as SPA Angular
+    participant SPA as SPA (vanilla JS)
     participant GW as API Gateway
     participant ORCH as Recommendation Orchestrator
     participant ML as ML Models
@@ -448,6 +502,94 @@ erDiagram
     }
 ```
 
+### 9.1bis Entidades agregadas en la implementación (v4 y módulo operativo)
+
+> Las 35 tablas actuales del schema `agroia` incluyen, además de las anteriores, las siguientes
+> (introducidas por las migraciones 023 → 035). El modelo físico real es la fuente de verdad en
+> `apps/backend/agroia_backend/models/*.py`.
+
+```mermaid
+erDiagram
+    FINCA ||--o{ LOTE : contiene
+    LOTE ||--o{ CICLO_LOTE : historial_ciclos_lote
+    LOTE ||--o{ LABOR : orden_de_trabajo
+    FINCA ||--o{ ALERTA_CLIMATICA : recibe
+    FINCA ||--o{ CHECKLIST_BPA : evaluada_con
+    CHECKLIST_BPA ||--o{ VISITA_BPA : verificada_en
+    FINCA ||--o{ ANALISIS_AGUA_RIEGO : tiene
+    FINCA ||--o{ MONITOREO_PLAGA : registra
+    FINCA ||--o{ PREFERENCIA_NOTIFICACION : configura
+    CULTIVO ||--o{ VARIEDAD_CULTIVO : ofrece
+    CULTIVO ||--o{ CURVA_EXTRACCION : define
+    CULTIVO ||--o{ COMPATIBILIDAD_ROTACION : participa_en
+    CULTIVO ||--o{ PERIODO_CARENCIA : tiene
+    FINCA ||--o{ COMISION : asigna
+    COMISION ||--o{ COMISION_MIEMBRO : integrada_por
+    EQUIPO_TRABAJO ||--o{ NOVEDAD_EQUIPO : sufre
+    EQUIPO_TRABAJO ||--o{ TARIFA_ROL : cobra_segun
+    USUARIO ||--o{ AUDITORIA : genera
+
+    LOTE {
+        uuid id PK
+        uuid finca_id FK
+        string nombre
+        float area_ha
+        float profundidad_suelo_cm
+        float resistencia_penetracion_kpa
+    }
+    CICLO_LOTE {
+        uuid id PK
+        uuid lote_id FK
+        date fecha_siembra
+        date fecha_cosecha
+        float rendimiento_tha
+        boolean rendimiento_atipico
+    }
+    LABOR {
+        uuid id PK
+        uuid lote_id FK
+        string tipo
+        string producto
+        date fecha_programada
+        string estado
+    }
+    CHECKLIST_BPA {
+        uuid id PK
+        uuid finca_id FK
+        jsonb items
+        date fecha_ultima_visita
+    }
+    VISITA_BPA {
+        uuid id PK
+        uuid checklist_id FK
+        date fecha
+        string verificador
+        jsonb items_evaluados
+    }
+    ANALISIS_AGUA_RIEGO {
+        uuid id PK
+        uuid finca_id FK
+        float ph
+        float conductividad_electrica
+        string clasificacion_fao29
+    }
+    EQUIPO_TRABAJO {
+        uuid id PK
+        string nombre
+        string rol_equipo
+        string contacto_emergencia
+        string estado
+    }
+    COMISION {
+        uuid id PK
+        uuid finca_id FK
+        date fecha_inicio
+        date fecha_fin_medicion
+        numeric valor_comision
+        string estado
+    }
+```
+
 ### 9.2 Estrategia de particionamiento
 
 - **sensor_data:** partición por tiempo (TimescaleDB hypertable, chunk de 7 días) y por `finca_id` (particionamiento espacial opcional en fase 2).
@@ -564,7 +706,7 @@ graph TB
     subgraph "AWS sa-east-1 (São Paulo)"
         subgraph "EKS Cluster"
             subgraph "ns: agroia-prod"
-                pod_spa["SPA Angular (static)"]
+                pod_spa["SPA vanilla (static, servida por el backend)"]
                 pod_backend["Backend FastAPI (≥2 réplicas, HPA)"]
                 pod_ml["ML Inference (≥1 réplica, GPU opcional)"]
                 pod_rag["RAG Agent (≥1 réplica)"]
@@ -642,7 +784,7 @@ graph TB
 1. **El piloto es en café en el Quindío**, pero la arquitectura es multi-cultivo y multi-región desde el día 1. No se hardcodea nada para café.
 2. **Los sensores IoT y la red LoRaWAN son provistos por un aliado tecnológico externo.** AgroIA solo consume los datos ya transmitidos.
 3. **La pasarela de pagos no se implementa en MVP.** Solo se deja preparado el modelo de datos de membresías y la arquitectura para integrar (ej. PayU Latam, MercadoPago).
-4. **El equipo tiene experiencia en Python y Angular**, pero no necesariamente en Kubernetes. Se recomienda capacitación en EKS o uso de ECS Fargate como alternativa más simple.
+4. **El equipo tiene experiencia en Python y Angular.** En la práctica el frontend productivo se construyó como SPA vanilla JS (`apps/frontend-web`) para simplificar el despliegue; el prototipo Angular (`apps/frontend`) se conserva como base de un futuro frontend con framework.
 5. **Las APIs de IDEAM e IGAC son estables y públicas.** Si requieren convenio interinstitucional, el trámite es externo al desarrollo.
 6. **El presupuesto de AWS se estimará en la fase de diseño detallado** usando AWS Pricing Calculator. Mientras tanto se asume un presupuesto moderado para MVP (< $500/mes).
 7. **La IES aliada aporta investigadores para calibración de modelos.** Sin este recurso, la calidad de los modelos cold-start se degrada significativamente.
@@ -671,4 +813,7 @@ graph TB
 
 > **Documento generado según plantilla arc42/C4 Model. Los diagramas editables están en `resources/architecture/AgroIA-Arquitectura-C4.drawio`.**
 > 
-> **Próximo paso:** `genesis` — inicialización del repositorio de código con el esqueleto de capas (Angular 21 + FastAPI + PostgreSQL).
+> **Estado (2026-08-28):** el repositorio fue inicializado y el sistema está **implementado y desplegado**
+> (Render + Neon). Los diagramas `.drawio` (C1–C4) corresponden a la propuesta original y quedan como
+> referencia de la arquitectura objetivo; el detalle actualizado del sistema construido está en la
+> sección 0 y en `Documento_Funcional_Tecnico_AgroIA.md` (v2.13).
