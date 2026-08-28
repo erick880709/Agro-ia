@@ -2339,17 +2339,20 @@ async function cargarBpa() {
   if (!sel.value) return;
   const lista = document.getElementById('bpa-lista');
   const resumen = document.getElementById('bpa-resumen');
+  const visitas = document.getElementById('bpa-visitas');
   lista.innerHTML = '<p class="muted">Cargando checklist…</p>';
+  visitas.innerHTML = '<p class="muted">Cargando visitas…</p>';
   try {
-    const [check, traz] = await Promise.all([
+    const [check, traz, vis] = await Promise.all([
       api(`/fincas/${sel.value}/bpa/checklist`),
       api(`/fincas/${sel.value}/bpa/reporte-trazabilidad`),
+      api(`/fincas/${sel.value}/bpa/visitas`),
     ]);
     lista.innerHTML = (check.data || []).map((c, i) => `
       <div class="labor-row">
         <div class="labor-info"><b>${esc(c.categoria || '')}</b><span>${esc(c.item)}</span>
           ${c.fecha_verificacion ? `<span class="muted">verificado ${esc(c.fecha_verificacion)}</span>` : '<span class="muted">pendiente de verificación</span>'}</div>
-        <select data-bpa-item="${esc(c.item)}">
+        <select data-bpa-item="${esc(c.item)}" data-bpa-cat="${esc(c.categoria || '')}">
           <option value="">—</option>
           <option value="true" ${c.cumple === true ? 'selected' : ''}>✅ Cumple</option>
           <option value="false" ${c.cumple === false ? 'selected' : ''}>❌ No cumple</option>
@@ -2359,19 +2362,94 @@ async function cargarBpa() {
     resumen.innerHTML = `
       <p><b>Avance BPA:</b> ${t.cumplidos || 0} de ${t.total || 0} ítems cumplidos${t.pct_avance != null ? ` (${t.pct_avance}%)` : ''}.</p>
       <p class="muted">Aplicaciones con período de carencia: ${(traz.aplicaciones || []).filter(a => a.periodo_carencia_dias != null).length} · ${(traz.aplicaciones || []).filter(a => a.periodo_carencia_dias == null).length} sin carencia registrada.</p>
-      <button class="btn" id="bpa-guardar">💾 Guardar checklist</button>`;
+      <button class="btn" id="bpa-guardar">💾 Guardar checklist</button>
+      <button class="btn" id="bpa-nueva-visita">➕ Registrar visita de verificación</button>`;
     document.getElementById('bpa-guardar').onclick = async () => {
       const items = [...lista.querySelectorAll('[data-bpa-item]')].map(s => ({
         item: s.dataset.bpaItem,
-        categoria: null,
+        categoria: s.dataset.bpaCat || null,
         cumple: s.value === 'true' ? true : (s.value === 'false' ? false : null),
       })).filter(x => x.cumple !== null);
       if (!items.length) { alert('Seleccione al menos un ítem para guardar.'); return; }
       await api(`/fincas/${sel.value}/bpa/checklist`, { method: 'PUT', headers: headers(), body: JSON.stringify({ items }) });
       await cargarBpa();
     };
+    document.getElementById('bpa-nueva-visita').onclick = () => abrirModalVisitaBpa(sel.value, check.data || []);
+
+    visitas.innerHTML = (vis.data || []).map(v => `
+      <div class="labor-row">
+        <div class="labor-info">
+          <b>🗓️ Visita ${esc(v.fecha)}</b>
+          <span class="muted">por ${esc(v.verificado_por_nombre || v.verificado_por_email || '—')} · ${(v.items || []).length} ítem(s) evaluado(s)</span>
+          <span class="visita-items">${(v.items || []).map(it => `${it.cumple ? '✅' : '❌'} ${esc(it.item)}`).join(' · ')}</span>
+        </div>
+        <button type="button" class="btn-ghost-sm" data-visita-id="${esc(v.id)}">🗑️ Quitar</button>
+      </div>`).join('') || '<p class="muted">Sin visitas de verificación registradas todavía.</p>';
+    visitas.querySelectorAll('[data-visita-id]').forEach(btn => {
+      btn.addEventListener('click', () => quitarVisitaBpa(sel.value, btn.dataset.visitaId));
+    });
   } catch (e) {
     lista.innerHTML = errorBanner(e.message);
+  }
+}
+
+/** Modal: registrar una visita/medición de verificación BPA. */
+function abrirModalVisitaBpa(fincaId, checkData) {
+  const m = document.getElementById('modal-editor');
+  document.getElementById('modal-titulo').textContent = '🗓️ Registrar visita de verificación BPA';
+  document.getElementById('modal-cuerpo').innerHTML = `
+    <p class="muted">Evalúe cada práctica durante la visita. La visita queda en la línea de tiempo
+    de trazabilidad de la finca y actualiza el checklist vigente con la fecha de la visita.</p>
+    <label class="field"><span>Fecha de la visita *</span>
+      <input id="vis-fecha" type="date" value="${new Date().toISOString().slice(0, 10)}" required /></label>
+    <div class="bpa-items">${(checkData || []).map(c => `
+      <div class="labor-row">
+        <div class="labor-info"><b>${esc(c.categoria || '')}</b><span>${esc(c.item)}</span></div>
+        <select data-vis-item="${esc(c.item)}" data-vis-cat="${esc(c.categoria || '')}">
+          <option value="">—</option>
+          <option value="true">✅ Cumple</option>
+          <option value="false">❌ No cumple</option>
+        </select>
+      </div>`).join('')}</div>`;
+  document.getElementById('modal-msg').innerHTML = '';
+  m.classList.remove('hidden');
+  document.getElementById('modal-guardar').onclick = async () => {
+    const fecha = document.getElementById('vis-fecha').value;
+    const items = [...m.querySelectorAll('[data-vis-item]')].map(s => ({
+      item: s.dataset.visItem,
+      categoria: s.dataset.visCat || null,
+      cumple: s.value === 'true' ? true : (s.value === 'false' ? false : null),
+    })).filter(x => x.cumple !== null);
+    if (!fecha) {
+      document.getElementById('modal-msg').innerHTML = errorBanner('Indique la fecha de la visita.');
+      return;
+    }
+    if (!items.length) {
+      document.getElementById('modal-msg').innerHTML = errorBanner('Evalúe al menos un ítem para registrar la visita.');
+      return;
+    }
+    try {
+      document.getElementById('modal-msg').innerHTML = '<div class="ok-banner">⏳ Registrando visita…</div>';
+      await api(`/fincas/${fincaId}/bpa/visitas`, {
+        method: 'POST', headers: headers(),
+        body: JSON.stringify({ fecha, items }),
+      });
+      cerrarModal();
+      await cargarBpa();
+    } catch (e) {
+      document.getElementById('modal-msg').innerHTML = errorBanner(e.message);
+    }
+  };
+}
+
+/** Quita una visita de la línea de tiempo (el checklist vigente no se toca). */
+async function quitarVisitaBpa(fincaId, visitaId) {
+  if (!confirm('¿Quitar esta visita de la trazabilidad BPA? El checklist vigente no se modifica.')) return;
+  try {
+    await api(`/fincas/${fincaId}/bpa/visitas/${visitaId}`, { method: 'DELETE', headers: headers() });
+    await cargarBpa();
+  } catch (e) {
+    alert('No se pudo quitar la visita: ' + e.message);
   }
 }
 

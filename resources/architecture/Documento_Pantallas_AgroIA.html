@@ -584,8 +584,14 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   para certificación BPA (Resolución ICA 30021 de 2017).</div>
   <p><b>Qué muestra:</b> checklist por finca (suelo/agua · agroquímicos · trabajadores · poscosecha)
   y reporte que cruza labores (producto/dosis/fecha) con períodos de carencia.
-  Ítems sin diligenciar se marcan “pendiente de verificación” — no bloquea.</p>
+  <b>Visitas de verificación:</b> botón «➕ Registrar visita» abre un formulario con fecha y el
+  checklist completo para evaluar ✅/❌ en cada visita/medición; la visita queda en la
+  <b>línea de tiempo de trazabilidad</b> (quién, cuándo y qué ítems se evaluaron), actualiza el
+  checklist vigente con la fecha de la visita y puede <b>quitarse</b> (🗑️) sin tocar el checklist
+  vigente. Ítems sin diligenciar se marcan “pendiente de verificación” — no bloquea.</p>
   <p><b>Servicios que llama:</b> <code>GET/PUT /api/v1/fincas/{id}/bpa/checklist</code> ·
+  <code>POST/GET /api/v1/fincas/{id}/bpa/visitas</code> ·
+  <code>DELETE /api/v1/fincas/{id}/bpa/visitas/{visita_id}</code> ·
   <code>GET /api/v1/fincas/{id}/bpa/reporte-trazabilidad</code>. Sección B del reporte.</p>
 </div>
 

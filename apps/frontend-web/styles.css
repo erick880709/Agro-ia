@@ -69,6 +69,16 @@ body {
   margin-left: 8px;
 }
 
+/* Visitas BPA: chips de ítems evaluados */
+.visita-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  color: var(--verde-900, #14532d);
+  font-size: 0.82rem;
+}
+#bpa-visitas .labor-row { border-left: 3px solid #cfe3d2; }
+
 /* ── Bloque «Rotación sugerida» en el modal de nuevo ciclo ── */
 .rotacion-sugerida .nota { background: #eef7ef; border: 1px solid #cfe3d2; border-radius: 10px; padding: 10px 14px; margin-top: 12px; }
 .rotacion-lista { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 6px; }
