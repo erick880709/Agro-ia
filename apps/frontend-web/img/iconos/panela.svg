@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Bloque de panela -->
+  <rect x="22" y="30" width="56" height="42" rx="9" fill="#8B5A2B"/>
+  <rect x="22" y="30" width="56" height="14" rx="9" fill="#A9743C"/>
+  <path d="M22 64 L78 64 L72 72 L28 72 Z" fill="#6B4226"/>
+  <rect x="34" y="40" width="32" height="16" rx="4" fill="#C08A4E"/>
+  <circle cx="70" cy="26" r="7" fill="#6B4226"/>
+</svg>

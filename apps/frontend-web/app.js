@@ -32,6 +32,26 @@ function iconoCultivo(icono) {
   return icono;
 }
 
+// Íconos vectoriales reales creados por producto (especificación v4 — "custom pendiente")
+const ICONOS_IMG = {
+  'Panela / Caña panelera': '/img/iconos/panela.svg',
+  'Chontaduro': '/img/iconos/chontaduro.svg',
+  'Lulo': '/img/iconos/lulo.svg',
+  'Guayaba': '/img/iconos/guayaba.svg',
+  'Granadilla / Curuba': '/img/iconos/granadilla.svg',
+  'Habichuela': '/img/iconos/habichuela.svg',
+  'Ahuyama / Auyama': '/img/iconos/ahuyama.svg',
+  'Caucho': '/img/iconos/caucho.svg',
+  'Fique': '/img/iconos/fique.svg',
+};
+
+/** Imagen real del producto si existe; si no, el emoji representativo. */
+function iconoImgCultivo(c) {
+  const svg = ICONOS_IMG[c.nombre];
+  if (svg) return `<img class="icono-img" src="${svg}" alt="${esc(c.nombre)}" />`;
+  return iconoCultivo(c.icono);
+}
+
 const state = {
   fincas: [],
   cultivos: [],
@@ -3429,7 +3449,7 @@ function renderCatalogo(q) {
       ].filter(Boolean);
       return `
       <div class="cultivo-card">
-        <div class="icono">${iconoCultivo(c.icono)}</div>
+        <div class="icono">${iconoImgCultivo(c)}</div>
         <h3>${esc(c.nombre)}</h3>
         ${c.nombre_cientifico ? `<p><i>${esc(c.nombre_cientifico)}</i></p>` : ''}
         ${c.descripcion ? `<p>${esc(c.descripcion)}</p>` : ''}

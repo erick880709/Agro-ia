@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Guayaba -->
+  <circle cx="52" cy="58" r="27" fill="#A8C256"/>
+  <path d="M52 32 C50 24 44 20 34 20 C42 22 46 26 47 30" fill="#6B8E23"/>
+  <path d="M52 32 C58 24 64 20 72 20 C66 22 62 26 61 30" fill="#7AA52A"/>
+  <circle cx="44" cy="52" r="5" fill="#DCE775" opacity="0.8"/>
+  <circle cx="60" cy="62" r="4" fill="#DCE775" opacity="0.7"/>
+</svg>

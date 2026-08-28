@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787890039.5993297,
-    "ast_hash": "d083f769eed42ed0d82e451b65ae64b8",
+    "mtime": 1787891477.8498774,
+    "ast_hash": "eb4a859f228be9cd8f69707e563487b4",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -5285,8 +5285,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/seed_v4.py": {
-    "mtime": 1787889918.9733639,
-    "ast_hash": "2b635e1eb0e9326b8bfc3be05e4c5de7",
+    "mtime": 1787891477.8528442,
+    "ast_hash": "a2e9c39aff96227cbd9e4ffeda120a7c",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/023_modulos_v4.py": {

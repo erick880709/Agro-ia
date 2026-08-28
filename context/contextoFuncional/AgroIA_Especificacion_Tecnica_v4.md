@@ -453,20 +453,20 @@ Cultivos a incorporar, con ícono propuesto siguiendo la misma regla de gobernan
 
 | Cultivo nuevo | Ícono propuesto | Justificación / fuente de ficha técnica de referencia |
 |---|---|---|
-| **Panela / Caña panelera** *(separar de Caña de azúcar)* | 🌱 *(ícono custom pendiente — bloque de panela)* | Fedepanela: `https://fedepanela.org.co/` · UPRA ficha de zonificación de caña panelera |
+| **Panela / Caña panelera** *(separar de Caña de azúcar)* | ✅ `img/iconos/panela.svg` (creado — bloque de panela) | Fedepanela: `https://fedepanela.org.co/` · UPRA ficha de zonificación de caña panelera |
 | Ñame | 🍠 *(aproximado — tubérculo, no exacto)* | Agrosavia / Corpoica Caribe — ficha regional Córdoba-Sucre |
-| Chontaduro | 🌱 *(ícono custom pendiente — riesgo de ambigüedad con palma de aceite si se usa 🌴)* | Agrosavia — zona Pacífico/Amazonía |
-| Lulo | 🌱 *(ícono custom pendiente)* | Agrosavia — ficha técnica lulo de Castilla |
+| Chontaduro | ✅ `img/iconos/chontaduro.svg` (creado — racimo de frutos de palma) | Agrosavia — zona Pacífico/Amazonía |
+| Lulo | ✅ `img/iconos/lulo.svg` (creado — fruto naranja con cáliz) | Agrosavia — ficha técnica lulo de Castilla |
 | Mora | 🫐 *(aproximado — mora de zarza real distinta a blueberry, sin emoji exacto)* | Agrosavia — mora de Castilla |
-| Guayaba | 🌱 *(ícono custom pendiente)* | Corpoica / cadena guayaba-bocadillo Santander |
-| Granadilla / Curuba | 🌱 *(ícono custom pendiente)* | Agrosavia — frutales pasifloráceas |
+| Guayaba | ✅ `img/iconos/guayaba.svg` (creado — fruto verde con hojas) | Corpoica / cadena guayaba-bocadillo Santander |
+| Granadilla / Curuba | ✅ `img/iconos/granadilla.svg` (creado — fruto naranja punteado) | Agrosavia — frutales pasifloráceas |
 | Arveja | 🫛 | FAO / Agrosavia — leguminosas de clima frío |
-| Habichuela | 🌱 *(ícono custom pendiente — 🫛 ya asignado a arveja, evitar ambigüedad)* | Agrosavia — hortalizas Cundinamarca-Boyacá |
-| Ahuyama / Auyama | 🌱 *(ícono custom pendiente — 🎃 se descarta por connotación de Halloween)* | Agrosavia — hortalizas |
+| Habichuela | ✅ `img/iconos/habichuela.svg` (creado — vaina verde) | Agrosavia — hortalizas Cundinamarca-Boyacá |
+| Ahuyama / Auyama | ✅ `img/iconos/ahuyama.svg` (creado — cucurbitácea naranja) | Agrosavia — hortalizas |
 | Fresa | 🍓 | Agrosavia — frutales de clima frío moderado |
 | Coco | 🥥 | Agrosavia — Caribe y Pacífico |
-| Caucho | 🌱 *(ícono custom pendiente)* | Agrosavia / programas de sustitución de cultivos (Meta, Caquetá) |
-| Fique | 🌱 *(ícono custom pendiente)* | Agrosavia — fibra Cauca/Nariño/Santander |
+| Caucho | ✅ `img/iconos/caucho.svg` (creado — árbol con copa de látex) | Agrosavia / programas de sustitución de cultivos (Meta, Caquetá) |
+| Fique | ✅ `img/iconos/fique.svg` (creado — roseta de agave) | Agrosavia — fibra Cauca/Nariño/Santander |
 | Quinua | 🌾 *(compartido con cereales — ambigüedad ya señalada en v3, reforzar necesidad de set custom)* | Agrosavia — Nariño/Boyacá |
 
 **Endpoint de alta de cultivo (ya existe, `POST /api/v1/cultivos` — extender el contrato para exigir ícono explícito):**

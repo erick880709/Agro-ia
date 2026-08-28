@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Granadilla -->
+  <circle cx="50" cy="58" r="28" fill="#F57C00"/>
+  <circle cx="44" cy="50" r="7" fill="#FFB74D" opacity="0.7"/>
+  <path d="M50 31 C48 24 42 20 34 20 C42 22 46 25 46 29" fill="#2E7D32"/>
+  <path d="M50 31 C56 24 62 20 70 20 C64 22 60 25 60 29" fill="#388E3C"/>
+  <circle cx="38" cy="62" r="1.6" fill="#E65100"/>
+  <circle cx="52" cy="66" r="1.6" fill="#E65100"/>
+  <circle cx="63" cy="58" r="1.6" fill="#E65100"/>
+  <circle cx="46" cy="74" r="1.6" fill="#E65100"/>
+  <circle cx="60" cy="74" r="1.6" fill="#E65100"/>
+</svg>
