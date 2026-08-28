@@ -41,6 +41,7 @@ USUARIOS = [
     ("admin@agroia.co", "Admin123!", "Administrador AgroIA", RolUsuario.ADMIN),
     ("agronomo@agroia.co", "Agronomo123!", "María Agrónoma", RolUsuario.AGRONOMO),
     ("cliente@agroia.co", "Cliente123!", "Juan Campesino", RolUsuario.CLIENTE),
+    ("maria.cliente@agroia.co", "Cliente123!", "María Cliente", RolUsuario.CLIENTE),
 ]
 
 FINCAS = [
@@ -96,6 +97,19 @@ FINCAS = [
         "contacto_email": "demo@agroia.co",
         "largo_metros": 250.0, "ancho_metros": 100.0,
     },
+    {
+        "id": "3a47d0c6-fb00-4106-91ba-0a707f612e86",
+        "nombre": "Finca Demo",
+        "departamento": "Quindío",
+        "municipio": "Armenia",
+        "latitud": 4.5306, "longitud": -75.6809, "altitud_msnm": 1480,
+        "area_hectareas": 1.5,
+        "coordenadas_google": "https://maps.app.goo.gl/FincaDemo",
+        "propietario": "Finca Demo AgroIA",
+        "contacto_telefono": "3001112233",
+        "contacto_email": "demo@agroia.co",
+        "largo_metros": 150.0, "ancho_metros": 100.0,
+    },
 ]
 
 
@@ -133,6 +147,7 @@ async def main() -> None:
         admin_id = creados_u["admin@agroia.co"]
         agronomo_id = creados_u["agronomo@agroia.co"]
         cliente_id = creados_u["cliente@agroia.co"]
+        maria_id = creados_u["maria.cliente@agroia.co"]
 
         # ── Fincas ──
         fincas_ids: list[uuid.UUID] = []
@@ -173,6 +188,7 @@ async def main() -> None:
         asociaciones += [
             (cliente_id, uuid.UUID("22222222-2222-2222-2222-222222222222")),
             (cliente_id, uuid.UUID("8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936")),
+            (maria_id, uuid.UUID("3a47d0c6-fb00-4106-91ba-0a707f612e86")),
         ]
         for uid, fid in asociaciones:
             existe = (

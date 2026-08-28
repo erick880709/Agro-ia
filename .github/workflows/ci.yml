@@ -107,6 +107,9 @@ jobs:
         run: poetry run pytest tests/ -v --cov=agroia_backend --cov-report=xml
         env:
           DATABASE_URL: postgresql+asyncpg://agroia:agroia_test@localhost:5432/agroia_test
+          # La raíz del repo debe estar en el path para el puente IoT
+          # (`apps.iot.agroia_iot`) usado por /api/v1/sync/sensor-readings.
+          PYTHONPATH: ${{ github.workspace }}
 
   # ═══════════════════════════════════════════════
   # SAST — Static Analysis (mensual, día 1)
