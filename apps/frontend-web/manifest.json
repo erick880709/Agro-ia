@@ -1,0 +1,17 @@
+{
+  "name": "AgroIA — AgroInteligente Colombia",
+  "short_name": "AgroIA",
+  "description": "Diagnóstico agronómico y recomendaciones inteligentes para el campo colombiano.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#17381f",
+  "theme_color": "#2e7d32",
+  "icons": [
+    {
+      "src": "/img/iconos/panela.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

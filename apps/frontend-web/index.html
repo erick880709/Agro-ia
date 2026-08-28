@@ -6,8 +6,11 @@
   <title>AgroIA · AgroInteligente Colombia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="stylesheet" href="/styles.css?v=20260827-medicion" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2e7d32" />
 </head>
 <body>
+  <div id="offline-banner" class="offline-banner" style="display:none"></div>
   <!-- ============ PANTALLA DE AUTENTICACIÓN ============ -->
   <div id="login-screen" class="login-screen">
     <div class="login-card">
@@ -823,6 +826,7 @@
   </footer>
 
   <script src="/departamentos.js?v=20260827-medicion"></script>
+  <script src="/offline.js"></script>
   <script src="/app.js?v=20260827-medicion"></script>
 </body>
 </html>

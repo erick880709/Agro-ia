@@ -297,6 +297,7 @@ function goTab(name) {
 /* ─────────────────────────── carga inicial ─────────────────────────── */
 
 async function init() {
+  iniciarOffline();
   // ── Autenticación ──
   const loginScreen = document.getElementById('login-screen');
   document.getElementById('form-login').addEventListener('submit', manejarLogin);
@@ -1691,6 +1692,18 @@ async function actualizarLabor(laborId, estado) {
     });
     await renderLaboresPendientes();
   } catch (e) {
+    // Sin conexión: la actualización se encola y se sincroniza al volver.
+    if (!navigator.onLine || e instanceof TypeError) {
+      await encolarOffline('labor', {
+        labor_id: laborId,
+        estado,
+        observaciones_ejecucion: observacion,
+        fecha_ejecucion: new Date().toISOString().slice(0, 10),
+      });
+      alert('Sin conexión: la labor quedó pendiente de sincronizar. Se enviará automáticamente al recuperar la señal.');
+      await renderLaboresPendientes();
+      return;
+    }
     alert('No se pudo actualizar la labor: ' + e.message);
   }
 }
@@ -4175,7 +4188,16 @@ async function enviarTramaSimulada() {
       `· Advertencias: ${esc((r.advertencias || []).join(', ') || 'ninguna')}.`
     );
   } catch (err) {
-    out.innerHTML = errorBanner(err.message);
+    // Sin conexión: la trama se encola en IndexedDB y se sincroniza al volver.
+    if (!navigator.onLine || err instanceof TypeError) {
+      await encolarOffline('sensor', trama);
+      out.innerHTML = okBanner(
+        `Sin conexión: la trama de <b>${esc(trama.device_id || 'sensor')}</b> quedó encolada ` +
+        `y se sincronizará automáticamente al recuperar la señal.`
+      );
+    } else {
+      out.innerHTML = errorBanner(err.message);
+    }
   } finally {
     btn.disabled = false;
     btn.textContent = '📡 Enviar trama';
