@@ -23,6 +23,7 @@ from fastapi.staticfiles import StaticFiles
 import agroia_backend.models.aceptacion_recomendacion  # noqa: F401
 import agroia_backend.models.alerta_climatica  # noqa: F401
 import agroia_backend.models.analisis_agua_riego  # noqa: F401
+import agroia_backend.models.analisis_laboratorio  # noqa: F401
 import agroia_backend.models.auditoria  # noqa: F401
 import agroia_backend.models.precio_insumo  # noqa: F401
 import agroia_backend.models.checklist_bpa  # noqa: F401
@@ -66,6 +67,7 @@ from agroia_backend.api.fincas import router as fincas_router
 from agroia_backend.api.iot import router as iot_router
 from agroia_backend.api.labores import router as labores_router
 from agroia_backend.api.lista_trabajos import router as lista_trabajos_router
+from agroia_backend.api.laboratorio import router as laboratorio_router
 from agroia_backend.api.location import router as location_router
 from agroia_backend.api.mantenimiento import router as mantenimiento_router
 from agroia_backend.api.ml import admin_router as ml_admin_router
@@ -230,6 +232,8 @@ app.include_router(notificaciones_router)
 app.include_router(plagas_router)
 app.include_router(rotacion_router)
 app.include_router(ml_admin_router)
+# ── Laboratorios ICA (v3): ingesta de análisis de suelo acreditados ──
+app.include_router(laboratorio_router)
 # ── Módulo operativo: equipo de trabajo, comisiones y lista de trabajos ──
 app.include_router(equipo_router)
 app.include_router(comisiones_router)

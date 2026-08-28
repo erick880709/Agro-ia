@@ -161,12 +161,26 @@ class RecommendationOrchestrator:
         # ── Contexto agronómico de la finca (validación lab, fenología…) ──
         finca_ctx = await self._cargar_contexto_finca(request.finca_id)
 
+        # ── Laboratorio ICA reciente (<90 días): prioridad sobre el sensor ──
+        lab_ctx = await self._aplicar_analisis_laboratorio(
+            request.finca_id, soil_dict, finca_ctx
+        )
+        if lab_ctx:
+            finca_ctx["lab_reciente"] = lab_ctx
+
         # ── Advertencias de calidad de datos (brechas G3/G4) ──
         advertencias_datos = []
         if soil_data.calidad == "npk_no_calibrado":
             advertencias_datos.append(
                 "⚠️ Lecturas NPK sin calibrar: valide con análisis de laboratorio "
                 "antes de aplicar fertilizantes."
+            )
+        if lab_ctx:
+            advertencias_datos.append(
+                "🧪 " + str(len(lab_ctx["variables"]))
+                + " variable(s) validadas por laboratorio"
+                + (" «" + lab_ctx["laboratorio"] + "»" if lab_ctx["laboratorio"] else "")
+                + "."
             )
         if soil_data.missing_non_blocking:
             advertencias_datos.append(
@@ -184,6 +198,9 @@ class RecommendationOrchestrator:
 
         # ── Paso 2: Ramificación por caso de uso ──
         npk_no_calibrado = soil_data.calidad == "npk_no_calibrado"
+        # Si el laboratorio validó N/P/K, se elimina la penalización del sensor
+        if lab_ctx and {"nitrogeno", "fosforo", "potasio"} <= set(lab_ctx["variables"]):
+            npk_no_calibrado = False
         if request.cultivo_id is None:
             # UC1: no hay cultivo sembrado → recomendar qué sembrar
             return await self._recomendar_cultivos(
@@ -250,6 +267,43 @@ class RecommendationOrchestrator:
             "latitud": finca.latitud,
             "longitud": finca.longitud,
             "lote": lote,
+        }
+
+    async def _aplicar_analisis_laboratorio(
+        self, finca_id: str, soil_dict: dict, finca_ctx: dict
+    ) -> dict | None:
+        """Sobrescribe soil_dict con el análisis de laboratorio reciente (<90 días).
+
+        Devuelve el contexto del laboratorio aplicado (o None). Las variables
+        cubiertas quedan marcadas como validadas y N/P/K eliminan la
+        penalización `npk_sin_calibrar`.
+        """
+        from agroia_backend.services.analisis_laboratorio import lab_reciente
+        from agroia_backend.services.data_adapters import ALL_SOIL_VARIABLES
+
+        analisis = await lab_reciente(self.db, finca_id)
+        if analisis is None:
+            return None
+        variables: list[str] = []
+        for clave, valor in (analisis.resultados or {}).items():
+            if valor is None:
+                continue
+            if clave in soil_dict or clave in ALL_SOIL_VARIABLES:
+                soil_dict[clave] = valor
+                variables.append(clave)
+        if not variables:
+            return None
+        if {"nitrogeno", "fosforo", "potasio", "ph", "materia_organica"} & set(variables):
+            finca_ctx["validacion_laboratorio"] = True
+        return {
+            "laboratorio": analisis.laboratorio_nombre,
+            "fecha_muestreo": (
+                analisis.fecha_muestreo.isoformat() if analisis.fecha_muestreo else None
+            ),
+            "fecha_resultado": (
+                analisis.fecha_resultado.isoformat() if analisis.fecha_resultado else None
+            ),
+            "variables": variables,
         }
 
     async def _respaldos(self, finca_id: str, cultivo_id: str | None = None) -> int:
@@ -462,6 +516,8 @@ class RecommendationOrchestrator:
             "confianza_real": confianza_real,
             "respaldos_expertos": respaldos,
         }
+        if finca_ctx.get("lab_reciente"):
+            justificacion["laboratorio_reciente"] = finca_ctx["lab_reciente"]
 
         elapsed_ms = (datetime.utcnow() - t_start).total_seconds() * 1000
         return RecommendationResult(
@@ -824,6 +880,8 @@ class RecommendationOrchestrator:
             "confianza_real": confianza_real,
             "respaldos_expertos": respaldos,
         }
+        if finca_ctx.get("lab_reciente"):
+            justificacion["laboratorio_reciente"] = finca_ctx["lab_reciente"]
 
         elapsed_ms = (datetime.utcnow() - t_start).total_seconds() * 1000
         return RecommendationResult(
