@@ -71,6 +71,7 @@ aliases:
     - Soybean healthy
     - Strawberry healthy
     - Tomato healthy
+    - h0
   coffee_rust: [rust, Rust, coffee_leaf_rust, Coffee Leaf Rust, roya, Roya, coffee_rust_leaf]
   coffee_phoma: [phoma, Phoma, coffee_phoma_leaf]
   coffee_cercospora: [cercospora, Cercospora, coffee_cercospora_leaf]

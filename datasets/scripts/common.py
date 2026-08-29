@@ -389,13 +389,23 @@ def http_download(
                 req_headers["Range"] = f"bytes={offset}-"
             request = urllib.request.Request(url, headers=req_headers)
             with urllib.request.urlopen(request, timeout=timeout) as resp:
+                total = int(resp.headers.get("Content-Length") or 0)
                 mode = "ab" if offset else "wb"
+                escrito = 0
                 with open(part, mode) as out:
                     while True:
                         chunk = resp.read(1024 * 256)
                         if not chunk:
                             break
                         out.write(chunk)
+                        escrito += len(chunk)
+                if total and escrito < total:
+                    # EOF prematuro (el servidor cortó la transferencia): no
+                    # aceptar el archivo como completo; se reintenta con
+                    # resume desde el offset actual.
+                    raise ConnectionError(
+                        f"descarga incompleta: {offset + escrito}/{offset + total} bytes"
+                    )
             part.replace(dest)
             return {
                 "sha256": sha256_file(dest),
