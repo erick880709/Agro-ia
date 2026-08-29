@@ -56,12 +56,18 @@ def _features(path: Path, size: int = 32) -> np.ndarray:
     return np.concatenate([hist / max(hist.sum(), 1), textura / max(textura.max(), 1)])
 
 
-def cargar_curated(raiz: Path, split: str) -> tuple[np.ndarray, np.ndarray, list[str]]:
+def cargar_curated(raiz: Path, split: str, etiquetas: list[str] | None = None) -> tuple[np.ndarray, np.ndarray, list[str]]:
+    """Carga imágenes del split. `etiquetas` fija el vocabulario de clases
+    (índices alineados entre splits; si el split no tiene una clase, no aporta
+    filas de esa clase)."""
     carpetas = sorted(p for p in raiz.glob(f"{split}/*/*") if p.is_dir())
+    etiquetas = list(etiquetas) if etiquetas is not None else sorted({p.name for p in carpetas})
+    indice = {nombre: i for i, nombre in enumerate(etiquetas)}
     x, y, clases = [], [], []
-    etiquetas = sorted({p.name for p in carpetas})
     for carpeta in carpetas:
-        etiqueta = etiquetas.index(carpeta.name)
+        if carpeta.name not in indice:
+            continue
+        etiqueta = indice[carpeta.name]
         for archivo in sorted(carpeta.glob("*")):
             if archivo.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp"}:
                 continue
@@ -82,7 +88,7 @@ def entrenar_sklearn(config: dict, curated: Path) -> dict:
     from sklearn.ensemble import HistGradientBoostingClassifier
 
     x_train, y_train, etiquetas = cargar_curated(curated, "train")
-    x_val, y_val, _ = cargar_curated(curated, "val")
+    x_val, y_val, _ = cargar_curated(curated, "val", etiquetas)
     if len(etiquetas) < 2 or x_train.shape[0] == 0:
         return {"estado": "error", "detalle": "curated sin clases suficientes"}
     balance = config.get("balance")

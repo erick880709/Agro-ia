@@ -68,10 +68,9 @@ def _clusters_por_phash(archivos: list[Path], threshold: int) -> list[list[Path]
 def _asignar_grupos(
     grupos: list[tuple[str, dict[str, int]]], ratios: list[float], seed: int
 ) -> dict[str, str]:
-    """Greedy por mayor déficit: cada grupo va al split más atrasado
-    respecto a su ratio objetivo (share total); desempata por desvío por
-    clase y luego aleatorio. Garantiza proporciones ≈ ratios sin dejar
-    splits vacíos.
+    """Greedy estratificado por clase: cada grupo va al split con mayor
+    déficit agregado POR CLASE (así ninguna clase queda fuera de un split);
+    desempata por déficit total y luego aleatorio.
     """
     nombres = ["train", "val", "test"]
     contadores: dict[str, dict[str, int]] = {s: defaultdict(int) for s in nombres}
@@ -86,27 +85,33 @@ def _asignar_grupos(
     orden = sorted(grupos, key=lambda item: -sum(item[1].values()))
     for nombre_grupo, clases in orden:
         n_grupo = sum(clases.values())
-        mejor, mejor_deficit, mejor_clase_score = None, -float("inf"), float("inf")
+        mejor, mejor_deficit, mejor_total = None, -float("inf"), -float("inf")
         for split, ratio in zip(nombres, ratios):
-            deficit = ratio - contador_total[split] / total_imagenes
-            clase_score = sum(
-                abs(
-                    (contadores[split].get(clase, 0) + clases.get(clase, 0))
-                    / max(total, 1)
-                    - ratio
+            # Déficit relativo por clase: 0 cuando el split ya alcanzó su
+            # proporción objetivo para todas las clases.
+            deficit_clase = sum(
+                max(
+                    0.0,
+                    1.0
+                    - (contadores[split].get(clase, 0) + clases.get(clase, 0))
+                    / max(total * ratio, 1e-9),
                 )
                 for clase, total in totales_por_clase.items()
             )
+            deficit_total = max(
+                0.0,
+                1.0 - (contador_total[split] + n_grupo) / max(total_imagenes * ratio, 1e-9),
+            )
             if (
-                deficit > mejor_deficit
-                or (deficit == mejor_deficit and clase_score < mejor_clase_score)
+                deficit_clase > mejor_deficit
+                or (deficit_clase == mejor_deficit and deficit_total > mejor_total)
                 or (
-                    deficit == mejor_deficit
-                    and clase_score == mejor_clase_score
+                    deficit_clase == mejor_deficit
+                    and deficit_total == mejor_total
                     and randomizer.random() < 0.5
                 )
             ):
-                mejor, mejor_deficit, mejor_clase_score = split, deficit, clase_score
+                mejor, mejor_deficit, mejor_total = split, deficit_clase, deficit_total
         mejor = mejor or "train"
         asignacion[nombre_grupo] = mejor
         contador_total[mejor] += n_grupo
