@@ -50,6 +50,18 @@ aliases:
     - soybean___healthy
     - strawberry___healthy
     - tomato___healthy
+    - Apple healthy
+    - Bell_pepper healthy
+    - Blueberry healthy
+    - Cherry healthy
+    - Corn healthy
+    - Grape healthy
+    - Peach healthy
+    - Potato healthy
+    - Raspberry healthy
+    - Soybean healthy
+    - Strawberry healthy
+    - Tomato healthy
   coffee_rust: [rust, Rust, coffee_leaf_rust, Coffee Leaf Rust, roya, Roya, coffee_rust_leaf]
   coffee_phoma: [phoma, Phoma, coffee_phoma_leaf]
   coffee_cercospora: [cercospora, Cercospora, coffee_cercospora_leaf]
@@ -101,6 +113,36 @@ aliases:
     - tomato___target_spot
     - tomato___tomato_mosaic_virus
     - tomato___tomato_yellow_leaf_curl_virus
+    # Nombres reales de carpetas del repo PlantDoc (pratikkayal/PlantDoc-Dataset)
+    - Apple Scab Leaf
+    - Apple leaf
+    - Apple rust leaf
+    - Bell_pepper leaf
+    - Bell_pepper leaf spot
+    - Blueberry leaf
+    - Cherry leaf
+    - Corn Gray leaf spot
+    - Corn leaf blight
+    - Corn rust leaf
+    - Grape leaf
+    - Grape leaf black rot
+    - Peach leaf
+    - Potato leaf
+    - Potato leaf early blight
+    - Potato leaf late blight
+    - Raspberry leaf
+    - Soybean leaf
+    - Squash Powdery mildew leaf
+    - Strawberry leaf
+    - Tomato Early blight leaf
+    - Tomato leaf
+    - Tomato leaf bacterial spot
+    - Tomato leaf late blight
+    - Tomato leaf mosaic virus
+    - Tomato leaf yellow virus
+    - Tomato mold leaf
+    - Tomato Septoria leaf spot
+    - Tomato two spotted spider mites leaf
 crop_hints:
   coffee: [cafe, café, coffea, arabica, robusta]
   cacao: [cacao, cocoa, cacaotero]
