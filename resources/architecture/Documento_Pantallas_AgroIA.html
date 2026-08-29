@@ -78,7 +78,7 @@
   <a href="#ruta">🧭 Ruta natural de trabajo</a>
   <a href="#p0">P0 · Inicio de sesión</a>
   <a href="#p1">P1 · Inicio (Dashboard)</a>
-  <a href="#p1b">P1b · Alertas clima</a>
+  <a href="#p1b">P1b · Alertas clima y fases lunares</a>
   <a href="#p1b-bis">P1b-bis · Almanaque Bristol</a>
   <a href="#p1c">P1c · Visión plagas</a>
   <a href="#p2">P2 · Fincas (registro)</a>
@@ -190,7 +190,7 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
 
 <!-- ─────────── P1b ─────────── -->
 <div class="pantalla" id="p1b">
-  <div class="cab"><span class="icono">⛅</span><span class="titulo">P1b · Alertas clima</span>
+  <div class="cab"><span class="icono">🌙</span><span class="titulo">P1b · Alertas clima y fases lunares</span>
     <span class="rol">Todos los roles</span></div>
   <div class="objetivo"><b>Objetivo:</b> consultar en un solo lugar las alertas climáticas
   activas de las fincas visibles para el rol, sin depender del banner del Dashboard.</div>
@@ -219,12 +219,16 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
     <span class="rol">Todos los roles</span></div>
   <div class="objetivo"><b>Objetivo:</b> mostrar la fase lunar actual y la recomendación
   cultural de siembra como capa complementaria de las alertas climáticas.</div>
-  <p><b>Qué muestra:</b> tarjeta fija al inicio del panel «⛅ Alertas clima» con el
-  <b>emoji de la fase</b> (🌑🌒🌓🌔🌕🌖🌗🌘), el <b>nombre de la fase</b>, la
-  <b>iluminación</b> (%), el <b>día lunar</b>, la <b>recomendación Bristol</b>
+  <p><b>Qué muestra:</b> tarjeta fija al inicio del panel «🌙 Alertas clima y fases
+  lunares» con el <b>emoji de la fase</b> (🌑🌒🌓🌔🌕🌖🌗🌘), el <b>nombre de la fase</b>,
+  la <b>iluminación</b> (%), el <b>día lunar</b>, la <b>recomendación Bristol</b>
   (raíces / hojas / frutos / reposo) con cultivos sugeridos, las próximas luna
   llena y luna nueva, y el <b>disclaimer cultural</b>: la recomendación complementa
   el diagnóstico agronómico y la decisión final la valida un agrónomo.</p>
+  <p><b>Calendario lunar navegable:</b> debajo de la tarjeta, un calendario mensual
+  con flechas ◀ ▶ para recorrer meses. Cada día muestra la <b>fase lunar prevista</b>
+  (emoji + tooltip con nombre e iluminación), el día actual se resalta en verde y
+  permite planear siembras viendo las fases de meses pasados y futuros.</p>
   <p><b>Alertas de siembra:</b> cada 6 h el servicio de alertas evalúa
   <b>fase favorable + clima favorable</b> (7 días sin lluvias &gt; 20 mm ni heladas
   &lt; 5 °C) y crea la alerta <code>siembra_lunar</code> (ícono 📅, fondo verde
@@ -236,8 +240,9 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   controla la sección lunar del reporte (<code>mostrar_en_reportes</code>).</p>
   <p><b>Servicios que llama:</b> <code>GET /api/v1/calendario-lunar/actual</code>
   (fase + recomendación) · <code>GET /api/v1/calendario-lunar/pronostico?dias=7</code>
-  · <code>GET/PUT /api/v1/usuarios/preferencias-bristol</code>. Fuentes:
-  skyfield → US Navy → tabla estática (degradación automática).</p>
+  · <code>GET /api/v1/calendario-lunar/mes?anio=&amp;mes=</code> (calendario navegable,
+  efemérides analíticas sin red) · <code>GET/PUT /api/v1/usuarios/preferencias-bristol</code>.
+  Fuentes: skyfield → US Navy → tabla estática (degradación automática).</p>
   <p><span class="siguiente">Siguiente → P1c Visión plagas.</span></p>
 </div>
 

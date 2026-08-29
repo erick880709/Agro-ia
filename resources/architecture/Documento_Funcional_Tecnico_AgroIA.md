@@ -1145,6 +1145,7 @@ para evitar llamadas de red.
 - **API** `api/calendario.py`:
   - `GET /api/v1/calendario-lunar/actual?lat=&lon=` — fase + recomendación (todos).
   - `GET /api/v1/calendario-lunar/pronostico?dias=7` — fases de los próximos días.
+  - `GET /api/v1/calendario-lunar/mes?anio=&mes=` — fases diarias del mes (calendario navegable; efemérides analíticas sin red).
   - `GET /api/v1/calendario-lunar/estado` — fuente activa (Admin).
   - `GET|PUT /api/v1/usuarios/preferencias-bristol` — toggle del usuario.
 - **Alertas programadas** (`clima_alertas.py`, regla 3): cada 6 h evalúa fase
@@ -1153,8 +1154,7 @@ para evitar llamadas de red.
   usuario.
 - **Reportes** (`reportes_html.py`): sección «📅 Calendario Lunar» después del
   plano del lote, con disclaimer cultural; se omite si el usuario la desactivó.
-- **Frontend** (`#view-alertas`): tarjeta con fase/emoji/recomendación/eventos,
-  toggle de alertas y alertas `siembra_lunar` en verde claro.
+- **Frontend** (`#view-alertas` «🌙 Alertas clima y fases lunares»): tarjeta con fase/emoji/recomendación/eventos, **calendario lunar navegable por meses** (fase prevista por día), toggle de alertas y alertas `siembra_lunar` en verde claro.
 
 ---
 

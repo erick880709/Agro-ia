@@ -280,7 +280,7 @@ function goTab(name) {
   if (name === 'historial') cargarHistorial();
   if (name === 'sensores') cargarSensores();
   if (name === 'inicio') cargarDashboard();
-  if (name === 'alertas') { cargarAlertasClima(); cargarCalendarioLunar(); cargarPreferenciasBristol(); }
+  if (name === 'alertas') { cargarAlertasClima(); cargarCalendarioLunar(); cargarPreferenciasBristol(); cargarCalendarioLunarMes(); }
   if (name === 'fincas' && state.rol.toLowerCase() === 'admin') renderFincasList();
   if (name === 'usuarios' && state.rol.toLowerCase() === 'admin') cargarUsuarios();
   if (name === 'insumos' && state.rol.toLowerCase() === 'admin') cargarPreciosInsumos();
@@ -1658,6 +1658,73 @@ async function guardarPreferenciaBristol() {
   } catch (e) {
     alert('No se pudo guardar la preferencia: ' + e.message);
   }
+}
+
+/* ── Calendario lunar navegable por meses (Almanaque Bristol) ── */
+
+const MESES_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const DIAS_SEMANA = ['Do','Lu','Ma','Mi','Ju','Vi','Sá'];
+const _lunarMesActual = { anio: null, mes: null };
+const _lunarCache = new Map();
+
+function _claveMes(a, m) { return `${a}-${m}`; }
+
+async function cargarCalendarioLunarMes() {
+  const grid = document.getElementById('lunar-cal-grid');
+  if (!grid) return;
+  const hoy = new Date();
+  if (_lunarMesActual.anio == null) { _lunarMesActual.anio = hoy.getFullYear(); _lunarMesActual.mes = hoy.getMonth() + 1; }
+  await renderCalendarioLunarMes(_lunarMesActual.anio, _lunarMesActual.mes);
+}
+
+async function renderCalendarioLunarMes(anio, mes) {
+  const grid = document.getElementById('lunar-cal-grid');
+  const titulo = document.getElementById('lunar-cal-titulo');
+  if (!grid) return;
+  const clave = _claveMes(anio, mes);
+  let datos = _lunarCache.get(clave);
+  if (!datos) {
+    titulo.textContent = 'Cargando…';
+    try {
+      datos = await api(`/calendario-lunar/mes?anio=${anio}&mes=${mes}`);
+      _lunarCache.set(clave, datos);
+    } catch (e) {
+      grid.innerHTML = errorBanner('No se pudo cargar el calendario lunar: ' + e.message);
+      titulo.textContent = `${MESES_ES[mes - 1]} ${anio}`;
+      return;
+    }
+  }
+  titulo.textContent = `${MESES_ES[mes - 1]} ${anio}`;
+  const hoy = new Date();
+  const hoyIso = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+  const porDia = new Map((datos.dias || []).map(d => [Number(d.fecha.slice(8)), d]));
+  const primero = new Date(Date.UTC(anio, mes - 1, 1));
+  const offset = (primero.getUTCDay() + 6) % 7; // semana inicia en domingo
+  const total = new Date(Date.UTC(anio, mes, 0)).getUTCDate();
+  let celdas = '';
+  celdas += DIAS_SEMANA.map(d => `<div class="lunar-cal-dow">${d}</div>`).join('');
+  for (let i = 0; i < offset; i++) celdas += '<div class="lunar-cal-dia vacio"></div>';
+  for (let d = 1; d <= total; d++) {
+    const dia = porDia.get(d) || {};
+    const fase = dia.fase || {};
+    const esHoy = dia.fecha === hoyIso;
+    celdas += `
+      <div class="lunar-cal-dia${esHoy ? ' hoy' : ''}" title="${esc(fase.nombre || '')} · iluminación ${Math.round((fase.iluminacion || 0) * 100)}%">
+        <span class="lunar-cal-num">${d}</span>
+        <span class="lunar-cal-emoji">${esc(fase.emoji || '')}</span>
+      </div>`;
+  }
+  grid.innerHTML = celdas;
+}
+
+function navegarCalendarioLunar(delta) {
+  let { anio, mes } = _lunarMesActual;
+  mes += delta;
+  if (mes < 1) { mes = 12; anio -= 1; }
+  if (mes > 12) { mes = 1; anio += 1; }
+  _lunarMesActual.anio = anio;
+  _lunarMesActual.mes = mes;
+  renderCalendarioLunarMes(anio, mes);
 }
 
 /* ────────────────────── Precios de cosecha (admin, UC1 mercado) ────────────────────── */

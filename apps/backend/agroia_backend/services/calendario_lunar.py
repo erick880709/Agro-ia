@@ -280,6 +280,24 @@ def pronostico_lunar(dias: int = 7, lat: float = 0.0, lon: float = 0.0) -> list[
     return salida
 
 
+def calendario_mes(anio: int, mes: int) -> dict:
+    """Fases lunares de todos los días de un mes (para el calendario UI).
+
+    Usa efemérides analíticas (sin red) para que navegar meses sea
+    instantáneo y sin límites de la API externa.
+    """
+    import calendar as _calendar
+
+    anio = max(1900, min(int(anio), 2200))
+    mes = max(1, min(int(mes), 12))
+    total = _calendar.monthrange(anio, mes)[1]
+    return {
+        "anio": anio,
+        "mes": mes,
+        "dias": [fase_estatica(date(anio, mes, d)) for d in range(1, total + 1)],
+    }
+
+
 def estado_bristol() -> dict:
     """Fuente activa y modo configurado (para el endpoint de administración)."""
     modo = _modo_actual()

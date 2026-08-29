@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AgroIA · AgroInteligente Colombia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="/styles.css?v=20260829-bristol" />
+  <link rel="stylesheet" href="/styles.css?v=20260829-cal" />
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#2e7d32" />
 </head>
@@ -62,7 +62,7 @@
 
   <nav class="tabs" id="tabs">
     <button class="tab active" data-tab="inicio">🏠 Inicio</button>
-    <button class="tab" data-tab="alertas">⛅ Alertas clima</button>
+    <button class="tab" data-tab="alertas">🌙 Alertas clima y fases lunares</button>
     <button class="tab" data-tab="zona">🗺️ Mi zona</button>
     <button class="tab" data-tab="sensores">📡 Sensores IoT</button>
     <button class="tab" data-tab="carga">📂 Cargar archivo</button>
@@ -105,7 +105,7 @@
     <section id="view-alertas" class="view">
       <div class="card">
         <div class="alertas-head">
-          <h2>⛅ Alertas clima <span class="muted">(pronóstico 7 días × labores y fenología)</span></h2>
+          <h2>🌙 Alertas clima y fases lunares <span class="muted">(pronóstico 7 días × labores, fenología y Almanaque Bristol)</span></h2>
           <button type="button" class="btn" id="btn-evaluar-alertas" data-roles="admin" onclick="evaluarAlertasAhora()">🔄 Evaluar ahora</button>
         </div>
         <p class="muted">Las alertas se agrupan por ubicación: si varias fincas comparten la misma zona, se muestra el departamento y la ciudad con la lista de fincas.</p>
@@ -120,6 +120,15 @@
           <div class="lunar-reco" id="lunar-reco">—</div>
           <div class="lunar-eventos" id="lunar-eventos"></div>
           <p class="nota-cultural">* Esta recomendación es cultural y complementa el diagnóstico agronómico. La decisión final debe basarse en el análisis de suelo, clima y manejo validado por un agrónomo.</p>
+        </div>
+        <div class="lunar-cal-card">
+          <div class="lunar-cal-head">
+            <button type="button" class="btn-ghost-sm lunar-cal-nav" id="lunar-cal-prev" title="Mes anterior" onclick="navegarCalendarioLunar(-1)">◀</button>
+            <div class="lunar-cal-titulo" id="lunar-cal-titulo">—</div>
+            <button type="button" class="btn-ghost-sm lunar-cal-nav" id="lunar-cal-next" title="Mes siguiente" onclick="navegarCalendarioLunar(1)">▶</button>
+          </div>
+          <div class="lunar-cal-grid" id="lunar-cal-grid"><p class="muted">Cargando calendario…</p></div>
+          <p class="muted" style="margin-top:8px">Cada día muestra la fase lunar prevista (🌑 nueva · 🌒 creciente · 🌓 cuarto · 🌔 gibosa creciente · 🌕 llena · 🌖 gibosa menguante · 🌗 cuarto menguante · 🌘 menguante). Navega entre meses para planear siembras.</p>
         </div>
         <label class="field toggle-row" id="bristol-toggle-row">
           <input type="checkbox" id="bristol-toggle" onchange="guardarPreferenciaBristol()" />

@@ -12,6 +12,7 @@ from agroia_backend.models.usuario import Usuario
 from agroia_backend.services.auditoria import registrar_auditoria
 from agroia_backend.services.calendario_lunar import (
     BRISTOL_ACTIVADO,
+    calendario_mes,
     estado_bristol,
     pronostico_lunar,
     resumen_bristol,
@@ -54,6 +55,15 @@ async def calendario_lunar_pronostico(
 ):
     """Fases de los próximos `dias` días con recomendación y favorabilidad."""
     return {"data": pronostico_lunar(dias, lat, lon), "total": dias}
+
+
+@router.get("/calendario-lunar/mes")
+async def calendario_lunar_mes(
+    anio: int = Query(..., ge=1900, le=2200),
+    mes: int = Query(..., ge=1, le=12),
+):
+    """Fases lunares de todos los días de un mes (calendario navegable)."""
+    return calendario_mes(anio, mes)
 
 
 @router.get("/calendario-lunar/estado")

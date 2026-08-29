@@ -14,6 +14,7 @@ from agroia.database import async_session_factory  # noqa: E402
 from agroia_backend.main import app  # noqa: E402
 from agroia_backend.services.calendario_lunar import (  # noqa: E402
     FASES_FAVORABLES,
+    calendario_mes,
     clima_favorable_siembra,
     estado_bristol,
     fase_estatica,
@@ -88,6 +89,19 @@ def test_pronostico_lunar():
         assert "favorable" in dia["recomendacion_bristol"]
 
 
+def test_calendario_mes():
+    resultado = calendario_mes(2026, 8)
+    assert resultado["anio"] == 2026
+    assert resultado["mes"] == 8
+    assert len(resultado["dias"]) == 31
+    for i, dia in enumerate(resultado["dias"], start=1):
+        assert dia["fecha"] == f"2026-08-{i:02d}"
+        assert dia["fase"]["emoji"] in {"🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘"}
+        assert 0.0 <= dia["fase"]["iluminacion"] <= 1.0
+    # Febrero bisiesto (2024) → 29 días
+    assert len(calendario_mes(2024, 2)["dias"]) == 29
+
+
 # ── Tabla Bristol ──
 
 def test_mapeo_tabla_bristol():
@@ -151,6 +165,16 @@ async def test_endpoint_pronostico(cli):
     cuerpo = r.json()
     assert cuerpo["total"] == 3
     assert len(cuerpo["data"]) == 3
+
+
+async def test_endpoint_mes(cli):
+    r = await cli.get(
+        "/api/v1/calendario-lunar/mes", params={"anio": 2026, "mes": 8}, headers=_cabeceras()
+    )
+    assert r.status_code == 200
+    cuerpo = r.json()
+    assert len(cuerpo["dias"]) == 31
+    assert cuerpo["dias"][0]["fase"]["emoji"]
 
 
 async def test_endpoint_estado_solo_admin(cli):

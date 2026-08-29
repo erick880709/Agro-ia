@@ -1538,6 +1538,7 @@ para evitar llamadas de red.</p>
 <li><strong>API</strong> <code>api/calendario.py</code>:</li>
 <li><code>GET /api/v1/calendario-lunar/actual?lat=&amp;lon=</code> — fase + recomendación (todos).</li>
 <li><code>GET /api/v1/calendario-lunar/pronostico?dias=7</code> — fases de los próximos días.</li>
+<li><code>GET /api/v1/calendario-lunar/mes?anio=&amp;mes=</code> — fases diarias del mes (calendario navegable; efemérides analíticas sin red).</li>
 <li><code>GET /api/v1/calendario-lunar/estado</code> — fuente activa (Admin).</li>
 <li><code>GET|PUT /api/v1/usuarios/preferencias-bristol</code> — toggle del usuario.</li>
 <li><strong>Alertas programadas</strong> (<code>clima_alertas.py</code>, regla 3): cada 6 h evalúa fase
@@ -1546,8 +1547,7 @@ para evitar llamadas de red.</p>
   usuario.</li>
 <li><strong>Reportes</strong> (<code>reportes_html.py</code>): sección «📅 Calendario Lunar» después del
   plano del lote, con disclaimer cultural; se omite si el usuario la desactivó.</li>
-<li><strong>Frontend</strong> (<code>#view-alertas</code>): tarjeta con fase/emoji/recomendación/eventos,
-  toggle de alertas y alertas <code>siembra_lunar</code> en verde claro.</li>
+<li><strong>Frontend</strong> (<code>#view-alertas</code> «🌙 Alertas clima y fases lunares»): tarjeta con fase/emoji/recomendación/eventos, <strong>calendario lunar navegable por meses</strong> (fase prevista por día), toggle de alertas y alertas <code>siembra_lunar</code> en verde claro.</li>
 </ul>
 <hr />
 <h2 id="13-despliegue-y-cicd">13. Despliegue y CI/CD</h2>
