@@ -173,6 +173,40 @@ recomendaciones mostradas a usuarios reales</strong> (regla de <code>datasets/RE
 + <code>ml_meta.json</code> (fecha, variables, imputación, cultivos, métricas y
 promoción). El backend los carga vía <code>services/ml_oracle.py</code> (imports
 perezosos; degrada a <code>None</code> sin artefactos).</p>
+<h3 id="15-fuentes-tabulares-externas-para-calibracion-espec-v6-1">1.5 Fuentes tabulares externas para calibración (espec v6 §1)</h3>
+<p>Enlaces consolidados para el equipo de datos (no son datasets de
+entrenamiento directo: calibran <code>rendimiento_esperado</code>, umbrales y fichas):</p>
+<table>
+<thead>
+<tr>
+<th>Fuente</th>
+<th>Qué aporta</th>
+<th>Acceso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FAOSTAT</strong> (producción/rendimiento por cultivo y país)</td>
+<td>Valida <code>rendimiento_esperado</code> (anti-outliers)</td>
+<td><code>https://www.fao.org/faostat/en/#data/QCL</code> (Bulk Downloads → <code>Production_Crops_Livestock_E_All_Data.zip</code>) · API: <code>https://fenixservices.fao.org/faostat/api/v1/es/data/QCL?area=Colombia&amp;item={cultivo}</code></td>
+</tr>
+<tr>
+<td><strong>datos.gov.co — EVA (UPRA/MinAgricultura)</strong></td>
+<td>Área, producción y rendimiento por municipio/cultivo en Colombia</td>
+<td><code>https://www.datos.gov.co/browse?q=evaluaciones+agropecuarias+municipales</code> → endpoint Socrata <code>https://www.datos.gov.co/resource/{id}.json</code> (el <code>{id}</code> cambia con cada actualización; no hardcodear)</td>
+</tr>
+<tr>
+<td><strong>ISRIC SoilGrids v2.0</strong></td>
+<td>pH, CIC, carbono orgánico y textura de referencia por coordenada (250 m)</td>
+<td>API punto: <code>https://rest.isric.org/soilgrids/v2.0/properties/query?lon={lng}&amp;lat={lat}&amp;property=phh2o&amp;property=cec&amp;property=soc&amp;property=clay&amp;property=sand&amp;property=silt</code> · mapas: <code>https://files.isric.org/soilgrids/latest/data/</code> — servicio beta: referencia de calibración, NO dependencia en tiempo real de producción</td>
+</tr>
+<tr>
+<td><strong>Agrosavia / Fedepanela / ICA</strong></td>
+<td>Fichas técnicas por cultivo (rangos agronómicos a curar manualmente)</td>
+<td><code>https://www.agrosavia.co/</code> · <code>https://fedepanela.org.co/gremio/</code> · <code>https://www.ica.gov.co/</code> — documentos, no API; se transcriben a <code>RANGOS[cultivo]</code> en <code>train_colombia.py</code></td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="2-agrovision-diagnostico-visual-foto">2. AgroVision — diagnóstico visual (foto)</h2>
 <h3 id="21-estado-del-entrenamiento">2.1 Estado del entrenamiento</h3>

@@ -56,6 +56,18 @@ recomendaciones mostradas a usuarios reales** (regla de `datasets/README.md`).
 promoción). El backend los carga vía `services/ml_oracle.py` (imports
 perezosos; degrada a `None` sin artefactos).
 
+### 1.5 Fuentes tabulares externas para calibración (espec v6 §1)
+
+Enlaces consolidados para el equipo de datos (no son datasets de
+entrenamiento directo: calibran `rendimiento_esperado`, umbrales y fichas):
+
+| Fuente | Qué aporta | Acceso |
+|---|---|---|
+| **FAOSTAT** (producción/rendimiento por cultivo y país) | Valida `rendimiento_esperado` (anti-outliers) | `https://www.fao.org/faostat/en/#data/QCL` (Bulk Downloads → `Production_Crops_Livestock_E_All_Data.zip`) · API: `https://fenixservices.fao.org/faostat/api/v1/es/data/QCL?area=Colombia&item={cultivo}` |
+| **datos.gov.co — EVA (UPRA/MinAgricultura)** | Área, producción y rendimiento por municipio/cultivo en Colombia | `https://www.datos.gov.co/browse?q=evaluaciones+agropecuarias+municipales` → endpoint Socrata `https://www.datos.gov.co/resource/{id}.json` (el `{id}` cambia con cada actualización; no hardcodear) |
+| **ISRIC SoilGrids v2.0** | pH, CIC, carbono orgánico y textura de referencia por coordenada (250 m) | API punto: `https://rest.isric.org/soilgrids/v2.0/properties/query?lon={lng}&lat={lat}&property=phh2o&property=cec&property=soc&property=clay&property=sand&property=silt` · mapas: `https://files.isric.org/soilgrids/latest/data/` — servicio beta: referencia de calibración, NO dependencia en tiempo real de producción |
+| **Agrosavia / Fedepanela / ICA** | Fichas técnicas por cultivo (rangos agronómicos a curar manualmente) | `https://www.agrosavia.co/` · `https://fedepanela.org.co/gremio/` · `https://www.ica.gov.co/` — documentos, no API; se transcriben a `RANGOS[cultivo]` en `train_colombia.py` |
+
 ---
 
 ## 2. AgroVision — diagnóstico visual (foto)
