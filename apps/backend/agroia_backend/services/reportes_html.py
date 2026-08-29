@@ -164,6 +164,15 @@ _CSS = """
   .plano-stat { background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px;
     padding: 8px 14px; font-size: .82rem; }
   .plano-stat b { display: block; font-family: var(--mono); font-size: 1.05rem; color: var(--moss); }
+  /* ── Calendario lunar (Almanaque Bristol) ── */
+  .seccion-lunar { break-inside: avoid; page-break-inside: avoid; }
+  .seccion-lunar .lunar-cuerpo { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+  .lunar-emoji { font-size: 2.4rem; line-height: 1; }
+  .lunar-fase b { font-family: var(--serif); font-size: 1.05rem; color: var(--moss); }
+  .lunar-reco { margin: 8px 0; padding: 10px 14px; border: 1px solid var(--line);
+    border-radius: 10px; background: var(--surface-2); font-size: .88rem; }
+  .lunar-eventos { font-family: var(--mono); font-size: .78rem; color: var(--muted); }
+  .nota-cultural { margin-top: 10px; font-size: .78rem; color: var(--muted); font-style: italic; }
   .clima-muestra { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--line);
     border-radius: 10px; background: rgba(135,169,92,.07); }
   .ctx { font-size: .8rem; margin-top: 4px; line-height: 1.45; }
@@ -1457,6 +1466,44 @@ def _bloque_clima_muestra(
     </div>"""
 
 
+def _seccion_lunar(lunar: dict | None) -> str:
+    """Sección de calendario lunar (Almanaque Bristol) — después del plano del lote."""
+    if not lunar:
+        return ""
+    fase = lunar.get("fase") or {}
+    reco = lunar.get("recomendacion_bristol") or {}
+    eventos = lunar.get("proximos_eventos") or {}
+    cultivos = ", ".join(reco.get("cultivos") or []) or "mantenimiento del suelo"
+    eventos_html = "".join(
+        f"<li>{esc(etiqueta)}: <b>{esc(valor)}</b></li>"
+        for etiqueta, valor in (
+            ("Próxima luna llena", eventos.get("proxima_luna_llena")),
+            ("Próxima luna nueva", eventos.get("proxima_luna_nueva")),
+        )
+        if valor
+    )
+    return f"""
+  <section class="block seccion-lunar">
+    <div class="block-head"><span class="block-num">📅</span>
+      <div><div class="block-title">Calendario Lunar (Almanaque Bristol)</div>
+      <div class="block-sub">Tradición de siembra · capa cultural complementaria</div></div>
+    </div>
+    <div class="lunar-cuerpo">
+      <span class="lunar-emoji">{esc(fase.get('emoji') or '🌙')}</span>
+      <div>
+        <p class="lunar-fase">Fase actual: <b>{esc(fase.get('nombre') or '—')}</b>
+          (iluminación {(float(fase.get('iluminacion') or 0) * 100):.0f}% · día lunar {esc(str(fase.get('edad_dias') or '—'))})</p>
+        <p>Recomendación de siembra: <strong>{esc(reco.get('descripcion') or '—')}</strong></p>
+      </div>
+    </div>
+    <div class="lunar-reco">🌱 Cultivos sugeridos: {esc(cultivos)}.</div>
+    <ul class="lunar-eventos">{eventos_html}</ul>
+    <p class="nota-cultural">* Esta recomendación es cultural y complementa el diagnóstico
+    agronómico. La decisión final debe basarse en el análisis de suelo, clima y
+    manejo validado por un agrónomo.</p>
+  </section>"""
+
+
 def _seccion_labores(labores: list | None) -> str:
     """Sección Q — órdenes de trabajo / labores de la finca."""
     if not labores:
@@ -1588,6 +1635,7 @@ def generar_reporte_html(
     balance_hidrico: dict | None = None,
     rotacion: dict | None = None,
     bpa_resumen: dict | None = None,
+    lunar: dict | None = None,
 ) -> str:
     """Construye el documento HTML completo del reporte."""
     fecha = datetime.now(timezone.utc).astimezone().strftime("%d/%m/%Y %H:%M")
@@ -1703,6 +1751,9 @@ def generar_reporte_html(
     seccion_rotacion = _seccion_rotacion(rotacion)
     seccion_bpa = _seccion_bpa(bpa_resumen)
 
+    # v3.4: calendario lunar (Almanaque Bristol) — justo después del plano
+    seccion_lunar = _seccion_lunar(lunar)
+
     # Explicación en lenguaje campesino (siempre que haya análisis)
     explicacion_campo = generar_explicacion_campesina(uc1=uc1, uc2=uc2, lectura=lectura)
 
@@ -1795,6 +1846,7 @@ def generar_reporte_html(
   {secciones}
   {seccion_mapa}
   {seccion_plano}
+  {seccion_lunar}
   {seccion_labores}
   {seccion_riego}
   {seccion_rotacion}

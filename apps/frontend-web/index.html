@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AgroIA · AgroInteligente Colombia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="/styles.css?v=20260827-medicion" />
+  <link rel="stylesheet" href="/styles.css?v=20260829-bristol" />
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#2e7d32" />
 </head>
@@ -109,6 +109,22 @@
           <button type="button" class="btn" id="btn-evaluar-alertas" data-roles="admin" onclick="evaluarAlertasAhora()">🔄 Evaluar ahora</button>
         </div>
         <p class="muted">Las alertas se agrupan por ubicación: si varias fincas comparten la misma zona, se muestra el departamento y la ciudad con la lista de fincas.</p>
+        <div id="lunar-card" class="lunar-card">
+          <div class="lunar-cabecera">
+            <span class="lunar-emoji" id="lunar-emoji">🌙</span>
+            <div>
+              <div class="lunar-fase" id="lunar-fase">Cargando fase lunar…</div>
+              <div class="lunar-sub" id="lunar-sub">—</div>
+            </div>
+          </div>
+          <div class="lunar-reco" id="lunar-reco">—</div>
+          <div class="lunar-eventos" id="lunar-eventos"></div>
+          <p class="nota-cultural">* Esta recomendación es cultural y complementa el diagnóstico agronómico. La decisión final debe basarse en el análisis de suelo, clima y manejo validado por un agrónomo.</p>
+        </div>
+        <label class="field toggle-row" id="bristol-toggle-row">
+          <input type="checkbox" id="bristol-toggle" onchange="guardarPreferenciaBristol()" />
+          <span>📅 Activar alertas de siembra según Almanaque Bristol</span>
+        </label>
         <div id="alertas-clima-listado"><p class="muted">Cargando…</p></div>
       </div>
     </section>

@@ -1107,6 +1107,57 @@ Las **12 mejoras de calidad** implementadas en el reporte (resumen): 1) NPK en 3
 
 ---
 
+## 12b. Almanaque Bristol — calendario lunar y siembra cultural (v3.4)
+
+Capa de recomendación **cultural complementaria**: conecta con la tradición de
+siembra del agricultor colombiano y enriquece las alertas climáticas. **No
+reemplaza la decisión agronómica** (suelo + clima).
+
+### Jerarquía de fuentes astronómicas
+| Fuente | Descripción | Clave |
+|---|---|---|
+| `skyfield` | Efemérides JPL locales (opcional, sin red tras instalación) | recomendada |
+| `usnavy` | API pública de la US Navy (`api.usno.navy.mil/moon/phase`) | respaldo sin clave |
+| `static` | Efemérides analíticas (algoritmo simplificado Meeus) | fallback extremo |
+
+`BRISTOL_MODO` (default `skyfield`) y `BRISTOL_ACTIVADO` (default `true`)
+controlan el módulo. La degradación es automática: si skyfield no está
+instalado y la US Navy no responde, se usa la tabla estática (precisión < 1 %
+frente a la US Navy). En producción (Render) se fija `BRISTOL_MODO=static`
+para evitar llamadas de red.
+
+### Tabla Bristol (fase → recomendación)
+| Fase lunar | Recomendación | Cultivos sugeridos |
+|---|---|---|
+| Luna Nueva | Raíces y bulbos | Zanahoria, remolacha, papa, cebolla |
+| Luna Creciente / Cuarto Creciente | Hojas y crecimiento aéreo | Lechuga, espinaca, repollo, coliflor |
+| Luna Llena | Frutos y semillas | Tomate, pimiento, frijol, maíz |
+| Cuarto Menguante / Menguante | Mantenimiento y reposo | Trasplantes, abonos, preparación de suelo |
+
+### Implementación
+- **Servicio** `services/calendario_lunar.py`: `get_lunar_phase()`,
+  `mapear_recomendacion_bristol()`, `resumen_bristol()`, `pronostico_lunar()`,
+  `estado_bristol()` y `clima_favorable_siembra()` (sin lluvias > 20 mm ni
+  heladas < 5 °C en los próximos 7 días).
+- **Migración 043**: tabla `agroia.preferencias_bristol` (toggle de alertas y
+  visibilidad en reportes por usuario). El tipo de alerta es VARCHAR en
+  `alertas_climaticas`, por lo que `siembra_lunar` no requiere ALTER TYPE.
+- **API** `api/calendario.py`:
+  - `GET /api/v1/calendario-lunar/actual?lat=&lon=` — fase + recomendación (todos).
+  - `GET /api/v1/calendario-lunar/pronostico?dias=7` — fases de los próximos días.
+  - `GET /api/v1/calendario-lunar/estado` — fuente activa (Admin).
+  - `GET|PUT /api/v1/usuarios/preferencias-bristol` — toggle del usuario.
+- **Alertas programadas** (`clima_alertas.py`, regla 3): cada 6 h evalúa fase
+  favorable + clima favorable y crea `siembra_lunar` (severidad Media, ícono
+  📅); no se duplica (la anterior activa se desactiva) y respeta el toggle del
+  usuario.
+- **Reportes** (`reportes_html.py`): sección «📅 Calendario Lunar» después del
+  plano del lote, con disclaimer cultural; se omite si el usuario la desactivó.
+- **Frontend** (`#view-alertas`): tarjeta con fase/emoji/recomendación/eventos,
+  toggle de alertas y alertas `siembra_lunar` en verde claro.
+
+---
+
 ## 13. Despliegue y CI/CD
 
 - **Dockerfile** (`apps/backend/`): instala con Poetry, `PYTHONPATH` incluye `/app/apps/iot`, y en `CMD` ejecuta **`alembic upgrade head` y luego uvicorn en `$PORT`**.

@@ -4570,8 +4570,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/reportes_html.py": {
-    "mtime": 1787942906.0589278,
-    "ast_hash": "dbd80d3e225ef8d6c014fb2a4ec0dcc3",
+    "mtime": 1788007844.452273,
+    "ast_hash": "a844d3847345b5fda2cf1c835b52f371",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/003_dispositivos_iot.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1788006881.5622284,
-    "ast_hash": "cf6b8684084dd6aa53401aa88085ab23",
+    "mtime": 1788007859.7307916,
+    "ast_hash": "08a9f8f93a4dbbb9e8d8ccd3a8b7e518",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4825,13 +4825,13 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.html": {
-    "mtime": 1788007012.1846347,
-    "ast_hash": "9f7d32cf0269c9076c3ee611e5429700",
+    "mtime": 1788008673.0601523,
+    "ast_hash": "af3ff9a3f3601a701d892507a606787c",
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1788007108.0475032,
-    "ast_hash": "31d85a921178fa995c83bf8bdba2c8fb",
+    "mtime": 1788008719.4654646,
+    "ast_hash": "b03d7b01c32b28c7b5b8b0bb79d8efb3",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {
@@ -4855,8 +4855,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Pantallas_AgroIA.html": {
-    "mtime": 1788007108.12509,
-    "ast_hash": "5a284f7dfcac231a150ce5d77fb86950",
+    "mtime": 1788008002.2099986,
+    "ast_hash": "379771ebbbc343de2a8fd9d24c9692d4",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/economia.py": {
@@ -5535,8 +5535,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/sw.js": {
-    "mtime": 1788006881.576286,
-    "ast_hash": "e262ec6dae71f947496528fec14db211",
+    "mtime": 1788007875.779497,
+    "ast_hash": "625957d0a9fe18507c01ec66a7c0bc9b",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/vision.py": {
@@ -5705,6 +5705,31 @@
     "semantic_hash": ""
   },
   "context/AgroIA_Especificacion_Tecnica_v6_Datasets.md": {
+    "mtime": 1788006243.6714225,
+    "ast_hash": "238edb2dec7156d7f07e279e79d8fa15",
+    "semantic_hash": ""
+  },
+  "apps/backend/tests/test_prompt_v2_badges.py": {
+    "mtime": 1788007875.779497,
+    "ast_hash": "1bab6c30f8459df7018b1f1c744ebbd0",
+    "semantic_hash": ""
+  },
+  "context/prompt-sistema-agroia-v2.md": {
+    "mtime": 1788007097.458788,
+    "ast_hash": "21a35b473281bc02c1f18d242d53d9d8",
+    "semantic_hash": ""
+  },
+  "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.html": {
+    "mtime": 1788009437.4670851,
+    "ast_hash": "0241a32b75bdc4b5612d22333000ddcd",
+    "semantic_hash": ""
+  },
+  "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md": {
+    "mtime": 1788009430.5432172,
+    "ast_hash": "4541437b3db361aafd416c632682dad2",
+    "semantic_hash": ""
+  },
+  "context/contextoVision/AgroIA_Especificacion_Tecnica_v6_Datasets.md": {
     "mtime": 1788006243.6714225,
     "ast_hash": "238edb2dec7156d7f07e279e79d8fa15",
     "semantic_hash": ""

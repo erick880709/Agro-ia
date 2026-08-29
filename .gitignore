@@ -31,6 +31,20 @@ Thumbs.db
 # Poetry
 poetry.lock
 
+# Datasets AgroVision: datos reales NO versionados (solo manifest/configs/scripts)
+datasets/raw/*
+datasets/staging/*
+datasets/quarantine/*
+datasets/normalized/*
+datasets/annotations/*
+datasets/curated/classification/*
+datasets/curated/detection/*
+datasets/curated/segmentation/*
+datasets/metadata/*.jsonl
+datasets/models/*
+datasets/reports/*
+!datasets/**/.gitkeep
+
 # Keys (JWT, TLS)
 keys/
 

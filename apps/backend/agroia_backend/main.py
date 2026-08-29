@@ -27,6 +27,7 @@ import agroia_backend.models.analisis_laboratorio  # noqa: F401
 import agroia_backend.models.auditoria  # noqa: F401
 import agroia_backend.models.precio_insumo  # noqa: F401
 import agroia_backend.models.precio_cosecha  # noqa: F401
+import agroia_backend.models.preferencia_bristol  # noqa: F401
 import agroia_backend.models.checklist_bpa  # noqa: F401
 import agroia_backend.models.chat_memoria  # noqa: F401
 import agroia_backend.models.ciclo_lote  # noqa: F401
@@ -56,6 +57,7 @@ from agroia_backend.api.admin_precios import router as admin_precios_router
 from agroia_backend.api.agua_riego import router as agua_riego_router
 from agroia_backend.api.alertas import router as alertas_router
 from agroia_backend.api.auditoria import router as auditoria_router
+from agroia_backend.api.calendario import router as calendario_router
 from agroia_backend.api.balance_hidrico import router as balance_hidrico_router
 from agroia_backend.api.bpa import router as bpa_router
 from agroia_backend.api.catalogo import router as catalogo_router
@@ -241,6 +243,8 @@ app.include_router(laboratorio_router)
 app.include_router(precios_cosecha_router)
 # ── PWA offline (v3): sincronización idempotente de tramas y labores ──
 app.include_router(sync_router)
+# ── Almanaque Bristol (v3.4): calendario lunar y preferencias ──
+app.include_router(calendario_router)
 # ── Visión por computadora (v3): diagnóstico de plagas desde foto ──
 app.include_router(vision_router)
 # ── Módulo operativo: equipo de trabajo, comisiones y lista de trabajos ──

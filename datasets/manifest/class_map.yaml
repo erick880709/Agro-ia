@@ -29,7 +29,27 @@ taxonomy:
     - other_disease
     - other_pest
 aliases:
-  healthy: [healthy, Healthy, Sana, sana, no_rust, NoRust, rust_no, sin_sintomas]
+  healthy:
+    - healthy
+    - Healthy
+    - Sana
+    - sana
+    - no_rust
+    - NoRust
+    - rust_no
+    - sin_sintomas
+    - apple___healthy
+    - blueberry___healthy
+    - cherry___healthy
+    - corn___healthy
+    - grape___healthy
+    - peach___healthy
+    - pepper,_bell___healthy
+    - potato___healthy
+    - raspberry___healthy
+    - soybean___healthy
+    - strawberry___healthy
+    - tomato___healthy
   coffee_rust: [rust, Rust, coffee_leaf_rust, Coffee Leaf Rust, roya, Roya, coffee_rust_leaf]
   coffee_phoma: [phoma, Phoma, coffee_phoma_leaf]
   coffee_cercospora: [cercospora, Cercospora, coffee_cercospora_leaf]
@@ -53,6 +73,34 @@ aliases:
   rice_leaf_blast: [rice_leaf_blast, leaf_blast]
   rice_brown_spot: [rice_brown_spot, brown_spot]
   rice_bacterial_blight: [rice_bacterial_blight, bacterial_blight]
+  other_disease:
+    - apple___apple_scab
+    - apple___black_rot
+    - apple___cedar_apple_rust
+    - cherry___powdery_mildew
+    - corn___cercospora_leaf_spot
+    - corn___common_rust
+    - corn___northern_leaf_blight
+    - corn___gray_leaf_spot
+    - grape___black_rot
+    - grape___esca_(black_measles)
+    - grape___leaf_blight_(isariopsis_leaf_spot)
+    - orange___haunglongbing_(citrus_greening)
+    - peach___bacterial_spot
+    - pepper,_bell___bacterial_spot
+    - potato___early_blight
+    - potato___late_blight
+    - squash___powdery_mildew
+    - strawberry___leaf_scorch
+    - tomato___bacterial_spot
+    - tomato___early_blight
+    - tomato___late_blight
+    - tomato___leaf_mold
+    - tomato___septoria_leaf_spot
+    - tomato___spider_mites_two-spotted_spider_mite
+    - tomato___target_spot
+    - tomato___tomato_mosaic_virus
+    - tomato___tomato_yellow_leaf_curl_virus
 crop_hints:
   coffee: [cafe, café, coffea, arabica, robusta]
   cacao: [cacao, cocoa, cacaotero]

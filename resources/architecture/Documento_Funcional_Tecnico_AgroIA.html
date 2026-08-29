@@ -1458,6 +1458,98 @@ ground truth real, baselines Kaggle y manifest de AgroVision).</p>
 <li><code>search_path</code> sin <code>agroia</code> → los <strong>casts de enum</strong> (<code>$2::variablesuelo</code>) fallan intermitentemente. Defensas: <code>server_settings={"search_path": "public, agroia"}</code> en el engine, <code>SET LOCAL</code> antes de INSERTs con enum, y <strong>evitar filtrar por columnas enum en SQL</strong> (filtrar en Python).</li>
 </ul>
 <hr />
+<h2 id="12b-almanaque-bristol-calendario-lunar-y-siembra-cultural-v34">12b. Almanaque Bristol — calendario lunar y siembra cultural (v3.4)</h2>
+<p>Capa de recomendación <strong>cultural complementaria</strong>: conecta con la tradición de
+siembra del agricultor colombiano y enriquece las alertas climáticas. <strong>No
+reemplaza la decisión agronómica</strong> (suelo + clima).</p>
+<h3 id="jerarquia-de-fuentes-astronomicas">Jerarquía de fuentes astronómicas</h3>
+<table>
+<thead>
+<tr>
+<th>Fuente</th>
+<th>Descripción</th>
+<th>Clave</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>skyfield</code></td>
+<td>Efemérides JPL locales (opcional, sin red tras instalación)</td>
+<td>recomendada</td>
+</tr>
+<tr>
+<td><code>usnavy</code></td>
+<td>API pública de la US Navy (<code>api.usno.navy.mil/moon/phase</code>)</td>
+<td>respaldo sin clave</td>
+</tr>
+<tr>
+<td><code>static</code></td>
+<td>Efemérides analíticas (algoritmo simplificado Meeus)</td>
+<td>fallback extremo</td>
+</tr>
+</tbody>
+</table>
+<p><code>BRISTOL_MODO</code> (default <code>skyfield</code>) y <code>BRISTOL_ACTIVADO</code> (default <code>true</code>)
+controlan el módulo. La degradación es automática: si skyfield no está
+instalado y la US Navy no responde, se usa la tabla estática (precisión &lt; 1 %
+frente a la US Navy). En producción (Render) se fija <code>BRISTOL_MODO=static</code>
+para evitar llamadas de red.</p>
+<h3 id="tabla-bristol-fase-recomendacion">Tabla Bristol (fase → recomendación)</h3>
+<table>
+<thead>
+<tr>
+<th>Fase lunar</th>
+<th>Recomendación</th>
+<th>Cultivos sugeridos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Luna Nueva</td>
+<td>Raíces y bulbos</td>
+<td>Zanahoria, remolacha, papa, cebolla</td>
+</tr>
+<tr>
+<td>Luna Creciente / Cuarto Creciente</td>
+<td>Hojas y crecimiento aéreo</td>
+<td>Lechuga, espinaca, repollo, coliflor</td>
+</tr>
+<tr>
+<td>Luna Llena</td>
+<td>Frutos y semillas</td>
+<td>Tomate, pimiento, frijol, maíz</td>
+</tr>
+<tr>
+<td>Cuarto Menguante / Menguante</td>
+<td>Mantenimiento y reposo</td>
+<td>Trasplantes, abonos, preparación de suelo</td>
+</tr>
+</tbody>
+</table>
+<h3 id="implementacion">Implementación</h3>
+<ul>
+<li><strong>Servicio</strong> <code>services/calendario_lunar.py</code>: <code>get_lunar_phase()</code>,
+  <code>mapear_recomendacion_bristol()</code>, <code>resumen_bristol()</code>, <code>pronostico_lunar()</code>,
+  <code>estado_bristol()</code> y <code>clima_favorable_siembra()</code> (sin lluvias &gt; 20 mm ni
+  heladas &lt; 5 °C en los próximos 7 días).</li>
+<li><strong>Migración 043</strong>: tabla <code>agroia.preferencias_bristol</code> (toggle de alertas y
+  visibilidad en reportes por usuario). El tipo de alerta es VARCHAR en
+  <code>alertas_climaticas</code>, por lo que <code>siembra_lunar</code> no requiere ALTER TYPE.</li>
+<li><strong>API</strong> <code>api/calendario.py</code>:</li>
+<li><code>GET /api/v1/calendario-lunar/actual?lat=&amp;lon=</code> — fase + recomendación (todos).</li>
+<li><code>GET /api/v1/calendario-lunar/pronostico?dias=7</code> — fases de los próximos días.</li>
+<li><code>GET /api/v1/calendario-lunar/estado</code> — fuente activa (Admin).</li>
+<li><code>GET|PUT /api/v1/usuarios/preferencias-bristol</code> — toggle del usuario.</li>
+<li><strong>Alertas programadas</strong> (<code>clima_alertas.py</code>, regla 3): cada 6 h evalúa fase
+  favorable + clima favorable y crea <code>siembra_lunar</code> (severidad Media, ícono
+  📅); no se duplica (la anterior activa se desactiva) y respeta el toggle del
+  usuario.</li>
+<li><strong>Reportes</strong> (<code>reportes_html.py</code>): sección «📅 Calendario Lunar» después del
+  plano del lote, con disclaimer cultural; se omite si el usuario la desactivó.</li>
+<li><strong>Frontend</strong> (<code>#view-alertas</code>): tarjeta con fase/emoji/recomendación/eventos,
+  toggle de alertas y alertas <code>siembra_lunar</code> en verde claro.</li>
+</ul>
+<hr />
 <h2 id="13-despliegue-y-cicd">13. Despliegue y CI/CD</h2>
 <ul>
 <li><strong>Dockerfile</strong> (<code>apps/backend/</code>): instala con Poetry, <code>PYTHONPATH</code> incluye <code>/app/apps/iot</code>, y en <code>CMD</code> ejecuta <strong><code>alembic upgrade head</code> y luego uvicorn en <code>$PORT</code></strong>.</li>

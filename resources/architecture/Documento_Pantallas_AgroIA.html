@@ -79,6 +79,7 @@
   <a href="#p0">P0 · Inicio de sesión</a>
   <a href="#p1">P1 · Inicio (Dashboard)</a>
   <a href="#p1b">P1b · Alertas clima</a>
+  <a href="#p1b-bis">P1b-bis · Almanaque Bristol</a>
   <a href="#p1c">P1c · Visión plagas</a>
   <a href="#p2">P2 · Fincas (registro)</a>
   <a href="#p3">P3 · Sensores IoT</a>
@@ -210,6 +211,34 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   <p><b>Servicios que llama:</b> <code>GET /api/v1/alertas-climaticas</code> — alertas activas
   de las fincas visibles (<code>fincas_permitidas_ids</code>) con ubicación para agrupar.</p>
   <p><span class="siguiente">Siguiente → P2 Fincas.</span></p>
+</div>
+
+<!-- ─────────── P1b-bis ─────────── -->
+<div class="pantalla" id="p1b-bis">
+  <div class="cab"><span class="icono">📅</span><span class="titulo">P1b-bis · Almanaque Bristol (v3.4)</span>
+    <span class="rol">Todos los roles</span></div>
+  <div class="objetivo"><b>Objetivo:</b> mostrar la fase lunar actual y la recomendación
+  cultural de siembra como capa complementaria de las alertas climáticas.</div>
+  <p><b>Qué muestra:</b> tarjeta fija al inicio del panel «⛅ Alertas clima» con el
+  <b>emoji de la fase</b> (🌑🌒🌓🌔🌕🌖🌗🌘), el <b>nombre de la fase</b>, la
+  <b>iluminación</b> (%), el <b>día lunar</b>, la <b>recomendación Bristol</b>
+  (raíces / hojas / frutos / reposo) con cultivos sugeridos, las próximas luna
+  llena y luna nueva, y el <b>disclaimer cultural</b>: la recomendación complementa
+  el diagnóstico agronómico y la decisión final la valida un agrónomo.</p>
+  <p><b>Alertas de siembra:</b> cada 6 h el servicio de alertas evalúa
+  <b>fase favorable + clima favorable</b> (7 días sin lluvias &gt; 20 mm ni heladas
+  &lt; 5 °C) y crea la alerta <code>siembra_lunar</code> (ícono 📅, fondo verde
+  claro), que aparece en el listado de P1b; no se duplica y respeta el toggle del
+  usuario.</p>
+  <p><b>Preferencias:</b> bajo la tarjeta hay un <b>toggle «📅 Activar alertas de
+  siembra según Almanaque Bristol»</b> que persiste la preferencia del usuario
+  (<code>PUT /api/v1/usuarios/preferencias-bristol</code>); la misma preferencia
+  controla la sección lunar del reporte (<code>mostrar_en_reportes</code>).</p>
+  <p><b>Servicios que llama:</b> <code>GET /api/v1/calendario-lunar/actual</code>
+  (fase + recomendación) · <code>GET /api/v1/calendario-lunar/pronostico?dias=7</code>
+  · <code>GET/PUT /api/v1/usuarios/preferencias-bristol</code>. Fuentes:
+  skyfield → US Navy → tabla estática (degradación automática).</p>
+  <p><span class="siguiente">Siguiente → P1c Visión plagas.</span></p>
 </div>
 
 <!-- ─────────── P1c ─────────── -->

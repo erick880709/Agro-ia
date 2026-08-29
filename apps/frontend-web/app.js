@@ -280,7 +280,7 @@ function goTab(name) {
   if (name === 'historial') cargarHistorial();
   if (name === 'sensores') cargarSensores();
   if (name === 'inicio') cargarDashboard();
-  if (name === 'alertas') cargarAlertasClima();
+  if (name === 'alertas') { cargarAlertasClima(); cargarCalendarioLunar(); cargarPreferenciasBristol(); }
   if (name === 'fincas' && state.rol.toLowerCase() === 'admin') renderFincasList();
   if (name === 'usuarios' && state.rol.toLowerCase() === 'admin') cargarUsuarios();
   if (name === 'insumos' && state.rol.toLowerCase() === 'admin') cargarPreciosInsumos();
@@ -1503,6 +1503,7 @@ function cerrarModalLabor() {
 const ICONOS_ALERTA = {
   lluvia_aplicacion: '⛅',
   helada_floracion: '🥶',
+  siembra_lunar: '📅',
 };
 
 async function renderAlertasClimaticas() {
@@ -1529,6 +1530,7 @@ async function renderAlertasClimaticas() {
 const TITULOS_ALERTA = {
   lluvia_aplicacion: 'Lluvia fuerte / lixiviación',
   helada_floracion: 'Riesgo de helada',
+  siembra_lunar: 'Almanaque Bristol · días propicios de siembra',
 };
 
 function _etiquetaUbicacion(a) {
@@ -1607,6 +1609,54 @@ async function evaluarAlertasAhora() {
     alert('No se pudo evaluar: ' + e.message);
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = '🔄 Evaluar ahora'; }
+  }
+}
+
+/* ────────────────────── Almanaque Bristol — calendario lunar (v3.4) ────────────────────── */
+
+async function cargarCalendarioLunar() {
+  const card = document.getElementById('lunar-card');
+  if (!card) return;
+  try {
+    const r = await api('/calendario-lunar/actual');
+    const fase = r.fase || {};
+    const reco = r.recomendacion_bristol || {};
+    const ev = r.proximos_eventos || {};
+    document.getElementById('lunar-emoji').textContent = fase.emoji || '🌙';
+    document.getElementById('lunar-fase').textContent =
+      `Fase actual: ${fase.nombre || '—'} (iluminación ${Math.round((fase.iluminacion || 0) * 100)}%)`;
+    document.getElementById('lunar-sub').textContent =
+      `Día lunar ${fase.edad_dias != null ? fase.edad_dias : '—'} · fuente ${r.fuente || '—'}`;
+    document.getElementById('lunar-reco').textContent =
+      `🌱 ${reco.descripcion || '—'} Cultivos sugeridos: ${(reco.cultivos || []).join(', ') || 'mantenimiento del suelo'}.`;
+    document.getElementById('lunar-eventos').innerHTML = [
+      ev.proxima_luna_llena ? `Próxima luna llena: <b>${esc(ev.proxima_luna_llena)}</b>` : '',
+      ev.proxima_luna_nueva ? `Próxima luna nueva: <b>${esc(ev.proxima_luna_nueva)}</b>` : '',
+    ].filter(Boolean).join(' · ');
+  } catch {
+    document.getElementById('lunar-fase').textContent = 'Calendario lunar no disponible.';
+  }
+}
+
+async function cargarPreferenciasBristol() {
+  const toggle = document.getElementById('bristol-toggle');
+  if (!toggle) return;
+  try {
+    const r = await api('/usuarios/preferencias-bristol');
+    toggle.checked = r.generar_alertas_siembra !== false;
+  } catch { toggle.checked = true; }
+}
+
+async function guardarPreferenciaBristol() {
+  const toggle = document.getElementById('bristol-toggle');
+  if (!toggle) return;
+  try {
+    await api('/usuarios/preferencias-bristol', {
+      method: 'PUT', headers: headers(),
+      body: JSON.stringify({ generar_alertas_siembra: toggle.checked }),
+    });
+  } catch (e) {
+    alert('No se pudo guardar la preferencia: ' + e.message);
   }
 }
 

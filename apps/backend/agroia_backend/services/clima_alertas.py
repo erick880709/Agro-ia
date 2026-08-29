@@ -73,6 +73,80 @@ def _dia_helada(pronostico: list[dict], dias: int = 3) -> dict | None:
     return None
 
 
+async def _usuarios_permiten_siembra_lunar(db, finca_uuid) -> bool:
+    """True si ningún usuario vinculado a la finca desactivó las alertas Bristol.
+
+    Sin preferencias registradas → se permite (default activado).
+    """
+    from agroia_backend.models.finca_usuario import FincaUsuario
+    from agroia_backend.models.preferencia_bristol import PreferenciaBristol
+
+    vinculados = (
+        await db.execute(
+            select(FincaUsuario.usuario_id).where(FincaUsuario.finca_id == finca_uuid)
+        )
+    ).scalars().all()
+    if not vinculados:
+        return True
+    prefs = (
+        await db.execute(
+            select(PreferenciaBristol).where(
+                PreferenciaBristol.usuario_id.in_(list(vinculados))
+            )
+        )
+    ).scalars().all()
+    if not prefs:
+        return True
+    return any(p.generar_alertas_siembra for p in prefs)
+
+
+async def _evaluar_siembra_bristol(
+    db, finca: Finca, pronostico: list[dict], _registrar, _desactivar_tipo
+) -> None:
+    """Regla 3 (v3.4): alerta 'siembra_lunar' cuando fase + clima favorecen.
+
+    Fase favorable (Bristol) + pronóstico 7 días sin lluvias > 20 mm ni
+    heladas < 5 °C → alerta. Si ya existe una activa del tipo para la
+    finca se desactiva (no se duplica).
+    """
+    from agroia_backend.services.calendario_lunar import (
+        BRISTOL_ACTIVADO,
+        clima_favorable_siembra,
+        resumen_bristol,
+    )
+
+    if not BRISTOL_ACTIVADO:
+        return
+
+    hoy = datetime.now(timezone.utc).date()
+    try:
+        lunar = resumen_bristol(hoy, float(finca.latitud), float(finca.longitud))
+    except Exception as exc:  # noqa: BLE001 — nunca tumbar el lote
+        logger.error("bristol_evaluacion_fallo", error=str(exc))
+        return
+
+    recomendacion = lunar["recomendacion_bristol"]
+    if not recomendacion["favorable"] or not clima_favorable_siembra(pronostico):
+        await _desactivar_tipo("siembra_lunar")
+        return
+
+    if not await _usuarios_permiten_siembra_lunar(db, finca.id):
+        await _desactivar_tipo("siembra_lunar")
+        return
+
+    cultivo = recomendacion["cultivos"][0] if recomendacion["cultivos"] else "su cultivo"
+    fase = lunar["fase"]
+    await _registrar(
+        "siembra_lunar",
+        "Media",
+        f"📅 El Almanaque Bristol indica días propicios para siembra "
+        f"({fase['nombre']} {fase['emoji']}). El clima (temp y lluvia) es "
+        "favorable en los próximos días. Considere programar siembra de "
+        f"{cultivo}.",
+        {"fecha": hoy.isoformat(), "fase": fase["nombre_en"]},
+    )
+
+
 async def evaluar_alertas_finca(db, finca: Finca, pronostico: list[dict] | None = None) -> list[dict]:
     """Evalúa las reglas y persiste/desactiva alertas para una finca.
 
@@ -164,6 +238,9 @@ async def evaluar_alertas_finca(db, finca: Finca, pronostico: list[dict] | None 
         )
     else:
         cambios += await _desactivar_tipo("helada_floracion")
+
+    # ── Regla 3: siembra según Almanaque Bristol (fase lunar + clima) ──
+    await _evaluar_siembra_bristol(db, finca, pronostico, _registrar, _desactivar_tipo)
 
     if creadas or cambios:
         await db.commit()

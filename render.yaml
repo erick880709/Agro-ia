@@ -24,5 +24,9 @@ services:
         value: "1"
       - key: LOG_LEVEL
         value: INFO
+      - key: BRISTOL_MODO
+        value: static
+      - key: BRISTOL_ACTIVADO
+        value: "true"
       - key: JWT_SECRET
         sync: false # Pegar una clave de 32+ caracteres en el dashboard de Render

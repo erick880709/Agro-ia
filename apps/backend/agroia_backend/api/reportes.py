@@ -419,6 +419,42 @@ async def generar_reporte(
         ),
     }
 
+    # ── v3.4: calendario lunar (Almanaque Bristol) ──
+    # Solo si la finca tiene coordenadas y el usuario no desactivó la sección.
+    lunar = None
+    try:
+        from agroia_backend.services.calendario_lunar import (
+            BRISTOL_ACTIVADO,
+            resumen_bristol,
+        )
+
+        if BRISTOL_ACTIVADO and finca.latitud is not None and finca.longitud is not None:
+            mostrar = True
+            if x_user_email:
+                from agroia_backend.models.preferencia_bristol import PreferenciaBristol
+                from agroia_backend.models.usuario import Usuario
+
+                usuario = (
+                    await db.execute(
+                        select(Usuario).where(Usuario.email == x_user_email.lower())
+                    )
+                ).scalar_one_or_none()
+                if usuario is not None:
+                    pref = (
+                        await db.execute(
+                            select(PreferenciaBristol).where(
+                                PreferenciaBristol.usuario_id == usuario.id
+                            )
+                        )
+                    ).scalar_one_or_none()
+                    mostrar = pref.mostrar_en_reportes if pref else True
+            if mostrar:
+                lunar = resumen_bristol(
+                    None, float(finca.latitud), float(finca.longitud)
+                )
+    except Exception as e:  # noqa: BLE001 — el reporte nunca falla por Bristol
+        logger.warning("bristol_reporte_no_disponible", error=str(e))
+
     html = generar_reporte_html(
         finca={
             "nombre": finca.nombre,
@@ -482,6 +518,7 @@ async def generar_reporte(
         balance_hidrico=balance_hidrico,
         rotacion=rotacion,
         bpa_resumen=bpa_resumen,
+        lunar=lunar,
     )
 
     titulo = {

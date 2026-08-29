@@ -40,7 +40,13 @@ def _dest_dir(ds_id: str, version: str) -> Path:
 
 def adapter_http(ds: dict, dest: Path) -> dict:
     url = ds.get("download_url")
-    out = dest / Path(url.rstrip("/").split("/")[-1] or f"{ds['id']}.bin")
+    # Sanitizar nombre: quitar query string (p. ej. Zenodo "?download=1"),
+    # inválido en nombres de archivo de Windows.
+    nombre = url.rstrip("/").split("/")[-1].split("?")[0] or f"{ds['id']}.bin"
+    if "." not in nombre.split("/")[-1]:
+        # codeload y similares terminan en rama, no en archivo → usar id + .zip
+        nombre = f"{ds['id']}.zip"
+    out = dest / nombre
     return {"archivos": [http_download(url, out, logger=log)], "destino": dest}
 
 
@@ -199,6 +205,24 @@ def descargar(ds: dict) -> dict:
     return record
 
 
+def _sanitizar_nombre(nombre: str) -> str:
+    """Reemplaza caracteres inválidos en Windows y acorta componentes largos
+    (rutas > MAX_PATH fallan en extracción)."""
+    partes = []
+    for componente in nombre.split("/"):
+        for ch in '?*:<>|"':
+            componente = componente.replace(ch, "_")
+        componente = componente.strip()
+        if not componente:
+            continue
+        ruta = Path(componente)
+        tallo, extension = ruta.stem, ruta.suffix
+        if len(tallo) > 70:
+            tallo = tallo[:70]
+        partes.append(tallo + extension)
+    return "/".join(partes)
+
+
 def extraer_zip(record: dict) -> None:
     """Extrae ZIP en staging/ (opcional, controlado por --extraer)."""
     from common import STAGING_DIR
@@ -210,7 +234,14 @@ def extraer_zip(record: dict) -> None:
         out = STAGING_DIR / record["dataset_id"]
         try:
             with zipfile.ZipFile(zip_path) as zf:
-                zf.extractall(out)
+                for member in zf.infolist():
+                    objetivo = out / Path(_sanitizar_nombre(member.filename))
+                    if member.is_dir():
+                        objetivo.mkdir(parents=True, exist_ok=True)
+                        continue
+                    objetivo.parent.mkdir(parents=True, exist_ok=True)
+                    with zf.open(member) as origen, open(objetivo, "wb") as destino:
+                        shutil.copyfileobj(origen, destino)
             record["extraido_en"] = str(out)
         except zipfile.BadZipFile as exc:
             record["extraccion"] = f"zip corrupto: {exc}"

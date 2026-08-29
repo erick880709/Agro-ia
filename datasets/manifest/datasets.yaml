@@ -29,8 +29,8 @@ datasets:
     cultivo: [tomate, papa, pimiento, maiz, manzana, uva, fresa, cereza, calabaza, frambuesa]
     clases: [healthy, apple_scab, grape_black_rot, corn_rust, tomato_early_blight, tomato_late_blight, potato_early_blight, potato_late_blight, bell_pepper_bacterial_spot, corn_leaf_blight]
     fuente_url: https://github.com/pratikkayal/PlantDoc-Dataset
-    download_url: https://github.com/pratikkayal/PlantDoc-Dataset
-    download_type: git
+    download_url: https://codeload.github.com/pratikkayal/PlantDoc-Dataset/zip/refs/heads/master
+    download_type: http
     licencia: "CC BY 4.0"
     uso_comercial_permitido: true
     formato_original: "Imágenes de campo real, 2.598 fotos, 13 especies"
