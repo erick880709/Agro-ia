@@ -344,16 +344,16 @@ def phash(array: np.ndarray) -> int:
 
 
 def _dct2d(block: np.ndarray) -> np.ndarray:
+    """DCT-II 2D. La normalización ortonormal no es necesaria: el hash
+    perceptual solo usa el signo respecto a la mediana."""
     n, m = block.shape
-    u = np.arange(n).reshape(-1, 1)
-    v = np.arange(m).reshape(1, -1)
-    cu = np.sqrt(2.0 / n) * np.where(u == 0, 1.0 / np.sqrt(2.0), 1.0)
-    cv = np.sqrt(2.0 / m) * np.where(v == 0, 1.0 / np.sqrt(2.0), 1.0)
-    return cu * cv * (
-        np.cos(np.pi * (2 * np.arange(n).reshape(-1, 1) + 1) * u.T / (2 * n))
-        @ block
-        @ np.cos(np.pi * (2 * np.arange(m).reshape(1, -1) + 1) * v / (2 * m)).T
-    )
+    filas = np.arange(n).reshape(-1, 1)      # posiciones
+    frec_n = np.arange(n).reshape(1, -1)     # frecuencias
+    c_n = np.cos(np.pi * (2 * filas + 1) * frec_n / (2 * n))
+    cols = np.arange(m).reshape(-1, 1)
+    frec_m = np.arange(m).reshape(1, -1)
+    c_m = np.cos(np.pi * (2 * cols + 1) * frec_m / (2 * m))
+    return c_n @ block @ c_m.T
 
 
 def hamming_distance(a: int, b: int) -> int:
