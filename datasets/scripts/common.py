@@ -381,6 +381,9 @@ def http_download(
     while attempt <= retries:
         try:
             req_headers = dict(headers or {})
+            req_headers.setdefault(
+                "User-Agent", "AgroIA-Pipeline/1.0 (+https://github.com/erick880709/Agro-ia)"
+            )
             offset = part.stat().st_size if part.exists() else 0
             if offset:
                 req_headers["Range"] = f"bytes={offset}-"

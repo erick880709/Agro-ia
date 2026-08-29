@@ -113,6 +113,9 @@ def inspeccionar_dataset(ds: dict, config: dict) -> list[dict]:
     for path in sorted(raiz.rglob("*")):
         if not path.is_file() or path.suffix == ".part":
             continue
+        if path.suffix.lower() in {".zip", ".tar", ".gz", ".tgz", ".7z", ".rar"}:
+            # Archivos originales conservados en raw/: no se inspeccionan.
+            continue
         record = {
             "dataset_id": ds.get("id"),
             "version": version,

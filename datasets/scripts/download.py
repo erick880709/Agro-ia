@@ -206,10 +206,16 @@ def descargar(ds: dict) -> dict:
 
 
 def _sanitizar_nombre(nombre: str) -> str:
-    """Reemplaza caracteres inválidos en Windows y acorta componentes largos
-    (rutas > MAX_PATH fallan en extracción)."""
+    """Reemplaza caracteres inválidos en Windows y acorta componentes largos.
+
+    Los componentes truncados reciben un sufijo hash del nombre original para
+    evitar colisiones entre archivos distintos (rutas > MAX_PATH fallan).
+    """
+    import hashlib
+
     partes = []
     for componente in nombre.split("/"):
+        original = componente
         for ch in '?*:<>|"':
             componente = componente.replace(ch, "_")
         componente = componente.strip()
@@ -218,20 +224,23 @@ def _sanitizar_nombre(nombre: str) -> str:
         ruta = Path(componente)
         tallo, extension = ruta.stem, ruta.suffix
         if len(tallo) > 70:
-            tallo = tallo[:70]
+            sufijo = hashlib.md5(original.encode("utf-8")).hexdigest()[:6]
+            tallo = f"{tallo[:70]}_{sufijo}"
         partes.append(tallo + extension)
     return "/".join(partes)
 
 
 def extraer_zip(record: dict) -> None:
-    """Extrae ZIP en staging/ (opcional, controlado por --extraer)."""
-    from common import STAGING_DIR
+    """Extrae ZIP junto a los originales en raw/ (opcional, --extraer).
 
+    Las etapas posteriores (inspect/normalize) leen desde raw/, así que la
+    extracción aterriza allí: `raw/<id>/<version>/<contenido del zip>`.
+    """
     if record.get("estado") != "ok":
         return
     dest = _dest_dir(record["dataset_id"], record.get("version", "current"))
     for zip_path in dest.glob("*.zip"):
-        out = STAGING_DIR / record["dataset_id"]
+        out = dest
         try:
             with zipfile.ZipFile(zip_path) as zf:
                 for member in zf.infolist():
