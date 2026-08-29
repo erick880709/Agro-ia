@@ -74,12 +74,30 @@ entrenamiento directo: calibran `rendimiento_esperado`, umbrales y fichas):
 
 ### 2.1 Estado del entrenamiento
 
-**Ningún modelo de visión está entrenado todavía**: producción opera con el
-fallback OpenCV/numpy (`services/vision_fallback.py`) que emite diagnósticos
-preliminares no confirmatorios y abstención explicada. El pipeline de datos
-(`datasets/scripts/`) ya está listo para entrenar: `discover → download →
-inspect → dedup → normalize → convert_annotations → split → train →
-evaluate → package_model`.
+**Primer modelo entrenado con datos reales (2026-08-29)** — baseline sklearn
+sobre **DS02 PlantDoc** (CC BY 4.0, campo real):
+
+- Pipeline completo ejecutado: `discover → download → inspect → dedup →
+  normalize → split → train`.
+- 2.574 imágenes inspeccionadas OK · 59 duplicados descartados (SHA-256 +
+  pHash) · 2.508 normalizadas en **10 clases canónicas** (apple_scab,
+  bell_pepper_bacterial_spot, corn_leaf_blight, corn_rust, grape_black_rot,
+  potato_early_blight, potato_late_blight, tomato_early_blight,
+  tomato_late_blight, other_disease).
+- Split sin fuga por clusters pHash con déficit relativo por clase:
+  1.459 train / 623 val / 421 test.
+- **Modelo `baseline-sklearn-20260829-144942`**: HistGradientBoosting con
+  features de color/textura — **accuracy en validación 70,8 %** (1.459
+  muestras, 10 clases).
+
+Producción sigue operando con el fallback OpenCV/numpy
+(`services/vision_fallback.py`, diagnóstico preliminar no confirmatorio):
+el baseline sklearn es un hito del pipeline, **no** el modelo operativo. Se
+promoverá cuando entrenen DS03–DS08 (café/yuca/arroz) y las métricas superen
+los umbrales de promoción. PlantDoc no contiene clase `healthy`; esa clase
+llegará con DS01/DS09 y fotos propias.
+
+Próximo: DS23 CocoaMonilia (monilia M1–M3) pendiente de descarga (6,19 GB).
 
 ### 2.2 Datasets declarados para entrenamiento (manifest v6)
 
@@ -89,7 +107,7 @@ modelo empaquetado queda en `datasets/models/<nombre>/<version>/manifest.json`.
 | ID | Dataset | Cultivos | Información por muestra | Licencia / uso comercial |
 |---|---|---|---|---|
 | DS01 | PlantVillage | Tomate, papa, maíz, uva, manzana… (14) | ~54.305 fotos de hoja, 38 clases (laboratorio) | Dominio abierto — **verificar réplica** |
-| DS02 | PlantDoc | 13 especies | 2.598 fotos de **campo real** | CC BY 4.0 · ✅ |
+| DS02 | PlantDoc | 13 especies | 2.598 fotos de **campo real** · ✅ **primer entrenamiento 2026-08-29** | CC BY 4.0 · ✅ |
 | DS03 | RoCoLe | Café robusta | 1.560 fotos + máscaras; roya en 4 niveles + ácaro | CC BY 4.0 · ✅ |
 | DS04 | BRACOL | Café arábica | 1.747 hojas + 2.147 recortes de síntoma con severidad | CC BY 4.0 · ✅ |
 | DS05 | BRACOT | Café | 300 árboles con instancias segmentadas | CC BY 4.0 · ✅ |

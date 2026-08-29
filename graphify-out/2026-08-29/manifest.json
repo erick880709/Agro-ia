@@ -5630,13 +5630,13 @@
     "semantic_hash": ""
   },
   "datasets/scripts/split.py": {
-    "mtime": 1788014098.0231874,
-    "ast_hash": "c94b1a97a697f4af3f1190ae2e9a6803",
+    "mtime": 1788014639.007274,
+    "ast_hash": "f60d30458ed1eee5a8b945caaac7879b",
     "semantic_hash": ""
   },
   "datasets/scripts/train.py": {
-    "mtime": 1787951729.8847446,
-    "ast_hash": "9e788304a9bfbad9d82a1ea60306d724",
+    "mtime": 1788014639.007274,
+    "ast_hash": "dcbf344b76ebab21e6557ac70d114cb5",
     "semantic_hash": ""
   },
   "context/contextoFuncional/especificacionImagenes.md": {

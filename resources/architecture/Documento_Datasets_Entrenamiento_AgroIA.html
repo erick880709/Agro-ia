@@ -210,12 +210,29 @@ entrenamiento directo: calibran <code>rendimiento_esperado</code>, umbrales y fi
 <hr />
 <h2 id="2-agrovision-diagnostico-visual-foto">2. AgroVision — diagnóstico visual (foto)</h2>
 <h3 id="21-estado-del-entrenamiento">2.1 Estado del entrenamiento</h3>
-<p><strong>Ningún modelo de visión está entrenado todavía</strong>: producción opera con el
-fallback OpenCV/numpy (<code>services/vision_fallback.py</code>) que emite diagnósticos
-preliminares no confirmatorios y abstención explicada. El pipeline de datos
-(<code>datasets/scripts/</code>) ya está listo para entrenar: <code>discover → download →
-inspect → dedup → normalize → convert_annotations → split → train →
-evaluate → package_model</code>.</p>
+<p><strong>Primer modelo entrenado con datos reales (2026-08-29)</strong> — baseline sklearn
+sobre <strong>DS02 PlantDoc</strong> (CC BY 4.0, campo real):</p>
+<ul>
+<li>Pipeline completo ejecutado: <code>discover → download → inspect → dedup →
+  normalize → split → train</code>.</li>
+<li>2.574 imágenes inspeccionadas OK · 59 duplicados descartados (SHA-256 +
+  pHash) · 2.508 normalizadas en <strong>10 clases canónicas</strong> (apple_scab,
+  bell_pepper_bacterial_spot, corn_leaf_blight, corn_rust, grape_black_rot,
+  potato_early_blight, potato_late_blight, tomato_early_blight,
+  tomato_late_blight, other_disease).</li>
+<li>Split sin fuga por clusters pHash con déficit relativo por clase:
+  1.459 train / 623 val / 421 test.</li>
+<li><strong>Modelo <code>baseline-sklearn-20260829-144942</code></strong>: HistGradientBoosting con
+  features de color/textura — <strong>accuracy en validación 70,8 %</strong> (1.459
+  muestras, 10 clases).</li>
+</ul>
+<p>Producción sigue operando con el fallback OpenCV/numpy
+(<code>services/vision_fallback.py</code>, diagnóstico preliminar no confirmatorio):
+el baseline sklearn es un hito del pipeline, <strong>no</strong> el modelo operativo. Se
+promoverá cuando entrenen DS03–DS08 (café/yuca/arroz) y las métricas superen
+los umbrales de promoción. PlantDoc no contiene clase <code>healthy</code>; esa clase
+llegará con DS01/DS09 y fotos propias.</p>
+<p>Próximo: DS23 CocoaMonilia (monilia M1–M3) pendiente de descarga (6,19 GB).</p>
 <h3 id="22-datasets-declarados-para-entrenamiento-manifest-v6">2.2 Datasets declarados para entrenamiento (manifest v6)</h3>
 <p>Trazabilidad completa en <code>datasets/manifest/datasets.yaml</code>; el lineage de cada
 modelo empaquetado queda en <code>datasets/models/&lt;nombre&gt;/&lt;version&gt;/manifest.json</code>.</p>
@@ -241,7 +258,7 @@ modelo empaquetado queda en <code>datasets/models/&lt;nombre&gt;/&lt;version&gt;
 <td>DS02</td>
 <td>PlantDoc</td>
 <td>13 especies</td>
-<td>2.598 fotos de <strong>campo real</strong></td>
+<td>2.598 fotos de <strong>campo real</strong> · ✅ <strong>primer entrenamiento 2026-08-29</strong></td>
 <td>CC BY 4.0 · ✅</td>
 </tr>
 <tr>

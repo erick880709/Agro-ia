@@ -392,5 +392,16 @@ Los 2 casos de uso del motor están operativos vía sistema experto determiníst
 - Acceso por rol: cliente solo reportes de sus fincas.
 
 ---
+### Almanaque Bristol + primer modelo de visión con datos reales (2026-08-29)
 
+- **Módulo Almanaque Bristol (v3.4)** (`context/contextoVision/bristo.md`): calendario lunar como capa cultural complementaria. Servicio `services/calendario_lunar.py` con jerarquía de fuentes **skyfield → US Navy → tabla estática** (degradación automática, precisión < 1 %); en producción `BRISTOL_MODO=static`.
+- **API**: `GET /api/v1/calendario-lunar/actual` (fase + recomendación), `/pronostico?dias=7`, **`/mes?anio=&mes=`** (calendario navegable, efemérides analíticas sin red), `/estado` (Admin) y `GET|PUT /api/v1/usuarios/preferencias-bristol` (toggle por usuario; migración 043 + tabla `preferencias_bristol`).
+- **Alertas programadas**: regla 3 en `clima_alertas.py` (cada 6 h) crea `siembra_lunar` solo con fase favorable + 7 días sin lluvias > 20 mm ni heladas < 5 °C; no se duplica y respeta el toggle.
+- **Reportes**: sección «📅 Calendario Lunar» después del plano del lote, con disclaimer cultural; se omite si el usuario la desactivó.
+- **Frontend**: pestaña renombrada a «🌙 Alertas clima y fases lunares» con tarjeta de fase actual, **calendario mensual navegable** (fase lunar por día, hoy resaltado, cache por mes) y toggle de preferencias. `sw.js` en v7.
+- **Primer entrenamiento de visión con datos reales**: pipeline `datasets/` ejecutado sobre **DS02 PlantDoc** (CC BY 4.0): 2.574 imágenes → inspect OK → dedup pHash (DCT-II corregido) 59 duplicados → normalize 2.508 en 10 clases → split sin fuga (déficit relativo por clase). **Modelo sklearn baseline: accuracy 70,8 %** en validación (1.459 train / 623 val), guardado en `datasets/models/baseline-sklearn-20260829-144942/`. Es baseline con features de color/textura — el modelo operativo seguirá siendo el fallback OpenCV hasta entrenar con más datasets (DS03–DS08) y alcanzar métricas de promoción.
+- **DS23 CocoaMonilia (6,19 GB)**: pendiente de descarga por espacio en disco (~13 GB requeridos).
+- **Pruebas**: 57 pruebas backend en verde (13 + 2 nuevas del módulo Bristol).
+
+---
 > **Generado por el pipeline AgroIA:** janus (54 reqs) → epicureo (9 specs IA≤15) → archi (C4+6 ADRs) → genesis (scaffold) → builder (9 épicas)
