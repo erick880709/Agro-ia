@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1787890074.7735565,
-    "ast_hash": "663a90b6a4012b8e2b0528087dabf071",
+    "mtime": 1788015248.492301,
+    "ast_hash": "ffd0d5f5d1c0e3fccd70ad45fe4fcf88",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1788011609.6513033,
-    "ast_hash": "99e26445da122094da4b50200cdb9df2",
+    "mtime": 1788014929.7271917,
+    "ast_hash": "16d5fc99f93ef5fc29c9250a47c23336",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1788011575.171343,
-    "ast_hash": "fd791b3e431f39c4a1f596141561409b",
+    "mtime": 1788014953.9130917,
+    "ast_hash": "d2d2603a2765924bf9ab6da27fb65525",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4825,13 +4825,13 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.html": {
-    "mtime": 1788011981.5157478,
-    "ast_hash": "449dc09996215a3e088534d68b14d4fd",
+    "mtime": 1788015028.0426836,
+    "ast_hash": "d831bfe1837d9f3d493041e12c17c644",
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1788011877.3712213,
-    "ast_hash": "196420e2e3be5584806c6dc488582a2d",
+    "mtime": 1788015021.4686687,
+    "ast_hash": "29f499dd6442299c76f8b52563000777",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {
@@ -4855,8 +4855,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Pantallas_AgroIA.html": {
-    "mtime": 1788011926.1247966,
-    "ast_hash": "341a67544a6c881de692b48df50eb92f",
+    "mtime": 1788015021.4686687,
+    "ast_hash": "9ebca74a54f791d18b8fc9c328c4c12c",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/economia.py": {
@@ -5535,8 +5535,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/sw.js": {
-    "mtime": 1788011625.2612476,
-    "ast_hash": "6ce24fb8b673b2ca6315e5a59e7fd0ec",
+    "mtime": 1788014947.0196347,
+    "ast_hash": "a115ee2ebebf4ebbecdd22582030e344",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/vision.py": {
@@ -5720,13 +5720,13 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.html": {
-    "mtime": 1788009437.4670851,
-    "ast_hash": "0241a32b75bdc4b5612d22333000ddcd",
+    "mtime": 1788015217.084444,
+    "ast_hash": "ed05a85352e156196762993d565c3f41",
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md": {
-    "mtime": 1788009430.5432172,
-    "ast_hash": "4541437b3db361aafd416c632682dad2",
+    "mtime": 1788015248.489268,
+    "ast_hash": "334992553f916bb204443221afe12f5e",
     "semantic_hash": ""
   },
   "context/contextoVision/AgroIA_Especificacion_Tecnica_v6_Datasets.md": {
@@ -5735,8 +5735,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/calendario.py": {
-    "mtime": 1788011450.73917,
-    "ast_hash": "d2b70ebc1173664d5131e833c6061178",
+    "mtime": 1788014876.2076383,
+    "ast_hash": "2040d5900cffc05fec4d9afaac747954",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/preferencia_bristol.py": {
@@ -5745,8 +5745,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/calendario_lunar.py": {
-    "mtime": 1788011704.5321002,
-    "ast_hash": "5b7ec69388280688bb38dc85459638e2",
+    "mtime": 1788014876.201093,
+    "ast_hash": "b1cef01fb8e8bab7f24cd0c8cc0e382a",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/043_add_bristol_preferences.py": {
@@ -5755,8 +5755,8 @@
     "semantic_hash": ""
   },
   "apps/backend/tests/test_bristol.py": {
-    "mtime": 1788011788.5479114,
-    "ast_hash": "3f8accede52ce0914742b6a7bb097657",
+    "mtime": 1788014894.6264179,
+    "ast_hash": "e8032562693c25326fd706426599f659",
     "semantic_hash": ""
   },
   "context/contextoVision/bristo.md": {

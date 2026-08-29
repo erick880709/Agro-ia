@@ -400,7 +400,8 @@ Los 2 casos de uso del motor están operativos vía sistema experto determiníst
 - **Reportes**: sección «📅 Calendario Lunar» después del plano del lote, con disclaimer cultural; se omite si el usuario la desactivó.
 - **Frontend**: pestaña renombrada a «🌙 Alertas clima y fases lunares» con tarjeta de fase actual, **calendario mensual navegable** (fase lunar por día, hoy resaltado, cache por mes) y toggle de preferencias. `sw.js` en v7.
 - **Primer entrenamiento de visión con datos reales**: pipeline `datasets/` ejecutado sobre **DS02 PlantDoc** (CC BY 4.0): 2.574 imágenes → inspect OK → dedup pHash (DCT-II corregido) 59 duplicados → normalize 2.508 en 10 clases → split sin fuga (déficit relativo por clase). **Modelo sklearn baseline: accuracy 70,8 %** en validación (1.459 train / 623 val), guardado en `datasets/models/baseline-sklearn-20260829-144942/`. Es baseline con features de color/textura — el modelo operativo seguirá siendo el fallback OpenCV hasta entrenar con más datasets (DS03–DS08) y alcanzar métricas de promoción.
-- **DS23 CocoaMonilia (6,19 GB)**: pendiente de descarga por espacio en disco (~13 GB requeridos).
+- **DS23 CocoaMonilia (6,19 GB)**: descargado de Zenodo (CC BY 4.0) con curl + verificación de `Content-Length` (fix de descargas truncadas); 1.950 fotos normalizadas en 4 clases (healthy/monilia M1–M3) con split sin fuga; máscaras y anotaciones preservadas en cuarentena.
+- **Modelo combinado (DS02+DS23, 14 clases)**: reentrenado con 2.800 train / 940 val — **accuracy 59,6 %** (las etapas monilia M1–M3 son visualmente cercanas; baseline de color/textura para medir progreso).
 - **Pruebas**: 57 pruebas backend en verde (13 + 2 nuevas del módulo Bristol).
 
 ---

@@ -99,6 +99,22 @@ llegará con DS01/DS09 y fotos propias.
 
 Próximo: DS23 CocoaMonilia (monilia M1–M3) pendiente de descarga (6,19 GB).
 
+**DS23 CocoaMoniliaDataSet v2 (2026-08-29)** — descargado de Zenodo
+(`10.5281/zenodo.17716661`, CC BY 4.0, 6,19 GB): 1.950 fotos de mazorca de
+cacao en campo normalizadas en 4 clases (`healthy` 646 · `cocoa_monilia_m1`
+436 · `cocoa_monilia_m2` 401 · `cocoa_monilia_m3` 467); split sin fuga
+1.341/317/292. Las 3.900 máscaras de segmentación y las anotaciones
+COCO/YOLO quedaron preservadas en cuarentena para la etapa de detección.
+
+**Modelo combinado `baseline-sklearn-20260829-182910` (14 clases)** —
+PlantDoc + CocoaMonilia juntos: 2.800 train / 940 val · **accuracy en
+validación 59,6 %**. La caída frente al baseline solo-PlantDoc (70,8 %) es
+esperable: las etapas monilia M1–M3 son visualmente cercanas entre sí y el
+vocabulario crece de 10 a 14 clases. Es un baseline de color/textura para
+medir progreso — el modelo operativo seguirá siendo el fallback OpenCV hasta
+entrenar con más datasets (DS01/DS03–DS08) y superar los umbrales de
+promoción.
+
 ### 2.2 Datasets declarados para entrenamiento (manifest v6)
 
 Trazabilidad completa en `datasets/manifest/datasets.yaml`; el lineage de cada
