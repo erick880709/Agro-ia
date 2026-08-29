@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroIA · Documentación del Servicio de Ingesta de Sensores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600;9..144,900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --moss:#1e5c2e; --moss-soft:#eef6ef; --line:#e3e9e4; --muted:#5a725e;
+  --amber:#f9a825; --text:#1d3322; }
+* { box-sizing: border-box; }
+body { margin:0; font-family:'IBM Plex Sans',system-ui,Segoe UI,sans-serif;
+  color:var(--text); background:#f6f9f6; line-height:1.6; }
+.sheet { max-width:860px; margin:0 auto; padding:48px 40px 72px; background:#fff; }
+header.specimen { display:flex; justify-content:space-between; align-items:flex-end;
+  border-bottom:1px solid var(--line); padding-bottom:18px; margin-bottom:28px; }
+.brand { font-family:Fraunces,Georgia,serif; font-size:1.6rem; font-weight:600; }
+.brand em { color:var(--moss); font-style:normal; }
+.kicker { font-family:Consolas,monospace; font-size:.7rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--muted); }
+h1 { font-family:Fraunces,Georgia,serif; font-size:1.9rem; line-height:1.2; }
+h2 { font-family:Fraunces,Georgia,serif; font-size:1.3rem; margin-top:2.2em;
+  border-bottom:1px solid var(--line); padding-bottom:6px; color:var(--moss); }
+h3 { font-size:1.05rem; margin-top:1.6em; }
+p, li { font-size:.95rem; }
+code { font-family:Consolas,monospace; font-size:.85em; background:var(--moss-soft);
+  padding:2px 6px; border-radius:4px; }
+pre { background:#102318; color:#e8f5e9; padding:16px 18px; border-radius:8px;
+  overflow-x:auto; font-size:.85rem; }
+pre code { background:none; color:inherit; padding:0; }
+table { border-collapse:collapse; width:100%; margin:16px 0; font-size:.88rem; }
+th { background:var(--moss); color:#fff; text-align:left; padding:8px 10px; }
+td { border:1px solid var(--line); padding:8px 10px; vertical-align:top; }
+tr:nth-child(even) td { background:#fbfdfb; }
+blockquote { margin:16px 0; padding:10px 16px; border-left:4px solid var(--moss);
+  background:var(--moss-soft); border-radius:0 8px 8px 0; }
+blockquote p { margin:.3em 0; }
+hr { border:none; border-top:1px solid var(--line); margin:2em 0; }
+a { color:var(--moss); }
+footer { text-align:center; color:var(--muted); font-size:.8rem; padding:24px; }
+@media print { body { background:#fff; } .sheet { max-width:none; padding:0; } }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <header class="specimen">
+    <div>
+      <div class="brand">Agro<em>IA</em></div>
+      <div class="kicker">Documentación técnica · servicio de ingesta de sensores</div>
+    </div>
+    <div class="kicker">AgroInteligente Colombia · v0.1.0</div>
+  </header>
+  <h1 id="agroia-datasets-de-entrenamiento-de-los-modelos">AgroIA — Datasets de entrenamiento de los modelos</h1>
+<p><strong>Versión:</strong> 1.0 · <strong>Fecha:</strong> 2026-08-29
+<strong>Alcance:</strong> trazabilidad de qué datos han entrenado (o entrenarán) cada modelo
+de AgroIA: modelo tabular (diagnóstico nutricional/aptitud) y AgroVision
+(diagnóstico por foto). Fuente de verdad de artefactos: <code>apps/ml/models/</code>,
+<code>datasets/</code> y <code>ml_meta.json</code>.</p>
+<hr />
+<h2 id="1-modelo-tabular-diagnostico-nutricional-y-aptitud-ml-en-sombra">1. Modelo tabular — diagnóstico nutricional y aptitud (ML en sombra)</h2>
+<h3 id="11-dataset-de-entrenamiento-principal-sintetico-etiquetado-por-reglas">1.1 Dataset de entrenamiento principal: sintético etiquetado por reglas</h3>
+<p>El modelo tabular no entrena con un dataset externo: entrena contra un
+<strong>dataset sintético etiquetado por el sistema experto</strong> (el mismo motor de
+reglas UPRA/Cenicafé/AGROSAVIA que es la fuente de verdad en producción).</p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Generador</td>
+<td><code>apps/ml/agroia_ml/train_colombia.py</code> (modo activo)</td>
+</tr>
+<tr>
+<td>Reglas de etiquetado</td>
+<td>54 reglas agronómicas · 17 variables · 30 cultivos (<code>asegurar_reglas</code> + <code>load_seeds</code>)</td>
+</tr>
+<tr>
+<td>Muestras por modelo</td>
+<td><strong>75.000</strong> por variable de diagnóstico + 1 modelo de aptitud (<code>ml_aptitud</code>)</td>
+</tr>
+<tr>
+<td>Variables modeladas</td>
+<td><code>ph</code>, <code>nitrogeno</code>, <code>fosforo</code>, <code>potasio</code>, <code>calcio</code>, <code>magnesio</code>, <code>azufre</code>, <code>hierro</code>, <code>manganeso</code>, <code>zinc</code>, <code>cobre</code>, <code>boro</code>, <code>materia_organica</code>, <code>cic</code>, <code>humedad</code>, <code>temperatura_suelo</code>, <code>conductividad_electrica</code></td>
+</tr>
+<tr>
+<td>Clases de salida</td>
+<td><code>DEFICIT</code> / <code>EXCESO</code> / <code>OK</code> (diagnóstico por variable) · clasificación UPRA (aptitud)</td>
+</tr>
+<tr>
+<td>Datos faltantes sintéticos</td>
+<td>35 % (<code>missingness_sintetico: 0.35</code>) con imputación por <strong>medianas por variable</strong> (mismas medianas que usa <code>ml_oracle</code> en inferencia)</td>
+</tr>
+<tr>
+<td>Métricas sintéticas</td>
+<td>accuracy ≈ 0.95–0.97 · F1 ≈ 0.95–0.97 por variable</td>
+</tr>
+<tr>
+<td>Fecha de entrenamiento</td>
+<td>2026-08-27 (ver <code>ml_meta.json</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-ground-truth-real-aprendizaje-activo">1.2 Ground truth real (aprendizaje activo)</h3>
+<p>El dataset real del modelo se construye con el uso de la plataforma
+(<code>services/ml_labels.py</code>, visible en <code>GET /api/v1/ml/etiquetas-doradas</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Fuente</th>
+<th>Información que aporta</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Aceptaciones de recomendación</strong> (<code>aceptaciones_recomendacion</code>)</td>
+<td>Estados por variable (<code>DEFICIT/EXCESO/OK</code>) validados por el agrónomo + perfil de suelo de la última lectura</td>
+<td>Etiquetas doradas; peso de muestra real ×10</td>
+</tr>
+<tr>
+<td><strong>Ciclos cerrados</strong> (<code>historial_ciclos_lote</code>)</td>
+<td>Rendimiento real (t/ha) vs. esperado de ficha</td>
+<td>Ground truth de rendimiento; excluye ciclos <code>rendimiento_atipico</code></td>
+</tr>
+<tr>
+<td>Estado actual (2026-08-27)</td>
+<td>1 aceptación útil + 1 ciclo cerrado útil</td>
+<td>Promoción a PRODUCTION exige concordancia real ≥ 0.85; por ahora todos los modelos están en sombra (<code>promovidas: {}</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-baselines-kaggle-cold-start-metodologico-no-produccion">1.3 Baselines Kaggle (cold-start, metodológico — NO producción)</h3>
+<p>Entrenados al inicio del proyecto como baseline; <strong>no alimentan las
+recomendaciones mostradas a usuarios reales</strong> (regla de <code>datasets/README.md</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Archivo</th>
+<th>Registros</th>
+<th>Tamaño</th>
+<th>Columnas (información)</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Crop Recommendation (Kaggle <code>atharvaingle</code>)</td>
+<td><code>datasets/crop-recommendation/Crop_recommendation.csv</code></td>
+<td>2.200</td>
+<td>147 KB</td>
+<td><code>N, P, K, temperature, humidity, ph, rainfall, label</code> (cultivo recomendado)</td>
+<td>Modelo 2 — predicción de cultivo ideal (baseline metodológico)</td>
+</tr>
+<tr>
+<td>Crops NPK (Kaggle <code>javakhan</code>)</td>
+<td><code>datasets/crops-npk/sensor_Crop_Dataset (1).csv</code></td>
+<td>20.000</td>
+<td>2,9 MB</td>
+<td><code>Nitrogen, Phosphorus, Potassium, Temperature, Humidity, pH_Value, Rainfall, Crop, Soil_Type, Variety</code></td>
+<td>Modelo 3 — deficiencias nutricionales (baseline metodológico)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="14-artefactos-generados">1.4 Artefactos generados</h3>
+<p><code>apps/ml/models/</code>: <code>ml_aptitud.joblib</code> + 17 <code>ml_diagnostico_*.joblib</code>
+(pH, N, P, K, Ca, Mg, S, Fe, Mn, Zn, Cu, B, MO, CIC, humedad, T suelo, CE)
++ <code>ml_meta.json</code> (fecha, variables, imputación, cultivos, métricas y
+promoción). El backend los carga vía <code>services/ml_oracle.py</code> (imports
+perezosos; degrada a <code>None</code> sin artefactos).</p>
+<hr />
+<h2 id="2-agrovision-diagnostico-visual-foto">2. AgroVision — diagnóstico visual (foto)</h2>
+<h3 id="21-estado-del-entrenamiento">2.1 Estado del entrenamiento</h3>
+<p><strong>Ningún modelo de visión está entrenado todavía</strong>: producción opera con el
+fallback OpenCV/numpy (<code>services/vision_fallback.py</code>) que emite diagnósticos
+preliminares no confirmatorios y abstención explicada. El pipeline de datos
+(<code>datasets/scripts/</code>) ya está listo para entrenar: <code>discover → download →
+inspect → dedup → normalize → convert_annotations → split → train →
+evaluate → package_model</code>.</p>
+<h3 id="22-datasets-declarados-para-entrenamiento-manifest-v6">2.2 Datasets declarados para entrenamiento (manifest v6)</h3>
+<p>Trazabilidad completa en <code>datasets/manifest/datasets.yaml</code>; el lineage de cada
+modelo empaquetado queda en <code>datasets/models/&lt;nombre&gt;/&lt;version&gt;/manifest.json</code>.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Dataset</th>
+<th>Cultivos</th>
+<th>Información por muestra</th>
+<th>Licencia / uso comercial</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DS01</td>
+<td>PlantVillage</td>
+<td>Tomate, papa, maíz, uva, manzana… (14)</td>
+<td>~54.305 fotos de hoja, 38 clases (laboratorio)</td>
+<td>Dominio abierto — <strong>verificar réplica</strong></td>
+</tr>
+<tr>
+<td>DS02</td>
+<td>PlantDoc</td>
+<td>13 especies</td>
+<td>2.598 fotos de <strong>campo real</strong></td>
+<td>CC BY 4.0 · ✅</td>
+</tr>
+<tr>
+<td>DS03</td>
+<td>RoCoLe</td>
+<td>Café robusta</td>
+<td>1.560 fotos + máscaras; roya en 4 niveles + ácaro</td>
+<td>CC BY 4.0 · ✅</td>
+</tr>
+<tr>
+<td>DS04</td>
+<td>BRACOL</td>
+<td>Café arábica</td>
+<td>1.747 hojas + 2.147 recortes de síntoma con severidad</td>
+<td>CC BY 4.0 · ✅</td>
+</tr>
+<tr>
+<td>DS05</td>
+<td>BRACOT</td>
+<td>Café</td>
+<td>300 árboles con instancias segmentadas</td>
+<td>CC BY 4.0 · ✅</td>
+</tr>
+<tr>
+<td>DS06</td>
+<td>Cassava Leaf Disease</td>
+<td>Yuca</td>
+<td>~21.000 fotos de campo, 5 clases</td>
+<td><strong>Verificar</strong> (Kaggle)</td>
+</tr>
+<tr>
+<td>DS07</td>
+<td>Rice Leaf Diseases</td>
+<td>Arroz</td>
+<td>Fotos de campo (tizón/mancha parda)</td>
+<td><strong>Verificar</strong></td>
+</tr>
+<tr>
+<td>DS08</td>
+<td>New Plant Diseases (Augmented)</td>
+<td>Varios</td>
+<td>PlantVillage aumentado</td>
+<td><strong>Verificar réplica</strong></td>
+</tr>
+<tr>
+<td>DS09</td>
+<td><strong>AgroIA propio</strong> (Cacao/Aguacate)</td>
+<td>Cacao, aguacate</td>
+<td>Fotos reales de fincas del sistema + <code>etiqueta_confirmada</code> del agrónomo (RQ-V6-01)</td>
+<td>Propietario · ✅</td>
+</tr>
+<tr>
+<td>DS10–DS28</td>
+<td>Complementarios</td>
+<td>Café/cacao/multicultivo</td>
+<td>Multiespectral, COCO/YOLO/máscaras, VQA, IP102, AgriPath, portales AGROSAVIA/ICA/SIOC</td>
+<td>Mixto (NC bloqueados por <code>license_policy.yaml</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="23-reglas-de-uso-heredadas-de-la-especificacion">2.3 Reglas de uso (heredadas de la especificación)</h3>
+<ul>
+<li><strong>Provenance-first</strong>: cada imagen conserva fuente, dataset, versión, URL,
+  licencia, hash y etiqueta original (<code>metadata/lineage.jsonl</code>).</li>
+<li><strong>No leakage</strong>: split por grupo (finca/planta/hoja) o clusters pHash.</li>
+<li><strong>Field-first</strong>: PlantVillage solo pretraining; el test prioriza campo real.</li>
+<li><strong>Commercial-use gate</strong>: DS16/DS17/DS18/DS22/DS23/DS28 (NC o académico)
+  bloqueados de curated/production; DS06/DS07/DS08 y portales requieren
+  revisión de licencia antes de promover.</li>
+<li><strong>DS09</strong>: se entrena cuando haya ≥ 200–300 imágenes confirmadas por clase.</li>
+</ul>
+<hr />
+<h2 id="3-como-leer-la-trazabilidad">3. Cómo leer la trazabilidad</h2>
+<ol>
+<li><strong>Tabular</strong>: <code>apps/ml/models/ml_meta.json</code> (fecha, variables, métricas,
+   promoción) + <code>GET /api/v1/ml/estado</code> (BD + artefactos) +
+   <code>GET /api/v1/ml/etiquetas-doradas</code> (ground truth real).</li>
+<li><strong>Visión</strong>: <code>datasets/metadata/*.jsonl</code> (discovery/downloads/inspection/
+   duplicates/images/lineage) + <code>GET /api/v1/vision/admin/dataset-estado</code>
+   (resumen del pipeline) + <code>datasets/models/&lt;nombre&gt;/&lt;version&gt;/manifest.json</code>
+   (lineage exacto del artefacto: dataset IDs, versiones, hashes, git commit).</li>
+<li><strong>Regla de oro</strong>: ninguna métrica de producción se publica basada
+   únicamente en datos sintéticos o de laboratorio; la promoción exige
+   concordancia con datos reales colombianos.</li>
+</ol>
+</div>
+<footer>AgroIA — AgroInteligente Colombia · Documentación generada desde
+  <code>resources/architecture/api_sensor_muestreo.md</code></footer>
+</body>
+</html>

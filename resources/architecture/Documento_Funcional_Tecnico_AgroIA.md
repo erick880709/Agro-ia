@@ -885,6 +885,11 @@ Reejecuta `RulesEngine.evaluate` sobre el último suelo de la finca con las vari
 
 ## 10. El modelo de Machine Learning: entrenamiento y artefactos
 
+> 📄 **Trazabilidad completa de datasets**: ver
+> [`Documento_Datasets_Entrenamiento_AgroIA.md`](Documento_Datasets_Entrenamiento_AgroIA.md)
+> (qué datos han entrenado cada modelo: sintético etiquetado por reglas,
+> ground truth real, baselines Kaggle y manifest de AgroVision).
+
 `apps/ml/agroia_ml/train_colombia.py` (ejecutar con `python -m agroia_ml.train_colombia --registrar --active-learning`).
 
 ### 10.1 Datos y etiquetado

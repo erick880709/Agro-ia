@@ -1099,6 +1099,12 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 3. <strong>Efecto en el modelo</strong>: cada aceptación suma +0.02 de confianza al análisis de esa finca/cultivo (máx +0.10). El análisis siguiente muestra <code>respaldos: N</code> y en <code>/ml/estado</code> aparece <code>validaciones_humanas</code>. El comentario queda como feedback para futuros reentrenamientos.</p>
 <hr />
 <h2 id="10-el-modelo-de-machine-learning-entrenamiento-y-artefactos">10. El modelo de Machine Learning: entrenamiento y artefactos</h2>
+<blockquote>
+<p>📄 <strong>Trazabilidad completa de datasets</strong>: ver
+<a href="Documento_Datasets_Entrenamiento_AgroIA.md"><code>Documento_Datasets_Entrenamiento_AgroIA.md</code></a>
+(qué datos han entrenado cada modelo: sintético etiquetado por reglas,
+ground truth real, baselines Kaggle y manifest de AgroVision).</p>
+</blockquote>
 <p><code>apps/ml/agroia_ml/train_colombia.py</code> (ejecutar con <code>python -m agroia_ml.train_colombia --registrar --active-learning</code>).</p>
 <h3 id="101-datos-y-etiquetado">10.1 Datos y etiquetado</h3>
 <ul>
