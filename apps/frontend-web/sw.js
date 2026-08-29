@@ -2,7 +2,7 @@
  * Shell estático cacheado (app shell); la API siempre va a la red
  * (la cola IndexedDB cubre los cortes de conexión).
  */
-const CACHE = 'agroia-shell-v3';
+const CACHE = 'agroia-shell-v4';
 const SHELL = [
   '/',
   '/index.html',

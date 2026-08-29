@@ -19,6 +19,9 @@ class VisionDiagnostico(Base):
     usuario_id: Mapped[uuid.UUID | None] = mapped_column(Uuid, nullable=True, index=True)
     imagen_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     resultado_json: Mapped[dict] = mapped_column(JSON, nullable=False)
+    # RQ-V6-01: etiqueta confirmada por el agrónomo al revisar un diagnóstico
+    # con requiere_review=true — alimenta el dataset propio de AgroIA.
+    etiqueta_confirmada: Mapped[str | None] = mapped_column(String(500), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )

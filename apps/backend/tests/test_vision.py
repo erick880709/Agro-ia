@@ -140,6 +140,54 @@ async def test_diagnose_uri_invalida(cli):
     assert r.status_code == 422
 
 
+async def test_confirmar_diagnostico_rq_v6_01(cli, hoja_sintomatica):
+    """RQ-V6-01: el agrónomo confirma la etiqueta y queda en el historial."""
+    finca_id = "3a47d0c6-fb00-4106-91ba-0a707f612e86"
+    r = await cli.post(
+        f"/api/v1/vision/analizar-plaga?finca_id={finca_id}",
+        headers=_cabeceras(),
+        files={"file": ("hoja.png", hoja_sintomatica, "image/png")},
+    )
+    diag_id = r.json()["diagnostico_id"]
+    r2 = await cli.post(
+        f"/api/v1/vision/diagnosticos/{diag_id}/confirmar",
+        headers=_cabeceras(),
+        json={"etiqueta": "coffee_rust"},
+    )
+    assert r2.status_code == 200, r2.text
+    assert r2.json()["etiqueta_confirmada"] == "coffee_rust"
+    # Etiqueta no válida → 422
+    r3 = await cli.post(
+        f"/api/v1/vision/diagnosticos/{diag_id}/confirmar",
+        headers=_cabeceras(),
+        json={"etiqueta": "x"},
+    )
+    assert r3.status_code == 422
+    # Cliente no puede confirmar
+    r4 = await cli.post(
+        f"/api/v1/vision/diagnosticos/{diag_id}/confirmar",
+        headers=_cabeceras(rol="Cliente", email="maria.cliente@agroia.co"),
+        json={"etiqueta": "coffee_rust"},
+    )
+    assert r4.status_code in (401, 403)
+    # Aparece en el historial
+    r5 = await cli.get(f"/api/v1/vision/diagnosticos/{finca_id}", headers=_cabeceras())
+    diags = r5.json()["diagnosticos"]
+    assert any(d["id"] == diag_id and d["etiqueta_confirmada"] == "coffee_rust" for d in diags)
+
+
+async def test_dataset_estado_solo_admin(cli):
+    r = await cli.get("/api/v1/vision/admin/dataset-estado", headers=_cabeceras())
+    assert r.status_code == 403
+    r2 = await cli.get(
+        "/api/v1/vision/admin/dataset-estado",
+        headers=_cabeceras(rol="Admin", email="admin@agroia.co"),
+    )
+    assert r2.status_code == 200
+    cuerpo = r2.json()
+    assert set(cuerpo) >= {"disponible", "manifest", "metadata", "fuentes", "curacion", "modelos"}
+
+
 async def test_analizar_plaga_formato_rechazado(cli):
     finca_id = "3a47d0c6-fb00-4106-91ba-0a707f612e86"
     r = await cli.post(

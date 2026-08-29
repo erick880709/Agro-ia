@@ -1,9 +1,21 @@
 # AgroVision — Pipeline de visión agrícola
 
 Implementación de la especificación `context/contextoVision/especi.md` v1.0
-(28-ago-2026): ingesta, curación, entrenamiento, evaluación y despliegue de
-modelos de visión para diagnóstico preliminar de enfermedades/plagas en
-cultivos colombianos.
+(28-ago-2026) y del mapeo de fuentes de la
+`context/AgroIA_Especificacion_Tecnica_v6_Datasets.md`: ingesta, curación,
+entrenamiento, evaluación y despliegue de modelos de visión para diagnóstico
+preliminar de enfermedades/plagas en cultivos colombianos.
+
+## Manifest v6
+
+- **DS01–DS08**: fuentes públicas reales y verificables (PlantVillage,
+  PlantDoc, RoCoLe, BRACOL, BRACOT, Cassava, Rice, PlantVillage aumentado).
+- **DS09**: dataset propio AgroIA (Cacao/Aguacate Colombia) en construcción
+  por aprendizaje activo: `POST /api/v1/vision/diagnosticos/{id}/confirmar`
+  alimenta `vision_diagnosticos.etiqueta_confirmada` (RQ-V6-01).
+- **DS10–DS28**: fuentes complementarias del inventario previo.
+- `uso_comercial_permitido` + `license_policy.yaml` gobiernan el paso a
+  curated/production; DS06–DS08 y DS24–DS27 quedan en revisión de licencia.
 
 ## Estructura (sección 6 de la especificación)
 

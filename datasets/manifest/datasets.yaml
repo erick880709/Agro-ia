@@ -1,135 +1,164 @@
-# Catálogo declarativo de datasets AgroVision (RF-01).
-# Fuente canónica: inventario_datasets_agrovision_colombia.csv (28-ago-2026).
-# Nota: la URL puede ser un recurso de acceso y no una URL binaria estática.
-# El software debe usar el mecanismo de descarga documentado por el proveedor.
+# Catálogo declarativo de datasets AgroVision (RF-01) — v6.
+# DS01–DS08: fuentes públicas reales y verificables (espec v6 §2.2).
+# DS09: dataset propio AgroIA (aprendizaje activo, v6 §2.3).
+# DS10–DS22: fuentes complementarias del inventario previo.
+# DS23–DS28: fuentes desplazadas del inventario original (conservadas).
+# Los scripts normalizan `nombre/cultivo/clases/fuente_url/licencia`.
 version: "1"
 generated_at: "2026-08-28"
 datasets:
   - id: DS01
-    name: "Colombian Coffee Tree Leaves Multispectral"
-    source_url: https://www.kaggle.com/ds/5644659
-    download_url: https://www.kaggle.com/ds/5644659
+    nombre: "PlantVillage"
+    cultivo: [tomate, papa, maiz, uva, manzana, fresa, cereza, durazno, pimiento, berenjena]
+    clases: [healthy, bacterial_spot, early_blight, late_blight, leaf_mold, septoria_leaf_spot, spider_mite, target_spot, yellow_leaf_curl, mosaic_virus, rust, scab, black_rot, esca, cercospora_leaf_spot, powdery_mildew]
+    fuente_url: https://www.kaggle.com/datasets/emmarex/plantdisease
+    download_url: https://www.kaggle.com/datasets/emmarex/plantdisease
     download_type: kaggle
+    licencia: "Dominio abierto (verificar licencia de la copia específica al descargar)"
+    uso_comercial_permitido: revisar
+    formato_original: "JPEG ~54.305 imágenes, 38 clases, condiciones de laboratorio"
     version: "current"
-    license: "CC BY 4.0"
-    priority: P0
+    priority: P1
     enabled: true
-    tasks: [classification, multispectral]
-    crops: [coffee]
-    classes: [rust, no_rust]
+    tasks: [classification]
     domain: lab
-    images: 6726
+    images: 54305
+    notas: "Mirror académico: https://github.com/spMohanty/PlantVillage-Dataset. Pretraining; no como único benchmark de campo."
   - id: DS02
-    name: "CocoaMoniliaDataSet v2"
-    source_url: https://zenodo.org/records/17716661
-    download_url: https://zenodo.org/records/17716661/files/CocoaMoniliaDataSet.zip?download=1
-    download_type: zenodo
-    version: "v2"
-    license: "CC BY 4.0"
-    priority: P0
-    enabled: true
-    tasks: [detection, segmentation, severity]
-    crops: [cacao]
-    classes: [healthy, monilia_m1, monilia_m2, monilia_m3]
-    domain: field
-    images: 1953
-    splits_present: true
-  - id: DS03
-    name: "Coffee Leaf Disease Dataset - Uganda"
-    source_url: https://data.mendeley.com/datasets/k36wnd6knb/1
-    download_url: https://data.mendeley.com/datasets/k36wnd6knb/1
-    download_type: mendeley
-    version: "1"
-    license: "CC BY 4.0"
-    priority: P1
-    enabled: true
-    tasks: [classification]
-    crops: [coffee]
-    classes: [healthy, rust, phoma]
-    domain: field
-    images: 3312
-  - id: DS04
-    name: "Coffee Leaf Dataset by Phytosanitary Class - Saposoa"
-    source_url: https://data.mendeley.com/datasets/mfpxg4y65r/1
-    download_url: https://data.mendeley.com/datasets/mfpxg4y65r/1
-    download_type: mendeley
-    version: "1"
-    license: "CC BY 4.0"
-    priority: P1
-    enabled: true
-    tasks: [classification]
-    crops: [coffee]
-    classes: [healthy, rust, coffee_leaf_spot]
-    domain: field
-    images: 1500
-  - id: DS05
-    name: "JMuBEN"
-    source_url: https://data.mendeley.com/datasets/t2r6rszp5c/1
-    download_url: https://data.mendeley.com/datasets/t2r6rszp5c/1
-    download_type: mendeley
-    version: "1"
-    license: "CC BY 4.0"
-    priority: P0
-    enabled: true
-    tasks: [classification]
-    crops: [coffee]
-    classes: [healthy, phoma, rust, cercospora, miner]
-    domain: lab
-    images: 22591
-  - id: DS06
-    name: "RoCoLe - Robusta Coffee Leaf"
-    source_url: https://doi.org/10.17632/c5yvn32dzg.2
-    download_url: https://doi.org/10.17632/c5yvn32dzg.2
-    download_type: mendeley
-    version: "2"
-    license: "CC BY 4.0"
-    priority: P0
-    enabled: true
-    tasks: [classification, segmentation, severity]
-    crops: [coffee]
-    classes: [healthy, rust, red_spider_mite]
-    domain: field
-    images: 1560
-  - id: DS07
-    name: "PlantVillage"
-    source_url: https://huggingface.co/datasets/mohanty/PlantVillage
-    download_url: https://huggingface.co/datasets/mohanty/PlantVillage/resolve/main/data.zip
-    download_type: huggingface
-    version: "main"
-    license: "CC BY-SA 3.0"
-    priority: P0
-    enabled: true
-    tasks: [classification]
-    crops: [apple, blueberry, cherry, corn, grape, orange, peach, pepper, potato, raspberry, soybean, squash, strawberry, tomato]
-    domain: lab
-    images: 54306
-    splits_present: true
-    use_note: "Pretraining/base multicultivo; no usar como único benchmark de campo."
-  - id: DS08
-    name: "PlantVillageVQA"
-    source_url: https://huggingface.co/datasets/SyedNazmusSakib/PlantVillageVQA
-    download_url: https://huggingface.co/datasets/SyedNazmusSakib/PlantVillageVQA
-    download_type: huggingface
-    version: "current"
-    license: "CC BY 4.0"
-    priority: P1
-    enabled: true
-    tasks: [vqa]
-    crops: [apple, blueberry, cherry, corn, grape, orange, peach, pepper, potato, raspberry, soybean, squash, strawberry, tomato]
-    domain: lab
-  - id: DS09
-    name: "PlantDoc"
-    source_url: https://github.com/pratikkayal/PlantDoc-Dataset
+    nombre: "PlantDoc"
+    cultivo: [tomate, papa, pimiento, maiz, manzana, uva, fresa, cereza, calabaza, frambuesa]
+    clases: [healthy, apple_scab, grape_black_rot, corn_rust, tomato_early_blight, tomato_late_blight, potato_early_blight, potato_late_blight, bell_pepper_bacterial_spot, corn_leaf_blight]
+    fuente_url: https://github.com/pratikkayal/PlantDoc-Dataset
     download_url: https://github.com/pratikkayal/PlantDoc-Dataset
     download_type: git
+    licencia: "CC BY 4.0"
+    uso_comercial_permitido: true
+    formato_original: "Imágenes de campo real, 2.598 fotos, 13 especies"
     version: "current"
-    license: "CC BY 4.0"
     priority: P0
     enabled: true
     tasks: [classification, detection]
-    crops: [apple, bell_pepper, cherry, corn, grape, peach, pepper, potato, raspberry, squash, strawberry, tomato]
     domain: field
     images: 2598
+    notas: "Campo real (no laboratorio): más representativo de fotos de agricultores que PlantVillage."
+  - id: DS03
+    nombre: "RoCoLe - Robusta Coffee Leaf Images"
+    cultivo: [cafe]
+    clases: [healthy, red_spider_mite, rust_level_1, rust_level_2, rust_level_3, rust_level_4]
+    fuente_url: https://data.mendeley.com/datasets/c5yvn32dzg/2
+    download_url: https://data.mendeley.com/datasets/c5yvn32dzg/2
+    download_type: mendeley
+    doi: "10.17632/c5yvn32dzg.2"
+    licencia: "CC BY 4.0"
+    uso_comercial_permitido: true
+    formato_original: "JPEG + máscaras de segmentación; severidad de roya en 4 niveles + ácaro rojo"
+    version: "2"
+    priority: P0
+    enabled: true
+    tasks: [classification, segmentation, severity]
+    domain: field
+    images: 1560
+    notas: "Café robusta, condiciones de campo real (smartphone), transferencia a variedades colombianas."
+  - id: DS04
+    nombre: "BRACOL - Brazilian Arabica Coffee Leaf"
+    cultivo: [cafe]
+    clases: [healthy, rust, miner, brown_leaf_spot, cercospora]
+    fuente_url: https://data.mendeley.com/datasets/yy2k5y8mxg/1
+    download_url: https://data.mendeley.com/datasets/yy2k5y8mxg/1
+    download_type: mendeley
+    doi: "10.17632/yy2k5y8mxg.1"
+    licencia: "CC BY 4.0"
+    uso_comercial_permitido: true
+    formato_original: "1.747 hojas completas + 2.147 recortes de síntoma, severidad cuantificada"
+    version: "1"
+    priority: P0
+    enabled: true
+    tasks: [classification, severity]
+    domain: field
+    images: 1747
+    notas: "Café arábica: roya, minador, mancha parda y cercospora."
+  - id: DS05
+    nombre: "BRACOT - Brazilian Arabica Coffee Tree"
+    cultivo: [cafe]
+    clases: [healthy_leaf, diseased_leaf, coffee_tree]
+    fuente_url: https://data.mendeley.com/datasets/pmkbyjpf6k/1
+    download_url: https://data.mendeley.com/datasets/pmkbyjpf6k/1
+    download_type: mendeley
+    licencia: "CC BY 4.0"
+    uso_comercial_permitido: true
+    formato_original: "300 imágenes de árboles de café con instancias segmentadas"
+    version: "1"
+    priority: P1
+    enabled: true
+    tasks: [segmentation, detection]
+    domain: field
+    images: 300
+    notas: "Complementario a DS04: segmentación de árbol completo."
+  - id: DS06
+    nombre: "Cassava Leaf Disease Classification"
+    cultivo: [yuca]
+    clases: [cassava_mosaic, cassava_bacterial_blight, cassava_green_mite, cassava_brown_streak, healthy]
+    fuente_url: https://www.kaggle.com/competitions/cassava-leaf-disease-classification/data
+    download_url: https://www.kaggle.com/competitions/cassava-leaf-disease-classification/data
+    download_type: kaggle
+    licencia: "Verificar términos específicos de la competencia Kaggle antes de uso comercial"
+    uso_comercial_permitido: revisar
+    formato_original: "~21.000 imágenes de campo real, 5 clases (Makerere AI Lab)"
+    version: "current"
+    priority: P1
+    enabled: true
+    tasks: [classification]
+    domain: field
+    images: 21000
+    notas: "Algunas ediciones restringidas a fines no comerciales/investigación."
+  - id: DS07
+    nombre: "Rice Leaf Diseases Dataset"
+    cultivo: [arroz]
+    clases: [rice_leaf_blast, rice_brown_spot, rice_bacterial_blight, healthy]
+    fuente_url: https://www.kaggle.com/datasets/vbookshelf/rice-leaf-diseases
+    download_url: https://www.kaggle.com/datasets/vbookshelf/rice-leaf-diseases
+    download_type: kaggle
+    licencia: "Verificar licencia específica en la página del dataset"
+    uso_comercial_permitido: revisar
+    formato_original: "Imágenes de campo (volumen variable según versión)"
+    version: "current"
+    priority: P1
+    enabled: true
+    tasks: [classification]
+    domain: field
+    notas: "Tizón/mancha parda y otras clases de arroz."
+  - id: DS08
+    nombre: "New Plant Diseases Dataset (Augmented)"
+    cultivo: [tomate, papa, maiz, uva, manzana]
+    clases: [healthy, early_blight, late_blight, rust, scab, black_rot]
+    fuente_url: https://www.kaggle.com/datasets/vipoooool/new-plant-diseases-dataset
+    download_url: https://www.kaggle.com/datasets/vipoooool/new-plant-diseases-dataset
+    download_type: kaggle
+    licencia: "Igual base que PlantVillage — verificar licencia de la réplica"
+    uso_comercial_permitido: revisar
+    formato_original: "PlantVillage con aumentación de datos"
+    version: "current"
+    priority: P2
+    enabled: true
+    tasks: [classification]
+    domain: lab
+    notas: "Amplía volumen de los cultivos que ya cubre DS01."
+  - id: DS09
+    nombre: "AgroIA propio (Cacao/Aguacate Colombia)"
+    cultivo: [cacao, aguacate]
+    clases: [healthy, cocoa_monilia_m1, cocoa_monilia_m2, cocoa_monilia_m3, cocoa_black_pod, cocoa_phytophthora, other]
+    fuente_url: "Interno: revisión de diagnósticos requiere_review (RQ-V6-01)"
+    download_url: ""
+    download_type: interno
+    licencia: "Propietario AgroIA (uso interno)"
+    uso_comercial_permitido: true
+    formato_original: "vision_diagnosticos.etiqueta_confirmada → media/vision/"
+    version: "current"
+    priority: P1
+    enabled: false
+    tasks: [classification, detection, segmentation]
+    domain: field
+    notas: "Aprendizaje activo: mínimo 200–300 imágenes confirmadas por clase antes de entrenar."
   - id: DS10
     name: "PlantWild v2"
     source_url: https://tqwei05.github.io/PlantWild/access_v2
@@ -303,3 +332,93 @@ datasets:
     crops: [other]
     domain: none
     use_note: "Discovery only; no incorporar automáticamente."
+  - id: DS23
+    name: "CocoaMoniliaDataSet v2"
+    cultivo: [cacao]
+    clases: [healthy, monilia_m1, monilia_m2, monilia_m3]
+    fuente_url: https://zenodo.org/records/17716661
+    download_url: https://zenodo.org/records/17716661/files/CocoaMoniliaDataSet.zip?download=1
+    download_type: zenodo
+    licencia: "CC BY 4.0"
+    uso_comercial_permitido: true
+    version: "v2"
+    priority: P0
+    enabled: true
+    tasks: [detection, segmentation, severity]
+    domain: field
+    images: 1953
+  - id: DS24
+    name: "Coffee Leaf Disease Dataset - Uganda"
+    cultivo: [cafe]
+    clases: [healthy, rust, phoma]
+    fuente_url: https://data.mendeley.com/datasets/k36wnd6knb/1
+    download_url: https://data.mendeley.com/datasets/k36wnd6knb/1
+    download_type: mendeley
+    licencia: "CC BY 4.0"
+    uso_comercial_permitido: true
+    version: "1"
+    priority: P1
+    enabled: true
+    tasks: [classification]
+    domain: field
+    images: 3312
+  - id: DS25
+    name: "Coffee Leaf Dataset by Phytosanitary Class - Saposoa"
+    cultivo: [cafe]
+    clases: [healthy, rust, coffee_leaf_spot]
+    fuente_url: https://data.mendeley.com/datasets/mfpxg4y65r/1
+    download_url: https://data.mendeley.com/datasets/mfpxg4y65r/1
+    download_type: mendeley
+    licencia: "CC BY 4.0"
+    uso_comercial_permitido: true
+    version: "1"
+    priority: P1
+    enabled: true
+    tasks: [classification]
+    domain: field
+    images: 1500
+  - id: DS26
+    name: "JMuBEN"
+    cultivo: [cafe]
+    clases: [healthy, phoma, rust, cercospora, miner]
+    fuente_url: https://data.mendeley.com/datasets/t2r6rszp5c/1
+    download_url: https://data.mendeley.com/datasets/t2r6rszp5c/1
+    download_type: mendeley
+    licencia: "CC BY 4.0"
+    uso_comercial_permitido: true
+    version: "1"
+    priority: P0
+    enabled: true
+    tasks: [classification]
+    domain: lab
+    images: 22591
+  - id: DS27
+    nombre: "PlantVillageVQA"
+    cultivo: [multicultivo]
+    clases: []
+    fuente_url: https://huggingface.co/datasets/SyedNazmusSakib/PlantVillageVQA
+    download_url: https://huggingface.co/datasets/SyedNazmusSakib/PlantVillageVQA
+    download_type: huggingface
+    licencia: "CC BY 4.0"
+    uso_comercial_permitido: true
+    version: "current"
+    priority: P1
+    enabled: true
+    tasks: [vqa]
+    domain: lab
+  - id: DS28
+    nombre: "Colombian Coffee Tree Leaves Multispectral"
+    cultivo: [cafe]
+    clases: [rust, no_rust]
+    fuente_url: https://www.kaggle.com/ds/5644659
+    download_url: https://www.kaggle.com/ds/5644659
+    download_type: kaggle
+    licencia: "CC BY 4.0"
+    uso_comercial_permitido: true
+    version: "current"
+    priority: P0
+    enabled: true
+    tasks: [classification, multispectral]
+    domain: lab
+    images: 6726
+    notas: "Fuente colombiana; 6.726 imágenes."

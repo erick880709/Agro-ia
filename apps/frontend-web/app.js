@@ -1692,6 +1692,13 @@ async function cargarVision() {
   }
   const fincaId = sel && sel.value;
   const cont = document.getElementById('vision-diagnosticos');
+  const adminBox = document.getElementById('vision-admin');
+  if (adminBox) {
+    adminBox.innerHTML = (state.rol || '').toLowerCase() === 'admin'
+      ? '<button type="button" class="btn" onclick="verDatasetEstado()">📊 Estado de datasets (AgroVision)</button>'
+        + '<div id="vision-ds-estado" style="margin-top:10px"></div>'
+      : '';
+  }
   if (!cont) return;
   if (!fincaId) {
     cont.innerHTML = '<p class="muted">Selecciona una finca para ver su historial de diagnósticos.</p>';
@@ -1704,9 +1711,10 @@ async function cargarVision() {
       cont.innerHTML = '<p class="muted">Sin diagnósticos para esta finca.</p>';
       return;
     }
+    const puedeConfirmar = state.rol && state.rol.toLowerCase() !== 'cliente';
     cont.innerHTML = `
       <div class="table-wrap"><table>
-        <tr><th>Foto</th><th>Plaga</th><th>Confianza</th><th>Severidad</th><th>Fuente</th><th>Fecha</th></tr>
+        <tr><th>Foto</th><th>Plaga</th><th>Confianza</th><th>Severidad</th><th>Fuente</th><th>Etiqueta confirmada</th><th>Fecha</th>${puedeConfirmar ? '<th></th>' : ''}</tr>
         ${diags.map(d => {
           const res = d.resultado || {};
           return `<tr>
@@ -1715,7 +1723,9 @@ async function cargarVision() {
             <td>${res.confianza != null ? Math.round(res.confianza * 100) + '%' : '—'}</td>
             <td>${esc(res.severidad || '—')}</td>
             <td>${esc(res.fuente || d.fuente || '—')}</td>
+            <td>${esc(d.etiqueta_confirmada || '—')}</td>
             <td>${esc((d.created_at || '').slice(0, 16).replace('T', ' '))}</td>
+            ${puedeConfirmar ? `<td><button type="button" class="btn" onclick="confirmarDiagnostico('${esc(d.id)}')">Confirmar</button></td>` : ''}
           </tr>`;
         }).join('')}
       </table></div>`;
@@ -1759,6 +1769,34 @@ async function analizarFotoPlaga(e) {
     await cargarVision();
   } catch (err) {
     msg.innerHTML = errorBanner(err.message);
+  }
+}
+
+async function confirmarDiagnostico(id) {
+  // RQ-V6-01: el agrónomo confirma/corrige la etiqueta de un diagnóstico.
+  const etiqueta = window.prompt('Etiqueta confirmada (p. ej. coffee_rust, healthy, cocoa_monilia_m2):');
+  if (!etiqueta) return;
+  try {
+    await api(`/vision/diagnosticos/${id}/confirmar`, {
+      method: 'POST', headers: headers(), body: JSON.stringify({ etiqueta }),
+    });
+    await cargarVision();
+  } catch (e) {
+    const msg = document.getElementById('vision-msg');
+    msg.innerHTML = errorBanner(e.message);
+  }
+}
+
+async function verDatasetEstado() {
+  const cont = document.getElementById('vision-ds-estado');
+  if (!cont) return;
+  cont.innerHTML = '<p class="muted">Consultando…</p>';
+  try {
+    const r = await api('/vision/admin/dataset-estado');
+    cont.innerHTML = `<div class="card"><h3>📊 Estado de datasets AgroVision</h3>`
+      + `<pre style="white-space:pre-wrap;font-size:.82rem">${esc(JSON.stringify(r, null, 2))}</pre></div>`;
+  } catch (e) {
+    cont.innerHTML = errorBanner(e.message);
   }
 }
 

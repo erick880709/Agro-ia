@@ -11,6 +11,10 @@ policy:
     - pattern: "CC BY 4.0"
       action: allow
       requirements: [attribution]
+    - pattern: "Propietario AgroIA"
+      action: allow
+      requirements: [interno]
+      note: "Dataset propio del sistema (aprendizaje activo vía etiqueta_confirmada)."
     - pattern: "CC BY-SA"
       action: allow
       requirements: [attribution, share_alike]

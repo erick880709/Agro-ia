@@ -25,9 +25,12 @@ RUN poetry install --no-interaction --no-ansi --no-root
 # ── Copiar código fuente ──
 COPY apps/ /app/apps/
 COPY .env.example /app/.env
+# Manifest del pipeline AgroVision (read-only) para /vision/admin/dataset-estado
+COPY datasets/manifest /app/datasets/manifest
 
 # ── Python path para que alembic/uvicorn encuentren agroia y agroia_backend ──
 ENV PYTHONPATH="/app/apps/shared:/app/apps/backend:/app/apps/iot"
+ENV AGROIA_DATASETS_DIR="/app/datasets"
 
 # ── Health check ──
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \

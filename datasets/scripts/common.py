@@ -253,9 +253,35 @@ def _parse_simple_yaml(text: str) -> Any:
 
 # ── Manifest y configs ───────────────────────────────────────────────────────
 def load_catalog() -> list[dict]:
-    """Catálogo de datasets desde manifest/datasets.yaml."""
+    """Catálogo de datasets desde manifest/datasets.yaml.
+
+    Normaliza las claves de la espec v6 (`nombre`, `cultivo`, `clases`,
+    `fuente_url`, `licencia`) al esquema canónico del pipeline."""
     doc = load_yaml(MANIFEST_DIR / "datasets.yaml") or {}
-    return doc.get("datasets", [])
+    return [_normalizar_dataset(d) for d in doc.get("datasets", [])]
+
+
+def _normalizar_dataset(entrada: dict) -> dict:
+    ds = dict(entrada)
+    if not ds.get("name"):
+        ds["name"] = ds.get("nombre") or ds.get("id", "")
+    if not ds.get("source_url"):
+        ds["source_url"] = ds.get("fuente_url") or ds.get("download_url") or ""
+    if not ds.get("license"):
+        ds["license"] = ds.get("licencia") or "Revisar ficha/condiciones de cada recurso"
+    if ds.get("crops") is None:
+        cultivo = ds.get("cultivo")
+        ds["crops"] = cultivo if isinstance(cultivo, list) else ([cultivo] if cultivo else [])
+    if ds.get("classes") is None:
+        ds["classes"] = ds.get("clases") or []
+    if ds.get("tasks") is None:
+        ds["tasks"] = ds.get("tareas") or ["classification"]
+    ds.setdefault("download_url", ds.get("source_url", ""))
+    ds.setdefault("download_type", "http")
+    ds.setdefault("version", "current")
+    ds.setdefault("priority", "P1")
+    ds.setdefault("enabled", True)
+    return ds
 
 
 def load_class_map() -> dict:

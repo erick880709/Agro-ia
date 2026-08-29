@@ -57,11 +57,11 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
   <h1>Documento Funcional-Técnico — AgroIA</h1>
   <div class="meta">Generado automáticamente desde
     <code>resources/architecture/Documento_Funcional_Tecnico_AgroIA.md</code> (fuente de verdad) ·
-    2026-08-28 · Repositorio erick880709/Agro-ia (rama master)</div>
+    2026-08-29 · Repositorio erick880709/Agro-ia (rama master)</div>
 </header>
 <div class="wrap">
 <h1 id="documento-funcional-tecnico-agroia-agrointeligente-colombia">Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)</h1>
-<p><strong>Versión:</strong> 3.1 · <strong>Fecha:</strong> 2026-08-28
+<p><strong>Versión:</strong> 3.2 · <strong>Fecha:</strong> 2026-08-29
 <strong>Alcance:</strong> Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.</p>
 <hr />
 <h2 id="tabla-de-contenidos">Tabla de contenidos</h2>
@@ -858,11 +858,13 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 <li><strong>Endpoints</strong> (<code>api/vision.py</code>):</li>
 <li><code>POST /api/v1/vision/analizar-plaga?finca_id=</code> (multipart <code>file</code>, JPEG/PNG/WebP máx 5 MB): guarda la imagen en <code>media/vision/</code> (servida en <code>/media/vision/...</code>), registra el diagnóstico y responde <code>{diagnostico_id, finca_id, imagen_url, estado, modelo_version, plaga, confianza, severidad, recomendacion, evidencia, requiere_revision, fuente, nota}</code>.</li>
 <li><code>POST /api/v1/vision/diagnose</code> (JSON <code>{image_uri, crop_hint?, location?, capture_timestamp?}</code>): <strong>contrato de inferencia</strong> (sección 18 de la especificación AgroVision) <code>{model_version, status, crop, diagnosis, severity, evidence, recommend_review, dataset_lineage}</code>; sin persistencia, para consumidores de API.</li>
-<li><code>GET /api/v1/vision/diagnosticos/{finca_id}</code> — historial (acceso por rol a la finca).</li>
+<li><code>GET /api/v1/vision/diagnosticos/{finca_id}</code> — historial (acceso por rol a la finca); incluye <code>etiqueta_confirmada</code> por diagnóstico.</li>
+<li><code>POST /api/v1/vision/diagnosticos/{diagnostico_id}/confirmar</code> — <strong>RQ-V6-01</strong>: el agrónomo confirma/corrige la etiqueta (<code>{etiqueta}</code>) de un diagnóstico; cada revisión de campo se convierte en ejemplo etiquetado para el dataset propio AgroIA (aprendizaje activo).</li>
 <li><code>POST /api/v1/vision/admin/reentrenar</code> — solicitud de reentrenamiento (solo Admin; orquesta el pipeline <code>datasets/scripts/train.py</code>).</li>
+<li><code>GET /api/v1/vision/admin/dataset-estado</code> — <strong>v6 §2.5</strong>: resumen read-only del pipeline (manifest, metadata JSONL, curación y modelos empaquetados); complementa al reentrenamiento.</li>
 <li><strong>Motor AgroVision</strong> (<code>services/vision_engine.py</code> + <code>services/vision_fallback.py</code>): jerarquía <strong>modelo empaquetado → fallback de visión tradicional (OpenCV/numpy) → abstención explicada</strong> (sección 24 de <code>context/contextoVision/especi.md</code>). El fallback ejecuta <strong>quality gate</strong> (tamaño/nitidez/exposición/presencia de hoja), segmentación HSV del follaje, medición de clorosis/necrosis/textura y área afectada, estima severidad (<code>none…critical</code>) y emite diagnóstico compatible por cultivo (<code>coffee_rust_compatible</code>, <code>cocoa_black_pod_compatible</code>, <code>sin_sintomas_visibles</code>, …). Todo resultado del fallback es <strong>preliminar y no confirmatorio</strong> (<code>requiere_review=true</code>); con confianza bajo el umbral (0.6) o foto inválida responde <code>estado=abstain</code> con motivo. <code>fuente: "agrovision_opencv_v1"</code>, <code>modelo_version: "agrovision-fallback-1.0.0"</code>.</li>
 <li><strong>Decodificación</strong>: <code>pillow</code> (dependencia del backend) decodifica JPEG/PNG/WebP; <code>cv2</code> es opcional. Sin decodificador, el motor degrada a abstención explicada.</li>
-<li><strong>Pipeline de datos (<code>datasets/</code>)</strong>: ingesta/curación/entrenamiento declarativo para entrenar el modelo propio (manifest DS01–DS22, <code>class_map.yaml</code>, <code>license_policy.yaml</code> con commercial-use gate; scripts <code>discover → download → inspect → dedup → normalize → convert_annotations → split → train → evaluate → package_model</code> + CLI <code>fallback_opencv.py</code>). Ver <code>datasets/VISION.md</code>.</li>
+<li><strong>Pipeline de datos (<code>datasets/</code>)</strong>: ingesta/curación/entrenamiento declarativo para entrenar el modelo propio. Manifest <strong>v6</strong> (espec <code>context/AgroIA_Especificacion_Tecnica_v6_Datasets.md</code>): <code>DS01–DS08</code> fuentes públicas reales (PlantVillage, PlantDoc, RoCoLe, BRACOL, BRACOT, Cassava, Rice, PlantVillage aumentado), <code>DS09</code> dataset propio AgroIA (aprendizaje activo vía <code>etiqueta_confirmada</code>), <code>DS10–DS28</code> fuentes complementarias; <code>class_map.yaml</code>, <code>license_policy.yaml</code> con commercial-use gate. Scripts <code>discover → download → inspect → dedup → normalize → convert_annotations → split → train → evaluate → package_model</code> + CLI <code>fallback_opencv.py</code>. Ver <code>datasets/VISION.md</code>.</li>
 <li><strong>UI</strong>: pestaña «🔬 Visión plagas» (Admin/Agrónomo/Extensionista): selector de finca, carga de foto, banner con estado/evidencia del diagnóstico e historial con tabla de resultados.</li>
 </ul>
 <hr />
@@ -1286,6 +1288,7 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 <li><strong>Precios de cosecha (039)</strong>: upsert por cultivo+departamento (Admin); <code>ingreso_bruto_cop_ha</code>, <code>utilidad_estimada_cop_ha</code> y <code>score_ponderado</code> en las sugerencias con badge «Más rentable».</li>
 <li><strong>PWA offline (040)</strong>: <code>manifest.json</code> + <code>sw.js</code> (network-first para el shell), cola IndexedDB con <code>idempotency_key</code>, banner de pendientes, reintento al volver la señal; <code>GET /api/v1/sync/estado</code>, <code>POST /api/v1/sync/sensor-readings</code> y <code>POST /api/v1/sync/labores</code> idempotentes (tabla <code>sync_registro</code>).</li>
 <li><strong>Visión plagas (041)</strong>: subida de foto → <strong>motor AgroVision</strong> (modelo → fallback OpenCV → abstención): diagnóstico <strong>preliminar no confirmatorio</strong> con evidencia (clorosis/necrosis/área afectada) y <code>requiere_review</code>; contrato de inferencia <code>POST /api/v1/vision/diagnose</code>; historial por finca y reentrenamiento admin.</li>
+<li><strong>Visión RQ-V6-01 (042)</strong>: columna <code>etiqueta_confirmada</code> en <code>vision_diagnosticos</code> + <code>POST /api/v1/vision/diagnosticos/{id}/confirmar</code> (aprendizaje activo para el dataset propio DS09) y <code>GET /api/v1/vision/admin/dataset-estado</code> (trazabilidad del pipeline).</li>
 </ul>
 <hr />
 <ul>
@@ -1430,17 +1433,17 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 </tr>
 <tr>
 <td><code>vision_diagnosticos</code></td>
-<td><strong>Diagnósticos de visión</strong> (finca, usuario, imagen_url, resultado_json con estado/modelo_version/evidencia/requiere_revision)</td>
+<td><strong>Diagnósticos de visión</strong> (finca, usuario, imagen_url, resultado_json con estado/modelo_version/evidencia/requiere_revision, <strong>etiqueta_confirmada</strong> RQ-V6-01)</td>
 </tr>
 </tbody>
 </table>
 <h3 id="122-enums-12-tipos-en-schema-agroia">12.2 Enums (12 tipos en schema <code>agroia</code>)</h3>
 <p><code>clasificacionupra, estadodiscordancia, estadoficha, estadomembresia, estadorecomendacion, planmembresia, prioridadregla, rolusuario, stagemodelo, texturasuelo, tipofuente, variablesuelo</code>.</p>
-<h3 id="123-migraciones-001-041">12.3 Migraciones (001 → 041)</h3>
+<h3 id="123-migraciones-001-042">12.3 Migraciones (001 → 042)</h3>
 <ul>
 <li><code>001–003</code> tablas base y dispositivos · <code>004/005</code> creación y corrección de enums · <code>006</code> posiciones de muestreo · <code>007</code> chat_memoria · <code>008/009</code> auto-reparación de enums · <code>010</code> campos agronómicos de finca + aceptaciones · <code>011</code> georreferenciación de fincas + tabla <code>lotes</code> · <code>012</code> profundidad/pedregosidad del lote + tipo de riego · <code>013</code> <code>chat_memoria.imagen_base64</code> · <code>014</code> fisiología de cultivos · <code>015</code> tabla <code>auditoria</code> · <code>016</code> tabla <code>historial_ciclos_lote</code> · <code>017</code> inicio de ciclo · <code>018</code> tabla <code>labores</code> · <code>019</code> tabla <code>alertas_climaticas</code> · <code>020</code> enum <code>texturasuelo</code> ampliado con clases IGAC · <code>021</code> tabla <code>precios_insumos</code> · <code>022</code> <code>labores.imagen_url</code> (fotos en disco) + <code>historial_ciclos_lote.rendimiento_atipico</code> (anti-outliers).</li>
 <li><code>023</code> módulos v4 (agrupa 023→032): agua de riego, curvas de extracción, monitoreo de plagas, variedades, rotación, checklist BPA, períodos de carencia, preferencias de notificación, <code>kc_inicial/medio/final</code> en <code>cultivos</code>, <code>resistencia_penetracion_kpa</code> en <code>lotes</code> y rol Extensionista · <code>033</code> reparación idempotente de <code>pos_x/pos_y</code> relativos al centroide · <code>034</code> visitas de verificación BPA (<code>checklist_bpa_visitas</code>) · <code>035</code> módulo operativo (<code>equipo_trabajo</code>, <code>tarifas_rol</code>, <code>novedades_equipo</code>, <code>comisiones</code>, <code>comision_miembros</code>).</li>
-<li><code>036</code> JWT (<code>token_blacklist</code>, <code>refresh_tokens</code>) · <code>037</code> <code>analisis_laboratorio</code> · <code>038</code> reglas <code>tipo='antagonismo'</code> · <code>039</code> <code>precios_cosecha</code> · <code>040</code> <code>sync_registro</code> · <code>041</code> <code>vision_diagnosticos</code>.</li>
+<li><code>036</code> JWT (<code>token_blacklist</code>, <code>refresh_tokens</code>) · <code>037</code> <code>analisis_laboratorio</code> · <code>038</code> reglas <code>tipo='antagonismo'</code> · <code>039</code> <code>precios_cosecha</code> · <code>040</code> <code>sync_registro</code> · <code>041</code> <code>vision_diagnosticos</code> · <code>042</code> <code>vision_diagnosticos.etiqueta_confirmada</code> (RQ-V6-01).</li>
 <li><strong>Auto-reparación al arranque</strong>: <code>asegurar_enums()</code> crea tipos enum faltantes y <code>asegurar_reglas()</code> siembra reglas faltantes (idempotentes, corren en el <code>lifespan</code> de <code>main.py</code>).</li>
 </ul>
 <h3 id="124-gotchas-de-neon-lecciones-aprendidas">12.4 Gotchas de Neon (lecciones aprendidas)</h3>

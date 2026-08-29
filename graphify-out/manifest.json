@@ -3700,8 +3700,8 @@
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
-    "mtime": 1787943504.438571,
-    "ast_hash": "7e118744e4fa749a982bd9a2c1ccb093",
+    "mtime": 1787953971.053571,
+    "ast_hash": "c581c87a316dea7cd142c1c2df4e37fb",
     "semantic_hash": ""
   },
   "apps/backend/tests/test_health.py": {
@@ -4145,8 +4145,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1785886203.1667376,
-    "ast_hash": "d3fa694ab0defc28e5d952fc50a10760",
+    "mtime": 1787954693.7487428,
+    "ast_hash": "70f09ccac17688ecba73112ce58e8b8a",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/usuarios.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1787944463.224241,
-    "ast_hash": "64a3f27d0a0a768f9f1b0b551dcaef01",
+    "mtime": 1787952194.4609182,
+    "ast_hash": "5553e2e3afa9541124d9a259518fc278",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1787944432.679759,
-    "ast_hash": "7f29ee2766b650c2b70a517eee939973",
+    "mtime": 1787952184.6760912,
+    "ast_hash": "d09a822d6933aea2608b3d82a35ead59",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4655,8 +4655,8 @@
     "semantic_hash": ""
   },
   "scripts/seed_cloud.py": {
-    "mtime": 1787700442.319858,
-    "ast_hash": "78021f58ea8b75fa62ad09477d570a34",
+    "mtime": 1787954693.772342,
+    "ast_hash": "201fa571a56d1d80b0db0ce0e798378b",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/004_crear_enums.py": {
@@ -4825,13 +4825,13 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.html": {
-    "mtime": 1787944851.8685503,
-    "ast_hash": "9800679923709ffd003e5961406a4b55",
+    "mtime": 1787956982.5774002,
+    "ast_hash": "e860edc3285ab3f8045416c159624771",
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1787945731.1197932,
-    "ast_hash": "e7f461539708eb65c16b31e757826a19",
+    "mtime": 1787956923.184201,
+    "ast_hash": "b003d6e052fba2dc66fd36b0916b4e95",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {
@@ -4855,8 +4855,8 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Pantallas_AgroIA.html": {
-    "mtime": 1787944950.1749008,
-    "ast_hash": "6d46537fad0ffa713aa0df0c5518e43c",
+    "mtime": 1787956891.734314,
+    "ast_hash": "39e11c09dc2ca2209c57319a26e88e4e",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/economia.py": {
@@ -5535,13 +5535,13 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/sw.js": {
-    "mtime": 1787944581.8645656,
-    "ast_hash": "cf2dd4788f19030836e98f51d64342a1",
+    "mtime": 1787952210.8341322,
+    "ast_hash": "55de99a4379a710f67f37b30b5e18f2c",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/vision.py": {
-    "mtime": 1787944379.968914,
-    "ast_hash": "7cb79a40d384ac97937d59760be7686e",
+    "mtime": 1787951818.3893497,
+    "ast_hash": "bee1463a376253aad3746a812c69d046",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/vision_diagnostico.py": {
@@ -5555,8 +5555,143 @@
     "semantic_hash": ""
   },
   "apps/backend/tests/test_vision.py": {
-    "mtime": 1787944474.1327183,
-    "ast_hash": "971368d0206491f8b785708f0f3bcad0",
+    "mtime": 1787951492.5153408,
+    "ast_hash": "5f968c230661700648a71d8e8c5e6803",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/vision_engine.py": {
+    "mtime": 1787950343.307407,
+    "ast_hash": "754eca3636e0725c82de19f4efffa244",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/vision_fallback.py": {
+    "mtime": 1787950433.106905,
+    "ast_hash": "750622f36f36c4df315b17b62e2585e4",
+    "semantic_hash": ""
+  },
+  "apps/backend/tests/test_vision_engine.py": {
+    "mtime": 1787950442.6236064,
+    "ast_hash": "daca29ffea029722f707edfaa0f176be",
+    "semantic_hash": ""
+  },
+  "datasets/scripts/__init__.py": {
+    "mtime": 1787949770.7050874,
+    "ast_hash": "c72273e8c34e5269b0fbaaead2bbf607",
+    "semantic_hash": ""
+  },
+  "datasets/scripts/common.py": {
+    "mtime": 1787951248.0265262,
+    "ast_hash": "8038b84e2c8d6d2102afa6e79ab02842",
+    "semantic_hash": ""
+  },
+  "datasets/scripts/convert_annotations.py": {
+    "mtime": 1787949916.6289194,
+    "ast_hash": "6f0b3bf7b886378c428f55cd1bd73721",
+    "semantic_hash": ""
+  },
+  "datasets/scripts/deduplicate.py": {
+    "mtime": 1787951003.185003,
+    "ast_hash": "a57b0bd088a0d3c93a730232f644a643",
+    "semantic_hash": ""
+  },
+  "datasets/scripts/discover.py": {
+    "mtime": 1787951544.2608812,
+    "ast_hash": "4aa196992315ad97a75b9a5cec2c27f8",
+    "semantic_hash": ""
+  },
+  "datasets/scripts/download.py": {
+    "mtime": 1787949831.9388344,
+    "ast_hash": "426ed19bb9a36ed0dd57db086dac63ce",
+    "semantic_hash": ""
+  },
+  "datasets/scripts/evaluate.py": {
+    "mtime": 1787951003.187196,
+    "ast_hash": "81dc63f93bced0a2d03018f29fd6ddd9",
+    "semantic_hash": ""
+  },
+  "datasets/scripts/fallback_opencv.py": {
+    "mtime": 1787951339.95978,
+    "ast_hash": "d0deaba6c92e8f11428ee9ffb67879f5",
+    "semantic_hash": ""
+  },
+  "datasets/scripts/inspect.py": {
+    "mtime": 1787951148.8771658,
+    "ast_hash": "48afa891f534a5d0f14ec0fefe0058b6",
+    "semantic_hash": ""
+  },
+  "datasets/scripts/normalize.py": {
+    "mtime": 1787949936.867485,
+    "ast_hash": "4e44d919688e0befa7f85887ee9a0df3",
+    "semantic_hash": ""
+  },
+  "datasets/scripts/package_model.py": {
+    "mtime": 1787950098.1965916,
+    "ast_hash": "8e939ab0a3b17ac810b02c365a24f24e",
+    "semantic_hash": ""
+  },
+  "datasets/scripts/split.py": {
+    "mtime": 1787951288.9667628,
+    "ast_hash": "b9775eafdb86b1e3a0e9243260b8f987",
+    "semantic_hash": ""
+  },
+  "datasets/scripts/train.py": {
+    "mtime": 1787951729.8847446,
+    "ast_hash": "9e788304a9bfbad9d82a1ea60306d724",
+    "semantic_hash": ""
+  },
+  "context/contextoFuncional/especificacionImagenes.md": {
+    "mtime": 1787948859.9629774,
+    "ast_hash": "a0131a310c6861e1b2a00a38c087e516",
+    "semantic_hash": ""
+  },
+  "context/contextoVision/datasets.yaml": {
+    "mtime": 1787948690.5856893,
+    "ast_hash": "f7fc05ae61d08cfad4ea46c0d12a08b1",
+    "semantic_hash": ""
+  },
+  "context/contextoVision/especi.md": {
+    "mtime": 1787949240.8438475,
+    "ast_hash": "075812fb7f23d818821763611affd3b0",
+    "semantic_hash": ""
+  },
+  "context/contextoVision/especificacion.md": {
+    "mtime": 1787949128.408364,
+    "ast_hash": "4dd2a18a5315315a668e617412a64905",
+    "semantic_hash": ""
+  },
+  "datasets/VISION.md": {
+    "mtime": 1787950433.106905,
+    "ast_hash": "d0a6304c983b54332c9af3d7ba6aa5a9",
+    "semantic_hash": ""
+  },
+  "datasets/configs/pipeline.yaml": {
+    "mtime": 1787955407.8412862,
+    "ast_hash": "23af8cbe441dd42e0f6c9e124764bb1d",
+    "semantic_hash": ""
+  },
+  "datasets/configs/train_classification.yaml": {
+    "mtime": 1787955407.8435123,
+    "ast_hash": "e0c61157621eb0f89b5b9c9f692c04dc",
+    "semantic_hash": ""
+  },
+  "datasets/manifest/class_map.yaml": {
+    "mtime": 1787955407.8325884,
+    "ast_hash": "353d2dc7823284456ee12040e1048051",
+    "semantic_hash": ""
+  },
+  "datasets/manifest/datasets.yaml": {
+    "mtime": 1787955407.8325884,
+    "ast_hash": "7b00a6ba2b1af074de273f5f0d7bb516",
+    "semantic_hash": ""
+  },
+  "datasets/manifest/license_policy.yaml": {
+    "mtime": 1787955407.8381746,
+    "ast_hash": "26b524369eba2dcae9c5e96a64e389f7",
+    "semantic_hash": ""
+  },
+  "graphify-out/converted/inventario_tecnico_datasets_agrovision_32ce3853.md": {
+    "mtime": 1787952681.9626555,
+    "ast_hash": "de9f0cb43178a24f0fb20a9ef7a2405c",
     "semantic_hash": ""
   }
 }

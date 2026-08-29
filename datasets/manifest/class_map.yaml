@@ -19,6 +19,13 @@ taxonomy:
     - cocoa_monilia_m3
     - cocoa_black_pod
     - cocoa_phytophthora
+    - cassava_mosaic
+    - cassava_bacterial_blight
+    - cassava_brown_streak
+    - cassava_green_mite
+    - rice_leaf_blast
+    - rice_brown_spot
+    - rice_bacterial_blight
     - other_disease
     - other_pest
 aliases:
@@ -34,6 +41,18 @@ aliases:
   cocoa_monilia_m3: [m3, monilia_m3, Monilia M3]
   cocoa_black_pod: [black_pod, black_pod_rot, pudricion_negra, l1, l2, l3, l4, l5]
   cocoa_phytophthora: [phytophthora, Phytophthora]
+  rust_level_1: [rust_level_1]
+  rust_level_2: [rust_level_2]
+  rust_level_3: [rust_level_3]
+  rust_level_4: [rust_level_4]
+  brown_leaf_spot: [brown_leaf_spot, mancha_parda]
+  cassava_mosaic: [cassava_mosaic, cmd, cassava_mosaic_disease]
+  cassava_bacterial_blight: [cassava_bacterial_blight, cbb]
+  cassava_brown_streak: [cassava_brown_streak, cbsd]
+  cassava_green_mite: [cassava_green_mite, cgm]
+  rice_leaf_blast: [rice_leaf_blast, leaf_blast]
+  rice_brown_spot: [rice_brown_spot, brown_spot]
+  rice_bacterial_blight: [rice_bacterial_blight, bacterial_blight]
 crop_hints:
   coffee: [cafe, café, coffea, arabica, robusta]
   cacao: [cacao, cocoa, cacaotero]

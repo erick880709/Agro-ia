@@ -239,9 +239,21 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   historial).</p>
   <p><b>Servicios que llama:</b> <code>POST /api/v1/vision/analizar-plaga</code> (multipart)
   · <code>POST /api/v1/vision/diagnose</code> (contrato de inferencia, sección 18)
-  · <code>GET /api/v1/vision/diagnosticos/{finca_id}</code>. El reentrenamiento lo dispara el
-  Admin desde <code>POST /api/v1/vision/admin/reentrenar</code> (orquesta el pipeline
+  · <code>GET /api/v1/vision/diagnosticos/{finca_id}</code> ·
+  <code>POST /api/v1/vision/diagnosticos/{id}/confirmar</code> (RQ-V6-01). El reentrenamiento lo
+  dispara el Admin desde <code>POST /api/v1/vision/admin/reentrenar</code> (orquesta el pipeline
   <code>datasets/scripts/train.py</code>).</p>
+  <p><b>Confirmación del agrónomo (RQ-V6-01):</b> cada fila del historial muestra la
+  <b>etiqueta confirmada</b> y, para Admin/Agrónomo/Extensionista, el botón
+  <b>«Confirmar»</b> que abre un prompt para escribir la etiqueta real (p. ej.
+  <code>coffee_rust</code> o <code>healthy</code>). Cada confirmación se guarda en
+  <code>vision_diagnosticos.etiqueta_confirmada</code> (migración 042) y se convierte en un
+  ejemplo etiquetado por experto para el <b>dataset propio AgroIA (DS09)</b> — el mismo patrón
+  de aprendizaje activo del modelo tabular.</p>
+  <p><b>Estado de datasets (Admin):</b> el botón <b>«📊 Estado de datasets (AgroVision)»</b>
+  consulta <code>GET /api/v1/vision/admin/dataset-estado</code> y muestra el resumen del
+  pipeline: manifest (DS01–DS28), metadata de descubrimiento/descarga/curación, splits
+  train/val/test y modelos empaquetados.</p>
   <p><span class="siguiente">Siguiente → P2 Fincas.</span></p>
 </div>
 
@@ -769,7 +781,7 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v3.1 · 2026-08-28<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v3.2 · 2026-08-29<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

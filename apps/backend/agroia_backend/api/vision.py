@@ -22,6 +22,7 @@ from agroia_backend.models.usuario import Usuario
 from agroia_backend.models.vision_diagnostico import VisionDiagnostico
 from agroia_backend.services.acceso import exigir_no_cliente, verificar_acceso_finca
 from agroia_backend.services.auditoria import registrar_auditoria
+from agroia_backend.services.dataset_estado import estado_datasets
 from agroia_backend.services.vision_engine import diagnosticar_imagen
 
 logger = get_logger(__name__)
@@ -142,6 +143,12 @@ class DiagnoseRequest(BaseModel):
     capture_timestamp: str | None = None
 
 
+class ConfirmarDiagnosticoRequest(BaseModel):
+    """RQ-V6-01: etiqueta confirmada por el agrónomo al revisar."""
+
+    etiqueta: str = Field(..., min_length=2, max_length=500)
+
+
 @router.post("/diagnose")
 async def diagnose(
     body: DiagnoseRequest,
@@ -216,11 +223,95 @@ async def diagnosticos_finca(
                 "finca_id": str(d.finca_id),
                 "imagen_url": d.imagen_url,
                 "resultado": d.resultado_json,
+                "etiqueta_confirmada": d.etiqueta_confirmada,
                 "created_at": d.created_at.isoformat() if d.created_at else None,
             }
             for d in filas
         ],
     }
+
+
+@router.post("/diagnosticos/{diagnostico_id}/confirmar")
+async def confirmar_diagnostico(
+    diagnostico_id: str,
+    body: ConfirmarDiagnosticoRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+):
+    """RQ-V6-01: el agrónomo confirma/corrige la etiqueta de un diagnóstico.
+
+    Convierte cada revisión de campo en un ejemplo etiquetado por experto
+    para el dataset propio de AgroIA (DS09 en datasets/manifest)."""
+    exigir_no_cliente(x_user_role)
+    try:
+        did = uuid_mod.UUID(diagnostico_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "DIAGNOSTICO_INVALIDO",
+            "message": "diagnostico_id no es un UUID válido.",
+        })
+    diagnostico = (
+        await db.execute(select(VisionDiagnostico).where(VisionDiagnostico.id == did))
+    ).scalar_one_or_none()
+    if diagnostico is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "DIAGNOSTICO_NO_ENCONTRADO",
+            "message": "El diagnóstico indicado no existe.",
+        })
+    await verificar_acceso_finca(
+        db, x_user_role, x_user_email, str(diagnostico.finca_id)
+    )
+    etiqueta_anterior = diagnostico.etiqueta_confirmada
+    diagnostico.etiqueta_confirmada = body.etiqueta.strip()
+    await registrar_auditoria(
+        db,
+        usuario_email=x_user_email or "desconocido@agroia.co",
+        rol=x_user_role,
+        accion="vision.confirmar_diagnostico",
+        entidad="vision_diagnostico",
+        entidad_id=str(diagnostico.id),
+        detalle={
+            "etiqueta": diagnostico.etiqueta_confirmada,
+            "etiqueta_anterior": etiqueta_anterior,
+            "diagnosis_preliminar": (
+                diagnostico.resultado_json or {}
+            ).get("plaga"),
+        },
+        ip=request.client.host if request and request.client else None,
+    )
+    await db.commit()
+    logger.info(
+        "vision_etiqueta_confirmada",
+        diagnostico_id=str(diagnostico.id),
+        etiqueta=diagnostico.etiqueta_confirmada,
+    )
+    return {
+        "id": str(diagnostico.id),
+        "etiqueta_confirmada": diagnostico.etiqueta_confirmada,
+        "nota": "Etiqueta registrada; alimenta el dataset propio AgroIA (aprendizaje activo).",
+    }
+
+
+@router.get("/admin/dataset-estado")
+async def dataset_estado(
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+):
+    """RQ v6 §2.5: estado/trazabilidad del pipeline de datasets AgroVision.
+
+    Resumen read-only del árbol datasets/ (manifest, metadata, curación y
+    modelos empaquetados). No reemplaza /admin/reentrenar, lo complementa."""
+    if (x_user_role or "").lower() not in ("admin", "administrador"):
+        raise HTTPException(status_code=403, detail={
+            "code": "SOLO_ADMIN",
+            "message": "Solo el administrador puede consultar el estado de datasets.",
+        })
+    raiz = Path(
+        os.environ.get("AGROIA_DATASETS_DIR")
+        or Path(__file__).resolve().parents[4] / "datasets"
+    )
+    return estado_datasets(raiz)
 
 
 @router.post("/admin/reentrenar")
