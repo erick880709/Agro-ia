@@ -392,7 +392,9 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
   <ul>
     <li><b>Cabecera</b>: cultivo, clasificación UPRA + badge de estado de validación
     (Validada / Preliminar / Pendiente de validación técnica / Sujeta a confirmación de textura),
-    barra de confianza (final y real) y respaldos de expertos.</li>
+    barra de confianza (final y real) y respaldos de expertos con <b>lenguaje neutro bajo 3
+    aprobaciones</b> (RQ-15: «Revisado por N — en proceso de validación»; el ✅ de aprobación
+    solo aparece con 3 o más respaldos).</li>
     <li><b>Avisos</b>: fenología por etapa + <b>GDD faltante</b> («⏳ Faltan ~N GDD para cosecha,
     optimice riego»), variables de fertilidad sin dato, advertencia y discordancia.</li>
     <li><b>Bloque «📝 Complete los parámetros esenciales»</b>: cuando el análisis es preliminar por
@@ -416,7 +418,8 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
     muestra el banner verde con las variables promovidas: coincidencias con las reglas
     (confianza reforzada +0.02/variable, máx +0.06) y discrepancias («prevalecen las reglas»).
     Sin variables promovidas, el ML sigue en sombra y el banner no aparece.</li>
-    <li><b>Ranking «Cultivos sugeridos»</b> (UC1): score, clasificación, confianza, nº de reglas y
+    <li><b>Ranking «Cultivos sugeridos»</b> (UC1): score, clasificación, confianza (con
+    <b>badge compacto «Confianza reducida»</b> cuando queda bajo 80 % — RQ-14), nº de reglas y
     <b>descripción de las reglas aplicadas</b> (incluye la limitante de profundidad radicular si el
     lote es más somero que lo requerido por el cultivo).</li>
     <li><b>Panel de aceptación</b> (Admin/Agrónomo): botón «✅ Aceptar recomendación» + caja de texto
@@ -781,7 +784,7 @@ P9b (Insumos) y P11 (Auditoría) · P10 (Catálogo) para consulta y referencia.<
 </div>
 
 <footer>
-  AgroIA — AgroInteligente Colombia · Manual de pantallas v3.2 · 2026-08-29<br>
+  AgroIA — AgroInteligente Colombia · Manual de pantallas v3.3 · 2026-08-29<br>
   Aplica a https://agroia-backend.onrender.com (producción) y al entorno local http://127.0.0.1:8000
 </footer>
 </body>

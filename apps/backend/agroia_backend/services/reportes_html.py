@@ -14,6 +14,40 @@ from html import escape as esc
 
 from agroia_backend.services.lenguaje_campesino import generar_explicacion_campesina
 
+# RQ-15 (prompt-sistema-agroia-v2 §2.3): mínimo de aprobaciones de agrónomos
+# para mostrar el badge de «Aprobación de expertos» (rango configurable 3–5).
+_UMBRAL_APROBACION_EXPERTOS = 3
+# RQ-14 (prompt-sistema-agroia-v2 §2.2): umbral duro de confianza global.
+_UMBRAL_CONFIANZA_REAL = 0.80
+
+
+def _respaldo_html(respaldos: int) -> str:
+    """RQ-15: lenguaje neutro bajo el umbral; ✅ solo con consenso suficiente."""
+    if respaldos <= 0:
+        return ""
+    if respaldos >= _UMBRAL_APROBACION_EXPERTOS:
+        return (
+            '<div class="muted" style="margin-top:6px">✅ Aprobación de expertos: '
+            f"<b>{respaldos}</b> respaldos de agrónomos (admin/agrónomo) — consenso "
+            "suficiente para validación técnica.</div>"
+        )
+    return (
+        '<div class="muted" style="margin-top:6px">Revisado por '
+        f"<b>{respaldos}</b> agrónomo{'' if respaldos == 1 else 's'} — en proceso "
+        f"de validación (se requieren {_UMBRAL_APROBACION_EXPERTOS} respaldos para "
+        "aprobación de expertos).</div>"
+    )
+
+
+def _badge_confianza_reducida(confianza: float | None) -> str:
+    """RQ-14: badge compacto en rankings cuando la confianza queda bajo umbral."""
+    if (confianza or 0) < _UMBRAL_CONFIANZA_REAL:
+        return (
+            '<span class="badge badge-pendiente" '
+            'style="font-size:.7rem">CONFIANZA REDUCIDA</span>'
+        )
+    return ""
+
 _CSS = """
   :root {
     --bg:        #16130f;   --surface:   #201b14;   --surface-2: #292219;
@@ -353,13 +387,7 @@ def _seccion_uc2(a) -> str:
     respaldos = int(a.get("respaldos") or 0)
     confianza = (a.get("confianza") or 0) * 100
     confianza_real = (a.get("confianza_real") or 0) * 100
-    respaldo_html = (
-        f'<div class="muted" style="margin-top:6px">✅ Respaldada por '
-        f"<b>{respaldos}</b> aceptación{'' if respaldos == 1 else 'es'} de "
-        "expertos (admin/agrónomo) — cada aceptación refuerza la confianza "
-        "del modelo.</div>"
-        if respaldos else ""
-    )
+    respaldo_html = _respaldo_html(respaldos)
     fenologia_html = ""
     if a.get("fenologia_ajustada"):
         fenologia_html = (
@@ -633,7 +661,7 @@ def _seccion_uc1(a) -> str:
         f"""<div class="rank">
           <div class="pos">{i + 1}</div>
           <div class="crop"><b>{esc(s.get("icono") or "")} {esc(s.get("cultivo"))}</b>
-          <span>{_badge_clasificacion(s.get("clasificacion"))} · {esc(str(s.get("reglas_especificas") or ""))} reglas</span></div>
+          <span>{_badge_clasificacion(s.get("clasificacion"))} {_badge_confianza_reducida(s.get("confianza"))} · {esc(str(s.get("reglas_especificas") or ""))} reglas</span></div>
           <div class="scorebar"><i style="width:{min(100.0, float(s.get("score") or 0))}%"></i></div>
           <div class="score">{_num(s.get("score"), 1)} · {((s.get("confianza") or 0) * 100):.0f}%</div>
         </div>"""
@@ -643,13 +671,7 @@ def _seccion_uc1(a) -> str:
     respaldos = int(a.get("respaldos") or 0)
     confianza = (a.get("confianza") or 0) * 100
     confianza_real = (a.get("confianza_real") or 0) * 100
-    respaldo_html = (
-        f'<div class="muted" style="margin-top:6px">✅ Respaldada por '
-        f"<b>{respaldos}</b> aceptación{'' if respaldos == 1 else 'es'} de "
-        "expertos (admin/agrónomo) — cada aceptación refuerza la confianza "
-        "del modelo.</div>"
-        if respaldos else ""
-    )
+    respaldo_html = _respaldo_html(respaldos)
     faltantes = a.get("variables_faltantes_fertilidad") or []
     faltantes_html = ""
     if faltantes:

@@ -61,7 +61,7 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
 </header>
 <div class="wrap">
 <h1 id="documento-funcional-tecnico-agroia-agrointeligente-colombia">Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)</h1>
-<p><strong>Versión:</strong> 3.2 · <strong>Fecha:</strong> 2026-08-29
+<p><strong>Versión:</strong> 3.3 · <strong>Fecha:</strong> 2026-08-29
 <strong>Alcance:</strong> Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.</p>
 <hr />
 <h2 id="tabla-de-contenidos">Tabla de contenidos</h2>
@@ -587,12 +587,12 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 }
 </div>
 <p><strong>Qué hace la UI con la respuesta (<code>renderAnalisis</code>):</strong>
-- Cabecera: cultivo, badge de clasificación + badge de estado de validación, barra de confianza (final y real), respaldos de expertos.
+- Cabecera: cultivo, badge de clasificación + badge de estado de validación, barra de confianza (final y real), respaldos de expertos con <strong>lenguaje neutro bajo 3 aprobaciones</strong> (RQ-15: «Revisado por N — en proceso de validación»; el ✅ de aprobación solo aparece con ≥ 3 respaldos).
 - Avisos: fenología ajustada (incluye GDD), variables de fertilidad faltantes, advertencia, discordancia.
 - <strong>Bloque «📝 Complete los parámetros esenciales»</strong>: si la respuesta trae <code>variables_faltantes_esenciales</code>, se muestran inputs para cada valor faltante (pH, N, P, K, CE) y el botón «💾 Guardar y reanalizar» ingesta los valores vía <code>POST /api/sensor</code> y reejecuta el análisis automáticamente.
 - Tabla de diagnóstico: Variable · Estado (DÉFICIT/EXCESO/<strong>SIN DATO</strong>) · Lectura · Rango ideal · Acción (con marcador <em>condicional a confirmación de laboratorio</em> y contexto de pH) · Prioridad · <strong>Confiabilidad</strong> · <strong>Plan sugerido</strong> (fuente, frecuencia, dosis).
 - <strong>Bloque «💰 Plan económico vs. plan ideal»</strong>: costo del plan, costo ideal, presupuesto, cobertura %, diferencia de rendimiento estimada y listas de acciones Incluidas/Aplazadas.
-- Ranking «🌾 Cultivos sugeridos (ranking del motor)»: #, cultivo, score, clasificación, confianza, nº de reglas y <strong>columna de descripción de reglas aplicadas</strong> (variable, estado, rango, acción, prioridad).</p>
+- Ranking «🌾 Cultivos sugeridos (ranking del motor)»: #, cultivo, score, clasificación, confianza (<strong>badge compacto «Confianza reducida» cuando &lt; 80 % — RQ-14</strong>), nº de reglas y <strong>columna de descripción de reglas aplicadas</strong> (variable, estado, rango, acción, prioridad).</p>
 <p><strong>Panel de aceptación (Admin/Agrónomo):</strong> al final aparece «✅ Aceptar recomendación» + caja de texto para ampliar acciones (ver sección 9).</p>
 <h3 id="65-historial">6.5 📜 Historial</h3>
 <p><strong>Servicio que llama:</strong> <code>GET /api/v1/recomendaciones/historial/{finca_id}?page=&amp;page_size=&amp;cultivo_id=</code></p>
@@ -1161,12 +1161,12 @@ desde <code>/media-ayuda/</code> bajo el mount estático del frontend.</p>
 <tr>
 <td>01</td>
 <td>Diagnóstico UC2</td>
-<td>Badge de clasificación + <strong>badge de estado de validación</strong> (PENDIENTE/PRELIMINAR/SUJETA A TEXTURA/VALIDADA), tabla con Acción, Prioridad, <strong>Confiabilidad</strong> y <strong>Plan sugerido</strong>, contexto pH, condicional NPK, respaldos, fenología + GDD, y bloque <strong>«💰 Plan económico vs. plan ideal»</strong></td>
+<td>Badge de clasificación + <strong>badge de estado de validación</strong> (PENDIENTE/PRELIMINAR/SUJETA A TEXTURA/VALIDADA), tabla con Acción, Prioridad, <strong>Confiabilidad</strong> y <strong>Plan sugerido</strong>, contexto pH, condicional NPK, respaldos (RQ-15: neutro &lt; 3, ✅ con ≥ 3), fenología + GDD, y bloque <strong>«💰 Plan económico vs. plan ideal»</strong></td>
 </tr>
 <tr>
 <td>02</td>
-<td>Recomendación UC1</td>
-<td>Ranking top 5 con scorebar, badge de estado, confianza real y faltantes de fertilidad</td>
+<td>Ranking de siembra (UC1)</td>
+<td>Ranking top 5 con scorebar, badge de estado, confianza real y faltantes de fertilidad; <strong>badge compacto «Confianza reducida» por cultivo bajo 80 % (RQ-14)</strong>; respaldo de expertos con umbral RQ-15</td>
 </tr>
 <tr>
 <td>M</td>

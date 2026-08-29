@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 3.2 · **Fecha:** 2026-08-29
+**Versión:** 3.3 · **Fecha:** 2026-08-29
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -364,12 +364,12 @@ desde `/media-ayuda/` bajo el mount estático del frontend.
 ```
 
 **Qué hace la UI con la respuesta (`renderAnalisis`):**
-- Cabecera: cultivo, badge de clasificación + badge de estado de validación, barra de confianza (final y real), respaldos de expertos.
+- Cabecera: cultivo, badge de clasificación + badge de estado de validación, barra de confianza (final y real), respaldos de expertos con **lenguaje neutro bajo 3 aprobaciones** (RQ-15: «Revisado por N — en proceso de validación»; el ✅ de aprobación solo aparece con ≥ 3 respaldos).
 - Avisos: fenología ajustada (incluye GDD), variables de fertilidad faltantes, advertencia, discordancia.
 - **Bloque «📝 Complete los parámetros esenciales»**: si la respuesta trae `variables_faltantes_esenciales`, se muestran inputs para cada valor faltante (pH, N, P, K, CE) y el botón «💾 Guardar y reanalizar» ingesta los valores vía `POST /api/sensor` y reejecuta el análisis automáticamente.
 - Tabla de diagnóstico: Variable · Estado (DÉFICIT/EXCESO/**SIN DATO**) · Lectura · Rango ideal · Acción (con marcador *condicional a confirmación de laboratorio* y contexto de pH) · Prioridad · **Confiabilidad** · **Plan sugerido** (fuente, frecuencia, dosis).
 - **Bloque «💰 Plan económico vs. plan ideal»**: costo del plan, costo ideal, presupuesto, cobertura %, diferencia de rendimiento estimada y listas de acciones Incluidas/Aplazadas.
-- Ranking «🌾 Cultivos sugeridos (ranking del motor)»: #, cultivo, score, clasificación, confianza, nº de reglas y **columna de descripción de reglas aplicadas** (variable, estado, rango, acción, prioridad).
+- Ranking «🌾 Cultivos sugeridos (ranking del motor)»: #, cultivo, score, clasificación, confianza (**badge compacto «Confianza reducida» cuando < 80 % — RQ-14**), nº de reglas y **columna de descripción de reglas aplicadas** (variable, estado, rango, acción, prioridad).
 
 **Panel de aceptación (Admin/Agrónomo):** al final aparece «✅ Aceptar recomendación» + caja de texto para ampliar acciones (ver sección 9).
 
@@ -931,8 +931,8 @@ Reejecuta `RulesEngine.evaluate` sobre el último suelo de la finca con las vari
 | T | Telemetría | Dispositivo, finca, última transmisión, RSSI, uptime, **Calidad NPK en 3 niveles**, validación lab, pH, CE, N, P, K, HR/T ambiente |
 | pH | Escala | Barra de pH con marcador y etiqueta ácido/neutro/alcalino |
 | P | **Parámetros faltantes** | Si el análisis es preliminar: lista de parámetros que «sería bueno contar» para mayor detalle y aviso de aval de agrónomo |
-| 01 | Diagnóstico UC2 | Badge de clasificación + **badge de estado de validación** (PENDIENTE/PRELIMINAR/SUJETA A TEXTURA/VALIDADA), tabla con Acción, Prioridad, **Confiabilidad** y **Plan sugerido**, contexto pH, condicional NPK, respaldos, fenología + GDD, y bloque **«💰 Plan económico vs. plan ideal»** |
-| 02 | Recomendación UC1 | Ranking top 5 con scorebar, badge de estado, confianza real y faltantes de fertilidad |
+| 01 | Diagnóstico UC2 | Badge de clasificación + **badge de estado de validación** (PENDIENTE/PRELIMINAR/SUJETA A TEXTURA/VALIDADA), tabla con Acción, Prioridad, **Confiabilidad** y **Plan sugerido**, contexto pH, condicional NPK, respaldos (RQ-15: neutro < 3, ✅ con ≥ 3), fenología + GDD, y bloque **«💰 Plan económico vs. plan ideal»** |
+| 02 | Ranking de siembra (UC1) | Ranking top 5 con scorebar, badge de estado, confianza real y faltantes de fertilidad; **badge compacto «Confianza reducida» por cultivo bajo 80 % (RQ-14)**; respaldo de expertos con umbral RQ-15 |
 | M | Mapa de calor | Matriz de puntos `pos_x/pos_y` por variable, rampa de intensidad `#e8f5e9→#1b5e20` normalizada por parámetro; en PDF se imprimen **todas las variables** |
 | N | Plano del lote | SVG con puntos, cierre convexo, **perímetro/área**, pendiente y drenaje del lote, metodología de muestreo, clima IDEAM del día de la muestra con **alerta fitosanitaria específica** (HR > 78 %), **historial de manejo** y tabla **«📜 Historial de ciclos — línea de tiempo»** (últimos 3 ciclos: Siembra → Aplicaciones destacadas → Cosecha → Rendimiento) |
 | E | **Análisis económico proyectado** | Ganancia esperada = (rendimiento × precio de cosecha) × 1,15 si se aplica el plan · ROI = (ganancia − costo fertilización) ÷ costo · alerta «⚠️ Inversión justa, considere subvenciones» si ROI < 1,2 |

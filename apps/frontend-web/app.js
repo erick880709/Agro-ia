@@ -3629,7 +3629,7 @@ function renderAnalisis(a) {
       <div>${badge(a.clasificacion_upra, badgeClase(a.clasificacion_upra))} ${badgeValidacion(a.estado_validacion)}</div>
       <div style="flex:1;min-width:180px">
         <div class="confianza-bar"><div style="width:${confianza}%"></div></div>
-        <span class="muted">Confianza ${confianza}%${confianzaReal ? ` (real ${confianzaReal}%)` : ''} · ${esc(a.modo)} · ${a.tiempo_respuesta_ms ? Math.round(a.tiempo_respuesta_ms) + ' ms' : ''}${respaldos ? ` · respaldada por ${respaldos} experto${respaldos !== 1 ? 's' : ''}` : ''}</span>
+        <span class="muted">Confianza ${confianza}%${confianzaReal ? ` (real ${confianzaReal}%)` : ''} · ${esc(a.modo)} · ${a.tiempo_respuesta_ms ? Math.round(a.tiempo_respuesta_ms) + ' ms' : ''}${respaldos >= 3 ? ` · ✅ aprobación de expertos (${respaldos})` : (respaldos ? ` · revisado por ${respaldos} — en proceso de validación` : '')}</span>
       </div>
     </div>`;
 
@@ -3687,7 +3687,7 @@ function renderAnalisis(a) {
             <td>${esc(s.icono || '')} ${esc(s.cultivo)}${s.mas_rentable ? ' <span class="badge ok">Más rentable</span>' : ''}${s.nota_secano ? `<div class="muted" style="font-size:0.75rem">${esc(s.nota_secano)}</div>` : ''}</td>
             <td>${fmtNum(s.score, 1)}</td>
             <td>${badge(s.clasificacion, badgeClase(s.clasificacion))}</td>
-            <td>${Math.round((s.confianza || 0) * 100)}%</td>
+            <td>${Math.round((s.confianza || 0) * 100)}%${(s.confianza || 0) < 0.8 ? ' <span class="badge pendiente" style="font-size:.72rem">Confianza reducida</span>' : ''}</td>
             ${conMercado ? `<td>${s.precio_promedio_cop_kg != null ? '$ ' + fmtNum(s.precio_promedio_cop_kg, 0) : '—'}</td><td>${s.utilidad_estimada_cop_ha != null ? '$ ' + fmtNum(s.utilidad_estimada_cop_ha, 0) : '—'}</td>` : ''}
             <td>${s.reglas_especificas ?? '—'}</td>
             <td class="ajustes-desc">${descAjustes(s.ajustes)}</td>
