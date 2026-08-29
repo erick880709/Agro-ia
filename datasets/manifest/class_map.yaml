@@ -26,6 +26,15 @@ taxonomy:
     - rice_leaf_blast
     - rice_brown_spot
     - rice_bacterial_blight
+    - apple_scab
+    - grape_black_rot
+    - corn_rust
+    - corn_leaf_blight
+    - tomato_early_blight
+    - tomato_late_blight
+    - potato_early_blight
+    - potato_late_blight
+    - bell_pepper_bacterial_spot
     - other_disease
     - other_pest
 aliases:
@@ -85,6 +94,16 @@ aliases:
   rice_leaf_blast: [rice_leaf_blast, leaf_blast]
   rice_brown_spot: [rice_brown_spot, brown_spot]
   rice_bacterial_blight: [rice_bacterial_blight, bacterial_blight]
+  # PlantDoc (pratikkayal/PlantDoc-Dataset) → clases de la spec v6 para DS02
+  apple_scab: [Apple Scab Leaf, Apple rust leaf, Apple leaf]
+  grape_black_rot: [grape leaf black rot, Grape leaf black rot]
+  corn_rust: [Corn rust leaf]
+  corn_leaf_blight: [Corn leaf blight]
+  tomato_early_blight: [Tomato Early blight leaf]
+  tomato_late_blight: [Tomato leaf late blight]
+  potato_early_blight: [Potato leaf early blight]
+  potato_late_blight: [Potato leaf late blight]
+  bell_pepper_bacterial_spot: [Bell_pepper leaf spot]
   other_disease:
     - apple___apple_scab
     - apple___black_rot
@@ -114,30 +133,20 @@ aliases:
     - tomato___tomato_mosaic_virus
     - tomato___tomato_yellow_leaf_curl_virus
     # Nombres reales de carpetas del repo PlantDoc (pratikkayal/PlantDoc-Dataset)
-    - Apple Scab Leaf
-    - Apple leaf
-    - Apple rust leaf
     - Bell_pepper leaf
-    - Bell_pepper leaf spot
     - Blueberry leaf
     - Cherry leaf
     - Corn Gray leaf spot
-    - Corn leaf blight
-    - Corn rust leaf
     - Grape leaf
-    - Grape leaf black rot
     - Peach leaf
     - Potato leaf
-    - Potato leaf early blight
-    - Potato leaf late blight
     - Raspberry leaf
+    - Soyabean leaf
     - Soybean leaf
     - Squash Powdery mildew leaf
     - Strawberry leaf
-    - Tomato Early blight leaf
     - Tomato leaf
     - Tomato leaf bacterial spot
-    - Tomato leaf late blight
     - Tomato leaf mosaic virus
     - Tomato leaf yellow virus
     - Tomato mold leaf

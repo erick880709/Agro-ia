@@ -68,26 +68,48 @@ def _clusters_por_phash(archivos: list[Path], threshold: int) -> list[list[Path]
 def _asignar_grupos(
     grupos: list[tuple[str, dict[str, int]]], ratios: list[float], seed: int
 ) -> dict[str, str]:
-    """Greedy estratificado: minimiza el desvío del target por clase."""
+    """Greedy por mayor déficit: cada grupo va al split más atrasado
+    respecto a su ratio objetivo (share total); desempata por desvío por
+    clase y luego aleatorio. Garantiza proporciones ≈ ratios sin dejar
+    splits vacíos.
+    """
     nombres = ["train", "val", "test"]
     contadores: dict[str, dict[str, int]] = {s: defaultdict(int) for s in nombres}
+    contador_total: dict[str, int] = {s: 0 for s in nombres}
     totales_por_clase: dict[str, int] = defaultdict(int)
     for _, clases in grupos:
         for clase, n in clases.items():
             totales_por_clase[clase] += n
+    total_imagenes = sum(totales_por_clase.values()) or 1
     randomizer = random.Random(seed)
     asignacion: dict[str, str] = {}
     orden = sorted(grupos, key=lambda item: -sum(item[1].values()))
     for nombre_grupo, clases in orden:
-        mejor, mejor_score = None, float("inf")
+        n_grupo = sum(clases.values())
+        mejor, mejor_deficit, mejor_clase_score = None, -float("inf"), float("inf")
         for split, ratio in zip(nombres, ratios):
-            score = 0.0
-            for clase, total in totales_por_clase.items():
-                actual = contadores[split].get(clase, 0) + clases.get(clase, 0)
-                score += abs(actual / max(total, 1) - ratio)
-            if score < mejor_score or (score == mejor_score and randomizer.random() < 0.5):
-                mejor, mejor_score = split, score
-        asignacion[nombre_grupo] = mejor or "train"
+            deficit = ratio - contador_total[split] / total_imagenes
+            clase_score = sum(
+                abs(
+                    (contadores[split].get(clase, 0) + clases.get(clase, 0))
+                    / max(total, 1)
+                    - ratio
+                )
+                for clase, total in totales_por_clase.items()
+            )
+            if (
+                deficit > mejor_deficit
+                or (deficit == mejor_deficit and clase_score < mejor_clase_score)
+                or (
+                    deficit == mejor_deficit
+                    and clase_score == mejor_clase_score
+                    and randomizer.random() < 0.5
+                )
+            ):
+                mejor, mejor_deficit, mejor_clase_score = split, deficit, clase_score
+        mejor = mejor or "train"
+        asignacion[nombre_grupo] = mejor
+        contador_total[mejor] += n_grupo
         for clase, n in clases.items():
             contadores[mejor][clase] += n
     return asignacion
