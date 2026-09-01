@@ -204,13 +204,17 @@ async def cargar_datos_reales(limite: int = 400) -> list[dict]:
 
 
 def _features(muestras: list[dict], cultivo_idx: int, medianas: dict | None = None) -> np.ndarray:
-    """Matriz de features; imputa valores faltantes con la mediana de la variable."""
+    """Matriz de features; imputa valores faltantes con la mediana de la variable.
+
+    float32 (no float64): la mitad de memoria — el servicio web encola el
+    entrenamiento en el MISMO contenedor (Render 512 MB) y cada MB cuenta.
+    """
     med = medianas or {}
-    X = np.full((len(muestras), len(VARIABLES) + 1), -1.0, dtype=float)
+    X = np.full((len(muestras), len(VARIABLES) + 1), -1.0, dtype=np.float32)
     for i, m in enumerate(muestras):
         for j, var in enumerate(VARIABLES):
-            X[i, j] = float(m.get(var, med.get(var, -1.0)))
-        X[i, len(VARIABLES)] = cultivo_idx
+            X[i, j] = np.float32(m.get(var, med.get(var, -1.0)))
+        X[i, len(VARIABLES)] = np.float32(cultivo_idx)
     return X
 
 
@@ -233,7 +237,7 @@ def _particion_por_finca(
     return train, test
 
 
-def _entrenar_con_golden(X_synth, y_synth, X_golden, y_golden):
+def _entrenar_con_golden(X_synth, y_synth, X_golden, y_golden, n_jobs: int = 1):
     """Reentrena combinando sintéticos + dorados (muestras reales con más peso)."""
     X = np.vstack([X_synth, X_golden])
     y = np.concatenate([y_synth, y_golden])
@@ -242,7 +246,7 @@ def _entrenar_con_golden(X_synth, y_synth, X_golden, y_golden):
         np.full(len(y_golden), W_GOLDEN),
     ])
     modelo = RandomForestClassifier(
-        n_estimators=120, max_depth=12, random_state=RANDOM_STATE, n_jobs=-1
+        n_estimators=120, max_depth=12, random_state=RANDOM_STATE, n_jobs=n_jobs
     )
     modelo.fit(X, y, sample_weight=pesos)
     return modelo
@@ -261,12 +265,12 @@ def _metricas_golden(modelo, X_g, y_g) -> dict | None:
     }
 
 
-def entrenar_y_evaluar(nombre: str, X, y, clases, con_cv: bool = False) -> dict:
+def entrenar_y_evaluar(nombre: str, X, y, clases, con_cv: bool = False, n_jobs: int = 1) -> dict:
     X_tr, X_te, y_tr, y_te = train_test_split(
         X, y, test_size=0.2, random_state=RANDOM_STATE, stratify=y
     )
     modelo = RandomForestClassifier(
-        n_estimators=120, max_depth=12, random_state=RANDOM_STATE, n_jobs=-1
+        n_estimators=120, max_depth=12, random_state=RANDOM_STATE, n_jobs=n_jobs
     )
     modelo.fit(X_tr, y_tr)
     y_pred = modelo.predict(X_te)
@@ -288,7 +292,7 @@ def entrenar_y_evaluar(nombre: str, X, y, clases, con_cv: bool = False) -> dict:
     }
 
 
-async def main(registrar: bool = False, active_learning: bool = False) -> None:
+async def main(registrar: bool = False, active_learning: bool = False, n_jobs: int = 1) -> None:
     reglas, cultivos = await cargar_reglas_y_cultivos()
     cultivos_con_reglas = [
         c for c in cultivos
@@ -392,7 +396,7 @@ async def main(registrar: bool = False, active_learning: bool = False) -> None:
     for var in variables_modelo:
         X = _features(muestras_masked, 0, medianas)
         y = np.array([s["y_var"].get(var, "OK") for s in muestras])
-        r = entrenar_y_evaluar(f"diagnostico_{var}", X, y, sorted(set(y)), con_cv=False)
+        r = entrenar_y_evaluar(f"diagnostico_{var}", X, y, sorted(set(y)), con_cv=False, n_jobs=n_jobs)
         if "modelo" not in r:
             r.pop("clasificacion_report", None)
             resultados.append(r)
@@ -414,7 +418,7 @@ async def main(registrar: bool = False, active_learning: bool = False) -> None:
                 if train_g:
                     X_gt = _features([f["features"] for f in train_g], 0, medianas)
                     y_gt = np.array([f["etiquetas"][var] for f in train_g])
-                    modelo = _entrenar_con_golden(X, y, X_gt, y_gt)
+                    modelo = _entrenar_con_golden(X, y, X_gt, y_gt, n_jobs=n_jobs)
                 m_gold = None
                 if test_g:
                     X_gte = _features([f["features"] for f in test_g], 0, medianas)
@@ -460,7 +464,7 @@ async def main(registrar: bool = False, active_learning: bool = False) -> None:
     for i, s in enumerate(muestras):
         X_apt[i, len(VARIABLES)] = s["cultivo_idx"]
     y_apt = np.array([s["y_apt"] for s in muestras])
-    r_apt = entrenar_y_evaluar("aptitud_upra", X_apt, y_apt, sorted(set(y_apt)), con_cv=True)
+    r_apt = entrenar_y_evaluar("aptitud_upra", X_apt, y_apt, sorted(set(y_apt)), con_cv=True, n_jobs=n_jobs)
     if "modelo" in r_apt:
         modelos_artefactos["ml_aptitud"] = r_apt.pop("modelo")
     r_apt.pop("clasificacion_report", None)
@@ -474,7 +478,7 @@ async def main(registrar: bool = False, active_learning: bool = False) -> None:
             X_ct = _features([f["features"] for f in train_c], 0, medianas)
             y_ct = np.array([f["etiqueta_aptitud"] for f in train_c])
             modelos_artefactos["ml_aptitud"] = _entrenar_con_golden(
-                X_apt, y_apt, X_ct, y_ct
+                X_apt, y_apt, X_ct, y_ct, n_jobs=n_jobs
             )
         if test_c:
             X_cte = _features([f["features"] for f in test_c], 0, medianas)
@@ -647,5 +651,14 @@ if __name__ == "__main__":
              "humanas + ciclos cerrados) y promueve variables con precisión "
              "real >= 0.85",
     )
+    ap.add_argument(
+        "--n-jobs", type=int, default=1,
+        help="hilos de scikit-learn (default 1 — el reentrenamiento corre en "
+             "el mismo contenedor del servicio web, de 512 MB en Render)",
+    )
     args = ap.parse_args()
-    asyncio.run(main(registrar=args.registrar, active_learning=args.active_learning))
+    asyncio.run(main(
+        registrar=args.registrar,
+        active_learning=args.active_learning,
+        n_jobs=args.n_jobs,
+    ))

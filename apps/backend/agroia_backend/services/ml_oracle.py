@@ -10,6 +10,7 @@ solo con reglas (comportamiento actual).
 """
 
 from pathlib import Path
+from threading import Lock
 
 from agroia.logging import get_logger
 
@@ -22,10 +23,54 @@ VARIABLES = [
     "conductividad_electrica",
 ]
 
+# Caché compartida de artefactos: los joblib (~18 MB) se cargan UNA sola vez
+# por proceso. Antes se cargaban en cada request (analyze/reporte/estado), lo
+# que multiplicaba el uso de memoria y disparaba OOM en Render Free (512 MB).
+_CACHE_LOCK = Lock()
+_CACHE_ESTADO: dict[str, dict] = {}
+
 
 def _dir_modelos() -> Path:
     # repo/apps/ml/models en dev y en el contenedor (/app/apps/ml/models)
     return Path(__file__).resolve().parents[3] / "ml" / "models"
+
+
+def _cargar_artefactos(dir_modelos: Path) -> dict:
+    """Lee modelos/medianas/promovidas del directorio (una vez por proceso)."""
+    estado: dict = {"modelos": {}, "medianas": {}, "promovidas": {}}
+    if not dir_modelos.exists():
+        logger.info("ml_oracle_sin_artefactos", dir=str(dir_modelos))
+        return estado
+    try:
+        import joblib
+    except ImportError:
+        logger.error("ml_oracle_sin_joblib")
+        return estado
+    for p in dir_modelos.glob("ml_*.joblib"):
+        nombre = p.stem  # ej. ml_diagnostico_ph, ml_aptitud
+        try:
+            estado["modelos"][nombre] = joblib.load(p)
+        except Exception as e:  # noqa: BLE001
+            logger.warning("ml_oracle_carga_fallida", modelo=nombre, error=str(e))
+    meta_path = dir_modelos / "ml_meta.json"
+    if meta_path.exists():
+        try:
+            import json
+
+            meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            estado["medianas"] = {k: float(v) for k, v in meta.get("medianas", {}).items()}
+            estado["promovidas"] = {
+                str(k): dict(v) if isinstance(v, dict) else {}
+                for k, v in meta.get("promovidas", {}).items()
+            }
+        except Exception as e:  # noqa: BLE001
+            logger.warning("ml_oracle_meta_fallida", error=str(e))
+    logger.info(
+        "ml_oracle_modelos_cargados",
+        n=len(estado["modelos"]), medianas=len(estado["medianas"]),
+        promovidas=len(estado["promovidas"]),
+    )
+    return estado
 
 
 class MLOracleService:
@@ -42,39 +87,17 @@ class MLOracleService:
         if self._cargados:
             return
         self._cargados = True
-        if not self.dir.exists():
-            logger.info("ml_oracle_sin_artefactos", dir=str(self.dir))
-            return
-        try:
-            import joblib
-        except ImportError:
-            logger.error("ml_oracle_sin_joblib")
-            return
-        for p in self.dir.glob("ml_*.joblib"):
-            nombre = p.stem  # ej. ml_diagnostico_ph, ml_aptitud
-            try:
-                self._modelos[nombre] = joblib.load(p)
-            except Exception as e:  # noqa: BLE001
-                logger.warning("ml_oracle_carga_fallida", modelo=nombre, error=str(e))
-        meta_path = self.dir / "ml_meta.json"
-        if meta_path.exists():
-            try:
-                import json
-
-                meta = json.loads(meta_path.read_text(encoding="utf-8"))
-                self._medianas = {k: float(v) for k, v in meta.get("medianas", {}).items()}
-                # Variables promovidas a producción por precisión real ≥ umbral
-                self._promovidas = {
-                    str(k): dict(v) if isinstance(v, dict) else {}
-                    for k, v in meta.get("promovidas", {}).items()
-                }
-            except Exception as e:  # noqa: BLE001
-                logger.warning("ml_oracle_meta_fallida", error=str(e))
-        logger.info(
-            "ml_oracle_modelos_cargados",
-            n=len(self._modelos), medianas=len(self._medianas),
-            promovidas=len(self._promovidas),
-        )
+        clave = str(self.dir)
+        estado = _CACHE_ESTADO.get(clave)
+        if estado is None:
+            with _CACHE_LOCK:
+                estado = _CACHE_ESTADO.get(clave)
+                if estado is None:
+                    estado = _cargar_artefactos(self.dir)
+                    _CACHE_ESTADO[clave] = estado
+        self._modelos = estado["modelos"]
+        self._medianas = estado["medianas"]
+        self._promovidas = estado["promovidas"]
 
     def variables_promovidas(self) -> set[str]:
         """Variables cuyo modelo fue promovido a producción (validador activo)."""

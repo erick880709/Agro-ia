@@ -148,6 +148,10 @@ async def reentrenar_modelo(
             os.environ.get("PYTHON_BIN", "python"),
             "train_colombia.py",
             "--registrar",
+            # n_jobs=1: el entrenamiento corre en el MISMO contenedor del
+            # servicio web (Render Free = 512 MB); con -1 los RandomForest
+            # usan todos los hilos y disparan OOM/restart del servicio.
+            "--n-jobs", "1",
             "--active-learning" if body.modo == "active-learning" else "--full",
         ]
         env = dict(os.environ)
@@ -158,6 +162,9 @@ async def reentrenar_modelo(
             subprocess.Popen(
                 comando, cwd=_ML_ROOT, env=env,
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                # Sesión separada: el hijo no se cuelga del ciclo de vida
+                # del worker y no hereda señales de restart del proceso web.
+                start_new_session=True,
             )
         except Exception:  # noqa: BLE001 — el job queda registrado como en_cola
             pass
@@ -168,7 +175,9 @@ async def reentrenar_modelo(
         "estado": "en_cola",
         "mensaje": (
             "Reentrenamiento encolado; ejecuta train_colombia.py --registrar "
-            f"--active-learning con los cultivos indicados ({len(body.cultivos_incluidos)})"
+            f"--n-jobs 1 --active-learning con los cultivos indicados "
+            f"({len(body.cultivos_incluidos)}) — corre en segundo plano en el "
+            "mismo contenedor (modo de memoria baja para no reiniciar el servicio)."
         ),
         "encolado_en": datetime.now(timezone.utc).isoformat(),
     }

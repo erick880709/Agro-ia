@@ -69,19 +69,49 @@ def _config() -> dict[str, Any]:
 
 
 def decodificar(contenido: bytes) -> np.ndarray | None:
-    """Decodifica bytes a RGB uint8. cv2 > Pillow > None."""
+    """Decodifica bytes a RGB uint8. cv2 > Pillow > None.
+
+    Límite de lado (1024 px): las fotos de 12 MP se reducen antes de los
+    pasos float64 (HSV/Laplaciano), que multiplicaban la memoria por ~10 y
+    contribuían a OOM en Render Free (512 MB).
+    """
+    MAX_LADO = 1024
+
+    def _limitar(img: np.ndarray) -> np.ndarray:
+        alto, ancho = img.shape[:2]
+        lado = max(alto, ancho)
+        if lado <= MAX_LADO:
+            return img
+        escala = MAX_LADO / lado
+        nuevo_alto = max(1, int(round(alto * escala)))
+        nuevo_ancho = max(1, int(round(ancho * escala)))
+        try:
+            import cv2  # type: ignore
+
+            return cv2.resize(img, (nuevo_ancho, nuevo_alto), interpolation=cv2.INTER_AREA)
+        except Exception:  # noqa: BLE001
+            try:
+                from PIL import Image  # type: ignore
+
+                with Image.fromarray(img) as im:
+                    im = im.resize((nuevo_ancho, nuevo_alto), Image.Resampling.LANCZOS)
+                    return np.asarray(im)
+            except Exception:  # noqa: BLE001
+                return img
+
     try:
         import cv2  # type: ignore
 
         img = cv2.imdecode(np.frombuffer(contenido, np.uint8), cv2.IMREAD_COLOR)
         if img is not None and img.size:
-            return img[:, :, ::-1]  # BGR → RGB
+            return _limitar(img[:, :, ::-1])  # BGR → RGB
     except Exception:  # noqa: BLE001
         pass
     try:
         from PIL import Image  # type: ignore
 
         with Image.open(io.BytesIO(contenido)) as im:
+            im.thumbnail((MAX_LADO, MAX_LADO), Image.Resampling.LANCZOS)
             return np.asarray(im.convert("RGB"))
     except Exception:  # noqa: BLE001
         return None
