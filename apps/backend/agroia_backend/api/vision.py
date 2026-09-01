@@ -61,8 +61,10 @@ async def analizar_plaga(
     Contrato de respuesta: plaga, confianza (0-1), severidad, recomendacion,
     fuente, imagen_url + estado (preliminary/abstain), modelo_version,
     evidencia y requiere_revision (sección 24).
+
+    El rol Cliente está permitido (vista de monitoreo para el productor);
+    el acceso queda limitado a las fincas asociadas al usuario.
     """
-    exigir_no_cliente(x_user_role)
     await verificar_acceso_finca(db, x_user_role, x_user_email, finca_id)
     ext = TIPOS_IMAGEN.get(file.content_type or "")
     if ext is None:

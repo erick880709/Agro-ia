@@ -9,7 +9,7 @@ const SESION_KEY = 'agroia_sesion';
 const TABS_POR_ROL = {
   admin: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'equipo', 'comisiones', 'lista-trabajos', 'reentrenar', 'precios-cosecha', 'vision', 'catalogo'],
   agronomo: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'vision', 'catalogo'],
-  cliente: ['inicio', 'alertas', 'sensores', 'historial', 'reportes', 'catalogo'],
+  cliente: ['inicio', 'alertas', 'reportes', 'vision'],
   extensionista: ['inicio', 'alertas', 'zona', 'sensores', 'historial', 'reportes', 'vision', 'catalogo'],
 };
 
@@ -3151,6 +3151,24 @@ async function abrirModalNovedad(empleadoId, nombre) {
   };
 }
 
+const ESTADOS_COMISION_LABEL = {
+  asignada: 'Asignada',
+  en_campo: 'En campo',
+  en_recomendacion: 'En recomendación',
+  generacion_reporte_fin_etapa: 'Generación de reporte fin de etapa',
+  finalizada: 'Finalizada',
+  cancelada: 'Cancelada',
+};
+
+function badgeComision(estado) {
+  const cls = estado === 'finalizada' ? 'ok'
+    : estado === 'cancelada' ? 'warning'
+    : estado === 'generacion_reporte_fin_etapa' ? 'ok'
+    : estado === 'en_recomendacion' ? 'pendiente'
+    : '';
+  return badge(ESTADOS_COMISION_LABEL[estado] || estado, cls);
+}
+
 async function cargarComisiones() {
   const sel = document.getElementById('com-finca');
   if (sel && !sel.options.length) {
@@ -3169,7 +3187,7 @@ async function cargarComisiones() {
         <div class="labor-info">
           <b>🗂️ ${esc(c.finca_nombre || c.finca_id)}</b>
           <span class="muted">${esc(c.servicio || 'servicio sin especificar')} · asignada ${esc(c.fecha_asignacion)} · inicio ${esc(c.fecha_inicio_tomas || '—')} · fin ${esc(c.fecha_fin_tomas || '—')}</span>
-          <span>${badge(c.estado, c.estado === 'finalizada' ? 'ok' : c.estado === 'cancelada' ? 'warning' : '')}
+          <span>${badgeComision(c.estado)}
             · comisión ${c.valor_comision_cop != null ? `$${fmtNum(c.valor_comision_cop, 0)}` : '—'}
             · cobro ${c.valor_cobro_servicio_cop != null ? `$${fmtNum(c.valor_cobro_servicio_cop, 0)}` : '—'}
             · validación ${c.valor_validacion_cop != null ? `$${fmtNum(c.valor_validacion_cop, 0)}` : '—'}
@@ -3780,6 +3798,7 @@ function renderAnalisis(a) {
     </div>`;
 
   if (a.fenologia_ajustada) html += `<div class="advertencia">🌱 ${esc(a.fenologia_ajustada)}</div>`;
+  if (a.comision_estado) html += `<div class="muted" style="margin-top:4px">🗂️ Comisión: <b>${esc(ESTADOS_COMISION_LABEL[a.comision_estado] || a.comision_estado)}</b></div>`;
   if (a.variables_faltantes_fertilidad && a.variables_faltantes_fertilidad.length) {
     html += `<div class="advertencia">🔬 Variables de fertilidad sin dato: ${esc(a.variables_faltantes_fertilidad.join(', '))}. La confianza global se redujo; la clasificación es preliminar.</div>`;
   }

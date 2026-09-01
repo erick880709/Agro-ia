@@ -28,6 +28,7 @@ from agroia_backend.models.aceptacion_recomendacion import AceptacionRecomendaci
 from agroia_backend.models.alerta_climatica import AlertaClimatica
 from agroia_backend.models.chat_memoria import ChatMemoria
 from agroia_backend.models.ciclo_lote import CicloLote
+from agroia_backend.models.comision import Comision
 from agroia_backend.models.cultivo import Cultivo
 from agroia_backend.models.discordancia import Discordancia
 from agroia_backend.models.dispositivo_iot import DispositivoIoT
@@ -248,6 +249,16 @@ async def _crear_ejemplo_completo(db, cfg: dict) -> str:
     await _sembrar_lecturas(db, finca.id, cfg["lectura_base"], cfg["sensor_grid"])
     await _sembrar_labores(db, lote.id, cfg["labores"])
     await _sembrar_ciclos(db, lote.id, cfg["cultivo"], cfg["ciclos"])
+    db.add(Comision(
+        finca_id=finca.id,
+        servicio=f"Toma de muestras — {cfg['cultivo']} (demo)",
+        fecha_asignacion=date.today() - timedelta(days=12),
+        fecha_inicio_tomas=date.today() - timedelta(days=10),
+        fecha_fin_tomas=date.today() - timedelta(days=8),
+        estado=cfg.get("estado_comision", "en_recomendacion"),
+        valor_comision_cop=450000.0,
+        observaciones="Comisión demo: muestreo 3×3 + lectura de laboratorio.",
+    ))
     return str(finca.id)
 
 
@@ -262,6 +273,14 @@ async def _crear_finca_etapa(db, cfg: dict) -> str:
     ))
     if cfg.get("labores"):
         await _sembrar_labores(db, lote.id, cfg["labores"])
+    db.add(Comision(
+        finca_id=finca.id,
+        servicio=f"Toma de muestras — {cfg['cultivo']} (demo)",
+        fecha_asignacion=date.today() - timedelta(days=3),
+        estado=cfg.get("estado_comision", "asignada"),
+        valor_comision_cop=380000.0,
+        observaciones="Comisión demo: pendiente de toma de muestras.",
+    ))
     return str(finca.id)
 
 
@@ -281,6 +300,7 @@ async def restablecer_demo(db) -> dict:
     await db.execute(delete(VisionDiagnostico))
     await db.execute(delete(PrecioCosecha))
     await db.execute(delete(FincaUsuario))
+    await db.execute(delete(Comision))
     await db.execute(delete(Lote))
     await db.execute(
         delete(SensorReading).where(
@@ -522,6 +542,8 @@ async def restablecer_demo(db) -> dict:
         "dispositivo_conservado": SENSOR_REAL,
         "precios_insumos": len(_INSUMOS),
         "precios_cosecha": len(_PRECIOS_COSECHA),
+        "comisiones": len(nuevos_ids),
+        "comisiones_en_recomendacion": 2,
     }
     logger.info("demo_restablecida", fincas=resumen["fincas_restantes"])
     return resumen

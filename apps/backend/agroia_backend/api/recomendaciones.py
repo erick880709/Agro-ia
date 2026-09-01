@@ -56,6 +56,8 @@ class RecommendResponse(BaseModel):
     desglose_confianza: dict = {}
     # ── Validador ML (variables promovidas por aprendizaje activo) ──
     validacion_ml: dict | None = None
+    # ── Etapa de la comisión de la finca tras el análisis ──
+    comision_estado: str | None = None
 
 
 # ── Persistencia del historial ──
@@ -166,6 +168,14 @@ async def analizar_aptitud(
     exigir_no_cliente(x_user_role)
     await verificar_acceso_finca(db, x_user_role, None, request.finca_id)
 
+    # ── Regla de negocio: sin comisión asignada no se genera recomendación ──
+    from agroia_backend.services.comision_etapas import (
+        exigir_comision_para_recomendacion,
+        marcar_en_recomendacion,
+    )
+
+    comision = await exigir_comision_para_recomendacion(db, request.finca_id)
+
     rules_engine = RulesEngine(db)
     orch = RecommendationOrchestrator(
         db_session=db,
@@ -184,6 +194,9 @@ async def analizar_aptitud(
             )
         )
         await _persistir_recomendacion(db, request, result)
+        # La recomendación mueve la comisión de la finca a `en_recomendacion`.
+        await marcar_en_recomendacion(db, comision)
+        await db.commit()
         return RecommendResponse(
             cultivo=result.cultivo,
             clasificacion_upra=result.clasificacion_upra,
@@ -205,6 +218,7 @@ async def analizar_aptitud(
             rendimiento_actual_t_ha=result.rendimiento_actual_t_ha,
             desglose_confianza=result.desglose_confianza,
             validacion_ml=result.validacion_ml,
+            comision_estado=comision.estado,
         )
     except Exception as e:
         logger.exception("orchestrator_unexpected_error", error=str(e), finca_id=request.finca_id)

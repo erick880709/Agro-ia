@@ -306,6 +306,14 @@ async def cargar_archivo_sensor(
         finca_final = str(finca.id) if finca else str(dispositivo.finca_id)
         device_final = dispositivo.device_id if dispositivo else None
 
+        # ── Regla de negocio: sin comisión asignada no se genera recomendación ──
+        from agroia_backend.services.comision_etapas import (
+            exigir_comision_para_recomendacion,
+            marcar_en_recomendacion,
+        )
+
+        comision = await exigir_comision_para_recomendacion(db, finca_final)
+
         # ── Normalizar y persistir cada muestra (cuadrícula) ──
         from agroia_backend.services.geo_utils import centroide_finca, haversine_relativa
         from agroia_backend.services.puente_iot import process_sensor_message
@@ -380,6 +388,9 @@ async def cargar_archivo_sensor(
             ),
             resultado,
         )
+        # La recomendación generada mueve la comisión a `en_recomendacion`.
+        await marcar_en_recomendacion(db, comision)
+        await db.commit()
 
     return {
         "status": "accepted",
@@ -392,6 +403,7 @@ async def cargar_archivo_sensor(
         "variables_recibidas": sorted(variables_recibidas),
         "advertencias_ingesta": advertencias,
         "analisis": asdict(resultado),
+        "comision_estado": comision.estado,
     }
 
 

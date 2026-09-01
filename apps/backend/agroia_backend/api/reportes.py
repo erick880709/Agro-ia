@@ -190,6 +190,15 @@ async def generar_reporte(
             "code": "FINCA_NOT_FOUND", "message": "La finca no está registrada.",
         })
 
+    # ── Regla de negocio: el reporte exige haber pasado por la etapa de
+    # recomendación (comisión en `en_recomendacion` o posterior). ──
+    from agroia_backend.services.comision_etapas import (
+        exigir_etapa_recomendacion_para_reporte,
+        marcar_reporte_fin_etapa,
+    )
+
+    comision = await exigir_etapa_recomendacion_para_reporte(db, body.finca_id)
+
     lectura = (
         await db.execute(
             select(SensorReading)
@@ -546,12 +555,16 @@ async def generar_reporte(
         await db.commit()
     except Exception as e:  # noqa: BLE001 — la traza no debe romper el reporte
         logger.warning("reporte_auditoria_fallo", error=str(e))
+    # El reporte marca el fin de etapa de la comisión.
+    await marcar_reporte_fin_etapa(db, comision)
+    await db.commit()
     return {
         "titulo": titulo,
         "tipo": body.tipo,
         "html": html,
         "parametros_faltantes": parametros_faltantes,
         "preliminar": bool(parametros_faltantes),
+        "comision_estado": comision.estado,
     }
 
 

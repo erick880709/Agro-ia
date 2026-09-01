@@ -205,14 +205,24 @@ async def test_analizar_plaga_formato_rechazado(cli):
     assert r.status_code == 415
 
 
-async def test_analizar_plaga_cliente_prohibido(cli, png_minimo):
+async def test_analizar_plaga_cliente_permitido(cli, png_minimo):
+    """El cliente puede usar visión de plagas en sus fincas (2026-08-31)."""
     finca_id = "3a47d0c6-fb00-4106-91ba-0a707f612e86"
     r = await cli.post(
         f"/api/v1/vision/analizar-plaga?finca_id={finca_id}",
         headers=_cabeceras(rol="Cliente", email="maria.cliente@agroia.co"),
         files={"file": ("hoja.png", png_minimo, "image/png")},
     )
-    assert r.status_code in (401, 403)
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["estado"] == "abstain"
+    # Sigue protegido: un cliente NO puede analizar fincas que no le pertenecen
+    r2 = await cli.post(
+        f"/api/v1/vision/analizar-plaga?finca_id={uuid.uuid4()}",
+        headers=_cabeceras(rol="Cliente", email="maria.cliente@agroia.co"),
+        files={"file": ("hoja.png", png_minimo, "image/png")},
+    )
+    assert r2.status_code in (401, 403)
 
 
 async def test_reentrenar_solo_admin(cli):

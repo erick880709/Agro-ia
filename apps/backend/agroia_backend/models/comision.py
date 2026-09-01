@@ -9,7 +9,14 @@ from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Numeric, String, Tex
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
-ESTADOS_COMISION = ("asignada", "en_campo", "finalizada", "cancelada")
+ESTADOS_COMISION = (
+    "asignada",
+    "en_campo",
+    "en_recomendacion",               # se generó al menos una recomendación
+    "generacion_reporte_fin_etapa",   # se generó el reporte fin de etapa
+    "finalizada",
+    "cancelada",
+)
 
 
 class Comision(Base):
@@ -28,7 +35,7 @@ class Comision(Base):
     fecha_asignacion: Mapped[date] = mapped_column(Date, nullable=False)
     fecha_inicio_tomas: Mapped[date | None] = mapped_column(Date, nullable=True)
     fecha_fin_tomas: Mapped[date | None] = mapped_column(Date, nullable=True)
-    estado: Mapped[str] = mapped_column(String(20), nullable=False, default="asignada")
+    estado: Mapped[str] = mapped_column(String(40), nullable=False, default="asignada")
     valor_comision_cop: Mapped[Decimal | None] = mapped_column(Numeric(14, 2), nullable=True)
     valor_cobro_servicio_cop: Mapped[Decimal | None] = mapped_column(Numeric(14, 2), nullable=True)
     valor_validacion_cop: Mapped[Decimal | None] = mapped_column(Numeric(14, 2), nullable=True)

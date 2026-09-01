@@ -32,7 +32,7 @@ ETAPA_ETIQUETA = {
     "asignacion_comision": "Asignación de comisión",
     "toma_muestras": "Toma de muestras (parámetros)",
     "recomendacion": "Generación de recomendación",
-    "reporte": "Generación de reporte",
+    "reporte": "Generación de reporte fin de etapa",
     "finalizada": "Fin de actividad",
 }
 SEMAFORO = {
