@@ -4515,8 +4515,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/reportes.py": {
-    "mtime": 1788230985.8405876,
-    "ast_hash": "6e31028d94b00eebb062e6cb1a336fee",
+    "mtime": 1788235733.2907474,
+    "ast_hash": "73b32467ffafb818d29178ae56bee607",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/sensor_api.py": {
@@ -4570,8 +4570,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/reportes_html.py": {
-    "mtime": 1788011531.3629775,
-    "ast_hash": "d45e72e49e4c3c9f0e5da90289912738",
+    "mtime": 1788235534.5781994,
+    "ast_hash": "222ce81cb4a45352c444845624cc7fbe",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/003_dispositivos_iot.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1788233814.2200265,
-    "ast_hash": "0f6db6fc026c97d447f870a910f90c1c",
+    "mtime": 1788235344.4177873,
+    "ast_hash": "ff6828565784ebe70d1c6e6f68df5a4c",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1788227173.4618232,
-    "ast_hash": "06846486b0e10058d9c799f438a23a8a",
+    "mtime": 1788235325.2040226,
+    "ast_hash": "1154b1848e88e639830b8da2419beb3a",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -5535,8 +5535,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/sw.js": {
-    "mtime": 1788233839.0313156,
-    "ast_hash": "052e3417b507ecf446866c001c0f0d32",
+    "mtime": 1788235351.4958687,
+    "ast_hash": "59668f063a47beaa961d867d02a193a8",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/vision.py": {
@@ -5777,6 +5777,16 @@
   "apps/backend/tests/test_comisiones_etapas.py": {
     "mtime": 1788233831.3059387,
     "ast_hash": "e08a18928a50040b37fef5aea3c481dd",
+    "semantic_hash": ""
+  },
+  "apps/backend/tests/test_reportes_accesibilidad.py": {
+    "mtime": 1788235809.2729907,
+    "ast_hash": "e4c1294c9eff4c8b124e55910db9e3c1",
+    "semantic_hash": ""
+  },
+  "context/AgroIA_Especificacion_Tecnica_v8_Accesibilidad.md": {
+    "mtime": 1788234994.6163795,
+    "ast_hash": "a05a4965fc23e0d5cdd0e05858d3a687",
     "semantic_hash": ""
   }
 }

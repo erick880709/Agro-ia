@@ -1,16 +1,16 @@
 # Graph Report - Agro-ia  (2026-08-31)
 
 ## Corpus Check
-- 1033 files · ~993,862 words
+- 1033 files · ~994,175 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 10759 nodes · 13935 edges · 1012 communities (840 shown, 172 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 289 edges (avg confidence: 0.56)
+- 10761 nodes · 13941 edges · 1035 communities (863 shown, 172 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 290 edges (avg confidence: 0.56)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `926f7353`
+- Built from commit: `d074eb07`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -52,9 +52,9 @@
 - compilerOptions
 - card
 - BM25
-- search
-- assets/scripts/design_system.py
 - BM25
+- assets/scripts/design_system.py
+- search
 - src/ui-ux-pro-max/scripts/design_system.py
 - .claude/skills/design/scripts/icon/generate.py
 - fontSize
@@ -100,7 +100,7 @@
 - admin_precios.py
 - assets/skills/brand/scripts/inject-brand-context.cjs
 - assets/skills/design-system/scripts/embed-tokens.cjs
-- primitive
+- duration
 - patch
 - assets/skills/ui-styling/scripts/tests/test_tailwind_config_gen.py
 - devDependencies
@@ -130,7 +130,7 @@
 - test_comisiones_etapas.py
 - services/balance_hidrico.py
 - app.js
-- headers
+- enviarFinca
 - build.mjs
 - train_baseline.py
 - gray
@@ -141,7 +141,7 @@
 - organize-evidence.mjs
 - Buenas Prácticas de QA para React y Next.js
 - 5. Alcance del MVP
-- services/__init__.py
+- RecommendationOrchestrator
 - Documento de Arquitectura de Software: AgroInteligente Colombia (AgroIA)
 - skills/ui-ux-pro-max/scripts/validate_data.py
 - assets/scripts/validate_data.py
@@ -318,7 +318,7 @@
 - Messaging Framework
 - Brand Voice Framework
 - Layout Patterns
-- equipo.py
+- comisiones.py
 - Tailwind Integration
 - Layout Patterns
 - Banner Design - Multi-Format Creative Banner System
@@ -589,7 +589,7 @@
 - Base
 - CultivosService
 - Base
-- plagas.py
+- registrar_monitoreo
 - Datasets para AgroIA
 - TenantMiddleware
 - HU-01: Solicitar análisis de aptitud del suelo para una finca
@@ -613,7 +613,7 @@
 - TT-04: Entrenar y servir modelos ML (5 modelos + ensemble)
 - TT-07: Crear modelo de datos para recomendaciones
 - $type
-- sensor_api.py
+- consumer.py
 - field_serializer
 - 1. Introducción y Objetivos
 - TT-02: Implementar motor de reglas agronómicas (sistema experto)
@@ -633,7 +633,7 @@
 - agroia_auth/api/__init__.py
 - 🚀 Despliegue gratuito (Render + Neon/Supabase)
 - diagnosticar
-- dashboard.py
+- get_dashboard_data
 - ui-ux-pro-max-skill-main⁄README.zh.md.md
 - AgroIA — Especificación Técnica v6
 - vigilar_sensor.py
@@ -665,7 +665,7 @@
 - frontend
 - options
 - Installation
-- src/ui-ux-pro-max/scripts/core.py
+- equipo.py
 - Frontend
 - angular.json
 - Path
@@ -823,12 +823,12 @@
 - test_sync_offline.py
 - str
 - get_settings
-- labores.py
+- generar_labores
 - bpa.py
 - 008_reparar_enums_sensor.py
 - get_combined_dataset
 - search
-- src/ui-ux-pro-max/scripts/tests/test_core.py
+- assets/scripts/core.py
 - errors.py
 - input
 - ndarray
@@ -861,7 +861,7 @@
 - 1. Modelo tabular — diagnóstico nutricional y aptitud (ML en sombra)
 - BaseModel
 - offline.js
-- lista_trabajos
+- assets/scripts/tests/test_core.py
 - $type
 - md_to_html.py
 - env.py
@@ -871,7 +871,7 @@
 - sm
 - errorBanner
 - md
-- RecommendationOrchestrator
+- agroia_auth/main.py
 - get
 - AsyncSession
 - Base
@@ -891,7 +891,7 @@
 - Lote
 - patch
 - Request
-- search
+- PreferenciaNotificacion
 - AptitudService
 - field_validator
 - clima_alertas.py
@@ -900,15 +900,15 @@
 - delete
 - 6
 - 8
-- _analisis_texto
-- _ficha_texto
-- _vars_lectura
+- construir_contexto
+- Cultivo
+- search
 - delete
 - put
 - Request
 - 11. Reportes: anatomía del HTML generado
 - patch
-- _reglas_texto
+- respuesta_orquestada
 - Base
 - Request
 - datetime
@@ -931,15 +931,16 @@
 - AceptacionRecomendacion
 - Labor
 - ndarray
-- detect_domain
+- input
 - AsyncSession
 - BaseModel
 - get
 - put
+- detect_domain
 - 0. Estado actual de implementación (2026-08-28)
 - MonitoreoPlaga
 - mlflow_config.py
-- FastAPI
+- health.py
 - destructive-foreground
 - muted
 - primary
@@ -949,29 +950,51 @@
 - BaseModel
 - post
 - 003_infra_fincas.py
+- renderLotes
+- FincaCreate
+- radius
+- lg
 - sw.js
+- sm
 - download.py
 - test_antagonismos.py
 - Request
+- agroia_iot/main.py
+- padding-x
 - split.py
 - http_download
+- xl
+- md
 - train.py
 - evaluate.py
 - append_jsonl
 - inspect.py
-- discover.py
+- .coerce_id
+- http_head
+- 16
 - convert_annotations.py
 - AgroVision — Pipeline de visión agrícola
 - Path
+- 1
 - especificacionImagenes.md
 - logging.py
+- 3
 - AgroIA — Especificación Técnica v6
-- test_laboratorio.py
+- 8
+- destructive-foreground
+- agroia_backend/main.py
+- muted
+- primary
 - inventario_tecnico_datasets_agrovision_32ce3853.md
+- primary-foreground
 - datasets/scripts/__init__.py
 - Any
+- ring
 - feature_engineering.py
-- BaseModel
+- secondary-foreground
+- sync.py
+- sync_doc_funcional_html.py
+- fixture
 - AsyncSession
 - 12b. Almanaque Bristol — calendario lunar y siembra cultural (v3.4)
 - bristo.md
@@ -997,17 +1020,17 @@
   tests/tmp_reporte_esp32.py → apps/backend/agroia_backend/services/aptitud.py
 - `FakeCultivo` --uses--> `AptitudService`  [INFERRED]
   tests/tmp_reporte_esp32.py → apps/backend/agroia_backend/services/aptitud.py
-- `test_normalizacion_esp32()` --calls--> `normalizar_trama()`  [INFERRED]
-  tests/integration_test.py → apps/backend/agroia_backend/services/normalizacion_iot.py
 - `main()` --calls--> `diagnosticar()`  [EXTRACTED]
   datasets/scripts/fallback_opencv.py → apps/backend/agroia_backend/services/vision_fallback.py
 - `DemoRulesEngine` --uses--> `RulesEngine`  [INFERRED]
+  tests/tmp_reporte_esp32.py → apps/backend/agroia_backend/services/rules_engine.py
+- `FakeCultivo` --uses--> `RulesEngine`  [INFERRED]
   tests/tmp_reporte_esp32.py → apps/backend/agroia_backend/services/rules_engine.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (1012 total, 172 thin omitted)
+## Communities (1035 total, 172 thin omitted)
 
 ### Community 0 - "init.ts"
 Cohesion: 0.06
@@ -1066,8 +1089,8 @@ Cohesion: 0.09
 Nodes (22): $type, $value, $type, $value, $type, $value, $type, $value (+14 more)
 
 ### Community 14 - "spacing"
-Cohesion: 0.06
-Nodes (34): $type, $value, $type, $value, $type, $value, $type, $value (+26 more)
+Cohesion: 0.09
+Nodes (22): $type, $value, $type, $value, $type, $value, $type, $value (+14 more)
 
 ### Community 15 - "TestTailwindConfigGenerator"
 Cohesion: 0.07
@@ -1106,24 +1129,24 @@ Cohesion: 0.15
 Nodes (19): _e(), generate_chart_slide(), generate_cta_slide(), generate_deck(), generate_metrics_slide(), generate_problem_slide(), generate_solution_slide(), generate_testimonial_slide() (+11 more)
 
 ### Community 24 - "DesignSystemGenerator"
-Cohesion: 0.12
-Nodes (12): DesignSystemGenerator, Find matching reasoning rule for a category., Apply reasoning rules to search results., Select best matching result based on priority keywords., Extract results list from search result dict., Generate complete design system recommendation. variance/motion/density are…, Bucket a 1-10 dial value into its tier config. Returns None if value is None., Generates design system recommendations from aggregated searches. (+4 more)
+Cohesion: 0.14
+Nodes (10): DesignSystemGenerator, Find matching reasoning rule for a category., Apply reasoning rules to search results., Select best matching result based on priority keywords., Extract results list from search result dict., Generate complete design system recommendation. variance/motion/density are…, Generates design system recommendations from aggregated searches., Load reasoning rules from CSV. (+2 more)
 
 ### Community 25 - "assets/skills/design-system/scripts/generate-slide.py"
 Cohesion: 0.15
 Nodes (19): _e(), generate_chart_slide(), generate_cta_slide(), generate_deck(), generate_metrics_slide(), generate_problem_slide(), generate_solution_slide(), generate_testimonial_slide() (+11 more)
 
 ### Community 26 - "DesignSystemGenerator"
-Cohesion: 0.14
-Nodes (10): DesignSystemGenerator, Find matching reasoning rule for a category., Apply reasoning rules to search results., Select best matching result based on priority keywords., Extract results list from search result dict., Generate complete design system recommendation. variance/motion/density are…, Generates design system recommendations from aggregated searches., Load reasoning rules from CSV. (+2 more)
+Cohesion: 0.12
+Nodes (12): DesignSystemGenerator, Find matching reasoning rule for a category., Apply reasoning rules to search results., Select best matching result based on priority keywords., Extract results list from search result dict., Generate complete design system recommendation. variance/motion/density are…, Bucket a 1-10 dial value into its tier config. Returns None if value is None., Generates design system recommendations from aggregated searches. (+4 more)
 
 ### Community 27 - "color"
 Cohesion: 0.11
 Nodes (19): $type, $value, background, destructive, foreground, muted-foreground, primary-hover, secondary (+11 more)
 
 ### Community 28 - "color"
-Cohesion: 0.05
-Nodes (37): $type, $value, background, destructive, destructive-foreground, foreground, muted, muted-foreground (+29 more)
+Cohesion: 0.11
+Nodes (19): $type, $value, background, destructive, foreground, muted-foreground, primary-hover, secondary (+11 more)
 
 ### Community 29 - "thumbnail.py"
 Cohesion: 0.15
@@ -1157,21 +1180,21 @@ Nodes (12): $type, $value, bg, bg, padding, shadow, card, bg (+4 more)
 Cohesion: 0.15
 Nodes (9): BM25, _normalize(), Apply synonym substitution before tokenizing., BM25 ranking algorithm for text search, Lowercase, normalize synonyms, split, remove punctuation, filter stopwords, Build BM25 index from documents, Score all documents against query, All indexed terms, for suggestion/typo-recovery purposes. (+1 more)
 
-### Community 37 - "search"
-Cohesion: 0.07
-Nodes (27): BM25, _domain_keywords(), _get_bm25(), _load_csv(), _load_product_keywords(), _normalize(), Apply synonym substitution before tokenizing., BM25 ranking algorithm for text search (+19 more)
-
-### Community 38 - "assets/scripts/design_system.py"
-Cohesion: 0.08
-Nodes (28): detect_domain(), Auto-detect the most relevant domain from query. Matches are weighted by…, ansi_ljust(), _detect_page_type(), format_ascii_box(), format_markdown(), format_master_md(), format_page_override_md() (+20 more)
-
-### Community 39 - "BM25"
+### Community 37 - "BM25"
 Cohesion: 0.15
 Nodes (9): BM25, _normalize(), Apply synonym substitution before tokenizing., BM25 ranking algorithm for text search, Lowercase, normalize synonyms, split, remove punctuation, filter stopwords, Build BM25 index from documents, Score all documents against query, All indexed terms, for suggestion/typo-recovery purposes. (+1 more)
 
-### Community 40 - "src/ui-ux-pro-max/scripts/design_system.py"
+### Community 38 - "assets/scripts/design_system.py"
 Cohesion: 0.15
 Nodes (16): ansi_ljust(), _detect_page_type(), format_ascii_box(), format_page_override_md(), _generate_intelligent_overrides(), hex_to_ansi(), Format a page-specific override file with intelligent AI-generated content., Generate intelligent overrides based on page type using layered search. Uses… (+8 more)
+
+### Community 39 - "search"
+Cohesion: 0.07
+Nodes (27): BM25, _domain_keywords(), _get_bm25(), _load_csv(), _load_product_keywords(), _normalize(), Apply synonym substitution before tokenizing., BM25 ranking algorithm for text search (+19 more)
+
+### Community 40 - "src/ui-ux-pro-max/scripts/design_system.py"
+Cohesion: 0.08
+Nodes (28): detect_domain(), Auto-detect the most relevant domain from query. Matches are weighted by…, ansi_ljust(), _detect_page_type(), format_ascii_box(), format_markdown(), format_master_md(), format_page_override_md() (+20 more)
 
 ### Community 41 - ".claude/skills/design/scripts/icon/generate.py"
 Cohesion: 0.20
@@ -1194,8 +1217,8 @@ Cohesion: 0.20
 Nodes (15): apply_color(), apply_viewbox_size(), extract_svgs(), generate_batch(), generate_icon(), generate_sizes(), load_env(), main() (+7 more)
 
 ### Community 46 - "fontSize"
-Cohesion: 0.11
-Nodes (20): $type, $value, $type, $value, $type, $value, $type, $value (+12 more)
+Cohesion: 0.12
+Nodes (16): $type, $value, $type, $value, $type, $value, $type, $value (+8 more)
 
 ### Community 47 - "ShadcnInstaller"
 Cohesion: 0.23
@@ -1234,8 +1257,8 @@ Cohesion: 0.04
 Nodes (46): 1. For Large PDFs, 2. For Text Extraction, 3. For Image Extraction, 4. For Form Filling, 5. Memory Management, Advanced Command-Line Operations, Advanced Encryption, Advanced Image Conversion (+38 more)
 
 ### Community 56 - "test_bristol.py"
-Cohesion: 0.10
-Nodes (40): calendario_mes(), _edad_lunar(), estado_bristol(), fase_estatica(), _fase_usnavy(), get_lunar_phase(), mapear_recomendacion_bristol(), _modo_actual() (+32 more)
+Cohesion: 0.09
+Nodes (41): calendario_mes(), _edad_lunar(), estado_bristol(), fase_estatica(), _fase_usnavy(), get_lunar_phase(), mapear_recomendacion_bristol(), _modo_actual() (+33 more)
 
 ### Community 57 - "search.md"
 Cohesion: 0.14
@@ -1274,8 +1297,8 @@ Cohesion: 0.15
 Nodes (12): component, $type, $value, dark, semantic, $schema, $type, $value (+4 more)
 
 ### Community 67 - "assets/skills/design-system/templates/design-tokens-starter.json"
-Cohesion: 0.17
-Nodes (11): $type, $value, dark, semantic, $schema, $type, $value, semantic (+3 more)
+Cohesion: 0.15
+Nodes (12): component, $type, $value, dark, semantic, $schema, $type, $value (+4 more)
 
 ### Community 68 - "get_soffice_env"
 Cohesion: 0.24
@@ -1295,7 +1318,7 @@ Nodes (11): extensions, formatReport(), fs, getFiles(), main(), parseArgs(), pat
 
 ### Community 72 - "card"
 Cohesion: 0.20
-Nodes (12): radius, padding, radius, shadow, card, radius, $type, $value (+4 more)
+Nodes (12): $type, $value, bg, bg, padding, shadow, card, bg (+4 more)
 
 ### Community 73 - ".generate_config_string"
 Cohesion: 0.20
@@ -1345,9 +1368,9 @@ Nodes (10): extractColorsFromTable(), extractCoreAttributes(), extractHexColors(
 Cohesion: 0.18
 Nodes (8): args, fs, minimal, MINIMAL_TOKENS, path, projectRoot, tokensPath, wrapStyle
 
-### Community 85 - "primitive"
-Cohesion: 0.18
-Nodes (11): fast, normal, slow, $type, $value, $type, $value, primitive (+3 more)
+### Community 85 - "duration"
+Cohesion: 0.20
+Nodes (10): fast, normal, slow, $type, $value, $type, $value, duration (+2 more)
 
 ### Community 86 - "patch"
 Cohesion: 0.18
@@ -1362,8 +1385,8 @@ Cohesion: 0.18
 Nodes (11): devDependencies, @playwright/test, @types/bun, @types/node, @types/prompts, typescript, typescript, @playwright/test (+3 more)
 
 ### Community 89 - "agronomo_chat.py"
-Cohesion: 0.14
-Nodes (22): _accion_sin_duplicado(), _alias_detectado(), _consejo_estado(), _fundamentar(), _nombre_rec(), _rango_variable(), Asesor agronómico conversacional de AgroIA. Actúa como un experto agrónomo con…, Consejo de 'cómo y cuándo' específico por variable, con genérico de respaldo. (+14 more)
+Cohesion: 0.22
+Nodes (13): _accion_sin_duplicado(), _alias_detectado(), _consejo_estado(), _nombre_rec(), Asesor agronómico conversacional de AgroIA. Actúa como un experto agrónomo con…, Consejo de 'cómo y cuándo' específico por variable, con genérico de respaldo., Quita la palabra repetida cuando la acción empieza con el nombre (p. ej. nombre…, Nombre amigable para una recomendación del motor (variable 'P' → 'el fósforo'). (+5 more)
 
 ### Community 90 - ".claude/skills/design/scripts/logo/generate.py"
 Cohesion: 0.29
@@ -1374,8 +1397,8 @@ Cohesion: 0.36
 Nodes (9): flattenTokens(), fs, generateCSS(), generateTailwind(), main(), parseArgs(), path, resolveReference() (+1 more)
 
 ### Community 92 - "catalogo.py"
-Cohesion: 0.10
-Nodes (38): actualizar_cultivo(), actualizar_ficha(), aprobar_ficha(), crear_cultivo(), crear_ficha(), CultivoCreate, CultivoResponse, CultivoUpdate (+30 more)
+Cohesion: 0.11
+Nodes (37): actualizar_cultivo(), actualizar_ficha(), aprobar_ficha(), crear_cultivo(), crear_ficha(), CultivoCreate, CultivoResponse, CultivoUpdate (+29 more)
 
 ### Community 93 - "._base_config"
 Cohesion: 0.22
@@ -1438,8 +1461,8 @@ Cohesion: 0.08
 Nodes (33): Discordancia, EstadoDiscordancia, str, Modelo Discordancia — conflicto ML vs reglas agronómicas., Caso de conflicto entre predicción ML y validación del sistema experto., DispositivoIoT, Modelo DispositivoIoT — registro de dispositivos de sensores IoT. Permite…, Dispositivo sensor IoT registrado en la plataforma. (+25 more)
 
 ### Community 109 - "radius"
-Cohesion: 0.11
-Nodes (27): $type, $value, lg, sm, $type, $value, $type, $value (+19 more)
+Cohesion: 0.19
+Nodes (14): $type, $value, $type, $value, $type, $value, primitive, radius (+6 more)
 
 ### Community 110 - "ensure-test-user.mjs"
 Cohesion: 0.46
@@ -1450,8 +1473,8 @@ Cohesion: 0.10
 Nodes (20): 1. Perfil y Rol del Modelo (System Prompt), 2.1 Regla de Degradación Grácil (Graceful Degradation), 2.2 Control de Confianza Global y Umbrales Duros (RQ-12 / RQ-14), 2.3 Umbral de Badge de Aprobación de Expertos (RQ-15), 2. Principios Rectores y Reglas No Negociables de la Plataforma, 3.1 Tabla de Sensibilidad a Textura y Drenaje (RQ-05 Generalizado), 3.2 Contexto de pH por Cultivo (RQ-02), 3. Matriz de Reglas Agronómicas Especializadas (+12 more)
 
 ### Community 112 - "test_comisiones_etapas.py"
-Cohesion: 0.18
-Nodes (20): _borrar_finca(), _cabeceras(), cli(), _estado_comision(), _finca_demo(), _finca_sin_comision(), _poner_estado(), fixture (+12 more)
+Cohesion: 0.19
+Nodes (20): _borrar_finca(), _cabeceras(), _estado_comision(), _finca_demo(), _finca_sin_comision(), _poner_estado(), Reglas de etapas de comisión: recomendación y reporte fin de etapa. Flujo…, Finca demo con comisión 'asignada' → la recomendación la pasa a… (+12 more)
 
 ### Community 113 - "services/balance_hidrico.py"
 Cohesion: 0.18
@@ -1461,9 +1484,9 @@ Nodes (13): balance_hidrico(), AsyncSession, get, API de balance hídrico ETo/Kc
 Cohesion: 0.06
 Nodes (47): abrirMapa(), actualizarSliderValor(), aplicarRol(), auditState, CALIDAD_LECTURA, cargarAlertasClima(), cargarAuditoria(), cargarCalendarioLunar() (+39 more)
 
-### Community 115 - "headers"
-Cohesion: 0.14
-Nodes (25): abrirEditarFinca(), abrirEditarLote(), abrirModalVisitaBpa(), cargarBpa(), cargarFincas(), copiarTexto(), crearLote(), eliminarFinca() (+17 more)
+### Community 115 - "enviarFinca"
+Cohesion: 0.21
+Nodes (13): abrirEditarFinca(), cargarFincas(), copiarTexto(), eliminarFinca(), enviarAnalisis(), enviarCargaCiclos(), enviarFinca(), guardarEdicionFinca() (+5 more)
 
 ### Community 116 - "build.mjs"
 Cohesion: 0.33
@@ -1505,9 +1528,9 @@ Nodes (45): Actualizar los Tests Cuando Cambia el Código, Aislamiento de Base d
 Cohesion: 0.04
 Nodes (44): 10. Funcionalidades futuras (fuera del MVP), 11. Entregables esperados, 12. Criterios de éxito, 13. Preguntas abiertas / a definir con el proveedor, 1.1 Nombre del proyecto, 1.2 Objetivo del proyecto, 1.3 Mercado objetivo, 1. Introducción (+36 more)
 
-### Community 126 - "services/__init__.py"
+### Community 126 - "RecommendationOrchestrator"
 Cohesion: 0.04
-Nodes (41): Regla del sistema experto agronómico. Sin tenant_id (datos compartidos)., ReglaAgronomica, Seed data para reglas agronómicas del sistema experto (UC1 + UC2). Fuentes:…, asegurar_reglas(), Asegura que las reglas agronómicas ampliadas existan en la BD. Al arrancar la…, Inserta las reglas faltantes. Retorna conteos {universales, cultivos}., Data Adapters para el motor de recomendaciones. Proveen una interfaz unificada…, Valida una lectura de sensor y la convierte a SoilData normalizado. (+33 more)
+Nodes (44): Regla del sistema experto agronómico. Sin tenant_id (datos compartidos)., ReglaAgronomica, Seed data para reglas agronómicas del sistema experto (UC1 + UC2). Fuentes:…, asegurar_reglas(), Asegura que las reglas agronómicas ampliadas existan en la BD. Al arrancar la…, Inserta las reglas faltantes. Retorna conteos {universales, cultivos}., AgroIA Backend services package., Orquestador híbrido de recomendaciones — ML + Reglas. Coordina el pipeline… (+36 more)
 
 ### Community 127 - "Documento de Arquitectura de Software: AgroInteligente Colombia (AgroIA)"
 Cohesion: 0.17
@@ -1985,9 +2008,9 @@ Nodes (13): Brand Voice Framework, Character Spectrum, Emotion Spectrum, Languag
 Cohesion: 0.14
 Nodes (13): Card Styles, Component Variants, CSS Structures, Feature Grid (3 columns), Layout Decision Flow, Layout Patterns, Layout Selection by Use Case, Metric Styles (+5 more)
 
-### Community 313 - "equipo.py"
-Cohesion: 0.05
-Nodes (87): cancelar_comision(), _comision_a_dict(), ComisionCreate, ComisionUpdate, crear_comision(), detalle_comision(), editar_comision(), _exigir_admin() (+79 more)
+### Community 313 - "comisiones.py"
+Cohesion: 0.07
+Nodes (49): cancelar_comision(), _comision_a_dict(), ComisionCreate, ComisionUpdate, crear_comision(), detalle_comision(), editar_comision(), _exigir_admin() (+41 more)
 
 ### Community 314 - "Tailwind Integration"
 Cohesion: 0.14
@@ -2218,8 +2241,8 @@ Cohesion: 0.22
 Nodes (8): Guía: Generar el diagrama de despliegue desde código Terraform, Paso 1 — Localizar el código Terraform, Paso 2 — Identificar el proveedor de nube, Paso 3 — Mapear recursos a componentes del diagrama, Paso 4 — Reconstruir las relaciones, Paso 5 — Generar el archivo y documentar hallazgos, Regla de oro, Si no hay Terraform ni documento previo
 
 ### Community 371 - "AsyncSession"
-Cohesion: 0.10
-Nodes (42): quitar_visita(), Quita una visita de la trazabilidad (el checklist vigente no se modifica)., actualizar_datos_agronomicos(), crear_lote(), editar_finca(), editar_lote(), eliminar_finca(), eliminar_lote() (+34 more)
+Cohesion: 0.09
+Nodes (47): quitar_visita(), Quita una visita de la trazabilidad (el checklist vigente no se modifica)., actualizar_datos_agronomicos(), crear_lote(), editar_finca(), editar_lote(), eliminar_finca(), eliminar_lote() (+39 more)
 
 ### Community 372 - "Plomería base por patrón arquitectónico"
 Cohesion: 0.22
@@ -2850,8 +2873,8 @@ Cohesion: 0.50
 Nodes (3): 📄 Archivos principales, Extracting a screen inventory from a PRD, 🔗 Nodos clave
 
 ### Community 550 - "agroia_backend/api/chat.py"
-Cohesion: 0.15
-Nodes (18): ChatRequest, consultar_chat(), memoria_chat(), Chat con el asesor agronómico experto (explica reportes y da consejos).…, Memoria conversacional de la finca (últimas consultas y respuestas)., Responde una pregunta sobre la finca usando el contexto agronómico real., ChatMemoria, Consulta-respuesta del chat agronómico ligada a una finca. (+10 more)
+Cohesion: 0.20
+Nodes (14): ChatRequest, consultar_chat(), Chat con el asesor agronómico experto (explica reportes y da consejos).…, Responde una pregunta sobre la finca usando el contexto agronómico real., ChatMemoria, Consulta-respuesta del chat agronómico ligada a una finca., consultar_experto(), contexto_resumido() (+6 more)
 
 ### Community 551 - "Formato de Runbook de Pruebas en Markdown"
 Cohesion: 0.50
@@ -2981,9 +3004,9 @@ Nodes (3): 📄 Archivos principales, 🔗 Nodos clave, validate_file
 Cohesion: 0.50
 Nodes (3): 📄 Archivos principales, 🔗 Nodos clave, Workflow
 
-### Community 587 - "plagas.py"
-Cohesion: 0.20
-Nodes (14): _a_dict(), _gbif_ocurrencias(), historial_monitoreo(), MonitoreoRequest, AsyncSession, BaseModel, get, post (+6 more)
+### Community 587 - "registrar_monitoreo"
+Cohesion: 0.19
+Nodes (13): _a_dict(), _gbif_ocurrencias(), historial_monitoreo(), MonitoreoRequest, AsyncSession, BaseModel, get, post (+5 more)
 
 ### Community 589 - "Datasets para AgroIA"
 Cohesion: 0.40
@@ -3002,8 +3025,8 @@ Cohesion: 0.10
 Nodes (18): create_access_token(), create_refresh_token(), decode_token(), get_current_user(), get_tenant_id(), Request, str, Servicio de autenticación JWT + OAuth2 + RBAC para AgroIA. Emite y valida… (+10 more)
 
 ### Community 593 - "button"
-Cohesion: 0.09
-Nodes (28): $type, $value, bg, fg, font-size, hover-bg, padding-x, padding-y (+20 more)
+Cohesion: 0.20
+Nodes (10): fg, font-size, hover-bg, button, $type, $value, $type, $value (+2 more)
 
 ### Community 594 - "HU-03: Revisar recomendaciones de baja confianza"
 Cohesion: 0.20
@@ -3014,8 +3037,8 @@ Cohesion: 0.20
 Nodes (9): Campos del recurso, Como, Criterios de Aceptación, HU-05: Gestionar reglas agronómicas del sistema experto, Para, Quiero, Recurso, Recurso de datos involucrado (+1 more)
 
 ### Community 597 - "usuarios.py"
-Cohesion: 0.05
-Nodes (60): dashboard_zona(), _es_extensionista(), info_extensionista(), AsyncSession, get, API del rol Extensionista (1.J) — dashboard de zona por municipios., Municipios asignados del extensionista actual., Fincas de la zona del extensionista (por municipios asignados). (+52 more)
+Cohesion: 0.06
+Nodes (50): actualizar_perfil(), cambiar_rol(), crear_usuario(), editar_usuario(), eliminar_cuenta(), eliminar_usuario(), _exigir_admin_usuarios(), _hash_password() (+42 more)
 
 ### Community 598 - "ciclos.py"
 Cohesion: 0.06
@@ -3073,9 +3096,9 @@ Nodes (5): Criterios de Done, Descripción, Recurso de datos involucrado, Recurs
 Cohesion: 0.60
 Nodes (5): $type, $value, border, border, border
 
-### Community 612 - "sensor_api.py"
-Cohesion: 0.14
-Nodes (16): ingesta_sensor(), BaseModel, post, API de ingesta para sensores físicos (ESP32/LoRaWAN). Este es el endpoint que…, Trama tal como la envía el firmware del sensor., Recibe una trama del sensor y la procesa en el pipeline de AgroIA., SensorFrame, centroide_finca() (+8 more)
+### Community 612 - "consumer.py"
+Cohesion: 0.10
+Nodes (18): ingesta_sensor(), BaseModel, post, Trama tal como la envía el firmware del sensor., Recibe una trama del sensor y la procesa en el pipeline de AgroIA., SensorFrame, centroide_finca(), haversine_relativa() (+10 more)
 
 ### Community 614 - "1. Introducción y Objetivos"
 Cohesion: 0.40
@@ -3134,8 +3157,8 @@ Cohesion: 0.11
 Nodes (16): 📄 Archivos principales, 🌐 Comunidades conectadas, genesis/SKILL.md, 🔗 Nodos clave, 📄 Archivos principales, 🌐 Comunidades conectadas, 🔗 Nodos clave, references/comandos-init-por-stack.md (+8 more)
 
 ### Community 628 - "catalogo_service.py"
-Cohesion: 0.08
-Nodes (39): Cultivo, FichaTecnica, Base, TimestampMixin, ¿Se venció el SLA de revisión (5 días hábiles)?, ¿Han pasado más de 12 meses desde la última revisión?, ¿Los umbrales de esta ficha pueden usarse para generar recomendaciones?, Catálogo de cultivos. Datos compartidos (sin tenant_id). (+31 more)
+Cohesion: 0.11
+Nodes (27): FichaTecnica, ¿Se venció el SLA de revisión (5 días hábiles)?, ¿Han pasado más de 12 meses desde la última revisión?, ¿Los umbrales de esta ficha pueden usarse para generar recomendaciones?, Ficha técnica de un cultivo con umbrales edafoclimáticos. Flujo: Borrador → En…, actualizar_ficha(), aprobar_ficha(), crear_ficha() (+19 more)
 
 ### Community 630 - "🚀 Despliegue gratuito (Render + Neon/Supabase)"
 Cohesion: 0.04
@@ -3145,9 +3168,9 @@ Nodes (46): Aceptación humana de recomendaciones (human-in-the-loop) y 12 mejor
 Cohesion: 0.09
 Nodes (43): _buscar_modelo(), diagnosticar_imagen(), _mapear_contrato(), Any, Motor de visión AgroVision — orquestación de inferencia (sección 18). Jerarquía…, Punto de entrada único del motor de visión., Busca un modelo empaquetado aplicable en el registry local. Estructura lista…, Traduce la salida del fallback al contrato público de inferencia. (+35 more)
 
-### Community 632 - "dashboard.py"
-Cohesion: 0.12
-Nodes (24): dashboard_finca(), exportar_datos(), _format_agricultor(), _format_experto(), generar_reporte_pdf(), AsyncSession, get, API endpoints del dashboard y reportes PDF. (+16 more)
+### Community 632 - "get_dashboard_data"
+Cohesion: 0.11
+Nodes (23): dashboard_finca(), exportar_datos(), _format_agricultor(), _format_experto(), generar_reporte_pdf(), AsyncSession, get, Exporta datos del dashboard en CSV, JSON o Excel. (+15 more)
 
 ### Community 633 - "ui-ux-pro-max-skill-main⁄README.zh.md.md"
 Cohesion: 0.12
@@ -3218,8 +3241,8 @@ Cohesion: 0.25
 Nodes (10): check_datasets(), check_docker(), check_env_file(), check_python(), main(), Script de verificación del entorno de desarrollo. Valida que todas las…, Verifica versión de Python., Verifica que .env existe. (+2 more)
 
 ### Community 667 - "integration_test.py"
-Cohesion: 0.13
-Nodes (20): aplicar_calibracion(), Aplica factores de calibración NPK por dispositivo (brecha G4). Solo se invoca…, main(), Prueba de integración end-to-end del proyecto AgroIA. Verifica que todos los…, Verifica los datos semilla de reglas agronómicas (UC1 + UC2)., Verifica el mapeo VariableSuelo → claves de SoilData.to_dict()., Verifica que todos los modelos SQLAlchemy se puedan importar., Verifica la normalización de la trama cruda del ESP32 (brecha G2). (+12 more)
+Cohesion: 0.10
+Nodes (24): aplicar_calibracion(), normalizar_trama(), Normalización de tramas IoT (ESP32/LoRaWAN) al formato canónico. Cierra la…, Aplica factores de calibración NPK por dispositivo (brecha G4). Solo se invoca…, Convierte una trama cruda de sensor a payload canónico. Args: raw: diccionario…, main(), Prueba de integración end-to-end del proyecto AgroIA. Verifica que todos los…, Verifica los datos semilla de reglas agronómicas (UC1 + UC2). (+16 more)
 
 ### Community 668 - "Obsidian CLI"
 Cohesion: 0.20
@@ -3237,9 +3260,9 @@ Nodes (9): options, assets, browser, inlineStyleLanguage, polyfills, styles, tsC
 Cohesion: 0.22
 Nodes (8): Claude Code, Codex, Installation, Manually, Marketplace, npx skills, OpenCode, Skills
 
-### Community 672 - "src/ui-ux-pro-max/scripts/core.py"
-Cohesion: 0.21
-Nodes (12): _domain_keywords(), _get_bm25(), _load_csv(), _load_product_keywords(), Load CSV and return list of dicts, with mtime-based caching., Fitted BM25 index for this file+columns, with mtime-based caching., Core search function using BM25. Returns (results, bm25_or_none)., Nearest known vocabulary terms for a query that returned 0 hits, so the caller… (+4 more)
+### Community 672 - "equipo.py"
+Cohesion: 0.10
+Nodes (43): cerrar_novedad(), crear_empleado(), desvincular_empleado(), editar_empleado(), _empleado_a_dict(), EmpleadoCreate, EmpleadoUpdate, _exigir_admin() (+35 more)
 
 ### Community 673 - "Frontend"
 Cohesion: 0.25
@@ -3286,8 +3309,8 @@ Cohesion: 0.50
 Nodes (3): agroia-shared, 📄 Archivos principales, 🔗 Nodos clave
 
 ### Community 686 - "curvas.py"
-Cohesion: 0.06
-Nodes (33): _a_dict(), cargar_curva_extraccion(), curva_extraccion(), CurvaRequest, PuntoCurva, AsyncSession, BaseModel, get (+25 more)
+Cohesion: 0.07
+Nodes (32): _a_dict(), cargar_curva_extraccion(), curva_extraccion(), CurvaRequest, PuntoCurva, AsyncSession, BaseModel, get (+24 more)
 
 ### Community 687 - "AsyncSession"
 Cohesion: 0.16
@@ -3754,20 +3777,20 @@ Cohesion: 0.50
 Nodes (3): 📄 Archivos principales, 🔗 Nodos clave, 三处 data / scripts / templates 的区别
 
 ### Community 804 - "demo_reset.py"
-Cohesion: 0.24
-Nodes (15): _crear_ejemplo_completo(), _crear_finca_etapa(), _cultivo_por_nombre(), _lectura(), _lote_para(), Restablecimiento de datos para demostración. Limpia los datos operativos y…, Crea o actualiza la finca (los ids fijos se reutilizan)., Cuadrícula 3×3 con variación determinística + lectura central exacta. (+7 more)
+Cohesion: 0.08
+Nodes (30): _lote_principal(), Data Adapters para el motor de recomendaciones. Proveen una interfaz unificada…, Valida una lectura de sensor y la convierte a SoilData normalizado., Adaptador para consultar datos de suelo desde PostgreSQL+TimescaleDB., Obtiene la lectura más reciente para una finca. Precedencia: el sensor manda…, Rellena variables faltantes del sensor con la capa SIG oficial., Obtiene el histórico de lecturas para una finca., Datos de suelo normalizados para el motor de recomendaciones. (+22 more)
 
 ### Community 811 - "agroia_auth/api/auth.py"
-Cohesion: 0.10
-Nodes (26): login(), LoginRequest, me(), BaseModel, get, post, API endpoints de autenticación y usuarios., Autentica un usuario y retorna JWT access + refresh tokens. (+18 more)
+Cohesion: 0.18
+Nodes (17): login(), LoginRequest, me(), BaseModel, get, post, API endpoints de autenticación y usuarios., Autentica un usuario y retorna JWT access + refresh tokens. (+9 more)
 
 ### Community 813 - "Datasets para AgroIA"
 Cohesion: 0.50
 Nodes (3): 📄 Archivos principales, Datasets para AgroIA, 🔗 Nodos clave
 
 ### Community 814 - "laboratorio.py"
-Cohesion: 0.17
-Nodes (18): _a_dict(), eliminar_analisis(), _es_uuid(), historial_analisis(), IngestaLabRequest, ingestar_analisis(), API de análisis de laboratorio ICA — ingesta de resultados de suelo. - POST…, Historial de análisis de laboratorio de la finca. (+10 more)
+Cohesion: 0.21
+Nodes (14): _a_dict(), IngestaLabRequest, ingestar_analisis(), API de análisis de laboratorio ICA — ingesta de resultados de suelo. - POST…, Ingesta de resultados de laboratorio; valida rangos y prioriza sobre el sensor., AnalisisLaboratorio, Modelo AnalisisLaboratorio — resultados de laboratorios ICA acreditados. Los…, Resultado de análisis de suelo de un laboratorio acreditado. (+6 more)
 
 ### Community 815 - "cargar_seed_data"
 Cohesion: 0.40
@@ -3806,20 +3829,20 @@ Cohesion: 0.12
 Nodes (24): Any, _clean_lines(), _dct2d(), _indent(), JsonLogger, license_action(), load_catalog(), load_class_map() (+16 more)
 
 ### Community 830 - "test_sync_offline.py"
-Cohesion: 0.29
-Nodes (9): cli(), _cabeceras(), cli(), Pruebas de sincronización offline (PWA) — tramas y labores idempotentes., test_estado_sync_requiere_rol(), test_sync_labores_requiere_labor_valida(), test_sync_prohibido_para_cliente(), test_sync_sensores_idempotente() (+1 more)
+Cohesion: 0.25
+Nodes (10): cli(), cli(), _cabeceras(), cli(), Pruebas de sincronización offline (PWA) — tramas y labores idempotentes., test_estado_sync_requiere_rol(), test_sync_labores_requiere_labor_valida(), test_sync_prohibido_para_cliente() (+2 more)
 
 ### Community 832 - "get_settings"
 Cohesion: 0.20
 Nodes (10): get, rag_health(), Verifica el estado del servicio RAG., get_settings(), Configuración centralizada de AgroIA., Retorna la configuración cacheada (singleton)., Settings, Configura structlog para toda la aplicación. (+2 more)
 
-### Community 833 - "labores.py"
-Cohesion: 0.13
-Nodes (26): actualizar_labor(), ActualizarLaborRequest, eliminar_labor(), _exigir_rol(), generar_labores(), GenerarLaboresRequest, _inferir_tipo(), _info_finca_lotes() (+18 more)
+### Community 833 - "generar_labores"
+Cohesion: 0.12
+Nodes (23): actualizar_labor(), ActualizarLaborRequest, eliminar_labor(), _exigir_rol(), generar_labores(), GenerarLaboresRequest, _inferir_tipo(), _info_finca_lotes() (+15 more)
 
 ### Community 834 - "bpa.py"
 Cohesion: 0.15
-Nodes (20): _a_dict(), ChecklistItem, ChecklistRequest, get_checklist(), get_visitas(), put_checklist(), API de trazabilidad BPA / certificación (1.G): checklist + reporte., Diligencia el checklist BPA (upsert por item). (+12 more)
+Nodes (21): _a_dict(), ChecklistItem, ChecklistRequest, get_checklist(), get_visitas(), put_checklist(), API de trazabilidad BPA / certificación (1.G): checklist + reporte., Diligencia el checklist BPA (upsert por item). (+13 more)
 
 ### Community 835 - "008_reparar_enums_sensor.py"
 Cohesion: 0.40
@@ -3833,9 +3856,9 @@ Nodes (8): get_combined_dataset(), load_crop_recommendation(), load_crops_npk(),
 Cohesion: 0.10
 Nodes (21): detect_domain(), _domain_keywords(), _get_bm25(), _load_csv(), _load_product_keywords(), Load CSV and return list of dicts, with mtime-based caching., Fitted BM25 index for this file+columns, with mtime-based caching., Core search function using BM25. Returns (results, bm25_or_none). (+13 more)
 
-### Community 838 - "src/ui-ux-pro-max/scripts/tests/test_core.py"
-Cohesion: 0.18
-Nodes (11): format_markdown(), format_master_md(), generate_design_system(), persist_design_system(), Format design system as markdown., Main entry point for design system generation. Args: query: Search query (e.g.,…, Slugify a name into a single safe path segment. Only [a-z0-9_-] survives; every…, Persist design system to design-system/<project>/ folder using Master +… (+3 more)
+### Community 838 - "assets/scripts/core.py"
+Cohesion: 0.21
+Nodes (12): _domain_keywords(), _get_bm25(), _load_csv(), _load_product_keywords(), Load CSV and return list of dicts, with mtime-based caching., Fitted BM25 index for this file+columns, with mtime-based caching., Core search function using BM25. Returns (results, bm25_or_none)., Nearest known vocabulary terms for a query that returned 0 hits, so the caller… (+4 more)
 
 ### Community 839 - "errors.py"
 Cohesion: 0.11
@@ -3866,12 +3889,12 @@ Cohesion: 0.23
 Nodes (13): build_cip_prompt(), check_logo_required(), generate_cip_set(), generate_with_nano_banana(), load_env(), load_logo_image(), main(), Generate image using Gemini Nano Banana (native image generation) Supports two… (+5 more)
 
 ### Community 859 - "cargarUsuarios"
-Cohesion: 0.47
-Nodes (6): abrirEditarUsuario(), cargarUsuarios(), eliminarUsuario(), enviarUsuario(), guardarEdicionUsuario(), renderUsuariosList()
+Cohesion: 0.32
+Nodes (8): abrirEditarUsuario(), actualizarTriggerFincas(), cargarUsuarios(), eliminarUsuario(), enviarUsuario(), guardarEdicionUsuario(), renderMultiSelectFincas(), renderUsuariosList()
 
 ### Community 861 - "database.py"
 Cohesion: 0.03
-Nodes (84): API de análisis de agua de riego (clasificación FAO-29)., API de estado de los modelos de ML (validación de entrenamiento). GET…, get_preferencias(), preferencias_notificacion(), PreferenciasRequest, AsyncSession, BaseModel, get (+76 more)
+Nodes (83): API de análisis de agua de riego (clasificación FAO-29)., API endpoints del dashboard y reportes PDF., dashboard_zona(), _es_extensionista(), info_extensionista(), AsyncSession, get, API del rol Extensionista (1.J) — dashboard de zona por municipios. (+75 more)
 
 ### Community 863 - "test_vision.py"
 Cohesion: 0.19
@@ -3901,9 +3924,9 @@ Nodes (12): 1.1 Dataset de entrenamiento principal: sintético etiquetado por re
 Cohesion: 0.71
 Nodes (6): _abrirDB(), actualizarBannerOffline(), encolarOffline(), iniciarOffline(), _pendientes(), sincronizarPendientes()
 
-### Community 874 - "lista_trabajos"
-Cohesion: 0.40
-Nodes (5): _exigir_admin(), lista_trabajos(), AsyncSession, get, Fincas como órdenes de trabajo: etapa, semáforo y actividades faltantes.
+### Community 874 - "assets/scripts/tests/test_core.py"
+Cohesion: 0.18
+Nodes (11): format_markdown(), format_master_md(), generate_design_system(), persist_design_system(), Format design system as markdown., Main entry point for design system generation. Args: query: Search query (e.g.,…, Slugify a name into a single safe path segment. Only [a-z0-9_-] survives; every…, Persist design system to design-system/<project>/ folder using Master +… (+3 more)
 
 ### Community 875 - "$type"
 Cohesion: 0.60
@@ -3930,20 +3953,20 @@ Cohesion: 0.60
 Nodes (5): sm, sm, sm, $type, $value
 
 ### Community 884 - "errorBanner"
-Cohesion: 0.12
-Nodes (28): abrirModalCosechar(), actualizarAreaCalc(), actualizarResumenUbicacion(), analizarFotoPlaga(), aplicarCoordenadas(), aplicarEnlace(), calcularAreaHa(), calcularPerimetroM() (+20 more)
+Cohesion: 0.13
+Nodes (26): abrirModalCosechar(), actualizarAreaCalc(), actualizarResumenUbicacion(), analizarFotoPlaga(), aplicarCoordenadas(), aplicarEnlace(), calcularAreaHa(), calcularPerimetroM() (+18 more)
 
 ### Community 885 - "md"
 Cohesion: 0.67
 Nodes (4): $type, $value, md, md
 
-### Community 886 - "RecommendationOrchestrator"
-Cohesion: 0.10
-Nodes (20): Orquestador híbrido de recomendaciones — ML + Reglas. Coordina el pipeline…, Recomendación preliminar cuando la finca NO tiene lecturas. No se bloquea la…, Clasifica una violación como DEFICIT, EXCESO o DESCONOCIDO., Estima el GDD acumulado con IDEAM y lo compara con lo requerido. GDD diario =…, Orquesta el pipeline completo de recomendación., Combina la advertencia del análisis con las de calidad de datos., Ejecuta el pipeline completo de recomendación. Args: request: Solicitud con…, Datos agronómicos de la finca: validación de laboratorio, fenología, tipo de… (+12 more)
+### Community 886 - "agroia_auth/main.py"
+Cohesion: 0.21
+Nodes (9): lifespan(), FastAPI, AgroIA Auth Service — Autenticación JWT + OAuth2 + RBAC., AuditLogMiddleware, BaseHTTPMiddleware, Middleware de seguridad OWASP + logging de auditoría. Aplica cabeceras HTTP de…, Agrega cabeceras de seguridad OWASP a todas las respuestas., Registra operaciones sensibles en logs de auditoría. Cumple con Ley 1581/2012:… (+1 more)
 
 ### Community 887 - "get"
 Cohesion: 0.08
-Nodes (33): _alerta_a_dict(), alertas_activas(), alertas_globales(), evaluar_alertas(), EvaluarRequest, API de alertas climáticas proactivas., Dispara la evaluación de alertas (manual o con pronóstico inyectado)., Alertas meteorológicas activas de la finca (banner del Dashboard). (+25 more)
+Nodes (32): _alerta_a_dict(), alertas_activas(), alertas_globales(), evaluar_alertas(), EvaluarRequest, API de alertas climáticas proactivas., Dispara la evaluación de alertas (manual o con pronóstico inyectado)., Alertas meteorológicas activas de la finca (banner del Dashboard). (+24 more)
 
 ### Community 890 - "none"
 Cohesion: 0.67
@@ -3973,9 +3996,9 @@ Nodes (5): 12.1 Tablas principales, 12.2 Enums (12 tipos en schema `agroia`), 12
 Cohesion: 0.40
 Nodes (5): 4.1 Pantalla de login, 4.2 Servicio que se invoca, 4.3 Sesión en el cliente, 4.4 Roles, permisos y cabeceras, 4. Autenticación y sesión (lo más básico)
 
-### Community 908 - "search"
-Cohesion: 0.24
-Nodes (6): Main search function with auto-domain detection, search(), format_output(), Format results for Claude consumption (token-optimized), Known query -> expected top-domain sanity checks (not exact-row pinning, since…, TestSearchDomains
+### Community 908 - "PreferenciaNotificacion"
+Cohesion: 0.17
+Nodes (12): get_preferencias(), preferencias_notificacion(), PreferenciasRequest, AsyncSession, BaseModel, get, put, Configura el canal de notificación de una finca (upsert por finca). (+4 more)
 
 ### Community 909 - "AptitudService"
 Cohesion: 0.19
@@ -4001,9 +4024,25 @@ Nodes (3): $type, $value, 6
 Cohesion: 0.67
 Nodes (3): $type, $value, 8
 
+### Community 918 - "construir_contexto"
+Cohesion: 0.20
+Nodes (10): _analisis_texto(), construir_contexto(), _ficha_texto(), Convierte una lectura en texto plano para el contexto del modelo., Reglas agronómicas aplicables (universales + del cultivo)., Ficha técnica del cultivo en texto plano., Resultado del motor (clasificación + recomendaciones) en texto plano., Construye el contexto completo (texto plano) para el LLM. (+2 more)
+
+### Community 919 - "Cultivo"
+Cohesion: 0.17
+Nodes (12): Cultivo, Base, TimestampMixin, Catálogo de cultivos. Datos compartidos (sin tenant_id)., actualizar_cultivo(), crear_cultivo(), listar_cultivos(), obtener_cultivo() (+4 more)
+
+### Community 920 - "search"
+Cohesion: 0.24
+Nodes (6): Main search function with auto-domain detection, search(), format_output(), Format results for Claude consumption (token-optimized), Known query -> expected top-domain sanity checks (not exact-row pinning, since…, TestSearchDomains
+
 ### Community 925 - "11. Reportes: anatomía del HTML generado"
 Cohesion: 0.15
 Nodes (13): 11.10 Módulos v4 — agua, curvas, riego, plagas, variedades, rotación, BPA, notificaciones, Extensionista y ML (v2.12), 11.11 Módulo operativo: equipo de trabajo, comisiones y lista de trabajos (v2.13), 11.12 JWT, laboratorio ICA, antagonismos, precios de cosecha, PWA y visión (v3.0), 11.1 Novedades v1.3 — muestreo inteligente, ROI realista y modo simulación, 11.2 Historial de ciclos en el reporte (v2.1), 11.3 Labores / órdenes de trabajo (ejecución con trazabilidad, v2.3), 11.4 Alertas climáticas proactivas (pronóstico + fenología + labores, v2.4), 11.5 Aprendizaje activo — promoción del ML por variable (v2.5) (+5 more)
+
+### Community 927 - "respuesta_orquestada"
+Cohesion: 0.28
+Nodes (9): _fundamentar(), _rango_variable(), Formatea una respuesta fundamentada (qué, por qué, datos, fuentes, falta,…, Preguntas de clima/época: responde con lo disponible, sin inventar., Explica POR QUÉ el motor recomendó el cultivo, con los datos reales., Orquestador agronómico: intención → herramientas → respuesta fundamentada.…, _respuesta_clima(), respuesta_orquestada() (+1 more)
 
 ### Community 934 - "iot.py"
 Cohesion: 0.06
@@ -4014,16 +4053,16 @@ Cohesion: 0.67
 Nodes (4): xl, xl, $type, $value
 
 ### Community 936 - "arrancarAplicacion"
-Cohesion: 0.13
-Nodes (22): abrirModalComision(), abrirModalEmpleado(), abrirModalIniciarCiclo(), abrirModalNovedad(), abrirReporte(), aplicarTipoReporte(), arrancarAplicacion(), badgeComision() (+14 more)
+Cohesion: 0.11
+Nodes (30): abrirModalComision(), abrirModalEmpleado(), abrirModalIniciarCiclo(), abrirModalNovedad(), abrirModalVisitaBpa(), abrirReporte(), actualizarLabor(), aplicarTipoReporte() (+22 more)
 
 ### Community 937 - "reportes.py"
 Cohesion: 0.16
 Nodes (18): _dosis_fosforo_ciclo(), generar_reporte(), _historial_ciclos_reporte(), _muestras_geo(), AsyncSession, BaseModel, post, Generación de reportes de análisis de suelo (HTML + PDF vía navegador). Tipos:… (+10 more)
 
 ### Community 938 - "esc"
-Cohesion: 0.11
-Nodes (35): actualizarLabor(), actualizarTriggerFincas(), badge(), badgeClase(), badgeEstadoClase(), badgeValidacion(), cargarCultivos(), cargarDispositivos() (+27 more)
+Cohesion: 0.13
+Nodes (33): badge(), badgeClase(), badgeEstadoClase(), badgeValidacion(), cargarCultivos(), cargarEjemplo(), cargarHistorial(), cargarListaTrabajos() (+25 more)
 
 ### Community 940 - "dataset_estado.py"
 Cohesion: 0.46
@@ -4053,7 +4092,11 @@ Nodes (3): AceptacionRecomendacion, Base, Aceptación explícita de una recomend
 Cohesion: 0.50
 Nodes (3): Labor, Base, Orden de trabajo (labor) de una recomendación para un lote.
 
-### Community 955 - "detect_domain"
+### Community 955 - "input"
+Cohesion: 0.29
+Nodes (8): padding-y, input, $type, $value, focus-ring, padding-y, $type, $value
+
+### Community 961 - "detect_domain"
 Cohesion: 0.43
 Nodes (3): detect_domain(), Auto-detect the most relevant domain from query. Matches are weighted by…, TestDomainDetection
 
@@ -4069,9 +4112,9 @@ Nodes (3): MonitoreoPlaga, Base, Registro de monitoreo de plagas en un lote (inc
 Cohesion: 0.33
 Nodes (5): init_mlflow(), log_model_metrics(), MLflow tracking configuration for AgroIA ML service. Local development: uses…, Initialize MLflow tracking for the current environment., Log model training results to MLflow.
 
-### Community 966 - "FastAPI"
-Cohesion: 0.07
-Nodes (28): lifespan(), _middleware_auth(), _no_cache_frontend(), AgroIA Backend — Servicio principal de negocio. Expone la API REST para…, Ciclo de vida de la aplicación., Fuerza revalidación de los estáticos del frontend. Sin esto, tras un deploy el…, Tests del health check del backend., Verifica que el endpoint de salud responde correctamente. (+20 more)
+### Community 966 - "health.py"
+Cohesion: 0.15
+Nodes (14): lifespan(), FastAPI, AgroIA ML Inference Service — Modelos de ML y sistema experto., lifespan(), FastAPI, AgroIA RAG Agent Service — Agente conversacional con RAG + GPT-4., check_database_health(), Verifica que la base de datos responde (para health check). (+6 more)
 
 ### Community 967 - "destructive-foreground"
 Cohesion: 0.67
@@ -4097,9 +4140,33 @@ Nodes (3): ring, $type, $value
 Cohesion: 0.67
 Nodes (3): secondary-foreground, $type, $value
 
+### Community 978 - "renderLotes"
+Cohesion: 0.40
+Nodes (6): abrirEditarLote(), crearLote(), eliminarLote(), guardarEdicionLote(), renderLotes(), toggleLotes()
+
+### Community 980 - "radius"
+Cohesion: 0.60
+Nodes (5): radius, radius, radius, $type, $value
+
+### Community 981 - "lg"
+Cohesion: 0.60
+Nodes (5): lg, $type, $value, lg, lg
+
+### Community 983 - "sm"
+Cohesion: 0.60
+Nodes (5): sm, sm, sm, $type, $value
+
 ### Community 984 - "download.py"
-Cohesion: 0.19
-Nodes (19): http_head(), HEAD/GET ligero para comprobar disponibilidad (11.1 Discover)., adapter_git(), adapter_http(), adapter_huggingface(), adapter_kaggle(), adapter_mendeley(), adapter_portal() (+11 more)
+Cohesion: 0.22
+Nodes (17): adapter_git(), adapter_http(), adapter_huggingface(), adapter_kaggle(), adapter_mendeley(), adapter_portal(), adapter_roboflow(), adapter_zenodo() (+9 more)
+
+### Community 988 - "agroia_iot/main.py"
+Cohesion: 0.67
+Nodes (3): lifespan(), FastAPI, AgroIA IoT Ingestion Service — Consumidor RabbitMQ para datos de sensores.
+
+### Community 989 - "padding-x"
+Cohesion: 0.67
+Nodes (4): padding-x, padding-x, $type, $value
 
 ### Community 990 - "split.py"
 Cohesion: 0.27
@@ -4108,6 +4175,14 @@ Nodes (10): _asignar_grupos(), _cargar(), _clusters_por_phash(), main(), partir_
 ### Community 991 - "http_download"
 Cohesion: 0.25
 Nodes (8): get_logger(), http_download(), JsonFormatter, Logger con salida JSON a stdout., Descarga a `dest` con reintentos exponenciales y resume vía Range. Devuelve…, Formatea cada registro como una línea JSON., Logger, LogRecord
+
+### Community 992 - "xl"
+Cohesion: 0.67
+Nodes (4): xl, xl, $type, $value
+
+### Community 993 - "md"
+Cohesion: 0.67
+Nodes (4): $type, $value, md, md
 
 ### Community 994 - "train.py"
 Cohesion: 0.35
@@ -4125,9 +4200,13 @@ Nodes (16): append_jsonl(), hamming_distance(), sha256_file(), _cargar_imagen(),
 Cohesion: 0.33
 Nodes (8): _decode_image(), _es_script_dir(), inspeccionar_dataset(), main(), Path, Etapa Inspect (11.3) — integridad, MIME, resolución y labels. Recorre…, Intenta decodificar con Pillow (presente en el entorno de datos)., sniff_mime()
 
-### Community 999 - "discover.py"
-Cohesion: 0.47
-Nodes (5): discover_one(), main(), Etapa Discover (11.1) — valida URLs, DOI, versión y términos. Comprueba…, Devuelve la URL final tras resolver un DOI (si aplica)., resolve_doi()
+### Community 999 - "http_head"
+Cohesion: 0.36
+Nodes (7): http_head(), HEAD/GET ligero para comprobar disponibilidad (11.1 Discover)., discover_one(), main(), Etapa Discover (11.1) — valida URLs, DOI, versión y términos. Comprueba…, Devuelve la URL final tras resolver un DOI (si aplica)., resolve_doi()
+
+### Community 1000 - "16"
+Cohesion: 0.67
+Nodes (3): $type, $value, 16
 
 ### Community 1001 - "convert_annotations.py"
 Cohesion: 0.46
@@ -4137,6 +4216,10 @@ Nodes (7): coco_a_interno(), ejecutar(), interno_a_yolo(), main(), Path, Convers
 Cohesion: 0.22
 Nodes (8): AgroVision — Pipeline de visión agrícola, Dependencias, Ejemplos, Estructura (sección 6 de la especificación), Flujo (sección 8), Inferencia (sección 18), Manifest v6, Principios aplicados
 
+### Community 1004 - "1"
+Cohesion: 0.67
+Nodes (3): $type, $value, 1
+
 ### Community 1005 - "especificacionImagenes.md"
 Cohesion: 0.29
 Nodes (6): Datasets prioritarios, Entregables, Las URLs principales quedaron verificadas, Qué contiene la especificación, Recomendación para el siguiente paso, Un punto muy importante de licenciamiento
@@ -4145,25 +4228,57 @@ Nodes (6): Datasets prioritarios, Entregables, Las URLs principales quedaron ver
 Cohesion: 0.04
 Nodes (53): limpiar_imagenes(), AsyncSession, post, API admin de mantenimiento (limpieza de imágenes y otros jobs)., Limpia las imágenes Base64 del chat con más de 90 días (solo Admin). El mismo…, consultar_enriquecimiento(), enriquecer_sig(), _exigir_rol() (+45 more)
 
+### Community 1007 - "3"
+Cohesion: 0.67
+Nodes (3): $type, $value, 3
+
 ### Community 1008 - "AgroIA — Especificación Técnica v6"
 Cohesion: 0.15
 Nodes (12): 0. Principio rector (se mantiene igual que en v5), 1. Reentrenamiento del modelo tabular (sistema experto ↔ ML sombra) — enlaces directos, 2.1 Contexto técnico confirmado en el sistema actual, 2.2 Datasets públicos reales, con enlace de descarga directa, mapeados a DS01–DS22, 2.3 Gap real y honesto: cultivos sin dataset público maduro, 2.4 Actualización propuesta al manifest (`datasets/VISION.md` y `datasets/manifest/*.yaml`), 2.5 Endpoint de estado del dataset (para trazabilidad, se apoya en lo ya existente), 2. Reentrenamiento de AgroVision (diagnóstico por foto) — el foco de este documento (+4 more)
 
-### Community 1011 - "test_laboratorio.py"
-Cohesion: 0.43
-Nodes (5): _login(), Tests del módulo de Laboratorios ICA (v3): ingesta, historial y eliminación., test_eliminar_solo_admin(), test_historial_y_filtro_por_finca(), test_ingesta_laboratorio_valida_y_rechaza_desconocidas()
+### Community 1009 - "8"
+Cohesion: 0.67
+Nodes (3): $type, $value, 8
+
+### Community 1010 - "destructive-foreground"
+Cohesion: 0.67
+Nodes (3): destructive-foreground, $type, $value
+
+### Community 1011 - "agroia_backend/main.py"
+Cohesion: 0.13
+Nodes (15): lifespan(), _middleware_auth(), _no_cache_frontend(), AgroIA Backend — Servicio principal de negocio. Expone la API REST para…, Ciclo de vida de la aplicación., Fuerza revalidación de los estáticos del frontend. Sin esto, tras un deploy el…, Tests del health check del backend., Verifica que el endpoint de salud responde correctamente. (+7 more)
+
+### Community 1012 - "muted"
+Cohesion: 0.67
+Nodes (3): muted, $type, $value
+
+### Community 1013 - "primary"
+Cohesion: 0.67
+Nodes (3): primary, $type, $value
 
 ### Community 1014 - "inventario_tecnico_datasets_agrovision_32ce3853.md"
 Cohesion: 0.40
 Nodes (4): Sheet: Inventario, Sheet: Pipeline, Sheet: Politica_Licencias, Sheet: Resumen
 
+### Community 1015 - "primary-foreground"
+Cohesion: 0.67
+Nodes (3): primary-foreground, $type, $value
+
+### Community 1021 - "ring"
+Cohesion: 0.67
+Nodes (3): ring, $type, $value
+
 ### Community 1022 - "feature_engineering.py"
 Cohesion: 0.40
 Nodes (5): get_soil_ranges(), Feature engineering for crop recommendation. Prepares features from raw soil +…, Return soil variable ranges for validation (Colombia reference). These are…, Validate feature values against expected ranges. Returns list of warnings for…, validate_features()
 
-### Community 1024 - "BaseModel"
-Cohesion: 0.17
-Nodes (16): FincaCreate, BatchLabor, BatchSensor, ItemLabor, ItemSensor, API de sincronización offline (PWA) — tramas de sensores y labores en batch.…, Actualiza labores completadas offline (idempotente)., Reenvía tramas de sensores capturadas offline (idempotente). (+8 more)
+### Community 1023 - "secondary-foreground"
+Cohesion: 0.67
+Nodes (3): secondary-foreground, $type, $value
+
+### Community 1024 - "sync.py"
+Cohesion: 0.20
+Nodes (15): BatchLabor, BatchSensor, estado_sync(), ItemLabor, ItemSensor, API de sincronización offline (PWA) — tramas de sensores y labores en batch.…, Actualiza labores completadas offline (idempotente)., Estado del servidor para la app offline (hora y salud). (+7 more)
 
 ### Community 1028 - "12b. Almanaque Bristol — calendario lunar y siembra cultural (v3.4)"
 Cohesion: 0.50
@@ -4185,17 +4300,17 @@ Nodes (18): _a_dict(), actualizar_precio(), PrecioRequest, precios_por_departame
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `VisionDiagnostico` connect `equipo.py` to `database.py`?**
+- **Why does `RefreshToken` connect `comisiones.py` to `database.py`?**
   _High betweenness centrality (0.002) - this node is a cross-community bridge._
+- **Why does `primitive` connect `radius` to `assets/skills/design-system/templates/design-tokens-starter.json`, `gray`, `fontSize`, `spacing`, `duration`?**
+  _High betweenness centrality (0.001) - this node is a cross-community bridge._
+- **Why does `phash()` connect `common.py` to `ndarray`, `append_jsonl`?**
+  _High betweenness centrality (0.001) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `TailwindConfigGenerator` (e.g. with `TestGeneratedConfigIsValidJs` and `TestTailwindConfigGenerator`) actually correct?**
   _`TailwindConfigGenerator` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `TABS_POR_ROL`, `ICONOS_APROXIMADOS`, `ICONOS_IMG` to the rest of the system?**
   _4403 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `init.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.06080246913580247 - nodes in this community are weakly interconnected._
-- **Should `BaseSchemaValidator` be split into smaller, more focused modules?**
-  _Cohesion score 0.051759834368530024 - nodes in this community are weakly interconnected._
-- **Should `BaseSchemaValidator` be split into smaller, more focused modules?**
-  _Cohesion score 0.051759834368530024 - nodes in this community are weakly interconnected._
 - **Should `BaseSchemaValidator` be split into smaller, more focused modules?**
   _Cohesion score 0.051759834368530024 - nodes in this community are weakly interconnected._
