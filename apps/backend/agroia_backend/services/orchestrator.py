@@ -160,6 +160,8 @@ class RecommendationOrchestrator:
 
         # ── Contexto agronómico de la finca (validación lab, fenología…) ──
         finca_ctx = await self._cargar_contexto_finca(request.finca_id)
+        finca_ctx["lectura_antiguedad_horas"] = soil_data.antiguedad_horas
+        finca_ctx["lectura_origen"] = soil_data.origen
 
         # ── Laboratorio ICA reciente (<90 días): prioridad sobre el sensor ──
         lab_ctx = await self._aplicar_analisis_laboratorio(
@@ -170,6 +172,17 @@ class RecommendationOrchestrator:
 
         # ── Advertencias de calidad de datos (brechas G3/G4) ──
         advertencias_datos = []
+        antiguedad = soil_data.antiguedad_horas
+        if antiguedad is not None and antiguedad > 24:
+            if antiguedad >= 24:
+                texto = f"{round(antiguedad / 24, 1)} días"
+            else:
+                texto = f"{round(antiguedad)} horas"
+            advertencias_datos.append(
+                f"🕒 Última toma de suelo hace {texto}: el análisis usa los "
+                f"datos capturados con el sensor real (no se descartan). "
+                f"Considere tomar una nueva muestra para mayor certeza."
+            )
         if soil_data.calidad == "npk_no_calibrado":
             advertencias_datos.append(
                 "⚠️ Lecturas NPK sin calibrar: valide con análisis de laboratorio "
@@ -525,6 +538,10 @@ class RecommendationOrchestrator:
             "confianza_real": confianza_real,
             "respaldos_expertos": respaldos,
             "mercado_departamento": finca_ctx.get("departamento"),
+            "lectura_antiguedad_horas": (
+                round(antiguedad, 1) if (antiguedad := finca_ctx.get("lectura_antiguedad_horas")) is not None else None
+            ),
+            "lectura_origen": finca_ctx.get("lectura_origen"),
         }
         if finca_ctx.get("lab_reciente"):
             justificacion["laboratorio_reciente"] = finca_ctx["lab_reciente"]
@@ -909,6 +926,10 @@ class RecommendationOrchestrator:
             "confianza": confianza_final,
             "confianza_real": confianza_real,
             "respaldos_expertos": respaldos,
+            "lectura_antiguedad_horas": (
+                round(antiguedad, 1) if (antiguedad := finca_ctx.get("lectura_antiguedad_horas")) is not None else None
+            ),
+            "lectura_origen": finca_ctx.get("lectura_origen"),
         }
         if finca_ctx.get("lab_reciente"):
             justificacion["laboratorio_reciente"] = finca_ctx["lab_reciente"]

@@ -3883,11 +3883,19 @@ async function completarParametros() {
     return;
   }
   try {
-    await fetch('/api/sensor', {
+    const resp = await fetch('/api/sensor', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-User-Role': state.rol },
       body: JSON.stringify(frame),
     });
+    if (!resp.ok) {
+      let detalle = `HTTP ${resp.status}`;
+      try {
+        const d = await resp.json();
+        detalle = (d && d.detail && (d.detail.message || JSON.stringify(d.detail))) || detalle;
+      } catch (_) { /* sin cuerpo JSON */ }
+      throw new Error(detalle);
+    }
     if (msg) msg.innerHTML = okBanner('Parámetros guardados. Reanalizando…');
     document.getElementById('form-analyze').requestSubmit();
   } catch (err) {

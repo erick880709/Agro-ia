@@ -5,7 +5,7 @@ NDVI y GIS, abstrayendo la fuente de almacenamiento subyacente.
 """
 
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from agroia.logging import get_logger
 
@@ -56,6 +56,10 @@ class SoilData:
     estimaciones_sig: list[str] = field(default_factory=list)
     missing_blocking: list[str] = field(default_factory=list)
     missing_non_blocking: list[str] = field(default_factory=list)
+    # Antigüedad de la lectura usada (horas) y origen de la misma:
+    # "sensor_reciente" | "sensor_historico" | "sig"
+    antiguedad_horas: float | None = None
+    origen: str | None = None
 
     @property
     def has_sufficient_data(self) -> bool:
@@ -131,31 +135,56 @@ class SueloAdapter:
         self.db = db_session
 
     async def get_latest(self, finca_id: str, max_age_hours: int = 24) -> SoilData | None:
-        """Obtiene la lectura más reciente para una finca (máx. 24h).
+        """Obtiene la lectura más reciente para una finca.
 
         Precedencia: el sensor manda SIEMPRE; las variables que no mida se
         rellenan con la última estimación SIG oficial (calidad
         `estimado_por_sig`, fuente IGAC/UPRA), quedando marcadas en
         `estimaciones_sig`.
+
+        Si no hay lecturas dentro de `max_age_hours`, se usa la toma más
+        reciente de cualquier antigüedad: el estudio SIEMPRE se realiza con
+        los datos capturados por el sensor real, y la antigüedad se informa
+        en `antiguedad_horas` para que el usuario decida tomar una nueva
+        muestra. Solo devuelve None cuando no existe NINGUNA lectura.
         """
         from sqlalchemy import desc, or_, select
 
-        cutoff = datetime.utcnow() - timedelta(hours=max_age_hours)
+        ahora = datetime.now(timezone.utc)
+        cutoff = ahora - timedelta(hours=max_age_hours)
+
+        def _antiguedad(ts) -> float:
+            if ts.tzinfo is None:
+                ts = ts.replace(tzinfo=timezone.utc)
+            return max(0.0, (ahora - ts).total_seconds() / 3600.0)
+
+        filtro_sensor = or_(
+            SensorReading.calidad.is_(None),
+            SensorReading.calidad != "estimado_por_sig",
+        )
         sensor = (
             await self.db.execute(
                 select(SensorReading)
                 .where(
                     SensorReading.finca_id == finca_id,
                     SensorReading.ts >= cutoff,
-                    or_(
-                        SensorReading.calidad.is_(None),
-                        SensorReading.calidad != "estimado_por_sig",
-                    ),
+                    filtro_sensor,
                 )
                 .order_by(desc(SensorReading.ts))
                 .limit(1)
             )
         ).scalar_one_or_none()
+        origen = "sensor_reciente"
+        if sensor is None:
+            sensor = (
+                await self.db.execute(
+                    select(SensorReading)
+                    .where(SensorReading.finca_id == finca_id, filtro_sensor)
+                    .order_by(desc(SensorReading.ts))
+                    .limit(1)
+                )
+            ).scalar_one_or_none()
+            origen = "sensor_historico"
         sig = (
             await self.db.execute(
                 select(SensorReading)
@@ -169,10 +198,12 @@ class SueloAdapter:
         ).scalar_one_or_none()
 
         if sensor is None and sig is None:
-            logger.info("no_recent_soil_data", finca_id=finca_id, max_age_hours=max_age_hours)
+            logger.info("no_soil_data", finca_id=finca_id)
             return None
         if sensor is None:
             data = validate_soil_reading(sig)
+            data.origen = "sig"
+            data.antiguedad_horas = round(_antiguedad(sig.ts), 1)
             data.estimaciones_sig = [
                 v for v in ALL_SOIL_VARIABLES if getattr(data, v) is not None
             ]
@@ -183,6 +214,13 @@ class SueloAdapter:
             return data
 
         data = validate_soil_reading(sensor)
+        data.origen = origen
+        data.antiguedad_horas = round(_antiguedad(sensor.ts), 1)
+        if data.antiguedad_horas > max_age_hours:
+            logger.info(
+                "soil_data_historico_usado", finca_id=finca_id,
+                antiguedad_horas=data.antiguedad_horas,
+            )
         if sig is not None:
             data = self._rellenar_con_sig(data, sig)
         return data
