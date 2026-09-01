@@ -1,6 +1,41 @@
 # AgroIA — Estado del Proyecto
 
-> **Fecha:** 2026-08-28 | **Versión:** 0.1.0 | **Pipeline:** janus → epicureo → archi → genesis → builder | **CI:** 🟢 verde | **Producción:** 🌐 https://agroia-backend.onrender.com (Render Free + Neon)
+> **Fecha:** 2026-08-31 | **Versión:** 0.2.0 | **Pipeline:** janus → epicureo → archi → genesis → builder | **CI:** 🟢 verde | **Producción:** 🌐 https://agroia-backend.onrender.com (Render Free + Neon) | **Tests:** 65 verdes
+
+### Estado v5 — Accesibilidad, comisiones por etapas y AgroVision con datos reales (2026-08-31)
+
+#### Visión de plagas (AgroVision) con datasets reales
+
+- **Pipeline de datasets** (`datasets/scripts/`): discovery de fuentes públicas (manifest `datasets/manifest/datasets.yaml`), descarga robusta (curl con resume + verificación Content-Length), deduplicación perceptual (pHash DCT-II), normalización, split por déficit relativo por clase y entrenamiento (`train.py` con vocabulario de etiquetas alineado).
+- **Datos reales descargados**: **DS02 PlantDoc** (2 574 imágenes → 2 508 normalizadas, 10 clases) y **DS23 CocoaMonilia** (Zenodo, 1 950 imágenes, 4 clases healthy/m1/m2/m3).
+- **Modelos baseline entrenados**: `baseline-sklearn-20260829-144942` (10 clases, acc 70.8 %) y combinado `baseline-sklearn-20260829-182910` (14 clases, 2 800 train, acc 59.6 %).
+- **Explicación en lenguaje humano**: `/vision/analizar-plaga` y `/diagnose` devuelven `explicacion` («🔎 ¿Qué vio el análisis?»): qué se detectó, por qué (clorosis, necrosis…) y qué podría estar pasando con la mata; la abstención también se explica. UI muestra la caja de explicación bajo el resultado.
+- **Fix Safari**: `DOMException 12` («The string did not match the expected pattern») — se eliminaron selectores `:scope` y URLs crudas en fetch; validación de UUID + captura explícita del error con mensaje accionable.
+
+#### Almanaque Bristol y calendario lunar (v3.4, migración 043)
+
+- Vista **«🌙 Alertas clima y fases lunares»** con calendario lunar navegable (mes anterior/siguiente), alertas `siembra_lunar`, resumen Bristol y preferencias por usuario (`preferencias_bristol`, toggle en el reporte). 15 pruebas dedicadas.
+
+#### Motor de recomendaciones — tomas reales del sensor sin importar antigüedad
+
+- `SueloAdapter.get_latest()` ya no descarta lecturas con más de 24 h: si no hay toma reciente, usa la **última lectura existente de cualquier antigüedad** (el sensor manda siempre). La respuesta expone `lectura_antiguedad_horas`/`lectura_origen` y el análisis advierte «🕒 Última toma de suelo hace X días: el análisis usa los datos capturados con el sensor real». «Guardar y reanalizar» ahora verifica la respuesta de `POST /api/sensor` y muestra el error real si falla.
+
+#### Comisiones por etapas (migración 044)
+
+- Estados: `asignada → en_campo → en_recomendacion → generacion_reporte_fin_etapa → finalizada` (+ `cancelada`).
+- **Reglas** (`services/comision_etapas.py`): sin comisión activa no se genera recomendación (409 `FINCA_SIN_COMISION`); generar recomendación (`/recomendaciones/analyze` y `/iot/carga`) mueve la comisión a `en_recomendacion`; generar reporte exige haber pasado por la etapa de recomendación (409 `REPORTE_SIN_RECOMENDACION`) y mueve la comisión a `generacion_reporte_fin_etapa` (regenerable).
+- **Listas por etapa**: `GET /fincas?filtro=con_comision|con_recomendacion`; en Recomendaciones solo se listan fincas con comisión y en Reportes solo fincas con recomendación previa.
+- **Vista Cliente** (solo lectura): menú reducido a Alertas clima y fases lunares · Reportes · Visión de plagas; puede subir fotos a `/vision/analizar-plaga` y generar reportes de sus fincas; bloqueado de analizar y de administración.
+
+#### Accesibilidad del reporte (especificación v8)
+
+- **Audiencia efectiva**: la vista en vivo usa el rol de sesión (Cliente → Agricultor); la exportación lleva selector «Audiencia al exportar» junto a Abrir/Descargar con **Agricultor por defecto**. `POST /reportes/generar` acepta `audiencia: agricultor|agronomo`.
+- **H1** semáforo de 4 barras con «Sin violaciones activas» + explicación de una línea por barra. **H2** siglas traducidas solo en audiencia Agricultor. **H3** RSSI/Uptime colapsados bajo «Ver detalle técnico del sensor ▾» solo en Agricultor. **H4** frase-resumen antes del mapa de calor (umbrales respaldados por las reglas del cultivo top para siembra). **H5** sin porcentaje duplicado cuando base == real. **H6** orden simple-primero (03 → 05 → 01/02 → M → 04) solo en Agricultor; orden técnico intacto para Agrónomo.
+
+#### Reset de demostración v2
+
+- `POST /api/v1/demo/reset` (Admin) siembra **8 fincas**: 2 ejemplos completos («Finca Demo — El Vergel» Café y «Los Naranjos» Aguacate con lectura de laboratorio de 18 variables, cuadrícula 3×3, labores y ciclos) + 6 fincas en otras etapas fenológicas; **8 comisiones** (2 en `en_recomendacion`), 12 precios de insumos y 8 precios de cosecha. Conserva las lecturas del sensor real `esp32-npk-001` reasociadas a El Vergel. Idempotente; usuarios/catálogo/reglas intactos.
+
 ### Módulos v4 — cobertura funcional ampliada (2026-08-27)
 
 Implementación de `context/contextoFuncional/AgroIA_Especificacion_Tecnica_v4.md` (principio rector: ningún reporte se bloquea por falta de datos):
@@ -75,10 +110,9 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - **Fenología (GDD)**: el orquestador estima el GDD acumulado con la temperatura IDEAM (T base 10 °C) según la etapa fenológica de la finca y compara con `gdd_total_requerido`; avisa *«Faltan ~N GDD para cosecha, optimice riego»*.
 - Tarjeta del catálogo en la UI muestra «🌱 raíz ≥ 80 cm · 2000 GDD · 270 días». Validado local y en producción (Café vegetativa → faltan ~1262 GDD).
 
-### Limpieza de BD y finca demo (2026-08-27)
+### Limpieza de BD y set de demostración (2026-08-27 → v2 2026-08-31)
 
-- **Reset de demostración** `POST /api/v1/demo/reset` (solo Admin): elimina fincas, lotes, recomendaciones, chat y dispositivos de prueba; **conserva únicamente las lecturas del sensor real `esp32-npk-001`** y crea la finca demo completa **«Finca Demo — El Vergel»** (Quindío/Armenia, Café 4 años en Fructificación, riego por goteo, validación de laboratorio, historial agronómico, lote de 2,5 ha con suelo de 100 cm de profundidad) con el sensor y sus lecturas asociados.
-- Aplicado en **local y producción**: ambas bases quedan con 1 sola finca demo y las lecturas reales del sensor (15 local / 371 prod).
+- **Reset de demostración** `POST /api/v1/demo/reset` (solo Admin): ver «Reset de demostración v2» arriba — desde 2026-08-31 siembra 8 fincas con comisiones y precios; conserva únicamente las lecturas del sensor real `esp32-npk-001` reasociadas a la finca demo «Finca Demo — El Vergel».
 
 ### Recomendación sin bloqueo por falta de parámetros (2026-08-27)
 
@@ -299,6 +333,17 @@ Plataforma inteligente de diagnóstico agronómico para Colombia. Determina la a
 - `020_texturas_sig` — enum `agroia.texturasuelo` ampliado con clases granulométricas IGAC (FRANCA, FRANCO_ARENOSA, FRANCO_ARCILLOSA, FRANCO_LIMOSA).
 - `021_precios_insumos` — tabla `agroia.precios_insumos` (precios dinámicos COP/kg para el ROI del plan económico).
 - `022_imagenes_y_rendimiento` — `labores.imagen_url` (fotos en disco) y `historial_ciclos_lote.rendimiento_atipico` (anti-outliers del Ground Truth).
+- `023–032` — módulos v4: agua de riego FAO-29, curvas de extracción, monitoreo de plagas, variedades, rotación, checklist BPA, períodos de carencia, preferencias de notificación, Kc en cultivos, `resistencia_penetracion_kpa` en lotes y rol Extensionista.
+- `033–034` — equipos de trabajo: tarifas por rol, comisiones y novedades de equipo.
+- `035_equipo_comisiones` — tabla `agroia.comisiones` + `comision_miembros` (órdenes de trabajo de toma de medidas por finca).
+- `036_tokens_auth` — JWT con refresh rotatorio, logout con blacklist y anti-suplantación.
+- `037_laboratorio_ica` — análisis de laboratorio ICA con ventana de 90 días y prioridad sobre el sensor.
+- `038_antagonismos` — interacciones nutricionales (tipo `antagonismo`, estado INTERACCION).
+- `039_precios_cosecha` — precios de cosecha por cultivo/departamento + score ponderado por utilidad.
+- `040_sync_offline` — PWA offline (`sync_registro`, endpoints `/api/v1/sync/*`, service worker network-first).
+- `041–042` — visión de plagas: `vision_diagnosticos` y `etiqueta_confirmada` (AgroVision).
+- `043_add_bristol_preferences` — preferencias del Almanaque Bristol por usuario.
+- `044_comision_etapas` — `comisiones.estado` VARCHAR(40) con etapas `en_recomendacion` y `generacion_reporte_fin_etapa`.
 
 ### Límites del tier gratuito (validados 2026-08-25)
 

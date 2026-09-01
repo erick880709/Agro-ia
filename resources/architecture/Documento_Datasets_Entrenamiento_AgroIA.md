@@ -97,7 +97,15 @@ promoverá cuando entrenen DS03–DS08 (café/yuca/arroz) y las métricas supere
 los umbrales de promoción. PlantDoc no contiene clase `healthy`; esa clase
 llegará con DS01/DS09 y fotos propias.
 
-Próximo: DS23 CocoaMonilia (monilia M1–M3) pendiente de descarga (6,19 GB).
+**Segundo modelo con datos reales (2026-08-29)** — **DS23 CocoaMonilia**
+(Zenodo 17716661, moniliasis del cacao M1–M3 + healthy):
+- Descarga completada (~6 GB) con curl + resume y verificación
+  Content-Length; 1.950 imágenes normalizadas en 4 clases
+  (`healthy`, `m1`, `m2`, `m3`).
+- **Modelo combinado `baseline-sklearn-20260829-182910`**: 14 clases
+  (10 PlantDoc + 4 CocoaMonilia), 2.800 muestras de entrenamiento,
+  **accuracy 59,6 %** — baseline honesto; la clase `healthy` queda cubierta
+  a partir de DS23.
 
 **DS23 CocoaMoniliaDataSet v2 (2026-08-29)** — descargado de Zenodo
 (`10.5281/zenodo.17716661`, CC BY 4.0, 6,19 GB): 1.950 fotos de mazorca de

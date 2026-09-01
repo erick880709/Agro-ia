@@ -1,6 +1,6 @@
 # Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)
 
-**Versión:** 3.3 · **Fecha:** 2026-08-29
+**Versión:** 3.5 · **Fecha:** 2026-08-31
 **Alcance:** Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.
 
 ---
@@ -69,7 +69,7 @@ flowchart LR
     PWA[PWA offline: Service Worker + IndexedDB<br/>manifiesto, banner de sincronización]
   end
   subgraph Backend["Backend FastAPI (apps/backend)"]
-    API[36 routers REST /api/v1]
+    API[37 routers REST /api/v1]
     ORCH[RecommendationOrchestrator]
     RULES[RulesEngine + AptitudService<br/>sistema experto]
     ML[MLOracleService<br/>modo sombra]
@@ -110,8 +110,8 @@ flowchart LR
 
 | Módulo | Responsabilidad |
 |---|---|
-| `main.py` | Crea la app FastAPI, monta los 36 routers, sirve el frontend estático en `/`, y en el arranque (`lifespan`) ejecuta `asegurar_enums()` y `asegurar_reglas()`. |
-| `api/*.py` | 36 routers HTTP: `auth`, `sensor_api`, `iot`, `fincas`, `ciclos`, `labores`, `recomendaciones`, `reportes`, `ml`, `chat`, `dashboard`, `catalogo`, `usuarios`, `location`, `sig`, `admin_precios`, `alertas`, `auditoria`, `demo`, `mantenimiento`, `agua_riego`, `balance_hidrico`, `bpa`, `curvas`, `extensionista`, `notificaciones`, `plagas`, `rotacion`, `variedades`, `equipo`, `comisiones`, `lista_trabajos`, `laboratorio`, `precios_cosecha`, `sync`, `vision`, `health`. |
+| `main.py` | Crea la app FastAPI, monta los 37 routers, sirve el frontend estático en `/`, y en el arranque (`lifespan`) ejecuta `asegurar_enums()` y `asegurar_reglas()`. |
+| `api/*.py` | 37 routers HTTP: `auth`, `sensor_api`, `iot`, `fincas`, `ciclos`, `labores`, `recomendaciones`, `reportes`, `ml`, `chat`, `dashboard`, `catalogo`, `usuarios`, `location`, `sig`, `admin_precios`, `alertas`, `auditoria`, `demo`, `mantenimiento`, `agua_riego`, `balance_hidrico`, `bpa`, `curvas`, `extensionista`, `notificaciones`, `plagas`, `rotacion`, `variedades`, `equipo`, `comisiones`, `lista_trabajos`, `laboratorio`, `precios_cosecha`, `sync`, `vision`, `calendario`, `health`. |
 | `services/orchestrator.py` | Orquesta el pipeline completo de recomendación (datos → reglas → ML → discordancia → confianza → respuesta). |
 | `services/rules_engine.py` | Sistema experto: evalúa reglas agronómicas contra los datos de suelo. |
 | `services/aptitud.py` | UC1: puntúa todos los cultivos y los ordena por aptitud. |
@@ -1158,6 +1158,36 @@ para evitar llamadas de red.
 
 ---
 
+## 12c. Comisiones por etapas y accesibilidad del reporte (v3.5)
+
+### Comisiones por etapas (migración 044)
+
+- **Estados** (`models/comision.py`): `asignada → en_campo → en_recomendacion → generacion_reporte_fin_etapa → finalizada` (+ `cancelada`). Columna `estado` VARCHAR(40).
+- **Reglas** (`services/comision_etapas.py`):
+  1. Sin comisión activa no se genera recomendación — `POST /api/v1/recomendaciones/analyze` y `POST /api/v1/iot/carga` responden 409 `FINCA_SIN_COMISION`.
+  2. Generar una recomendación mueve la comisión a `en_recomendacion` (pueden generarse tantas como se necesiten).
+  3. `POST /api/v1/reportes/generar` exige haber pasado por la etapa de recomendación — 409 `REPORTE_SIN_RECOMENDACION` si el estado es anterior.
+  4. Generar el reporte mueve la comisión a `generacion_reporte_fin_etapa` (el reporte es regenerable).
+- **Listas por etapa**: `GET /api/v1/fincas?filtro=con_comision|con_recomendacion` (otro valor → 422). La vista Recomendaciones solo lista fincas con comisión; Reportes solo fincas con recomendación previa.
+- **Vista Cliente** (solo lectura): menú reducido a Alertas clima y fases lunares · Reportes · Visión de plagas. Puede subir fotos a `/vision/analizar-plaga` y generar reportes de sus fincas; bloqueado de analizar y de administración.
+
+### Accesibilidad del reporte (especificación v8)
+
+- **Audiencia efectiva** (`POST /api/v1/reportes/generar` acepta `audiencia: agricultor|agronomo`; si no se envía, la vista en vivo usa el rol de sesión — Cliente → Agricultor, resto → Agrónomo):
+  - **H1** semáforo de 4 barras renombrado «Sin violaciones activas» con explicación de una línea por barra (también en reportes de siembra).
+  - **H2** «Próximos pasos» traduce las siglas de fertilidad solo en audiencia Agricultor.
+  - **H3** RSSI/Uptime colapsados bajo «Ver detalle técnico del sensor ▾» solo en audiencia Agricultor.
+  - **H4** frase-resumen antes del mapa de calor («De los X puntos medidos, Y están fuera de lo ideal»); umbrales respaldados por las reglas del cultivo top para reportes de siembra.
+  - **H5** confianza sin duplicar porcentaje cuando base == real.
+  - **H6** audiencia Agricultor reordena: 03 palabras del campo → 05 próximos pasos → 01/02 técnico → M mapa → 04 advertencias (numeración intacta).
+- **Frontend**: selector «Audiencia al exportar» junto a Abrir/Descargar HTML (Agricultor por defecto); abrir/descargar regeneran el reporte con la audiencia elegida.
+
+### Motor de recomendaciones y lecturas históricas
+
+- `SueloAdapter.get_latest()` ya no descarta lecturas con más de 24 h: si no hay toma reciente usa la última lectura de cualquier antigüedad (el sensor manda siempre). La respuesta incluye `lectura_antiguedad_horas`/`lectura_origen` y advierte «🕒 Última toma de suelo hace X días: el análisis usa los datos capturados con el sensor real».
+
+---
+
 ## 13. Despliegue y CI/CD
 
 - **Dockerfile** (`apps/backend/`): instala con Poetry, `PYTHONPATH` incluye `/app/apps/iot`, y en `CMD` ejecuta **`alembic upgrade head` y luego uvicorn en `$PORT`**.
@@ -1181,8 +1211,11 @@ para evitar llamadas de red.
 
 ## 15. Demo y restablecimiento de datos
 
-- **`POST /api/v1/demo/reset`** (solo rol Admin, `api/demo.py` + `services/demo_reset.py`): restablece los datos operativos para demostraciones — elimina fincas, lotes, recomendaciones, chat/memoria, aceptaciones y dispositivos de prueba; **conserva únicamente las lecturas del sensor real `esp32-npk-001`** y crea la finca demo completa **«Finca Demo — El Vergel»** (Quindío/Armenia, Café 4 años en Fructificación, riego por goteo, validación de laboratorio, historial agronómico y lote de 2,5 ha con suelo de 100 cm) reasociando el sensor y sus lecturas a ella.
-- No toca usuarios/roles, catálogo, fichas ni reglas. Aplicado en local y producción; cada base queda con una sola finca demo con datos reales del sensor.
+- **`POST /api/v1/demo/reset`** (solo rol Admin, `api/demo.py` + `services/demo_reset.py`): restablece los datos operativos para demostraciones — elimina fincas, lotes, recomendaciones, chat/memoria, aceptaciones, comisiones y dispositivos de prueba; **conserva únicamente las lecturas del sensor real `esp32-npk-001`** y siembra el **set demo v2** (2026-08-31):
+  - **2 ejemplos completos** — «Finca Demo — El Vergel» (Café, Fructificación, Quindío/Armenia) y «Los Naranjos» (Aguacate Hass, Floración, Antioquia/Rionegro) con lectura de laboratorio de 18 variables, cuadrícula de muestreo 3×3 con posiciones, labores y ciclos cerrados.
+  - **6 fincas en otras etapas fenológicas** (Café vegetativa/floración, Cacao fructificación, Tomate vegetativa, Maíz cosecha, Plátano vegetativa).
+  - **8 comisiones** (2 en `en_recomendacion` — habilitan reportes de inmediato), 12 precios de insumos y 8 precios de cosecha. Los UUID de los 2 ejemplos completos son fijos.
+- No toca usuarios/roles, catálogo, fichas ni reglas. Idempotente; aplicado en local y producción.
 
 ---
 

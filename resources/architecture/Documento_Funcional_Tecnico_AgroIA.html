@@ -57,11 +57,11 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
   <h1>Documento Funcional-Técnico — AgroIA</h1>
   <div class="meta">Generado automáticamente desde
     <code>resources/architecture/Documento_Funcional_Tecnico_AgroIA.md</code> (fuente de verdad) ·
-    2026-08-29 · Repositorio erick880709/Agro-ia (rama master)</div>
+    2026-08-31 · Repositorio erick880709/Agro-ia (rama master)</div>
 </header>
 <div class="wrap">
 <h1 id="documento-funcional-tecnico-agroia-agrointeligente-colombia">Documento Funcional-Técnico — AgroIA (AgroInteligente Colombia)</h1>
-<p><strong>Versión:</strong> 3.3 · <strong>Fecha:</strong> 2026-08-29
+<p><strong>Versión:</strong> 3.5 · <strong>Fecha:</strong> 2026-08-31
 <strong>Alcance:</strong> Descripción funcional y técnica de cada sección del aplicativo, los servicios que invoca, qué hace cada servicio, y —con especial detalle— cómo se invoca el modelo de recomendación/diagnóstico y qué parámetros recibe.</p>
 <hr />
 <h2 id="tabla-de-contenidos">Tabla de contenidos</h2>
@@ -160,7 +160,7 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
     PWA[PWA offline: Service Worker + IndexedDB&lt;br/&gt;manifiesto, banner de sincronización]
   end
   subgraph Backend[&quot;Backend FastAPI (apps/backend)&quot;]
-    API[36 routers REST /api/v1]
+    API[37 routers REST /api/v1]
     ORCH[RecommendationOrchestrator]
     RULES[RulesEngine + AptitudService&lt;br/&gt;sistema experto]
     ML[MLOracleService&lt;br/&gt;modo sombra]
@@ -207,11 +207,11 @@ footer { background:#17381f; color:#cfe3d2; text-align:center; padding:20px; fon
 <tbody>
 <tr>
 <td><code>main.py</code></td>
-<td>Crea la app FastAPI, monta los 36 routers, sirve el frontend estático en <code>/</code>, y en el arranque (<code>lifespan</code>) ejecuta <code>asegurar_enums()</code> y <code>asegurar_reglas()</code>.</td>
+<td>Crea la app FastAPI, monta los 37 routers, sirve el frontend estático en <code>/</code>, y en el arranque (<code>lifespan</code>) ejecuta <code>asegurar_enums()</code> y <code>asegurar_reglas()</code>.</td>
 </tr>
 <tr>
 <td><code>api/*.py</code></td>
-<td>36 routers HTTP: <code>auth</code>, <code>sensor_api</code>, <code>iot</code>, <code>fincas</code>, <code>ciclos</code>, <code>labores</code>, <code>recomendaciones</code>, <code>reportes</code>, <code>ml</code>, <code>chat</code>, <code>dashboard</code>, <code>catalogo</code>, <code>usuarios</code>, <code>location</code>, <code>sig</code>, <code>admin_precios</code>, <code>alertas</code>, <code>auditoria</code>, <code>demo</code>, <code>mantenimiento</code>, <code>agua_riego</code>, <code>balance_hidrico</code>, <code>bpa</code>, <code>curvas</code>, <code>extensionista</code>, <code>notificaciones</code>, <code>plagas</code>, <code>rotacion</code>, <code>variedades</code>, <code>equipo</code>, <code>comisiones</code>, <code>lista_trabajos</code>, <code>laboratorio</code>, <code>precios_cosecha</code>, <code>sync</code>, <code>vision</code>, <code>health</code>.</td>
+<td>37 routers HTTP: <code>auth</code>, <code>sensor_api</code>, <code>iot</code>, <code>fincas</code>, <code>ciclos</code>, <code>labores</code>, <code>recomendaciones</code>, <code>reportes</code>, <code>ml</code>, <code>chat</code>, <code>dashboard</code>, <code>catalogo</code>, <code>usuarios</code>, <code>location</code>, <code>sig</code>, <code>admin_precios</code>, <code>alertas</code>, <code>auditoria</code>, <code>demo</code>, <code>mantenimiento</code>, <code>agua_riego</code>, <code>balance_hidrico</code>, <code>bpa</code>, <code>curvas</code>, <code>extensionista</code>, <code>notificaciones</code>, <code>plagas</code>, <code>rotacion</code>, <code>variedades</code>, <code>equipo</code>, <code>comisiones</code>, <code>lista_trabajos</code>, <code>laboratorio</code>, <code>precios_cosecha</code>, <code>sync</code>, <code>vision</code>, <code>calendario</code>, <code>health</code>.</td>
 </tr>
 <tr>
 <td><code>services/orchestrator.py</code></td>
@@ -1550,6 +1550,34 @@ para evitar llamadas de red.</p>
 <li><strong>Frontend</strong> (<code>#view-alertas</code> «🌙 Alertas clima y fases lunares»): tarjeta con fase/emoji/recomendación/eventos, <strong>calendario lunar navegable por meses</strong> (fase prevista por día), toggle de alertas y alertas <code>siembra_lunar</code> en verde claro.</li>
 </ul>
 <hr />
+<h2 id="12c-comisiones-por-etapas-y-accesibilidad-del-reporte-v35">12c. Comisiones por etapas y accesibilidad del reporte (v3.5)</h2>
+<h3 id="comisiones-por-etapas-migracion-044">Comisiones por etapas (migración 044)</h3>
+<ul>
+<li><strong>Estados</strong> (<code>models/comision.py</code>): <code>asignada → en_campo → en_recomendacion → generacion_reporte_fin_etapa → finalizada</code> (+ <code>cancelada</code>). Columna <code>estado</code> VARCHAR(40).</li>
+<li><strong>Reglas</strong> (<code>services/comision_etapas.py</code>):
+  1. Sin comisión activa no se genera recomendación — <code>POST /api/v1/recomendaciones/analyze</code> y <code>POST /api/v1/iot/carga</code> responden 409 <code>FINCA_SIN_COMISION</code>.
+  2. Generar una recomendación mueve la comisión a <code>en_recomendacion</code> (pueden generarse tantas como se necesiten).
+  3. <code>POST /api/v1/reportes/generar</code> exige haber pasado por la etapa de recomendación — 409 <code>REPORTE_SIN_RECOMENDACION</code> si el estado es anterior.
+  4. Generar el reporte mueve la comisión a <code>generacion_reporte_fin_etapa</code> (el reporte es regenerable).</li>
+<li><strong>Listas por etapa</strong>: <code>GET /api/v1/fincas?filtro=con_comision|con_recomendacion</code> (otro valor → 422). La vista Recomendaciones solo lista fincas con comisión; Reportes solo fincas con recomendación previa.</li>
+<li><strong>Vista Cliente</strong> (solo lectura): menú reducido a Alertas clima y fases lunares · Reportes · Visión de plagas. Puede subir fotos a <code>/vision/analizar-plaga</code> y generar reportes de sus fincas; bloqueado de analizar y de administración.</li>
+</ul>
+<h3 id="accesibilidad-del-reporte-especificacion-v8">Accesibilidad del reporte (especificación v8)</h3>
+<ul>
+<li><strong>Audiencia efectiva</strong> (<code>POST /api/v1/reportes/generar</code> acepta <code>audiencia: agricultor|agronomo</code>; si no se envía, la vista en vivo usa el rol de sesión — Cliente → Agricultor, resto → Agrónomo):</li>
+<li><strong>H1</strong> semáforo de 4 barras renombrado «Sin violaciones activas» con explicación de una línea por barra (también en reportes de siembra).</li>
+<li><strong>H2</strong> «Próximos pasos» traduce las siglas de fertilidad solo en audiencia Agricultor.</li>
+<li><strong>H3</strong> RSSI/Uptime colapsados bajo «Ver detalle técnico del sensor ▾» solo en audiencia Agricultor.</li>
+<li><strong>H4</strong> frase-resumen antes del mapa de calor («De los X puntos medidos, Y están fuera de lo ideal»); umbrales respaldados por las reglas del cultivo top para reportes de siembra.</li>
+<li><strong>H5</strong> confianza sin duplicar porcentaje cuando base == real.</li>
+<li><strong>H6</strong> audiencia Agricultor reordena: 03 palabras del campo → 05 próximos pasos → 01/02 técnico → M mapa → 04 advertencias (numeración intacta).</li>
+<li><strong>Frontend</strong>: selector «Audiencia al exportar» junto a Abrir/Descargar HTML (Agricultor por defecto); abrir/descargar regeneran el reporte con la audiencia elegida.</li>
+</ul>
+<h3 id="motor-de-recomendaciones-y-lecturas-historicas">Motor de recomendaciones y lecturas históricas</h3>
+<ul>
+<li><code>SueloAdapter.get_latest()</code> ya no descarta lecturas con más de 24 h: si no hay toma reciente usa la última lectura de cualquier antigüedad (el sensor manda siempre). La respuesta incluye <code>lectura_antiguedad_horas</code>/<code>lectura_origen</code> y advierte «🕒 Última toma de suelo hace X días: el análisis usa los datos capturados con el sensor real».</li>
+</ul>
+<hr />
 <h2 id="13-despliegue-y-cicd">13. Despliegue y CI/CD</h2>
 <ul>
 <li><strong>Dockerfile</strong> (<code>apps/backend/</code>): instala con Poetry, <code>PYTHONPATH</code> incluye <code>/app/apps/iot</code>, y en <code>CMD</code> ejecuta <strong><code>alembic upgrade head</code> y luego uvicorn en <code>$PORT</code></strong>.</li>
@@ -1571,8 +1599,11 @@ para evitar llamadas de red.</p>
 <hr />
 <h2 id="15-demo-y-restablecimiento-de-datos">15. Demo y restablecimiento de datos</h2>
 <ul>
-<li><strong><code>POST /api/v1/demo/reset</code></strong> (solo rol Admin, <code>api/demo.py</code> + <code>services/demo_reset.py</code>): restablece los datos operativos para demostraciones — elimina fincas, lotes, recomendaciones, chat/memoria, aceptaciones y dispositivos de prueba; <strong>conserva únicamente las lecturas del sensor real <code>esp32-npk-001</code></strong> y crea la finca demo completa <strong>«Finca Demo — El Vergel»</strong> (Quindío/Armenia, Café 4 años en Fructificación, riego por goteo, validación de laboratorio, historial agronómico y lote de 2,5 ha con suelo de 100 cm) reasociando el sensor y sus lecturas a ella.</li>
-<li>No toca usuarios/roles, catálogo, fichas ni reglas. Aplicado en local y producción; cada base queda con una sola finca demo con datos reales del sensor.</li>
+<li><strong><code>POST /api/v1/demo/reset</code></strong> (solo rol Admin, <code>api/demo.py</code> + <code>services/demo_reset.py</code>): restablece los datos operativos para demostraciones — elimina fincas, lotes, recomendaciones, chat/memoria, aceptaciones, comisiones y dispositivos de prueba; <strong>conserva únicamente las lecturas del sensor real <code>esp32-npk-001</code></strong> y siembra el <strong>set demo v2</strong> (2026-08-31):</li>
+<li><strong>2 ejemplos completos</strong> — «Finca Demo — El Vergel» (Café, Fructificación, Quindío/Armenia) y «Los Naranjos» (Aguacate Hass, Floración, Antioquia/Rionegro) con lectura de laboratorio de 18 variables, cuadrícula de muestreo 3×3 con posiciones, labores y ciclos cerrados.</li>
+<li><strong>6 fincas en otras etapas fenológicas</strong> (Café vegetativa/floración, Cacao fructificación, Tomate vegetativa, Maíz cosecha, Plátano vegetativa).</li>
+<li><strong>8 comisiones</strong> (2 en <code>en_recomendacion</code> — habilitan reportes de inmediato), 12 precios de insumos y 8 precios de cosecha. Los UUID de los 2 ejemplos completos son fijos.</li>
+<li>No toca usuarios/roles, catálogo, fichas ni reglas. Idempotente; aplicado en local y producción.</li>
 </ul>
 <hr />
 <h2 id="16-glosario">16. Glosario</h2>

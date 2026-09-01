@@ -1,12 +1,21 @@
 # Resumen Ejecutivo — AgroInteligente Colombia (AgroIA)
 
 **Cliente:** Por definir (proyecto con componente de investigación aplicada — potencial financiación MinCiencias/ColombIA Inteligente)
-**Fecha del documento:** Agosto 2026
+**Fecha del documento:** Agosto 2026 · **actualizado 2026-08-31**
 **Documentos fuente:** 
 - `RFP-inicial.md`
 - `RFP-AgroInteligente-Colombia.md` (versión consolidada 1.0)
 - `contextAgro.md` (PROJECT_CONTEXT)
 - `Anexo-Datasets-Fuentes-Datos.md`
+
+## Estado actual (2026-08-31)
+
+- **Producción activa**: https://agroia-backend.onrender.com (Render Free + Neon Postgres), CI verde, 65 pruebas backend.
+- **Motor de recomendaciones** (sistema experto UPRA/Cenicafé/AGROSAVIA, 54 reglas / 17 variables): diagnóstico UC2 + ranking de siembra UC1, plan económico, ROI, simulación what-if y flujo de comisiones por etapas (asignada → en_campo → en_recomendación → generación de reporte fin de etapa).
+- **Reporte completo** con mapa de calor, plano del lote, semáforo de confianza, telemetría, secciones de riego/rotación/BPA/calendario lunar y **audiencia efectiva** (Agricultor/Agrónomo — especificación v8 de accesibilidad: lenguaje simple, orden simple-primero y telemetría colapsada para agricultores).
+- **Visión de plagas (AgroVision)**: pipeline de datasets públicos (PlantDoc, CocoaMonilia), deduplicación perceptual, 2 modelos baseline entrenados y diagnóstico con explicación en lenguaje humano.
+- **IoT**: ingesta ESP32/LoRaWAN (`POST /api/sensor`), posiciones de muestreo, enriquecimiento SIG IGAC/UPRA y alertas climáticas proactivas.
+- **Roles**: Admin, Agrónomo, Cliente (solo lectura: alertas/fases lunares, reportes y visión de plagas), Técnico, Investigador y Extensionista por zona.
 
 ## Objetivo y alcance del proyecto
 

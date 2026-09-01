@@ -232,7 +232,15 @@ el baseline sklearn es un hito del pipeline, <strong>no</strong> el modelo opera
 promoverá cuando entrenen DS03–DS08 (café/yuca/arroz) y las métricas superen
 los umbrales de promoción. PlantDoc no contiene clase <code>healthy</code>; esa clase
 llegará con DS01/DS09 y fotos propias.</p>
-<p>Próximo: DS23 CocoaMonilia (monilia M1–M3) pendiente de descarga (6,19 GB).</p>
+<p><strong>Segundo modelo con datos reales (2026-08-29)</strong> — <strong>DS23 CocoaMonilia</strong>
+(Zenodo 17716661, moniliasis del cacao M1–M3 + healthy):
+- Descarga completada (~6 GB) con curl + resume y verificación
+  Content-Length; 1.950 imágenes normalizadas en 4 clases
+  (<code>healthy</code>, <code>m1</code>, <code>m2</code>, <code>m3</code>).
+- <strong>Modelo combinado <code>baseline-sklearn-20260829-182910</code></strong>: 14 clases
+  (10 PlantDoc + 4 CocoaMonilia), 2.800 muestras de entrenamiento,
+  <strong>accuracy 59,6 %</strong> — baseline honesto; la clase <code>healthy</code> queda cubierta
+  a partir de DS23.</p>
 <p><strong>DS23 CocoaMoniliaDataSet v2 (2026-08-29)</strong> — descargado de Zenodo
 (<code>10.5281/zenodo.17716661</code>, CC BY 4.0, 6,19 GB): 1.950 fotos de mazorca de
 cacao en campo normalizadas en 4 clases (<code>healthy</code> 646 · <code>cocoa_monilia_m1</code>

@@ -12,7 +12,16 @@
 | **ml** | Python 3.11+ | FastAPI 0.115 | SQLAlchemy 2.0 (async) + gRPC | 8000 |
 | **rag** | Python 3.11+ | FastAPI 0.115 | pgvector 0.3 | 8000 |
 | **iot** | Python 3.11+ | FastAPI 0.115 | aio-pika 9.4 (RabbitMQ) | 8000 |
-| **frontend** | TypeScript 5 | Angular 21 | — | 4200 |
+| **frontend** | JavaScript (SPA vanilla) | `apps/frontend-web` — servida por el backend en `/` (productiva) | — | — |
+| **frontend (prototipo)** | TypeScript 5 | Angular 21 | — | 4200 |
+
+> **Realidad productiva (2026-08-31):** el frontend que corre en producción
+> es la **SPA web integrada** (`apps/frontend-web/`, vanilla JS + service
+> worker PWA) servida por el propio backend; Angular (`apps/frontend`) es un
+> prototipo parcial. Despliegue real en **Render Free + Neon Postgres**
+> (auto-deploy en cada push a `master`, migraciones `alembic upgrade head`
+> al arranque). AWS EKS/Terraform corresponde a la arquitectura objetivo
+> (ver `Documento_Arquitectura_AgroIA.md`).
 
 ## Infraestructura
 

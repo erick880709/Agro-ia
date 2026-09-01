@@ -2,7 +2,20 @@
 
 Plataforma inteligente de diagnóstico agronómico basada en IA, IoT y datos geoespaciales para el mercado agrícola colombiano.
 
-> **Versión:** 0.1.0 | **Stack:** Python 3.11+ / FastAPI · Angular 21 · PostgreSQL+PostGIS+pgvector · AWS EKS
+> **Versión:** 0.2.0 (2026-08-31) | **Stack:** Python 3.11+ / FastAPI · **SPA web integrada** (`apps/frontend-web`, productiva) + Angular 21 (`apps/frontend`, prototipo) · PostgreSQL 15 (+pgvector) · Docker
+> **Estado:** ✅ en producción — https://agroia-backend.onrender.com (Render + Neon) · CI verde · 65 pruebas backend
+
+## 🔑 Credenciales de demostración (producción)
+
+| Rol | Email | Contraseña |
+|-----|-------|------------|
+| Administrador | admin@agroia.co | Admin123! |
+| Agrónomo | agronomo@agroia.co | Agronomo123! |
+| Cliente | cliente@agroia.co | Cliente123! |
+
+**Set demo:** `POST /api/v1/demo/reset` (Admin) — 8 fincas (2 ejemplos completos + 6 por etapa fenológica), 8 comisiones, precios de insumos/cosecha y lecturas del sensor real `esp32-npk-001`.
+
+**Documentación de estado:** `PROJECT_STATUS.md` (bitácora completa por fecha) · `resources/architecture/Documento_Funcional_Tecnico_AgroIA.md` (fuente de verdad funcional-técnica) · `resources/architecture/` (arquitectura C4, datasets, pantallas).
 
 ---
 
@@ -42,11 +55,11 @@ cd apps/frontend && npm install && cd ../..
 ### 2. Ejecutar
 
 ```bash
-# Backend principal (puerto 8000)
+# Backend principal (puerto 8000) — sirve la SPA en /
 cd apps/backend && poetry run uvicorn agroia_backend.main:app --reload --port 8000
 
-# Frontend (puerto 4200)
-cd apps/frontend && npm start
+# Frontend SPA productivo: se sirve desde el backend (no requiere servidor aparte)
+# Prototipo Angular (opcional): cd apps/frontend && npm start
 ```
 
 ### 3. Verificar
@@ -57,6 +70,10 @@ curl http://localhost:8000/api/v1/health
 
 # Swagger UI (solo desarrollo)
 open http://localhost:8000/docs
+
+# Pruebas backend (venv de la raíz)
+$env:PYTHONPATH="$PWD\apps\backend;$PWD\apps\shared;$PWD"
+.venv\Scripts\python.exe -m pytest apps\backend\tests -q
 ```
 
 ### 4. Tests
