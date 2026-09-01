@@ -1,7 +1,7 @@
-# Graph Report - Agro-ia  (2026-08-31)
+# Graph Report - Agro-ia  (2026-08-29)
 
 ## Corpus Check
-- 1030 files · ~989,794 words
+- 1030 files · ~989,593 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `db2eaf26`
+- Built from commit: `cb107965`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -4262,7 +4262,7 @@ Cohesion: 0.50
 Nodes (4): 12b. Almanaque Bristol — calendario lunar y siembra cultural (v3.4), Implementación, Jerarquía de fuentes astronómicas, Tabla Bristol (fase → recomendación)
 
 ## Knowledge Gaps
-- **4402 isolated node(s):** `TABS_POR_ROL`, `ICONOS_APROXIMADOS`, `ICONOS_IMG`, `state`, `TIPO_LABOR_ICONO` (+4397 more)
+- **4402 isolated node(s):** `Módulos v4 — cobertura funcional ampliada (2026-08-27)`, `🎯 Objetivo`, `📊 Estado por épica`, `🏗️ Stack`, `Brecha económica — plan de fertilización por presupuesto (2026-08-25)` (+4397 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **176 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -4273,7 +4273,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `TailwindConfigGenerator` (e.g. with `TestGeneratedConfigIsValidJs` and `TestTailwindConfigGenerator`) actually correct?**
   _`TailwindConfigGenerator` has 4 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `TABS_POR_ROL`, `ICONOS_APROXIMADOS`, `ICONOS_IMG` to the rest of the system?**
+- **What connects `Módulos v4 — cobertura funcional ampliada (2026-08-27)`, `🎯 Objetivo`, `📊 Estado por épica` to the rest of the system?**
   _4402 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `init.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.06080246913580247 - nodes in this community are weakly interconnected._
