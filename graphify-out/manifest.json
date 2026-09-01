@@ -4510,8 +4510,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/fincas.py": {
-    "mtime": 1787873209.2030041,
-    "ast_hash": "3aadfb17b8a3c87d9acbe09899f137db",
+    "mtime": 1788233793.6255062,
+    "ast_hash": "94229f3e8d9c8b4a0e2cddd6d18bcd77",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/reportes.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1788233008.32483,
-    "ast_hash": "fd562d2a21cc5e4c186ddc823cf25079",
+    "mtime": 1788233814.2200265,
+    "ast_hash": "0f6db6fc026c97d447f870a910f90c1c",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -5535,8 +5535,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/sw.js": {
-    "mtime": 1788233196.2024715,
-    "ast_hash": "e803b3aa2af0cb983f6859c430e69cfb",
+    "mtime": 1788233839.0313156,
+    "ast_hash": "052e3417b507ecf446866c001c0f0d32",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/vision.py": {
@@ -5775,8 +5775,8 @@
     "semantic_hash": ""
   },
   "apps/backend/tests/test_comisiones_etapas.py": {
-    "mtime": 1788233031.6911538,
-    "ast_hash": "f22c7f966387d137591fa0ddc2a40aad",
+    "mtime": 1788233831.3059387,
+    "ast_hash": "e08a18928a50040b37fef5aea3c481dd",
     "semantic_hash": ""
   }
 }
