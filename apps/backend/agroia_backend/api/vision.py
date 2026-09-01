@@ -128,6 +128,7 @@ async def analizar_plaga(
         "severidad": resultado["severidad"],
         "recomendacion": resultado["recomendacion"],
         "evidencia": resultado["evidence"],
+        "explicacion": resultado.get("explicacion", ""),
         "requiere_revision": resultado["requiere_revision"],
         "fuente": resultado["fuente"],
         "nota": "Diagnóstico visual preliminar (no confirmatorio) — sección 24.",
@@ -186,6 +187,7 @@ async def diagnose(
         "diagnosis": resultado["diagnosis"],
         "severity": resultado["severity"],
         "evidence": [{"type": "texto", "detalle": e} for e in resultado["evidence"]],
+        "explicacion": resultado.get("explicacion", ""),
         "recommend_review": resultado["requiere_revision"],
         "dataset_lineage": [],
     }

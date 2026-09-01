@@ -86,6 +86,10 @@ async def test_analizar_plaga_flujo_completo(cli, hoja_sintomatica):
     assert body["requiere_revision"] is True
     assert isinstance(body["evidencia"], list) and body["evidencia"]
     assert 0.0 < body["confianza"] <= 1.0
+    # Explicación en lenguaje humano (descripción + posibles causas)
+    assert body.get("explicacion")
+    assert "análisis" in body["explicacion"].lower()
+    assert "clorosis" in body["explicacion"].lower()
     # Historial
     r2 = await cli.get(f"/api/v1/vision/diagnosticos/{finca_id}", headers=_cabeceras())
     assert r2.status_code == 200
@@ -107,6 +111,9 @@ async def test_analizar_plaga_foto_invalida_abstencion(cli, png_minimo):
     assert body["estado"] == "abstain"
     assert body["confianza"] == 0.0
     assert "recomendacion" in body and body["recomendacion"]
+    # Abstención explicada también en lenguaje humano
+    assert body.get("explicacion")
+    assert "no se pudo hacer" in body["explicacion"].lower()
 
 
 async def test_diagnose_contrato_seccion18(cli, hoja_sintomatica):

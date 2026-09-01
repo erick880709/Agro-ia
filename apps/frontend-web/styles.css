@@ -903,6 +903,11 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
 .nota-cultural { margin: 10px 0 0; font-size: 12px; color: #7a8a80; font-style: italic; }
 .toggle-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 13.5px; }
 .toggle-row input { width: 18px; height: 18px; accent-color: #2e7d32; }
+/* Explicación humana del análisis de visión */
+.explicacion-box { margin-top: 10px; padding: 12px 14px; border: 1px solid #b9d9c4; border-radius: 12px;
+  background: #f3faf5; font-size: 13.5px; line-height: 1.55; color: #2c4536; }
+.explicacion-box b { color: #1b5e20; }
+.explicacion-box p { margin: 6px 0 0; }
 /* Calendario lunar navegable */
 .lunar-cal-card { margin-top: 14px; padding: 14px 16px; border: 1px solid #dcebe2; border-radius: 14px; background: #fbfdfb; }
 .lunar-cal-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }

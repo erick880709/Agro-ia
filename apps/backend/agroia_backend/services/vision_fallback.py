@@ -170,6 +170,117 @@ def _severidad(afectada: float) -> str:
     return "critical"
 
 
+# ── Explicación en lenguaje humano (para el agricultor) ──
+
+_SEVERIDAD_PALABRAS = {
+    "none": "sin daño aparente",
+    "mild": "un daño leve",
+    "moderate": "un daño moderado",
+    "severe": "un daño fuerte",
+    "critical": "un daño muy severo",
+}
+
+_MOTIVOS_PALABRAS = {
+    "tamano_insuficiente": "la foto es muy pequeña",
+    "imagen_borrosa": "la foto salió movida o desenfocada",
+    "imagen_oscura": "la foto está muy oscura",
+    "sobreexpuesta": "la foto está muy clara (quemada por la luz)",
+    "hoja_no_detectada": "no se alcanza a ver la hoja o el fruto",
+    "confianza_bajo_umbral": "los síntomas detectados son muy débiles",
+    "imagen_no_decodificable": "el archivo no se pudo leer como imagen",
+}
+
+_CAUSAS_POR_DIAGNOSTICO = {
+    "sin_sintomas_visibles": (
+        "La hoja o fruto se ve sano: no se detectaron manchas importantes. "
+        "El cultivo podría estar bien, o el síntoma apenas está comenzando. "
+        "Vuelva a revisar la planta en unos días."
+    ),
+    "clorosis_compatible": (
+        "La coloración amarillenta (clorosis) suele aparecer por falta de "
+        "nutrientes como nitrógeno, hierro o magnesio, por exceso o escasez "
+        "de riego, por daño en las raíces, o por el inicio de una enfermedad. "
+        "Compare con el análisis de suelo y las fertilizaciones recientes "
+        "para acotar la causa."
+    ),
+    "necrosis_compatible": (
+        "Las manchas oscuras o secas suelen deberse a hongos o bacterias, a "
+        "quemaduras por sol o por productos mal aplicados, o a una falta de "
+        "agua prolongada. Revise el historial de aplicaciones y el riego de "
+        "los últimos días."
+    ),
+    "coffee_rust_compatible": (
+        "En café, manchas con necrosis en la hoja son compatibles con roya. "
+        "La roya avanza en ambientes húmedos y con poca ventilación; revise "
+        "el manejo preventivo y el sombrío del cultivo."
+    ),
+    "coffee_cercospora_compatible": (
+        "En café, manchas redondeadas con necrosis pueden ser cercospora "
+        "(ojo de gallo), favorecida por la humedad y el exceso de sombra. "
+        "Mejore la aireación y consulte el plan sanitario."
+    ),
+    "cocoa_black_pod_compatible": (
+        "En cacao, manchas oscuras sobre la mazorca son compatibles con "
+        "pudrición (monilia o phytophthora). Retire los frutos enfermos, "
+        "evite la humedad estancada y no deje mazorcas en el suelo."
+    ),
+    "cocoa_monilia_m1_compatible": (
+        "En cacao, los abultamientos o bultos en la mazorca son compatibles "
+        "con monilia en etapa temprana. Retire y entierre las mazorcas "
+        "afectadas para que el hongo no se propague."
+    ),
+}
+
+
+def _explicacion_preliminar(metricas: dict[str, Any], diagnostico: str) -> str:
+    """Describe en palabras sencillas lo que vio el análisis y qué pudo causarlo."""
+    porc_hoja = round(metricas.get("ratio_hoja", 0.0) * 100, 1)
+    porc_clorosis = round(metricas.get("clorosis", 0.0) * 100, 1)
+    porc_necrosis = round(metricas.get("necrosis", 0.0) * 100, 1)
+    porc_afectada = round(metricas.get("area_afectada", 0.0) * 100, 1)
+    textura = metricas.get("textura", 0.0)
+    superficie = (
+        "lisa"
+        if textura < 15
+        else "algo rugosa"
+        if textura < 30
+        else "muy rugosa"
+    )
+    severidad_palabras = _SEVERIDAD_PALABRAS.get(
+        metricas.get("severidad", "none"), "un daño leve"
+    )
+    causas = _CAUSAS_POR_DIAGNOSTICO.get(
+        diagnostico,
+        "Las señales pueden venir de una enfermedad, de plagas, de falta de "
+        "nutrientes o de estrés por agua o clima. Revise la planta completa "
+        "y las condiciones del lote para identificar el origen.",
+    )
+    return (
+        f"En la foto, la hoja o fruto ocupa el {porc_hoja}% de la imagen. "
+        f"El análisis encontró que el {porc_clorosis}% de esa superficie está "
+        f"amarillenta (clorosis), el {porc_necrosis}% tiene manchas oscuras o "
+        f"secas (necrosis) y en total el {porc_afectada}% del área presenta "
+        f"algún daño; la textura de la superficie se ve {superficie}. Esto "
+        f"corresponde a {severidad_palabras}. "
+        f"¿Qué pudo llevar la mata a ese estado? {causas} "
+        f"Este es un análisis visual preliminar hecho con reglas de visión: "
+        f"no reemplaza el dictamen de un agrónomo ni los análisis de suelo o "
+        f"de laboratorio."
+    )
+
+
+def explicacion_abstencion(motivo: str) -> str:
+    """Explicación humana de por qué el análisis se abstuvo y qué hacer."""
+    razones = ";".join(
+        _MOTIVOS_PALABRAS.get(m.strip(), m.strip()) for m in (motivo or "").split(";") if m.strip()
+    ) or "la imagen no es apta para el análisis"
+    return (
+        f"El análisis no se pudo hacer porque {razones}. Tome la foto de "
+        f"cerca, con buena luz, sin mover la cámara y con la hoja o el fruto "
+        f"bien enfocado, y vuelva a intentarlo."
+    )
+
+
 def analizar_sintomas(rgb: np.ndarray, crop_hint: str | None = None) -> dict[str, Any]:
     """Análisis HSV de clorosis, necrosis, textura y área afectada."""
     h, s, v = rgb_a_hsv(rgb)
@@ -231,19 +342,22 @@ def diagnosticar(
     """Contrato de salida del fallback (sección 14)."""
     rgb = decodificar(contenido)
     if rgb is None:
+        motivo = "imagen_no_decodificable"
         return {
             "status": "abstain",
-            "motivo": "imagen_no_decodificable",
+            "motivo": motivo,
             "confidence": 0.0,
             "evidence": [],
+            "explicacion": explicacion_abstencion(motivo),
             "requires_review": True,
             "fuente": FUENTE_FALLBACK,
         }
     puerta = quality_gate(rgb)
     if not puerta["ok"]:
+        motivo = ";".join(puerta["motivos"])
         return {
             "status": "abstain",
-            "motivo": ";".join(puerta["motivos"]),
+            "motivo": motivo,
             "confidence": 0.0,
             "quality_gate": puerta,
             "evidence": [
@@ -251,6 +365,7 @@ def diagnosticar(
                 f"nitidez {puerta['nitidez']}",
                 f"brillo {puerta['brillo']}",
             ],
+            "explicacion": explicacion_abstencion(motivo),
             "requires_review": True,
             "fuente": FUENTE_FALLBACK,
         }
@@ -270,6 +385,7 @@ def diagnosticar(
         "confidence": confianza,
         "severity": {"label": metricas["severidad"], "confidence": 0.7},
         "evidence": evidencia,
+        "explicacion": _explicacion_preliminar(metricas, diagnostico),
         "requires_review": True,
         "fuente": FUENTE_FALLBACK,
     }

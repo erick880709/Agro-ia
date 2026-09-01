@@ -24,6 +24,7 @@ from agroia_backend.services.vision_fallback import (
     FUENTE_FALLBACK,
     MODELO_VERSION,
     diagnosticar,
+    explicacion_abstencion,
 )
 
 logger = get_logger(__name__)
@@ -85,6 +86,10 @@ def _mapear_contrato(resultado: dict[str, Any], crop_hint: str | None) -> dict[s
         "diagnosis": diagnosis,
         "severity": {"label": severidad, "confidence": resultado.get("severity", {}).get("confidence", 0.0)},
         "evidence": resultado.get("evidence", []),
+        "explicacion": resultado.get("explicacion")
+        or explicacion_abstencion(resultado.get("motivo", "sin_evidencia_suficiente"))
+        if estado == "abstain"
+        else resultado.get("explicacion", ""),
         "requiere_revision": bool(resultado.get("requires_review", True)),
         # Campos legados del endpoint /analizar-plaga (compatibilidad v3.0).
         "plaga": plaga,
@@ -112,6 +117,7 @@ def diagnosticar_imagen(contenido: bytes, crop_hint: str | None = None) -> dict[
             "motivo": "confianza_bajo_umbral",
             "confidence": resultado.get("confidence", 0.0),
             "evidence": resultado.get("evidence", []),
+            "explicacion": explicacion_abstencion("confianza_bajo_umbral"),
             "requires_review": True,
             "fuente": resultado.get("fuente", FUENTE_FALLBACK),
         }

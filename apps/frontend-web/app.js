@@ -1890,12 +1890,15 @@ async function analizarFotoPlaga(e) {
     }
     const estado = r.estado || '';
     const evidencia = Array.isArray(r.evidencia) ? r.evidencia : [];
+    const explicacion = r.explicacion || '';
     msg.innerHTML = okBanner(
       `Diagnóstico <b>${esc(r.plaga)}</b> (${r.confianza != null ? Math.round(r.confianza * 100) + '%' : '—'}) · ` +
       `severidad: ${esc(r.severidad)}${estado ? ` · estado: <b>${esc(estado)}</b>` : ''}.<br>` +
       `${esc(r.recomendacion)} <i>(${esc(r.nota || '')})</i>` +
       (evidencia.length ? `<ul>${evidencia.map(e => `<li>${esc(e)}</li>`).join('')}</ul>` : '')
-    );
+    ) + (explicacion
+      ? `<div class="explicacion-box"><b>🔎 ¿Qué vio el análisis?</b><p>${esc(explicacion)}</p></div>`
+      : '');
     document.getElementById('vision-foto').value = '';
     await cargarVision();
   } catch (err) {
