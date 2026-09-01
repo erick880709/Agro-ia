@@ -1,7 +1,7 @@
 # Graph Report - Agro-ia  (2026-08-29)
 
 ## Corpus Check
-- 1030 files · ~989,211 words
+- 1030 files · ~989,265 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `01413fc4`
+- Built from commit: `cf6f38de`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -4271,14 +4271,14 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `MLOracleService` connect `RecommendationOrchestrator` to `Path`?**
   _High betweenness centrality (0.002) - this node is a cross-community bridge._
-- **Why does `JsonFormatter` connect `http_download` to `common.py`?**
-  _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `TailwindConfigGenerator` (e.g. with `TestGeneratedConfigIsValidJs` and `TestTailwindConfigGenerator`) actually correct?**
   _`TailwindConfigGenerator` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Módulos v4 — cobertura funcional ampliada (2026-08-27)`, `🎯 Objetivo`, `📊 Estado por épica` to the rest of the system?**
   _4402 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `init.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.06080246913580247 - nodes in this community are weakly interconnected._
+- **Should `BaseSchemaValidator` be split into smaller, more focused modules?**
+  _Cohesion score 0.051759834368530024 - nodes in this community are weakly interconnected._
 - **Should `BaseSchemaValidator` be split into smaller, more focused modules?**
   _Cohesion score 0.051759834368530024 - nodes in this community are weakly interconnected._
 - **Should `BaseSchemaValidator` be split into smaller, more focused modules?**

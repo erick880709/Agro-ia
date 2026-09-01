@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1788015248.492301,
-    "ast_hash": "ffd0d5f5d1c0e3fccd70ad45fe4fcf88",
+    "mtime": 1788028182.1547985,
+    "ast_hash": "f6fb93e938753bb50362f7a977753422",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -5720,13 +5720,13 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.html": {
-    "mtime": 1788015217.084444,
-    "ast_hash": "ed05a85352e156196762993d565c3f41",
+    "mtime": 1788028187.3528647,
+    "ast_hash": "7c641b5356363c888e32d7d5fdf18c05",
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md": {
-    "mtime": 1788015248.489268,
-    "ast_hash": "334992553f916bb204443221afe12f5e",
+    "mtime": 1788028182.1547985,
+    "ast_hash": "147a2c3f8b2f564de9835beaa0346658",
     "semantic_hash": ""
   },
   "context/contextoVision/AgroIA_Especificacion_Tecnica_v6_Datasets.md": {

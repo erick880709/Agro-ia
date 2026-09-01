@@ -4,510 +4,15 @@
   "graph": {},
   "nodes": [
     {
-      "label": "common.py",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "datasets_scripts_common",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "common.py"
-    },
-    {
-      "label": "_es_script_dir()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L28",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_es_script_dir",
-      "community": 112,
-      "community_name": "Path",
-      "norm_label": "_es_script_dir()"
-    },
-    {
-      "label": "JsonFormatter",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L61",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_jsonformatter",
-      "community": 991,
-      "community_name": "http_download",
-      "norm_label": "jsonformatter"
-    },
-    {
-      "label": ".format()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L64",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_jsonformatter_format",
-      "community": 991,
-      "community_name": "http_download",
-      "norm_label": ".format()"
-    },
-    {
-      "label": "LogRecord",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "logrecord",
-      "community": 991,
-      "community_name": "http_download",
-      "norm_label": "logrecord"
-    },
-    {
-      "label": "JsonLogger",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L79",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_jsonlogger",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "jsonlogger"
-    },
-    {
-      "label": "._log()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L82",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_jsonlogger_log",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "._log()"
-    },
-    {
-      "label": "get_logger()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L111",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_get_logger",
-      "community": 991,
-      "community_name": "http_download",
-      "norm_label": "get_logger()"
-    },
-    {
-      "label": "Logger",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "logger",
-      "community": 991,
-      "community_name": "http_download",
-      "norm_label": "logger"
-    },
-    {
-      "label": "load_yaml()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L124",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_load_yaml",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "load_yaml()"
-    },
-    {
-      "label": "Path",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "path",
-      "community": 112,
-      "community_name": "Path",
-      "norm_label": "path"
-    },
-    {
-      "label": "Any",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "any",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "any"
-    },
-    {
-      "label": "_strip_comment()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L137",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_strip_comment",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "_strip_comment()"
-    },
-    {
-      "label": "_parse_scalar()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L150",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_parse_scalar",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "_parse_scalar()"
-    },
-    {
-      "label": "_clean_lines()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L177",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_clean_lines",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "_clean_lines()"
-    },
-    {
-      "label": "_indent()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L186",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_indent",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "_indent()"
-    },
-    {
-      "label": "_parse_block()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L190",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_parse_block",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "_parse_block()"
-    },
-    {
-      "label": "_parse_simple_yaml()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L246",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_parse_simple_yaml",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "_parse_simple_yaml()"
-    },
-    {
-      "label": "load_catalog()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L255",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_load_catalog",
-      "community": 999,
-      "community_name": "load_catalog",
-      "norm_label": "load_catalog()"
-    },
-    {
-      "label": "_normalizar_dataset()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L264",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_normalizar_dataset",
-      "community": 999,
-      "community_name": "load_catalog",
-      "norm_label": "_normalizar_dataset()"
-    },
-    {
-      "label": "load_class_map()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L287",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_load_class_map",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "load_class_map()"
-    },
-    {
-      "label": "load_license_policy()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L291",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_load_license_policy",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "load_license_policy()"
-    },
-    {
-      "label": "load_pipeline_config()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L295",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_load_pipeline_config",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "load_pipeline_config()"
-    },
-    {
-      "label": "license_action()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L302",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_license_action",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "license_action()"
-    },
-    {
-      "label": "sha256_bytes()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L312",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_sha256_bytes",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "sha256_bytes()"
-    },
-    {
-      "label": "sha256_file()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L316",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_sha256_file",
-      "community": 996,
-      "community_name": "append_jsonl",
-      "norm_label": "sha256_file()"
-    },
-    {
-      "label": "phash()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L324",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_phash",
-      "community": 1022,
-      "community_name": "phash",
-      "norm_label": "phash()"
-    },
-    {
-      "label": "ndarray",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "ndarray",
-      "community": 1022,
-      "community_name": "phash",
-      "norm_label": "ndarray"
-    },
-    {
-      "label": "_dct2d()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L346",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_dct2d",
-      "community": 1022,
-      "community_name": "phash",
-      "norm_label": "_dct2d()"
-    },
-    {
-      "label": "hamming_distance()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L359",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_hamming_distance",
-      "community": 996,
-      "community_name": "append_jsonl",
-      "norm_label": "hamming_distance()"
-    },
-    {
-      "label": "http_download()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L364",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_http_download",
-      "community": 991,
-      "community_name": "http_download",
-      "norm_label": "http_download()"
-    },
-    {
-      "label": "http_head()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L444",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_http_head",
-      "community": 984,
-      "community_name": "download.py",
-      "norm_label": "http_head()"
-    },
-    {
-      "label": "append_jsonl()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L475",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_append_jsonl",
-      "community": 996,
-      "community_name": "append_jsonl",
-      "norm_label": "append_jsonl()"
-    },
-    {
-      "label": "read_jsonl()",
-      "file_type": "code",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L481",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_read_jsonl",
-      "community": 995,
-      "community_name": "evaluate.py",
-      "norm_label": "read_jsonl()"
-    },
-    {
-      "label": "Utilidades compartidas del pipeline AgroVision. Sin dependencias duras m\u00e1s all\u00e1\u2026",
-      "file_type": "rationale",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_rationale_1",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "utilidades compartidas del pipeline agrovision. sin dependencias duras mas alla..."
-    },
-    {
-      "label": "Formatea cada registro como una l\u00ednea JSON.",
-      "file_type": "rationale",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L62",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_rationale_62",
-      "community": 991,
-      "community_name": "http_download",
-      "norm_label": "formatea cada registro como una linea json."
-    },
-    {
-      "label": "Logger que acepta `extra_fields=` como kwarg de conveniencia.",
-      "file_type": "rationale",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L80",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_rationale_80",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "logger que acepta `extra_fields=` como kwarg de conveniencia."
-    },
-    {
-      "label": "Logger con salida JSON a stdout.",
-      "file_type": "rationale",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L112",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_rationale_112",
-      "community": 991,
-      "community_name": "http_download",
-      "norm_label": "logger con salida json a stdout."
-    },
-    {
-      "label": "Carga YAML: PyYAML si existe, si no un parser m\u00ednimo del subconjunto usado por\u2026",
-      "file_type": "rationale",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L125",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_rationale_125",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "carga yaml: pyyaml si existe, si no un parser minimo del subconjunto usado por..."
-    },
-    {
-      "label": "Cat\u00e1logo de datasets desde manifest/datasets.yaml. Normaliza las claves de la\u2026",
-      "file_type": "rationale",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L256",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_rationale_256",
-      "community": 999,
-      "community_name": "load_catalog",
-      "norm_label": "catalogo de datasets desde manifest/datasets.yaml. normaliza las claves de la..."
-    },
-    {
-      "label": "Eval\u00faa una licencia contra la pol\u00edtica (Commercial-use gate).",
-      "file_type": "rationale",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L303",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_rationale_303",
-      "community": 828,
-      "community_name": "common.py",
-      "norm_label": "evalua una licencia contra la politica (commercial-use gate)."
-    },
-    {
-      "label": "Hash perceptual 64 bits (DCT sobre miniatura gris 32x32). `array` debe ser HxW\u2026",
-      "file_type": "rationale",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L325",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_rationale_325",
-      "community": 1022,
-      "community_name": "phash",
-      "norm_label": "hash perceptual 64 bits (dct sobre miniatura gris 32x32). `array` debe ser hxw..."
-    },
-    {
-      "label": "DCT-II 2D. La normalizaci\u00f3n ortonormal no es necesaria: el hash perceptual solo\u2026",
-      "file_type": "rationale",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L347",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_rationale_347",
-      "community": 1022,
-      "community_name": "phash",
-      "norm_label": "dct-ii 2d. la normalizacion ortonormal no es necesaria: el hash perceptual solo..."
-    },
-    {
-      "label": "Descarga a `dest` con reintentos exponenciales y resume v\u00eda Range. Devuelve\u2026",
-      "file_type": "rationale",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L373",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_rationale_373",
-      "community": 991,
-      "community_name": "http_download",
-      "norm_label": "descarga a `dest` con reintentos exponenciales y resume via range. devuelve..."
-    },
-    {
-      "label": "HEAD/GET ligero para comprobar disponibilidad (11.1 Discover).",
-      "file_type": "rationale",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L445",
-      "_origin": "ast",
-      "id": "datasets_scripts_common_rationale_445",
-      "community": 984,
-      "community_name": "download.py",
-      "norm_label": "head/get ligero para comprobar disponibilidad (11.1 discover)."
-    },
-    {
       "label": "PROJECT_STATUS.md",
       "file_type": "document",
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "project_status",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "project_status.md",
-      "id": "project_status"
+      "norm_label": "project_status.md"
     },
     {
       "label": "AgroIA \u2014 Estado del Proyecto",
@@ -515,10 +20,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "project_status_agroia_estado_del_proyecto",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "agroia \u2014 estado del proyecto",
-      "id": "project_status_agroia_estado_del_proyecto"
+      "norm_label": "agroia \u2014 estado del proyecto"
     },
     {
       "label": "M\u00f3dulos v4 \u2014 cobertura funcional ampliada (2026-08-27)",
@@ -526,10 +31,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L4",
       "_origin": "ast",
+      "id": "project_status_m\u00f3dulos_v4_cobertura_funcional_ampliada_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "modulos v4 \u2014 cobertura funcional ampliada (2026-08-27)",
-      "id": "project_status_m\u00f3dulos_v4_cobertura_funcional_ampliada_2026_08_27"
+      "norm_label": "modulos v4 \u2014 cobertura funcional ampliada (2026-08-27)"
     },
     {
       "label": "\ud83c\udfaf Objetivo",
@@ -537,10 +42,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L15",
       "_origin": "ast",
+      "id": "project_status_objetivo",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83c\udfaf objetivo",
-      "id": "project_status_objetivo"
+      "norm_label": "\ud83c\udfaf objetivo"
     },
     {
       "label": "\ud83d\udcca Estado por \u00e9pica",
@@ -548,10 +53,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L18",
       "_origin": "ast",
+      "id": "project_status_estado_por_\u00e9pica",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83d\udcca estado por epica",
-      "id": "project_status_estado_por_\u00e9pica"
+      "norm_label": "\ud83d\udcca estado por epica"
     },
     {
       "label": "\ud83c\udfd7\ufe0f Stack",
@@ -559,10 +64,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L32",
       "_origin": "ast",
+      "id": "project_status_stack",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83c\udfd7\ufe0f stack",
-      "id": "project_status_stack"
+      "norm_label": "\ud83c\udfd7\ufe0f stack"
     },
     {
       "label": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
@@ -570,10 +75,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L46",
       "_origin": "ast",
+      "id": "project_status_despliegue_gratuito_render_neon_supabase",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83d\ude80 despliegue gratuito (render + neon/supabase)",
-      "id": "project_status_despliegue_gratuito_render_neon_supabase"
+      "norm_label": "\ud83d\ude80 despliegue gratuito (render + neon/supabase)"
     },
     {
       "label": "Brecha econ\u00f3mica \u2014 plan de fertilizaci\u00f3n por presupuesto (2026-08-25)",
@@ -581,10 +86,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L50",
       "_origin": "ast",
+      "id": "project_status_brecha_econ\u00f3mica_plan_de_fertilizaci\u00f3n_por_presupuesto_2026_08_25",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "brecha economica \u2014 plan de fertilizacion por presupuesto (2026-08-25)",
-      "id": "project_status_brecha_econ\u00f3mica_plan_de_fertilizaci\u00f3n_por_presupuesto_2026_08_25"
+      "norm_label": "brecha economica \u2014 plan de fertilizacion por presupuesto (2026-08-25)"
     },
     {
       "label": "Retorno de inversi\u00f3n en el reporte (2026-08-27)",
@@ -592,10 +97,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L57",
       "_origin": "ast",
+      "id": "project_status_retorno_de_inversi\u00f3n_en_el_reporte_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "retorno de inversion en el reporte (2026-08-27)",
-      "id": "project_status_retorno_de_inversi\u00f3n_en_el_reporte_2026_08_27"
+      "norm_label": "retorno de inversion en el reporte (2026-08-27)"
     },
     {
       "label": "Chat asesor con contexto visual (2026-08-27)",
@@ -603,10 +108,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L64",
       "_origin": "ast",
+      "id": "project_status_chat_asesor_con_contexto_visual_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "chat asesor con contexto visual (2026-08-27)",
-      "id": "project_status_chat_asesor_con_contexto_visual_2026_08_27"
+      "norm_label": "chat asesor con contexto visual (2026-08-27)"
     },
     {
       "label": "Fisiolog\u00eda de cultivos (2026-08-27)",
@@ -614,10 +119,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L71",
       "_origin": "ast",
+      "id": "project_status_fisiolog\u00eda_de_cultivos_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "fisiologia de cultivos (2026-08-27)",
-      "id": "project_status_fisiolog\u00eda_de_cultivos_2026_08_27"
+      "norm_label": "fisiologia de cultivos (2026-08-27)"
     },
     {
       "label": "Limpieza de BD y finca demo (2026-08-27)",
@@ -625,10 +130,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L78",
       "_origin": "ast",
+      "id": "project_status_limpieza_de_bd_y_finca_demo_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "limpieza de bd y finca demo (2026-08-27)",
-      "id": "project_status_limpieza_de_bd_y_finca_demo_2026_08_27"
+      "norm_label": "limpieza de bd y finca demo (2026-08-27)"
     },
     {
       "label": "Recomendaci\u00f3n sin bloqueo por falta de par\u00e1metros (2026-08-27)",
@@ -636,10 +141,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L83",
       "_origin": "ast",
+      "id": "project_status_recomendaci\u00f3n_sin_bloqueo_por_falta_de_par\u00e1metros_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "recomendacion sin bloqueo por falta de parametros (2026-08-27)",
-      "id": "project_status_recomendaci\u00f3n_sin_bloqueo_por_falta_de_par\u00e1metros_2026_08_27"
+      "norm_label": "recomendacion sin bloqueo por falta de parametros (2026-08-27)"
     },
     {
       "label": "Chat asesor agron\u00f3mico (2026-08-25)",
@@ -647,10 +152,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L92",
       "_origin": "ast",
+      "id": "project_status_chat_asesor_agron\u00f3mico_2026_08_25",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "chat asesor agronomico (2026-08-25)",
-      "id": "project_status_chat_asesor_agron\u00f3mico_2026_08_25"
+      "norm_label": "chat asesor agronomico (2026-08-25)"
     },
     {
       "label": "Mapa de calor del lote (2026-08-25)",
@@ -658,10 +163,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L101",
       "_origin": "ast",
+      "id": "project_status_mapa_de_calor_del_lote_2026_08_25",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "mapa de calor del lote (2026-08-25)",
-      "id": "project_status_mapa_de_calor_del_lote_2026_08_25"
+      "norm_label": "mapa de calor del lote (2026-08-25)"
     },
     {
       "label": "Relaci\u00f3n finca \u2194 sensor en la trama (2026-08-26)",
@@ -669,10 +174,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L112",
       "_origin": "ast",
+      "id": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "relacion finca \u2194 sensor en la trama (2026-08-26)",
-      "id": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26"
+      "norm_label": "relacion finca \u2194 sensor en la trama (2026-08-26)"
     },
     {
       "label": "C\u00f3mo est\u00e1 montado",
@@ -680,10 +185,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L121",
       "_origin": "ast",
+      "id": "project_status_c\u00f3mo_est\u00e1_montado",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "como esta montado",
-      "id": "project_status_c\u00f3mo_est\u00e1_montado"
+      "norm_label": "como esta montado"
     },
     {
       "label": "Validaci\u00f3n y entrenamiento del modelo de recomendaci\u00f3n/diagn\u00f3stico (2026-08-26)",
@@ -691,10 +196,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L127",
       "_origin": "ast",
+      "id": "project_status_validaci\u00f3n_y_entrenamiento_del_modelo_de_recomendaci\u00f3n_diagn\u00f3stico_2026_08_26",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "validacion y entrenamiento del modelo de recomendacion/diagnostico (2026-08-26)",
-      "id": "project_status_validaci\u00f3n_y_entrenamiento_del_modelo_de_recomendaci\u00f3n_diagn\u00f3stico_2026_08_26"
+      "norm_label": "validacion y entrenamiento del modelo de recomendacion/diagnostico (2026-08-26)"
     },
     {
       "label": "Plan de mejora ejecutado (2026-08-27)",
@@ -702,10 +207,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L137",
       "_origin": "ast",
+      "id": "project_status_plan_de_mejora_ejecutado_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "plan de mejora ejecutado (2026-08-27)",
-      "id": "project_status_plan_de_mejora_ejecutado_2026_08_27"
+      "norm_label": "plan de mejora ejecutado (2026-08-27)"
     },
     {
       "label": "Aceptaci\u00f3n humana de recomendaciones (human-in-the-loop) y 12 mejoras al reporte (2026-08-27)",
@@ -713,10 +218,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L144",
       "_origin": "ast",
+      "id": "project_status_aceptaci\u00f3n_humana_de_recomendaciones_human_in_the_loop_y_12_mejoras_al_reporte_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "aceptacion humana de recomendaciones (human-in-the-loop) y 12 mejoras al reporte (2026-08-27)",
-      "id": "project_status_aceptaci\u00f3n_humana_de_recomendaciones_human_in_the_loop_y_12_mejoras_al_reporte_2026_08_27"
+      "norm_label": "aceptacion humana de recomendaciones (human-in-the-loop) y 12 mejoras al reporte (2026-08-27)"
     },
     {
       "label": "Registro de finca en 3 secciones + cadena de validaci\u00f3n + separaci\u00f3n Finca/Lote (2026-08-27)",
@@ -724,10 +229,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L162",
       "_origin": "ast",
+      "id": "project_status_registro_de_finca_en_3_secciones_cadena_de_validaci\u00f3n_separaci\u00f3n_finca_lote_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "registro de finca en 3 secciones + cadena de validacion + separacion finca/lote (2026-08-27)",
-      "id": "project_status_registro_de_finca_en_3_secciones_cadena_de_validaci\u00f3n_separaci\u00f3n_finca_lote_2026_08_27"
+      "norm_label": "registro de finca en 3 secciones + cadena de validacion + separacion finca/lote (2026-08-27)"
     },
     {
       "label": "Muestreo inteligente, sem\u00e1foro de confianza, ROI realista y modo simulaci\u00f3n (2026-08-27)",
@@ -735,10 +240,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L168",
       "_origin": "ast",
+      "id": "project_status_muestreo_inteligente_sem\u00e1foro_de_confianza_roi_realista_y_modo_simulaci\u00f3n_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "muestreo inteligente, semaforo de confianza, roi realista y modo simulacion (2026-08-27)",
-      "id": "project_status_muestreo_inteligente_sem\u00e1foro_de_confianza_roi_realista_y_modo_simulaci\u00f3n_2026_08_27"
+      "norm_label": "muestreo inteligente, semaforo de confianza, roi realista y modo simulacion (2026-08-27)"
     },
     {
       "label": "Administraci\u00f3n de fincas, lotes y usuarios + auditor\u00eda de acciones (2026-08-27)",
@@ -746,10 +251,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L176",
       "_origin": "ast",
+      "id": "project_status_administraci\u00f3n_de_fincas_lotes_y_usuarios_auditor\u00eda_de_acciones_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "administracion de fincas, lotes y usuarios + auditoria de acciones (2026-08-27)",
-      "id": "project_status_administraci\u00f3n_de_fincas_lotes_y_usuarios_auditor\u00eda_de_acciones_2026_08_27"
+      "norm_label": "administracion de fincas, lotes y usuarios + auditoria de acciones (2026-08-27)"
     },
     {
       "label": "Finca integral de demostraci\u00f3n en producci\u00f3n (2026-08-27)",
@@ -757,10 +262,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L185",
       "_origin": "ast",
+      "id": "project_status_finca_integral_de_demostraci\u00f3n_en_producci\u00f3n_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "finca integral de demostracion en produccion (2026-08-27)",
-      "id": "project_status_finca_integral_de_demostraci\u00f3n_en_producci\u00f3n_2026_08_27"
+      "norm_label": "finca integral de demostracion en produccion (2026-08-27)"
     },
     {
       "label": "Historial de ciclos productivos por lote (2026-08-27)",
@@ -768,10 +273,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L191",
       "_origin": "ast",
+      "id": "project_status_historial_de_ciclos_productivos_por_lote_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "historial de ciclos productivos por lote (2026-08-27)",
-      "id": "project_status_historial_de_ciclos_productivos_por_lote_2026_08_27"
+      "norm_label": "historial de ciclos productivos por lote (2026-08-27)"
     },
     {
       "label": "Inicio r\u00e1pido de ciclo desde Recomendaciones (2026-08-27)",
@@ -779,10 +284,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L198",
       "_origin": "ast",
+      "id": "project_status_inicio_r\u00e1pido_de_ciclo_desde_recomendaciones_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "inicio rapido de ciclo desde recomendaciones (2026-08-27)",
-      "id": "project_status_inicio_r\u00e1pido_de_ciclo_desde_recomendaciones_2026_08_27"
+      "norm_label": "inicio rapido de ciclo desde recomendaciones (2026-08-27)"
     },
     {
       "label": "Cierre del ciclo \u2014 Cosechar (2026-08-27)",
@@ -790,10 +295,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L205",
       "_origin": "ast",
+      "id": "project_status_cierre_del_ciclo_cosechar_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "cierre del ciclo \u2014 cosechar (2026-08-27)",
-      "id": "project_status_cierre_del_ciclo_cosechar_2026_08_27"
+      "norm_label": "cierre del ciclo \u2014 cosechar (2026-08-27)"
     },
     {
       "label": "Carga masiva del historial de ciclos (CSV, 2026-08-27)",
@@ -801,10 +306,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L213",
       "_origin": "ast",
+      "id": "project_status_carga_masiva_del_historial_de_ciclos_csv_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "carga masiva del historial de ciclos (csv, 2026-08-27)",
-      "id": "project_status_carga_masiva_del_historial_de_ciclos_csv_2026_08_27"
+      "norm_label": "carga masiva del historial de ciclos (csv, 2026-08-27)"
     },
     {
       "label": "Historial de ciclos en el reporte \u2014 predicci\u00f3n de rendimiento y alerta de P (2026-08-27)",
@@ -812,10 +317,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L219",
       "_origin": "ast",
+      "id": "project_status_historial_de_ciclos_en_el_reporte_predicci\u00f3n_de_rendimiento_y_alerta_de_p_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "historial de ciclos en el reporte \u2014 prediccion de rendimiento y alerta de p (2026-08-27)",
-      "id": "project_status_historial_de_ciclos_en_el_reporte_predicci\u00f3n_de_rendimiento_y_alerta_de_p_2026_08_27"
+      "norm_label": "historial de ciclos en el reporte \u2014 prediccion de rendimiento y alerta de p (2026-08-27)"
     },
     {
       "label": "M\u00f3dulo de labores / \u00f3rdenes de trabajo (2026-08-27)",
@@ -823,10 +328,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L226",
       "_origin": "ast",
+      "id": "project_status_m\u00f3dulo_de_labores_\u00f3rdenes_de_trabajo_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "modulo de labores / ordenes de trabajo (2026-08-27)",
-      "id": "project_status_m\u00f3dulo_de_labores_\u00f3rdenes_de_trabajo_2026_08_27"
+      "norm_label": "modulo de labores / ordenes de trabajo (2026-08-27)"
     },
     {
       "label": "Alertas clim\u00e1ticas proactivas (pron\u00f3stico + fenolog\u00eda + labores, 2026-08-27)",
@@ -834,10 +339,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L236",
       "_origin": "ast",
+      "id": "project_status_alertas_clim\u00e1ticas_proactivas_pron\u00f3stico_fenolog\u00eda_labores_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "alertas climaticas proactivas (pronostico + fenologia + labores, 2026-08-27)",
-      "id": "project_status_alertas_clim\u00e1ticas_proactivas_pron\u00f3stico_fenolog\u00eda_labores_2026_08_27"
+      "norm_label": "alertas climaticas proactivas (pronostico + fenologia + labores, 2026-08-27)"
     },
     {
       "label": "Aprendizaje activo \u2014 promoci\u00f3n del ML por variable (2026-08-27)",
@@ -845,10 +350,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L245",
       "_origin": "ast",
+      "id": "project_status_aprendizaje_activo_promoci\u00f3n_del_ml_por_variable_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "aprendizaje activo \u2014 promocion del ml por variable (2026-08-27)",
-      "id": "project_status_aprendizaje_activo_promoci\u00f3n_del_ml_por_variable_2026_08_27"
+      "norm_label": "aprendizaje activo \u2014 promocion del ml por variable (2026-08-27)"
     },
     {
       "label": "Capas oficiales IGAC/UPRA \u2014 enriquecimiento SIG (2026-08-27)",
@@ -856,10 +361,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L253",
       "_origin": "ast",
+      "id": "project_status_capas_oficiales_igac_upra_enriquecimiento_sig_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "capas oficiales igac/upra \u2014 enriquecimiento sig (2026-08-27)",
-      "id": "project_status_capas_oficiales_igac_upra_enriquecimiento_sig_2026_08_27"
+      "norm_label": "capas oficiales igac/upra \u2014 enriquecimiento sig (2026-08-27)"
     },
     {
       "label": "Precios de insumos din\u00e1micos \u2014 ROI actualizable (2026-08-27)",
@@ -867,10 +372,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L261",
       "_origin": "ast",
+      "id": "project_status_precios_de_insumos_din\u00e1micos_roi_actualizable_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "precios de insumos dinamicos \u2014 roi actualizable (2026-08-27)",
-      "id": "project_status_precios_de_insumos_din\u00e1micos_roi_actualizable_2026_08_27"
+      "norm_label": "precios de insumos dinamicos \u2014 roi actualizable (2026-08-27)"
     },
     {
       "label": "Men\u00fa \u00abAdministraci\u00f3n\u00bb y p\u00e1gina propia de insumos (2026-08-28)",
@@ -878,10 +383,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L268",
       "_origin": "ast",
+      "id": "project_status_men\u00fa_administraci\u00f3n_y_p\u00e1gina_propia_de_insumos_2026_08_28",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "menu \u00abadministracion\u00bb y pagina propia de insumos (2026-08-28)",
-      "id": "project_status_men\u00fa_administraci\u00f3n_y_p\u00e1gina_propia_de_insumos_2026_08_28"
+      "norm_label": "menu \u00abadministracion\u00bb y pagina propia de insumos (2026-08-28)"
     },
     {
       "label": "Men\u00fa \u00abAyuda\u00bb \u2014 manuales de usuario por rol (2026-08-28)",
@@ -889,10 +394,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L275",
       "_origin": "ast",
+      "id": "project_status_men\u00fa_ayuda_manuales_de_usuario_por_rol_2026_08_28",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "menu \u00abayuda\u00bb \u2014 manuales de usuario por rol (2026-08-28)",
-      "id": "project_status_men\u00fa_ayuda_manuales_de_usuario_por_rol_2026_08_28"
+      "norm_label": "menu \u00abayuda\u00bb \u2014 manuales de usuario por rol (2026-08-28)"
     },
     {
       "label": "Im\u00e1genes fuera de la BD y validaci\u00f3n de rendimiento (2026-08-27)",
@@ -900,10 +405,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L283",
       "_origin": "ast",
+      "id": "project_status_im\u00e1genes_fuera_de_la_bd_y_validaci\u00f3n_de_rendimiento_2026_08_27",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "imagenes fuera de la bd y validacion de rendimiento (2026-08-27)",
-      "id": "project_status_im\u00e1genes_fuera_de_la_bd_y_validaci\u00f3n_de_rendimiento_2026_08_27"
+      "norm_label": "imagenes fuera de la bd y validacion de rendimiento (2026-08-27)"
     },
     {
       "label": "Migraciones destacadas",
@@ -911,10 +416,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L290",
       "_origin": "ast",
+      "id": "project_status_migraciones_destacadas",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "migraciones destacadas",
-      "id": "project_status_migraciones_destacadas"
+      "norm_label": "migraciones destacadas"
     },
     {
       "label": "L\u00edmites del tier gratuito (validados 2026-08-25)",
@@ -922,10 +427,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L303",
       "_origin": "ast",
+      "id": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "limites del tier gratuito (validados 2026-08-25)",
-      "id": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25"
+      "norm_label": "limites del tier gratuito (validados 2026-08-25)"
     },
     {
       "label": "Notas t\u00e9cnicas",
@@ -933,10 +438,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L313",
       "_origin": "ast",
+      "id": "project_status_notas_t\u00e9cnicas",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "notas tecnicas",
-      "id": "project_status_notas_t\u00e9cnicas"
+      "norm_label": "notas tecnicas"
     },
     {
       "label": "\ud83d\udcc1 Estructura",
@@ -944,10 +449,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L318",
       "_origin": "ast",
+      "id": "project_status_estructura",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83d\udcc1 estructura",
-      "id": "project_status_estructura"
+      "norm_label": "\ud83d\udcc1 estructura"
     },
     {
       "label": "\ud83d\ude80 Arranque r\u00e1pido",
@@ -955,10 +460,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L337",
       "_origin": "ast",
+      "id": "project_status_arranque_r\u00e1pido",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83d\ude80 arranque rapido",
-      "id": "project_status_arranque_r\u00e1pido"
+      "norm_label": "\ud83d\ude80 arranque rapido"
     },
     {
       "label": "\u2b1c Pendiente",
@@ -966,10 +471,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L350",
       "_origin": "ast",
+      "id": "project_status_pendiente",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\u2b1c pendiente",
-      "id": "project_status_pendiente"
+      "norm_label": "\u2b1c pendiente"
     },
     {
       "label": "\ud83e\udde0 Motor de recomendaciones \u2014 Sistema Experto activo (2026-08-25)",
@@ -977,10 +482,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L358",
       "_origin": "ast",
+      "id": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83e\udde0 motor de recomendaciones \u2014 sistema experto activo (2026-08-25)",
-      "id": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25"
+      "norm_label": "\ud83e\udde0 motor de recomendaciones \u2014 sistema experto activo (2026-08-25)"
     },
     {
       "label": "\ud83d\udc65 Roles y permisos por finca (2026-08-25)",
@@ -988,10 +493,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L373",
       "_origin": "ast",
+      "id": "project_status_roles_y_permisos_por_finca_2026_08_25",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83d\udc65 roles y permisos por finca (2026-08-25)",
-      "id": "project_status_roles_y_permisos_por_finca_2026_08_25"
+      "norm_label": "\ud83d\udc65 roles y permisos por finca (2026-08-25)"
     },
     {
       "label": "\ud83d\udcc4 Reportes de an\u00e1lisis (2026-08-25)",
@@ -999,10 +504,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L383",
       "_origin": "ast",
+      "id": "project_status_reportes_de_an\u00e1lisis_2026_08_25",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "\ud83d\udcc4 reportes de analisis (2026-08-25)",
-      "id": "project_status_reportes_de_an\u00e1lisis_2026_08_25"
+      "norm_label": "\ud83d\udcc4 reportes de analisis (2026-08-25)"
     },
     {
       "label": "Almanaque Bristol + primer modelo de visi\u00f3n con datos reales (2026-08-29)",
@@ -1010,10 +515,10 @@
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L395",
       "_origin": "ast",
+      "id": "project_status_almanaque_bristol_primer_modelo_de_visi\u00f3n_con_datos_reales_2026_08_29",
       "community": 630,
       "community_name": "\ud83d\ude80 Despliegue gratuito (Render + Neon/Supabase)",
-      "norm_label": "almanaque bristol + primer modelo de vision con datos reales (2026-08-29)",
-      "id": "project_status_almanaque_bristol_primer_modelo_de_visi\u00f3n_con_datos_reales_2026_08_29"
+      "norm_label": "almanaque bristol + primer modelo de vision con datos reales (2026-08-29)"
     },
     {
       "label": "Documento_Datasets_Entrenamiento_AgroIA.md",
@@ -1021,10 +526,10 @@
       "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "resources_architecture_documento_datasets_entrenamiento_agroia",
       "community": 870,
       "community_name": "1. Modelo tabular \u2014 diagn\u00f3stico nutricional y aptitud (ML en sombra)",
-      "norm_label": "documento_datasets_entrenamiento_agroia.md",
-      "id": "resources_architecture_documento_datasets_entrenamiento_agroia"
+      "norm_label": "documento_datasets_entrenamiento_agroia.md"
     },
     {
       "label": "AgroIA \u2014 Datasets de entrenamiento de los modelos",
@@ -1032,10 +537,10 @@
       "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_agroia_datasets_de_entrenamiento_de_los_modelos",
       "community": 870,
       "community_name": "1. Modelo tabular \u2014 diagn\u00f3stico nutricional y aptitud (ML en sombra)",
-      "norm_label": "agroia \u2014 datasets de entrenamiento de los modelos",
-      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_agroia_datasets_de_entrenamiento_de_los_modelos"
+      "norm_label": "agroia \u2014 datasets de entrenamiento de los modelos"
     },
     {
       "label": "1. Modelo tabular \u2014 diagn\u00f3stico nutricional y aptitud (ML en sombra)",
@@ -1043,10 +548,10 @@
       "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
       "source_location": "L11",
       "_origin": "ast",
+      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_1_modelo_tabular_diagn\u00f3stico_nutricional_y_aptitud_ml_en_sombra",
       "community": 870,
       "community_name": "1. Modelo tabular \u2014 diagn\u00f3stico nutricional y aptitud (ML en sombra)",
-      "norm_label": "1. modelo tabular \u2014 diagnostico nutricional y aptitud (ml en sombra)",
-      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_1_modelo_tabular_diagn\u00f3stico_nutricional_y_aptitud_ml_en_sombra"
+      "norm_label": "1. modelo tabular \u2014 diagnostico nutricional y aptitud (ml en sombra)"
     },
     {
       "label": "1.1 Dataset de entrenamiento principal: sint\u00e9tico etiquetado por reglas",
@@ -1054,10 +559,10 @@
       "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
       "source_location": "L13",
       "_origin": "ast",
+      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_1_1_dataset_de_entrenamiento_principal_sint\u00e9tico_etiquetado_por_reglas",
       "community": 870,
       "community_name": "1. Modelo tabular \u2014 diagn\u00f3stico nutricional y aptitud (ML en sombra)",
-      "norm_label": "1.1 dataset de entrenamiento principal: sintetico etiquetado por reglas",
-      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_1_1_dataset_de_entrenamiento_principal_sint\u00e9tico_etiquetado_por_reglas"
+      "norm_label": "1.1 dataset de entrenamiento principal: sintetico etiquetado por reglas"
     },
     {
       "label": "1.2 Ground truth real (aprendizaje activo)",
@@ -1065,10 +570,10 @@
       "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
       "source_location": "L30",
       "_origin": "ast",
+      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_1_2_ground_truth_real_aprendizaje_activo",
       "community": 870,
       "community_name": "1. Modelo tabular \u2014 diagn\u00f3stico nutricional y aptitud (ML en sombra)",
-      "norm_label": "1.2 ground truth real (aprendizaje activo)",
-      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_1_2_ground_truth_real_aprendizaje_activo"
+      "norm_label": "1.2 ground truth real (aprendizaje activo)"
     },
     {
       "label": "1.3 Baselines Kaggle (cold-start, metodol\u00f3gico \u2014 NO producci\u00f3n)",
@@ -1076,10 +581,10 @@
       "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
       "source_location": "L41",
       "_origin": "ast",
+      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_1_3_baselines_kaggle_cold_start_metodol\u00f3gico_no_producci\u00f3n",
       "community": 870,
       "community_name": "1. Modelo tabular \u2014 diagn\u00f3stico nutricional y aptitud (ML en sombra)",
-      "norm_label": "1.3 baselines kaggle (cold-start, metodologico \u2014 no produccion)",
-      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_1_3_baselines_kaggle_cold_start_metodol\u00f3gico_no_producci\u00f3n"
+      "norm_label": "1.3 baselines kaggle (cold-start, metodologico \u2014 no produccion)"
     },
     {
       "label": "1.4 Artefactos generados",
@@ -1087,10 +592,10 @@
       "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
       "source_location": "L51",
       "_origin": "ast",
+      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_1_4_artefactos_generados",
       "community": 870,
       "community_name": "1. Modelo tabular \u2014 diagn\u00f3stico nutricional y aptitud (ML en sombra)",
-      "norm_label": "1.4 artefactos generados",
-      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_1_4_artefactos_generados"
+      "norm_label": "1.4 artefactos generados"
     },
     {
       "label": "1.5 Fuentes tabulares externas para calibraci\u00f3n (espec v6 \u00a71)",
@@ -1098,10 +603,10 @@
       "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
       "source_location": "L59",
       "_origin": "ast",
+      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_1_5_fuentes_tabulares_externas_para_calibraci\u00f3n_espec_v6_1",
       "community": 870,
       "community_name": "1. Modelo tabular \u2014 diagn\u00f3stico nutricional y aptitud (ML en sombra)",
-      "norm_label": "1.5 fuentes tabulares externas para calibracion (espec v6 \u00a71)",
-      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_1_5_fuentes_tabulares_externas_para_calibraci\u00f3n_espec_v6_1"
+      "norm_label": "1.5 fuentes tabulares externas para calibracion (espec v6 \u00a71)"
     },
     {
       "label": "2. AgroVision \u2014 diagn\u00f3stico visual (foto)",
@@ -1109,10 +614,10 @@
       "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
       "source_location": "L73",
       "_origin": "ast",
+      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_2_agrovision_diagn\u00f3stico_visual_foto",
       "community": 870,
       "community_name": "1. Modelo tabular \u2014 diagn\u00f3stico nutricional y aptitud (ML en sombra)",
-      "norm_label": "2. agrovision \u2014 diagnostico visual (foto)",
-      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_2_agrovision_diagn\u00f3stico_visual_foto"
+      "norm_label": "2. agrovision \u2014 diagnostico visual (foto)"
     },
     {
       "label": "2.1 Estado del entrenamiento",
@@ -1120,43 +625,538 @@
       "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
       "source_location": "L75",
       "_origin": "ast",
+      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_2_1_estado_del_entrenamiento",
       "community": 870,
       "community_name": "1. Modelo tabular \u2014 diagn\u00f3stico nutricional y aptitud (ML en sombra)",
-      "norm_label": "2.1 estado del entrenamiento",
-      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_2_1_estado_del_entrenamiento"
+      "norm_label": "2.1 estado del entrenamiento"
     },
     {
       "label": "2.2 Datasets declarados para entrenamiento (manifest v6)",
       "file_type": "document",
       "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L102",
+      "source_location": "L118",
       "_origin": "ast",
+      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_2_2_datasets_declarados_para_entrenamiento_manifest_v6",
       "community": 870,
       "community_name": "1. Modelo tabular \u2014 diagn\u00f3stico nutricional y aptitud (ML en sombra)",
-      "norm_label": "2.2 datasets declarados para entrenamiento (manifest v6)",
-      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_2_2_datasets_declarados_para_entrenamiento_manifest_v6"
+      "norm_label": "2.2 datasets declarados para entrenamiento (manifest v6)"
     },
     {
       "label": "2.3 Reglas de uso (heredadas de la especificaci\u00f3n)",
       "file_type": "document",
       "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L120",
+      "source_location": "L136",
       "_origin": "ast",
+      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_2_3_reglas_de_uso_heredadas_de_la_especificaci\u00f3n",
       "community": 870,
       "community_name": "1. Modelo tabular \u2014 diagn\u00f3stico nutricional y aptitud (ML en sombra)",
-      "norm_label": "2.3 reglas de uso (heredadas de la especificacion)",
-      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_2_3_reglas_de_uso_heredadas_de_la_especificaci\u00f3n"
+      "norm_label": "2.3 reglas de uso (heredadas de la especificacion)"
     },
     {
       "label": "3. C\u00f3mo leer la trazabilidad",
       "file_type": "document",
       "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L133",
+      "source_location": "L149",
       "_origin": "ast",
+      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_3_c\u00f3mo_leer_la_trazabilidad",
       "community": 870,
       "community_name": "1. Modelo tabular \u2014 diagn\u00f3stico nutricional y aptitud (ML en sombra)",
-      "norm_label": "3. como leer la trazabilidad",
-      "id": "resources_architecture_documento_datasets_entrenamiento_agroia_3_c\u00f3mo_leer_la_trazabilidad"
+      "norm_label": "3. como leer la trazabilidad"
+    },
+    {
+      "label": "common.py",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "common.py",
+      "id": "datasets_scripts_common"
+    },
+    {
+      "label": "_es_script_dir()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L28",
+      "_origin": "ast",
+      "community": 112,
+      "community_name": "Path",
+      "norm_label": "_es_script_dir()",
+      "id": "datasets_scripts_common_es_script_dir"
+    },
+    {
+      "label": "JsonFormatter",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L61",
+      "_origin": "ast",
+      "community": 991,
+      "community_name": "http_download",
+      "norm_label": "jsonformatter",
+      "id": "datasets_scripts_common_jsonformatter"
+    },
+    {
+      "label": ".format()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L64",
+      "_origin": "ast",
+      "community": 991,
+      "community_name": "http_download",
+      "norm_label": ".format()",
+      "id": "datasets_scripts_common_jsonformatter_format"
+    },
+    {
+      "label": "LogRecord",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 991,
+      "community_name": "http_download",
+      "norm_label": "logrecord",
+      "id": "logrecord"
+    },
+    {
+      "label": "JsonLogger",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L79",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "jsonlogger",
+      "id": "datasets_scripts_common_jsonlogger"
+    },
+    {
+      "label": "._log()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L82",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "._log()",
+      "id": "datasets_scripts_common_jsonlogger_log"
+    },
+    {
+      "label": "get_logger()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L111",
+      "_origin": "ast",
+      "community": 991,
+      "community_name": "http_download",
+      "norm_label": "get_logger()",
+      "id": "datasets_scripts_common_get_logger"
+    },
+    {
+      "label": "Logger",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 991,
+      "community_name": "http_download",
+      "norm_label": "logger",
+      "id": "logger"
+    },
+    {
+      "label": "load_yaml()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L124",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "load_yaml()",
+      "id": "datasets_scripts_common_load_yaml"
+    },
+    {
+      "label": "Path",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 112,
+      "community_name": "Path",
+      "norm_label": "path",
+      "id": "path"
+    },
+    {
+      "label": "Any",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "any",
+      "id": "any"
+    },
+    {
+      "label": "_strip_comment()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L137",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "_strip_comment()",
+      "id": "datasets_scripts_common_strip_comment"
+    },
+    {
+      "label": "_parse_scalar()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L150",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "_parse_scalar()",
+      "id": "datasets_scripts_common_parse_scalar"
+    },
+    {
+      "label": "_clean_lines()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L177",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "_clean_lines()",
+      "id": "datasets_scripts_common_clean_lines"
+    },
+    {
+      "label": "_indent()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L186",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "_indent()",
+      "id": "datasets_scripts_common_indent"
+    },
+    {
+      "label": "_parse_block()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L190",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "_parse_block()",
+      "id": "datasets_scripts_common_parse_block"
+    },
+    {
+      "label": "_parse_simple_yaml()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L246",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "_parse_simple_yaml()",
+      "id": "datasets_scripts_common_parse_simple_yaml"
+    },
+    {
+      "label": "load_catalog()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L255",
+      "_origin": "ast",
+      "community": 999,
+      "community_name": "load_catalog",
+      "norm_label": "load_catalog()",
+      "id": "datasets_scripts_common_load_catalog"
+    },
+    {
+      "label": "_normalizar_dataset()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L264",
+      "_origin": "ast",
+      "community": 999,
+      "community_name": "load_catalog",
+      "norm_label": "_normalizar_dataset()",
+      "id": "datasets_scripts_common_normalizar_dataset"
+    },
+    {
+      "label": "load_class_map()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L287",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "load_class_map()",
+      "id": "datasets_scripts_common_load_class_map"
+    },
+    {
+      "label": "load_license_policy()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L291",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "load_license_policy()",
+      "id": "datasets_scripts_common_load_license_policy"
+    },
+    {
+      "label": "load_pipeline_config()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L295",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "load_pipeline_config()",
+      "id": "datasets_scripts_common_load_pipeline_config"
+    },
+    {
+      "label": "license_action()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L302",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "license_action()",
+      "id": "datasets_scripts_common_license_action"
+    },
+    {
+      "label": "sha256_bytes()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L312",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "sha256_bytes()",
+      "id": "datasets_scripts_common_sha256_bytes"
+    },
+    {
+      "label": "sha256_file()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L316",
+      "_origin": "ast",
+      "community": 996,
+      "community_name": "append_jsonl",
+      "norm_label": "sha256_file()",
+      "id": "datasets_scripts_common_sha256_file"
+    },
+    {
+      "label": "phash()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L324",
+      "_origin": "ast",
+      "community": 1022,
+      "community_name": "phash",
+      "norm_label": "phash()",
+      "id": "datasets_scripts_common_phash"
+    },
+    {
+      "label": "ndarray",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 1022,
+      "community_name": "phash",
+      "norm_label": "ndarray",
+      "id": "ndarray"
+    },
+    {
+      "label": "_dct2d()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L346",
+      "_origin": "ast",
+      "community": 1022,
+      "community_name": "phash",
+      "norm_label": "_dct2d()",
+      "id": "datasets_scripts_common_dct2d"
+    },
+    {
+      "label": "hamming_distance()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L359",
+      "_origin": "ast",
+      "community": 996,
+      "community_name": "append_jsonl",
+      "norm_label": "hamming_distance()",
+      "id": "datasets_scripts_common_hamming_distance"
+    },
+    {
+      "label": "http_download()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L364",
+      "_origin": "ast",
+      "community": 991,
+      "community_name": "http_download",
+      "norm_label": "http_download()",
+      "id": "datasets_scripts_common_http_download"
+    },
+    {
+      "label": "http_head()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L444",
+      "_origin": "ast",
+      "community": 984,
+      "community_name": "download.py",
+      "norm_label": "http_head()",
+      "id": "datasets_scripts_common_http_head"
+    },
+    {
+      "label": "append_jsonl()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L475",
+      "_origin": "ast",
+      "community": 996,
+      "community_name": "append_jsonl",
+      "norm_label": "append_jsonl()",
+      "id": "datasets_scripts_common_append_jsonl"
+    },
+    {
+      "label": "read_jsonl()",
+      "file_type": "code",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L481",
+      "_origin": "ast",
+      "community": 995,
+      "community_name": "evaluate.py",
+      "norm_label": "read_jsonl()",
+      "id": "datasets_scripts_common_read_jsonl"
+    },
+    {
+      "label": "Utilidades compartidas del pipeline AgroVision. Sin dependencias duras m\u00e1s all\u00e1\u2026",
+      "file_type": "rationale",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "utilidades compartidas del pipeline agrovision. sin dependencias duras mas alla...",
+      "id": "datasets_scripts_common_rationale_1"
+    },
+    {
+      "label": "Formatea cada registro como una l\u00ednea JSON.",
+      "file_type": "rationale",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L62",
+      "_origin": "ast",
+      "community": 991,
+      "community_name": "http_download",
+      "norm_label": "formatea cada registro como una linea json.",
+      "id": "datasets_scripts_common_rationale_62"
+    },
+    {
+      "label": "Logger que acepta `extra_fields=` como kwarg de conveniencia.",
+      "file_type": "rationale",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L80",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "logger que acepta `extra_fields=` como kwarg de conveniencia.",
+      "id": "datasets_scripts_common_rationale_80"
+    },
+    {
+      "label": "Logger con salida JSON a stdout.",
+      "file_type": "rationale",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L112",
+      "_origin": "ast",
+      "community": 991,
+      "community_name": "http_download",
+      "norm_label": "logger con salida json a stdout.",
+      "id": "datasets_scripts_common_rationale_112"
+    },
+    {
+      "label": "Carga YAML: PyYAML si existe, si no un parser m\u00ednimo del subconjunto usado por\u2026",
+      "file_type": "rationale",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L125",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "carga yaml: pyyaml si existe, si no un parser minimo del subconjunto usado por...",
+      "id": "datasets_scripts_common_rationale_125"
+    },
+    {
+      "label": "Cat\u00e1logo de datasets desde manifest/datasets.yaml. Normaliza las claves de la\u2026",
+      "file_type": "rationale",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L256",
+      "_origin": "ast",
+      "community": 999,
+      "community_name": "load_catalog",
+      "norm_label": "catalogo de datasets desde manifest/datasets.yaml. normaliza las claves de la...",
+      "id": "datasets_scripts_common_rationale_256"
+    },
+    {
+      "label": "Eval\u00faa una licencia contra la pol\u00edtica (Commercial-use gate).",
+      "file_type": "rationale",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L303",
+      "_origin": "ast",
+      "community": 828,
+      "community_name": "common.py",
+      "norm_label": "evalua una licencia contra la politica (commercial-use gate).",
+      "id": "datasets_scripts_common_rationale_303"
+    },
+    {
+      "label": "Hash perceptual 64 bits (DCT sobre miniatura gris 32x32). `array` debe ser HxW\u2026",
+      "file_type": "rationale",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L325",
+      "_origin": "ast",
+      "community": 1022,
+      "community_name": "phash",
+      "norm_label": "hash perceptual 64 bits (dct sobre miniatura gris 32x32). `array` debe ser hxw...",
+      "id": "datasets_scripts_common_rationale_325"
+    },
+    {
+      "label": "DCT-II 2D. La normalizaci\u00f3n ortonormal no es necesaria: el hash perceptual solo\u2026",
+      "file_type": "rationale",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L347",
+      "_origin": "ast",
+      "community": 1022,
+      "community_name": "phash",
+      "norm_label": "dct-ii 2d. la normalizacion ortonormal no es necesaria: el hash perceptual solo...",
+      "id": "datasets_scripts_common_rationale_347"
+    },
+    {
+      "label": "Descarga a `dest` con reintentos exponenciales y resume v\u00eda Range. Devuelve\u2026",
+      "file_type": "rationale",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L373",
+      "_origin": "ast",
+      "community": 991,
+      "community_name": "http_download",
+      "norm_label": "descarga a `dest` con reintentos exponenciales y resume via range. devuelve...",
+      "id": "datasets_scripts_common_rationale_373"
+    },
+    {
+      "label": "HEAD/GET ligero para comprobar disponibilidad (11.1 Discover).",
+      "file_type": "rationale",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L445",
+      "_origin": "ast",
+      "community": 984,
+      "community_name": "download.py",
+      "norm_label": "head/get ligero para comprobar disponibilidad (11.1 discover).",
+      "id": "datasets_scripts_common_rationale_445"
     },
     {
       "label": "calendario.py",
@@ -117698,299 +117698,650 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L475",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_append_jsonl",
+      "source": "project_status",
+      "target": "project_status_agroia_estado_del_proyecto",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L177",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L337",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_clean_lines",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_arranque_r\u00e1pido",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L346",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_dct2d",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_despliegue_gratuito_render_neon_supabase",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L28",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_es_script_dir",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L111",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_get_logger",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L359",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_hamming_distance",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L364",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_http_download",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L444",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_http_head",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L186",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_indent",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L61",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_jsonformatter",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L79",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_jsonlogger",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L302",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_license_action",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L255",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_load_catalog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L287",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_load_class_map",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L291",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_load_license_policy",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L295",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_load_pipeline_config",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L124",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_load_yaml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L264",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_normalizar_dataset",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L190",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_parse_block",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L150",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_parse_scalar",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L246",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_parse_simple_yaml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L324",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_phash",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L481",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_read_jsonl",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L312",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_sha256_bytes",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L316",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_sha256_file",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
-      "source_location": "L137",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datasets_scripts_common_strip_comment",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "datasets/scripts/common.py",
+      "source_file": "PROJECT_STATUS.md",
       "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "datasets_scripts_common",
-      "target": "datetime",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_estado_por_\u00e9pica",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L318",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_estructura",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L358",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_m\u00f3dulos_v4_cobertura_funcional_ampliada_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_objetivo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L350",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_pendiente",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L383",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_reportes_de_an\u00e1lisis_2026_08_25",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L373",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_roles_y_permisos_por_finca_2026_08_25",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_agroia_estado_del_proyecto",
+      "target": "project_status_stack",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L144",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_aceptaci\u00f3n_humana_de_recomendaciones_human_in_the_loop_y_12_mejoras_al_reporte_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L176",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_administraci\u00f3n_de_fincas_lotes_y_usuarios_auditor\u00eda_de_acciones_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L236",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_alertas_clim\u00e1ticas_proactivas_pron\u00f3stico_fenolog\u00eda_labores_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L245",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_aprendizaje_activo_promoci\u00f3n_del_ml_por_variable_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L50",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_brecha_econ\u00f3mica_plan_de_fertilizaci\u00f3n_por_presupuesto_2026_08_25",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L253",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_capas_oficiales_igac_upra_enriquecimiento_sig_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L213",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_carga_masiva_del_historial_de_ciclos_csv_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L92",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_chat_asesor_agron\u00f3mico_2026_08_25",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_chat_asesor_con_contexto_visual_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L205",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_cierre_del_ciclo_cosechar_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L121",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_c\u00f3mo_est\u00e1_montado",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L185",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_finca_integral_de_demostraci\u00f3n_en_producci\u00f3n_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L71",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_fisiolog\u00eda_de_cultivos_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L219",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_historial_de_ciclos_en_el_reporte_predicci\u00f3n_de_rendimiento_y_alerta_de_p_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L191",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_historial_de_ciclos_productivos_por_lote_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L283",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_im\u00e1genes_fuera_de_la_bd_y_validaci\u00f3n_de_rendimiento_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L198",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_inicio_r\u00e1pido_de_ciclo_desde_recomendaciones_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L78",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_limpieza_de_bd_y_finca_demo_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L303",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L101",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_mapa_de_calor_del_lote_2026_08_25",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L268",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_men\u00fa_administraci\u00f3n_y_p\u00e1gina_propia_de_insumos_2026_08_28",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L275",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_men\u00fa_ayuda_manuales_de_usuario_por_rol_2026_08_28",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L290",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_migraciones_destacadas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L168",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_muestreo_inteligente_sem\u00e1foro_de_confianza_roi_realista_y_modo_simulaci\u00f3n_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L226",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_m\u00f3dulo_de_labores_\u00f3rdenes_de_trabajo_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L313",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_notas_t\u00e9cnicas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L137",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_plan_de_mejora_ejecutado_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L261",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_precios_de_insumos_din\u00e1micos_roi_actualizable_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L83",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_recomendaci\u00f3n_sin_bloqueo_por_falta_de_par\u00e1metros_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L162",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_registro_de_finca_en_3_secciones_cadena_de_validaci\u00f3n_separaci\u00f3n_finca_lote_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L112",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L57",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_retorno_de_inversi\u00f3n_en_el_reporte_2026_08_27",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L127",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_despliegue_gratuito_render_neon_supabase",
+      "target": "project_status_validaci\u00f3n_y_entrenamiento_del_modelo_de_recomendaci\u00f3n_diagn\u00f3stico_2026_08_26",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT_STATUS.md",
+      "source_location": "L395",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "project_status_reportes_de_an\u00e1lisis_2026_08_25",
+      "target": "project_status_almanaque_bristol_primer_modelo_de_visi\u00f3n_con_datos_reales_2026_08_29",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_datasets_entrenamiento_agroia",
+      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_agroia_datasets_de_entrenamiento_de_los_modelos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
+      "source_location": "L889",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "resources_architecture_documento_funcional_tecnico_agroia",
+      "target": "resources_architecture_documento_datasets_entrenamiento_agroia"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_agroia_datasets_de_entrenamiento_de_los_modelos",
+      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_1_modelo_tabular_diagn\u00f3stico_nutricional_y_aptitud_ml_en_sombra",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
+      "source_location": "L73",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_agroia_datasets_de_entrenamiento_de_los_modelos",
+      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_2_agrovision_diagn\u00f3stico_visual_foto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
+      "source_location": "L149",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_agroia_datasets_de_entrenamiento_de_los_modelos",
+      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_3_c\u00f3mo_leer_la_trazabilidad",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_1_modelo_tabular_diagn\u00f3stico_nutricional_y_aptitud_ml_en_sombra",
+      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_1_1_dataset_de_entrenamiento_principal_sint\u00e9tico_etiquetado_por_reglas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_1_modelo_tabular_diagn\u00f3stico_nutricional_y_aptitud_ml_en_sombra",
+      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_1_2_ground_truth_real_aprendizaje_activo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_1_modelo_tabular_diagn\u00f3stico_nutricional_y_aptitud_ml_en_sombra",
+      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_1_3_baselines_kaggle_cold_start_metodol\u00f3gico_no_producci\u00f3n",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_1_modelo_tabular_diagn\u00f3stico_nutricional_y_aptitud_ml_en_sombra",
+      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_1_4_artefactos_generados",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_1_modelo_tabular_diagn\u00f3stico_nutricional_y_aptitud_ml_en_sombra",
+      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_1_5_fuentes_tabulares_externas_para_calibraci\u00f3n_espec_v6_1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_2_agrovision_diagn\u00f3stico_visual_foto",
+      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_2_1_estado_del_entrenamiento",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
+      "source_location": "L118",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_2_agrovision_diagn\u00f3stico_visual_foto",
+      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_2_2_datasets_declarados_para_entrenamiento_manifest_v6",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
+      "source_location": "L136",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_2_agrovision_diagn\u00f3stico_visual_foto",
+      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_2_3_reglas_de_uso_heredadas_de_la_especificaci\u00f3n",
       "confidence_score": 1.0
     },
     {
@@ -118001,9 +118352,307 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common",
-      "target": "apps_shared_agroia_logging",
-      "confidence_score": 1.0
+      "target": "apps_shared_agroia_logging"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L475",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_append_jsonl"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L177",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_clean_lines"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L346",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_dct2d"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_es_script_dir"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L111",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_get_logger"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L359",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_hamming_distance"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L364",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_http_download"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L444",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_http_head"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L186",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_indent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_jsonformatter"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_jsonlogger"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L302",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_license_action"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L255",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_load_catalog"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L287",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_load_class_map"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L291",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_load_license_policy"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L295",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_load_pipeline_config"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L124",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_load_yaml"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L264",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_normalizar_dataset"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L190",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_parse_block"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L150",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_parse_scalar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L246",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_parse_simple_yaml"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L324",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_phash"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L481",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_read_jsonl"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L312",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_sha256_bytes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L316",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_sha256_file"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L137",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datasets_scripts_common_strip_comment"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "datasets/scripts/common.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "datasets_scripts_common",
+      "target": "datetime"
     },
     {
       "relation": "rationale_for",
@@ -118012,9 +118661,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_rationale_1",
-      "target": "datasets_scripts_common",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common"
     },
     {
       "relation": "imports_from",
@@ -118132,9 +118781,9 @@
       "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_es_script_dir",
-      "target": "path",
-      "confidence_score": 1.0
+      "target": "path"
     },
     {
       "relation": "calls",
@@ -118144,9 +118793,9 @@
       "source_location": "L116",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_get_logger",
-      "target": "datasets_scripts_common_jsonformatter",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_jsonformatter"
     },
     {
       "relation": "method",
@@ -118155,9 +118804,9 @@
       "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_jsonformatter",
-      "target": "datasets_scripts_common_jsonformatter_format",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_jsonformatter_format"
     },
     {
       "relation": "rationale_for",
@@ -118166,9 +118815,9 @@
       "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_rationale_62",
-      "target": "datasets_scripts_common_jsonformatter",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_jsonformatter"
     },
     {
       "relation": "references",
@@ -118178,9 +118827,9 @@
       "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_jsonformatter_format",
-      "target": "logrecord",
-      "confidence_score": 1.0
+      "target": "logrecord"
     },
     {
       "relation": "method",
@@ -118189,9 +118838,9 @@
       "source_location": "L82",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_jsonlogger",
-      "target": "datasets_scripts_common_jsonlogger_log",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_jsonlogger_log"
     },
     {
       "relation": "rationale_for",
@@ -118200,9 +118849,9 @@
       "source_location": "L80",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_rationale_80",
-      "target": "datasets_scripts_common_jsonlogger",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_jsonlogger"
     },
     {
       "relation": "references",
@@ -118212,9 +118861,9 @@
       "source_location": "L111",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_get_logger",
-      "target": "logger",
-      "confidence_score": 1.0
+      "target": "logger"
     },
     {
       "relation": "calls",
@@ -118224,9 +118873,9 @@
       "source_location": "L377",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_http_download",
-      "target": "datasets_scripts_common_get_logger",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_get_logger"
     },
     {
       "relation": "rationale_for",
@@ -118235,9 +118884,9 @@
       "source_location": "L112",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_rationale_112",
-      "target": "datasets_scripts_common_get_logger",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_get_logger"
     },
     {
       "relation": "calls",
@@ -118259,9 +118908,9 @@
       "source_location": "L364",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_http_download",
-      "target": "logger",
-      "confidence_score": 1.0
+      "target": "logger"
     },
     {
       "relation": "calls",
@@ -118271,9 +118920,9 @@
       "source_location": "L260",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_load_catalog",
-      "target": "datasets_scripts_common_load_yaml",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_load_yaml"
     },
     {
       "relation": "calls",
@@ -118283,9 +118932,9 @@
       "source_location": "L288",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_load_class_map",
-      "target": "datasets_scripts_common_load_yaml",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_load_yaml"
     },
     {
       "relation": "calls",
@@ -118295,9 +118944,9 @@
       "source_location": "L292",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_load_license_policy",
-      "target": "datasets_scripts_common_load_yaml",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_load_yaml"
     },
     {
       "relation": "calls",
@@ -118307,9 +118956,9 @@
       "source_location": "L299",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_load_pipeline_config",
-      "target": "datasets_scripts_common_load_yaml",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_load_yaml"
     },
     {
       "relation": "references",
@@ -118319,9 +118968,9 @@
       "source_location": "L124",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_load_yaml",
-      "target": "any",
-      "confidence_score": 1.0
+      "target": "any"
     },
     {
       "relation": "calls",
@@ -118331,9 +118980,9 @@
       "source_location": "L134",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_load_yaml",
-      "target": "datasets_scripts_common_parse_simple_yaml",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_parse_simple_yaml"
     },
     {
       "relation": "references",
@@ -118343,9 +118992,9 @@
       "source_location": "L124",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_load_yaml",
-      "target": "path",
-      "confidence_score": 1.0
+      "target": "path"
     },
     {
       "relation": "rationale_for",
@@ -118354,9 +119003,9 @@
       "source_location": "L125",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_rationale_125",
-      "target": "datasets_scripts_common_load_yaml",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_load_yaml"
     },
     {
       "relation": "references",
@@ -118402,9 +119051,9 @@
       "source_location": "L475",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_append_jsonl",
-      "target": "path",
-      "confidence_score": 1.0
+      "target": "path"
     },
     {
       "relation": "references",
@@ -118414,9 +119063,9 @@
       "source_location": "L364",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_http_download",
-      "target": "path",
-      "confidence_score": 1.0
+      "target": "path"
     },
     {
       "relation": "references",
@@ -118426,9 +119075,9 @@
       "source_location": "L481",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_read_jsonl",
-      "target": "path",
-      "confidence_score": 1.0
+      "target": "path"
     },
     {
       "relation": "references",
@@ -118438,9 +119087,9 @@
       "source_location": "L316",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_sha256_file",
-      "target": "path",
-      "confidence_score": 1.0
+      "target": "path"
     },
     {
       "relation": "calls",
@@ -118462,9 +119111,9 @@
       "source_location": "L190",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_parse_block",
-      "target": "any",
-      "confidence_score": 1.0
+      "target": "any"
     },
     {
       "relation": "references",
@@ -118474,9 +119123,9 @@
       "source_location": "L150",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_parse_scalar",
-      "target": "any",
-      "confidence_score": 1.0
+      "target": "any"
     },
     {
       "relation": "references",
@@ -118486,9 +119135,9 @@
       "source_location": "L246",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_parse_simple_yaml",
-      "target": "any",
-      "confidence_score": 1.0
+      "target": "any"
     },
     {
       "relation": "calls",
@@ -118498,9 +119147,9 @@
       "source_location": "L180",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_clean_lines",
-      "target": "datasets_scripts_common_strip_comment",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_strip_comment"
     },
     {
       "relation": "calls",
@@ -118510,9 +119159,9 @@
       "source_location": "L214",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_parse_block",
-      "target": "datasets_scripts_common_parse_scalar",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_parse_scalar"
     },
     {
       "relation": "calls",
@@ -118522,9 +119171,9 @@
       "source_location": "L247",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_parse_simple_yaml",
-      "target": "datasets_scripts_common_clean_lines",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_clean_lines"
     },
     {
       "relation": "calls",
@@ -118534,9 +119183,9 @@
       "source_location": "L193",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_parse_block",
-      "target": "datasets_scripts_common_indent",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_indent"
     },
     {
       "relation": "calls",
@@ -118546,9 +119195,9 @@
       "source_location": "L250",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_parse_simple_yaml",
-      "target": "datasets_scripts_common_parse_block",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_parse_block"
     },
     {
       "relation": "calls",
@@ -118558,9 +119207,9 @@
       "source_location": "L261",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_load_catalog",
-      "target": "datasets_scripts_common_normalizar_dataset",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_normalizar_dataset"
     },
     {
       "relation": "rationale_for",
@@ -118569,9 +119218,9 @@
       "source_location": "L256",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_rationale_256",
-      "target": "datasets_scripts_common_load_catalog",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_load_catalog"
     },
     {
       "relation": "calls",
@@ -118677,9 +119326,9 @@
       "source_location": "L304",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_license_action",
-      "target": "datasets_scripts_common_load_license_policy",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_load_license_policy"
     },
     {
       "relation": "calls",
@@ -118724,9 +119373,9 @@
       "source_location": "L303",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_rationale_303",
-      "target": "datasets_scripts_common_license_action",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_license_action"
     },
     {
       "relation": "calls",
@@ -118748,9 +119397,9 @@
       "source_location": "L411",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_http_download",
-      "target": "datasets_scripts_common_sha256_file",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_sha256_file"
     },
     {
       "relation": "calls",
@@ -118820,9 +119469,9 @@
       "source_location": "L340",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_phash",
-      "target": "datasets_scripts_common_dct2d",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_dct2d"
     },
     {
       "relation": "references",
@@ -118832,9 +119481,9 @@
       "source_location": "L324",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_phash",
-      "target": "ndarray",
-      "confidence_score": 1.0
+      "target": "ndarray"
     },
     {
       "relation": "rationale_for",
@@ -118843,9 +119492,9 @@
       "source_location": "L325",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_rationale_325",
-      "target": "datasets_scripts_common_phash",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_phash"
     },
     {
       "relation": "calls",
@@ -118891,9 +119540,9 @@
       "source_location": "L346",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_dct2d",
-      "target": "ndarray",
-      "confidence_score": 1.0
+      "target": "ndarray"
     },
     {
       "relation": "rationale_for",
@@ -118902,9 +119551,9 @@
       "source_location": "L347",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_rationale_347",
-      "target": "datasets_scripts_common_dct2d",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_dct2d"
     },
     {
       "relation": "calls",
@@ -118925,9 +119574,9 @@
       "source_location": "L373",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_rationale_373",
-      "target": "datasets_scripts_common_http_download",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_http_download"
     },
     {
       "relation": "calls",
@@ -118960,9 +119609,9 @@
       "source_location": "L445",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "datasets_scripts_common_rationale_445",
-      "target": "datasets_scripts_common_http_head",
-      "confidence_score": 1.0
+      "target": "datasets_scripts_common_http_head"
     },
     {
       "relation": "calls",
@@ -119107,655 +119756,6 @@
       "_origin": "ast",
       "source": "datasets_scripts_evaluate_main",
       "target": "datasets_scripts_common_read_jsonl"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status",
-      "target": "project_status_agroia_estado_del_proyecto"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L337",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_arranque_r\u00e1pido"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L46",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_despliegue_gratuito_render_neon_supabase"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L18",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_estado_por_\u00e9pica"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L318",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_estructura"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L358",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_motor_de_recomendaciones_sistema_experto_activo_2026_08_25"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_m\u00f3dulos_v4_cobertura_funcional_ampliada_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L15",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_objetivo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L350",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_pendiente"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L383",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_reportes_de_an\u00e1lisis_2026_08_25"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L373",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_roles_y_permisos_por_finca_2026_08_25"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L32",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_agroia_estado_del_proyecto",
-      "target": "project_status_stack"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L144",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_aceptaci\u00f3n_humana_de_recomendaciones_human_in_the_loop_y_12_mejoras_al_reporte_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L176",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_administraci\u00f3n_de_fincas_lotes_y_usuarios_auditor\u00eda_de_acciones_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L236",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_alertas_clim\u00e1ticas_proactivas_pron\u00f3stico_fenolog\u00eda_labores_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L245",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_aprendizaje_activo_promoci\u00f3n_del_ml_por_variable_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L50",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_brecha_econ\u00f3mica_plan_de_fertilizaci\u00f3n_por_presupuesto_2026_08_25"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L253",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_capas_oficiales_igac_upra_enriquecimiento_sig_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L213",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_carga_masiva_del_historial_de_ciclos_csv_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L92",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_chat_asesor_agron\u00f3mico_2026_08_25"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L64",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_chat_asesor_con_contexto_visual_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L205",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_cierre_del_ciclo_cosechar_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L121",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_c\u00f3mo_est\u00e1_montado"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L185",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_finca_integral_de_demostraci\u00f3n_en_producci\u00f3n_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L71",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_fisiolog\u00eda_de_cultivos_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L219",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_historial_de_ciclos_en_el_reporte_predicci\u00f3n_de_rendimiento_y_alerta_de_p_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L191",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_historial_de_ciclos_productivos_por_lote_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L283",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_im\u00e1genes_fuera_de_la_bd_y_validaci\u00f3n_de_rendimiento_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L198",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_inicio_r\u00e1pido_de_ciclo_desde_recomendaciones_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L78",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_limpieza_de_bd_y_finca_demo_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L303",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_l\u00edmites_del_tier_gratuito_validados_2026_08_25"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L101",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_mapa_de_calor_del_lote_2026_08_25"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L268",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_men\u00fa_administraci\u00f3n_y_p\u00e1gina_propia_de_insumos_2026_08_28"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L275",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_men\u00fa_ayuda_manuales_de_usuario_por_rol_2026_08_28"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L290",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_migraciones_destacadas"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L168",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_muestreo_inteligente_sem\u00e1foro_de_confianza_roi_realista_y_modo_simulaci\u00f3n_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L226",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_m\u00f3dulo_de_labores_\u00f3rdenes_de_trabajo_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L313",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_notas_t\u00e9cnicas"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L137",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_plan_de_mejora_ejecutado_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L261",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_precios_de_insumos_din\u00e1micos_roi_actualizable_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L83",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_recomendaci\u00f3n_sin_bloqueo_por_falta_de_par\u00e1metros_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L162",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_registro_de_finca_en_3_secciones_cadena_de_validaci\u00f3n_separaci\u00f3n_finca_lote_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L112",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_relaci\u00f3n_finca_sensor_en_la_trama_2026_08_26"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L57",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_retorno_de_inversi\u00f3n_en_el_reporte_2026_08_27"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L127",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_despliegue_gratuito_render_neon_supabase",
-      "target": "project_status_validaci\u00f3n_y_entrenamiento_del_modelo_de_recomendaci\u00f3n_diagn\u00f3stico_2026_08_26"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT_STATUS.md",
-      "source_location": "L395",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "project_status_reportes_de_an\u00e1lisis_2026_08_25",
-      "target": "project_status_almanaque_bristol_primer_modelo_de_visi\u00f3n_con_datos_reales_2026_08_29"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_datasets_entrenamiento_agroia",
-      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_agroia_datasets_de_entrenamiento_de_los_modelos"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md",
-      "source_location": "L889",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_funcional_tecnico_agroia",
-      "target": "resources_architecture_documento_datasets_entrenamiento_agroia"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_agroia_datasets_de_entrenamiento_de_los_modelos",
-      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_1_modelo_tabular_diagn\u00f3stico_nutricional_y_aptitud_ml_en_sombra"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L73",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_agroia_datasets_de_entrenamiento_de_los_modelos",
-      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_2_agrovision_diagn\u00f3stico_visual_foto"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L133",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_agroia_datasets_de_entrenamiento_de_los_modelos",
-      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_3_c\u00f3mo_leer_la_trazabilidad"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L13",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_1_modelo_tabular_diagn\u00f3stico_nutricional_y_aptitud_ml_en_sombra",
-      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_1_1_dataset_de_entrenamiento_principal_sint\u00e9tico_etiquetado_por_reglas"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L30",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_1_modelo_tabular_diagn\u00f3stico_nutricional_y_aptitud_ml_en_sombra",
-      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_1_2_ground_truth_real_aprendizaje_activo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L41",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_1_modelo_tabular_diagn\u00f3stico_nutricional_y_aptitud_ml_en_sombra",
-      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_1_3_baselines_kaggle_cold_start_metodol\u00f3gico_no_producci\u00f3n"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L51",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_1_modelo_tabular_diagn\u00f3stico_nutricional_y_aptitud_ml_en_sombra",
-      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_1_4_artefactos_generados"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L59",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_1_modelo_tabular_diagn\u00f3stico_nutricional_y_aptitud_ml_en_sombra",
-      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_1_5_fuentes_tabulares_externas_para_calibraci\u00f3n_espec_v6_1"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L75",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_2_agrovision_diagn\u00f3stico_visual_foto",
-      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_2_1_estado_del_entrenamiento"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L102",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_2_agrovision_diagn\u00f3stico_visual_foto",
-      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_2_2_datasets_declarados_para_entrenamiento_manifest_v6"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md",
-      "source_location": "L120",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "resources_architecture_documento_datasets_entrenamiento_agroia_2_agrovision_diagn\u00f3stico_visual_foto",
-      "target": "resources_architecture_documento_datasets_entrenamiento_agroia_2_3_reglas_de_uso_heredadas_de_la_especificaci\u00f3n"
     },
     {
       "relation": "contains",
@@ -273865,5 +273865,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "cf6f38de6bdcc96c952dc5b604493c8ab635eb30"
+  "built_at_commit": "cb107965842d4297fd9f63953f2785910c6ffe4d"
 }
