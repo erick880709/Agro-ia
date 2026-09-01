@@ -4880,8 +4880,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/demo_reset.py": {
-    "mtime": 1787850859.9576004,
-    "ast_hash": "9bc37b63b21ebe64e2d1d7de2cd094c9",
+    "mtime": 1788228200.0478246,
+    "ast_hash": "b34b068d607dc3ff76cc87e39ceb8412",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/optimizador_muestreo.py": {
