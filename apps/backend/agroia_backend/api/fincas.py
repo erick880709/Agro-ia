@@ -161,6 +161,7 @@ def _finca_a_dict(f: Finca) -> dict:
 @router.get("/fincas")
 async def listar_fincas(
     search: str | None = Query(None),
+    filtro: str | None = Query(None, pattern="^(con_comision|con_recomendacion)$"),
     db: AsyncSession = Depends(get_db),
     x_user_role: str | None = Header(None, alias="X-User-Role"),
     x_user_email: str | None = Header(None, alias="X-User-Email"),
@@ -168,6 +169,13 @@ async def listar_fincas(
     """Lista las fincas visibles para el rol actual.
 
     Admin/Agrónomo ven todas; Cliente solo las suyas.
+
+    Filtros de etapa (regla de comisiones):
+      - `con_comision`: fincas con una comisión asignada (estado distinto de
+        cancelada) — candidatas a generar recomendación.
+      - `con_recomendacion`: fincas que ya pasaron por la etapa de
+        recomendación (comisión en `en_recomendacion` o
+        `generacion_reporte_fin_etapa`) — candidatas a reporte.
     """
     from agroia_backend.services.acceso import fincas_permitidas_ids
 
@@ -180,6 +188,20 @@ async def listar_fincas(
     if search:
         stmt = stmt.where(
             Finca.nombre.ilike(f"%{search}%") | Finca.departamento.ilike(f"%{search}%")
+        )
+    if filtro:
+        from agroia_backend.models.comision import Comision
+
+        if filtro == "con_recomendacion":
+            condicion = Comision.estado.in_(
+                ("en_recomendacion", "generacion_reporte_fin_etapa")
+            )
+        else:  # con_comision
+            condicion = Comision.estado != "cancelada"
+        stmt = stmt.where(
+            select(Comision.id)
+            .where(Comision.finca_id == Finca.id, condicion)
+            .exists()
         )
     fincas = (await db.execute(stmt)).scalars().all()
     return {"data": [_finca_a_dict(f) for f in fincas], "total": len(fincas)}

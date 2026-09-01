@@ -176,3 +176,28 @@ async def test_reporte_regenerable_tras_fin_etapa(cli):
     )
     assert r.status_code == 200, r.text
     assert r.json()["comision_estado"] == "generacion_reporte_fin_etapa"
+
+
+async def test_fincas_filtro_por_etapa_comision(cli):
+    """GET /fincas filtra por etapa: con_comision y con_recomendacion."""
+    vergel = await _finca_demo("Finca Demo — El Vergel")
+    villa = await _finca_demo("Villa Café")
+    if vergel is None or villa is None:
+        pytest.skip("Requiere el set demo (restablecer_demo).")
+    await _poner_estado(vergel, "en_recomendacion")
+    await _poner_estado(villa, "asignada")
+
+    con_rec = await cli.get("/api/v1/fincas?filtro=con_recomendacion", headers=_cabeceras())
+    assert con_rec.status_code == 200
+    ids_rec = {f["id"] for f in con_rec.json()["data"]}
+    assert vergel in ids_rec
+    assert villa not in ids_rec
+
+    con_com = await cli.get("/api/v1/fincas?filtro=con_comision", headers=_cabeceras())
+    assert con_com.status_code == 200
+    ids_com = {f["id"] for f in con_com.json()["data"]}
+    assert vergel in ids_com
+    assert villa in ids_com
+
+    invalido = await cli.get("/api/v1/fincas?filtro=cualquiera", headers=_cabeceras())
+    assert invalido.status_code == 422

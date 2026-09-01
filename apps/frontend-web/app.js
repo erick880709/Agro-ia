@@ -279,6 +279,8 @@ function goTab(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === `view-${name}`));
   if (name === 'historial') cargarHistorial();
   if (name === 'sensores') cargarSensores();
+  if (name === 'recomendaciones') cargarFincas();
+  if (name === 'reportes') cargarFincas();
   if (name === 'inicio') cargarDashboard();
   if (name === 'alertas') { cargarAlertasClima(); cargarCalendarioLunar(); cargarPreferenciasBristol(); cargarCalendarioLunarMes(); }
   if (name === 'fincas' && state.rol.toLowerCase() === 'admin') renderFincasList();
@@ -623,6 +625,18 @@ async function cargarFincas() {
   try {
     const r = await api('/fincas');
     state.fincas = r.data || [];
+    // Listas por etapa de comisión:
+    //  - Recomendaciones: solo fincas con comisión asignada.
+    //  - Reportes: solo fincas que ya pasaron por la etapa de recomendación.
+    let conComision = [];
+    let conRecomendacion = [];
+    try {
+      conComision = ((await api('/fincas?filtro=con_comision')).data) || [];
+    } catch (_) { conComision = state.fincas; }
+    try {
+      conRecomendacion = ((await api('/fincas?filtro=con_recomendacion')).data) || [];
+    } catch (_) { conRecomendacion = []; }
+    const opt = f => `<option value="${esc(f.id)}">${esc(f.nombre)} (${esc(f.departamento || '?')})</option>`;
     const sel = document.getElementById('finca-select');
     const selReco = document.getElementById('reco-finca');
     const selCarga = document.getElementById('carga-finca');
@@ -634,13 +648,17 @@ async function cargarFincas() {
     selCiclos.innerHTML = '';
     selRepo.innerHTML = '';
     for (const f of state.fincas) {
-      const opt = `<option value="${esc(f.id)}">${esc(f.nombre)} (${esc(f.departamento || '?')})</option>`;
-      sel.innerHTML += opt;
-      selReco.innerHTML += opt;
-      selCarga.innerHTML += opt;
-      selCiclos.innerHTML += opt;
-      selRepo.innerHTML += opt;
+      const o = opt(f);
+      sel.innerHTML += o;
+      selCarga.innerHTML += o;
+      selCiclos.innerHTML += o;
     }
+    selReco.innerHTML = conComision.length
+      ? '<option value="">— Seleccione finca —</option>' + conComision.map(opt).join('')
+      : '<option value="">— Ninguna finca con comisión asignada —</option>';
+    selRepo.innerHTML = conRecomendacion.length
+      ? '<option value="">— Seleccione finca —</option>' + conRecomendacion.map(opt).join('')
+      : '<option value="">— Ninguna finca con recomendación —</option>';
     if (state.fincas.length) {
       state.fincaId = state.fincas[0].id;
       const f = state.fincas[0];
@@ -3604,6 +3622,8 @@ async function enviarAnalisis(e) {
     });
     state.ultimoAnalisis = r;
     out.innerHTML = `<div class="card">${renderAnalisis(r)}</div>${renderPanelAceptacion(r)}`;
+    // La finca ya pasó por recomendación: actualizar listas por etapa.
+    await cargarFincas();
   } catch (err) {
     out.innerHTML = errorBanner(err.message);
   }
