@@ -4238,17 +4238,19 @@ async function enviarReporte(e) {
   btn.disabled = true;
   btn.textContent = '⏳ Generando…';
   try {
+    const params = {
+      finca_id: finca, tipo, cultivo_id: cultivo || null,
+      presupuesto_cop: presupuesto, rendimiento_actual_t_ha: rendimiento,
+      modelo_pronostico: modeloPronostico,
+    };
     const r = await api('/reportes/generar', {
       method: 'POST',
       headers: headers(),
-      body: JSON.stringify({
-        finca_id: finca, tipo, cultivo_id: cultivo || null,
-        presupuesto_cop: presupuesto, rendimiento_actual_t_ha: rendimiento,
-        modelo_pronostico: modeloPronostico,
-      }),
+      body: JSON.stringify(params),
     });
     reporteHtmlActual = r.html;
     state.ultimoReporte = r;
+    state.ultimoReporteParams = params;
     const card = document.getElementById('reporte-preview-card');
     card.style.display = '';
     document.getElementById('reporte-iframe').srcdoc = r.html;
@@ -4343,15 +4345,41 @@ function registrarSimulacion() {
   });
 }
 
-function abrirReporte() {
-  if (!reporteHtmlActual) return;
-  const blob = new Blob([reporteHtmlActual], { type: 'text/html;charset=utf-8' });
+function audienciaVivo() {
+  // Vista en vivo: el rol de sesión define la audiencia (sin selector).
+  return (state.rol || '').toLowerCase() === 'cliente' ? 'agricultor' : 'agronomo';
+}
+
+async function reporteParaExportar() {
+  const sel = document.getElementById('repo-audiencia');
+  const deseada = sel ? sel.value : 'agricultor';
+  if (deseada === audienciaVivo() && reporteHtmlActual) return reporteHtmlActual;
+  const p = state.ultimoReporteParams;
+  if (!p) return reporteHtmlActual;
+  try {
+    const r = await api('/reportes/generar', {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({ ...p, audiencia: deseada }),
+    });
+    return r.html;
+  } catch (err) {
+    alert('No se pudo regenerar el reporte para esa audiencia: ' + err.message);
+    return null;
+  }
+}
+
+async function abrirReporte() {
+  const html = await reporteParaExportar();
+  if (!html) return;
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   window.open(URL.createObjectURL(blob), '_blank');
 }
 
-function descargarReporteHtml() {
-  if (!reporteHtmlActual) return;
-  const blob = new Blob([reporteHtmlActual], { type: 'text/html;charset=utf-8' });
+async function descargarReporteHtml() {
+  const html = await reporteParaExportar();
+  if (!html) return;
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'reporte-agroia.html';

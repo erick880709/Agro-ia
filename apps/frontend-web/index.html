@@ -405,7 +405,14 @@
         <div class="reporte-acciones">
           <button class="btn" id="reporte-abrir">🔗 Abrir en pestaña nueva</button>
           <button class="btn btn-ghost" id="reporte-descargar">⬇ Descargar HTML</button>
-          <span class="muted">Para PDF: abre el reporte y usa el botón «🖨 Guardar PDF» (imprimir → guardar como PDF).</span>
+          <label class="field audiencia-export">
+            <span>Audiencia al exportar</span>
+            <select id="repo-audiencia">
+              <option value="agricultor" selected>👨‍🌾 Agricultor (lenguaje simple)</option>
+              <option value="agronomo">🧑‍🔬 Agrónomo (versión técnica)</option>
+            </select>
+          </label>
+          <span class="muted">La vista en vivo usa tu rol; el selector aplica a lo que abres o descargas.</span>
         </div>
         <iframe id="reporte-iframe" class="reporte-iframe" title="Vista previa del reporte"></iframe>
         <div id="simular-panel" class="simular-panel" style="display:none">

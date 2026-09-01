@@ -151,6 +151,15 @@ class ReporteRequest(BaseModel):
             "auto (mejor disponible) o ecmwf (solo ECMWF IFS 0.25°)"
         ),
     )
+    audiencia: str | None = Field(
+        None, pattern="^(agricultor|agronomo)$",
+        description=(
+            "Audiencia de la exportación (v8 accesibilidad): 'agricultor' "
+            "(lenguaje simple, por defecto al exportar) o 'agronomo' (técnica). "
+            "Si no se envía, la vista en vivo usa el rol de sesión: Cliente → "
+            "agricultor, Admin/Agrónomo/Extensionista → agronomo."
+        ),
+    )
     presupuesto_cop: float | None = Field(
         None, ge=0, description="Presupuesto de fertilización ($/ha) para el plan económico (opcional)"
     )
@@ -198,6 +207,14 @@ async def generar_reporte(
     )
 
     comision = await exigir_etapa_recomendacion_para_reporte(db, body.finca_id)
+
+    # ── Audiencia efectiva (v8 accesibilidad): la exportación puede pedir
+    # audiencia explícita; la vista en vivo usa el rol de sesión. ──
+    rol_norm = (x_user_role or "").strip().lower()
+    if body.audiencia:
+        audiencia_efectiva = "agricultor" if body.audiencia == "agricultor" else "tecnica"
+    else:
+        audiencia_efectiva = "agricultor" if rol_norm == "cliente" else "tecnica"
 
     lectura = (
         await db.execute(
@@ -509,7 +526,7 @@ async def generar_reporte(
         uc1=asdict(uc1) if uc1 else None,
         uc2=asdict(uc2) if uc2 else None,
         muestras=muestras_geo,
-        umbrales=_umbrales_de_analisis(uc1, uc2),
+        umbrales=await _umbrales_de_analisis(db, uc1, uc2),
         clima=clima,
         plan_economico=plan_economico,
         ficha_economicos=ficha_economicos,
@@ -528,6 +545,7 @@ async def generar_reporte(
         rotacion=rotacion,
         bpa_resumen=bpa_resumen,
         lunar=lunar,
+        audiencia=audiencia_efectiva,
     )
 
     titulo = {
@@ -562,6 +580,7 @@ async def generar_reporte(
         "titulo": titulo,
         "tipo": body.tipo,
         "html": html,
+        "audiencia": audiencia_efectiva,
         "parametros_faltantes": parametros_faltantes,
         "preliminar": bool(parametros_faltantes),
         "comision_estado": comision.estado,
@@ -673,19 +692,69 @@ async def _muestras_geo(db: AsyncSession, finca_uuid) -> list[dict]:
     return muestras
 
 
-def _umbrales_de_analisis(uc1, uc2) -> dict:
-    """Rangos ideales por variable (símbolo → (min, max)) desde el análisis."""
-    umbrales: dict[str, tuple[float, float]] = {}
-    fuente = (uc2.recomendaciones if uc2 else []) or (uc1.recomendaciones if uc1 else [])
-    for rec in fuente:
-        variable = str(rec.get("variable") or "").strip()
-        rango = str(rec.get("rango_ideal") or "")
-        nums = [n for n in rango.replace("[", "").replace("]", "").split("-") if n.strip()]
+_NORM_VAR = {
+    "ph": "pH", "PH": "pH", "n": "N", "nitrogeno": "N", "nitrógeno": "N",
+    "p": "P", "fosforo": "P", "fósforo": "P", "k": "K", "potasio": "K",
+    "ca": "Ca", "calcio": "Ca", "mg": "Mg", "magnesio": "Mg",
+    "s": "S", "azufre": "S", "fe": "Fe", "hierro": "Fe",
+    "mn": "Mn", "manganeso": "Mn", "zn": "Zn", "zinc": "Zn",
+    "cu": "Cu", "cobre": "Cu", "b": "B", "boro": "B",
+    "mo": "MO", "materia_organica": "MO", "cic": "CIC",
+    "ce": "CE", "conductividad_electrica": "CE", "humedad": "humedad",
+    "temperatura_suelo": "temperatura_suelo", "textura": "textura",
+}
+
+
+async def _umbrales_de_analisis(db, uc1, uc2) -> dict:
+    """Rangos ideales por variable (símbolo → (min, max)) para el mapa de calor.
+
+    Fuentes, en orden: recomendaciones del diagnóstico (UC2), ajustes del
+    ranking (UC1) y, como respaldo para reportes de siembra, las reglas
+    agronómicas activas del cultivo top del ranking (los mismos datos del
+    motor de reglas que alimentan el reporte — sin cálculo nuevo).
+    """
+    umbrales: dict[str, tuple[float | None, float | None]] = {}
+
+    def _agregar(variable: str, rango: str) -> None:
+        clave = _NORM_VAR.get(variable.strip(), variable.strip())
+        nums = [
+            n for n in rango.replace("[", "").replace("]", "").replace("–", "-").split("-")
+            if n.strip()
+        ]
         try:
             minimo = float(nums[0]) if nums else None
             maximo = float(nums[1]) if len(nums) > 1 else None
         except ValueError:
-            continue
+            return
         if minimo is not None or maximo is not None:
-            umbrales[variable] = (minimo, maximo)
+            umbrales[clave] = (minimo, maximo)
+
+    fuente = (uc2.recomendaciones if uc2 else []) or (uc1.recomendaciones if uc1 else [])
+    for rec in fuente:
+        _agregar(str(rec.get("variable") or ""), str(rec.get("rango_ideal") or ""))
+    if not umbrales and uc1 and uc1.sugerencias_cultivos:
+        for s in uc1.sugerencias_cultivos[:3]:
+            for a in s.get("ajustes") or []:
+                _agregar(str(a.get("variable") or ""), str(a.get("rango_ideal") or ""))
+    if not umbrales and uc1 and uc1.sugerencias_cultivos:
+        top_id = uc1.sugerencias_cultivos[0].get("cultivo_id")
+        if top_id:
+            try:
+                top_uuid = uuid_mod.UUID(str(top_id))
+            except ValueError:
+                top_uuid = None
+            if top_uuid is not None:
+                from agroia_backend.models.regla_agronomica import ReglaAgronomica
+
+                reglas = (
+                    await db.execute(
+                        select(ReglaAgronomica).where(
+                            ReglaAgronomica.cultivo_id == top_uuid,
+                            ReglaAgronomica.activa.is_(True),
+                        )
+                    )
+                ).scalars().all()
+                for regla in reglas:
+                    clave = _NORM_VAR.get(str(regla.variable.value), str(regla.variable.value))
+                    umbrales[clave] = (regla.umbral_min, regla.umbral_max)
     return umbrales

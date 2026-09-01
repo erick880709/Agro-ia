@@ -191,7 +191,12 @@ _CSS = """
   .barra { background: #e5eae4; border-radius: 999px; height: 10px; overflow: hidden; }
   .barra i { display: block; height: 100%; border-radius: 999px; }
   .barra-val { font-family: var(--mono); font-size: .75rem; color: var(--muted); text-align: right; }
-  @media (max-width: 720px) { .barra-fila { grid-template-columns: 1fr; } .barra-val { text-align: left; } }
+  .barra-expl { grid-column: 2 / 4; font-size: .76rem; color: var(--muted); line-height: 1.45; }
+  @media (max-width: 720px) { .barra-fila { grid-template-columns: 1fr; } .barra-val { text-align: left; } .barra-expl { grid-column: 1; } }
+  .detalle-tec { margin-top: 10px; font-size: .82rem; }
+  .detalle-tec summary { cursor: pointer; color: var(--moss); font-family: var(--mono);
+    font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+  .detalle-tec .telemetry { margin-top: 8px; }
   .alerta-fito { margin: 10px 0 4px; padding: 10px 12px; border: 1px solid #d97706;
     border-radius: 8px; background: rgba(217,119,6,.08); color: #7c2d12; font-size: .86rem; }
   .ft-intro { font-family: var(--serif); font-size: 1.08rem; margin-bottom: 16px; }
@@ -306,15 +311,13 @@ def _badge_estado_final(clas: str, estado: str | None) -> str:
     return badge + ' <span class="badge badge-validada">VALIDADA</span>' if e == "validada" else badge
 
 
-def _telemetria(lectura, dispositivo, finca) -> str:
+def _telemetria(lectura, dispositivo, finca, audiencia: str = "tecnica") -> str:
     nivel = _nivel_calibracion(dispositivo, finca)
     lab = "Sí" if (finca or {}).get("validacion_laboratorio") else "No"
     tiles = [
         ("Dispositivo", dispositivo.get("device_id") if dispositivo else (lectura.get("sensor_id") or "—"), ""),
         ("Finca", finca.get("nombre"), f"{finca.get('municipio') or ''}, {finca.get('departamento') or ''}".strip(", ")),
         ("Última transmisión", _fecha(lectura.get("ts")), ""),
-        ("RSSI", _num(dispositivo.get("rssi") if dispositivo else None), "dBm"),
-        ("Uptime", _num((dispositivo.get("uptime_s") or 0) / 60 if dispositivo else None, 0), "min"),
         ("Calidad NPK", nivel, "nivel más bajo alcanzado"),
         ("Validación lab", lab, "análisis certificado"),
         ("pH", _num(lectura.get("ph")), ""),
@@ -325,10 +328,26 @@ def _telemetria(lectura, dispositivo, finca) -> str:
         ("HR ambiente", _num(lectura.get("humedad_ambiental")), "%"),
         ("T ambiente", _num(lectura.get("temperatura_ambiental")), "°C"),
     ]
-    return '<div class="telemetry">' + "".join(
-        f'<div class="tile"><div class="k">{esc(k)}</div><div class="v">{esc(v)} {f"<small>{esc(u)}</small>" if u else ""}</div></div>'
-        for k, v, u in tiles
-    ) + "</div>"
+    # H3 (accesibilidad): RSSI/Uptime son diagnósticos de red, no de la finca.
+    # En audiencia Agricultor van colapsados bajo "Ver detalle técnico del sensor".
+    tiles_tecnicos = [
+        ("RSSI", _num(dispositivo.get("rssi") if dispositivo else None), "dBm"),
+        ("Uptime", _num((dispositivo.get("uptime_s") or 0) / 60 if dispositivo else None, 0), "min"),
+    ]
+
+    def _tiles_html(lista):
+        return "".join(
+            f'<div class="tile"><div class="k">{esc(k)}</div><div class="v">{esc(v)} {f"<small>{esc(u)}</small>" if u else ""}</div></div>'
+            for k, v, u in lista
+        )
+
+    if audiencia == "agricultor":
+        detalle = (
+            '<details class="detalle-tec"><summary>🔧 Ver detalle técnico del sensor ▾</summary>'
+            f'<div class="telemetry">{_tiles_html(tiles_tecnicos)}</div></details>'
+        )
+        return f'<div class="telemetry">{_tiles_html(tiles)}</div>{detalle}'
+    return '<div class="telemetry">' + _tiles_html(tiles + tiles_tecnicos) + "</div>"
 
 
 def _fecha(ts):
@@ -419,7 +438,7 @@ def _seccion_uc2(a) -> str:
       <div><div class="block-title">Diagnóstico para cultivo sembrado — {esc(a.get("cultivo") or "—")}</div>
       <div class="block-sub">Recomendación para el cultivo · motor de reglas</div></div>
     </div>
-    <div style="margin-bottom:14px">{_badge_estado_final(clas, estado)} &nbsp; <span class="mono" style="color:var(--muted)">confianza {confianza:.0f}% (real {confianza_real:.0f}%)</span></div>
+    <div style="margin-bottom:14px">{_badge_estado_final(clas, estado)} &nbsp; <span class="mono" style="color:var(--muted)">{_confianza_txt(confianza, confianza_real)}</span></div>
     {respaldo_html}{fenologia_html}{faltantes_html}
     <table>
       <tr><th>Variable</th><th>Estado</th><th>Lectura</th><th>Rango ideal</th><th>Acción</th><th>Prioridad</th><th>Confiabilidad</th><th>Plan sugerido</th></tr>
@@ -438,22 +457,44 @@ def _fmt_cop(v) -> str:
         return "—"
 
 
+def _confianza_txt(base_pct: float | None, real_pct: float | None) -> str:
+    """H5: si base y real coinciden se muestra un solo número."""
+    if base_pct is None:
+        return "confianza —"
+    if real_pct is None or abs(base_pct - real_pct) < 0.5:
+        return f"confianza {base_pct:.0f}%"
+    return f"confianza {base_pct:.0f}% (real {real_pct:.0f}%)"
+
+
 def _desglose_confianza_html(a) -> str:
-    """Semáforo de 4 barras: por qué la confianza es la que es."""
+    """Semáforo de 4 barras: por qué la confianza es la que es.
+
+    H1 (accesibilidad): cada barra lleva un texto de una línea que explica
+    qué significa un valor alto, para que el color nunca se lea al revés.
+    """
     d = a.get("desglose_confianza") or {}
     if not d:
         return ""
     barras = [
-        ("🟢 Calibración del sensor", d.get("calibracion_sensor_pct", 100), "#16a34a"),
-        ("🟡 Cobertura de fertilidad", d.get("cobertura_fertilidad_pct", 100), "#d9a03d"),
-        ("🔴 Violaciones activas", d.get("violaciones_pct", 100), "#c0563f"),
-        ("🟣 Respaldo humano", d.get("respaldo_humano_pct", 0), "#7c5cbf"),
+        ("🟢 Calibración del sensor", d.get("calibracion_sensor_pct", 100), "#16a34a",
+         "el sensor está calibrado y validado en laboratorio.",
+         "el sensor aún no ha sido validado contra laboratorio."),
+        ("🟡 Cobertura de fertilidad", d.get("cobertura_fertilidad_pct", 100), "#d9a03d",
+         "se cuenta con todas las variables de fertilidad necesarias.",
+         "faltan variables de fertilidad por medir."),
+        ("🔴 Sin violaciones activas", d.get("violaciones_pct", 100), "#c0563f",
+         "no hay alertas críticas pendientes en este momento.",
+         "hay alertas críticas pendientes que requieren atención."),
+        ("🟣 Respaldo humano", d.get("respaldo_humano_pct", 0), "#7c5cbf",
+         "agrónomos ya confirmaron esta recomendación.",
+         "todavía ningún agrónomo ha confirmado esta recomendación."),
     ]
     filas = "".join(
         f'<div class="barra-fila"><div class="barra-label">{esc(label)}</div>'
         f'<div class="barra"><i style="width:{min(100, max(0, int(pct)))}%;background:{color}"></i></div>'
-        f'<div class="barra-val">{min(100, max(0, int(pct)))}%</div></div>'
-        for label, pct, color in barras
+        f'<div class="barra-val">{min(100, max(0, int(pct)))}%</div>'
+        f'<div class="barra-expl">— {esc(texto_bien if int(pct) >= 50 else texto_mal)}</div></div>'
+        for label, pct, color, texto_bien, texto_mal in barras
     )
     nota = d.get("nota_subir")
     return f"""
@@ -689,15 +730,17 @@ def _seccion_uc1(a) -> str:
             f"fertilidad sin dato: {esc(', '.join(faltantes))}. La confianza "
             "global del reporte se redujo por esta falta de información.</div>"
         )
+    desglose_html = _desglose_confianza_html(a)
     return f"""
   <section class="block">
     <div class="block-head"><span class="block-num">02</span>
       <div><div class="block-title">Recomendación de siembra</div>
       <div class="block-sub">¿Qué conviene sembrar? · ranking del motor</div></div>
     </div>
-    <div style="margin-bottom:10px">{_badge_estado_final(a.get("clasificacion_upra"), estado)} &nbsp; <span class="mono" style="color:var(--muted)">confianza {confianza:.0f}% (real {confianza_real:.0f}%)</span></div>
+    <div style="margin-bottom:10px">{_badge_estado_final(a.get("clasificacion_upra"), estado)} &nbsp; <span class="mono" style="color:var(--muted)">{_confianza_txt(confianza, confianza_real)}</span></div>
     {respaldo_html}{faltantes_html}
     {ranking or '<p>Sin cultivos evaluables.</p>'}
+    {desglose_html}
     <div class="verdict"><b>Top:</b> {esc(a.get("cultivo") or "—")} ({esc(a.get("clasificacion_upra") or "—")})</div>
   </section>"""
 
@@ -818,6 +861,8 @@ def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> s
 
     # ── Mapa resumen: todas las variables a la vez ──
     filas_resumen = []
+    puntos_medidos = 0
+    puntos_fuera = 0
     for y in reversed(ys):  # fila superior = y mayor
         fila = []
         for x in xs:
@@ -841,10 +886,28 @@ def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> s
             if total == 0:
                 fila.append(_celda(_GRIS, "·"))
             else:
+                puntos_medidos += 1
+                if fuera > 0:
+                    puntos_fuera += 1
                 prop = fuera / total
                 bg = _mezclar(_VERDE, _ROJO, prop)
                 fila.append(_celda(bg, f"{fuera}/{total}"))
         filas_resumen.append("".join(fila))
+
+    # H4 (accesibilidad): frase-resumen en lenguaje simple antes del mapa.
+    resumen_puntos = ""
+    if puntos_medidos:
+        if puntos_fuera:
+            resumen_puntos = (
+                f'<p class="ft-intro">👀 De los <b>{puntos_medidos}</b> puntos que se '
+                f'midieron en su lote, <b>{puntos_fuera}</b> presentan alguna variable '
+                f'fuera de lo ideal.</p>'
+            )
+        else:
+            resumen_puntos = (
+                f'<p class="ft-intro">✅ Los <b>{puntos_medidos}</b> puntos que se '
+                f'midieron en su lote están dentro de lo ideal.</p>'
+            )
 
     leyenda_resumen = (
         f'<div class="heat-legend"><span class="chip" style="background:{_VERDE}"></span>todo en orden'
@@ -943,6 +1006,7 @@ def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> s
     La intensidad del color indica el valor del parámetro: más intenso = valor más alto,
     menos intenso = valor más bajo (cada parámetro usa su propia escala).
     Use los botones para ver un parámetro por separado o todos a la vez.</p>
+    {resumen_puntos}
     {pestañas}
     {bloque_resumen}
     {''.join(bloques)}
@@ -1636,8 +1700,15 @@ def generar_reporte_html(
     rotacion: dict | None = None,
     bpa_resumen: dict | None = None,
     lunar: dict | None = None,
+    audiencia: str = "tecnica",
 ) -> str:
-    """Construye el documento HTML completo del reporte."""
+    """Construye el documento HTML completo del reporte.
+
+    `audiencia` (v8 accesibilidad): `"agricultor"` (lenguaje simple,
+    telemetría colapsada, orden simple-primero) o `"tecnica"` (formato
+    completo actual, sin cambios).
+    """
+    es_agricultor = audiencia == "agricultor"
     fecha = datetime.now(timezone.utc).astimezone().strftime("%d/%m/%Y %H:%M")
     titulo = {
         "siembra": "Recomendación de siembra",
@@ -1770,9 +1841,20 @@ def generar_reporte_html(
         '<ul class="warnings">' + "".join(f"<li>{esc(w)}</li>" for w in advertencias) + "</ul>"
     ) if advertencias else '<ul class="warnings"><li>Sin advertencias.</li></ul>'
 
+    # H2 (accesibilidad): en audiencia Agricultor las siglas de la lista de
+    # "Próximos pasos" se traducen a palabras simples; el agrónomo conserva
+    # el formato compacto (regla de no regresión).
+    faltantes_fertilidad = (
+        "Completar los nutrientes que faltan por medir: materia orgánica (MO), "
+        "capacidad de retener nutrientes del suelo (CIC), calcio (Ca), "
+        "magnesio (Mg), azufre (S), y los micronutrientes hierro, manganeso, "
+        "zinc, cobre y boro, para subir la confianza del reporte."
+        if es_agricultor else
+        "Completar las variables de fertilidad faltantes (MO, CIC, Ca, Mg, S, Fe, Mn, Zn, Cu, B) para subir la confianza del reporte."
+    )
     pasos = [
         "Validar la calibración NPK del sensor contra un análisis de laboratorio antes de aplicar fertilizantes.",
-        "Completar las variables de fertilidad faltantes (MO, CIC, Ca, Mg, S, Fe, Mn, Zn, Cu, B) para subir la confianza del reporte.",
+        faltantes_fertilidad,
         "Corregir el pH con encalado dolomítico (suelo ácido) o yeso agrícola (suelo alcalino) según la recomendación.",
         "Aplicar el plan de fertilización fraccionado indicado en la tabla de diagnóstico.",
         "Replicar el análisis tras 3–4 semanas para verificar la evolución de las variables.",
@@ -1810,6 +1892,69 @@ def generar_reporte_html(
     except (TypeError, ValueError):
         datos_json = "{}"
 
+    seccion_pasos = f"""
+  <section class="block">
+    <div class="block-head"><span class="block-num">05</span>
+      <div><div class="block-title">Próximos pasos</div>
+      <div class="block-sub">Plan de acción sugerido</div></div>
+    </div>
+    {prediccion_html}
+    <ol class="steps">{"".join(f"<li>{esc(p)}</li>" for p in pasos)}</ol>
+  </section>"""
+    seccion_advertencias = f"""
+  <section class="block">
+    <div class="block-head"><span class="block-num">04</span>
+      <div><div class="block-title">Advertencias del reporte</div>
+      <div class="block-sub">Calidad de datos y limitaciones</div></div>
+    </div>
+    {warnings_html}
+  </section>"""
+    seccion_telemetria = f"""
+  <section class="block">
+    <div class="block-head"><span class="block-num">T</span>
+      <div><div class="block-title">Telemetría y lectura del sensor</div>
+      <div class="block-sub">Fuente de datos para el análisis</div></div>
+    </div>
+    {_telemetria(lectura, dispositivo, finca, audiencia=audiencia)}
+  </section>"""
+
+    # H6 (accesibilidad): audiencia Agricultor lee primero el lenguaje simple
+    # y el plan de acción; el orden técnico actual no cambia para Agrónomo.
+    if es_agricultor:
+        cuerpo = (
+            f"{explicacion_campo}"
+            f"{seccion_pasos}"
+            f"{seccion_telemetria}"
+            f"{seccion_faltantes}"
+            f"{secciones}"
+            f"{seccion_mapa}"
+            f"{seccion_plano}"
+            f"{seccion_lunar}"
+            f"{seccion_labores}"
+            f"{seccion_riego}"
+            f"{seccion_rotacion}"
+            f"{seccion_bpa}"
+            f"{seccion_roi}"
+            f"{seccion_advertencias}"
+        )
+    else:
+        cuerpo = (
+            f"{seccion_telemetria}"
+            f"{seccion_faltantes}"
+            f"{secciones}"
+            f"{seccion_mapa}"
+            f"{seccion_plano}"
+            f"{seccion_lunar}"
+            f"{seccion_labores}"
+            f"{seccion_riego}"
+            f"{seccion_rotacion}"
+            f"{seccion_bpa}"
+            f"{seccion_roi}"
+            f"{explicacion_campo}"
+            f"{seccion_advertencias}"
+            f"{seccion_pasos}"
+        )
+
     html = f"""<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1835,39 +1980,7 @@ def generar_reporte_html(
     </div>
   </header>
   {_ph_scale(lectura.get("ph"))}
-  <section class="block">
-    <div class="block-head"><span class="block-num">T</span>
-      <div><div class="block-title">Telemetría y lectura del sensor</div>
-      <div class="block-sub">Fuente de datos para el análisis</div></div>
-    </div>
-    {_telemetria(lectura, dispositivo, finca)}
-  </section>
-  {seccion_faltantes}
-  {secciones}
-  {seccion_mapa}
-  {seccion_plano}
-  {seccion_lunar}
-  {seccion_labores}
-  {seccion_riego}
-  {seccion_rotacion}
-  {seccion_bpa}
-  {seccion_roi}
-  {explicacion_campo}
-  <section class="block">
-    <div class="block-head"><span class="block-num">04</span>
-      <div><div class="block-title">Advertencias del reporte</div>
-      <div class="block-sub">Calidad de datos y limitaciones</div></div>
-    </div>
-    {warnings_html}
-  </section>
-  <section class="block">
-    <div class="block-head"><span class="block-num">05</span>
-      <div><div class="block-title">Próximos pasos</div>
-      <div class="block-sub">Plan de acción sugerido</div></div>
-    </div>
-    {prediccion_html}
-    <ol class="steps">{"".join(f"<li>{esc(p)}</li>" for p in pasos)}</ol>
-  </section>
+  {cuerpo}
   <div class="stamp">AgroIA · sistema experto UPRA / Cenicafé / AGROSAVIA · generado {esc(fecha)}</div>
 </div>
 <footer class="colophon">AgroIA — AgroInteligente Colombia · Este reporte es una recomendación técnica de apoyo; no sustituye el análisis de laboratorio certificado.</footer>
