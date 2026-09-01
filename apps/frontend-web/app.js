@@ -324,8 +324,12 @@ async function arrancarAplicacion() {
   });
 
   // ── Menús desplegables (Administración y Ayuda) — flotantes sobre el contenido ──
+  // Nota: sin ':scope' en querySelector (Safari/WebKit lanza DOMException 12
+  // «The string did not match the expected pattern» con ese selector).
+  const _botonDesplegable = (dd) =>
+    Array.from(dd.children).find(el => el.matches('button.tab, .tab'));
   document.querySelectorAll('.tab-dropdown').forEach(dd => {
-    const btn = dd.querySelector(':scope > button.tab, :scope > .tab');
+    const btn = _botonDesplegable(dd);
     const sub = dd.querySelector('.tab-submenu');
     if (!btn || !sub) return;
 
@@ -373,7 +377,7 @@ async function arrancarAplicacion() {
     document.querySelectorAll('.tab-submenu.open').forEach(sub => {
       if (sub.contains(e.target)) return;
       const dd = sub.closest('.tab-dropdown');
-      const btn = dd ? dd.querySelector(':scope > button.tab, :scope > .tab') : null;
+      const btn = dd ? _botonDesplegable(dd) : null;
       if (btn === e.target) return;
       sub.classList.remove('open');
     });
@@ -1855,10 +1859,15 @@ async function analizarFotoPlaga(e) {
   e.preventDefault();
   const msg = document.getElementById('vision-msg');
   msg.innerHTML = '';
-  const fincaId = document.getElementById('vision-finca').value;
+  const fincaId = (document.getElementById('vision-finca').value || '').trim();
   const foto = document.getElementById('vision-foto').files[0];
   if (!fincaId || !foto) {
     msg.innerHTML = errorBanner('Selecciona la finca y la foto a analizar.');
+    return;
+  }
+  // Validación local del UUID (evita que Safari rechace la URL con DOMException 12)
+  if (!/^[0-9a-fA-F-]{36}$/.test(fincaId)) {
+    msg.innerHTML = errorBanner('La finca seleccionada no tiene un identificador válido. Recarga la página y vuelve a intentarlo.');
     return;
   }
   try {
@@ -1866,7 +1875,12 @@ async function analizarFotoPlaga(e) {
     fd.append('file', foto);
     // headers(false): NO fijar Content-Type para que el navegador ponga el
     // boundary multipart (con 'application/json' FastAPI no ve el campo file).
-    const res = await fetch(`/api/v1/vision/analizar-plaga?finca_id=${encodeURIComponent(fincaId)}`, {
+    // URL absoluta bien formada vía URL() (Safari valida la cadena contra su
+    // patrón interno y lanza «The string did not match the expected pattern»
+    // si encuentra algo inesperado).
+    const url = new URL('/api/v1/vision/analizar-plaga', window.location.origin);
+    url.searchParams.set('finca_id', fincaId);
+    const res = await fetch(url.href, {
       method: 'POST', headers: headers(false), body: fd,
     });
     const r = await res.json();
@@ -1885,7 +1899,15 @@ async function analizarFotoPlaga(e) {
     document.getElementById('vision-foto').value = '';
     await cargarVision();
   } catch (err) {
-    msg.innerHTML = errorBanner(err.message);
+    // DOMException 12 de Safari/WebKit («The string did not match the expected
+    // pattern»): rechazo del motor del navegador, no del servidor.
+    if (err && err.name === 'SyntaxError' && err.code === 12) {
+      msg.innerHTML = errorBanner(
+        'Tu navegador rechazó la petición (validación de Safari). Cierra y abre la aplicación de nuevo; si persiste, recarga con el botón de actualizar del navegador.'
+      );
+      return;
+    }
+    msg.innerHTML = errorBanner(err && err.message ? err.message : 'Error desconocido.');
   }
 }
 
@@ -1900,7 +1922,11 @@ async function confirmarDiagnostico(id) {
     await cargarVision();
   } catch (e) {
     const msg = document.getElementById('vision-msg');
-    msg.innerHTML = errorBanner(e.message);
+    if (e && e.name === 'SyntaxError' && e.code === 12) {
+      msg.innerHTML = errorBanner('Tu navegador rechazó la petición (validación de Safari). Recarga la aplicación e inténtalo de nuevo.');
+    } else {
+      msg.innerHTML = errorBanner(e.message);
+    }
   }
 }
 
