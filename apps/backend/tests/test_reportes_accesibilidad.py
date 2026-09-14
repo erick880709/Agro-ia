@@ -74,21 +74,25 @@ async def _comision_en_recomendacion(finca_id: str) -> None:
 
 
 async def _asegurar_lectura_sensor(cli, finca_id: str) -> None:
-    """Siembra una lectura georreferenciada (trama real del firmware, vía POST
+    """Siembra lecturas georreferenciadas (trama real del firmware, vía POST
     /api/sensor) para que el reporte tenga datos: sin lecturas el motor
     entrega un análisis preliminar sin semáforo de confianza (H1) ni mapa
-    de calor con puntos medidos (H4)."""
-    r = await cli.post("/api/sensor", json={
-        "device_id": "test-accesibilidad-v8",
-        "finca_id": finca_id,
-        "pos_x": 5.0,
-        "pos_y": 5.0,
-        "ph": 6.2,
-        "nitrogen": 80.0,
-        "phosphorus": 30.0,
-        "potassium": 150.0,
-    })
-    assert r.status_code == 202, r.text
+    de calor con puntos medidos (H4). El mapa de calor exige ≥ 2 puntos con
+    la misma variable, por eso se envían dos tomas en posiciones distintas;
+    el pH 4.0 viola las reglas de pH de todos los cultivos, lo que garantiza
+    el umbral de pH en los ajustes del ranking (celdas "fuera de lo ideal")."""
+    for pos_x, pos_y in ((5.0, 5.0), (8.0, 5.0)):
+        r = await cli.post("/api/sensor", json={
+            "device_id": "test-accesibilidad-v8",
+            "finca_id": finca_id,
+            "pos_x": pos_x,
+            "pos_y": pos_y,
+            "ph": 4.0,
+            "nitrogen": 80.0,
+            "phosphorus": 30.0,
+            "potassium": 150.0,
+        })
+        assert r.status_code == 202, r.text
 
 
 async def _generar(cli, finca_id, headers, audiencia=None, tipo="siembra"):
