@@ -56,9 +56,21 @@ async def _comision_en_recomendacion(finca_id: str) -> None:
                 .limit(1)
             )
         ).scalar_one_or_none()
-        if comision is not None:
+        if comision is None:
+            # Regla de negocio v3.5: sin comisión no se genera reporte.
+            # En CI no existe el set demo → crear una en la etapa requerida.
+            from datetime import date
+
+            comision = Comision(
+                finca_id=uuid.UUID(finca_id),
+                servicio="Prueba accesibilidad v8",
+                fecha_asignacion=date.today(),
+                estado="en_recomendacion",
+            )
+            db.add(comision)
+        else:
             comision.estado = "en_recomendacion"
-            await db.commit()
+        await db.commit()
 
 
 async def _generar(cli, finca_id, headers, audiencia=None, tipo="siembra"):
