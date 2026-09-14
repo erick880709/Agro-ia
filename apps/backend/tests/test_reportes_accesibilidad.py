@@ -147,8 +147,10 @@ async def test_reportes_accesibilidad(cli):
     assert html_agr.find('block-num">05<') < html_agr.find('block-num">02<')
 
     # ── Cliente en vivo → audiencia Agricultor por rol ──
+    # maria.cliente@agroia.co es la cuenta vinculada a la Finca Demo en el
+    # seed de CI (seed_cloud.py) y en el set demo local.
     r_cli = await _generar(
-        cli, finca_id, _cabeceras(rol="Cliente", email="cliente@agroia.co"),
+        cli, finca_id, _cabeceras(rol="Cliente", email="maria.cliente@agroia.co"),
     )
     assert r_cli.status_code == 200, r_cli.text
     assert r_cli.json()["audiencia"] == "agricultor"
