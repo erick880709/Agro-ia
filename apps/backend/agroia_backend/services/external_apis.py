@@ -5,7 +5,7 @@ con graceful degradation: si una API falla, el sistema sigue funcionando
 con los datos disponibles.
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import httpx
 from agroia.config import get_settings
@@ -431,6 +431,235 @@ async def fetch_pronostico_open_meteo(
     except Exception as e:  # noqa: BLE001 — graceful degradation
         logger.warning("pronostico_no_disponible", error=str(e), lat=lat, lon=lon)
         return None
+
+
+# ── Códigos de clima WMO (0–99) → descripción y emoji en español ──
+CODIGOS_CLIMA_WMO = {
+    0: ("Despejado", "☀️"),
+    1: ("Mayormente despejado", "🌤️"),
+    2: ("Parcialmente nublado", "⛅"),
+    3: ("Nublado", "☁️"),
+    45: ("Niebla", "🌫️"),
+    48: ("Niebla con escarcha", "🌫️"),
+    51: ("Llovizna ligera", "🌦️"),
+    53: ("Llovizna moderada", "🌦️"),
+    55: ("Llovizna densa", "🌧️"),
+    56: ("Llovizna helada ligera", "🌧️"),
+    57: ("Llovizna helada densa", "🌧️"),
+    61: ("Lluvia ligera", "🌧️"),
+    63: ("Lluvia moderada", "🌧️"),
+    65: ("Lluvia fuerte", "🌧️"),
+    66: ("Lluvia helada ligera", "🌧️"),
+    67: ("Lluvia helada fuerte", "🌧️"),
+    71: ("Nevada ligera", "🌨️"),
+    73: ("Nevada moderada", "🌨️"),
+    75: ("Nevada fuerte", "❄️"),
+    77: ("Granizo blando", "❄️"),
+    80: ("Chubascos ligeros", "🌦️"),
+    81: ("Chubascos moderados", "🌧️"),
+    82: ("Chubascos violentos", "⛈️"),
+    85: ("Chubascos de nieve ligeros", "🌨️"),
+    86: ("Chubascos de nieve fuertes", "❄️"),
+    95: ("Tormenta eléctrica", "⛈️"),
+    96: ("Tormenta con granizo", "⛈️"),
+    99: ("Tormenta con granizo fuerte", "⛈️"),
+}
+
+
+def codigo_clima_a_texto(codigo) -> dict:
+    """Código WMO → {codigo, descripcion, emoji} en español."""
+    try:
+        codigo_int = int(codigo)
+    except (TypeError, ValueError):
+        codigo_int = -1
+    descripcion, emoji = CODIGOS_CLIMA_WMO.get(codigo_int, ("Cielo variable", "🌥️"))
+    return {"codigo": codigo_int, "descripcion": descripcion, "emoji": emoji}
+
+
+def _valor(lista: list | None, i: int):
+    """Elemento i de una lista Open-Meteo o None (listas pueden faltar)."""
+    if not lista or i >= len(lista) or lista[i] is None:
+        return None
+    return lista[i]
+
+
+_CACHE_CLIMA_COMPLETO: dict[tuple, tuple[datetime, dict]] = {}
+_CACHE_CLIMA_TTL_S = 600  # 10 minutos
+
+
+async def fetch_clima_completo_open_meteo(
+    lat: float,
+    lon: float,
+    dias: int = 7,
+    modelo: str = "auto",
+    usar_cache: bool = True,
+) -> dict | None:
+    """Clima actual + pronóstico enriquecido de 7 días (Open-Meteo, sin clave).
+
+    Devuelve un dict con `actual` (condiciones del día en transcurso) y
+    `pronostico` (lista diaria enriquecida que mantiene las claves clásicas
+    `fecha/precipitacion_mm/temp_min_c/temp_max_c` y agrega sensación
+    térmica, probabilidad de lluvia, viento, humedad, UV, sol y descripción
+    del cielo). Si la API falla devuelve None (degradación con gracia).
+    """
+    dias = max(1, min(int(dias), 16))
+    clave = (round(lat, 4), round(lon, 4), dias, (modelo or "auto").lower())
+    if usar_cache:
+        cacheado = _CACHE_CLIMA_COMPLETO.get(clave)
+        if cacheado:
+            cuando, datos = cacheado
+            if (datetime.now(timezone.utc) - cuando).total_seconds() < _CACHE_CLIMA_TTL_S:
+                return datos
+
+    url = "https://api.open-meteo.com/v1/forecast"
+    params = {
+        "latitude": f"{lat:.4f}",
+        "longitude": f"{lon:.4f}",
+        "timezone": "America/Bogota",
+        "forecast_days": str(dias),
+        "current": (
+            "temperature_2m,apparent_temperature,relative_humidity_2m,"
+            "precipitation,weather_code,wind_speed_10m,wind_gusts_10m,"
+            "cloud_cover,pressure_msl,uv_index,is_day"
+        ),
+        "daily": (
+            "precipitation_sum,precipitation_probability_max,"
+            "temperature_2m_min,temperature_2m_max,"
+            "apparent_temperature_min,apparent_temperature_max,"
+            "weather_code,wind_speed_10m_max,"
+            "relative_humidity_2m_min,relative_humidity_2m_max,"
+            "uv_index_max,sunshine_duration,sunrise,sunset"
+        ),
+    }
+    modelo_openmeteo = MODELOS_PRONOSTICO.get((modelo or "auto").lower())
+    if modelo_openmeteo:
+        params["models"] = modelo_openmeteo
+    try:
+        async with httpx.AsyncClient(timeout=TIMEOUT_PRONOSTICO) as client:
+            r = await client.get(url, params=params)
+            r.raise_for_status()
+            datos = r.json()
+    except Exception as e:  # noqa: BLE001 — graceful degradation
+        logger.warning("clima_completo_no_disponible", error=str(e), lat=lat, lon=lon)
+        return None
+
+    current = datos.get("current") or {}
+    actual = None
+    if current.get("temperature_2m") is not None:
+        codigo = codigo_clima_a_texto(current.get("weather_code"))
+        actual = {
+            "fecha": current.get("time"),
+            "temperatura_c": round(float(current["temperature_2m"]), 1),
+            "sensacion_termica_c": (
+                round(float(current["apparent_temperature"]), 1)
+                if current.get("apparent_temperature") is not None else None
+            ),
+            "humedad_pct": (
+                round(float(current["relative_humidity_2m"]), 0)
+                if current.get("relative_humidity_2m") is not None else None
+            ),
+            "precipitacion_mm": (
+                float(current["precipitation"])
+                if current.get("precipitation") is not None else 0.0
+            ),
+            "viento_kmh": (
+                round(float(current["wind_speed_10m"]), 1)
+                if current.get("wind_speed_10m") is not None else None
+            ),
+            "rafagas_kmh": (
+                round(float(current["wind_gusts_10m"]), 1)
+                if current.get("wind_gusts_10m") is not None else None
+            ),
+            "nubosidad_pct": (
+                round(float(current["cloud_cover"]), 0)
+                if current.get("cloud_cover") is not None else None
+            ),
+            "presion_hpa": (
+                round(float(current["pressure_msl"]), 1)
+                if current.get("pressure_msl") is not None else None
+            ),
+            "uv": (
+                round(float(current["uv_index"]), 1)
+                if current.get("uv_index") is not None else None
+            ),
+            "es_de_dia": bool(current.get("is_day", 1)),
+            "codigo_clima": codigo["codigo"],
+            "descripcion": codigo["descripcion"],
+            "emoji": codigo["emoji"],
+        }
+
+    daily = datos.get("daily") or {}
+    fechas = daily.get("time") or []
+    pronostico: list[dict] = []
+    for i, fecha in enumerate(fechas):
+        codigo = codigo_clima_a_texto(_valor(daily.get("weather_code"), i))
+        pronostico.append({
+            "fecha": fecha,
+            # claves clásicas (contrato existente)
+            "precipitacion_mm": (
+                float(_valor(daily.get("precipitation_sum"), i))
+                if _valor(daily.get("precipitation_sum"), i) is not None else 0.0
+            ),
+            "temp_min_c": (
+                float(_valor(daily.get("temperature_2m_min"), i))
+                if _valor(daily.get("temperature_2m_min"), i) is not None else 20.0
+            ),
+            "temp_max_c": (
+                float(_valor(daily.get("temperature_2m_max"), i))
+                if _valor(daily.get("temperature_2m_max"), i) is not None else 26.0
+            ),
+            # claves enriquecidas (nuevas)
+            "probabilidad_lluvia_pct": (
+                round(float(_valor(daily.get("precipitation_probability_max"), i)), 0)
+                if _valor(daily.get("precipitation_probability_max"), i) is not None else None
+            ),
+            "sensacion_min_c": (
+                round(float(_valor(daily.get("apparent_temperature_min"), i)), 1)
+                if _valor(daily.get("apparent_temperature_min"), i) is not None else None
+            ),
+            "sensacion_max_c": (
+                round(float(_valor(daily.get("apparent_temperature_max"), i)), 1)
+                if _valor(daily.get("apparent_temperature_max"), i) is not None else None
+            ),
+            "viento_max_kmh": (
+                round(float(_valor(daily.get("wind_speed_10m_max"), i)), 1)
+                if _valor(daily.get("wind_speed_10m_max"), i) is not None else None
+            ),
+            "humedad_min_pct": (
+                round(float(_valor(daily.get("relative_humidity_2m_min"), i)), 0)
+                if _valor(daily.get("relative_humidity_2m_min"), i) is not None else None
+            ),
+            "humedad_max_pct": (
+                round(float(_valor(daily.get("relative_humidity_2m_max"), i)), 0)
+                if _valor(daily.get("relative_humidity_2m_max"), i) is not None else None
+            ),
+            "uv_max": (
+                round(float(_valor(daily.get("uv_index_max"), i)), 1)
+                if _valor(daily.get("uv_index_max"), i) is not None else None
+            ),
+            "horas_sol": (
+                round(float(_valor(daily.get("sunshine_duration"), i)) / 3600.0, 1)
+                if _valor(daily.get("sunshine_duration"), i) is not None else None
+            ),
+            "salida_sol": _valor(daily.get("sunrise"), i),
+            "puesta_sol": _valor(daily.get("sunset"), i),
+            "codigo_clima": codigo["codigo"],
+            "descripcion": codigo["descripcion"],
+            "emoji": codigo["emoji"],
+        })
+
+    if not pronostico and actual is None:
+        return None
+    resultado = {
+        "fuente": "open-meteo",
+        "modelo": (modelo or "auto").lower(),
+        "zona_horaria": "America/Bogota",
+        "hora_consulta": datetime.now(timezone.utc).isoformat(),
+        "actual": actual,
+        "pronostico": pronostico,
+    }
+    _CACHE_CLIMA_COMPLETO[clave] = (datetime.now(timezone.utc), resultado)
+    return resultado
 
 
 # ═══════════════════════════════════════════════════════════════

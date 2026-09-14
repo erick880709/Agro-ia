@@ -73,6 +73,29 @@ def _dia_helada(pronostico: list[dict], dias: int = 3) -> dict | None:
     return None
 
 
+def _resumen_clima_actual(actual: dict | None) -> str | None:
+    """Frase breve del clima actual (temperatura, sensación, humedad, viento)."""
+    if not actual or actual.get("temperatura_c") is None:
+        return None
+    partes = [f"{float(actual['temperatura_c']):.1f} °C"]
+    sensacion = actual.get("sensacion_termica_c")
+    if sensacion is not None:
+        partes.append(f"sensación térmica {float(sensacion):.1f} °C")
+    humedad = actual.get("humedad_pct")
+    if humedad is not None:
+        partes.append(f"humedad {float(humedad):.0f} %")
+    viento = actual.get("viento_kmh")
+    if viento is not None:
+        partes.append(f"viento {float(viento):.1f} km/h")
+    uv = actual.get("uv")
+    if uv is not None:
+        partes.append(f"UV {float(uv):.1f}")
+    descripcion = actual.get("descripcion")
+    if descripcion:
+        partes.append(descripcion.lower())
+    return " · ".join(partes)
+
+
 async def _usuarios_permiten_siembra_lunar(db, finca_uuid) -> bool:
     """True si ningún usuario vinculado a la finca desactivó las alertas Bristol.
 
@@ -101,7 +124,8 @@ async def _usuarios_permiten_siembra_lunar(db, finca_uuid) -> bool:
 
 
 async def _evaluar_siembra_bristol(
-    db, finca: Finca, pronostico: list[dict], _registrar, _desactivar_tipo
+    db, finca: Finca, pronostico: list[dict], _registrar, _desactivar_tipo,
+    clima: dict | None = None,
 ) -> None:
     """Regla 3 (v3.4): alerta 'siembra_lunar' cuando fase + clima favorecen.
 
@@ -136,31 +160,47 @@ async def _evaluar_siembra_bristol(
 
     cultivo = recomendacion["cultivos"][0] if recomendacion["cultivos"] else "su cultivo"
     fase = lunar["fase"]
+    resumen = _resumen_clima_actual((clima or {}).get("actual"))
+    mensaje = (
+        f"📅 El Almanaque Bristol indica días propicios para siembra "
+        f"({fase['nombre']} {fase['emoji']}). El clima (temp y lluvia) es "
+        f"favorable en los próximos días. Considere programar siembra de {cultivo}."
+    )
+    if resumen:
+        mensaje += f" 🌡️ Clima actual: {resumen}."
     await _registrar(
         "siembra_lunar",
         "Media",
-        f"📅 El Almanaque Bristol indica días propicios para siembra "
-        f"({fase['nombre']} {fase['emoji']}). El clima (temp y lluvia) es "
-        "favorable en los próximos días. Considere programar siembra de "
-        f"{cultivo}.",
+        mensaje,
         {"fecha": hoy.isoformat(), "fase": fase["nombre_en"]},
+        clima=clima,
     )
 
 
-async def evaluar_alertas_finca(db, finca: Finca, pronostico: list[dict] | None = None) -> list[dict]:
+async def evaluar_alertas_finca(
+    db, finca: Finca, pronostico: list[dict] | None = None,
+    clima: dict | None = None,
+) -> list[dict]:
     """Evalúa las reglas y persiste/desactiva alertas para una finca.
 
+    `clima` agrupa el clima completo (actual + pronóstico enriquecido de
+    7 días). Si no se inyecta, se consulta Open-Meteo; `pronostico` solo
+    (compatibilidad con pruebas) arma un clima sin condiciones actuales.
     Devuelve las alertas creadas (dict) para respuesta de API/logs.
     """
     if finca.latitud is None or finca.longitud is None:
         return []
 
-    if pronostico is None:
-        from agroia_backend.services.external_apis import fetch_pronostico_open_meteo
+    if clima is None and pronostico is None:
+        from agroia_backend.services.external_apis import fetch_clima_completo_open_meteo
 
-        pronostico = await fetch_pronostico_open_meteo(
+        clima = await fetch_clima_completo_open_meteo(
             float(finca.latitud), float(finca.longitud), dias=7
         )
+    if clima is not None:
+        pronostico = clima.get("pronostico") or pronostico
+    elif pronostico is not None:
+        clima = {"actual": None, "pronostico": list(pronostico)}
     if not pronostico:
         return []
 
@@ -182,9 +222,16 @@ async def evaluar_alertas_finca(db, finca: Finca, pronostico: list[dict] | None 
             a.activa = False
         return len(anteriores)
 
-    async def _registrar(tipo: str, severidad: str, mensaje: str, dia: dict) -> None:
+    async def _registrar(
+        tipo: str, severidad: str, mensaje: str, dia: dict,
+        clima: dict | None = None,
+    ) -> None:
         nonlocal cambios
         cambios += await _desactivar_tipo(tipo)
+        pronostico_guardar = (
+            list(clima["pronostico"]) if clima and clima.get("pronostico")
+            else list(pronostico)
+        )
         alerta = AlertaClimatica(
             id=uuid.uuid4(),
             finca_id=finca.id,
@@ -192,7 +239,11 @@ async def evaluar_alertas_finca(db, finca: Finca, pronostico: list[dict] | None 
             severidad=severidad,
             mensaje=mensaje,
             fecha_alerta=hoy,
-            pronostico={"dia": dia, "pronostico": pronostico[:3]},
+            pronostico={
+                "dia": dia,
+                "pronostico": pronostico_guardar,
+                "actual": clima.get("actual") if clima else None,
+            },
             activa=True,
         )
         db.add(alerta)
@@ -204,6 +255,8 @@ async def evaluar_alertas_finca(db, finca: Finca, pronostico: list[dict] | None 
             "mensaje": mensaje,
         })
 
+    resumen_actual = _resumen_clima_actual(clima.get("actual")) if clima else None
+
     # ── Regla 1: lluvia fuerte + fertilización programada ──
     dia_lluvia = _dia_lluvia_fuerte(pronostico)
     labores = await _labores_fertilizacion_proximas(db, finca.id) if dia_lluvia else []
@@ -211,13 +264,15 @@ async def evaluar_alertas_finca(db, finca: Finca, pronostico: list[dict] | None 
         productos = " y ".join(
             labor.producto or labor.titulo[:60] for labor in labores[:2]
         )
-        await _registrar(
-            "lluvia_aplicacion",
-            "Alta",
+        mensaje = (
             f"Aplace la aplicación de {productos}: se pronostican "
             f"{float(dia_lluvia['precipitacion_mm']):.0f} mm en 24h "
-            f"({dia_lluvia['fecha']}), riesgo de lixiviación.",
-            dia_lluvia,
+            f"({dia_lluvia['fecha']}), riesgo de lixiviación."
+        )
+        if resumen_actual:
+            mensaje += f" 🌡️ Clima actual: {resumen_actual}."
+        await _registrar(
+            "lluvia_aplicacion", "Alta", mensaje, dia_lluvia, clima=clima,
         )
     else:
         # Sin riesgo: desactivar alertas previas de este tipo (ya no vigentes)
@@ -228,19 +283,23 @@ async def evaluar_alertas_finca(db, finca: Finca, pronostico: list[dict] | None 
     etapa = (finca.etapa_fenologica or "").strip().lower()
     cultivo = (finca.cultivo_sembrado or "").strip().lower()
     if dia_helada and etapa == "floración" and cultivo in CULTIVOS_SENSIBLES_HELADA:
-        await _registrar(
-            "helada_floracion",
-            "Alta",
+        mensaje = (
             f"Riesgo de helada: temperatura mínima de "
             f"{float(dia_helada['temp_min_c']):.1f} °C el {dia_helada['fecha']} "
-            "durante la floración. Active el sistema de riego por aspersión.",
-            dia_helada,
+            "durante la floración. Active el sistema de riego por aspersión."
+        )
+        if resumen_actual:
+            mensaje += f" 🌡️ Clima actual: {resumen_actual}."
+        await _registrar(
+            "helada_floracion", "Alta", mensaje, dia_helada, clima=clima,
         )
     else:
         cambios += await _desactivar_tipo("helada_floracion")
 
     # ── Regla 3: siembra según Almanaque Bristol (fase lunar + clima) ──
-    await _evaluar_siembra_bristol(db, finca, pronostico, _registrar, _desactivar_tipo)
+    await _evaluar_siembra_bristol(
+        db, finca, pronostico, _registrar, _desactivar_tipo, clima=clima
+    )
 
     if creadas or cambios:
         await db.commit()

@@ -16,12 +16,14 @@ from agroia_backend.services.acceso import (
     verificar_acceso_finca,
 )
 from agroia_backend.services.clima_alertas import evaluar_alertas_finca, evaluar_todas_fincas
+from agroia_backend.services.external_apis import fetch_clima_completo_open_meteo
 
 logger = get_logger(__name__)
 router = APIRouter(prefix="/api/v1", tags=["alertas-climaticas"])
 
 
 def _alerta_a_dict(a) -> dict:
+    jsonb = a.pronostico or {}
     return {
         "id": str(a.id),
         "finca_id": str(a.finca_id),
@@ -30,6 +32,8 @@ def _alerta_a_dict(a) -> dict:
         "mensaje": a.mensaje,
         "fecha_alerta": a.fecha_alerta.isoformat() if a.fecha_alerta else None,
         "pronostico": a.pronostico,
+        "clima_actual": jsonb.get("actual"),
+        "pronostico_detallado": jsonb.get("pronostico"),
         "activa": a.activa,
         "created_at": a.created_at.isoformat() if a.created_at else None,
     }
@@ -79,7 +83,8 @@ async def alertas_globales(
     - Agrónomo / Admin → todas las fincas.
     Cada alerta incluye `finca_nombre`, `departamento`, `municipio`, `latitud` y
     `longitud` para que el frontend agrupe las fincas que comparten ubicación y
-    muestre la alerta con el departamento y la ciudad.
+    muestre la alerta con el departamento y la ciudad. Además expone
+    `clima_actual` y `pronostico_detallado` (clima completo de la alerta).
     """
 
     query = (
@@ -111,6 +116,49 @@ async def alertas_globales(
         })
         data.append(item)
     return {"data": data, "total": len(data)}
+
+
+@router.get("/fincas/{finca_id}/clima")
+async def clima_finca(
+    finca_id: str,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+):
+    """Clima en vivo de la finca: condiciones actuales + pronóstico 7 días.
+
+    Devuelve el clima completo de Open-Meteo (temperatura, sensación
+    térmica, humedad, viento, lluvia, UV, descripción del cielo por día).
+    `disponible=false` cuando el proveedor no responde (degradación con
+    gracia; el frontend usa el clima persistido en las alertas).
+    """
+    await verificar_acceso_finca(db, x_user_role, x_user_email, finca_id)
+    import uuid as uuid_mod
+
+    try:
+        finca_uuid = uuid_mod.UUID(finca_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FINCA_INVALIDA", "message": "finca_id no es un UUID válido.",
+        })
+    finca = (
+        await db.execute(select(Finca).where(Finca.id == finca_uuid))
+    ).scalar_one_or_none()
+    if finca is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "FINCA_NOT_FOUND", "message": "La finca no está registrada.",
+        })
+    if finca.latitud is None or finca.longitud is None:
+        raise HTTPException(status_code=422, detail={
+            "code": "SIN_COORDENADAS",
+            "message": "La finca no tiene coordenadas registradas para consultar el clima.",
+        })
+    clima = await fetch_clima_completo_open_meteo(
+        float(finca.latitud), float(finca.longitud), dias=7
+    )
+    if clima is None:
+        return {"finca_id": finca_id, "disponible": False}
+    return {"finca_id": finca_id, "disponible": True, **clima}
 
 
 @router.post("/alertas-climaticas/evaluar")

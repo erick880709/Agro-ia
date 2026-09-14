@@ -932,6 +932,17 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
 .alerta-clima-finca { font-size: 13px; margin-top: 4px; opacity: .85; }
 .alerta-clima-fincas summary { cursor: pointer; font-size: 13px; margin-top: 6px; font-weight: 600; }
 .alerta-clima-fincas ul { margin: 4px 0 0 18px; font-size: 13px; }
+/* Clima completo dentro de cada alerta (día en transcurso + semana) */
+.alerta-clima-detalle { margin-top: 8px; border-top: 1px dashed rgba(0,0,0,.14); padding-top: 8px; font-size: 13px; }
+.alerta-clima-actual { display: flex; flex-direction: column; gap: 3px; margin-bottom: 6px; }
+.alerta-clima-actual b { font-size: 15px; }
+.alerta-clima-estado { font-weight: 700; }
+.alerta-clima-nota { font-size: 11px; opacity: .7; margin-bottom: 6px; }
+.alerta-clima-tabla-wrap { overflow-x: auto; }
+.alerta-clima-semana { width: 100%; border-collapse: collapse; font-size: 12px; }
+.alerta-clima-semana th, .alerta-clima-semana td { padding: 3px 6px; border-bottom: 1px solid rgba(0,0,0,.08); text-align: left; white-space: nowrap; }
+.alerta-clima-semana th { font-weight: 700; opacity: .75; }
+.alerta-clima-semana tr:last-child td { border-bottom: 0; }
 /* ─────────────────────────── Validador ML (aprendizaje activo) ─────────────────────────── */
 .validador-ml { background: #ecfdf5; border: 1px solid #6ee7b7; color: #065f46; border-radius: 12px; padding: 10px 14px; margin-top: 12px; font-size: 14px; line-height: 1.45; }
 /* ─────────────────────────── Enriquecimiento SIG (IGAC/UPRA) ─────────────────────────── */

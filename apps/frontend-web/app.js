@@ -1528,6 +1528,91 @@ const ICONOS_ALERTA = {
   siembra_lunar: '📅',
 };
 
+/* ── Clima en las alertas: estado actual + pronóstico de la semana ── */
+
+const DIAS_SEMANA_ES = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+function _num(v, dec = 0) {
+  if (v == null || v === '' || Number.isNaN(Number(v))) return '—';
+  return Number(v).toLocaleString('es-CO', { maximumFractionDigits: dec });
+}
+
+function _diaSemana(fecha) {
+  if (!fecha) return '—';
+  const d = new Date(fecha + 'T12:00:00');
+  return Number.isNaN(d.getTime()) ? fecha : DIAS_SEMANA_ES[d.getDay()];
+}
+
+function _horaCorta(iso) {
+  if (!iso) return '';
+  const m = String(iso).match(/T(\d{2}:\d{2})/);
+  return m ? m[1] : '';
+}
+
+/** Bloque HTML del clima de una alerta (actual + pronóstico 7 días).
+ *  Acepta el shape persistido ({clima_actual, pronostico_detallado})
+ *  o el del endpoint en vivo ({actual, pronostico}). */
+function _climaHTML(d) {
+  const actual = d.actual ?? d.clima_actual;
+  const pron = (d.pronostico ?? d.pronostico_detallado) || [];
+  if (!actual && !pron.length) return '';
+  let html = '<div class="alerta-clima-detalle">';
+  if (actual) {
+    const partes = [];
+    if (actual.temperatura_c != null) partes.push(`🌡️ <b>${_num(actual.temperatura_c, 1)} °C</b>`);
+    if (actual.sensacion_termica_c != null) partes.push(`🤚 Sensación ${_num(actual.sensacion_termica_c, 1)} °C`);
+    if (actual.humedad_pct != null) partes.push(`💧 Humedad ${_num(actual.humedad_pct)} %`);
+    if (actual.viento_kmh != null) partes.push(`🌬️ Viento ${_num(actual.viento_kmh, 1)} km/h`);
+    if (actual.rafagas_kmh != null) partes.push(`Ráfagas ${_num(actual.rafagas_kmh, 1)} km/h`);
+    if (actual.nubosidad_pct != null) partes.push(`☁️ Nubes ${_num(actual.nubosidad_pct)} %`);
+    if (actual.presion_hpa != null) partes.push(`🧭 ${_num(actual.presion_hpa)} hPa`);
+    if (actual.uv != null) partes.push(`☀️ UV ${_num(actual.uv, 1)}`);
+    if (actual.precipitacion_mm != null && Number(actual.precipitacion_mm) > 0) partes.push(`🌧️ ${_num(actual.precipitacion_mm, 1)} mm`);
+    const estado = actual.descripcion ? `${actual.emoji || '🌥️'} ${esc(actual.descripcion)}` : '';
+    const hora = actual.fecha ? ` (registrado ${_horaCorta(actual.fecha)})` : '';
+    html += `<div class="alerta-clima-actual">${estado ? `<span class="alerta-clima-estado">${estado}</span>` : ''}<span>${partes.join(' · ')}</span></div>`;
+    html += `<div class="alerta-clima-nota">📡 Datos del día en transcurso — Open-Meteo, hora de Colombia${hora}</div>`;
+  }
+  if (pron.length) {
+    html += '<div class="alerta-clima-tabla-wrap"><table class="alerta-clima-semana"><thead><tr>' +
+      '<th>Día</th><th>Cielo</th><th>Mín</th><th>Máx</th><th>🌧️ mm</th><th>Prob.</th><th>💨 km/h</th><th>💧 HR</th><th>☀️ Sol</th></tr></thead><tbody>';
+    pron.slice(0, 7).forEach(dd => {
+      const titulo = [
+        dd.salida_sol ? `🌅 Amanece ${_horaCorta(dd.salida_sol)}` : '',
+        dd.puesta_sol ? `🌇 Anochece ${_horaCorta(dd.puesta_sol)}` : '',
+        dd.sensacion_min_c != null && dd.sensacion_max_c != null
+          ? `Sensación ${_num(dd.sensacion_min_c, 1)}–${_num(dd.sensacion_max_c, 1)} °C` : '',
+      ].filter(Boolean).join(' · ');
+      html += `<tr title="${esc(titulo)}">` +
+        `<td>${esc(_diaSemana(dd.fecha))} <span class="muted">${esc((dd.fecha || '').slice(5))}</span></td>` +
+        `<td>${esc(dd.emoji || '🌥️')} ${esc(dd.descripcion || '')}</td>` +
+        `<td>${_num(dd.temp_min_c, 1)}°</td><td>${_num(dd.temp_max_c, 1)}°</td>` +
+        `<td>${_num(dd.precipitacion_mm, 1)}</td>` +
+        `<td>${dd.probabilidad_lluvia_pct != null ? _num(dd.probabilidad_lluvia_pct) + ' %' : '—'}</td>` +
+        `<td>${dd.viento_max_kmh != null ? _num(dd.viento_max_kmh, 1) : '—'}</td>` +
+        `<td>${dd.humedad_min_pct != null ? _num(dd.humedad_min_pct) + '–' + _num(dd.humedad_max_pct) + ' %' : '—'}</td>` +
+        `<td>${dd.horas_sol != null ? _num(dd.horas_sol, 1) + ' h' : '—'}</td>` +
+        `</tr>`;
+    });
+    html += '</tbody></table></div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+/** Reemplaza el bloque de clima con datos en vivo de la API (/clima). */
+async function _refrescarClimaEnVivo(fincaId, contId) {
+  const cont = document.getElementById(contId);
+  if (!cont) return;
+  try {
+    const r = await api(`/fincas/${fincaId}/clima`);
+    if (r && r.disponible) {
+      const html = _climaHTML(r);
+      if (html) cont.innerHTML = html;
+    }
+  } catch { /* se mantiene el clima persistido en la alerta */ }
+}
+
 async function renderAlertasClimaticas() {
   const div = document.getElementById('dashboard-alertas');
   if (!div || !state.fincaId) return;
@@ -1536,14 +1621,16 @@ async function renderAlertasClimaticas() {
     const r = await api(`/fincas/${state.fincaId}/alertas-climaticas/activas`);
     const alertas = r.data || [];
     if (!alertas.length) return;
-    div.innerHTML = alertas.map(a => `
+    div.innerHTML = alertas.map((a, i) => `
       <div class="alerta-clima alerta-${esc(a.tipo)}">
         <span class="alerta-clima-ico">${ICONOS_ALERTA[a.tipo] || '⚠️'}</span>
         <div class="alerta-clima-cuerpo">
           <div class="alerta-clima-titulo">Alerta meteorológica · ${esc(a.severidad)}</div>
           <div class="alerta-clima-msg">${esc(a.mensaje)}</div>
+          <div id="clima-dash-${i}">${_climaHTML(a)}</div>
         </div>
       </div>`).join('');
+    alertas.forEach((a, i) => _refrescarClimaEnVivo(a.finca_id, `clima-dash-${i}`));
   } catch { /* sin alertas o error: no mostrar */ }
 }
 
@@ -1591,8 +1678,13 @@ async function cargarAlertasClima() {
       if (!grupos.has(clave)) grupos.set(clave, []);
       grupos.get(clave).push(a);
     });
+    let climaIdx = 0;
+    const pendientes = [];
     cont.innerHTML = [...grupos.values()].map(gs => {
       const a = gs[0];
+      climaIdx += 1;
+      const miIdx = climaIdx;
+      pendientes.push({ idx: miIdx, fincaId: a.finca_id });
       const varias = gs.length > 1;
       const ubicacion = _etiquetaUbicacion(a);
       const detalle = varias
@@ -1607,11 +1699,13 @@ async function cargarAlertasClima() {
           <div class="alerta-clima-cuerpo">
             <div class="alerta-clima-titulo">${TITULOS_ALERTA[a.tipo] || esc(a.tipo)} · ${esc(a.severidad)} · ${esc(a.fecha_alerta || '')}</div>
             <div class="alerta-clima-msg">${esc(a.mensaje)}</div>
+            <div id="clima-vivo-${miIdx}">${_climaHTML(a)}</div>
             <div class="alerta-clima-ubi">📍 ${esc(ubicacion)}</div>
             ${detalle}
           </div>
         </div>`;
     }).join('');
+    pendientes.forEach(p => _refrescarClimaEnVivo(p.fincaId, `clima-vivo-${p.idx}`));
   } catch (e) {
     cont.innerHTML = errorBanner(e.message);
   }
