@@ -73,6 +73,24 @@ async def _comision_en_recomendacion(finca_id: str) -> None:
         await db.commit()
 
 
+async def _asegurar_lectura_sensor(cli, finca_id: str) -> None:
+    """Siembra una lectura georreferenciada (trama real del firmware, vía POST
+    /api/sensor) para que el reporte tenga datos: sin lecturas el motor
+    entrega un análisis preliminar sin semáforo de confianza (H1) ni mapa
+    de calor con puntos medidos (H4)."""
+    r = await cli.post("/api/sensor", json={
+        "device_id": "test-accesibilidad-v8",
+        "finca_id": finca_id,
+        "pos_x": 5.0,
+        "pos_y": 5.0,
+        "ph": 6.2,
+        "nitrogen": 80.0,
+        "phosphorus": 30.0,
+        "potassium": 150.0,
+    })
+    assert r.status_code == 202, r.text
+
+
 async def _generar(cli, finca_id, headers, audiencia=None, tipo="siembra"):
     cuerpo = {"finca_id": finca_id, "tipo": tipo}
     if audiencia:
@@ -85,6 +103,7 @@ async def test_reportes_accesibilidad(cli):
     if finca_id is None:
         pytest.skip("Requiere el set demo (restablecer_demo).")
     await _comision_en_recomendacion(finca_id)
+    await _asegurar_lectura_sensor(cli, finca_id)
 
     # ── Agrónomo sin audiencia → versión técnica (rol de sesión) ──
     r_tec = await _generar(cli, finca_id, _cabeceras())
