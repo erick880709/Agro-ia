@@ -401,18 +401,18 @@ def pdf_cotizacion(estimacion: dict, identidad: dict) -> bytes:
         ],
     }
     totales_rows = [
-        ["Subtotal directo", "", "", "", _num(estimacion.get("total_directo"))],
-        ["Subtotal ajustado", "", "", "", _num(estimacion.get("total_ajustado"))],
-        ["Descuento aplicado", "", "", "", "−" + _num(estimacion.get("descuento_aplicado"))],
+        ["Subtotal directo", _num(estimacion.get("total_directo"))],
+        ["Subtotal ajustado", _num(estimacion.get("total_ajustado"))],
+        ["Descuento aplicado", "−" + _num(estimacion.get("descuento_aplicado"))],
     ]
     for i in estimacion.get("impuestos_informativos") or []:
         totales_rows.append([
-            f"{i.get('nombre')} ({i.get('porcentaje')}% informativo)", "", "", "", _num(i.get("valor")),
+            f"{i.get('nombre')} ({i.get('porcentaje')}% informativo)", _num(i.get("valor")),
         ])
-    totales_rows.append(["TOTAL", "", "", "", _num(estimacion.get("total_final")) + " COP"])
+    totales_rows.append(["TOTAL", _num(estimacion.get("total_final")) + " COP"])
     tabla_totales = {
-        "headers": ["Concepto", "", "", "", "Valor"],
-        "colWidths": [94 * mm, 20 * mm, 14 * mm, 0 * mm, 26 * mm],
+        "headers": ["Concepto", "Valor"],
+        "colWidths": [128 * mm, 26 * mm],
         "rows": totales_rows,
     }
     secciones = [

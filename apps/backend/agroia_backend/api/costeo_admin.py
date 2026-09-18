@@ -75,6 +75,19 @@ async def _exigir_editable(db: AsyncSession, conjunto: CosteoConjunto) -> None:
         )
 
 
+def _json_detalle(valor):
+    """Convierte Decimal/date a tipos JSON para auditoria.detalle (JSONB)."""
+    if isinstance(valor, Decimal):
+        return float(valor)
+    if isinstance(valor, date):
+        return valor.isoformat()
+    if isinstance(valor, dict):
+        return {k: _json_detalle(v) for k, v in valor.items()}
+    if isinstance(valor, (list, tuple)):
+        return [_json_detalle(v) for v in valor]
+    return valor
+
+
 async def _auditar(request: Request, db, *, accion: str, entidad_id: str | None, detalle: dict) -> None:
     usuario = contexto_usuario(request, ROLES_ADMIN)
     await registrar_auditoria(
@@ -85,7 +98,7 @@ async def _auditar(request: Request, db, *, accion: str, entidad_id: str | None,
         accion=accion,
         entidad="costeo",
         entidad_id=entidad_id,
-        detalle=detalle,
+        detalle=_json_detalle(detalle),
     )
 
 
@@ -908,7 +921,7 @@ async def _hijos_simples(modelo_clase, conjunto_id: str, request: Request, db, b
         accion=accion,
         entidad="costeo",
         entidad_id=str(conjunto.id),
-        detalle=body.model_dump(),
+        detalle=_json_detalle(body.model_dump()),
     )
     return hijo
 
