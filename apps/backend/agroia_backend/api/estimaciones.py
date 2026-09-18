@@ -176,6 +176,19 @@ class EstimacionIn(BaseModel):
     notas: str | None = None
 
 
+def _json_safe(valor):
+    """Convierte Decimal/date a tipos JSON (la columna seleccion es JSONB)."""
+    if isinstance(valor, Decimal):
+        return float(valor)
+    if isinstance(valor, date):
+        return valor.isoformat()
+    if isinstance(valor, dict):
+        return {k: _json_safe(v) for k, v in valor.items()}
+    if isinstance(valor, list):
+        return [_json_safe(v) for v in valor]
+    return valor
+
+
 def _lotes_normalizados(body: EstimacionIn, finca: Finca, db_lotes: list[Lote],
                         conjunto_dict: dict | None = None) -> list[dict]:
     lotes = [lot.model_dump() for lot in body.lotes]
@@ -322,11 +335,11 @@ async def crear_estimacion(
     await db.flush()
 
     lotes = _lotes_normalizados(body, finca, db_lotes, conjunto_dict)
-    estimacion.seleccion = {
+    estimacion.seleccion = _json_safe({
         "lotes": lotes,
         "factores": body.factores,
         "descuento_pct": str(body.descuento_pct) if body.descuento_pct is not None else None,
-    }
+    })
     try:
         await _recalcular(
             db, estimacion,
@@ -539,11 +552,11 @@ async def editar_estimacion(
         notas=body.notas if body.notas is not None else e.notas,
     )
     lotes = _lotes_normalizados(base, finca, db_lotes, conjunto_dict)
-    e.seleccion = {
+    e.seleccion = _json_safe({
         "lotes": lotes,
         "factores": body.factores or {},
         "descuento_pct": str(body.descuento_pct) if body.descuento_pct is not None else None,
-    }
+    })
     try:
         await _recalcular(
             db, e,

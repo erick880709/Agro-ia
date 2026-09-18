@@ -161,10 +161,24 @@ async def test_ca08_rechaza_traslape_de_tramos(cli):
 async def test_doble_control_aprobador_es_editor(cli):
     """RF-15: el editor no puede publicar su propio conjunto."""
     await _semilla()
-    r = await cli.post("/api/v1/costeo/conjuntos", headers=_cab(uid=EDITOR),
-                       json={"nombre": "Doble control"})
+    async with async_session_factory() as db:
+        from agroia_backend.models.costeo import CosteoConjunto
+        semilla = (await db.execute(
+            select(CosteoConjunto).where(CosteoConjunto.estado == "publicado")
+            .order_by(CosteoConjunto.version.desc())
+        )).scalars().first()
+        semilla_id = str(semilla.id)
+    r = await cli.post(f"/api/v1/costeo/conjuntos/{semilla_id}/clonar",
+                       headers=_cab(uid=EDITOR), json={"nombre": "Doble control"})
     assert r.status_code == 201, r.text
     conjunto_id = r.json()["id"]
+    # El clon queda atribuido al editor (simula que EDITOR lo creó/editó).
+    async with async_session_factory() as db:
+        from agroia_backend.models.costeo import CosteoConjunto
+        c = (await db.execute(select(CosteoConjunto).where(
+            CosteoConjunto.id == uuid.UUID(conjunto_id)))).scalars().one()
+        c.creado_por = uuid.UUID(EDITOR)
+        await db.commit()
     # Simulación previa para aislar la validación del doble control.
     r = await cli.post("/api/v1/costeo/simular", headers=_cab(uid=EDITOR), json={
         "conjunto_id": conjunto_id, "area_ha": 1,

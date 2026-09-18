@@ -1042,13 +1042,20 @@ async def importar_conjunto(request: Request, db: AsyncSession = Depends(get_db)
     ultima = (
         await db.execute(select(CosteoConjunto).order_by(CosteoConjunto.version.desc()).limit(1))
     ).scalars().one_or_none()
+    vigencia_desde = conjunto_dict.get("vigencia_desde")
+    vigencia_hasta = conjunto_dict.get("vigencia_hasta")
+    if isinstance(vigencia_desde, str):
+        vigencia_desde = date.fromisoformat(vigencia_desde)
+    if isinstance(vigencia_hasta, str):
+        vigencia_hasta = date.fromisoformat(vigencia_hasta)
     nuevo = CosteoConjunto(
         nombre=conjunto_dict.get("nombre") or "Conjunto importado",
         version=(ultima.version + 1) if ultima else 1,
         estado="borrador",
         moneda=conjunto_dict.get("moneda") or "COP",
         notas="Importado desde JSON (RF-23).",
-        vigencia_desde=conjunto_dict.get("vigencia_desde"),
+        vigencia_desde=vigencia_desde,
+        vigencia_hasta=vigencia_hasta,
     )
     db.add(nuevo)
     await db.flush()
