@@ -269,7 +269,12 @@ def _motor_para_lotes(
             lote_uuid = uuid.UUID(str(lote_id)) if lote_id else None
         except ValueError:
             lote_uuid = None
-        contexto, seleccion = _contexto_lote(lote, fecha_ref, rol, zona, factores)
+        # El descuento es de la estimación completa; si el lote no lo trae
+        # explícito, se propaga (multi-lote consolidado).
+        lote_con_descuento = dict(lote)
+        if "descuento_pct" not in lote_con_descuento or lote_con_descuento.get("descuento_pct") is None:
+            lote_con_descuento["descuento_pct"] = descuento_pct
+        contexto, seleccion = _contexto_lote(lote_con_descuento, fecha_ref, rol, zona, factores)
         try:
             res = calcular(contexto, conjunto_dict, seleccion)
         except CosteoError as e:

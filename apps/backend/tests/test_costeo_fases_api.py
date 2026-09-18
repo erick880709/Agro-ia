@@ -423,8 +423,10 @@ async def test_ca10_ca11_identidad_telefonos_logo_pdf(cli):
 async def _aceptada(cli) -> str:
     await _semilla()
     est_id = await _crear_estimacion(cli)
-    await cli.post(f"/api/v1/estimaciones/{est_id}/emitir", headers=_cab(), json={})
-    await cli.post(f"/api/v1/estimaciones/{est_id}/aceptar", headers=_cab(), json={})
+    r = await cli.post(f"/api/v1/estimaciones/{est_id}/emitir", headers=_cab(), json={})
+    assert r.status_code == 200, f"emitir: {r.status_code} {r.text}"
+    r = await cli.post(f"/api/v1/estimaciones/{est_id}/aceptar", headers=_cab(), json={})
+    assert r.status_code == 200, f"aceptar: {r.status_code} {r.text}"
     return est_id
 
 
