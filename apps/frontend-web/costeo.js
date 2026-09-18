@@ -1,6 +1,7 @@
 /* AgroIA — Módulo AGC-COST (frontend F2–F7).
  * RFP AgroIA v4 §11: pantalla de parámetros con simulador, cotizador de
  * 4 pasos, identidad administrable, documentos de cobro y tablero.
+ * (re-trigger deploy 2026-09-18)
  * Se carga después de app.js; usa el wrapper costeoApi() (agrega Content-Type
  JSON) sobre el global api(), además de esc(), state y errorBanner.
  */
