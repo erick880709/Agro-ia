@@ -4,6 +4,8 @@ Requiere base de datos con migraciones aplicadas (corre en CI contra
 PostgreSQL). El conjunto semilla se asegura de forma idempotente.
 """
 
+from __future__ import annotations
+
 import uuid
 from datetime import date, timedelta
 
