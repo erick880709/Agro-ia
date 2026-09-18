@@ -2,7 +2,7 @@ openapi: "3.1.0"
 info:
   title: AgroIA API
   description: API de AgroInteligente Colombia — Plataforma de diagnóstico agronómico inteligente
-  version: "0.1.0"
+  version: "0.2.0"
   contact:
     name: AgroIA Team
 
@@ -148,3 +148,85 @@ paths:
       responses:
         "200":
           description: Lista paginada de recomendaciones
+
+  /costeo/parametros/vigentes:
+    get:
+      summary: Conjunto de parámetros de costeo publicado y vigente
+      description: Devuelve el conjunto vigente a la fecha con servicios, componentes, tramos, factores, política, impuestos, descuentos, densidad y zonas. Roles Admin y Agrónomo.
+      tags: [Costeo]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: fecha
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: Fecha de referencia (hoy por defecto)
+      responses:
+        "200":
+          description: Conjunto vigente serializado
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+
+  /costeo/simular:
+    post:
+      summary: Calcular costeo sin persistir (motor determinista)
+      description: Ejecuta la tubería de cálculo AGC-COST sobre el conjunto indicado o el vigente. Roles Admin y Agrónomo.
+      tags: [Costeo]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [area_ha, servicios]
+              properties:
+                conjunto_id:
+                  type: string
+                  format: uuid
+                fecha_referencia:
+                  type: string
+                  format: date
+                area_ha:
+                  type: number
+                puntos:
+                  type: integer
+                km:
+                  type: number
+                dificultad:
+                  type: string
+                departamento:
+                  type: string
+                municipio:
+                  type: string
+                descuento_pct:
+                  type: number
+                servicios:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      codigo:
+                        type: string
+                      cantidad:
+                        type: number
+      responses:
+        "200":
+          description: Desglose completo (líneas, factores, totales, advertencias, indicadores y traza)
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "422":
+          description: Error de negocio del motor (TRAMOS_INCONSISTENTES, DESCUENTO_EXCEDE_TOPE, etc.)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+

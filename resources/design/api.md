@@ -38,7 +38,7 @@
 ## Códigos de error estándar
 
 | Código | HTTP | Significado |
-|--------|------|-------------|
+|--------|-----|-------------|
 | NOT_FOUND | 404 | Recurso no existe |
 | VALIDATION_ERROR | 422 | Datos de entrada inválidos |
 | UNAUTHORIZED | 401 | Token faltante o inválido |
@@ -65,3 +65,11 @@
 - Parámetros: `?page=1&page_size=20`
 - Máximo: 100 items por página
 - Ordenamiento: `?sort=created_at&order=desc`
+
+## Historial de cambios del contrato
+
+- v0.2.0 (2026-09-18): módulo AGC-COST F1 — agregados `GET /costeo/parametros/vigentes` y
+  `POST /costeo/simular` (roles Admin/Agrónomo) — aditivo. Códigos de negocio:
+  `CONJUNTO_SIN_VIGENCIA`, `TRAMOS_INCONSISTENTES`, `DESCUENTO_EXCEDE_TOPE`,
+  `BAJO_PISO_RENTABILIDAD` (advertencia), `SERVICIO_NO_ENCONTRADO`, `CONJUNTO_NO_PUBLICADO`,
+  `TRAMOS_INSUFICIENTES`, `CONJUNTO_NOT_FOUND`, `CONJUNTO_INVALIDO`.

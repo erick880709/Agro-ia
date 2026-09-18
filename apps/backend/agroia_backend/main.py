@@ -65,6 +65,7 @@ from agroia_backend.api.chat import router as chat_router
 from agroia_backend.api.ciclos import router as ciclos_router
 from agroia_backend.api.curvas import router as curvas_router
 from agroia_backend.api.comisiones import router as comisiones_router
+from agroia_backend.api.costeo import router as costeo_router
 from agroia_backend.api.dashboard import router as dashboard_router
 from agroia_backend.api.demo import router as demo_router
 from agroia_backend.api.extensionista import router as extensionista_router
@@ -115,6 +116,14 @@ async def lifespan(app: FastAPI):
         await asegurar_reglas()
     except Exception as e:  # noqa: BLE001 — no bloquear el arranque
         logger.error("asegurar_reglas_fallo", error=str(e))
+
+    # Conjunto semilla de costeo AGC-COST (idempotente — RFP AgroIA v4 §15)
+    from agroia_backend.services.costeo_seed import asegurar_conjunto_semilla
+
+    try:
+        await asegurar_conjunto_semilla()
+    except Exception as e:  # noqa: BLE001 — no bloquear el arranque
+        logger.error("costeo_semilla_fallo", error=str(e))
 
     # Lecturas históricas con GPS en grados → metros relativos (idempotente)
     from agroia_backend.services.reparacion_geo import reparar_gps_legado
@@ -251,6 +260,7 @@ app.include_router(vision_router)
 app.include_router(equipo_router)
 app.include_router(comisiones_router)
 app.include_router(lista_trabajos_router)
+app.include_router(costeo_router)
 # curvas/variedades: expuestas también bajo /api/v1/catalogo (catálogo)
 app.include_router(curvas_router, prefix="/api/v1")
 app.include_router(curvas_router, prefix="/api/v1/catalogo")
