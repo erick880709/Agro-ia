@@ -42,6 +42,19 @@ async def _semilla() -> None:
         await asegurar_conjunto_semilla(db)
 
 
+async def _semilla_id() -> str:
+    """ID del conjunto semilla original (por nombre: sobrevive al archivado)."""
+    from agroia_backend.models.costeo import CosteoConjunto
+    from agroia_backend.services.costeo_seed import SEMILLA_NOMBRE
+
+    async with async_session_factory() as db:
+        semilla = (await db.execute(
+            select(CosteoConjunto).where(CosteoConjunto.nombre == SEMILLA_NOMBRE)
+        )).scalars().first()
+        assert semilla is not None, "El conjunto semilla no existe"
+        return str(semilla.id)
+
+
 async def _finca_id() -> str:
     async with async_session_factory() as db:
         finca = (await db.execute(select(Finca).limit(1))).scalars().first()
@@ -109,13 +122,7 @@ async def _poner_componente(cli, componente: dict, config: dict) -> None:
 async def test_ca05_cambiar_tarifa_base_sin_despliegue(cli):
     """CA-05: tarifa base 100k → 120k en un conjunto nuevo → CA-01 = 270k."""
     await _semilla()
-    async with async_session_factory() as db:
-        from agroia_backend.models.costeo import CosteoConjunto
-        semilla = (await db.execute(
-            select(CosteoConjunto).where(CosteoConjunto.estado == "publicado")
-            .order_by(CosteoConjunto.version.desc())
-        )).scalars().first()
-        semilla_id = str(semilla.id)
+    semilla_id = await _semilla_id()
 
     r = await cli.post(f"/api/v1/costeo/conjuntos/{semilla_id}/clonar",
                        headers=_cab(uid=EDITOR), json={"nombre": "CA-05 tarifa nueva"})
@@ -136,13 +143,7 @@ async def test_ca05_cambiar_tarifa_base_sin_despliegue(cli):
 async def test_ca08_rechaza_traslape_de_tramos(cli):
     """CA-08: publicar/validar con tramos 1-15 y 14-30 se rechaza con el rango."""
     await _semilla()
-    async with async_session_factory() as db:
-        from agroia_backend.models.costeo import CosteoConjunto
-        semilla = (await db.execute(
-            select(CosteoConjunto).where(CosteoConjunto.estado == "publicado")
-            .order_by(CosteoConjunto.version.desc())
-        )).scalars().first()
-        semilla_id = str(semilla.id)
+    semilla_id = await _semilla_id()
     r = await cli.post(f"/api/v1/costeo/conjuntos/{semilla_id}/clonar",
                        headers=_cab(uid=EDITOR), json={"nombre": "CA-08 traslape"})
     assert r.status_code == 201, r.text
@@ -161,13 +162,7 @@ async def test_ca08_rechaza_traslape_de_tramos(cli):
 async def test_doble_control_aprobador_es_editor(cli):
     """RF-15: el editor no puede publicar su propio conjunto."""
     await _semilla()
-    async with async_session_factory() as db:
-        from agroia_backend.models.costeo import CosteoConjunto
-        semilla = (await db.execute(
-            select(CosteoConjunto).where(CosteoConjunto.estado == "publicado")
-            .order_by(CosteoConjunto.version.desc())
-        )).scalars().first()
-        semilla_id = str(semilla.id)
+    semilla_id = await _semilla_id()
     r = await cli.post(f"/api/v1/costeo/conjuntos/{semilla_id}/clonar",
                        headers=_cab(uid=EDITOR), json={"nombre": "Doble control"})
     assert r.status_code == 201, r.text
@@ -206,13 +201,7 @@ async def test_publicar_exige_simulacion_previa(cli):
 async def test_import_export_json(cli):
     """RF-23: exportar el semilla e importarlo crea un conjunto válido."""
     await _semilla()
-    async with async_session_factory() as db:
-        from agroia_backend.models.costeo import CosteoConjunto
-        semilla = (await db.execute(
-            select(CosteoConjunto).where(CosteoConjunto.estado == "publicado")
-            .order_by(CosteoConjunto.version.desc())
-        )).scalars().first()
-        semilla_id = str(semilla.id)
+    semilla_id = await _semilla_id()
     r = await cli.get(f"/api/v1/costeo/conjuntos/{semilla_id}/exportar", headers=_cab())
     assert r.status_code == 200
     payload = r.json()
@@ -292,13 +281,7 @@ async def test_estimacion_vencida_no_se_acepta(cli):
 async def test_piso_rentabilidad_bloquea_y_permite_autorizar(cli):
     """RF-12: por debajo del piso exige autorización de administrador con motivo."""
     await _semilla()
-    async with async_session_factory() as db:
-        from agroia_backend.models.costeo import CosteoConjunto
-        semilla = (await db.execute(
-            select(CosteoConjunto).where(CosteoConjunto.estado == "publicado")
-            .order_by(CosteoConjunto.version.desc())
-        )).scalars().first()
-        semilla_id = str(semilla.id)
+    semilla_id = await _semilla_id()
 
     async def editar(cli, conjunto_id):
         r = await cli.put(f"/api/v1/costeo/conjuntos/{conjunto_id}/politica",
@@ -328,13 +311,7 @@ async def test_piso_rentabilidad_bloquea_y_permite_autorizar(cli):
 async def test_ca09_descuento_tope_por_rol(cli):
     """CA-09: el agrónomo no puede exceder su tope; el administrador sí."""
     await _semilla()
-    async with async_session_factory() as db:
-        from agroia_backend.models.costeo import CosteoConjunto
-        semilla = (await db.execute(
-            select(CosteoConjunto).where(CosteoConjunto.estado == "publicado")
-            .order_by(CosteoConjunto.version.desc())
-        )).scalars().first()
-        semilla_id = str(semilla.id)
+    semilla_id = await _semilla_id()
 
     async def editar(cli, conjunto_id):
         r = await cli.post(f"/api/v1/costeo/conjuntos/{conjunto_id}/descuentos",
