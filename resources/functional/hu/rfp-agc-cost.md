@@ -110,13 +110,39 @@ anulación y numeración agotada.
       seed idempotente `services/costeo_seed.py` + `scripts/seed_costeo.py`,
       API `GET /costeo/parametros/vigentes` y `POST /costeo/simular` (Admin/Agrónomo),
       tests `test_costeo_motor.py` (CA-01 a CA-09 + precisión/redondeo) y `test_costeo_api.py`.
-      Motor: 18 pruebas en verde; pruebas de API pendientes de correr en CI (BD local caída).
-- [ ] AGC-02 (F2) — pantalla de parámetros, versionado, doble control, simulador
-- [ ] AGC-03 (F3) — cotizador, ciclo de vida, snapshot, márgenes y descuentos
-- [ ] AGC-04 (F4) — identidad y PDF
-- [ ] AGC-05 (F5) — documento de cobro, numeración, pagos, anulación
-- [ ] AGC-06 (F6) — conversión a comisión + lista de trabajos + auditoría
-- [ ] AGC-07 (F7) — opcionales
+      Motor: 18 pruebas en verde; desplegado y validado en producción (CA-01 → $250.000 COP).
+- [x] **AGC-02 (F2)** — 2026-09-18: `api/costeo_admin.py` (CRUD de conjuntos, servicios,
+      componentes, tramos, factores, opciones, densidad, zonas, impuestos, política,
+      descuentos), `services/costeo_validacion.py` (validación previa RF-03/CA-08),
+      doble control (APROBADOR_ES_EDITOR), publicación con simulación obligatoria y
+      archivo automático del vigente, clonar con reajuste masivo + vista previa (RF-18),
+      import/export JSON (RF-23). Simulación what-if sobre borradores (RF-16).
+      Frontend: pantalla «Parámetros de costeo» en Administración con sub-pestañas
+      y simulador lado a lado.
+- [x] **AGC-03 (F3)** — 2026-09-18: tablas `estimacion*` (migración 046),
+      `api/estimaciones.py` + `services/estimaciones.py` (ciclo borrador → emitida →
+      aceptada/rechazada/vencida, snapshot SHA-256 con selección congelada y
+      verificación de reproducibilidad CA-07, piso de rentabilidad RF-12,
+      tope de descuento por rol CA-09, vencimiento automático RF-19, export
+      HTML/PDF por audiencia RF-21). Frontend: pestaña «Estimación de costos»
+      con vista previa en vivo, emitir/aceptar/rechazar y verificación de snapshot.
+- [x] **AGC-04 (F4)** — 2026-09-18: `costeo_identidad`/`costeo_telefono`,
+      `api/costeo_identidad.py` (CRUD de identidad, teléfonos ordenables, logo
+      PNG/SVG con validación, sede con coordenadas para km geodésicos RF-07),
+      `services/documentos_costeo.py` (motor de composición carta con «página X de Y»,
+      degradación sin logo; reportlab). CA-10/CA-11 cubiertos.
+- [x] **AGC-05 (F5)** — 2026-09-18: `cobro_*` + `services/cobros.py` (numeración
+      consecutiva con bloqueo en servidor, NUMERACION_AGOTADA/RESOLUCION_VENCIDA,
+      pagos con saldo, anulación con motivo). `api/estimaciones.py` expone /cobros*.
+      CA-12 a CA-15 cubiertos. Frontend: pantalla «Documentos de cobro».
+- [x] **AGC-06 (F6)** — 2026-09-18: conversión estimación aceptada → comisión con
+      equipo precargado y referencia de origen (`comisiones.origen_estimacion_id`),
+      nueva etapa «estimación» en el semáforo de la lista de trabajos, auditoría
+      completa de parámetros, estimaciones y cobros (RF-22).
+- [x] **AGC-07 (F7)** — 2026-09-18: import/export JSON (RF-23), tablero de
+      estimaciones con tasa de conversión y ticket promedio (RF-25), envío del
+      documento por WhatsApp con registro en eventos (RF-33, canal v4 reutilizado).
+      El cálculo offline PWA (RF-24) queda documentado como pendiente de priorización.
 
 ## Notas técnicas
 

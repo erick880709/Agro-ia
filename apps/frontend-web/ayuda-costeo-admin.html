@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Manual de administrador — Parámetros de costeo (AGC-COST)</title>
+<style>
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #222; margin: 0; background: #f6f8f4; }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 24px; }
+  header { background: #1b5e20; color: #fff; padding: 20px 24px; }
+  header h1 { margin: 0; font-size: 22px; }
+  header p { margin: 6px 0 0; opacity: .85; font-size: 13px; }
+  h2 { color: #1b5e20; border-bottom: 2px solid #cde3c9; padding-bottom: 6px; margin-top: 28px; }
+  h3 { color: #2f6b31; margin-top: 18px; }
+  .card { background: #fff; border: 1px solid #dde; border-radius: 10px; padding: 16px 20px; margin: 12px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { border: 1px solid #d5ddd2; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #edf4ea; }
+  code { background: #f0f4ee; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+  .paso { background: #fffbe8; border-left: 4px solid #e0b400; padding: 8px 12px; margin: 8px 0; }
+  .alerta { background: #fdecec; border-left: 4px solid #c62828; padding: 8px 12px; margin: 8px 0; }
+  footer { text-align: center; color: #888; font-size: 12px; margin-top: 30px; }
+  @media print { header { background: #1b5e20 !important; -webkit-print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>🧮 Manual de administrador — Parámetros de costeo (AGC-COST)</h1>
+  <p>AgroIA v4 · RFP «Estimación de costos de trabajos con parámetros administrables» · Fases F1–F7</p>
+</header>
+<div class="wrap">
+
+<h2>1. Qué es AGC-COST</h2>
+<div class="card">
+<p>Es el módulo que calcula <b>cuánto cuesta y cuánto se cobra un trabajo de campo</b> antes de
+comprometerlo. Tiene tres piezas: un <b>catálogo de parámetros versionado</b> (esta pantalla),
+un <b>motor de cálculo determinista</b> y un <b>cotizador</b> que produce estimaciones
+desglosadas, auditables y convertibles en comisión y en documento de cobro.</p>
+<p>Fórmula de referencia: <code>Comisión = Tarifa_base + (Puntos × Tarifa_escalonada) + Recargo_dificultad</code>.
+Ningún valor monetario vive en el código: todo se administra desde esta pantalla.</p>
+</div>
+
+<h2>2. Pantalla de parámetros (Administración → Parámetros de costeo)</h2>
+<div class="card">
+<p>El encabezado muestra <b>siempre</b> el conjunto en edición, su estado y su vigencia.
+Los estados son: <b>Borrador</b> → <b>En revisión</b> → <b>Publicado</b> → <b>Archivado</b>.</p>
+<h3>Sub-pestañas</h3>
+<table>
+<tr><th>Pestaña</th><th>Qué administra</th></tr>
+<tr><td>🛠️ Servicios</td><td>Catálogo cotizable (muestreo en grilla, visita…), unidad, orden y componentes con tramos.</td></tr>
+<tr><td>⚖️ Factores</td><td>Escalas con opciones y porcentajes (dificultad, urgencia…), combinación suma/multiplica.</td></tr>
+<tr><td>📍 Densidad</td><td>Puntos sugeridos por rango de área (el cotizador propone y permite sobrescribir).</td></tr>
+<tr><td>🗺️ Zonas</td><td>Factor por municipio, km incluidos, tarifa por km y peajes.</td></tr>
+<tr><td>🧾 Impuestos</td><td>IVA/retenciones con base y bandera informativo (no suma) o incluido.</td></tr>
+<tr><td>📐 Política</td><td>Margen objetivo, margen mínimo, piso de rentabilidad, vigencia y redondeo.</td></tr>
+<tr><td>💸 Descuentos</td><td>Reglas comerciales con tope por rol (un agrónomo no puede exceder su tope).</td></tr>
+<tr><td>🧪 Simulador</td><td>Caso de prueba lado a lado: borrador vs. conjunto publicado vigente.</td></tr>
+<tr><td>🏷️ Identidad</td><td>Logo (PNG/SVG), sitio web, teléfonos ordenables; se refleja en el PDF sin desplegar.</td></tr>
+<tr><td>🔢 Cobros</td><td>Tipo de documento, prefijo, rango de numeración, resolución DIAN y plazo de pago.</td></tr>
+</table>
+</div>
+
+<h2>3. Ciclo de publicación de un conjunto</h2>
+<div class="card">
+<div class="paso"><b>1 · Crear o clonar.</b> «Nuevo» crea un borrador vacío; «Clonar» copia un conjunto
+existente y puede aplicar un reajuste porcentual masivo (p. ej. +9% por IPC).</div>
+<div class="paso"><b>2 · Configurar.</b> Servicios → componentes → tramos → factores → política.
+Los tramos no pueden traslaparse ni dejar huecos: la validación lo rechaza indicando el rango en conflicto.</div>
+<div class="paso"><b>3 · Validar.</b> «Validar» revisa tramos, factores sin opciones, servicios sin
+componentes y política sin margen.</div>
+<div class="paso"><b>4 · Simular.</b> <b>Obligatorio</b>: publicar exige haber corrido al menos un caso
+en el simulador sobre el borrador.</div>
+<div class="paso"><b>5 · Publicar (doble control).</b> Quien editó <b>no puede</b> publicar: el sistema
+rechaza la publicación si el aprobador es el mismo usuario (<code>APROBADOR_ES_EDITOR</code>).
+Publicar archiva automáticamente el conjunto vigente anterior, sin borrarlo.</div>
+</div>
+
+<h2>4. Cotizador (pestaña Estimación de costos)</h2>
+<div class="card">
+<p>Visible para Administrador y Agrónomo. En una pantalla se elige finca, servicio, cantidad/puntos,
+área, km y condiciones; la <b>vista previa</b> recalcula en vivo. Al guardar queda en <b>borrador</b>;
+al <b>emitir</b> se congela el snapshot (SHA-256) y se asigna consecutivo <code>COT-año-00001</code>.
+El cliente puede <b>aceptar</b> o <b>rechazar</b> desde «Mis cotizaciones».</p>
+<ul>
+<li><b>Piso de rentabilidad:</b> emitir por debajo exige autorización de administrador con justificación.</li>
+<li><b>Vigencia:</b> al vencer la cotización pasa a «vencida» y no puede aceptarse.</li>
+<li><b>Descuentos:</b> el motor valida el tope por rol (<code>DESCUENTO_EXCEDE_TOPE</code>).</li>
+<li><b>Reproducibilidad:</b> «Verificar snapshot» recalcula con los parámetros congelados y debe dar el mismo total al peso (CA-07).</li>
+</ul>
+</div>
+
+<h2>5. Documentos de cobro</h2>
+<div class="card">
+<ul>
+<li>Se crean desde una estimación <b>aceptada</b>; heredan líneas y total (no editables).</li>
+<li>La numeración (<code>CC-1, CC-2…</code>) se asigna en el servidor con bloqueo: sin huecos ni duplicados.</li>
+<li>Pagos parciales recalculan el saldo; al completarse el documento pasa a «pagado».</li>
+<li>Un documento emitido nunca se borra: se <b>anula con motivo</b> y queda en auditoría.</li>
+<li>Si la numeración se agota o la resolución venció, la emisión se bloquea con aviso.</li>
+</ul>
+</div>
+
+<h2>6. Errores frecuentes</h2>
+<div class="card">
+<table>
+<tr><th>Código</th><th>Qué hacer</th></tr>
+<tr><td><code>TRAMOS_INCONSISTENTES</code></td><td>Revise rangos: sin traslapes ni huecos; el tramo abierto (∞) debe ser el último.</td></tr>
+<tr><td><code>APROBADOR_ES_EDITOR</code></td><td>Pida a otro administrador que publique (doble control).</td></tr>
+<tr><td><code>SIMULACION_REQUERIDA</code></td><td>Corra un caso en el simulador sobre el borrador antes de publicar.</td></tr>
+<tr><td><code>BAJO_PISO_RENTABILIDAD</code></td><td>Suba el total o autorice la excepción como administrador con motivo.</td></tr>
+<tr><td><code>NUMERACION_AGOTADA</code></td><td>Configure un rango nuevo en «🔢 Cobros».</td></tr>
+<tr><td><code>SNAPSHOT_INCONSISTENTE</code></td><td>Los parámetros congelados fueron alterados; revise la bitácora de auditoría.</td></tr>
+</table>
+</div>
+
+<div class="alerta"><b>Nota DIAN (RFP §17):</b> el módulo emite <b>cuenta de cobro</b> (no requiere validación DIAN).
+La factura de venta electrónica (XML UBL 2.1, CUFE, proveedor tecnológico) queda preparada en el
+modelo de datos y se contrata aparte.</div>
+
+<footer>AgroIA · Agrointeligente Colombia · Manual AGC-COST v1.0 · 2026-09-18</footer>
+</div>
+</body>
+</html>

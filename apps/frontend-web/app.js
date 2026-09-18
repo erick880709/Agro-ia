@@ -7,9 +7,9 @@ const API = '/api/v1';
 const SESION_KEY = 'agroia_sesion';
 
 const TABS_POR_ROL = {
-  admin: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'equipo', 'comisiones', 'lista-trabajos', 'reentrenar', 'precios-cosecha', 'vision', 'catalogo'],
-  agronomo: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'vision', 'catalogo'],
-  cliente: ['inicio', 'alertas', 'reportes', 'vision'],
+  admin: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'equipo', 'comisiones', 'lista-trabajos', 'reentrenar', 'precios-cosecha', 'vision', 'catalogo', 'costeo-parametros', 'estimaciones', 'cobros'],
+  agronomo: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'vision', 'catalogo', 'estimaciones'],
+  cliente: ['inicio', 'alertas', 'reportes', 'vision', 'cotizaciones'],
   extensionista: ['inicio', 'alertas', 'zona', 'sensores', 'historial', 'reportes', 'vision', 'catalogo'],
 };
 
@@ -293,6 +293,10 @@ function goTab(name) {
   if (name === 'comisiones' && state.rol.toLowerCase() === 'admin') cargarComisiones();
   if (name === 'lista-trabajos' && state.rol.toLowerCase() === 'admin') cargarListaTrabajos();
   if (name === 'precios-cosecha' && state.rol.toLowerCase() === 'admin') cargarPreciosCosecha();
+  if (name === 'costeo-parametros' && typeof cargarCosteoParametros === 'function') cargarCosteoParametros();
+  if (name === 'estimaciones' && typeof cargarEstimaciones === 'function') cargarEstimaciones();
+  if (name === 'cobros' && typeof cargarCobros === 'function') cargarCobros();
+  if (name === 'cotizaciones' && typeof cargarCotizaciones === 'function') cargarCotizaciones();
   if (name === 'vision' && state.rol.toLowerCase() !== 'cliente') cargarVision();
   document.querySelectorAll('.tab-submenu.open').forEach(s => s.classList.remove('open'));
 }

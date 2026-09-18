@@ -334,7 +334,8 @@ def aplicar_redondeo(valor: Decimal, multiplo: Decimal, modo: str) -> Decimal:
 # ──────────────────────────────────────────────────────────────
 
 
-def calcular(contexto: dict, conjunto: dict, seleccion: dict) -> dict:
+def calcular(contexto: dict, conjunto: dict, seleccion: dict,
+             permitir_no_publicado: bool = False) -> dict:
     """Ejecuta la tubería de cálculo y devuelve el desglose completo.
 
     Parámetros:
@@ -344,20 +345,32 @@ def calcular(contexto: dict, conjunto: dict, seleccion: dict) -> dict:
                   moneda, politica, servicios[], factores[], impuestos[], descuentos[]}
       seleccion: {servicios: [{codigo, cantidad}], factores: {codigo: opcion},
                   descuento_pct}
+      permitir_no_publicado: habilita simulación what-if sobre borradores
+                  y conjuntos en revisión (RF-16); en emisión real sigue False.
     """
     traza: list[str] = []
     advertencias: list[dict] = []
 
     # ── 1. Vigencia del conjunto ──
     fecha_ref = contexto.get("fecha_referencia")
-    if conjunto.get("estado") != "publicado":
+    estados_simulables = {"borrador", "en_revision"}
+    if conjunto.get("estado") != "publicado" and not (
+        permitir_no_publicado and conjunto.get("estado") in estados_simulables
+    ):
         raise CosteoError(
             "CONJUNTO_NO_PUBLICADO",
             f"El conjunto {conjunto.get('nombre')} no está publicado.",
         )
+    if permitir_no_publicado and conjunto.get("estado") in estados_simulables:
+        traza.append(
+            f"Simulación what-if sobre conjunto {conjunto.get('estado')} "
+            f"v{conjunto.get('version')} (RF-16)."
+        )
     vdesde = conjunto.get("vigencia_desde")
     vhasta = conjunto.get("vigencia_hasta")
-    if vdesde and fecha_ref and str(fecha_ref) < str(vdesde):
+    if vdesde and fecha_ref and str(fecha_ref) < str(vdesde) and not (
+        permitir_no_publicado and conjunto.get("estado") in estados_simulables
+    ):
         raise CosteoError("CONJUNTO_SIN_VIGENCIA", "El conjunto no está vigente para la fecha.")
     if vhasta and fecha_ref and str(fecha_ref) > str(vhasta):
         raise CosteoError("CONJUNTO_SIN_VIGENCIA", "El conjunto venció para la fecha.")

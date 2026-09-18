@@ -15,6 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia_backend.models.auditoria import Auditoria
 from agroia_backend.models.comision import Comision
+from agroia_backend.models.estimaciones import Estimacion
 from agroia_backend.models.finca import Finca
 from agroia_backend.models.lote import Lote
 from agroia_backend.models.recomendacion import Recomendacion
@@ -24,11 +25,12 @@ logger = get_logger(__name__)
 router = APIRouter(prefix="/api/v1/admin", tags=["lista-trabajos"])
 
 ETAPAS = (
-    "registro", "asignacion_comision", "toma_muestras",
+    "registro", "estimacion", "asignacion_comision", "toma_muestras",
     "recomendacion", "reporte", "finalizada",
 )
 ETAPA_ETIQUETA = {
     "registro": "Registro (finca/lote)",
+    "estimacion": "Estimación de costos (AGC-COST)",
     "asignacion_comision": "Asignación de comisión",
     "toma_muestras": "Toma de muestras (parámetros)",
     "recomendacion": "Generación de recomendación",
@@ -37,6 +39,7 @@ ETAPA_ETIQUETA = {
 }
 SEMAFORO = {
     "registro": "#9aa4b2",
+    "estimacion": "#6f42c1",
     "asignacion_comision": "#f0ad4e",
     "toma_muestras": "#f0ad4e",
     "recomendacion": "#5bc0de",
@@ -96,6 +99,20 @@ async def lista_trabajos(
     for c in comisiones:
         comision_por_finca.setdefault(c.finca_id, c)
 
+    # Estimaciones AGC-COST emitidas/aceptadas por finca (F6: etapa previa a comisión)
+    estimaciones = (
+        await db.execute(
+            select(Estimacion.finca_id, func.max(Estimacion.total_final).label("max_total"),
+                   func.count(Estimacion.id).label("n"))
+            .where(
+                Estimacion.finca_id.in_(finca_ids),
+                Estimacion.estado.in_(("emitida", "aceptada")),
+            )
+            .group_by(Estimacion.finca_id)
+        )
+    ).all()
+    estimacion_por_finca = {row[0]: {"n": row[2], "max_total": row[1]} for row in estimaciones}
+
     # Lecturas (tomas de muestras)
     lecturas = (
         await db.execute(select(SensorReading.finca_id, func.count(SensorReading.id).label("n")).where(
@@ -132,12 +149,16 @@ async def lista_trabajos(
         ultimo_reporte = reporte_por_finca.get(str(finca.id))
 
         faltantes = []
+        estimacion = estimacion_por_finca.get(finca.id)
         if n_lotes == 0:
             etapa_c = "registro"
             faltantes.append("Registro de lote")
+        elif comision is None and estimacion is None:
+            etapa_c = "estimacion"
+            faltantes.append("Estimación de costos (cotizador)")
         elif comision is None:
             etapa_c = "asignacion_comision"
-            faltantes.append("Asignación de comisión")
+            faltantes.append("Asignación de comisión (desde la estimación aceptada)")
         elif comision.estado in ("asignada", "en_campo") and n_lecturas == 0:
             etapa_c = "toma_muestras"
             faltantes.append("Proceso de toma de muestras (parámetros)")
@@ -160,7 +181,8 @@ async def lista_trabajos(
             fecha_fin = comision.fecha_fin_tomas
 
         estado_c = "finalizada" if etapa_c == "finalizada" else (
-            "en_proceso" if comision is not None else "pendiente"
+            "en_proceso" if comision is not None or etapa_c in ("estimacion", "asignacion_comision")
+            else "pendiente"
         )
 
         # Filtros
@@ -188,6 +210,7 @@ async def lista_trabajos(
             "faltantes": faltantes,
             "resumen": {
                 "lotes": n_lotes,
+                "estimacion_emitida": estimacion is not None,
                 "comision_estado": comision.estado if comision else None,
                 "lecturas": n_lecturas,
                 "recomendaciones": n_recs,

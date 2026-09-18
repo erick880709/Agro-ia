@@ -1,8 +1,13 @@
 openapi: "3.1.0"
 info:
   title: AgroIA API
-  description: API de AgroInteligente Colombia — Plataforma de diagnóstico agronómico inteligente
-  version: "0.2.0"
+  description: |-
+    API de AgroInteligente Colombia — Plataforma de diagnóstico agronómico inteligente.
+    v0.3.0: módulo AGC-COST completo (F1-F7) — catálogo de parámetros versionado,
+    motor de cálculo determinista, estimaciones con snapshot SHA-256, identidad
+    administrable con PDF, documentos de cobro con numeración consecutiva y
+    conversión a comisión.
+  version: "0.3.0"
   contact:
     name: AgroIA Team
 
@@ -230,3 +235,214 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+
+  # ── AGC-COST F2-F7 ──────────────────────────────────────────────────────
+  /costeo/conjuntos:
+    get:
+      summary: Listar conjuntos con estado y vigencia (Admin)
+      tags: [Costeo admin]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Lista de conjuntos }
+    post:
+      summary: Crear conjunto en borrador (Admin)
+      tags: [Costeo admin]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "201": { description: Conjunto creado }
+
+  /costeo/conjuntos/{conjunto_id}/validar:
+    post:
+      summary: Validación integral previa a publicar (Admin)
+      tags: [Costeo admin]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: conjunto_id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200": { description: Resultado de validación (errores y advertencias) }
+
+  /costeo/conjuntos/{conjunto_id}/publicar:
+    post:
+      summary: Publicar con doble control y simulación obligatoria (Admin aprobador)
+      tags: [Costeo admin]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: conjunto_id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200": { description: Conjunto publicado; el anterior queda archivado }
+        "422": { description: APROBADOR_ES_EDITOR, CONJUNTO_INVALIDO o SIMULACION_REQUERIDA }
+
+  /costeo/conjuntos/{conjunto_id}/clonar:
+    post:
+      summary: Clonar con reajuste porcentual masivo opcional (Admin)
+      tags: [Costeo admin]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: conjunto_id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "201": { description: Conjunto clonado en borrador }
+
+  /costeo/identidad:
+    get:
+      summary: Identidad y contactos vigentes para encabezados y PDF (autenticado)
+      tags: [Costeo identidad]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Identidad con teléfonos ordenados }
+    put:
+      summary: Actualizar identidad y lista de teléfonos (Admin)
+      tags: [Costeo identidad]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Identidad actualizada }
+
+  /costeo/identidad/logo:
+    post:
+      summary: Cargar logo PNG/SVG con validación de formato y tamaño (Admin)
+      tags: [Costeo identidad]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                archivo: { type: string, format: binary }
+                oscuro: { type: boolean }
+      responses:
+        "200": { description: URL estable del logo }
+
+  /estimaciones:
+    get:
+      summary: Listar estimaciones (Admin/Agrónomo todas; Cliente solo las suyas)
+      tags: [Estimaciones]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Lista de estimaciones }
+    post:
+      summary: Crear estimación en borrador con cálculo inmediato (Admin/Agrónomo)
+      tags: [Estimaciones]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "201": { description: Estimación creada con desglose }
+        "422": { description: DESCUENTO_EXCEDE_TOPE, SERVICIO_NO_ENCONTRADO, etc. }
+
+  /estimaciones/{estimacion_id}/emitir:
+    post:
+      summary: Congelar snapshot SHA-256, asignar consecutivo y emitir
+      tags: [Estimaciones]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: estimacion_id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200": { description: Estimación emitida }
+        "422": { description: BAJO_PISO_RENTABILIDAD, ESTIMACION_NO_EDITABLE }
+
+  /estimaciones/{estimacion_id}/aceptar:
+    post:
+      summary: Registrar aceptación del cliente
+      tags: [Estimaciones]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: estimacion_id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200": { description: Estimación aceptada }
+        "422": { description: ESTIMACION_VENCIDA, ESTIMACION_NO_ACEPTABLE }
+
+  /estimaciones/{estimacion_id}/recalcular:
+    post:
+      summary: Recalcular con el snapshot congelado y verificar reproducibilidad (CA-07)
+      tags: [Estimaciones]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: estimacion_id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200": { description: Comparación total guardado vs. total snapshot }
+
+  /estimaciones/{estimacion_id}/convertir-comision:
+    post:
+      summary: Crear la comisión asociada a una estimación aceptada (Admin)
+      tags: [Estimaciones]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: estimacion_id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200": { description: Comisión creada con referencia de origen }
+        "422": { description: ESTIMACION_NO_ACEPTADA, COMISION_YA_CREADA }
+
+  /estimaciones/{estimacion_id}/export:
+    get:
+      summary: Descargar la cotización HTML/PDF por audiencia (agricultor|tecnico)
+      tags: [Estimaciones]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: estimacion_id, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: formato, in: query, schema: { type: string, enum: [html, pdf] } }
+        - { name: audiencia, in: query, schema: { type: string, enum: [agricultor, tecnico] } }
+      responses:
+        "200": { description: HTML o PDF de la cotización }
+
+  /estimaciones/tablero:
+    get:
+      summary: Tablero de estimaciones: emitidas, aceptadas, conversión y ticket promedio (Admin)
+      tags: [Estimaciones]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Métricas del tablero }
+
+  /cobros:
+    get:
+      summary: Listar documentos de cobro (Admin)
+      tags: [Cobros]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Lista de documentos }
+    post:
+      summary: Crear documento de cobro desde una estimación aceptada (Admin)
+      tags: [Cobros]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: estimacion_id, in: query, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "201": { description: Documento en borrador con líneas heredadas }
+
+  /cobros/{documento_id}/emitir:
+    post:
+      summary: Asignar consecutivo con bloqueo en servidor y emitir (Admin)
+      tags: [Cobros]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: documento_id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200": { description: Documento emitido con numeración consecutiva }
+        "422": { description: NUMERACION_AGOTADA, RESOLUCION_VENCIDA, COBRO_YA_EMITIDO }
+
+  /cobros/{documento_id}/pagos:
+    post:
+      summary: Registrar un pago total o parcial con recálculo de saldo (Admin)
+      tags: [Cobros]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: documento_id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "201": { description: Pago registrado; saldo y estado actualizados }
+
+  /cobros/{documento_id}/anular:
+    post:
+      summary: Anular con motivo obligatorio; el documento nunca se borra (Admin)
+      tags: [Cobros]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: documento_id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200": { description: Documento anulado con motivo }
+
+  /cobros/{documento_id}/pdf:
+    get:
+      summary: Descargar el documento de cobro en PDF (Admin y cliente propietario)
+      tags: [Cobros]
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: documento_id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200": { description: PDF del documento de cobro }

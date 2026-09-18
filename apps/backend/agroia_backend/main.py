@@ -66,6 +66,9 @@ from agroia_backend.api.ciclos import router as ciclos_router
 from agroia_backend.api.curvas import router as curvas_router
 from agroia_backend.api.comisiones import router as comisiones_router
 from agroia_backend.api.costeo import router as costeo_router
+from agroia_backend.api.costeo_admin import router as costeo_admin_router
+from agroia_backend.api.costeo_identidad import router as costeo_identidad_router
+from agroia_backend.api.estimaciones import router as estimaciones_router
 from agroia_backend.api.dashboard import router as dashboard_router
 from agroia_backend.api.demo import router as demo_router
 from agroia_backend.api.extensionista import router as extensionista_router
@@ -261,6 +264,9 @@ app.include_router(equipo_router)
 app.include_router(comisiones_router)
 app.include_router(lista_trabajos_router)
 app.include_router(costeo_router)
+app.include_router(costeo_admin_router)
+app.include_router(costeo_identidad_router)
+app.include_router(estimaciones_router)
 # curvas/variedades: expuestas también bajo /api/v1/catalogo (catálogo)
 app.include_router(curvas_router, prefix="/api/v1")
 app.include_router(curvas_router, prefix="/api/v1/catalogo")

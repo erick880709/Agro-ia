@@ -72,6 +72,8 @@
     <button class="tab" data-tab="fincas">🏡 Fincas</button>
     <button class="tab" data-tab="vision" data-roles="admin,agronomo,extensionista">🔬 Visión plagas</button>
     <button class="tab" data-tab="catalogo">🌾 Catálogo</button>
+    <button class="tab" data-tab="estimaciones" data-roles="agronomo,admin">📐 Estimación de costos</button>
+    <button class="tab" data-tab="cotizaciones" data-roles="cliente">🧾 Mis cotizaciones</button>
     <div class="tab-dropdown" data-roles="admin">
       <button type="button" class="tab" id="admin-menu-btn">⚙️ Administración ▾</button>
       <div class="tab-submenu" id="admin-submenu">
@@ -86,6 +88,9 @@
         <button class="tab submenu-item" data-tab="equipo">🧑‍🤝‍🧑 Equipo de trabajo</button>
         <button class="tab submenu-item" data-tab="comisiones">🗂️ Comisiones</button>
         <button class="tab submenu-item" data-tab="lista-trabajos">📊 Lista de trabajos</button>
+        <button class="tab submenu-item" data-tab="costeo-parametros">🧮 Parámetros de costeo</button>
+        <button class="tab submenu-item" data-tab="estimaciones">📐 Estimación de costos</button>
+        <button class="tab submenu-item" data-tab="cobros">🧾 Documentos de cobro</button>
         <button class="tab submenu-item" data-tab="reentrenar">🤖 Reentrenar modelo</button>
       </div>
     </div>
@@ -93,6 +98,7 @@
       <button type="button" class="tab" id="ayuda-menu-btn">❓ Ayuda ▾</button>
       <div class="tab-submenu" id="ayuda-submenu">
         <a class="tab submenu-item" data-roles="admin" href="/ayuda-admin.html" target="_blank">👑 Manual de usuario Administrador</a>
+        <a class="tab submenu-item" data-roles="admin" href="/ayuda-costeo-admin.html" target="_blank">🧮 Manual de parámetros de costeo (AGC-COST)</a>
         <a class="tab submenu-item" data-roles="admin,agronomo" href="/ayuda-agronomo.html" target="_blank">🧑‍🌾 Manual de usuario Agrónomo</a>
         <a class="tab submenu-item" data-roles="admin,cliente" href="/ayuda-cliente.html" target="_blank">👤 Manual de usuario Cliente</a>
         <a class="tab submenu-item" href="/capacitacion.html" target="_blank">🎓 Capacitación — flujo completo</a>
@@ -839,6 +845,34 @@
     </section>
   </main>
 
+  <!-- ============ AGC-COST: parámetros de costeo (F2, admin) ============ -->
+  <section id="view-costeo-parametros" class="view">
+    <div class="card">
+      <div id="costeo-params-root"><p class="muted">Cargando parámetros de costeo…</p></div>
+    </div>
+  </section>
+
+  <!-- ============ AGC-COST: estimación de costos (F3, admin/agrónomo) ============ -->
+  <section id="view-estimaciones" class="view">
+    <div class="card">
+      <div id="estimaciones-root"><p class="muted">Cargando estimaciones…</p></div>
+    </div>
+  </section>
+
+  <!-- ============ AGC-COST: documentos de cobro (F5, admin) ============ -->
+  <section id="view-cobros" class="view">
+    <div class="card">
+      <div id="cobros-root"><p class="muted">Cargando documentos de cobro…</p></div>
+    </div>
+  </section>
+
+  <!-- ============ AGC-COST: mis cotizaciones (cliente) ============ -->
+  <section id="view-cotizaciones" class="view">
+    <div class="card">
+      <div id="cotizaciones-root"><p class="muted">Cargando cotizaciones…</p></div>
+    </div>
+  </section>
+
   <!-- ============ Modal de edición (fincas / usuarios) ============ -->
   <div class="modal-overlay hidden" id="modal-editor">
     <div class="modal">
@@ -876,5 +910,6 @@
   <script src="/departamentos.js?v=20260827-medicion"></script>
   <script src="/offline.js"></script>
   <script src="/app.js?v=20260827-medicion"></script>
+  <script src="/costeo.js?v=20260918-agccost"></script>
 </body>
 </html>

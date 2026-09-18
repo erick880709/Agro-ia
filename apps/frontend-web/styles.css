@@ -970,3 +970,47 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
   text-align: center;
 }
 
+
+/* ════════════ AGC-COST (F2-F7) — RFP AgroIA v4 §11 ════════════ */
+
+.costeo-header { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-bottom: 8px; }
+.costeo-header .field { min-width: 260px; }
+.costeo-acciones { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.costeo-subtabs { display: flex; flex-wrap: wrap; gap: 4px; margin: 10px 0; }
+.costeo-subtabs .tab { padding: 6px 10px; font-size: 12px; }
+
+.costeo-form .field { min-width: 170px; }
+.costeo-form input, .costeo-form select, .costeo-form textarea {
+  width: 100%; padding: 8px; border: 1px solid #ccd6c4; border-radius: 8px;
+  font: inherit; background: #fff;
+}
+
+.sim-totales { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
+.sim-totales > div {
+  background: #f4f9f2; border: 1px solid #d9e8d3; border-radius: 10px;
+  padding: 8px 14px; min-width: 150px;
+}
+.sim-totales span { display: block; font-size: 11px; color: #5b6b55; }
+.sim-totales b { font-size: 16px; color: #1b5e20; }
+.sim-total { color: #0d3d12 !important; font-size: 18px !important; }
+.sim-lado { margin-bottom: 8px; }
+
+.logo-preview { max-height: 64px; max-width: 220px; margin: 8px 0; border: 1px dashed #ccd6c4; padding: 4px; }
+
+.tbl-cards { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
+.tbl-card {
+  background: #f4f9f2; border: 1px solid #d9e8d3; border-radius: 10px;
+  padding: 10px 16px; min-width: 130px;
+}
+.tbl-card span { display: block; font-size: 11px; color: #5b6b55; }
+.tbl-card b { font-size: 18px; color: #1b5e20; }
+.tbl-wide { flex: 1; min-width: 240px; }
+.tbl-items { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.tbl-item span { display: block; font-size: 11px; }
+.tbl-item b { font-size: 13px; }
+
+.estim-acciones { margin: 8px 0; }
+.estim-det { margin-top: 10px; }
+.cell-acciones { white-space: nowrap; }
+.cell-acciones .btn-ghost-sm { margin-right: 4px; }

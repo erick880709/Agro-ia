@@ -68,6 +68,21 @@
 
 ## Historial de cambios del contrato
 
+- v0.3.0 (2026-09-18): módulo AGC-COST completo (F2-F7) — agregados: CRUD admin de
+  `/costeo/conjuntos` (+ validar, publicar con doble control, archivar, clonar con
+  reajuste, reajuste-previo, exportar/importar JSON) y CRUD de servicios, componentes,
+  tramos, factores/opciones, densidad, zonas, impuestos, política y descuentos;
+  `GET|PUT /costeo/identidad`, `POST /costeo/identidad/logo`, `GET|PUT /costeo/cobro-config`;
+  `/estimaciones` (crear, listar, editar, emitir, aceptar, rechazar, recalcular con
+  snapshot, convertir-comision, export HTML/PDF, sugerencia-puntos y sugerencia-km,
+  tablero); `/cobros` (crear, emitir, pagos, anular, enviar, PDF, export HTML).
+  Nueva etapa «estimación» en la lista de trabajos. Códigos de negocio nuevos:
+  `APROBADOR_ES_EDITOR`, `SIMULACION_REQUERIDA`, `CONJUNTO_INVALIDO`, `CONJUNTO_NO_EDITABLE`,
+  `IMPORT_VALIDACION_FALLIDA`, `ESTIMACION_NO_EDITABLE`, `ESTIMACION_VENCIDA`,
+  `ESTIMACION_NO_ACEPTADA`, `ESTIMACION_NO_ACEPTABLE`, `SNAPSHOT_INCONSISTENTE`,
+  `SNAPSHOT_AUSENTE`, `COMISION_YA_CREADA`, `COBRO_SIN_CONFIGURACION`, `COBRO_YA_EXISTE`,
+  `COBRO_YA_EMITIDO`, `NUMERACION_AGOTADA`, `RESOLUCION_VENCIDA`, `PAGO_EXCEDE_SALDO`,
+  `MOTIVO_ANULACION_REQUERIDO`, `COBRO_NO_PAGABLE`, `COBRO_NO_ANULABLE` — aditivo.
 - v0.2.0 (2026-09-18): módulo AGC-COST F1 — agregados `GET /costeo/parametros/vigentes` y
   `POST /costeo/simular` (roles Admin/Agrónomo) — aditivo. Códigos de negocio:
   `CONJUNTO_SIN_VIGENCIA`, `TRAMOS_INCONSISTENTES`, `DESCUENTO_EXCEDE_TOPE`,

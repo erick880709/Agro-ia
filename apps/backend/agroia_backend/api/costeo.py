@@ -133,6 +133,7 @@ async def _conjunto_a_dict(db: AsyncSession, conjunto: CosteoConjunto) -> dict:
     por_factor: dict = {}
     for o in opciones:
         por_factor.setdefault(o.factor_id, []).append({
+            "id": str(o.id),
             "codigo": o.codigo,
             "etiqueta": o.etiqueta,
             "porcentaje": _n(o.porcentaje),
@@ -208,6 +209,7 @@ async def _conjunto_a_dict(db: AsyncSession, conjunto: CosteoConjunto) -> dict:
         ],
         "impuestos": [
             {
+                "id": str(i.id),
                 "codigo": i.codigo,
                 "nombre": i.nombre,
                 "porcentaje": _n(i.porcentaje),
@@ -218,6 +220,7 @@ async def _conjunto_a_dict(db: AsyncSession, conjunto: CosteoConjunto) -> dict:
         ],
         "descuentos": [
             {
+                "id": str(d.id),
                 "codigo": d.codigo,
                 "criterio": d.criterio,
                 "umbral": _n(d.umbral),
@@ -228,6 +231,7 @@ async def _conjunto_a_dict(db: AsyncSession, conjunto: CosteoConjunto) -> dict:
         ],
         "densidad": [
             {
+                "id": str(d.id),
                 "area_min": _n(d.area_min),
                 "area_max": _n(d.area_max),
                 "puntos_min": d.puntos_min,
@@ -239,6 +243,7 @@ async def _conjunto_a_dict(db: AsyncSession, conjunto: CosteoConjunto) -> dict:
         ],
         "zonas": [
             {
+                "id": str(z.id),
                 "departamento": z.departamento,
                 "municipio": z.municipio,
                 "factor": _n(z.factor),
@@ -324,8 +329,14 @@ async def simular(
     body: SimularRequest,
     db: AsyncSession = Depends(get_db),
     x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+    x_user_nombre: str | None = Header(None, alias="X-User-Nombre"),
 ):
-    """Cálculo de costeo sin persistir, contra el conjunto indicado o el vigente."""
+    """Cálculo de costeo sin persistir, contra el conjunto indicado o el vigente.
+
+    Registra la simulación en la bitácora: publicar un borrador exige al
+    menos una simulación sobre él (RFP §13).
+    """
     rol = _exigir_rol(x_user_role)
     fecha_ref = body.fecha_referencia or datetime.now(timezone.utc).date()
 
@@ -378,9 +389,31 @@ async def simular(
     }
 
     try:
-        resultado = calcular(contexto, conjunto_dict, seleccion)
+        # Simulación what-if: los borradores/en revisión solo se calculan en
+        # modo simulación (RF-16); el vigente publica sin restricción.
+        permitir = conjunto.estado in ("borrador", "en_revision")
+        resultado = calcular(contexto, conjunto_dict, seleccion,
+                             permitir_no_publicado=permitir)
     except CosteoError as e:
         raise HTTPException(status_code=422, detail={"code": e.code, "message": e.message})
+
+    # Trazabilidad de simulaciones (gobierno de parámetros §13 y RF-22).
+    from agroia_backend.services.auditoria import registrar_auditoria
+    await registrar_auditoria(
+        db,
+        usuario_email=(x_user_email or "desconocido@agroia.co").lower(),
+        usuario_nombre=x_user_nombre,
+        rol=x_user_role,
+        accion="costeo.simular",
+        entidad="costeo_conjunto",
+        entidad_id=str(conjunto.id),
+        detalle={
+            "total": float(resultado["total_final"]),
+            "puntos": puntos,
+            "area_ha": float(body.area_ha),
+        },
+    )
+    await db.commit()
 
     logger.info(
         "costeo_simulado",

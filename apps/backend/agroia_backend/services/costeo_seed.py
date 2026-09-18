@@ -56,6 +56,8 @@ async def _sembrar(db) -> dict:
         )
     ).scalars().first()
     if existente is not None:
+        await asegurar_identidad_semilla(db)
+        await asegurar_cobro_config_semilla(db)
         return {"creado": False, "conjunto_id": str(existente.id)}
 
     conjunto = CosteoConjunto(
@@ -165,4 +167,81 @@ async def _sembrar(db) -> dict:
 
     await db.commit()
     logger.info("costeo_semilla_creada", conjunto_id=str(conjunto.id))
+    await asegurar_identidad_semilla(db)
+    await asegurar_cobro_config_semilla(db)
     return {"creado": True, "conjunto_id": str(conjunto.id)}
+
+
+async def asegurar_identidad_semilla(db) -> dict:
+    """Identidad y contactos semilla (P-14): AgroIA con datos de la operación.
+
+    Idempotente: solo crea si no existe identidad. Los valores son datos
+    sembrados sustituibles desde la pantalla de parámetros (RF-26/27).
+    """
+    from agroia_backend.models.costeo_fases import CosteoIdentidad, CosteoTelefono
+
+    existente = (
+        await db.execute(select(CosteoIdentidad).limit(1))
+    ).scalars().first()
+    if existente is not None:
+        return {"creado": False, "identidad_id": str(existente.id)}
+
+    identidad = CosteoIdentidad(
+        nombre_comercial="AgroIA — AgroInteligente Colombia",
+        razon_social="Agrointeligente Colombia",
+        nit="(registrar NIT)",
+        regimen="Persona natural",
+        sitio_web="https://jeepaoaisystems.com",
+        correo="contacto@agroia.co",
+        ciudad="Pereira, Colombia",
+        color_acento="#1b5e20",
+        pie_legal="AgroIA · Agrointeligente Colombia. Cotización generada por el "
+                  "módulo AGC-COST; los valores son una oferta y no un compromiso "
+                  "hasta su aceptación.",
+    )
+    db.add(identidad)
+    await db.flush()
+    db.add(CosteoTelefono(
+        identidad_id=identidad.id,
+        etiqueta="Principal",
+        numero="3242013807",
+        whatsapp=True,
+        orden=0,
+    ))
+    await db.commit()
+    logger.info("costeo_identidad_semilla_creada", identidad_id=str(identidad.id))
+    return {"creado": True, "identidad_id": str(identidad.id)}
+
+
+async def asegurar_cobro_config_semilla(db) -> dict:
+    """Configuración de documentos de cobro semilla (P-15): cuenta de cobro.
+
+    Cuenta de cobro CC-1 a CC-10000, plazo 30 días, aviso de numeración
+    cuando queden 10. Idempotente.
+    """
+    from agroia_backend.models.costeo_fases import CobroConfig
+
+    existente = (
+        await db.execute(select(CobroConfig).limit(1))
+    ).scalars().first()
+    if existente is not None:
+        return {"creado": False, "config_id": str(existente.id)}
+
+    config = CobroConfig(
+        tipo_documento="cuenta_cobro",
+        prefijo="CC",
+        numero_desde=1,
+        numero_hasta=10000,
+        plazo_pago_dias=30,
+        medios_pago={"transferencia": "Transferencia bancaria", "efectivo": "Efectivo"},
+        aviso_numeracion_restante=10,
+        textos_legales={
+            "pie": "Documento generado por AgroIA. Cuenta de cobro — no requiere "
+                   "validación DIAN. La factura de venta electrónica se habilitará "
+                   "en una fase posterior (RFP §17).",
+        },
+    )
+    db.add(config)
+    await db.commit()
+    logger.info("costeo_cobro_config_semilla_creada", config_id=str(config.id))
+    return {"creado": True, "config_id": str(config.id)}
