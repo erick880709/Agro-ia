@@ -1,7 +1,8 @@
 /* AgroIA — Módulo AGC-COST (frontend F2–F7).
  * RFP AgroIA v4 §11: pantalla de parámetros con simulador, cotizador de
  * 4 pasos, identidad administrable, documentos de cobro y tablero.
- * Se carga después de app.js; usa los globales api(), esc(), state, errorBanner.
+ * Se carga después de app.js; usa el wrapper costeoApi() (agrega Content-Type
+ JSON) sobre el global api(), además de esc(), state y errorBanner.
  */
 'use strict';
 
@@ -30,6 +31,19 @@ function tokenAuth() {
   return state.sesion && state.sesion.access_token
     ? { Authorization: 'Bearer ' + state.sesion.access_token }
     : {};
+}
+
+/**
+ * Envoltorio de api() que inyecta Content-Type: application/json cuando el
+ * body es un string JSON. Sin esto, FastAPI recibe un string en lugar de un
+ * objeto y Pydantic falla con `model_attributes_type`.
+ */
+function costeoApi(path, opts = {}) {
+  const headers = { ...(opts.headers || {}) };
+  if (typeof opts.body === 'string' && !headers['Content-Type']) {
+    headers['Content-Type'] = 'application/json';
+  }
+  return window['api'](path, { ...opts, headers });
 }
 
 async function descargarArchivo(url, nombre) {
@@ -101,9 +115,9 @@ async function cargarCosteoParametros() {
   root.innerHTML = '<p class="muted">Cargando…</p>';
   try {
     const [conjuntosRes, identidadRes, configRes] = await Promise.all([
-      api('/costeo/conjuntos'),
-      api('/costeo/identidad'),
-      api('/costeo/cobro-config').catch(() => null),
+      costeoApi('/costeo/conjuntos'),
+      costeoApi('/costeo/identidad'),
+      costeoApi('/costeo/cobro-config').catch(() => null),
     ]);
     COSTEO.identidad = identidadRes.identidad;
     COSTEO.cobroConfig = configRes ? configRes.config : null;
@@ -174,7 +188,7 @@ function costeoSub(sub) {
 async function costeoCambiarConjunto(id) {
   COSTEO.conjuntoId = id;
   try {
-    const res = await api(`/costeo/conjuntos/${id}`);
+    const res = await costeoApi(`/costeo/conjuntos/${id}`);
     COSTEO.conjunto = res.conjunto;
   } catch (err) {
     COSTEO.conjunto = null;
@@ -189,7 +203,7 @@ async function renderCosteoCuerpo() {
   if (!COSTEO.conjunto) {
     el.innerHTML = '<p class="muted">Cargando conjunto…</p>';
     try {
-      const res = await api(`/costeo/conjuntos/${COSTEO.conjuntoId}`);
+      const res = await costeoApi(`/costeo/conjuntos/${COSTEO.conjuntoId}`);
       COSTEO.conjunto = res.conjunto;
     } catch (err) {
       el.innerHTML = errorBanner(err.message);
@@ -255,7 +269,7 @@ async function srvCrear() {
   };
   if (!body.codigo || !body.nombre) { alert('Código y nombre son obligatorios.'); return; }
   try {
-    await api(`/costeo/conjuntos/${COSTEO.conjuntoId}/servicios`, { method: 'POST', body: JSON.stringify(body) });
+    await costeoApi(`/costeo/conjuntos/${COSTEO.conjuntoId}/servicios`, { method: 'POST', body: JSON.stringify(body) });
     await refrescarConjunto();
   } catch (err) { alert(err.message); }
 }
@@ -263,7 +277,7 @@ async function srvCrear() {
 async function srvEliminar(id) {
   if (!confirm('¿Eliminar el servicio y sus componentes?')) return;
   try {
-    await api(`/costeo/servicios/${id}`, { method: 'DELETE' });
+    await costeoApi(`/costeo/servicios/${id}`, { method: 'DELETE' });
     await refrescarConjunto();
   } catch (err) { alert(err.message); }
 }
@@ -320,7 +334,7 @@ async function cmpCrear(servicioId) {
   };
   if (!body.codigo || !body.nombre) { alert('Código y nombre son obligatorios.'); return; }
   try {
-    await api(`/costeo/servicios/${servicioId}/componentes`, { method: 'POST', body: JSON.stringify(body) });
+    await costeoApi(`/costeo/servicios/${servicioId}/componentes`, { method: 'POST', body: JSON.stringify(body) });
     await refrescarConjunto();
     srvVer(servicioId);
   } catch (err) { alert(err.message); }
@@ -329,7 +343,7 @@ async function cmpCrear(servicioId) {
 async function cmpEliminar(id) {
   if (!confirm('¿Eliminar el componente y sus tramos?')) return;
   try {
-    await api(`/costeo/componentes/${id}`, { method: 'DELETE' });
+    await costeoApi(`/costeo/componentes/${id}`, { method: 'DELETE' });
     await refrescarConjunto();
   } catch (err) { alert(err.message); }
 }
@@ -366,7 +380,7 @@ async function trCrear(componenteId) {
   const modo = document.getElementById(`tr-modo-${componenteId}`).value;
   if (desde === '' || valor === '') { alert('Desde y valor son obligatorios.'); return; }
   try {
-    await api(`/costeo/componentes/${componenteId}/tramos`, {
+    await costeoApi(`/costeo/componentes/${componenteId}/tramos`, {
       method: 'POST',
       body: JSON.stringify({ desde: Number(desde), hasta: hasta === '' ? null : Number(hasta), valor: Number(valor), modo }),
     });
@@ -381,7 +395,7 @@ async function trEliminar(servicioId, componenteId, idx) {
   const t = (c.tramos || [])[idx];
   if (!t || !confirm('¿Eliminar el tramo?')) return;
   try {
-    await api(`/costeo/tramos/${t.id ?? ''}`, { method: 'DELETE' });
+    await costeoApi(`/costeo/tramos/${t.id ?? ''}`, { method: 'DELETE' });
     await refrescarConjunto();
     cmpVer(servicioId, componenteId);
   } catch (err) { alert(err.message); }
@@ -425,7 +439,7 @@ async function facCrear() {
   };
   if (!body.codigo || !body.nombre) { alert('Código y nombre son obligatorios.'); return; }
   try {
-    await api(`/costeo/conjuntos/${COSTEO.conjuntoId}/factores`, { method: 'POST', body: JSON.stringify(body) });
+    await costeoApi(`/costeo/conjuntos/${COSTEO.conjuntoId}/factores`, { method: 'POST', body: JSON.stringify(body) });
     await refrescarConjunto();
   } catch (err) { alert(err.message); }
 }
@@ -439,7 +453,7 @@ async function opcCrear(factorId) {
   };
   if (!body.codigo || !body.etiqueta) { alert('Código y etiqueta son obligatorios.'); return; }
   try {
-    await api(`/costeo/factores/${factorId}/opciones`, { method: 'POST', body: JSON.stringify(body) });
+    await costeoApi(`/costeo/factores/${factorId}/opciones`, { method: 'POST', body: JSON.stringify(body) });
     await refrescarConjunto();
   } catch (err) { alert(err.message); }
 }
@@ -447,7 +461,7 @@ async function opcCrear(factorId) {
 async function opcEliminar(factorId, opcionId) {
   if (!confirm('¿Eliminar la opción?')) return;
   try {
-    await api(`/costeo/factor-opciones/${opcionId}`, { method: 'DELETE' });
+    await costeoApi(`/costeo/factor-opciones/${opcionId}`, { method: 'DELETE' });
     await refrescarConjunto();
   } catch (err) { alert(err.message); }
 }
@@ -480,7 +494,7 @@ async function denCrear() {
     puntos_por_ha: document.getElementById('den-pha').value === '' ? null : Number(document.getElementById('den-pha').value),
   };
   try {
-    await api(`/costeo/conjuntos/${COSTEO.conjuntoId}/densidad`, { method: 'POST', body: JSON.stringify(body) });
+    await costeoApi(`/costeo/conjuntos/${COSTEO.conjuntoId}/densidad`, { method: 'POST', body: JSON.stringify(body) });
     await refrescarConjunto();
   } catch (err) { alert(err.message); }
 }
@@ -516,7 +530,7 @@ async function zonaCrear() {
   };
   if (!body.departamento) { alert('El departamento es obligatorio.'); return; }
   try {
-    await api(`/costeo/conjuntos/${COSTEO.conjuntoId}/zonas`, { method: 'POST', body: JSON.stringify(body) });
+    await costeoApi(`/costeo/conjuntos/${COSTEO.conjuntoId}/zonas`, { method: 'POST', body: JSON.stringify(body) });
     await refrescarConjunto();
   } catch (err) { alert(err.message); }
 }
@@ -550,7 +564,7 @@ async function impCrear() {
   };
   if (!body.codigo || !body.nombre) { alert('Código y nombre son obligatorios.'); return; }
   try {
-    await api(`/costeo/conjuntos/${COSTEO.conjuntoId}/impuestos`, { method: 'POST', body: JSON.stringify(body) });
+    await costeoApi(`/costeo/conjuntos/${COSTEO.conjuntoId}/impuestos`, { method: 'POST', body: JSON.stringify(body) });
     await refrescarConjunto();
   } catch (err) { alert(err.message); }
 }
@@ -583,7 +597,7 @@ async function polGuardar() {
     redondeo_modo: document.getElementById('pol-modo').value,
   };
   try {
-    await api(`/costeo/conjuntos/${COSTEO.conjuntoId}/politica`, { method: 'PUT', body: JSON.stringify(body) });
+    await costeoApi(`/costeo/conjuntos/${COSTEO.conjuntoId}/politica`, { method: 'PUT', body: JSON.stringify(body) });
     await refrescarConjunto();
     setMsg('costeo-msg', okBanner('Política guardada.'));
   } catch (err) { alert(err.message); }
@@ -621,7 +635,7 @@ async function desCrear() {
   };
   if (!body.codigo) { alert('El código es obligatorio.'); return; }
   try {
-    await api(`/costeo/conjuntos/${COSTEO.conjuntoId}/descuentos`, { method: 'POST', body: JSON.stringify(body) });
+    await costeoApi(`/costeo/conjuntos/${COSTEO.conjuntoId}/descuentos`, { method: 'POST', body: JSON.stringify(body) });
     await refrescarConjunto();
   } catch (err) { alert(err.message); }
 }
@@ -632,7 +646,7 @@ async function hijoEliminar(tipo, idx) {
   const item = lista[idx];
   if (!item || !confirm('¿Eliminar el elemento?')) return;
   try {
-    await api(`/costeo/${tipo}/${item.id}`, { method: 'DELETE' });
+    await costeoApi(`/costeo/${tipo}/${item.id}`, { method: 'DELETE' });
     await refrescarConjunto();
   } catch (err) { alert(err.message); }
 }
@@ -696,8 +710,8 @@ async function costeoSimular() {
     </div>`;
   try {
     const [borrador, vigente] = await Promise.all([
-      api('/costeo/simular', { method: 'POST', body: JSON.stringify({ ...body, conjunto_id: COSTEO.conjuntoId }) }).catch((e) => ({ error: e.message })),
-      api('/costeo/simular', { method: 'POST', body: JSON.stringify(body) }).catch((e) => ({ error: e.message })),
+      costeoApi('/costeo/simular', { method: 'POST', body: JSON.stringify({ ...body, conjunto_id: COSTEO.conjuntoId }) }).catch((e) => ({ error: e.message })),
+      costeoApi('/costeo/simular', { method: 'POST', body: JSON.stringify(body) }).catch((e) => ({ error: e.message })),
     ]);
     el.innerHTML = `
       <div class="sim-lado">${borrador.error ? errorBanner('Borrador: ' + borrador.error) : fila('📝 Conjunto en edición (borrador)', borrador)}</div>
@@ -782,7 +796,7 @@ async function identidadGuardar() {
   };
   if (!body.nombre_comercial) { alert('El nombre comercial es obligatorio.'); return; }
   try {
-    const res = await api('/costeo/identidad', { method: 'PUT', body: JSON.stringify(body) });
+    const res = await costeoApi('/costeo/identidad', { method: 'PUT', body: JSON.stringify(body) });
     COSTEO.identidad = res.identidad;
     setMsg('costeo-msg', okBanner('Identidad guardada: los PDF reflejan los datos nuevos sin desplegar (CA-10/CA-11).'));
     renderCosteoCuerpo();
@@ -841,7 +855,7 @@ async function cobroConfigGuardar() {
     aviso_numeracion_restante: Number(document.getElementById('cb-aviso').value || 10),
   };
   try {
-    const res = await api('/costeo/cobro-config', { method: 'PUT', body: JSON.stringify(body) });
+    const res = await costeoApi('/costeo/cobro-config', { method: 'PUT', body: JSON.stringify(body) });
     COSTEO.cobroConfig = res.config;
     setMsg('costeo-msg', okBanner('Configuración de cobro guardada.'));
   } catch (err) { alert(err.message); }
@@ -849,7 +863,7 @@ async function cobroConfigGuardar() {
 
 /* ── Acciones de conjunto ── */
 async function refrescarConjunto() {
-  const res = await api(`/costeo/conjuntos/${COSTEO.conjuntoId}`);
+  const res = await costeoApi(`/costeo/conjuntos/${COSTEO.conjuntoId}`);
   COSTEO.conjunto = res.conjunto;
   const cont = document.getElementById('costeo-sub-cuerpo');
   if (cont) { cont.innerHTML = ''; await renderCosteoCuerpo(); }
@@ -859,7 +873,7 @@ async function costeoNuevoConjunto() {
   const nombre = prompt('Nombre del conjunto nuevo:');
   if (!nombre) return;
   try {
-    const res = await api('/costeo/conjuntos', { method: 'POST', body: JSON.stringify({ nombre }) });
+    const res = await costeoApi('/costeo/conjuntos', { method: 'POST', body: JSON.stringify({ nombre }) });
     COSTEO.conjuntoId = res.id;
     await cargarCosteoParametros();
   } catch (err) { alert(err.message); }
@@ -870,7 +884,7 @@ async function costeoClonar() {
   const body = { nombre: (COSTEO.conjunto.nombre || '') + ' (clon)' };
   if (pctReajuste !== '' && pctReajuste !== null) body.reajuste_pct = Number(pctReajuste);
   try {
-    const res = await api(`/costeo/conjuntos/${COSTEO.conjuntoId}/clonar`, { method: 'POST', body: JSON.stringify(body) });
+    const res = await costeoApi(`/costeo/conjuntos/${COSTEO.conjuntoId}/clonar`, { method: 'POST', body: JSON.stringify(body) });
     COSTEO.conjuntoId = res.id;
     setMsg('costeo-msg', okBanner('Conjunto clonado: ' + esc(res.nombre) + ' (v' + res.version + ').'));
     await cargarCosteoParametros();
@@ -879,7 +893,7 @@ async function costeoClonar() {
 
 async function costeoValidar() {
   try {
-    const res = await api(`/costeo/conjuntos/${COSTEO.conjuntoId}/validar`, { method: 'POST' });
+    const res = await costeoApi(`/costeo/conjuntos/${COSTEO.conjuntoId}/validar`, { method: 'POST' });
     const msg = document.getElementById('costeo-msg');
     msg.innerHTML = res.valido
       ? okBanner('✅ Validación aprobada. ' + (res.advertencias || []).map((a) => esc(a.mensaje)).join(' · '))
@@ -889,7 +903,7 @@ async function costeoValidar() {
 
 async function costeoPublicar() {
   try {
-    const res = await api(`/costeo/conjuntos/${COSTEO.conjuntoId}/publicar`, { method: 'POST' });
+    const res = await costeoApi(`/costeo/conjuntos/${COSTEO.conjuntoId}/publicar`, { method: 'POST' });
     setMsg('costeo-msg', okBanner('✅ Conjunto publicado (v' + res.version + '). El anterior quedó archivado.'));
     await cargarCosteoParametros();
   } catch (err) { alert(err.message); }
@@ -898,14 +912,14 @@ async function costeoPublicar() {
 async function costeoArchivar() {
   if (!confirm('¿Archivar el conjunto? Dejará de estar vigente.')) return;
   try {
-    await api(`/costeo/conjuntos/${COSTEO.conjuntoId}/archivar`, { method: 'POST' });
+    await costeoApi(`/costeo/conjuntos/${COSTEO.conjuntoId}/archivar`, { method: 'POST' });
     await cargarCosteoParametros();
   } catch (err) { alert(err.message); }
 }
 
 async function costeoExportar() {
   try {
-    const res = await api(`/costeo/conjuntos/${COSTEO.conjuntoId}/exportar`);
+    const res = await costeoApi(`/costeo/conjuntos/${COSTEO.conjuntoId}/exportar`);
     const blob = new Blob([JSON.stringify(res, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -918,7 +932,7 @@ async function costeoImportar(event) {
   const archivo = event.target.files && event.target.files[0];
   if (!archivo) return;
   try {
-    const res = await api('/costeo/importar', {
+    const res = await costeoApi('/costeo/importar', {
       method: 'POST',
       body: JSON.stringify(JSON.parse(await archivo.text())),
     });
@@ -936,9 +950,9 @@ async function cargarEstimaciones() {
   root.innerHTML = '<p class="muted">Cargando…</p>';
   try {
     const [lista, tablero, fincas] = await Promise.all([
-      api('/estimaciones?limite=100'),
-      state.rol.toLowerCase() === 'admin' ? api('/estimaciones/tablero').catch(() => null) : Promise.resolve(null),
-      api('/fincas'),
+      costeoApi('/estimaciones?limite=100'),
+      state.rol.toLowerCase() === 'admin' ? costeoApi('/estimaciones/tablero').catch(() => null) : Promise.resolve(null),
+      costeoApi('/fincas'),
     ]);
     COSTEO.fincas = (fincas.data || fincas || []).map ? (fincas.data || []) : [];
     root.innerHTML = `
@@ -993,7 +1007,7 @@ async function estimacionNueva() {
     return;
   }
   let vigentes = null;
-  try { vigentes = await api('/costeo/parametros/vigentes'); } catch { /* sin conjunto */ }
+  try { vigentes = await costeoApi('/costeo/parametros/vigentes'); } catch { /* sin conjunto */ }
   const servicios = vigentes ? (vigentes.conjunto.servicios || []) : [];
   const factores = vigentes ? (vigentes.conjunto.factores || []) : [];
   det.innerHTML = `
@@ -1023,12 +1037,12 @@ function estimFincaCambio() {
   const finca = (COSTEO.fincas || []).find((f) => f.id === document.getElementById('est-finca').value);
   if (finca && finca.area_hectareas) document.getElementById('est-area').value = finca.area_hectareas;
   // Distancia geodésica desde la sede (RF-07)
-  api(`/estimaciones/sugerencia-km?finca_id=${encodeURIComponent(finca.id)}`)
+  costeoApi(`/estimaciones/sugerencia-km?finca_id=${encodeURIComponent(finca.id)}`)
     .then((r) => { if (r.km != null) document.getElementById('est-km').value = r.km; })
     .catch(() => {});
   // Puntos sugeridos por densidad (RF-05)
   const area = Number(document.getElementById('est-area').value || 1);
-  api(`/estimaciones/sugerencia-puntos?area_ha=${area}`)
+  costeoApi(`/estimaciones/sugerencia-puntos?area_ha=${area}`)
     .then((r) => { if (r.puntos_sugeridos) document.getElementById('est-cantidad').value = r.puntos_sugeridos; })
     .catch(() => {});
 }
@@ -1060,7 +1074,7 @@ async function estimVistaPrevia() {
   const cuerpo = _estimCuerpo();
   el.innerHTML = '<p class="muted">Calculando vista previa…</p>';
   try {
-    const res = await api('/costeo/simular', {
+    const res = await costeoApi('/costeo/simular', {
       method: 'POST',
       body: JSON.stringify({
         area_ha: cuerpo.lotes[0].area_ha,
@@ -1085,7 +1099,7 @@ async function estimVistaPrevia() {
 
 async function estimGuardarBorrador() {
   try {
-    const res = await api('/estimaciones', { method: 'POST', body: JSON.stringify(_estimCuerpo()) });
+    const res = await costeoApi('/estimaciones', { method: 'POST', body: JSON.stringify(_estimCuerpo()) });
     setMsg('est-preview', okBanner('Borrador guardado con total ' + cop(res.estimacion.total_final) + '.'));
     await cargarEstimaciones();
   } catch (err) { alert(err.message); }
@@ -1095,7 +1109,7 @@ async function estimacionVer(id) {
   const det = document.getElementById('estim-detalle');
   det.innerHTML = '<p class="muted">Cargando…</p>';
   try {
-    const res = await api(`/estimaciones/${id}`);
+    const res = await costeoApi(`/estimaciones/${id}`);
     const e = res.estimacion;
     det.innerHTML = `
       <div class="card estim-det">
@@ -1127,7 +1141,7 @@ async function estimacionVer(id) {
 async function estimacionEmitir(id) {
   let autorizar = false, motivo = null;
   try {
-    await api(`/estimaciones/${id}/emitir`, { method: 'POST', body: JSON.stringify({}) });
+    await costeoApi(`/estimaciones/${id}/emitir`, { method: 'POST', body: JSON.stringify({}) });
   } catch (err) {
     if (err.detail && err.detail.code === 'BAJO_PISO_RENTABILIDAD') {
       autorizar = confirm(err.message + '\n\n¿Autorizar como administrador? Debes justificar la excepción.');
@@ -1135,7 +1149,7 @@ async function estimacionEmitir(id) {
       motivo = prompt('Motivo de la excepción al piso de rentabilidad (obligatorio):');
       if (!motivo) return;
       try {
-        await api(`/estimaciones/${id}/emitir`, {
+        await costeoApi(`/estimaciones/${id}/emitir`, {
           method: 'POST',
           body: JSON.stringify({ autorizar_bajo_piso: true, motivo_excepcion: motivo }),
         });
@@ -1151,7 +1165,7 @@ async function estimacionEmitir(id) {
 
 async function estimacionAceptar(id) {
   try {
-    await api(`/estimaciones/${id}/aceptar`, { method: 'POST', body: JSON.stringify({}) });
+    await costeoApi(`/estimaciones/${id}/aceptar`, { method: 'POST', body: JSON.stringify({}) });
     await cargarEstimaciones();
   } catch (err) { alert(err.message); }
 }
@@ -1159,7 +1173,7 @@ async function estimacionAceptar(id) {
 async function estimacionRechazar(id) {
   const comentario = prompt('Motivo del rechazo (opcional):');
   try {
-    await api(`/estimaciones/${id}/rechazar`, { method: 'POST', body: JSON.stringify({ comentario }) });
+    await costeoApi(`/estimaciones/${id}/rechazar`, { method: 'POST', body: JSON.stringify({ comentario }) });
     await cargarEstimaciones();
   } catch (err) { alert(err.message); }
 }
@@ -1167,7 +1181,7 @@ async function estimacionRechazar(id) {
 async function estimacionConvertir(id) {
   if (!confirm('¿Crear la comisión a partir de esta estimación aceptada?')) return;
   try {
-    const res = await api(`/estimaciones/${id}/convertir-comision`, { method: 'POST' });
+    const res = await costeoApi(`/estimaciones/${id}/convertir-comision`, { method: 'POST' });
     alert('✅ Comisión creada: ' + cop(res.comision.valor_comision_cop) + ' COP.');
     await cargarEstimaciones();
   } catch (err) { alert(err.message); }
@@ -1175,7 +1189,7 @@ async function estimacionConvertir(id) {
 
 async function estimacionRecalcular(id) {
   try {
-    const res = await api(`/estimaciones/${id}/recalcular`, { method: 'POST' });
+    const res = await costeoApi(`/estimaciones/${id}/recalcular`, { method: 'POST' });
     alert(res.coincide
       ? '✅ Snapshot reproducible: el total sigue siendo ' + cop(res.total_snapshot) + ' (CA-07).'
       : '❌ SNAPSHOT_INCONSISTENTE: ' + cop(res.total_guardado) + ' ≠ ' + cop(res.total_snapshot));
@@ -1189,7 +1203,7 @@ async function cargarCotizaciones() {
   if (!root) return;
   root.innerHTML = '<p class="muted">Cargando…</p>';
   try {
-    const lista = await api('/estimaciones?limite=100');
+    const lista = await costeoApi('/estimaciones?limite=100');
     root.innerHTML = `
       <h2>🧾 Mis cotizaciones <span class="muted">(ver, aceptar o descargar)</span></h2>
       <div id="cot-lista">${renderEstimLista(lista.data || [])}</div>
@@ -1207,8 +1221,8 @@ async function cargarCobros() {
   root.innerHTML = '<p class="muted">Cargando…</p>';
   try {
     const [lista, aceptadas] = await Promise.all([
-      api('/cobros?limite=100'),
-      api('/estimaciones?estado=aceptada&limite=100'),
+      costeoApi('/cobros?limite=100'),
+      costeoApi('/estimaciones?estado=aceptada&limite=100'),
     ]);
     COSTEO.aceptadas = (aceptadas.data || []).filter((e) => !e.cobro);
     root.innerHTML = `
@@ -1247,14 +1261,14 @@ async function cobroCrear() {
   const estimacionId = document.getElementById('cob-estimacion').value;
   if (!estimacionId) { alert('Seleccione una estimación aceptada.'); return; }
   try {
-    await api(`/cobros?estimacion_id=${estimacionId}`, { method: 'POST' });
+    await costeoApi(`/cobros?estimacion_id=${estimacionId}`, { method: 'POST' });
     await cargarCobros();
   } catch (err) { alert(err.message); }
 }
 
 async function cobroEmitir(id) {
   try {
-    await api(`/cobros/${id}/emitir`, { method: 'POST' });
+    await costeoApi(`/cobros/${id}/emitir`, { method: 'POST' });
     await cargarCobros();
   } catch (err) { alert(err.message); }
 }
@@ -1264,7 +1278,7 @@ async function cobroPago(id) {
   if (!valor) return;
   const medio = prompt('Medio de pago (transferencia, efectivo…):', 'transferencia');
   try {
-    await api(`/cobros/${id}/pagos`, { method: 'POST', body: JSON.stringify({ valor: Number(valor), medio }) });
+    await costeoApi(`/cobros/${id}/pagos`, { method: 'POST', body: JSON.stringify({ valor: Number(valor), medio }) });
     await cargarCobros();
   } catch (err) { alert(err.message); }
 }
@@ -1273,7 +1287,7 @@ async function cobroAnular(id) {
   const motivo = prompt('Motivo de la anulación (obligatorio, mínimo 5 caracteres):');
   if (!motivo) return;
   try {
-    await api(`/cobros/${id}/anular`, { method: 'POST', body: JSON.stringify({ motivo }) });
+    await costeoApi(`/cobros/${id}/anular`, { method: 'POST', body: JSON.stringify({ motivo }) });
     await cargarCobros();
   } catch (err) { alert(err.message); }
 }
@@ -1282,7 +1296,7 @@ async function cobroVer(id) {
   const det = document.getElementById('cobro-detalle');
   det.innerHTML = '<p class="muted">Cargando…</p>';
   try {
-    const lista = await api('/cobros?limite=100');
+    const lista = await costeoApi('/cobros?limite=100');
     const d = (lista.data || []).find((x) => x.id === id);
     if (!d) throw new Error('Documento no encontrado.');
     det.innerHTML = `
