@@ -45,6 +45,9 @@ import agroia_backend.models.finca_usuario  # noqa: F401
 import agroia_backend.models.metrica_modelo  # noqa: F401
 import agroia_backend.models.metrica_voz  # noqa: F401
 import agroia_backend.models.parametro_voz  # noqa: F401
+import agroia_backend.models.metrica_lectura_voz  # noqa: F401
+import agroia_backend.models.preferencia_lectura_voz  # noqa: F401
+import agroia_backend.models.voz_personalizada  # noqa: F401
 import agroia_backend.models.modelo_ml  # noqa: F401
 import agroia_backend.models.recomendacion  # noqa: F401
 import agroia_backend.models.regla_agronomica  # noqa: F401
@@ -97,6 +100,7 @@ from agroia_backend.api.usuarios import router as usuarios_router
 from agroia_backend.api.variedades import router as variedades_router
 from agroia_backend.api.equipo import router as equipo_router
 from agroia_backend.api.voz import router as voz_router
+from agroia_backend.api.lectura import router as lectura_router
 
 settings = get_settings()
 setup_logging()
@@ -277,6 +281,8 @@ app.include_router(variedades_router, prefix="/api/v1")
 app.include_router(variedades_router, prefix="/api/v1/catalogo")
 # ── Interacción por voz (RFP-AGROIA-001): transcripción, parámetros y métricas ──
 app.include_router(voz_router)
+# ── Lectura en voz alta (RFP-AGROIA-002): preferencias, síntesis, métricas y voz personalizada ──
+app.include_router(lectura_router)
 # app.include_router(catalogo_router, prefix="/api/v1")
 # app.include_router(usuarios_router, prefix="/api/v1")
 # app.include_router(dashboards_router, prefix="/api/v1")
