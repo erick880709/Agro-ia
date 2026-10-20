@@ -1,0 +1,6 @@
+# Chatterbox Multilingual V3 (MIT) — motor de clonación de voz para AgroIA.
+# Pin a un commit estable para reproducibilidad. Chatterbox ya declara torch==2.6.0.
+git+https://github.com/resemble-ai/chatterbox.git@master
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+soundfile==0.12.1

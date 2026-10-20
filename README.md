@@ -5,17 +5,9 @@ Plataforma inteligente de diagnóstico agronómico basada en IA, IoT y datos geo
 > **Versión:** 0.2.0 (2026-08-31) | **Stack:** Python 3.11+ / FastAPI · **SPA web integrada** (`apps/frontend-web`, productiva) + Angular 21 (`apps/frontend`, prototipo) · PostgreSQL 15 (+pgvector) · Docker
 > **Estado:** ✅ en producción — https://agroia-backend.onrender.com (Render + Neon) · CI verde · 65 pruebas backend
 
-## 🔑 Credenciales de demostración (producción)
+No se publican credenciales de acceso en la documentación. En entornos de demostración, las cuentas y sus contraseñas deben provisionarse mediante la configuración segura del entorno.
 
-| Rol | Email | Contraseña |
-|-----|-------|------------|
-| Administrador | admin@agroia.co | Admin123! |
-| Agrónomo | agronomo@agroia.co | Agronomo123! |
-| Cliente | cliente@agroia.co | Cliente123! |
-
-**Set demo:** `POST /api/v1/demo/reset` (Admin) — 8 fincas (2 ejemplos completos + 6 por etapa fenológica), 8 comisiones, precios de insumos/cosecha y lecturas del sensor real `esp32-npk-001`.
-
-**Documentación de estado:** `PROJECT_STATUS.md` (bitácora completa por fecha) · `resources/architecture/Documento_Funcional_Tecnico_AgroIA.md` (fuente de verdad funcional-técnica) · `resources/architecture/` (arquitectura C4, datasets, pantallas).
+**Documentación:** [Catálogo funcional detallado](resources/functional/catalogo-funcional-agroia.md) · [Menús y pantallas](resources/architecture/Documento_Menus_Pantallas_AgroIA.md) · [Documento funcional-técnico](resources/architecture/Documento_Funcional_Tecnico_AgroIA.md) · [Arquitectura y diseño](resources/architecture/overview.md).
 
 ---
 

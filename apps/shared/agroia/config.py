@@ -43,6 +43,10 @@ class Settings(BaseSettings):
     openai_api_key: str = ""
     openai_model: str = "gpt-4"
 
+    # ── Voz clonada (TT-06) ──
+    clonacion_voz_url: str = ""  # Endpoint base del servicio de clonación autoalojado (RunPod/HF Spaces).
+    clonacion_voz_token: str = ""  # Token de autorización para el servicio de clonación.
+
     # ── AWS ──
     aws_region: str = "sa-east-1"
     aws_access_key_id: str = ""

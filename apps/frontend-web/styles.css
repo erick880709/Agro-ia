@@ -603,6 +603,42 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
   transition: width 0.08s linear;
 }
 
+.chat-leer-btn {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border: 1px solid #c9d6cb;
+  background: #f1f8e9;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  vertical-align: middle;
+}
+
+.chat-leer-btn:hover { background: #e3f2fd; }
+
+.chat-lectura {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0 4px;
+  font-size: 0.85rem;
+}
+
+.chat-lectura-opts {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.chat-lectura select {
+  padding: 4px 6px;
+  border: 1px solid #c9d6cb;
+  border-radius: 6px;
+  font-size: 0.82rem;
+}
+
 .chat-preview {
   display: flex;
   align-items: center;
@@ -824,6 +860,12 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
 .modal-head h2 { margin: 0; font-size: 1.1rem; color: var(--verde-700); }
 .modal-head .btn-ghost-sm { color: var(--verde-700); border-color: #c8d6cd; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+.modal-body { display: flex; flex-direction: column; gap: 12px; }
+.mi-voz-controles { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.mi-voz-acciones { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+#mi-voz-msg.procesando { color: #b45309; }
+#mi-voz-msg.ok { color: #15803d; }
+#mi-voz-msg.error { color: #b91c1c; }
 .eu-fincas {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

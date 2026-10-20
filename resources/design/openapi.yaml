@@ -3,13 +3,12 @@ info:
   title: AgroIA API
   description: |-
     API de AgroInteligente Colombia — Plataforma de diagnóstico agronómico inteligente.
-    v0.4.0: interacción por voz en el Asesor agronómico (RFP-AGROIA-001) —
-    transcripción en servidor (respaldo híbrido), parámetros administrables de
-    voz y métricas de uso. v0.3.0: módulo AGC-COST completo (F1-F7) — catálogo
-    de parámetros versionado, motor de cálculo determinista, estimaciones con
-    snapshot SHA-256, identidad administrable con PDF, documentos de cobro con
-    numeración consecutiva y conversión a comisión.
-  version: "0.4.0"
+    v0.6.0: voz personalizada clonable — subida de muestra de audio, ciclo de clonación
+    en GPU cloud (clonar/estado) y síntesis con voz clonada (mi-voz). v0.5.0: lectura en
+    voz alta de las respuestas del Asesor agronómico (RFP-AGROIA-002) — preferencias por
+    usuario, síntesis en servidor (respaldo), métricas de lectura y voz personalizada
+    (Fase 2). v0.4.0: interacción por voz (RFP-AGROIA-001). v0.3.0: módulo AGC-COST.
+  version: "0.6.0"
   contact:
     name: AgroIA Team
 
@@ -95,6 +94,40 @@ components:
         proveedor:
           type: string
           example: "openai-whisper"
+
+    PreferenciaLecturaVoz:
+      type: object
+      properties:
+        activado:
+          type: boolean
+          example: false
+        voz:
+          type: string
+          enum: [femenina, masculina, mi-voz]
+          example: femenina
+        velocidad:
+          type: string
+          enum: ["0.75", "1", "1.25", "1.5"]
+          example: "1"
+
+    MetricaLecturaVoz:
+      type: object
+      properties:
+        periodo:
+          type: string
+          example: "2026-10"
+        activaciones:
+          type: integer
+          example: 5
+        voz_elegida:
+          type: string
+          example: femenina
+        errores:
+          type: integer
+          example: 1
+        caracteres_leidos:
+          type: integer
+          example: 3200
 
   responses:
     "400":
@@ -588,4 +621,175 @@ paths:
                   type: integer
       responses:
         "200": { description: Evento registrado }
+        "401": { $ref: "#/components/responses/401" }
+
+  /lectura/preferencias:
+    get:
+      summary: Preferencia de lectura del usuario
+      tags: [Lectura]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Preferencia de lectura
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PreferenciaLecturaVoz" }
+        "401": { $ref: "#/components/responses/401" }
+    put:
+      summary: Actualizar preferencia de lectura del usuario
+      tags: [Lectura]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PreferenciaLecturaVoz" }
+      responses:
+        "200":
+          description: Preferencia actualizada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PreferenciaLecturaVoz" }
+        "401": { $ref: "#/components/responses/401" }
+
+  /lectura/sintetizar:
+    post:
+      summary: Sintetizar texto a audio (respaldo en servidor)
+      tags: [Lectura]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [texto]
+              properties:
+                texto: { type: string }
+                voz: { type: string, enum: [femenina, masculina, mi-voz], default: femenina }
+                velocidad: { type: string, enum: ["0.75", "1", "1.25", "1.5"], default: "1" }
+      responses:
+        "200":
+          description: Audio (MP3 para voz estándar; WAV para voz clonada)
+          content:
+            audio/mpeg:
+              schema: { type: string, format: binary }
+            audio/wav:
+              schema: { type: string, format: binary }
+        "401": { $ref: "#/components/responses/401" }
+        "503":
+          description: Motor de síntesis no disponible
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+  /lectura/metricas:
+    get:
+      summary: Agregados mensuales de lectura (solo administrador)
+      tags: [Lectura]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Lista de métricas mensuales
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/MetricaLecturaVoz" }
+        "401": { $ref: "#/components/responses/401" }
+        "403": { $ref: "#/components/responses/403" }
+    post:
+      summary: Registrar un evento de uso de lectura
+      tags: [Lectura]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tipo]
+              properties:
+                tipo: { type: string, enum: [activacion, error] }
+                caracteres_leidos: { type: integer }
+                voz_elegida: { type: string }
+      responses:
+        "200": { description: Evento registrado }
+        "401": { $ref: "#/components/responses/401" }
+
+  /lectura/voz-personalizada:
+    get:
+      summary: Estado de la voz personalizada del usuario
+      tags: [Lectura]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Estado de la voz personalizada }
+        "401": { $ref: "#/components/responses/401" }
+    post:
+      summary: Subir la muestra de la propia voz (inicia la clonación si hay motor configurado)
+      tags: [Lectura]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [audio]
+              properties:
+                audio: { type: string, format: binary }
+      responses:
+        "200": { description: Muestra guardada y/o clonación iniciada }
+        "401": { $ref: "#/components/responses/401" }
+        "422": { description: Audio vacío o supera 8 MB }
+    put:
+      summary: Activar o desactivar la voz personalizada
+      tags: [Lectura]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Estado actualizado }
+        "401": { $ref: "#/components/responses/401" }
+    delete:
+      summary: Eliminar la voz personalizada (registro y muestra)
+      tags: [Lectura]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Voz eliminada }
+        "401": { $ref: "#/components/responses/401" }
+
+  /lectura/voz-personalizada/audio:
+    get:
+      summary: Obtener la muestra grabada para previsualización
+      tags: [Lectura]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Audio de la muestra (webm)
+          content:
+            audio/webm:
+              schema: { type: string, format: binary }
+        "401": { $ref: "#/components/responses/401" }
+        "404": { description: No hay muestra de voz }
+
+  /lectura/voz-personalizada/clonar:
+    post:
+      summary: Enviar la muestra guardada al motor de clonación (GPU cloud)
+      tags: [Lectura]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Clonación iniciada; devuelve estado y referencia }
+        "401": { $ref: "#/components/responses/401" }
+        "404": { description: No hay muestra de voz }
+        "503": { description: Motor de clonación no configurado o no disponible }
+
+  /lectura/voz-personalizada/estado:
+    get:
+      summary: Consultar y sincronizar el estado de clonación en el motor GPU
+      tags: [Lectura]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Estado de la voz personalizada }
         "401": { $ref: "#/components/responses/401" }

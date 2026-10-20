@@ -7,7 +7,7 @@ const API = '/api/v1';
 const SESION_KEY = 'agroia_sesion';
 
 const TABS_POR_ROL = {
-  admin: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'equipo', 'comisiones', 'lista-trabajos', 'reentrenar', 'precios-cosecha', 'vision', 'catalogo', 'costeo-parametros', 'voz-parametros', 'voz-metricas', 'estimaciones', 'cobros'],
+  admin: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'equipo', 'comisiones', 'lista-trabajos', 'reentrenar', 'precios-cosecha', 'vision', 'catalogo', 'costeo-parametros', 'voz-parametros', 'voz-metricas', 'lectura-metricas', 'estimaciones', 'cobros'],
   agronomo: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'vision', 'catalogo', 'estimaciones'],
   cliente: ['inicio', 'alertas', 'reportes', 'vision', 'cotizaciones'],
   extensionista: ['inicio', 'alertas', 'zona', 'sensores', 'historial', 'reportes', 'vision', 'catalogo'],
@@ -296,6 +296,7 @@ function goTab(name) {
   if (name === 'costeo-parametros' && typeof cargarCosteoParametros === 'function') cargarCosteoParametros();
   if (name === 'voz-parametros' && typeof cargarVozParametros === 'function') cargarVozParametros();
   if (name === 'voz-metricas' && typeof cargarVozMetricas === 'function') cargarVozMetricas();
+  if (name === 'lectura-metricas' && typeof cargarMetricasLectura === 'function') cargarMetricasLectura();
   if (name === 'estimaciones' && typeof cargarEstimaciones === 'function') cargarEstimaciones();
   if (name === 'cobros' && typeof cargarCobros === 'function') cargarCobros();
   if (name === 'cotizaciones' && typeof cargarCotizaciones === 'function') cargarCotizaciones();
@@ -333,6 +334,9 @@ async function arrancarAplicacion() {
 
   // ── Interacción por voz en el chat (RFP-AGROIA-001) ──
   if (typeof initVoz === 'function') initVoz();
+
+  // ── Lectura en voz alta de respuestas (RFP-AGROIA-002) ──
+  if (typeof initLectura === 'function') initLectura();
 
   // ── Menús desplegables (Administración y Ayuda) — flotantes sobre el contenido ──
   // Nota: sin ':scope' en querySelector (Safari/WebKit lanza DOMException 12

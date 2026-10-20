@@ -90,4 +90,49 @@ audio ni contenido de consultas.
 > **Nota:** la transcripción en servidor no persiste entidad de audio — el audio se
 > procesa en memoria y se descarta al terminar (RNF-019).
 
+## Módulo Lectura en voz alta — respuestas del Asesor agronómico (2026-10-19)
+
+Migración `048_lectura_voz` · schema `agroia` · RFP-AGROIA-002.
+
+### PreferenciaLecturaVoz
+Preferencia de lectura por usuario (clave `usuario_email`). Sin `tenant_id`.
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID PK | Identificador único |
+| usuario_email | String(255) UNIQUE | Dueño de la preferencia |
+| activado | Boolean | Lectura activa/inactiva (default `false`) |
+| voz | String(20) | `femenina` / `masculina` / `mi-voz` |
+| velocidad | String(10) | `0.75` / `1` / `1.25` / `1.5` |
+| created_at / updated_at | Timestamp | Auditoría |
+
+### MetricaLecturaVoz
+Agregado mensual de uso de la lectura (RF-056). Anónimo, sin audio ni contenido.
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID PK | Identificador único |
+| periodo | String(7) UNIQUE | Periodo `YYYY-MM` |
+| activaciones | Integer | Veces que se activó la lectura |
+| voz_elegida | String(20) | Última voz seleccionada |
+| errores | Integer | Errores de síntesis/reproducción |
+| caracteres_leidos | BigInteger | Consumo (control de cuota) |
+| created_at / updated_at | Timestamp | Auditoría |
+
+### VozPersonalizada
+Ciclo de vida de la voz clonada del usuario (Fase 2). La muestra y la representación
+de voz viven en el servicio de GPU; aquí solo estado y referencia.
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID PK | Identificador único |
+| usuario_email | String(255) UNIQUE | Dueño (aislamiento por usuario) |
+| estado | String(20) | `procesando` / `activa` / `desactivada` / `eliminada` |
+| referencia | String(255) | Artefacto en el servicio de GPU (nullable) |
+| creada_en | Timestamp | Fecha de creación |
+| created_at / updated_at | Timestamp | Auditoría |
+
+> **Nota:** el audio de síntesis (respuestas leídas) no se persiste — se sirve en
+> streaming o por fragmentos y se descarta (RNF-019/RF-047).
+
 Próximas fases: `estimacion*` (F3), `cobro_*` (F5), `costeo_identidad*` (F4) — ver `resources/functional/hu/rfp-agc-cost.md`.

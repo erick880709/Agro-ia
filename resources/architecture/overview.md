@@ -27,3 +27,10 @@
   y `models/metrica_voz.py`. Frontend en `apps/frontend-web/voz.js` (Web Speech API por
   defecto + respaldo en servidor). Variación: la transcripción es híbrida — la mayor parte de
   la lógica vive en el cliente y el servidor solo provee respaldo; el audio nunca se persiste.
+- **Lectura en voz alta (2026-10-19, RFP-AGROIA-002):** `api/lectura.py` (preferencias,
+  síntesis, métricas y voz personalizada), `services/sintesis_voz.py` (interfaz común de
+  síntesis + preprocesamiento de texto), `models/preferencia_lectura_voz.py`,
+  `models/metrica_lectura_voz.py` y `models/voz_personalizada.py`. Frontend en
+  `apps/frontend-web/lectura.js` (`speechSynthesis` por defecto + respaldo en servidor).
+  Variación: la síntesis primaria es del navegador; el servidor solo respalda. La voz
+  personalizada (Fase 2) depende de un motor de clonación externo en GPU cloud (TT-06).

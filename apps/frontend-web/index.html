@@ -91,6 +91,7 @@
         <button class="tab submenu-item" data-tab="costeo-parametros">🧮 Parámetros de costeo</button>
         <button class="tab submenu-item" data-tab="voz-parametros">🎙️ Parámetros de voz</button>
         <button class="tab submenu-item" data-tab="voz-metricas">📊 Métricas de voz</button>
+        <button class="tab submenu-item" data-tab="lectura-metricas">📈 Métricas de lectura</button>
         <button class="tab submenu-item" data-tab="estimaciones">📐 Estimación de costos</button>
         <button class="tab submenu-item" data-tab="cobros">🧾 Documentos de cobro</button>
         <button class="tab submenu-item" data-tab="reentrenar">🤖 Reentrenar modelo</button>
@@ -460,6 +461,25 @@
         </form>
         <span id="chat-voz-estado" class="chat-voz-estado" aria-live="polite"></span>
         <div id="chat-voz-nivel" class="chat-voz-nivel" aria-hidden="true"><span></span></div>
+        <div class="chat-lectura">
+          <label class="check"><input type="checkbox" id="lectura-toggle"> 🔊 Leer respuestas en voz alta</label>
+          <span class="chat-lectura-opts">
+            <select id="lectura-voz" aria-label="Voz de lectura">
+              <option value="femenina">Voz femenina</option>
+              <option value="masculina">Voz masculina</option>
+              <option value="mi-voz" id="lectura-mi-voz-option" hidden>Mi voz</option>
+            </select>
+            <select id="lectura-velocidad" aria-label="Velocidad de lectura">
+              <option value="0.75">0,75x</option>
+              <option value="1" selected>1x</option>
+              <option value="1.25">1,25x</option>
+              <option value="1.5">1,5x</option>
+            </select>
+            <button type="button" class="btn btn-ghost" id="lectura-crear-voz" title="Crear mi voz (Fase 2)">🎙️ Mi voz</button>
+            <button type="button" class="btn btn-ghost" id="lectura-eliminar-voz" title="Eliminar mi voz">🗑️</button>
+          </span>
+        </div>
+        <span id="lectura-estado" class="chat-voz-estado" aria-live="polite"></span>
         <div id="chat-preview" class="chat-preview hidden">
           <img id="chat-preview-img" alt="Vista previa de la foto adjunta">
           <button type="button" class="btn btn-ghost chat-quitar" id="chat-quitar"
@@ -871,6 +891,13 @@
     </div>
   </section>
 
+  <!-- ============ LECTURA: métricas (admin) ============ -->
+  <section id="view-lectura-metricas" class="view">
+    <div class="card">
+      <div id="lectura-metricas-root"><p class="muted">Cargando métricas de lectura…</p></div>
+    </div>
+  </section>
+
   <!-- ============ AGC-COST: estimación de costos (F3, admin/agrónomo) ============ -->
   <section id="view-estimaciones" class="view">
     <div class="card">
@@ -926,10 +953,41 @@
     AgroIA v0.1.0 · Motor: sistema experto (reglas UPRA/Cenicafé/AGROSAVIA) · ML en modo sombra
   </footer>
 
+  <!-- ============ Modal: crear mi voz (Fase 2) ============ -->
+  <div class="modal-overlay hidden" id="modal-mi-voz">
+    <div class="modal">
+      <div class="modal-head">
+        <h2>🎙️ Crear mi voz</h2>
+        <button type="button" class="btn-ghost-sm" id="mi-voz-cerrar" title="Cerrar">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="muted">
+          Grabe una muestra de su propia voz para usarla en la lectura de respuestas.
+          La voz es un dato personal y se tratará conforme a la Ley 1581 de 2012.
+        </p>
+        <label class="check"><input type="checkbox" id="mi-voz-consentimiento">
+          Doy mi consentimiento para grabar y usar mi voz en la lectura.</label>
+        <div class="mi-voz-controles">
+          <button type="button" class="btn btn-primary" id="mi-voz-grabar">🎤 Grabar</button>
+          <button type="button" class="btn btn-ghost hidden" id="mi-voz-detener">⏹ Detener</button>
+          <span id="mi-voz-tiempo" class="muted">0 s</span>
+        </div>
+        <div id="mi-voz-nivel" class="chat-voz-nivel" aria-hidden="true"><span></span></div>
+        <audio id="mi-voz-preview" controls class="hidden"></audio>
+        <div class="mi-voz-acciones">
+          <button type="button" class="btn btn-primary hidden" id="mi-voz-guardar">💾 Guardar voz</button>
+          <button type="button" class="btn btn-ghost" id="mi-voz-eliminar">🗑️ Eliminar mi voz</button>
+        </div>
+        <div id="mi-voz-msg" class="muted"></div>
+      </div>
+    </div>
+  </div>
+
   <script src="/departamentos.js?v=20260827-medicion"></script>
   <script src="/offline.js"></script>
   <script src="/app.js?v=20260827-medicion"></script>
   <script src="/costeo.js?v=20260918-agccost2"></script>
   <script src="/voz.js?v=20261019-voz1"></script>
+  <script src="/lectura.js?v=20261019-lectura1"></script>
 </body>
 </html>

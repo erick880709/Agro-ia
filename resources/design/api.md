@@ -68,6 +68,20 @@
 
 ## Historial de cambios del contrato
 
+- v0.6.0 (2026-10-19): voz personalizada clonable (TT-06) — `POST /lectura/sintetizar`
+  acepta `voz=mi-voz` (audio WAV con voz clonada); `POST /lectura/voz-personalizada`
+  ahora recibe la muestra de audio (multipart) e inicia la clonación si hay motor
+  configurado; agregados `GET /lectura/voz-personalizada/audio` (previsualización),
+  `POST /lectura/voz-personalizada/clonar` y `GET /lectura/voz-personalizada/estado`.
+  Códigos de negocio nuevos: `CLONACION_NO_CONFIGURADA`, `CLONACION_NO_DISPONIBLE`,
+  `CLONACION_RESPUESTA_INVALIDA`, `CLONACION_AUDIO_VACIO`, `VOZ_CLONADA_NO_DISPONIBLE`,
+  `VOZ_SIN_MUESTRA` — aditivo.
+- v0.5.0 (2026-10-19): lectura en voz alta (RFP-AGROIA-002) — agregados:
+  `GET|PUT /lectura/preferencias` (preferencia por usuario), `POST /lectura/sintetizar`
+  (respaldo en servidor, audio MP3), `GET|POST /lectura/metricas` (agregados mensuales
+  admin y registro de eventos) y CRUD `/lectura/voz-personalizada` (Fase 2, ciclo de
+  vida de la voz clonada). Códigos de negocio nuevos: `SINTESIS_NO_CONFIGURADA`,
+  `SINTESIS_NO_DISPONIBLE`, `TEXTO_VACIO`, `VOZ_NO_EXISTE` — aditivo.
 - v0.4.0 (2026-10-19): interacción por voz (RFP-AGROIA-001) — agregados:
   `POST /voz/transcripcion` (respaldo en servidor, multipart, audio descartado,
   límites de tamaño/tasa), `GET|PUT /voz/parametros` (lectura para cualquier
