@@ -16,6 +16,7 @@ información del contexto (lectura + reglas + ficha técnica + análisis).
 """
 
 import re
+from datetime import datetime
 
 from agroia.config import get_settings
 from agroia.logging import get_logger
@@ -450,6 +451,116 @@ def _respuesta_variable(mensaje: str, ctx: dict) -> str | None:
     return " ".join(partes)
 
 
+# ── Preguntas conceptuales ("¿qué es / para qué sirve / qué significa X?") ──
+
+_MESES_ES = [
+    "enero", "febrero", "marzo", "abril", "mayo", "junio",
+    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+]
+
+_CONCEPTO_RE = re.compile(
+    r"(para qu[ée] (sirve|se usa|es)|qu[ée] (significa|quiere decir|es|pasa si|pasa cuando)|"
+    r"c[óo]mo se (interpreta|lee|entiende|mide)|significado|"
+    r"(ayud[a-z]*|explic[a-z]*).{0,40}entender)"
+)
+
+_UMBRAL_RE = re.compile(
+    r"(menor|mayor|bajo|alto|por debajo de|por encima de|menos de|m[áa]s de)\s+(?:a|que|de)?\s*(\d+(?:[.,]\d+)?)"
+)
+
+
+def _umbral_mencionado(texto: str) -> tuple[str, str] | None:
+    """Extrae (dirección, número) si el mensaje compara con un umbral."""
+    m = _UMBRAL_RE.search(texto)
+    if not m:
+        return None
+    operador = m.group(1).lower()
+    numero = m.group(2).replace(",", ".")
+    if operador in ("menor", "bajo", "por debajo de", "menos de"):
+        return ("debajo", numero)
+    if operador in ("mayor", "alto", "por encima de", "más de"):
+        return ("encima", numero)
+    return None
+
+
+def _rango_texto_clave(clave: str, ctx: dict) -> str | None:
+    """Texto del rango ideal de una variable (recomendación o regla)."""
+    rango = _rango_variable(ctx.get("recomendaciones") or [], clave)
+    if rango:
+        return str(rango)
+    simbolo = _RULE_VAR.get(clave, clave).lower()
+    for regla in ctx.get("reglas") or []:
+        vregla = str(getattr(regla.variable, "value", regla.variable)).lower()
+        if vregla == simbolo:
+            minimo, maximo = regla.umbral_min, regla.umbral_max
+            if minimo is not None and maximo is not None:
+                return f"entre {minimo} y {maximo}"
+            if minimo is not None:
+                return f"por encima de {minimo}"
+            if maximo is not None:
+                return f"por debajo de {maximo}"
+    return None
+
+
+def _respuesta_conceptual(mensaje: str, ctx: dict) -> str | None:
+    """Responde preguntas de concepto/significado sobre una variable.
+
+    Cubre preguntas como «¿para qué sirve el pH?», «¿qué significa un pH menor
+    a 5.0?» o «¿qué es la materia orgánica?»: explica el concepto, el rango
+    ideal, la interpretación del umbral mencionado y, si existe, la lectura
+    real de la finca — en vez de soltar la respuesta genérica del reporte.
+    """
+    texto = mensaje.lower()
+    if not _CONCEPTO_RE.search(texto):
+        return None
+    clave = _alias_detectado(texto)
+    if clave is None:
+        return None
+    detalle = _DETALLE_VARIABLE.get(clave)
+    nombre = detalle[0] if detalle else _NOMBRE_VARIABLE.get(clave, clave.replace("_", " "))
+    que_es = detalle[1] if detalle else ""
+    lectura = ctx.get("lectura") or {}
+    valor = lectura.get(clave)
+    rango = _rango_texto_clave(clave, ctx)
+    umbral = _umbral_mencionado(texto)
+
+    partes = []
+    if que_es:
+        partes.append(que_es)
+    if rango:
+        partes.append(f"Lo bueno es mantenerlo {rango}.")
+    if umbral:
+        direccion, n = umbral
+        if clave == "ph":
+            if direccion == "debajo":
+                partes.append(
+                    f"Si el pH está por debajo de {n}, la tierra está muy agria (ácida): "
+                    "los cultivos comen mal y conviene encalar antes de sembrar."
+                )
+            else:
+                partes.append(
+                    f"Si el pH está por encima de {n}, la tierra está amarga (alcalina): "
+                    "hay que bajarlo con materia orgánica o azufre."
+                )
+        elif direccion == "debajo":
+            partes.append(
+                f"Si {nombre} está por debajo de {n}, le está faltando a la planta; "
+                "revise el reporte para corregir la dosis."
+            )
+        else:
+            partes.append(
+                f"Si {nombre} está por encima de {n}, puede ser demasiado; "
+                "revise para no pasarse."
+            )
+    if valor is not None:
+        partes.append(f"En su última lectura la finca marcó {valor}.")
+    partes.append(
+        "Este análisis es automático; el técnico de su zona o la UMATA pueden "
+        "afinar la interpretación para su lote."
+    )
+    return " ".join(partes)
+
+
 def _respuesta_local(mensaje: str, ctx: dict) -> str:
     """Motor determinista: responde con reglas + lectura, sin LLM."""
     texto = mensaje.lower()
@@ -469,6 +580,66 @@ def _respuesta_local(mensaje: str, ctx: dict) -> str:
             "¡Con mucho gusto! 🌱 Aquí estaré para lo que necesite. Recuerde que este consejo "
             "es automático y que el técnico o la UMATA de su zona pueden afinar la recomendación. "
             "¡Que la tierra le pague bien!"
+        )
+
+    # ── Fecha / día de hoy ──
+    if re.search(r"(qu[ée] (d[ií]a|fecha) es hoy|hoy es|fecha de hoy|qu[ée] d[ií]a es|d[ií]a de hoy)", texto):
+        clima = ctx.get("clima") or {}
+        fecha = clima.get("fecha")
+        fecha_humana = None
+        # "Hoy" con la hora local del servidor (para el usuario, no la fecha UTC del contexto).
+        try:
+            ahora = datetime.now()
+            fecha_humana = f"{ahora.day} de {_MESES_ES[ahora.month - 1]} de {ahora.year}"
+        except Exception:  # noqa: BLE001 — fallback a la fecha del contexto
+            fecha_humana = None
+        if not fecha_humana and fecha:
+            try:
+                d = datetime.strptime(fecha, "%Y-%m-%d")
+                fecha_humana = f"{d.day} de {_MESES_ES[d.month - 1]} de {d.year}"
+            except ValueError:
+                fecha_humana = fecha
+        if fecha_humana:
+            epoca = clima.get("epoca_ano")
+            return (
+                f"Hoy es {fecha_humana}."
+                + (f" Su finca está en {epoca}." if epoca else "")
+                + " ¿Quiere saber si es buen momento para abonar, sembrar o regar?"
+            )
+        return (
+            "No tengo la fecha del servidor disponible en este momento. "
+            "¿En qué más puedo ayudarle con su finca?"
+        )
+
+    # ── Pregunta conceptual sobre una variable (qué es / para qué sirve / qué significa) ──
+    conceptual = _respuesta_conceptual(mensaje, ctx)
+    if conceptual:
+        return conceptual
+
+    # ── Ubicación de la finca ──
+    if re.search(r"(d[óo]nde|donde).{0,25}(est[áa]|queda|ubicad|localiz)", texto) \
+       or re.search(r"\b(ubicaci[óo]n|municipio|departamento|regi[óo]n)\b", texto):
+        clima = ctx.get("clima") or {}
+        ubicacion = clima.get("ubicacion")
+        if ubicacion:
+            region = clima.get("region_climatica")
+            nombres_region = {
+                "andina": "la región Andina", "caribe": "la región Caribe",
+                "pacifico": "la región Pacífica", "orinoquia": "la Orinoquía",
+            }
+            partes = [f"Su finca está registrada en {ubicacion}."]
+            if region:
+                partes.append(f"Eso cae en {nombres_region.get(region, 'esa zona climática')}.")
+            if clima.get("epoca_ano"):
+                partes.append(f"Ahora mismo la zona está en {clima['epoca_ano']}.")
+            partes.append(
+                "Con esa ubicación y la época del año ya le puedo orientar sobre "
+                "siembra, abono y riego."
+            )
+            return " ".join(partes)
+        return (
+            "No tengo la ubicación de la finca en el contexto actual. "
+            "Seleccione una finca en el reporte y con gusto le digo dónde está y qué le conviene."
         )
 
     # ── Pregunta por una variable específica ──
@@ -708,6 +879,8 @@ def _respuesta_clima(mensaje: str, ctx: dict) -> str:
     rol = (ctx.get("rol") or "cliente").lower()
     sencillo = rol == "cliente"
     partes = []
+    if clima.get("ubicacion"):
+        partes.append(f"Su finca está registrada en {clima['ubicacion']}.")
     if clima.get("fecha"):
         partes.append(f"Hoy es {clima['fecha']}.")
     if clima.get("epoca_ano"):
@@ -912,8 +1085,8 @@ def respuesta_orquestada(mensaje: str, ctx: dict) -> dict:
             "datos_utilizados": datos,
         }
 
-    # ── 4) Clima / época ──
-    if re.search(r"(lluvia|clima|pronóstico|pronostico|esta semana|próxima semana|proxima semana|época|epoca del año|temporada)", texto):
+    # ── 4) Clima / época / lluvia ──
+    if re.search(r"(lluvia|llover|llueve|clima|pronóstico|pronostico|esta semana|próxima semana|proxima semana|época|epoca del año|temporada)", texto):
         return {
             "respuesta": _respuesta_clima(mensaje, ctx),
             "fuentes": ["IDEAM — calendario climático de Colombia (referencia general)"],

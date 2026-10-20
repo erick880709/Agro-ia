@@ -3,11 +3,13 @@ info:
   title: AgroIA API
   description: |-
     API de AgroInteligente Colombia — Plataforma de diagnóstico agronómico inteligente.
-    v0.3.0: módulo AGC-COST completo (F1-F7) — catálogo de parámetros versionado,
-    motor de cálculo determinista, estimaciones con snapshot SHA-256, identidad
-    administrable con PDF, documentos de cobro con numeración consecutiva y
-    conversión a comisión.
-  version: "0.3.0"
+    v0.4.0: interacción por voz en el Asesor agronómico (RFP-AGROIA-001) —
+    transcripción en servidor (respaldo híbrido), parámetros administrables de
+    voz y métricas de uso. v0.3.0: módulo AGC-COST completo (F1-F7) — catálogo
+    de parámetros versionado, motor de cálculo determinista, estimaciones con
+    snapshot SHA-256, identidad administrable con PDF, documentos de cobro con
+    numeración consecutiva y conversión a comisión.
+  version: "0.4.0"
   contact:
     name: AgroIA Team
 
@@ -54,6 +56,45 @@ components:
         total_pages:
           type: integer
           example: 8
+
+    VozParametros:
+      type: object
+      properties:
+        activado:
+          type: boolean
+          description: Activa/desactiva la función de voz
+        duracion_maxima_segundos:
+          type: integer
+          example: 60
+        idioma:
+          type: string
+          example: "es"
+
+    VozMetrica:
+      type: object
+      properties:
+        periodo:
+          type: string
+          example: "2026-10"
+        consultas:
+          type: integer
+          example: 12
+        errores:
+          type: integer
+          example: 1
+        duracion_media_ms:
+          type: integer
+          example: 4500
+
+    TranscripcionResponse:
+      type: object
+      properties:
+        texto:
+          type: string
+          example: "¿Qué abono debo aplicar?"
+        proveedor:
+          type: string
+          example: "openai-whisper"
 
   responses:
     "400":
@@ -446,3 +487,105 @@ paths:
         - { name: documento_id, in: path, required: true, schema: { type: string, format: uuid } }
       responses:
         "200": { description: PDF del documento de cobro }
+
+  /voz/transcripcion:
+    post:
+      summary: Transcribir audio a texto en español (respaldo en servidor)
+      description: Respaldo del enfoque híbrido de voz (RFP-AGROIA-001). El audio se procesa y descarta sin persistencia; aplica límites de tamaño y tasa de peticiones.
+      tags: [Voz]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [audio]
+              properties:
+                audio:
+                  type: string
+                  format: binary
+                idioma:
+                  type: string
+                  default: "es"
+      responses:
+        "200":
+          description: Transcripción realizada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TranscripcionResponse" }
+        "401": { $ref: "#/components/responses/401" }
+        "503":
+          description: Servicio de transcripción no disponible
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+  /voz/parametros:
+    get:
+      summary: Parámetros vigentes de la función de voz
+      tags: [Voz]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Parámetros de voz
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/VozParametros" }
+        "401": { $ref: "#/components/responses/401" }
+    put:
+      summary: Actualizar parámetros de voz (solo administrador)
+      tags: [Voz]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/VozParametros" }
+      responses:
+        "200":
+          description: Parámetros actualizados
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/VozParametros" }
+        "401": { $ref: "#/components/responses/401" }
+        "403": { $ref: "#/components/responses/403" }
+
+  /voz/metricas:
+    get:
+      summary: Agregados mensuales de uso de voz (solo administrador)
+      tags: [Voz]
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Lista de métricas mensuales
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/VozMetrica" }
+        "401": { $ref: "#/components/responses/401" }
+        "403": { $ref: "#/components/responses/403" }
+    post:
+      summary: Registrar un evento de uso de voz
+      tags: [Voz]
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tipo]
+              properties:
+                tipo:
+                  type: string
+                  enum: [consulta, error]
+                duracion_ms:
+                  type: integer
+      responses:
+        "200": { description: Evento registrado }
+        "401": { $ref: "#/components/responses/401" }

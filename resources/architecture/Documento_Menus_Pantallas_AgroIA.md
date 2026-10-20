@@ -3,6 +3,10 @@
 > Documento actualizado a **v3.5** (2026-09-18) · fuente: SPA `apps/frontend-web/` (index.html + app.js) y
 > `Documento_Funcional_Tecnico_AgroIA.md`. Incluye la mejora de **clima actual + pronóstico semanal**
 > en las alertas (commits 918f2a8 → cdf5228, desplegado en producción).
+>
+> Para el inventario transversal más detallado (incluidos costeo, estimaciones, cotizaciones,
+> cobros, operación de campo, límites por rol y endpoints principales), consulta el
+> [catálogo funcional de AgroIA](../functional/catalogo-funcional-agroia.md).
 
 ---
 
@@ -191,7 +195,11 @@ estado) y el bloque de ciclo activo con «Cosechar ciclo».
   - **🧪 Simular enmienda (what-if):** sliders de pH/N/P/K que re-evalúan el motor de reglas sin
     tocar la base de datos.
 - **💬 Asesor agronómico (chat):** conversación sobre el reporte (cómo abonar, qué significa cada
-  medición, qué sembrar) con memoria por finca y opción de adjuntar foto.
+  medición, qué sembrar) con memoria por finca y opción de adjuntar foto. Incluye **dictado por
+  voz** (RFP-AGROIA-001): botón 🎤 con estados y nivel de audio, transcripción híbrida
+  (Web Speech API + respaldo en servidor), revisión/edición antes de enviar y comandos de control
+  (“enviar”, “borrar”, “cancelar”, “repetir”). Requiere finca seleccionada; sin ella el chat
+  solicita elegirla.
 - El reporte HTML contiene: telemetría, escala de pH, diagnóstico, ranking de siembra, mapa de
   calor, plano del lote, análisis económico (ROI), advertencias, próximos pasos, pronóstico
   extendido 7 días, riego (R), rotación (S), BPA (B) y órdenes de trabajo (Q).
@@ -242,6 +250,8 @@ humano; historial de diagnósticos por finca con confirmación de etiqueta por e
 | 🧑‍🤝‍🧑 **Equipo** | CRUD de empleados, tarifas por rol/día y novedades con reemplazo. |
 | 🗂️ **Comisiones** | CRUD de comisiones por finca con equipo, fechas, estados y valores. |
 | 📊 **Lista de trabajos** | Órdenes por etapa (registro → comisión → muestras → recomendación → reporte → fin). |
+| 🎙️ **Parámetros de voz** | Activa/desactiva la voz del chat, duración máxima e idioma (cambios inmediatos). |
+| 📊 **Métricas de voz** | Agregados mensuales de uso: consultas por voz, errores y duración media (sin audio ni contenido). |
 | 🤖 **Reentrenar modelo** | Encola `train_colombia.py` (active learning / completo). |
 
 ---

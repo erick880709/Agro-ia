@@ -89,6 +89,8 @@
         <button class="tab submenu-item" data-tab="comisiones">🗂️ Comisiones</button>
         <button class="tab submenu-item" data-tab="lista-trabajos">📊 Lista de trabajos</button>
         <button class="tab submenu-item" data-tab="costeo-parametros">🧮 Parámetros de costeo</button>
+        <button class="tab submenu-item" data-tab="voz-parametros">🎙️ Parámetros de voz</button>
+        <button class="tab submenu-item" data-tab="voz-metricas">📊 Métricas de voz</button>
         <button class="tab submenu-item" data-tab="estimaciones">📐 Estimación de costos</button>
         <button class="tab submenu-item" data-tab="cobros">🧾 Documentos de cobro</button>
         <button class="tab submenu-item" data-tab="reentrenar">🤖 Reentrenar modelo</button>
@@ -450,11 +452,14 @@
         <form id="form-chat" class="chat-form">
           <input id="chat-input" type="text" maxlength="2000" autocomplete="off"
                  placeholder="Escriba su pregunta… (ej. ¿cada cuánto abono el café?)">
+          <button type="button" class="btn btn-ghost chat-mic" id="chat-mic" title="Dictar por voz" aria-label="Dictar por voz">🎤</button>
           <button type="button" class="btn btn-ghost chat-attach" id="chat-attach"
                   title="Adjuntar foto del cultivo (JPG/PNG, máx. 4,5 MB)">📎</button>
           <button type="submit" class="btn btn-primary" id="chat-btn">Enviar</button>
           <input type="file" id="chat-imagen" accept="image/jpeg,image/png" hidden>
         </form>
+        <span id="chat-voz-estado" class="chat-voz-estado" aria-live="polite"></span>
+        <div id="chat-voz-nivel" class="chat-voz-nivel" aria-hidden="true"><span></span></div>
         <div id="chat-preview" class="chat-preview hidden">
           <img id="chat-preview-img" alt="Vista previa de la foto adjunta">
           <button type="button" class="btn btn-ghost chat-quitar" id="chat-quitar"
@@ -852,6 +857,20 @@
     </div>
   </section>
 
+  <!-- ============ VOZ: parámetros (admin) ============ -->
+  <section id="view-voz-parametros" class="view">
+    <div class="card">
+      <div id="voz-params-root"><p class="muted">Cargando parámetros de voz…</p></div>
+    </div>
+  </section>
+
+  <!-- ============ VOZ: métricas (admin) ============ -->
+  <section id="view-voz-metricas" class="view">
+    <div class="card">
+      <div id="voz-metricas-root"><p class="muted">Cargando métricas de voz…</p></div>
+    </div>
+  </section>
+
   <!-- ============ AGC-COST: estimación de costos (F3, admin/agrónomo) ============ -->
   <section id="view-estimaciones" class="view">
     <div class="card">
@@ -911,5 +930,6 @@
   <script src="/offline.js"></script>
   <script src="/app.js?v=20260827-medicion"></script>
   <script src="/costeo.js?v=20260918-agccost2"></script>
+  <script src="/voz.js?v=20261019-voz1"></script>
 </body>
 </html>

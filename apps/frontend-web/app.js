@@ -7,7 +7,7 @@ const API = '/api/v1';
 const SESION_KEY = 'agroia_sesion';
 
 const TABS_POR_ROL = {
-  admin: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'equipo', 'comisiones', 'lista-trabajos', 'reentrenar', 'precios-cosecha', 'vision', 'catalogo', 'costeo-parametros', 'estimaciones', 'cobros'],
+  admin: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'fincas', 'reg-finca', 'usuarios', 'insumos', 'auditoria', 'bpa', 'equipo', 'comisiones', 'lista-trabajos', 'reentrenar', 'precios-cosecha', 'vision', 'catalogo', 'costeo-parametros', 'voz-parametros', 'voz-metricas', 'estimaciones', 'cobros'],
   agronomo: ['inicio', 'alertas', 'sensores', 'carga', 'recomendaciones', 'historial', 'reportes', 'vision', 'catalogo', 'estimaciones'],
   cliente: ['inicio', 'alertas', 'reportes', 'vision', 'cotizaciones'],
   extensionista: ['inicio', 'alertas', 'zona', 'sensores', 'historial', 'reportes', 'vision', 'catalogo'],
@@ -294,6 +294,8 @@ function goTab(name) {
   if (name === 'lista-trabajos' && state.rol.toLowerCase() === 'admin') cargarListaTrabajos();
   if (name === 'precios-cosecha' && state.rol.toLowerCase() === 'admin') cargarPreciosCosecha();
   if (name === 'costeo-parametros' && typeof cargarCosteoParametros === 'function') cargarCosteoParametros();
+  if (name === 'voz-parametros' && typeof cargarVozParametros === 'function') cargarVozParametros();
+  if (name === 'voz-metricas' && typeof cargarVozMetricas === 'function') cargarVozMetricas();
   if (name === 'estimaciones' && typeof cargarEstimaciones === 'function') cargarEstimaciones();
   if (name === 'cobros' && typeof cargarCobros === 'function') cargarCobros();
   if (name === 'cotizaciones' && typeof cargarCotizaciones === 'function') cargarCotizaciones();
@@ -328,6 +330,9 @@ async function arrancarAplicacion() {
     if (!t.dataset.tab) return;
     t.addEventListener('click', () => goTab(t.dataset.tab));
   });
+
+  // ── Interacción por voz en el chat (RFP-AGROIA-001) ──
+  if (typeof initVoz === 'function') initVoz();
 
   // ── Menús desplegables (Administración y Ayuda) — flotantes sobre el contenido ──
   // Nota: sin ':scope' en querySelector (Safari/WebKit lanza DOMException 12
@@ -4502,8 +4507,11 @@ function limpiarChatImagen() {
 }
 
 function chatFincaId() {
+  // Solo se consulta el asesor si el usuario seleccionó explícitamente una
+  // finca en el reporte (no se usa state.fincaId, que queda auto-seleccionada
+  // por defecto y haría que el chat responda con datos que el usuario no eligió).
   const sel = document.getElementById('repo-finca');
-  return (sel && sel.value) || state.fincaId || null;
+  return (sel && sel.value) || null;
 }
 
 function renderChat() {

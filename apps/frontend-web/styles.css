@@ -551,6 +551,58 @@ details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem;
   font-size: 1.05rem;
 }
 
+.chat-mic {
+  padding: 0 14px;
+  font-size: 1.05rem;
+}
+
+.chat-mic.recording {
+  background: #c62828;
+  color: #fff;
+  animation: chat-mic-pulso 1.2s ease-in-out infinite;
+}
+
+@keyframes chat-mic-pulso {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.45); }
+  50% { box-shadow: 0 0 0 8px rgba(198, 40, 40, 0); }
+}
+
+.chat-mic.hidden {
+  display: none;
+}
+
+.chat-voz-estado {
+  display: block;
+  min-height: 1.1em;
+  margin: 4px 2px 8px;
+  font-size: 0.82rem;
+  color: #5b6b5e;
+}
+
+.chat-voz-estado.grabando { color: #c62828; font-weight: 600; }
+.chat-voz-estado.procesando { color: #1565c0; }
+.chat-voz-estado.error { color: #b71c1c; }
+.chat-voz-estado.ok { color: #2e7d32; }
+
+.chat-voz-nivel {
+  display: none;
+  height: 4px;
+  margin: 2px 2px 8px;
+  background: #e0e7e1;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.chat-voz-nivel.visible { display: block; }
+
+.chat-voz-nivel span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #2e7d32;
+  transition: width 0.08s linear;
+}
+
 .chat-preview {
   display: flex;
   align-items: center;

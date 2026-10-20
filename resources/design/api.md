@@ -68,6 +68,14 @@
 
 ## Historial de cambios del contrato
 
+- v0.4.0 (2026-10-19): interacción por voz (RFP-AGROIA-001) — agregados:
+  `POST /voz/transcripcion` (respaldo en servidor, multipart, audio descartado,
+  límites de tamaño/tasa), `GET|PUT /voz/parametros` (lectura para cualquier
+  usuario autenticado, escritura solo admin) y `GET|POST /voz/metricas`
+  (agregados mensuales admin y registro de eventos). Códigos de negocio nuevos:
+  `TASA_EXCEDIDA`, `AUDIO_VACIO`, `AUDIO_DEMASIADO_GRANDE`,
+  `TRANSCRIPCION_NO_CONFIGURADA`, `TRANSCRIPCION_NO_DISPONIBLE`,
+  `TRANSCRIPCION_VACIA` — aditivo.
 - v0.3.0 (2026-09-18): módulo AGC-COST completo (F2-F7) — agregados: CRUD admin de
   `/costeo/conjuntos` (+ validar, publicar con doble control, archivar, clonar con
   reajuste, reajuste-previo, exportar/importar JSON) y CRUD de servicios, componentes,
