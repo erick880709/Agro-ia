@@ -21,4 +21,5 @@ ENV CHATTERBOX_T3_MODEL=v3 \
     CHATTERBOX_LANGUAGE_ID=es
 
 EXPOSE 8000
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+# Respeta $PORT para plataformas que lo inyectan (p. ej. HF Spaces usa 7860).
+CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-8000}"]
