@@ -3,10 +3,12 @@
 > Grafo de conocimiento generado por la skill `memoria`. Fuente de verdad: `.memoria/graph.json`.
 > Este archivo se regenera; no lo edites a mano.
 
-**4 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T12:14:47.076Z
+**5 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T12:37:08.305Z
 
 ## Contexto activo
 
+- **Implementar epica E5 protocolo de muestreo y contexto (RFP-003)** — `builder` · completado · 2026-11-04
+  HU-05 metadatos de muestreo (modelo SesionMuestreo + migracion 054 + campos profundidad/punto/replica/sesion en sensor_readings + endpoint /muestreo/sesiones), HU-06 contexto agronomico (contexto_agronomico.py, ventana post-fertilizacion/riego -> valida_con_advertencia, wire en consumer), HU-07 guia de campo (/muestreo/guia). 11 tests, integracion 8/8.
 - **Implementar epica E4 calibracion local (RFP-003)** — `builder` · completado · 2026-11-04
   TT-08 modelo de calibracion por regresion lineal (calibracion.py + modelos calibracion_sensor/par_calibracion + migracion 053), TT-09 capa de equivalencia sensor-laboratorio (grado B/C), TT-10 aplicabilidad de humedad por suelo (arenoso/salino no aplicable), HU-04 endpoints /calibracion/pares y /calibracion/{device_id}. 13 tests, integracion 8/8.
 - **Implementar epica E3 incertidumbre y clasificacion (RFP-003)** — `builder` · completado · 2026-11-04
@@ -17,6 +19,13 @@
   TT-01 decodificacion Modbus JXBS-3001 + CRC16 (15 tests), TT-02 firmware ESP32 (apps/iot/firmware), TT-03 verificacion de variante, HU-01 registro de dispositivos con configuracion (migracion 050).
 
 ## Avances
+
+### ✅ Implementar epica E5 protocolo de muestreo y contexto (RFP-003)
+
+- **id:** `mem-20261104123708-3630ca-builder-implementar-epica-e5-protocolo-de-muestreo-y-context`
+- **skill:** `builder` · **estado:** completado · **creado:** 2026-11-04
+- **resumen:** HU-05 metadatos de muestreo (modelo SesionMuestreo + migracion 054 + campos profundidad/punto/replica/sesion en sensor_readings + endpoint /muestreo/sesiones), HU-06 contexto agronomico (contexto_agronomico.py, ventana post-fertilizacion/riego -> valida_con_advertencia, wire en consumer), HU-07 guia de campo (/muestreo/guia). 11 tests, integracion 8/8.
+- **archivos:** `apps/backend/agroia_backend/services/contexto_agronomico.py`
 
 ### ✅ Implementar epica E4 calibracion local (RFP-003)
 

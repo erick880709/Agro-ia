@@ -45,6 +45,7 @@ async def process_sensor_message(message: dict) -> bool:
     """
     from agroia_backend.models.dispositivo_iot import DispositivoIoT
     from agroia_backend.models.sensor_reading import SensorReading
+    from agroia_backend.services.contexto_agronomico import aplicar_contexto
     from agroia_backend.services.incertidumbre import incertidumbres_lectura
     from agroia_backend.services.motor_calidad import (
         VERSION_REGLA_CALIDAD,
@@ -108,6 +109,15 @@ async def process_sensor_message(message: dict) -> bool:
             npk_calibrado=npk_calibrado,
         )
 
+        # ── Contexto agronómico (E5, RF-077): fertilización/riego reciente ──
+        calidad, motivos_calidad = aplicar_contexto(
+            estado=calidad,
+            motivos=motivos_calidad,
+            ts=ts,
+            fecha_ultima_fertilizacion=message.get("fecha_ultima_fertilizacion"),
+            fecha_ultimo_riego=message.get("fecha_ultimo_riego"),
+        )
+
         reading = SensorReading(
             finca_id=finca_id,
             ts=ts,
@@ -139,6 +149,10 @@ async def process_sensor_message(message: dict) -> bool:
             motivos_calidad=motivos_calidad,
             version_regla=VERSION_REGLA_CALIDAD,
             incertidumbre=incertidumbres_lectura(payload),
+            profundidad_cm=message.get("profundidad_cm"),
+            punto_id=message.get("punto_id"),
+            replica_n=message.get("replica_n"),
+            sesion_muestreo_id=message.get("sesion_muestreo_id"),
         )
 
         async with async_session_factory() as session:

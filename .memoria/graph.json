@@ -1,6 +1,6 @@
 {
   "schema": "memoria/v1",
-  "updatedAt": "2026-11-04T12:14:47.076Z",
+  "updatedAt": "2026-11-04T12:37:08.305Z",
   "nodes": [
     {
       "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
@@ -61,6 +61,21 @@
       "source": "manual",
       "createdAt": "2026-11-04T12:14:47.069Z",
       "updatedAt": "2026-11-04T12:14:47.071Z"
+    },
+    {
+      "id": "mem-20261104123708-3630ca-builder-implementar-epica-e5-protocolo-de-muestreo-y-context",
+      "type": "avance",
+      "status": "completado",
+      "skill": "builder",
+      "title": "Implementar epica E5 protocolo de muestreo y contexto (RFP-003)",
+      "summary": "HU-05 metadatos de muestreo (modelo SesionMuestreo + migracion 054 + campos profundidad/punto/replica/sesion en sensor_readings + endpoint /muestreo/sesiones), HU-06 contexto agronomico (contexto_agronomico.py, ventana post-fertilizacion/riego -> valida_con_advertencia, wire en consumer), HU-07 guia de campo (/muestreo/guia). 11 tests, integracion 8/8.",
+      "files": [
+        "apps/backend/agroia_backend/services/contexto_agronomico.py"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T12:37:08.300Z",
+      "updatedAt": "2026-11-04T12:37:08.302Z"
     }
   ],
   "edges": []

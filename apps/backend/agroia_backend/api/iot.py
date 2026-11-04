@@ -1026,6 +1026,96 @@ async def listar_calibraciones(device_id: str):
     }
 
 
+class SesionMuestreoRegistro(BaseModel):
+    """Sesión de muestreo con contexto agronómico (HU-05 / RF-076/077)."""
+    finca_id: str = Field(..., description="UUID de la finca")
+    lote_id: str | None = Field(None, description="UUID del lote")
+    punto_id: str = Field(..., description="Identificador del punto de muestreo")
+    replicas: int = Field(1, ge=1, le=20)
+    profundidad_cm: int | None = Field(None, ge=0)
+    pedregosidad: str | None = None
+    tiempo_estabilizacion_s: int | None = Field(None, ge=0)
+    observaciones: str | None = None
+    foto_url: str | None = None
+    fecha_ultima_fertilizacion: str | None = Field(None, description="YYYY-MM-DD")
+    fecha_ultimo_riego: str | None = Field(None, description="YYYY-MM-DD")
+    fecha_ultima_lluvia: str | None = Field(None, description="YYYY-MM-DD")
+
+
+@router.post("/muestreo/sesiones", status_code=201)
+async def registrar_sesion_muestreo(body: SesionMuestreoRegistro):
+    """Registra una sesión de muestreo con sus metadatos y contexto (HU-05)."""
+    import uuid as uuid_mod
+    from datetime import date
+
+    from agroia.database import async_session_factory
+
+    from agroia_backend.models.sesion_muestreo import SesionMuestreo
+
+    def _a_fecha(texto: str | None) -> date | None:
+        if not texto:
+            return None
+        try:
+            return date.fromisoformat(texto)
+        except ValueError:
+            raise HTTPException(status_code=422, detail={
+                "code": "FECHA_INVALIDA",
+                "message": f"'{texto}' no es una fecha ISO válida (YYYY-MM-DD).",
+            })
+
+    try:
+        finca_uuid = uuid_mod.UUID(body.finca_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FINCA_INVALIDA", "message": "finca_id no es un UUID válido.",
+        })
+
+    lote_uuid = None
+    if body.lote_id:
+        try:
+            lote_uuid = uuid_mod.UUID(body.lote_id)
+        except ValueError:
+            raise HTTPException(status_code=422, detail={
+                "code": "LOTE_INVALIDO", "message": "lote_id no es un UUID válido.",
+            })
+
+    async with async_session_factory() as session:
+        sesion = SesionMuestreo(
+            id=uuid_mod.uuid4(),
+            finca_id=finca_uuid,
+            lote_id=lote_uuid,
+            punto_id=body.punto_id,
+            replicas=body.replicas,
+            profundidad_cm=body.profundidad_cm,
+            pedregosidad=body.pedregosidad,
+            tiempo_estabilizacion_s=body.tiempo_estabilizacion_s,
+            observaciones=body.observaciones,
+            foto_url=body.foto_url,
+            fecha_ultima_fertilizacion=_a_fecha(body.fecha_ultima_fertilizacion),
+            fecha_ultimo_riego=_a_fecha(body.fecha_ultimo_riego),
+            fecha_ultima_lluvia=_a_fecha(body.fecha_ultima_lluvia),
+        )
+        session.add(sesion)
+        await session.commit()
+        sesion_id = str(sesion.id)
+
+    return {
+        "status": "registered",
+        "sesion_id": sesion_id,
+        "finca_id": body.finca_id,
+        "punto_id": body.punto_id,
+        "replicas": body.replicas,
+    }
+
+
+@router.get("/muestreo/guia")
+async def obtener_guia_campo(cultivo: str | None = None):
+    """Guía de campo para el técnico (HU-07 / RF-078)."""
+    from agroia_backend.services.contexto_agronomico import guia_campo
+
+    return guia_campo(cultivo)
+
+
 @router.get("/externas/enrich")
 async def enrich_location(
     lat: float = Query(..., ge=-90, le=90),

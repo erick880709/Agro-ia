@@ -9,7 +9,7 @@ import uuid
 from datetime import datetime
 
 from agroia.database import Base
-from sqlalchemy import DateTime, Float, ForeignKey, String, func
+from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -114,6 +114,22 @@ class SensorReading(Base):
     incertidumbre: Mapped[dict | None] = mapped_column(
         JSONB, nullable=True,
         comment="Mapa variable → incertidumbre estándar (exactitud/√3)",
+    )
+    # ── Metadatos de muestreo (Épica E5, RF-076) ──
+    profundidad_cm: Mapped[int | None] = mapped_column(
+        Integer, nullable=True, comment="Profundidad de la lectura (centro de la capa)"
+    )
+    punto_id: Mapped[str | None] = mapped_column(
+        String(100), nullable=True, comment="Identificador del punto de muestreo"
+    )
+    replica_n: Mapped[int | None] = mapped_column(
+        Integer, nullable=True, comment="Número de réplica dentro del punto"
+    )
+    sesion_muestreo_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("agroia.sesion_muestreo.id", ondelete="SET NULL"),
+        nullable=True,
+        comment="Sesión de muestreo a la que pertenece la lectura",
     )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
