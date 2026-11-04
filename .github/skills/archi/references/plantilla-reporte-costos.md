@@ -1,8 +1,10 @@
 # Plantilla: Reporte HTML de arquitectura de despliegue y costos multi-nube
 
-Se genera junto con `Pricing_<Proyecto>.md` cuando el Caso A activa el modo multi-nube (ver `references/guia-multi-cloud-deployment.md`). Es un único archivo `.html` autocontenido (CSS inline) que un no-técnico (ej. quien aprueba presupuesto) pueda abrir directamente en el navegador sin instalar nada, y ver: el contexto de cada arquitectura de despliegue, el diagrama con los iconos reales de cada nube, y el costo comparado.
+Se genera junto con `17.4-Pricing_<Proyecto>.md` cuando se activa el modo multi-nube. Es un archivo HTML autocontenido para consultar diagramas y costos comparados.
 
-Reemplaza todo lo que está entre `[...]` por el contenido real. El texto entre `<!-- -->` son instrucciones para ti, no deben aparecer en el archivo final. Guarda el resultado como `resources/architecture/Arquitectura_Costos_<NombreProyecto>.html` — crea la carpeta si no existe.
+Reemplaza los marcadores y guarda el resultado como `resources/architecture/17.5-Arquitectura_Costos_<NombreProyecto>.html`.
+
+Lee [contrato-costos.md](contrato-costos.md). Sustituye las tablas de totales ilustrativas de esta plantilla por una sola pareja `<!-- archi-pricing:start -->` / `<!-- archi-pricing:end -->`, rellenada desde `17.4.1` con `validate_pricing.py --sync-reports`. El bloque muestra moneda/fecha/hash y escenarios por proveedor, ambiente y periodicidad. No conservar totales manuales fuera del bloque. Mantén diagramas y narrativa, con detalle por ID de partida, evidencia comercial, recursos compartidos, exclusiones y pendientes. El script solo compara el bloque; revisar semánticamente cualquier cifra narrativa.
 
 ## Cómo embeber los diagramas .drawio
 
@@ -97,18 +99,30 @@ Usa el visor oficial de diagrams.net (`viewer.min.js`), que renderiza el XML del
 
 <div class="assumptions">
   <strong>Supuestos de dimensionamiento:</strong>
-  <p>[Lista de supuestos de carga/tamaño usados para dimensionar los servicios — debe ser consistente con Pricing_&lt;Proyecto&gt;.md.]</p>
+  <p>[Lista de supuestos consistente con 17.4-Pricing_&lt;Proyecto&gt;.md.]</p>
 </div>
 
 <h2>Comparativo de costo mensual estimado</h2>
 <table>
   <thead>
-    <tr><th>Proveedor</th><th class="num">Cómputo</th><th class="num">Base de datos</th><th class="num">Storage</th><th class="num">Red/CDN</th><th class="num">Otros</th><th class="num">Total mensual</th></tr>
+    <tr><th>Proveedor</th><th class="num">Cómputo</th><th class="num">Base de datos</th><th class="num">Storage</th><th class="num">Red/CDN</th><th class="num">IA/LLM</th><th class="num">Otros</th><th class="num">Total mensual</th></tr>
   </thead>
   <tbody>
-    <tr><td><span class="provider-badge aws">AWS</span></td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[total]</td></tr>
-    <tr><td><span class="provider-badge azure">Azure</span></td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[total]</td></tr>
-    <tr><td><span class="provider-badge gcp">GCP</span></td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[total]</td></tr>
+    <tr><td><span class="provider-badge aws">AWS</span></td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]–$[y]</td><td class="num">$[x]</td><td class="num">$[total]</td></tr>
+    <tr><td><span class="provider-badge azure">Azure</span></td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]–$[y]</td><td class="num">$[x]</td><td class="num">$[total]</td></tr>
+    <tr><td><span class="provider-badge gcp">GCP</span></td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]–$[y]</td><td class="num">$[x]</td><td class="num">$[total]</td></tr>
+  </tbody>
+</table>
+<!-- Omite la columna IA/LLM (o usa "N/A" en cada celda) si el proyecto no llama a ningún LLM. -->
+
+<!-- Solo si el proyecto llama a un LLM: detalle de IA/LLM siguiendo references/guia-costos-ia.md -->
+<h2>Detalle de costos de IA/LLM</h2>
+<p>[1-2 líneas: qué capacidades llaman al LLM y si el modelo ya está elegido o se presenta un rango de candidatos.]</p>
+<table>
+  <thead><tr><th>Modelo candidato</th><th class="num">Precio entrada/1M</th><th class="num">Precio salida/1M</th><th class="num">Costo mensual sin buffer</th><th class="num">Costo mensual con buffer</th><th>Fuente</th></tr></thead>
+  <tbody>
+    <tr><td>[ej. económico]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td class="num">$[x]</td><td>[enlace, fecha de consulta]</td></tr>
+    <tr class="total-row"><td colspan="4">Rango total estimado</td><td class="num" colspan="2">$[mínimo]–$[máximo]/mes</td></tr>
   </tbody>
 </table>
 
@@ -118,7 +132,7 @@ Usa el visor oficial de diagrams.net (`viewer.min.js`), que renderiza el XML del
   <p>[2-4 líneas de contexto: cómo se mapean los contenedores del C4 a servicios AWS concretos, y por qué esas elecciones — ej. "el API se despliega en ECS Fargate por no requerir gestión de servidores, con RDS PostgreSQL Multi-AZ para alta disponibilidad".]</p>
 
   <div class="diagram-wrap">
-    <div class="mxgraph" style="max-width:100%;" data-mxgraph="{&quot;toolbar&quot;:&quot;zoom&quot;,&quot;edit&quot;:&quot;_blank&quot;,&quot;xml&quot;:&quot;[PEGAR AQUÍ EL XML DE mxGraphModel DEL ARCHIVO Despliegue_AWS_&lt;Proyecto&gt;.drawio, ESCAPADO PARA HTML]&quot;}"></div>
+    <div class="mxgraph" style="max-width:100%;" data-mxgraph="{&quot;toolbar&quot;:&quot;zoom&quot;,&quot;edit&quot;:&quot;_blank&quot;,&quot;xml&quot;:&quot;[PEGAR AQUÍ EL XML DE 17.1-Despliegue_AWS_&lt;Proyecto&gt;.drawio, ESCAPADO PARA HTML]&quot;}"></div>
   </div>
 
   <table>
@@ -137,7 +151,7 @@ Usa el visor oficial de diagrams.net (`viewer.min.js`), que renderiza el XML del
 </div>
 
 <footer>
-  Generado con asistencia de IA a partir de <code>Documento_Arquitectura_[Proyecto].md</code> y <code>Pricing_[Proyecto].md</code>. Revisar antes de usar para decisiones de presupuesto.
+  Generado con asistencia de IA a partir de <code>00-Documento_Arquitectura_[Proyecto].md</code> y <code>17.4-Pricing_[Proyecto].md</code>. Revisar antes de usar para decisiones de presupuesto.
 </footer>
 
 <script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
@@ -148,5 +162,5 @@ Usa el visor oficial de diagrams.net (`viewer.min.js`), que renderiza el XML del
 ## Reglas
 
 - Un solo archivo `.html`, sin dependencias locales (la única referencia externa es el script del visor de diagrams.net, necesario para renderizar los `.drawio` embebidos — coméntaselo al usuario si va a distribuir el reporte a alguien sin acceso a internet, en cuyo caso puede reemplazarse por una captura estática exportada del diagrama).
-- Los números de este HTML y de `Pricing_<Proyecto>.md` deben coincidir exactamente — genera ambos a partir de la misma tabla de costos, nunca la recalcules dos veces.
-- Si el proyecto no está en modo multi-nube (ya hay un proveedor definido), no generes este reporte — el costo estimado para un solo proveedor va directo en `Pricing_<Proyecto>.md` sin necesidad del comparativo HTML.
+- Los números de este HTML y de `17.4-Pricing_<Proyecto>.md` deben coincidir exactamente, incluido el rango de IA/LLM (`references/guia-costos-ia.md`) cuando aplique.
+- En una nube el reporte es opcional bajo solicitud; si se genera, debe usar el mismo contrato/bloque y figurar en `html_report` del manifiesto.

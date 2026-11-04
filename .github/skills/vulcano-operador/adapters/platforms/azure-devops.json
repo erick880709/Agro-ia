@@ -1,0 +1,27 @@
+{
+  "id": "azure_devops",
+  "kind": "platform",
+  "status": "implemented",
+  "mcp_capability": "azure_devops_mcp",
+  "required_target_fields": ["organization", "project", "repository", "branch"],
+  "allowed_actions": {
+    "register_pipeline": "configure",
+    "create_environment": "configure",
+    "update_variable_group": "configure",
+    "configure_branch_policy": "configure",
+    "queue_pipeline": "execute",
+    "cancel_pipeline_run": "execute",
+    "approve_deployment": "execute",
+    "promote_release": "execute",
+    "rollback_deployment": "execute",
+    "tag_release": "configure"
+  },
+  "mcp_unsupported_actions": {
+    "create_environment": "El servidor oficial @azure-devops/mcp (microsoft/azure-devops-mcp) no expone ninguna herramienta para Environments/approvals en ningun dominio de su TOOLSET.md — verificado 2026-07-21, no es una restriccion de permisos del usuario. Crear el Environment manualmente en el portal (Pipelines > Environments).",
+    "update_variable_group": "Sin herramienta MCP para Variable Groups en ningun dominio del servidor oficial. Gestionar desde el portal (Pipelines > Library).",
+    "configure_branch_policy": "Sin herramienta MCP para Branch Policies en ningun dominio del servidor oficial. Configurar desde el portal (Repos > Branches > Branch policies).",
+    "approve_deployment": "Sin herramienta MCP para resolver un Environment approval en ningun dominio del servidor oficial. Requiere que la persona autorizada lo apruebe desde el portal — coherente ademas con que el agente nunca debe aprobar producción (ver SKILL.md §Limites).",
+    "tag_release": "El dominio pipelines solo expone pipelines_write (run_pipeline/create_pipeline/update_build_stage) — sin herramienta para crear refs de tag via la Git refs API. Crear el tag manualmente o vía otro mecanismo autorizado."
+  },
+  "reference": "references/azure-devops.md"
+}

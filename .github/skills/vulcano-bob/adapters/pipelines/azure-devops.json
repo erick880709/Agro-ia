@@ -1,0 +1,22 @@
+{
+  "id": "azure_devops",
+  "kind": "pipeline",
+  "status": "implemented",
+  "supported_execution_backends": ["azure_devops"],
+  "supports_progressive_delivery": true,
+  "supports_gitops": false,
+  "supports_policy_as_code": true,
+  "supports_notifications": true,
+  "renderer": "scripts/renderers/render-azure-devops.mjs",
+  "remote_operator": "vulcano-operador",
+  "dora_pipeline": {
+    "template": "azure-pipelines.dora.template.yml",
+    "path": "infra/pipelines/dora.yml",
+    "cron_placeholder": "__DORA_CRON__"
+  },
+  "dora_collector_script": {
+    "template": "dora-collect.template.mjs",
+    "path": "scripts/dora-collect.mjs"
+  },
+  "reference": "references/plantillas-codigo.md"
+}

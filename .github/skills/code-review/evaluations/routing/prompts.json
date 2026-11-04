@@ -1,0 +1,54 @@
+[
+  {
+    "id": "R01",
+    "prompt": "revisa mi PR antes de hacer merge, es la rama feature/movimientos contra develop"
+  },
+  {
+    "id": "R02",
+    "prompt": "¿esto está listo para producción?\n```diff\n- return round(sum(float(p) for p in prices), 2)\n+ return sum(Decimal(p) for p in prices).quantize(Decimal('0.01'))\n```"
+  },
+  {
+    "id": "R03",
+    "prompt": "Builder terminó el cambio ACC-12 con rigor reforzado, hazle el code review contra la spec"
+  },
+  {
+    "id": "R04",
+    "prompt": "me dejaron estos comentarios de revisión en el PR, ayúdame a decidir cuáles aplicar y cuáles no"
+  },
+  {
+    "id": "R05",
+    "prompt": "sanity check de los cambios sin commit en el adapter de r2dbc"
+  },
+  {
+    "id": "R06",
+    "prompt": "implementa el endpoint de consulta de saldo en el microservicio de cuentas"
+  },
+  {
+    "id": "R07",
+    "prompt": "diseña la arquitectura objetivo para la plataforma de riesgos con TOGAF"
+  },
+  {
+    "id": "R08",
+    "prompt": "arma la estrategia de pruebas de rendimiento para el canal móvil"
+  },
+  {
+    "id": "R09",
+    "prompt": "explícame qué es Clean Architecture"
+  },
+  {
+    "id": "R10",
+    "prompt": "corrige el bug de redondeo en orders.total"
+  },
+  {
+    "id": "R11",
+    "prompt": "valida que el código Terragrunt que generó la skill de IaC cumpla la calidad esperada antes de hacer merge"
+  },
+  {
+    "id": "R12",
+    "prompt": "crea el stack de Terragrunt para la base de datos de pagos en prod"
+  },
+  {
+    "id": "R13",
+    "prompt": "¿este terragrunt.hcl está bien?\n```hcl\ndependency \"vpc\" {\n  config_path = \"../vpc\"\n  mock_outputs_allowed_terraform_commands = [\"plan\", \"apply\"]\n}\n```"
+  }
+]

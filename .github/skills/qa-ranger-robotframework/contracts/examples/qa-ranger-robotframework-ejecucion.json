@@ -1,0 +1,61 @@
+{
+  "contractVersion": "0.1.0",
+  "capabilityId": "qa-ranger-robotframework",
+  "status": "completed",
+  "summary": "Ejemplo ficticio completo de ejecución Robot Framework: aceptación de base de datos del release.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "Objetivo y alcance ficticios definidos: TC-01..TC-03 de la HU de ejemplo."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "ctrf",
+      "kind": "test_results",
+      "path": "resources/qa/reports/run-robot/ctrf.json",
+      "mediaType": "application/json"
+    },
+    {
+      "id": "report",
+      "kind": "report",
+      "content": "Fixture: 3 casos de aceptación de BD ejecutados; 3 pasan."
+    }
+  ],
+  "pending": [],
+  "data": {
+    "task": "execute",
+    "expected": [
+      {
+        "id": "TC-01",
+        "project": "",
+        "priority": "critical"
+      },
+      {
+        "id": "TC-02",
+        "project": "",
+        "priority": "high"
+      },
+      {
+        "id": "TC-03",
+        "project": "",
+        "priority": "high"
+      }
+    ],
+    "exitCriteria": [
+      {
+        "id": "critical",
+        "status": "met",
+        "evidence": "Fixture: TC-01 pasó."
+      }
+    ],
+    "evidencePolicy": {
+      "level": "api",
+      "required": [
+        "raw_results"
+      ],
+      "override": null
+    }
+  }
+}

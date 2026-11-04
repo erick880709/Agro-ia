@@ -1,0 +1,106 @@
+<mxfile host="65bd71144e">
+    <diagram id="archi-azure-reference" name="Referencia visual Azure">
+        <mxGraphModel dx="2428" dy="2270" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="REFERENCIA VISUAL — DESPLIEGUE AZURE" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#172B4D;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="850" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="warning" value="Plantilla de composición, no arquitectura de solución. Sustituya todos los [CT-*] con componentes aprobados en C4, decisiones y vista de despliegue." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4CE;strokeColor=#D6B656;fontColor=#594300;align=left;spacingLeft=12;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="70" width="1450" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="external-zone" value="Canales y sistemas externos" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=8;spacingLeft=10;fillColor=#F4F5F7;strokeColor=#A5ADBA;dashed=1;fontStyle=1;fontColor=#42526E;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="145" width="210" height="700" as="geometry"/>
+                </mxCell>
+                <mxCell id="external-user" value="[CT-USUARIO / CANAL]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#A5ADBA;fontColor=#172B4D;fontSize=12;" parent="external-zone" vertex="1">
+                    <mxGeometry x="30" y="75" width="150" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="external-system" value="[CT-SISTEMA EXTERNO]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#A5ADBA;fontColor=#172B4D;fontSize=12;" parent="external-zone" vertex="1">
+                    <mxGeometry x="30" y="230" width="150" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="cloud-boundary" value="Microsoft Azure — [CT-SUSCRIPCIÓN / LANDING ZONE]" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=8;spacingLeft=10;fillColor=#EAF5FF;strokeColor=#0078D4;strokeWidth=2;fontStyle=1;fontColor=#005A9E;" parent="1" vertex="1">
+                    <mxGeometry x="280" y="145" width="1210" height="700" as="geometry"/>
+                </mxCell>
+                <mxCell id="region-boundary" value="[CT-REGIÓN] · [CT-AMBIENTE]" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=8;spacingLeft=10;fillColor=none;strokeColor=#5B9BD5;dashed=1;fontStyle=1;fontColor=#2F5597;" parent="cloud-boundary" vertex="1">
+                    <mxGeometry x="25" y="50" width="1160" height="620" as="geometry"/>
+                </mxCell>
+                <mxCell id="vnet-boundary" value="[CT-VNET / RED PRIVADA]" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=8;spacingLeft=10;fillColor=#F7FBFF;strokeColor=#3C78D8;dashed=1;fontStyle=1;fontColor=#2F5597;" parent="region-boundary" vertex="1">
+                    <mxGeometry x="300" y="65" width="625" height="500" as="geometry"/>
+                </mxCell>
+                <mxCell id="app-subnet" value="[CT-SUBRED APLICACIÓN]" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=8;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#7EA6E0;dashed=1;fontColor=#2F5597;" parent="vnet-boundary" vertex="1">
+                    <mxGeometry x="20" y="50" width="285" height="410" as="geometry"/>
+                </mxCell>
+                <mxCell id="apim" value="[CT-GATEWAY API]" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;verticalLabelPosition=bottom;verticalAlign=top;image=img/lib/azure2/integration/API_Management_Services.svg;" parent="app-subnet" archiIconId="azure.api-management" vertex="1">
+                    <mxGeometry x="25" y="80" width="72" height="72" as="geometry"/>
+                </mxCell>
+                <mxCell id="app" value="[CT-CONTENEDOR SIGNIFICATIVO]" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;verticalLabelPosition=bottom;verticalAlign=top;image=img/lib/azure2/compute/App_Services.svg;" parent="app-subnet" archiIconId="azure.app-service" vertex="1">
+                    <mxGeometry x="170" y="80" width="72" height="72" as="geometry"/>
+                </mxCell>
+                <mxCell id="bus" value="[CT-MENSAJERÍA]" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;verticalLabelPosition=bottom;verticalAlign=top;image=img/lib/azure2/integration/Service_Bus.svg;" parent="app-subnet" archiIconId="azure.service-bus" vertex="1">
+                    <mxGeometry x="95" y="245" width="72" height="72" as="geometry"/>
+                </mxCell>
+                <mxCell id="data-subnet" value="[CT-SUBRED DATOS / PRIVATE ENDPOINTS]" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=8;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#7EA6E0;dashed=1;fontColor=#2F5597;" parent="vnet-boundary" vertex="1">
+                    <mxGeometry x="325" y="50" width="280" height="410" as="geometry"/>
+                </mxCell>
+                <mxCell id="database" value="[CT-BASE DE DATOS]" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;verticalLabelPosition=bottom;verticalAlign=top;image=img/lib/azure2/databases/Azure_Database_PostgreSQL_Server.svg;" parent="data-subnet" archiIconId="azure.postgresql" vertex="1">
+                    <mxGeometry x="30" y="80" width="72" height="72" as="geometry"/>
+                </mxCell>
+                <mxCell id="cache" value="[CT-CACHÉ]" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;verticalLabelPosition=bottom;verticalAlign=top;image=img/lib/azure2/databases/Azure_Managed_Redis.svg;" parent="data-subnet" archiIconId="azure.managed-redis" vertex="1">
+                    <mxGeometry x="175" y="80" width="72" height="72" as="geometry"/>
+                </mxCell>
+                <mxCell id="vault" value="[CT-SECRETOS / LLAVES]" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;verticalLabelPosition=bottom;verticalAlign=top;image=img/lib/azure2/security/Key_Vaults.svg;" parent="data-subnet" archiIconId="azure.key-vault" vertex="1">
+                    <mxGeometry x="30" y="245" width="72" height="72" as="geometry"/>
+                </mxCell>
+                <mxCell id="private-endpoint" value="[CT-PRIVATE ENDPOINT]" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;verticalLabelPosition=bottom;verticalAlign=top;image=img/lib/azure2/networking/Private_Endpoint.svg;" parent="data-subnet" archiIconId="azure.private-endpoint" vertex="1">
+                    <mxGeometry x="175" y="245" width="72" height="72" as="geometry"/>
+                </mxCell>
+                <mxCell id="front-door" value="[CT-EDGE / WAF]" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;verticalLabelPosition=bottom;verticalAlign=top;image=img/lib/azure2/networking/Front_Doors.svg;" parent="region-boundary" archiIconId="azure.front-door" vertex="1">
+                    <mxGeometry x="55" y="105" width="72" height="72" as="geometry"/>
+                </mxCell>
+                <mxCell id="entra" value="[CT-IDENTIDAD]" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;verticalLabelPosition=bottom;verticalAlign=top;image=img/lib/azure2/identity/Azure_Active_Directory.svg;" parent="region-boundary" archiIconId="azure.entra-id" vertex="1">
+                    <mxGeometry x="180" y="105" width="72" height="72" as="geometry"/>
+                </mxCell>
+                <mxCell id="insights" value="[CT-OBSERVABILIDAD]" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;verticalLabelPosition=bottom;verticalAlign=top;image=img/lib/azure2/devops/Application_Insights.svg;" parent="region-boundary" archiIconId="azure.application-insights" vertex="1">
+                    <mxGeometry x="970" y="105" width="72" height="72" as="geometry"/>
+                </mxCell>
+                <mxCell id="monitor" value="[CT-MONITOREO]" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;verticalLabelPosition=bottom;verticalAlign=top;image=img/lib/azure2/management_governance/Monitor.svg;" parent="region-boundary" archiIconId="azure.monitor" vertex="1">
+                    <mxGeometry x="970" y="270" width="72" height="72" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend" value="Leyenda: línea continua = llamada síncrona · línea discontinua = asíncrona, identidad o telemetría · cada conector lleva protocolo y propósito · reemplace todo [CT-*] por el componente real y su servicio" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=12;fontColor=#42526E;strokeColor=#C1C7D0;fillColor=#FFFFFF;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="860" width="1450" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=0;curved=0;html=1;endArrow=block;endFill=1;strokeColor=#42526E;" parent="1" source="external-user" target="front-door" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=0;curved=0;html=1;endArrow=block;endFill=1;strokeColor=#42526E;" parent="1" source="front-door" target="apim" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" value="OIDC/OAuth 2.0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;curved=0;html=1;endArrow=block;endFill=1;strokeColor=#42526E;dashed=1;" parent="1" source="apim" target="entra" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=0;curved=0;html=1;endArrow=block;endFill=1;strokeColor=#42526E;" parent="1" source="apim" target="app" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" value="eventos" style="exitX=0.25;exitY=1;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;curved=0;html=1;endArrow=block;endFill=1;strokeColor=#42526E;" parent="1" source="app" target="bus" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" value="SQL/TLS" style="exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;curved=0;html=1;endArrow=block;endFill=1;strokeColor=#42526E;" parent="1" source="app" target="database" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" value="TLS" style="exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;curved=0;html=1;endArrow=block;endFill=1;strokeColor=#42526E;" parent="1" source="app" target="cache" edge="1">
+                    <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="849" y="350"/><mxPoint x="1111" y="350"/></Array></mxGeometry>
+                </mxCell>
+                <mxCell id="e8" value="identidad administrada" style="exitX=0.75;exitY=1;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;curved=0;html=1;endArrow=block;endFill=1;strokeColor=#42526E;dashed=1;" parent="1" source="app" target="vault" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" value="telemetría" style="exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;rounded=0;curved=0;html=1;endArrow=block;endFill=1;strokeColor=#42526E;dashed=1;" parent="1" source="app" target="insights" edge="1">
+                    <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="831" y="336"/></Array></mxGeometry>
+                </mxCell>
+                <mxCell id="e10" value="métricas y alertas" style="edgeStyle=orthogonalEdgeStyle;rounded=0;curved=0;html=1;endArrow=block;endFill=1;strokeColor=#42526E;dashed=1;" parent="1" source="insights" target="monitor" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

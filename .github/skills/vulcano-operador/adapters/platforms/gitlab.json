@@ -1,0 +1,19 @@
+{
+  "id": "gitlab",
+  "kind": "platform",
+  "status": "implemented",
+  "mcp_capability": "gitlab_mcp",
+  "required_target_fields": ["organization", "repository", "branch"],
+  "allowed_actions": {
+    "create_environment": "configure",
+    "update_cicd_variable": "configure",
+    "configure_protected_branch": "configure",
+    "run_pipeline": "execute",
+    "cancel_pipeline": "execute",
+    "approve_deployment": "execute",
+    "promote_release": "execute",
+    "rollback_deployment": "execute",
+    "tag_release": "configure"
+  },
+  "reference": "references/gitlab.md"
+}

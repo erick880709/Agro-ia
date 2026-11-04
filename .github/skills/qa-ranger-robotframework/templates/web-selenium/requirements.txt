@@ -1,0 +1,2 @@
+robotframework==__RF__
+robotframework-seleniumlibrary==6.9.0

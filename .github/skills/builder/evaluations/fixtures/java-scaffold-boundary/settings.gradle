@@ -1,0 +1,12 @@
+rootProject.name = 'cards'
+
+include ':model'
+include ':usecase'
+project(':model').projectDir = file('./domain/model')
+project(':usecase').projectDir = file('./domain/usecase')
+include ':app-service'
+project(':app-service').projectDir = file('./applications/app-service')
+include ':jpa-repository'
+project(':jpa-repository').projectDir = file('./infrastructure/driven-adapters/jpa-repository')
+include ':audit-log'
+project(':audit-log').projectDir = file('./infrastructure/driven-adapters/audit-log')

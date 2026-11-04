@@ -1,0 +1,3 @@
+robotframework==__RF__
+robotframework-databaselibrary==2.5.0
+__DRIVER_PKG__

@@ -1,0 +1,17 @@
+operation: inspect
+status: succeeded
+repository_id: example-api
+idempotency_key: example-api-inspect-001
+artifacts: []
+decisions: []
+warnings: []
+evidence:
+  - kind: repository-inventory
+    path: evidence/inspect.json
+next_steps:
+  - plan
+agent_context:
+  mode: create
+compensation:
+  supported: false
+

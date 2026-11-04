@@ -1,141 +1,177 @@
-# Diagramas de despliegue con iconografía real (.drawio)
+# Diagramas de despliegue cloud con catálogo curado (`.drawio`)
 
-Cuando el proveedor de nube de despliegue es AWS, Azure o GCP, el diagrama de despliegue (sección 12 de la plantilla) se genera como archivo **`.drawio`** (formato diagrams.net / mxGraph), no como Mermaid. Esto permite usar los **iconos oficiales de cada proveedor** en vez de cajas genéricas.
+Esta guía aplica a `17.1-Despliegue_AWS_<Proyecto>.drawio`, `17.2-Despliegue_Azure_<Proyecto>.drawio` y `17.3-Despliegue_GCP_<Proyecto>.drawio`. El diagrama es un **resultado** del diseño aprobado; ni el catálogo de iconos ni una referencia visual deciden componentes, patrones, servicios o topología.
 
-> Antes de generarlo, valida/configura la herramienta MCP `drawio-remoto` siguiendo `references/guia-mcp-diagramacion.md` — si está disponible, úsala para crear/editar el archivo en vez de escribir el XML a mano (esta guía sigue sirviendo como referencia de nombres de shape, colores y como fallback manual). El archivo resultante se guarda dentro de `resources/architecture/` — créala si no existe.
+## Fuentes obligatorias
 
-## Por qué .drawio y no Mermaid para este diagrama
+Antes de generar o editar un `.drawio`, lee:
 
-draw.io/diagrams.net trae **shape libraries nativas y oficiales** de AWS, Azure y GCP (se actualizan junto con los proveedores). Esto significa que en la mayoría de los casos **no necesitas ningún archivo de icono subido por el usuario**: basta con usar el nombre de shape correcto en el atributo `style` de cada `mxCell`. Los paquetes de iconos que suba el usuario (`assets/icons/<proveedor>/`) se usan solo como **fallback** para servicios muy nuevos o de nicho que la librería nativa de draw.io todavía no cubra (ver sección "Fallback a iconos subidos por el usuario").
+- `assets/iconos/catalogo_iconos_curado.json`: fuente canónica de IDs, estilos y estado de los iconos permitidos.
+- `assets/iconos/aliases_iconos.json`: resolución de nombres tecnológicos a IDs canónicos.
+- `assets/iconos/catalogo_iconos.schema.json`: contrato de estructura del catálogo.
+- `assets/drawio/referencia-despliegue-azure.drawio`: referencia **solo de composición visual** para Azure.
+- `17-Vista-de-Despliegue.md`, `10.1-Arquetipo-Solucion.md`, vistas C4, decisiones y diseño detallado: fuentes de verdad de la arquitectura.
 
-## Estructura base de un archivo .drawio
+La referencia Azure fue abstraída del artefacto `resources/architecture/11.2-Despliegue_Azure_OCTO-HR.drawio`. No copies su topología, nombres, servicios ni relaciones. El archivo canónico actual se numera `17.2`; `11.2` es únicamente un antecedente visual del proyecto.
 
-Todo archivo es XML con esta forma. Cambia `id`, `value`, `style` y `geometry` por cada nodo; una `mxCell` con `edge="1"` por cada conexión.
+## Separación de responsabilidades
+
+| Insumo | Sí determina | No determina |
+|---|---|---|
+| C4, `10.1`, decisiones y `17` | Componentes, servicios, relaciones, límites, ambientes, resiliencia y seguridad | Estilo gráfico |
+| Catálogo curado | Icono, biblioteca, ruta/shape, alias, estado y fallback visual | Selección tecnológica |
+| Referencia neutra | Jerarquía visual, espaciado, paleta, leyenda y lectura izquierda-derecha | Arquitectura del proyecto |
+
+Regla: primero define el componente y el servicio con evidencia arquitectónica; después resuelve su representación en el catálogo. Nunca selecciones un servicio porque exista un icono disponible.
+
+## Flujo de selección y generación
+
+1. Construye el inventario de nodos y relaciones desde `17`, C4, diseño detallado, ADR y, cuando aplique, IaC.
+2. Establece un solo proveedor por archivo. En una solución multicloud genera un archivo por proveedor y representa las integraciones externas entre ellos en `17`.
+3. Resuelve cada servicio por alias normalizado en `aliases_iconos.json`; si no existe, consulta `aliases`, `displayName`, `category` y `tags` del catálogo.
+4. Usa únicamente iconos con `status: active` y, de preferencia, `recommended: true`.
+5. Copia el `style` canónico del icono y agrega al `mxCell` el atributo `archiIconId="<id-del-catalogo>"`.
+6. Nombra el nodo con el componente real y su propósito, no solo con el producto cloud. Ejemplo: `API de Nómina · Azure App Service`.
+7. Organiza límites reales: organización/cuenta/suscripción/proyecto, región, red, subred, zona, ambiente y trust boundary. No dibujes límites que no tengan soporte documental.
+8. Etiqueta conexiones relevantes con protocolo, dirección y propósito; identifica flujos síncronos/asíncronos y límites de confianza.
+9. Ejecuta el validador estricto antes de cerrar el artefacto.
+10. Registra en `17` fecha, SHA-256, versión del catálogo, proveedor, resultado del validador y excepciones aprobadas.
+
+## Bibliotecas permitidas
+
+| Proveedor | Biblioteca actual | Mecanismo | Prohibido |
+|---|---|---|---|
+| Azure | `img/lib/azure2/...` | SVG oficial mediante `image=` | `img/lib/mscae/`, `mxgraph.azure.*` |
+| AWS | `mxgraph.aws4.*` | `shape`/`resIcon` nativo | AWS3 o iconos de otro proveedor |
+| GCP | `mxgraph.gcp3.*` | `shape` nativo | `mxgraph.gcp2.*` |
+
+No mezcles bibliotecas de proveedores dentro de un archivo. Las cajas neutras se permiten para usuarios, sistemas externos, límites y anotaciones; no requieren `archiIconId` cuando no fingen ser un recurso cloud.
+
+### Ejemplo Azure2
 
 ```xml
-<mxfile host="app.diagrams.net">
-  <diagram name="Despliegue AWS - [Nombre Proyecto]" id="despliegue-aws">
-    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
-      <root>
-        <mxCell id="0" />
-        <mxCell id="1" parent="0" />
-
-        <!-- Ejemplo: nodo de icono AWS (EC2) -->
-        <mxCell id="ec2_api" value="API de Pedidos" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#ED7100;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;" vertex="1" parent="1">
-          <mxGeometry x="360" y="200" width="78" height="78" as="geometry" />
-        </mxCell>
-
-        <!-- Ejemplo: grupo/contenedor (VPC) -->
-        <mxCell id="vpc1" value="VPC - prod (10.0.0.0/16)" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc;strokeColor=#248814;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#AAB7B8;dashed=0;" vertex="1" parent="1">
-          <mxGeometry x="120" y="120" width="560" height="360" as="geometry" />
-        </mxCell>
-
-        <!-- Ejemplo: conexión -->
-        <mxCell id="edge1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="ec2_api" target="rds_db">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
-</mxfile>
-```
-
-Reglas prácticas:
-- Un solo `<diagram>` por archivo `.drawio` (un proveedor = un archivo). Si generas los 3 proveedores en modo comparación, produce 3 archivos: `Despliegue_AWS_<Proyecto>.drawio`, `Despliegue_Azure_<Proyecto>.drawio`, `Despliegue_GCP_<Proyecto>.drawio`.
-- Agrupa visualmente por límites lógicos reales: VPC/Resource Group/Proyecto, subred pública vs privada, región/zona de disponibilidad.
-- Usa `fillColor` acorde a la paleta de cada proveedor (ver tablas abajo) — no inventes colores.
-- Nombra cada nodo con el nombre real del componente del sistema (ej. "API de Pedidos"), no el nombre genérico del servicio ("EC2 Instance").
-
-## Tabla de shapes — AWS (librería `mxgraph.aws4`)
-
-| Servicio | `shape` / `resIcon` | Color `fillColor` |
-|---|---|---|
-| EC2 (instancia/ASG) | `resIcon=mxgraph.aws4.ec2` | `#ED7100` |
-| ECS / Fargate | `resIcon=mxgraph.aws4.fargate` / `mxgraph.aws4.elastic_container_service` | `#ED7100` |
-| Lambda | `resIcon=mxgraph.aws4.lambda` | `#ED7100` |
-| Elastic Load Balancer / ALB | `resIcon=mxgraph.aws4.application_load_balancer` | `#8C4FFF` |
-| API Gateway | `resIcon=mxgraph.aws4.api_gateway` | `#E7157B` |
-| RDS | `resIcon=mxgraph.aws4.relational_database_service` | `#527FFF` |
-| DynamoDB | `resIcon=mxgraph.aws4.dynamodb` | `#527FFF` |
-| ElastiCache (Redis) | `resIcon=mxgraph.aws4.elasticache` | `#527FFF` |
-| S3 | `resIcon=mxgraph.aws4.simple_storage_service` | `#7AA116` |
-| SQS | `resIcon=mxgraph.aws4.simple_queue_service` | `#E7157B` |
-| SNS | `resIcon=mxgraph.aws4.simple_notification_service` | `#E7157B` |
-| CloudFront | `resIcon=mxgraph.aws4.cloudfront` | `#8C4FFF` |
-| VPC (contenedor) | `shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc` | `#248814` |
-| Subred pública/privada | `shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group` | `#248814` |
-| Route 53 | `resIcon=mxgraph.aws4.route_53` | `#8C4FFF` |
-| Cognito | `resIcon=mxgraph.aws4.cognito` | `#DD344C` |
-| CloudWatch | `resIcon=mxgraph.aws4.cloudwatch` | `#E7157B` |
-
-Patrón de `style` completo para cualquier icono de recurso AWS4 (solo cambia `resIcon` y `fillColor`):
-```
-sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=<COLOR>;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=<RESICON>;
-```
-
-## Tabla de shapes — Azure (librería `mxgraph.azure`)
-
-| Servicio | `shape` | Color `fillColor` |
-|---|---|---|
-| Virtual Machine | `mxgraph.azure.virtual_machine` | `#0078D4` |
-| App Service | `mxgraph.azure.app_services` | `#0078D4` |
-| AKS (Kubernetes Service) | `mxgraph.azure.kubernetes_services` | `#0078D4` |
-| Functions | `mxgraph.azure.function_apps` | `#0078D4` |
-| Application Gateway / Load Balancer | `mxgraph.azure.load_balancers` | `#0078D4` |
-| API Management | `mxgraph.azure.api_management_services` | `#0078D4` |
-| Azure SQL Database | `mxgraph.azure.sql_database` | `#0078D4` |
-| Cosmos DB | `mxgraph.azure.azure_cosmos_db` | `#0078D4` |
-| Azure Cache for Redis | `mxgraph.azure.cache_redis` | `#0078D4` |
-| Blob Storage | `mxgraph.azure.storage_accounts` | `#0078D4` |
-| Service Bus (colas) | `mxgraph.azure.service_bus` | `#0078D4` |
-| Azure CDN / Front Door | `mxgraph.azure.cdn_profiles` | `#0078D4` |
-| Virtual Network (contenedor) | `mxgraph.azure.virtual_networks` | `#0078D4` |
-| Azure AD / Entra ID | `mxgraph.azure.azure_active_directory` | `#0078D4` |
-| Azure Monitor | `mxgraph.azure.monitor` | `#0078D4` |
-
-Patrón de `style` para íconos Azure (estilo plano oficial):
-```
-sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=<COLOR>;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=<SHAPE>;
-```
-
-## Tabla de shapes — GCP (librería `mxgraph.gcp2`)
-
-| Servicio | `shape` | Color `fillColor` |
-|---|---|---|
-| Compute Engine | `mxgraph.gcp2.compute_engine` | `#4285F4` |
-| GKE (Kubernetes Engine) | `mxgraph.gcp2.kubernetes_engine` | `#4285F4` |
-| Cloud Functions | `mxgraph.gcp2.cloud_functions` | `#4285F4` |
-| Cloud Run | `mxgraph.gcp2.cloud_run` | `#4285F4` |
-| Cloud Load Balancing | `mxgraph.gcp2.cloud_load_balancing` | `#4285F4` |
-| API Gateway | `mxgraph.gcp2.api_gateway` | `#4285F4` |
-| Cloud SQL | `mxgraph.gcp2.cloud_sql` | `#4285F4` |
-| Firestore | `mxgraph.gcp2.firestore` | `#4285F4` |
-| Memorystore (Redis) | `mxgraph.gcp2.memorystore` | `#4285F4` |
-| Cloud Storage | `mxgraph.gcp2.cloud_storage` | `#4285F4` |
-| Pub/Sub | `mxgraph.gcp2.pubsub` | `#4285F4` |
-| Cloud CDN | `mxgraph.gcp2.cloud_cdn` | `#4285F4` |
-| VPC (contenedor) | `mxgraph.gcp2.virtual_private_cloud` | `#4285F4` |
-| Identity Platform | `mxgraph.gcp2.identity_platform` | `#4285F4` |
-| Cloud Monitoring | `mxgraph.gcp2.cloud_monitoring` | `#4285F4` |
-
-> Los nombres exactos de shape de Azure y GCP pueden variar levemente entre versiones de draw.io. Si al abrir el archivo un icono no se renderiza (aparece como caja gris con signo de interrogación), es la señal para: 1) verificar el nombre exacto abriendo la librería correspondiente en draw.io Desktop/Web y copiando su `style`, o 2) usar el fallback de imagen (siguiente sección).
-
-## Fallback: iconos subidos por el usuario
-
-Si el usuario cargó paquetes oficiales de iconos en `assets/icons/aws/`, `assets/icons/azure/` o `assets/icons/gcp/` (SVG/PNG individuales, no capturas de pantalla), úsalos solo cuando:
-1. El servicio no tiene shape nativo en draw.io, o
-2. El usuario pide explícitamente una versión/estilo de icono distinta a la nativa.
-
-Para insertar un icono como imagen en vez de shape nativo:
-```xml
-<mxCell id="custom_icon" value="Nombre del Componente" style="shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;image=data:image/svg+xml,<SVG_BASE64_O_URLENCODED>;" vertex="1" parent="1">
-  <mxGeometry x="100" y="100" width="64" height="64" as="geometry" />
+<mxCell id="api" archiIconId="azure.api-management"
+  value="API pública · Azure API Management"
+  style="shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/integration/API_Management_Services.svg;"
+  vertex="1" parent="1">
+  <mxGeometry x="300" y="180" width="72" height="72" as="geometry"/>
 </mxCell>
 ```
-Incrusta el SVG (preferido sobre PNG por escalabilidad) codificado en el atributo `image`, para que el `.drawio` siga siendo un archivo único y portable sin dependencias externas.
 
-## Al generar el archivo
+### Ejemplo AWS4
 
-1. Verifica que el XML sea válido (cierres de tags correctos, sin caracteres sin escapar como `<`, `>`, `&` dentro de atributos `value` — usa entidades `&lt;`, `&gt;`, `&amp;`).
-2. Guarda con extensión `.drawio` junto al documento de arquitectura, referenciado desde la sección 12 con una nota: *"Ver `Despliegue_<Proveedor>_<Proyecto>.drawio` — ábrelo en https://app.diagrams.net o la extensión de VS Code draw.io.integration"*.
-3. El mismo XML (el contenido de `<mxGraphModel>...</mxGraphModel>`) se reutiliza tal cual para embeberlo en el reporte HTML (ver `references/plantilla-reporte-costos.md`), evitando mantener dos versiones del diagrama.
+```xml
+<mxCell id="orders" archiIconId="aws.lambda"
+  value="Procesador de pedidos · Lambda"
+  style="sketch=0;outlineConnect=0;gradientColor=none;fillColor=#ED7100;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;"
+  vertex="1" parent="1">
+  <mxGeometry x="300" y="180" width="72" height="72" as="geometry"/>
+</mxCell>
+```
+
+### Ejemplo GCP3
+
+```xml
+<mxCell id="web" archiIconId="gcp.cloud-run"
+  value="Backend web · Cloud Run"
+  style="sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.cloudrun;"
+  vertex="1" parent="1">
+  <mxGeometry x="300" y="180" width="72" height="72" as="geometry"/>
+</mxCell>
+```
+
+> **AWS4:** en `resourceIcon` el glifo se pinta con `strokeColor` y el fondo con `fillColor`. Con `strokeColor=none` el ícono sale como un cuadrado de color vacío. Copia siempre el `style` del catálogo (v1.1.0+), que usa `strokeColor=#ffffff` como la paleta oficial de draw.io.
+
+### Ejemplo de conector
+
+```xml
+<mxCell id="e-api-db" value="SQL/TLS · lee y escribe"
+  style="edgeStyle=orthogonalEdgeStyle;rounded=0;curved=0;html=1;endArrow=block;endFill=1;strokeColor=#42526E;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;"
+  edge="1" parent="1" source="api" target="db">
+  <mxGeometry relative="1" as="geometry">
+    <Array as="points"><mxPoint x="520" y="216"/></Array>
+  </mxGeometry>
+</mxCell>
+```
+
+`source` y `target` deben existir; `curved=0` va explícito; los anclajes y waypoints se usan cuando el trazado automático atravesaría otro nodo (lo detecta `validate_drawio_layout.py`). Para asíncrono, identidad o telemetría agrega `dashed=1`.
+
+## Contenedores y límites
+
+Los límites (cuenta, región, red, subred, zona de confianza) son parte de la arquitectura, no decoración. Dibújalos con `container=1` y coloca los nodos como hijos (`parent=<id-del-contenedor>`), de modo que se muevan juntos y el validador detecte desbordes.
+
+| Proveedor | Cómo dibujar el límite |
+|---|---|
+| AWS | Entradas `aws.group-*` del catálogo (`group-cloud`, `group-account`, `group-region`, `group-vpc`, `group-subnet-public`, `group-subnet-private`, `group-corporate-dc`), que reproducen los grupos oficiales de AWS4 y llevan `archiIconId`. |
+| Azure | Caja neutra rotulada (`rounded=0;fillColor=none;dashed=1;strokeColor=#0078D4;verticalAlign=top;align=left;spacingLeft=10;container=1;`) con el ícono `azure.virtual-network` u otro del catálogo dentro, como en la referencia. Azure2 no trae shapes de grupo. |
+| GCP | Caja neutra rotulada (`strokeColor=#4285F4`). La biblioteca GCP3 de draw.io no trae grupos ni íconos de Pub/Sub, Memorystore, Cloud Load Balancing o VPC: usa `gcp.generic-service` con el nombre real, o una excepción registrada. |
+
+Las cajas neutras no llevan `archiIconId` porque no fingen ser un recurso cloud.
+
+### Composición específica de AWS
+
+- Anida límites de afuera hacia adentro: AWS Cloud → cuenta (si hay varias) → región → VPC → zona de disponibilidad → subred. Las zonas usan el rectángulo punteado de la paleta oficial (sin ícono, `strokeColor=#147EBA;dashed=1`) y se nombran con su identificador real (`us-east-1a`), no "AZ A".
+- Servicios **globales** (CloudFront, Route 53, WAF asociado a CloudFront, IAM, Organizations) van dentro de AWS Cloud y fuera de la región. Servicios **regionales** sin VPC (S3, DynamoDB, ECR, CloudWatch, Secrets Manager, KMS, Lambda sin VPC) van dentro de la región y fuera de la VPC. Si dudas, la regla es: ¿se elige región al crearlo?
+- Flujo de arriba hacia abajo: usuarios arriba; subredes públicas encima de las privadas; zonas lado a lado con el camino principal alineado en una columna por zona. El balanceador se ubica una sola vez sobre el borde entre zonas; NAT y otros elementos auxiliares hacia el exterior de cada zona.
+- Recursos **implícitos obligatorios** (Internet Gateway cuando hay NAT o balanceador público, por ejemplo) se dibujan aunque la fuente no los mencione y se declaran en `17` como agregados. Recursos **opcionales** cuya presencia depende de una decisión (VPC endpoints, bastión, inspección) no se agregan sin decisión: se registran como pendientes.
+- Para vistas de red o plataforma (`17.6.x`) usa los íconos de red del catálogo `1.2.0`: `aws.transit-gateway`, `aws.cloud-wan`, `aws.network-firewall`, `aws.nat-gateway`, `aws.internet-gateway`, `aws.vpc-endpoints`, `aws.direct-connect`, `aws.site-to-site-vpn`, `aws.route-53` y los de gobierno (`aws.organizations`, `aws.control-tower`, `aws.cloudtrail`, `aws.guardduty`, `aws.security-hub`).
+
+## Fallback y excepciones
+
+Si el servicio no tiene entrada exacta, usa primero el `fallback` genérico del proveedor y conserva el nombre real del servicio. No sustituyas por un icono semánticamente incorrecto.
+
+Un SVG oficial nuevo o una imagen embebida solo se acepta cuando:
+
+- no existe una entrada adecuada ni fallback suficiente;
+- su fuente y términos de uso están verificados;
+- el `mxCell` declara `archiIconException="<justificación breve>"`;
+- la excepción, fuente, responsable y fecha de revisión quedan registradas en `17`;
+- se propone incorporar el icono al catálogo en una versión posterior.
+
+PNG incrustado se evita por calidad y mantenibilidad. Una captura o logo tomado de una página web no es un icono oficial aceptable.
+
+## Validación determinista
+
+Desde la raíz del repositorio:
+
+```powershell
+python .claude/skills/archi/scripts/validate_drawio_catalog.py --strict
+python .claude/skills/archi/scripts/validate_drawio_catalog.py --drawio resources/architecture/17.2-Despliegue_Azure_<Proyecto>.drawio --provider azure --strict
+```
+
+La referencia neutra se valida excepcionalmente con `--reference`, porque conserva placeholders intencionales:
+
+```powershell
+python .claude/skills/archi/scripts/validate_drawio_catalog.py --drawio .claude/skills/archi/assets/drawio/referencia-despliegue-azure.drawio --provider azure --strict --reference
+```
+
+Después del catálogo valida la composición (conectores, solapamientos, contenedores, tamaños, leyenda):
+
+```powershell
+python .claude/skills/archi/scripts/validate_drawio_layout.py --drawio resources/architecture/17.2-Despliegue_Azure_<Proyecto>.drawio --strict
+```
+
+El cierre falla ante XML inválido, más de una página, placeholders en un entregable, biblioteca legada, mezcla de proveedor, `archiIconId` desconocido o diferencia entre el ID y el estilo. No uses `--reference` ni `--allow-multiple-pages` para aprobar un entregable del proyecto.
+
+## Criterios visuales y arquitectónicos
+
+- Una página por proveedor y ambiente representado; evita páginas ocultas o variantes sin decisión.
+- Lectura principal izquierda-derecha: canales, edge, integración, aplicación, datos y operación.
+- Límites y relaciones coinciden con C4 y `17`; no agregues servicios decorativos.
+- Aplica la composición de `references/guia-calidad-visual-diagramas.md` §7: columnas por capa, grilla de 10 px, íconos de 64–78 px del mismo tamaño, contenedores anidados, conectores ortogonales etiquetados sin atravesar nodos, anclajes repartidos y leyenda.
+- Expón zonas, redundancia, escalado, puntos de fallo, controles de red y observabilidad cuando sean relevantes.
+- Distingue existente, nuevo, compartido, gestionado y fuera de alcance mediante etiqueta/leyenda, no alterando arbitrariamente los iconos oficiales.
+- El XML debe quedar sin compresión para permitir revisión, diff y validación automática.
+
+## Mantenimiento del catálogo
+
+El catálogo fija repositorio, commit, versión de draw.io, archivos fuente y términos. Una actualización requiere:
+
+1. verificar las fuentes oficiales fijadas;
+2. actualizar solo entradas necesarias, alias y reemplazos;
+3. incrementar `catalogVersion` con SemVer y `generatedAt`;
+4. mantener IDs existentes o declararlos `deprecated` con `replacement`;
+5. ejecutar el validador del catálogo y la referencia;
+6. documentar el cambio en `release.md`.
+
+No reemplaces el catálogo curado por un volcado masivo: el catálogo fuente puede servir para descubrimiento, pero solo pasan al catálogo canónico los iconos revisados y necesarios.

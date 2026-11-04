@@ -1,0 +1,26 @@
+{
+  "contractVersion": "0.1.0",
+  "capabilityId": "qa-ranger-plan-pruebas",
+  "status": "input_required",
+  "summary": "Se requieren reglas de negocio para definir resultados esperados verificables.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "El encargo solicita diseñar pruebas unitarias."
+    },
+    {
+      "id": "requirements_available",
+      "passed": false,
+      "evidence": "La fuente indica que no hay reglas ni criterios de aceptación definidos."
+    }
+  ],
+  "artifacts": [],
+  "pending": [
+    {
+      "description": "Proporcionar las reglas de negocio y sus criterios de aceptación.",
+      "owner": "Responsable de negocio"
+    }
+  ],
+  "data": null
+}

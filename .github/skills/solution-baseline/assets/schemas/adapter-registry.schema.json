@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.invalid/solution-baseline/adapter-registry.schema.json",
+  "title": "Solution Baseline Adapter Registry",
+  "type": "object",
+  "required": ["schema_version", "adapters"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "adapters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "workloads", "detect", "native_engines", "validations", "owner"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+          "workloads": { "type": "array", "minItems": 1, "items": { "enum": ["web", "api", "worker", "agent", "integrations", "library"] }, "uniqueItems": true },
+          "owner": { "type": "string", "minLength": 1 },
+          "detect": {
+            "type": "object",
+            "properties": {
+              "files_any": { "type": "array", "items": { "type": "string" } },
+              "dependencies_any": { "type": "array", "items": { "type": "string" } },
+              "content_any": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          },
+          "native_engines": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+          "validations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "command"],
+              "properties": {
+                "id": { "type": "string", "minLength": 1 },
+                "command": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+                "when_script_exists": { "type": "string" },
+                "optional": { "type": "boolean" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
+

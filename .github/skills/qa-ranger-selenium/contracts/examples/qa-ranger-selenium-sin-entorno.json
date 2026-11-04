@@ -1,0 +1,21 @@
+{
+  "contractVersion": "0.1.0",
+  "capabilityId": "qa-ranger-selenium",
+  "status": "failed",
+  "summary": "No hay acceso al ambiente; no se fabrican resultados.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": false,
+      "evidence": "Falta acceso al ambiente del encargo."
+    }
+  ],
+  "artifacts": [],
+  "pending": [
+    {
+      "description": "El host debe proporcionar ambiente autorizado y acceso para ejecutar.",
+      "owner": "Host"
+    }
+  ],
+  "data": null
+}

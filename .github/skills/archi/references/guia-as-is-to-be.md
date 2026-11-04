@@ -1,6 +1,6 @@
 # Guía: Gap Analysis y Roadmap de Migración (AS-IS → TO-BE)
 
-Esta guía detalla las secciones 14 y 15 de la plantilla de documento cuando trabajas en Caso C (evolución de arquitectura). El objetivo de estas dos secciones es que alguien que nunca vio el AS-IS ni el TO-BE entienda, sin leer nada más, qué cambia, cuánto cuesta cambiarlo y en qué orden hacerlo.
+Esta guía detalla `23-Analisis-de-Brechas.md` y `24-Roadmap-de-Migracion.md` cuando trabajas en Caso C. El objetivo es que alguien que nunca vio el AS-IS ni el TO-BE entienda qué cambia, cuánto cuesta cambiarlo y en qué orden hacerlo.
 
 ## Análisis de Brechas (Gap Analysis)
 
@@ -36,6 +36,6 @@ Estructura el roadmap en fases incrementales — cada fase debe dejar el sistema
 
 Pautas para secuenciar las fases:
 - Prioriza primero lo que **desbloquea** otras fases (ej. separar un servicio de identidad antes de dividir servicios que dependen de autenticación centralizada), no necesariamente lo que es "más fácil" o "más visible".
-- Prefiere el patrón *strangler fig* (el sistema nuevo convive con el legacy y le va quitando responsabilidades gradualmente) sobre reescrituras paralelas completas, salvo que el legacy sea tan pequeño que no lo justifique.
+- Evalúa el patrón *Strangler Fig* de `references/guia-catalogo-patrones.md` (el sistema nuevo convive con el legacy y le va quitando responsabilidades gradualmente) antes de una reescritura paralela completa. Si lo aplicas, registra su `TP-xxx`, enrutamiento, coexistencia, ownership de datos, rollback y criterio de retiro; si lo descartas, documenta por qué el legacy o el riesgo no lo justifican.
 - Cada fase debe tener una forma clara de revertirse o al menos de detenerse sin dejar el sistema en un estado peor que antes de empezarla.
 - Si el roadmap tiene más de 5-6 fases, agrúpalas en hitos/trimestres para que el documento siga siendo legible a nivel ejecutivo, y deja el detalle fase por fase como sub-secciones.

@@ -1,0 +1,7 @@
+interface:
+  display_name: "DBA"
+  short_description: "Diseña, revisa, optimiza y migra bases relacionales y NoSQL con evidencia"
+  default_prompt: "Usa $dba para revisar el modelo de datos y las migraciones de este cambio."
+
+policy:
+  allow_implicit_invocation: true

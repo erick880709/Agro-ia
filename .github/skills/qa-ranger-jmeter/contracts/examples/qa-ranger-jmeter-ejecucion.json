@@ -1,0 +1,51 @@
+{
+  "contractVersion": "0.1.0",
+  "capabilityId": "qa-ranger-jmeter",
+  "status": "completed",
+  "summary": "Ejemplo ficticio completo de ejecución JMeter; no representa una prueba de carga real.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "Objetivo y alcance ficticios definidos."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "ctrf",
+      "kind": "test_results",
+      "path": "resources/qa/reports/run-jmeter/ctrf.json",
+      "mediaType": "application/json"
+    },
+    {
+      "id": "report",
+      "kind": "report",
+      "content": "Fixture: p95 180 ms, SLA acordado 250 ms, 0 errores."
+    }
+  ],
+  "pending": [],
+  "data": {
+    "task": "execute",
+    "expected": [
+      {
+        "id": "PERF-01",
+        "project": "",
+        "priority": "critical"
+      }
+    ],
+    "exitCriteria": [
+      {
+        "id": "sla-p95",
+        "status": "met",
+        "evidence": "Fixture: p95 180 ms < SLA acordado 250 ms; 0 errores."
+      }
+    ],
+    "evidencePolicy": {
+      "level": "api",
+      "required": [
+        "raw_results"
+      ],
+      "override": null
+    }
+  }
+}

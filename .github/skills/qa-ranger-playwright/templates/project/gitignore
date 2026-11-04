@@ -1,0 +1,13 @@
+node_modules/
+test-results/
+playwright-report/
+blob-report/
+results/
+resources/qa/test-results/
+resources/qa/reports/
+resources/qa/*/*/*/attempt-*/
+playwright/.auth/
+playwright/.cache/
+.playwright-cli/
+.env
+*.har

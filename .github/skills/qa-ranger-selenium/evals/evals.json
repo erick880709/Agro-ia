@@ -1,0 +1,81 @@
+{
+  "skill_name": "qa-ranger-selenium",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Necesito automatizar en Selenium con Java el flujo de transferencias de esta app (node evals/files/banca-demo-server.js 3200; usuario usuario.qa / Clave-Prueba-1): camino feliz, validaciones, saldo insuficiente, cancelación e historial. Java 17 con Maven.",
+      "expected_output": "Proyecto generado con scaffold.py (java-junit5); exploración real con explorar_pagina.py antes de escribir localizadores (detecta que Confirmar/Cancelar están ocultos hasta Continuar); page objects con By (sin PageFactory) que esperan su estado; espera por texto no vacío del mensaje; sesión nueva por test; @ParameterizedTest para validaciones; @DisplayName con [HU][CA]; compila sin deprecaciones; lint sin hallazgos; pasa en paralelo (referencia: 14/14, 42/42 en 3 rondas con 4 hilos); RTM 8/8 desde surefire-reports.",
+      "files": [
+        "evals/files/banca-demo-server.js"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-selenium",
+        "task": "implement",
+        "status": [
+          "completed",
+          "partial",
+          "failed",
+          "input_required"
+        ],
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Revisa esta suite heredada (Java y Python) y dime qué está mal y cómo corregirlo para llevarla a Selenium 4.",
+      "expected_output": "Ejecuta lint_selenium.py (20 reglas, ~46 hallazgos) y entrega reporte priorizado con código corregido: driver estático/fixture de sesión (S6), API Selenium 3 (S11), credenciales literales (S9), tests sin aserción (S14), implicit wait 10/15 s (S2), Thread.sleep (S1), XPath absoluto/posicional y clases generadas (S3/S4), clic por JS (S8), orden entre tests y estado compartido 'referencia' (S19 + revisión manual), close() sin quit() (S7), excepciones tragadas, reintentos ocultando flakiness, PageFactory, WebDriverManager/setProperty; plan de migración del recurso 12.",
+      "files": [
+        "evals/files/suite-mala/LoginTests.java",
+        "evals/files/suite-mala/test_pagos.py"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-selenium",
+        "task": "review",
+        "status": "completed",
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "Este test de transferencias en pytest falla a veces en el pipeline con assert 'Transferencia exitosa' in ''. ¿Qué pasa y cómo lo arreglo?",
+      "expected_output": "Reproduce repitiendo la ejecución; usa la evidencia del fallo (page source: mensaje vacío, overlay de carga visible, botón deshabilitado) en lugar de adivinar; identifica sleep fijo vs latencia variable y lectura sin espera; corrige con WebDriverWait sobre el texto no vacío; verifica con repeticiones (referencia: 7/12 fallos → 12/12). Advierte que esperar visibilidad de un contenedor vacío puede funcionar por accidente.",
+      "files": [
+        "evals/files/banca-demo-server.js"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-selenium",
+        "task": "diagnose",
+        "status": "completed",
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 4,
+      "prompt": "Diseña casos Selenium para RF-01: un login autorizado muestra Inicio; RF-02: contraseña incorrecta muestra un error y conserva la pantalla de acceso. Entrega diseño trazable, sin código ni ejecución, sin inventar localizadores.",
+      "files": [],
+      "oracle": {
+        "capabilityId": "qa-ranger-selenium",
+        "task": "design",
+        "status": "completed",
+        "requirements": [
+          "RF-01",
+          "RF-02"
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "prompt": "Ejecuta una suite Selenium. No hay URL, aplicación, credenciales ni acceso al ambiente. Conserva el bloqueo sin inventar evidencia o una ejecución.",
+      "files": [],
+      "oracle": {
+        "capabilityId": "qa-ranger-selenium",
+        "task": "execute",
+        "status": [
+          "input_required",
+          "failed"
+        ],
+        "noSource": true
+      }
+    }
+  ]
+}

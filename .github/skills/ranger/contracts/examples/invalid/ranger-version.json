@@ -1,0 +1,105 @@
+{
+  "contractVersion": "1.0.0",
+  "capabilityId": "ranger",
+  "status": "completed",
+  "summary": "Reporte terminado con recomendación NO-GO: TC-01 pasó y falta ejecutar el caso crítico TC-02.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "Evaluar la corrida ficticia contra los dos casos previstos en chromium."
+    },
+    {
+      "id": "results_available",
+      "passed": true,
+      "evidence": "Fixture ilustrativa con un caso pasado y otro no ejecutado."
+    },
+    {
+      "id": "criteria_reviewed",
+      "passed": true,
+      "evidence": "El plan exige completar los casos críticos."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "raw",
+      "kind": "raw_results",
+      "content": "Fixture ficticia: TC-01 pasó en chromium; TC-02 no aparece en la corrida."
+    },
+    {
+      "id": "report",
+      "kind": "report",
+      "content": "Ejemplo ficticio: el reporte está terminado, pero falta ejecutar TC-02 crítico. La recomendación es NO-GO."
+    },
+    {
+      "id": "video",
+      "kind": "video",
+      "uri": "https://example.invalid/fixtures/TC-01/video"
+    },
+    {
+      "id": "trace",
+      "kind": "trace",
+      "uri": "https://example.invalid/fixtures/TC-01/trace"
+    },
+    {
+      "id": "screenshot",
+      "kind": "screenshot",
+      "uri": "https://example.invalid/fixtures/TC-01/screenshot"
+    }
+  ],
+  "pending": [
+    {
+      "description": "Ejecutar TC-02 y actualizar la evaluación de la corrida.",
+      "owner": "QA"
+    }
+  ],
+  "data": {
+    "execution": {
+      "expected": [
+        {
+          "id": "TC-01",
+          "project": "chromium",
+          "priority": "critical"
+        },
+        {
+          "id": "TC-02",
+          "project": "chromium",
+          "priority": "critical"
+        }
+      ],
+      "cases": [
+        {
+          "id": "TC-01",
+          "project": "chromium",
+          "priority": "critical",
+          "status": "passed",
+          "retries": 0,
+          "evidence": [
+            "video",
+            "trace",
+            "screenshot"
+          ]
+        }
+      ],
+      "runErrors": [],
+      "exitCriteria": [
+        {
+          "id": "critical-cases",
+          "status": "failed",
+          "evidence": "TC-02 no fue ejecutado."
+        }
+      ],
+      "sourceArtifact": "raw",
+      "evidencePolicy": {
+        "level": "browser",
+        "required": [
+          "video",
+          "trace",
+          "screenshot"
+        ],
+        "override": null
+      }
+    },
+    "task": "report"
+  }
+}

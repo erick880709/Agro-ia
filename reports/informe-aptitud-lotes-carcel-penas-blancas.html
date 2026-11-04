@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de aptitud por lote — Carcel Peñas blancas</title>
+<style>
+  :root {
+    --verde-700: #1b5e20; --verde-100: #e6f4e6;
+    --ambar-700: #b45309; --ambar-100: #fef3c7;
+    --rojo-700: #b91c1c; --rojo-100: #fee2e2;
+    --gris: #f7f8f7; --borde: #e2e8e2; --texto: #1f2937; --muted: #6b7280;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: var(--texto); background: var(--gris); line-height: 1.55; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 20px 60px; }
+  header { background: linear-gradient(135deg, #1b5e20, #2e7d32); color: #fff; border-radius: 14px; padding: 28px 30px; margin-bottom: 22px; }
+  header h1 { margin: 0 0 8px; font-size: 1.5rem; }
+  header .sub { opacity: .92; font-size: .95rem; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 22px; }
+  .kpi { background: #fff; border: 1px solid var(--borde); border-radius: 12px; padding: 16px; }
+  .kpi .num { font-size: 1.5rem; font-weight: 700; color: var(--verde-700); }
+  .kpi .lbl { font-size: .85rem; color: var(--muted); }
+  .alert { background: #fff7ed; border: 1px solid #fed7aa; border-left: 5px solid #ea580c; border-radius: 10px; padding: 14px 16px; margin-bottom: 22px; font-size: .95rem; }
+  .lote { background: #fff; border: 1px solid var(--borde); border-radius: 14px; padding: 22px; margin-bottom: 22px; }
+  .lote-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+  .lote-head h2 { margin: 0; font-size: 1.25rem; color: var(--verde-700); }
+  .lote-head .sub { color: var(--muted); font-size: .88rem; }
+  .badge { font-size: .8rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+  .badge.rojo { background: var(--rojo-100); color: var(--rojo-700); }
+  .badge.ambar { background: var(--ambar-100); color: var(--ambar-700); }
+  .badge.verde { background: var(--verde-100); color: var(--verde-700); }
+  .meta { display: flex; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: .88rem; margin: 10px 0 16px; }
+  .conf { font-weight: 600; }
+  .conf.rojo { color: var(--rojo-700); } .conf.ambar { color: var(--ambar-700); } .conf.verde { color: var(--verde-700); }
+  .cols { display: grid; grid-template-columns: 1fr 1.6fr; gap: 16px; }
+  @media (max-width: 820px) { .cols { grid-template-columns: 1fr; } }
+  .card { border: 1px solid var(--borde); border-radius: 10px; padding: 14px; background: #fcfdfc; }
+  .card h3 { margin: 0 0 10px; font-size: .95rem; color: var(--verde-700); }
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--borde); vertical-align: top; }
+  th { background: var(--verde-100); color: var(--verde-700); font-weight: 600; }
+  td small { color: var(--muted); }
+  .estado { font-weight: 700; padding: 1px 8px; border-radius: 6px; font-size: .78rem; }
+  .estado.exceso { background: var(--rojo-100); color: var(--rojo-700); }
+  .estado.deficit { background: var(--ambar-100); color: var(--ambar-700); }
+  .prio { font-size: .75rem; font-weight: 700; padding: 1px 7px; border-radius: 6px; }
+  .prio.critica { background: var(--rojo-100); color: var(--rojo-700); }
+  .prio.alta { background: #fee2e2; color: var(--rojo-700); }
+  .prio.media { background: var(--ambar-100); color: var(--ambar-700); }
+  .cond { color: var(--ambar-700); font-size: .78rem; }
+  .plan { background: #fff; border: 1px solid var(--borde); border-radius: 14px; padding: 22px; }
+  .plan h2 { margin: 0 0 12px; color: var(--verde-700); }
+  .plan ol { margin: 0; padding-left: 20px; }
+  .plan li { margin-bottom: 10px; }
+  .nota-final { background: var(--verde-100); border: 1px solid #bcdcbc; border-radius: 10px; padding: 14px 16px; margin-top: 20px; font-size: .92rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Informe de aptitud por lote</h1>
+    <div class="sub">Finca Carcel Peñas blancas · Calarcá, Quindío · ID 042217d5-0c84-40be-aa5f-080429fbfcba · Motor de reglas UPRA / Cenicafé / AGROSAVIA · 2026-11-03</div>
+  </header>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num">2</div><div class="lbl">Lotes analizados</div></div>
+    <div class="kpi"><div class="num">199</div><div class="lbl">Lecturas de campo</div></div>
+    <div class="kpi"><div class="num">pH</div><div class="lbl">Hallazgo principal (alcalino)</div></div>
+    <div class="kpi"><div class="num">3</div><div class="lbl">Nutrientes condicionales (sin calibrar)</div></div>
+  </div>
+
+  <div class="alert">
+    <strong>⚠️ Alcance de la confiabilidad:</strong> el sensor NPK (<code>esp32-npk-001</code>) no está calibrado
+    contra laboratorio. Las conclusiones sobre <strong>pH y conductividad eléctrica</strong> son confiables;
+    las de <strong>nitrógeno, fósforo y potasio</strong> son <strong>condicionales</strong> y requieren análisis
+    de laboratorio antes de aplicar fertilizantes.
+  </div>
+
+  
+<section class="lote">
+  <div class="lote-head">
+    <h2>🌱 Lote Frijol</h2>
+    <span class="badge ambar">Moderadamente apta</span>
+    <span class="sub">· pendiente de validación técnica</span>
+  </div>
+  <div class="meta">
+    <span><strong>110</strong> lecturas</span>
+    <span>📍 pos_x=148.71, pos_y=-613.37 (m)</span>
+    <span>GPS aprox. 4.513333, -75.650278</span>
+    <span class="conf rojo">Confianza del modelo: <strong>24%</strong></span>
+  </div>
+  <div class="cols">
+    <div class="card">
+      <h3>📊 Datos de entrada (mediana y rango)</h3>
+      <table class="data">
+        <thead><tr><th>Variable</th><th>Mediana (mín – máx)</th></tr></thead>
+        <tbody>
+    <tr><td>pH</td><td>7.9 <small>(7.1 – 9)</small></td></tr>
+    <tr><td>Nitrógeno (N)</td><td>0 <small>(0 – 4)</small></td></tr>
+    <tr><td>Fósforo (P)</td><td>2 <small>(0 – 7)</small></td></tr>
+    <tr><td>Potasio (K)</td><td>5 <small>(0 – 17)</small></td></tr>
+    <tr><td>Conductividad eléctrica (dS/m)</td><td>0.032 <small>(0 – 0.103)</small></td></tr>
+    <tr><td>Humedad ambiental (%)</td><td>31.5 <small>(24.3 – 65.4)</small></td></tr>
+    <tr><td>Temperatura ambiental (°C)</td><td>21.5 <small>(20.8 – 25.1)</small></td></tr>
+    </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>🧪 Evaluación frente al cultivo</h3>
+      <table class="recs">
+        <thead><tr><th>Var</th><th>Estado</th><th>Valor</th><th>Rango óptimo</th><th>Prioridad</th><th>Acción recomendada</th></tr></thead>
+        <tbody><tr><td><strong>pH</strong></td><td><span class="estado exceso">EXCESO</span></td><td>7.9</td><td>5.5 – 7.0</td><td><span class="prio alta">Alta</span></td><td>El pH está alcalino para el fríjol. Encalar solo si pH < 5.5; para pH > 7.5 incorporar materia orgánica ácida.</td></tr>
+<tr><td><strong>P</strong></td><td><span class="estado deficit">DEFICIT</span></td><td>2</td><td>20 – 60</td><td><span class="prio alta">Alta</span></td><td>Ajustar fósforo: fundamental para nodulación y floración. <span class="cond">⚠ condicional a laboratorio</span></td></tr>
+<tr><td><strong>N</strong></td><td><span class="estado deficit">DEFICIT</span></td><td>0</td><td>40 – 120</td><td><span class="prio media">Media</span></td><td>Ajustar nitrógeno: el fríjol fija N pero responde a arranque (10–20 kg/ha). <span class="cond">⚠ condicional a laboratorio</span></td></tr>
+<tr><td><strong>K</strong></td><td><span class="estado deficit">DEFICIT</span></td><td>5</td><td>100 – 250</td><td><span class="prio media">Media</span></td><td>Ajustar potasio: KCl en banda al momento de la siembra. <span class="cond">⚠ condicional a laboratorio</span></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+  
+<section class="lote">
+  <div class="lote-head">
+    <h2>🌱 Lote Café</h2>
+    <span class="badge rojo">No apta</span>
+    <span class="sub">· pendiente de validación técnica</span>
+  </div>
+  <div class="meta">
+    <span><strong>89</strong> lecturas</span>
+    <span>📍 pos_x=87.18, pos_y=-458.92 (m)</span>
+    <span>GPS aprox. 4.514722, -75.650833</span>
+    <span class="conf rojo">Confianza del modelo: <strong>11%</strong></span>
+  </div>
+  <div class="cols">
+    <div class="card">
+      <h3>📊 Datos de entrada (mediana y rango)</h3>
+      <table class="data">
+        <thead><tr><th>Variable</th><th>Mediana (mín – máx)</th></tr></thead>
+        <tbody>
+    <tr><td>pH</td><td>7.3 <small>(6.5 – 8.9)</small></td></tr>
+    <tr><td>Nitrógeno (N)</td><td>1 <small>(0 – 13)</small></td></tr>
+    <tr><td>Fósforo (P)</td><td>4 <small>(0 – 19)</small></td></tr>
+    <tr><td>Potasio (K)</td><td>9 <small>(1 – 45)</small></td></tr>
+    <tr><td>Conductividad eléctrica (dS/m)</td><td>0.057 <small>(0.008 – 0.28)</small></td></tr>
+    <tr><td>Humedad ambiental (%)</td><td>50.6 <small>(30.7 – 64.7)</small></td></tr>
+    <tr><td>Temperatura ambiental (°C)</td><td>22.7 <small>(20.7 – 24.1)</small></td></tr>
+    </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>🧪 Evaluación frente al cultivo</h3>
+      <table class="recs">
+        <thead><tr><th>Var</th><th>Estado</th><th>Valor</th><th>Rango óptimo</th><th>Prioridad</th><th>Acción recomendada</th></tr></thead>
+        <tbody><tr><td><strong>pH</strong></td><td><span class="estado exceso">EXCESO</span></td><td>7.3</td><td>5.5 – 6.5</td><td><span class="prio critica">Crítica</span></td><td>Ajustar pH al rango 5.5–6.5: yeso agrícola si es alcalino (no aplicar cal dolomítica).</td></tr>
+<tr><td><strong>N</strong></td><td><span class="estado deficit">DEFICIT</span></td><td>1</td><td>200 – 400</td><td><span class="prio alta">Alta</span></td><td>Nitrógeno fuera de rango: ajustar plan de fertilización nitrogenada fraccionada según Cenicafé. <span class="cond">⚠ condicional a laboratorio</span></td></tr>
+<tr><td><strong>P</strong></td><td><span class="estado deficit">DEFICIT</span></td><td>4</td><td>30 – 75</td><td><span class="prio alta">Alta</span></td><td>Fósforo fuera de rango: aplicar DAP o roca fosfórica en hoyado o en banda. <span class="cond">⚠ condicional a laboratorio</span></td></tr>
+<tr><td><strong>K</strong></td><td><span class="estado deficit">DEFICIT</span></td><td>9</td><td>100 – 300</td><td><span class="prio alta">Alta</span></td><td>Potasio fuera de rango: aplicar KCl según la etapa del cultivo. <span class="cond">⚠ condicional a laboratorio</span></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+  <section class="plan">
+    <h2>🎯 Plan de acción</h2>
+    <ol>
+      <li><strong>Café (crítico):</strong> bajar el pH de 7.3 a 5.5–6.5 con <strong>yeso agrícola</strong> y/o
+          azufre elemental + materia orgánica, en dosis según análisis de laboratorio (CIC y carbonatos).
+          <em>No aplicar cal dolomítica</em> (subiría aún más el pH).</li>
+      <li><strong>Frijol:</strong> bajar el pH de 7.9 a ≤ 7.0 incorporando <strong>materia orgánica ácida</strong>
+          (compost, gallinaza madura) y, si el laboratorio lo confirma, enmienda ácida.</li>
+      <li><strong>Validar NPK en laboratorio antes de fertilizar:</strong> el sensor reporta N, P y K muy bajos,
+          pero no está calibrado; no fertilizar con base en esos valores. Un análisis de suelo permitirá
+          calcular las dosis reales.</li>
+      <li><strong>Completar variables de fertilidad faltantes</strong> (materia orgánica, CIC, calcio, magnesio,
+          azufre y micronutrientes) para subir la confianza del modelo y cerrar el plan de fertilización.</li>
+      <li><strong>Corregir el GPS del sensor:</strong> 2 lecturas se registraron con la coordenada por defecto
+          del firmware (4.578333, -75.666944), fuera de la finca; revisar el firmware del <code>esp32-npk-001</code>.</li>
+    </ol>
+    <div class="nota-final">
+      La confianza del modelo es baja (24% fríjol, 11% café) porque faltan variables de fertilidad y el NPK no
+      está calibrado. Las conclusiones de <strong>pH son firmes</strong>; las demás son <strong>orientativas</strong>
+      y deben confirmarse con análisis de laboratorio.
+    </div>
+  </section>
+</div>
+</body>
+</html>

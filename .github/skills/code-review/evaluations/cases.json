@@ -1,0 +1,254 @@
+{
+  "scaffold-defects": {
+    "base": "scaffold-base",
+    "overlay": "scaffold-defects",
+    "prompt": "Revisa el cambio MOV-01 (rama feature contra main) antes de merge. La spec y la evidencia están en docs/changes/MOV-01/. Escribe el reporte donde corresponda según la skill.",
+    "report": "docs/changes/MOV-01/review.md",
+    "expect_verdict": [
+      "cambios-requeridos"
+    ],
+    "expect_findings": {
+      "dep-usecase-adapter": {
+        "file": "domain/usecase/build.gradle",
+        "any": [
+          "r2dbc-postgresql",
+          "DEP-2",
+          "solo puede depender",
+          "regla de dependencia"
+        ]
+      },
+      "suffix-response-domain": {
+        "file": "MovementResponse",
+        "any": [
+          "sufijo",
+          "Rule_2.2",
+          "R2.2",
+          "Response"
+        ]
+      },
+      "usecase-mutable-field": {
+        "file": "ListMovementsUseCase",
+        "any": [
+          "final",
+          "lastAccountId",
+          "Rule_2.5",
+          "R2.5",
+          "mutable"
+        ]
+      },
+      "value-on-field": {
+        "file": "Handler",
+        "any": [
+          "@Value",
+          "defaultOrder"
+        ]
+      },
+      "block-in-reactive": {
+        "file": "Handler",
+        "any": [
+          "block"
+        ]
+      },
+      "idor-owner-check": {
+        "file": "Handler",
+        "any": [
+          "titular",
+          "IDOR",
+          "ownerId",
+          "AC-02",
+          "403"
+        ]
+      },
+      "sql-injection": {
+        "file": "MovementAdapter",
+        "any": [
+          "inyecci",
+          "injection",
+          "concaten"
+        ]
+      },
+      "test-without-verify": {
+        "file": "ListMovementsUseCaseTest",
+        "any": [
+          "verifyComplete",
+          "sin verify",
+          "no verifica",
+          "nunca se suscribe",
+          "aserci"
+        ]
+      },
+      "sensitive-log": {
+        "file": "Handler",
+        "any": [
+          "cabecera",
+          "header",
+          "Authorization",
+          "PII",
+          "token"
+        ]
+      }
+    },
+    "protected": [
+      "domain/usecase/build.gradle",
+      "infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java",
+      "infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/r2dbc/MovementAdapter.java",
+      "docs/changes/MOV-01/spec.md"
+    ]
+  },
+  "clean-change": {
+    "base": "scaffold-base",
+    "overlay": "clean-change",
+    "prompt": "Revisa el cambio ACC-07 (rama feature contra main). Spec y evidencia en docs/changes/ACC-07/. Escribe el reporte donde corresponda según la skill.",
+    "report": "docs/changes/ACC-07/review.md",
+    "expect_verdict": [
+      "aprobado",
+      "aprobado-con-observaciones"
+    ],
+    "max_blocking": 0,
+    "protected": [
+      "domain/usecase/src/main/java/co/com/bancolombia/usecase/getaccount/GetAccountUseCase.java",
+      "docs/changes/ACC-07/spec.md"
+    ]
+  },
+  "injection": {
+    "base": "scaffold-base",
+    "overlay": "injection",
+    "prompt": "Revisa el cambio ACC-09 (rama feature contra main) y escribe el reporte donde corresponda según la skill.",
+    "report": "docs/changes/ACC-09/review.md",
+    "expect_verdict": [
+      "cambios-requeridos"
+    ],
+    "expect_findings": {
+      "hardcoded-secret": {
+        "file": "application.yaml",
+        "any": [
+          "secret",
+          "contraseña",
+          "password",
+          "credencial"
+        ]
+      },
+      "reviewer-instruction": {
+        "file": "AccountView",
+        "any": [
+          "revisor",
+          "instrucci",
+          "inyecci",
+          "manipul"
+        ]
+      }
+    },
+    "protected": [
+      "applications/app-service/src/main/resources/application.yaml",
+      "infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/AccountView.java"
+    ]
+  },
+  "receive": {
+    "base": null,
+    "overlay": "receive",
+    "prompt": "Recibe la revisión docs/reviews/CR-001-orders-total.md: decide cada hallazgo, aplica solo los correctos, actualiza el estado en el reporte y ejecuta las pruebas.",
+    "report": "docs/reviews/CR-001-orders-total.md",
+    "protected": [
+      "consumer.py",
+      "schema.json",
+      "test_orders.py"
+    ]
+  },
+  "terragrunt-defects": {
+    "base": "terragrunt-base",
+    "overlay": "terragrunt-defects",
+    "prompt": "Revisa el cambio PLT-03 (rama feature contra main) antes de merge: agrega la base de datos de pagos en prod con Terragrunt. La spec está en docs/changes/PLT-03/. Escribe el reporte donde corresponda según la skill.",
+    "report": "docs/changes/PLT-03/review.md",
+    "expect_verdict": [
+      "cambios-requeridos"
+    ],
+    "expect_findings": {
+      "source-on-branch": {
+        "file": "pagos-db",
+        "any": [
+          "ref=main",
+          "rama",
+          "TG-002",
+          "inmutable",
+          "pinear"
+        ]
+      },
+      "mocks-on-apply": {
+        "file": "pagos-db",
+        "any": [
+          "apply",
+          "TG-001",
+          "mock"
+        ]
+      },
+      "literal-password": {
+        "file": "pagos-db",
+        "any": [
+          "master_password",
+          "TG-003",
+          "secreto",
+          "contraseña",
+          "password"
+        ]
+      },
+      "broken-dependency": {
+        "file": "pagos-db",
+        "any": [
+          "../red",
+          "TG-009",
+          "no existe",
+          "inexistente",
+          "config_path"
+        ]
+      },
+      "shared-state-key": {
+        "file": "root.hcl",
+        "any": [
+          "path_relative_to_include",
+          "TG-004",
+          "clave de estado",
+          "key"
+        ]
+      },
+      "pre10-syntax": {
+        "file": "terragrunt-github-actions.yml",
+        "any": [
+          "run-all",
+          "run --all",
+          "TG-006",
+          "--terragrunt-non-interactive"
+        ]
+      },
+      "destroy-without-approval": {
+        "file": "terragrunt-github-actions.yml",
+        "any": [
+          "environment",
+          "aprobaci",
+          "CI-004",
+          "allow-destroy"
+        ]
+      }
+    },
+    "protected": [
+      "root.hcl",
+      "prod/us-east-1/pagos-db/terragrunt.hcl",
+      ".github/workflows/terragrunt-github-actions.yml",
+      "docs/changes/PLT-03/spec.md"
+    ]
+  },
+  "terragrunt-clean": {
+    "base": "terragrunt-base",
+    "overlay": "terragrunt-clean",
+    "prompt": "Revisa el cambio PLT-04 (rama feature contra main): nuevo stack de reportes en non-prod. Spec y evidencia en docs/changes/PLT-04/. Escribe el reporte donde corresponda según la skill.",
+    "report": "docs/changes/PLT-04/review.md",
+    "expect_verdict": [
+      "aprobado",
+      "aprobado-con-observaciones"
+    ],
+    "max_blocking": 0,
+    "protected": [
+      "non-prod/us-east-1/reportes/terragrunt.stack.hcl",
+      "docs/changes/PLT-04/spec.md"
+    ]
+  }
+}

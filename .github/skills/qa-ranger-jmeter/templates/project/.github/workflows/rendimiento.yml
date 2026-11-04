@@ -1,0 +1,30 @@
+name: rendimiento
+on:
+  workflow_dispatch:
+    inputs:
+      ambiente: { type: choice, options: [qa, stg], default: qa }
+      usuarios: { type: string, default: '20' }
+jobs:
+  jmeter:
+    runs-on: ubuntu-latest        # carga real: usar runners self-hosted dedicados (resources/08 §6)
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - name: Instalar JMeter 5.6.3 (con verificación SHA-512)
+        run: |
+          curl -sSLO https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
+          curl -sSL https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz.sha512 | awk '{print $1"  apache-jmeter-5.6.3.tgz"}' | sha512sum -c -
+          tar xzf apache-jmeter-5.6.3.tgz
+          echo "JMETER_HOME=$PWD/apache-jmeter-5.6.3" >> "$GITHUB_ENV"
+      - name: Ejecutar y aplicar gate SLA
+        run: ./ejecutar.sh ${{ inputs.ambiente }} -Jusuarios=${{ inputs.usuarios }}
+        env:
+          CLAVE_PRUEBAS: ${{ secrets.CLAVE_PRUEBAS }}
+      - name: Resumen
+        if: always()
+        run: cat resultados/*/resumen.md >> "$GITHUB_STEP_SUMMARY" || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: resultados-rendimiento, path: resultados/ }

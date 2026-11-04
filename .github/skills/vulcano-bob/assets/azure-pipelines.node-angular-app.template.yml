@@ -1,0 +1,306 @@
+trigger:
+  branches:
+    include: [main, feature/*, fix/*, hotfix/*]
+
+pr:
+  branches:
+    include: [main]
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: vulcano-application-deploy
+  - name: nodeVersion
+    value: "20.x"
+
+stages:
+  - stage: ValidateConfiguration
+    jobs:
+      - job: RequiredOperationalValues
+        steps:
+          - bash: |
+              set -euo pipefail
+              required=(
+                SERVICE_CONNECTION_DEV SERVICE_CONNECTION_QA SERVICE_CONNECTION_PROD
+                BACKEND_APP_DEV FRONTEND_APP_DEV BACKEND_APP_QA FRONTEND_APP_QA
+                BACKEND_APP_PROD FRONTEND_APP_PROD PROD_RESOURCE_GROUP
+                BACKEND_HEALTH_DEV BACKEND_HEALTH_QA BACKEND_HEALTH_PROD_STAGING
+                BACKEND_HEALTH_PROD
+                FRONTEND_HEALTH_DEV FRONTEND_HEALTH_QA FRONTEND_HEALTH_PROD_STAGING
+                FRONTEND_HEALTH_PROD
+                # __PROGRESSIVE_DELIVERY_REQUIRED_VAR__
+              )
+              for name in "${required[@]}"; do
+                value="${!name:-}"
+                if [[ -z "$value" || "$value" == '$('* ]]; then
+                  echo "##vso[task.logissue type=error]Falta la variable operativa $name"
+                  exit 1
+                fi
+              done
+            displayName: Validar variables operativas
+            env:
+              SERVICE_CONNECTION_DEV: $(serviceConnectionDev)
+              SERVICE_CONNECTION_QA: $(serviceConnectionQa)
+              SERVICE_CONNECTION_PROD: $(serviceConnectionProd)
+              BACKEND_APP_DEV: $(backendAppNameDev)
+              FRONTEND_APP_DEV: $(frontendAppNameDev)
+              BACKEND_APP_QA: $(backendAppNameQa)
+              FRONTEND_APP_QA: $(frontendAppNameQa)
+              BACKEND_APP_PROD: $(backendAppNameProd)
+              FRONTEND_APP_PROD: $(frontendAppNameProd)
+              PROD_RESOURCE_GROUP: $(prodResourceGroup)
+              BACKEND_HEALTH_DEV: $(backendHealthUrlDev)
+              BACKEND_HEALTH_QA: $(backendHealthUrlQa)
+              BACKEND_HEALTH_PROD_STAGING: $(backendHealthUrlProdStaging)
+              BACKEND_HEALTH_PROD: $(backendHealthUrlProd)
+              FRONTEND_HEALTH_DEV: $(frontendHealthUrlDev)
+              FRONTEND_HEALTH_QA: $(frontendHealthUrlQa)
+              FRONTEND_HEALTH_PROD_STAGING: $(frontendHealthUrlProdStaging)
+              FRONTEND_HEALTH_PROD: $(frontendHealthUrlProd)
+              # __PROGRESSIVE_DELIVERY_ENV__
+
+  - stage: BuildAndTest
+    dependsOn: ValidateConfiguration
+    jobs:
+      - job: BuildTestSecurity
+        timeoutInMinutes: 30
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+
+          - task: Cache@2
+            inputs:
+              key: 'npm | "$(Agent.OS)" | backend/package-lock.json | frontend/package-lock.json'
+              path: $(Pipeline.Workspace)/.npm
+              cacheHitVar: NPM_CACHE_RESTORED
+
+          - bash: |
+              set -euo pipefail
+              npm ci --cache "$(Pipeline.Workspace)/.npm" --prefer-offline --prefix backend
+              npm ci --cache "$(Pipeline.Workspace)/.npm" --prefer-offline --prefix frontend
+            displayName: Instalar dependencias desde lockfiles
+
+          - bash: |
+              set -euo pipefail
+              npm run build --prefix backend
+              npm run build --prefix frontend
+            displayName: Compilar backend y frontend
+
+          - bash: npm run test:coverage --prefix backend -- --ci
+            displayName: Tests backend
+
+          - bash: npm run test:coverage --prefix frontend -- --watch=false
+            displayName: Tests frontend
+
+          - bash: |
+              set -euo pipefail
+              npm exec --prefix frontend -- playwright install --with-deps chromium
+              mkdir -p resources/qa/test-results
+              PLAYWRIGHT_JUNIT_OUTPUT_FILE=resources/qa/test-results/playwright.xml \
+                CI=true QA_RUN_ID="$(Build.BuildId)" \
+                npm run e2e --prefix frontend -- --reporter=junit
+            displayName: Tests E2E Playwright
+
+          - task: PublishTestResults@2
+            condition: always()
+            inputs:
+              testResultsFormat: JUnit
+              testResultsFiles: resources/qa/test-results/*.xml
+              failTaskOnFailedTests: true
+              testRunTitle: Playwright E2E
+
+          - bash: npm audit --prefix backend --audit-level=high
+            displayName: SCA backend
+
+          - bash: npm audit --prefix frontend --audit-level=high
+            displayName: SCA frontend
+
+          - bash: gitleaks detect --source . --no-git --redact
+            displayName: Secret scanning
+
+          - bash: npm run sonar
+            displayName: SonarQube Quality Gate
+            env:
+              SONAR_HOST_URL: $(sonarHostUrl)
+              SONAR_TOKEN: $(sonarToken)
+
+          - bash: node resources/security/generate-report.js
+            displayName: Generar reporte de seguridad
+            condition: always()
+            env:
+              SONAR_HOST_URL: $(sonarHostUrl)
+              SONAR_TOKEN: $(sonarToken)
+
+          - publish: resources/qa
+            artifact: test-results
+            condition: always()
+
+          - publish: resources/security
+            artifact: security-results
+            condition: always()
+
+          - bash: |
+              set -euo pipefail
+              rm -rf "$(Build.ArtifactStagingDirectory)/backend" "$(Build.ArtifactStagingDirectory)/frontend"
+              mkdir -p "$(Build.ArtifactStagingDirectory)/backend" "$(Build.ArtifactStagingDirectory)/frontend"
+              cp -R backend/dist backend/package.json backend/package-lock.json "$(Build.ArtifactStagingDirectory)/backend/"
+              cp -R frontend/dist/frontend/browser/. "$(Build.ArtifactStagingDirectory)/frontend/"
+              npm ci --omit=dev --prefix "$(Build.ArtifactStagingDirectory)/backend"
+            displayName: Preparar paquetes inmutables
+
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: $(Build.ArtifactStagingDirectory)/backend
+              includeRootFolder: false
+              archiveType: zip
+              archiveFile: $(Build.ArtifactStagingDirectory)/backend-$(Build.BuildId).zip
+              replaceExistingArchive: true
+
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: $(Build.ArtifactStagingDirectory)/frontend
+              includeRootFolder: false
+              archiveType: zip
+              archiveFile: $(Build.ArtifactStagingDirectory)/frontend-$(Build.BuildId).zip
+              replaceExistingArchive: true
+
+          - publish: $(Build.ArtifactStagingDirectory)
+            artifact: app-package
+
+  - stage: DeployDev
+    dependsOn: BuildAndTest
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - deployment: DeployImmutablePackageDev
+        environment: dev
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: app-package
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: $(serviceConnectionDev)
+                    appType: webAppLinux
+                    appName: $(backendAppNameDev)
+                    package: $(Pipeline.Workspace)/app-package/backend-$(Build.BuildId).zip
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: $(serviceConnectionDev)
+                    appType: webAppLinux
+                    appName: $(frontendAppNameDev)
+                    package: $(Pipeline.Workspace)/app-package/frontend-$(Build.BuildId).zip
+                - bash: curl --fail --retry 6 --retry-delay 10 "$(backendHealthUrlDev)"
+                  displayName: Health check dev
+                - bash: curl --fail --retry 6 --retry-delay 10 "$(frontendHealthUrlDev)"
+                  displayName: Health check frontend dev
+
+  - stage: DeployQa
+    dependsOn: DeployDev
+    jobs:
+      - deployment: DeployImmutablePackageQa
+        environment: qa
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: app-package
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: $(serviceConnectionQa)
+                    appType: webAppLinux
+                    appName: $(backendAppNameQa)
+                    package: $(Pipeline.Workspace)/app-package/backend-$(Build.BuildId).zip
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: $(serviceConnectionQa)
+                    appType: webAppLinux
+                    appName: $(frontendAppNameQa)
+                    package: $(Pipeline.Workspace)/app-package/frontend-$(Build.BuildId).zip
+                - bash: curl --fail --retry 6 --retry-delay 10 "$(backendHealthUrlQa)"
+                  displayName: Health check qa
+                - bash: curl --fail --retry 6 --retry-delay 10 "$(frontendHealthUrlQa)"
+                  displayName: Health check frontend qa
+
+  - stage: DeployProd
+    dependsOn: DeployQa
+    jobs:
+      - deployment: DeployStagingAndSwapProd
+        environment: prod
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: app-package
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: $(serviceConnectionProd)
+                    appType: webAppLinux
+                    appName: $(backendAppNameProd)
+                    deployToSlotOrASE: true
+                    resourceGroupName: $(prodResourceGroup)
+                    slotName: staging
+                    package: $(Pipeline.Workspace)/app-package/backend-$(Build.BuildId).zip
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: $(serviceConnectionProd)
+                    appType: webAppLinux
+                    appName: $(frontendAppNameProd)
+                    deployToSlotOrASE: true
+                    resourceGroupName: $(prodResourceGroup)
+                    slotName: staging
+                    package: $(Pipeline.Workspace)/app-package/frontend-$(Build.BuildId).zip
+                - bash: curl --fail --retry 6 --retry-delay 10 "$(backendHealthUrlProdStaging)"
+                  displayName: Health check staging
+                - bash: curl --fail --retry 6 --retry-delay 10 "$(frontendHealthUrlProdStaging)"
+                  displayName: Health check frontend staging
+                - task: AzureAppServiceManage@0
+                  name: SwapBackend
+                  inputs:
+                    azureSubscription: $(serviceConnectionProd)
+                    action: Swap Slots
+                    webAppName: $(backendAppNameProd)
+                    resourceGroupName: $(prodResourceGroup)
+                    sourceSlot: staging
+                - bash: echo "##vso[task.setvariable variable=BACKEND_SWAPPED]true"
+                  displayName: Registrar swap backend
+                - task: AzureAppServiceManage@0
+                  name: SwapFrontend
+                  inputs:
+                    azureSubscription: $(serviceConnectionProd)
+                    action: Swap Slots
+                    webAppName: $(frontendAppNameProd)
+                    resourceGroupName: $(prodResourceGroup)
+                    sourceSlot: staging
+                - bash: echo "##vso[task.setvariable variable=FRONTEND_SWAPPED]true"
+                  displayName: Registrar swap frontend
+                - bash: curl --fail --retry 6 --retry-delay 10 "$(backendHealthUrlProd)"
+                  displayName: Health check posterior al swap
+                - bash: curl --fail --retry 6 --retry-delay 10 "$(frontendHealthUrlProd)"
+                  displayName: Health check frontend posterior al swap
+                # __PROGRESSIVE_DELIVERY_ANALYSIS__
+                - task: AzureAppServiceManage@0
+                  displayName: Rollback frontend
+                  condition: and(failed(), eq(variables['FRONTEND_SWAPPED'], 'true'))
+                  inputs:
+                    azureSubscription: $(serviceConnectionProd)
+                    action: Swap Slots
+                    webAppName: $(frontendAppNameProd)
+                    resourceGroupName: $(prodResourceGroup)
+                    sourceSlot: staging
+                - task: AzureAppServiceManage@0
+                  displayName: Rollback backend
+                  condition: and(failed(), eq(variables['BACKEND_SWAPPED'], 'true'))
+                  inputs:
+                    azureSubscription: $(serviceConnectionProd)
+                    action: Swap Slots
+                    webAppName: $(backendAppNameProd)
+                    resourceGroupName: $(prodResourceGroup)
+                    sourceSlot: staging
+
+  # __NOTIFICATION_STAGE__

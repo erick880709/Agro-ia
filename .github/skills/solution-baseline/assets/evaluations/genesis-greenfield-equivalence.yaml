@@ -1,0 +1,55 @@
+schema_version: 1
+legacy_skill: genesis
+target_skill: solution-baseline
+equivalence_level: contractual
+required_outcomes:
+  - manifest
+  - source-layout
+  - configuration
+  - dependency-injection
+  - error-handling
+  - logging
+  - health-or-smoke
+  - tests
+  - living-documentation
+  - receipt
+forbidden_outcomes:
+  - cicd
+  - iac
+  - containers
+  - cloud-provisioning
+  - deployment
+workloads:
+  - id: web
+    adapter: react-vite
+    evidence:
+      - references/greenfield.md
+      - references/greenfield-stack-bootstrap.md
+      - references/greenfield-conventions.md
+      - references/application-plumbing.md
+  - id: api
+    adapter: fastapi
+    evidence:
+      - references/greenfield.md
+      - references/greenfield-stack-bootstrap.md
+      - references/greenfield-conventions.md
+      - references/application-plumbing.md
+  - id: worker
+    adapter: python-worker
+    evidence:
+      - references/greenfield.md
+      - references/greenfield-stack-bootstrap.md
+      - references/greenfield-conventions.md
+      - references/application-plumbing.md
+  - id: agent
+    adapter: python-agent-service
+    evidence:
+      - references/greenfield.md
+      - references/greenfield-stack-bootstrap.md
+      - references/greenfield-conventions.md
+      - references/application-plumbing.md
+retirement_gate:
+  archetypes_published: false
+  successful_projects: 0
+  required_successful_projects: 2
+  evidence: []

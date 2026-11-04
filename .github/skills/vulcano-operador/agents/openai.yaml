@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vulcano Operador"
+  short_description: "Opera plataformas remotas mediante adaptadores"
+  default_prompt: "Usa $vulcano-operador para reconciliar, planear, autorizar, operar y verificar cambios remotos con el adaptador seleccionado."

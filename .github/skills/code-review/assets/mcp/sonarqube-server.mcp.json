@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "sonarqube": {
+      "command": "docker",
+      "args": ["run", "--init", "--pull=always", "-i", "--rm",
+               "-e", "SONARQUBE_TOKEN", "-e", "SONARQUBE_URL", "-e", "SONARQUBE_PROJECT_KEY",
+               "-e", "SONARQUBE_READ_ONLY", "-e", "SONARQUBE_TOOLSETS",
+               "sonarsource/sonarqube-mcp"],
+      "env": {
+        "SONARQUBE_TOKEN": "${SONARQUBE_TOKEN}",
+        "SONARQUBE_URL": "${SONARQUBE_URL}",
+        "SONARQUBE_PROJECT_KEY": "${SONARQUBE_PROJECT_KEY}",
+        "SONARQUBE_READ_ONLY": "true",
+        "SONARQUBE_TOOLSETS": "quality-gates,measures,coverage,issues,security-hotspots,rules,duplications"
+      }
+    }
+  }
+}

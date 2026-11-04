@@ -1,0 +1,5 @@
+PyYAML==6.0.3
+jsonschema==4.26.0
+referencing==0.37.0
+packaging==26.2
+filelock==3.29.7

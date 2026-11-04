@@ -1,0 +1,8 @@
+rootProject.name = 'payments'
+
+include ':model'
+include ':usecase'
+project(':model').projectDir = file('./domain/model')
+project(':usecase').projectDir = file('./domain/usecase')
+include ':app-service'
+project(':app-service').projectDir = file('./applications/app-service')

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.invalid/solution-baseline/vulcano-handoff.schema.json",
+  "title": "Solution Baseline Vulcano Handoff",
+  "description": "Subconjunto estructuralmente compatible con el vocabulario de Score (score.dev/v1b1: containers/service/resources) para los campos que cubre. component_id y workload son campos de enlace con el blueprint, no forman parte del vocabulario Score. No declara conformidad total con el spec ni incluye build/despliegue (image, volumes, files, requests/limits): eso es responsabilidad de Vulcano.",
+  "type": "object",
+  "required": ["schema_version", "score_alignment", "component_id", "workload", "metadata", "containers"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "score_alignment": { "const": "score.dev/v1b1 (subset)" },
+    "component_id": { "type": "string", "minLength": 1 },
+    "workload": { "enum": ["web", "api", "worker", "agent", "integrations", "library"] },
+    "metadata": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "annotations": { "type": "object", "additionalProperties": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "containers": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/container" }
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "ports": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/servicePort" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/resourceDependency" }
+    },
+    "restrictions": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "probe": {
+      "type": "object",
+      "required": ["httpGet"],
+      "properties": {
+        "httpGet": {
+          "type": "object",
+          "required": ["path", "port"],
+          "properties": {
+            "path": { "type": "string", "minLength": 1 },
+            "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+            "scheme": { "enum": ["HTTP", "HTTPS"] }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "container": {
+      "type": "object",
+      "properties": {
+        "variables": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "livenessProbe": { "$ref": "#/$defs/probe" },
+        "readinessProbe": { "$ref": "#/$defs/probe" }
+      },
+      "additionalProperties": false
+    },
+    "servicePort": {
+      "type": "object",
+      "required": ["port", "targetPort"],
+      "properties": {
+        "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "targetPort": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "protocol": { "enum": ["TCP", "UDP"] }
+      },
+      "additionalProperties": false
+    },
+    "resourceDependency": {
+      "type": "object",
+      "required": ["type", "required"],
+      "properties": {
+        "type": { "type": "string", "minLength": 1 },
+        "class": { "type": "string" },
+        "required": { "type": "boolean" },
+        "params": { "type": "object" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

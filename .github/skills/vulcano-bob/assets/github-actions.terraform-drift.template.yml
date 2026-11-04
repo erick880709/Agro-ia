@@ -1,0 +1,45 @@
+name: Terraform drift detection
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+  issues: write
+
+jobs:
+  drift:
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [dev, qa, prod]
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.environment }}-plan
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with: { terraform_version: '__TERRAFORM_VERSION__' }
+      # __CLOUD_AUTH__
+      - name: Detect drift without applying
+        id: plan
+        working-directory: infra/environments/${{ matrix.environment }}
+        shell: bash
+        run: |
+          terraform init -input=false
+          set +e
+          terraform plan -detailed-exitcode -input=false -no-color > drift-report.txt
+          code=$?
+          set -e
+          test "$code" -ne 1
+          echo "exitcode=$code" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: drift-report-${{ matrix.environment }}
+          path: infra/environments/${{ matrix.environment }}/drift-report.txt
+          if-no-files-found: error
+      - name: Fail when drift exists
+        if: steps.plan.outputs.exitcode == '2'
+        run: exit 2

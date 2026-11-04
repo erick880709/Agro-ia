@@ -1,0 +1,214 @@
+trigger:
+  branches:
+    include: [main, feature/*, fix/*, hotfix/*]
+  paths:
+    include: [backend]
+
+pr:
+  branches:
+    include: [main]
+  paths:
+    include: [backend]
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: vulcano-application-deploy
+  - name: nodeVersion
+    value: "20.x"
+
+stages:
+  - stage: ValidateConfiguration
+    jobs:
+      - job: RequiredOperationalValues
+        steps:
+          - bash: |
+              set -euo pipefail
+              required=(
+                SERVICE_CONNECTION_DEV SERVICE_CONNECTION_QA SERVICE_CONNECTION_PROD
+                BACKEND_APP_DEV BACKEND_APP_QA BACKEND_APP_PROD PROD_RESOURCE_GROUP
+                BACKEND_HEALTH_DEV BACKEND_HEALTH_QA BACKEND_HEALTH_PROD_STAGING
+                BACKEND_HEALTH_PROD
+                # __PROGRESSIVE_DELIVERY_REQUIRED_VAR__
+              )
+              for name in "${required[@]}"; do
+                value="${!name:-}"
+                if [[ -z "$value" || "$value" == '$('* ]]; then
+                  echo "##vso[task.logissue type=error]Falta la variable operativa $name"
+                  exit 1
+                fi
+              done
+            displayName: Validar variables operativas
+            env:
+              SERVICE_CONNECTION_DEV: $(serviceConnectionDev)
+              SERVICE_CONNECTION_QA: $(serviceConnectionQa)
+              SERVICE_CONNECTION_PROD: $(serviceConnectionProd)
+              BACKEND_APP_DEV: $(backendAppNameDev)
+              BACKEND_APP_QA: $(backendAppNameQa)
+              BACKEND_APP_PROD: $(backendAppNameProd)
+              PROD_RESOURCE_GROUP: $(prodResourceGroup)
+              BACKEND_HEALTH_DEV: $(backendHealthUrlDev)
+              BACKEND_HEALTH_QA: $(backendHealthUrlQa)
+              BACKEND_HEALTH_PROD_STAGING: $(backendHealthUrlProdStaging)
+              BACKEND_HEALTH_PROD: $(backendHealthUrlProd)
+              # __PROGRESSIVE_DELIVERY_ENV__
+
+  - stage: BuildAndTest
+    dependsOn: ValidateConfiguration
+    jobs:
+      - job: BuildTestSecurity
+        timeoutInMinutes: 30
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+
+          - task: Cache@2
+            inputs:
+              key: 'npm | "$(Agent.OS)" | backend/package-lock.json'
+              path: $(Pipeline.Workspace)/.npm
+              cacheHitVar: NPM_CACHE_RESTORED
+
+          - bash: npm ci --cache "$(Pipeline.Workspace)/.npm" --prefer-offline --prefix backend
+            displayName: Instalar dependencias desde lockfile
+
+          - bash: npm run build --prefix backend
+            displayName: Compilar backend
+
+          - bash: npm run test:coverage --prefix backend -- --ci
+            displayName: Tests backend
+
+          - bash: npm audit --prefix backend --audit-level=high
+            displayName: SCA backend
+
+          - bash: gitleaks detect --source backend --no-git --redact
+            displayName: Secret scanning (backend)
+
+          # NOTA: sonar-project.properties cubre el monorepo completo — hasta que se separe en
+          # proyectos Sonar por componente (06-ci-cd.md §Inspección Continua), esta corrida
+          # analiza todo el repo, no solo backend/. No fabricar aqui un sonar.projectKey/sources
+          # que el script real no soporta todavia.
+          - bash: npm run sonar
+            displayName: SonarQube Quality Gate
+            env:
+              SONAR_HOST_URL: $(sonarHostUrl)
+              SONAR_TOKEN: $(sonarToken)
+
+          - bash: node resources/security/generate-report.js
+            displayName: Generar reporte de seguridad
+            condition: always()
+            env:
+              SONAR_HOST_URL: $(sonarHostUrl)
+              SONAR_TOKEN: $(sonarToken)
+
+          - publish: resources/security
+            artifact: security-results
+            condition: always()
+
+          - bash: |
+              set -euo pipefail
+              rm -rf "$(Build.ArtifactStagingDirectory)/backend"
+              mkdir -p "$(Build.ArtifactStagingDirectory)/backend"
+              cp -R backend/dist backend/package.json backend/package-lock.json "$(Build.ArtifactStagingDirectory)/backend/"
+              npm ci --omit=dev --prefix "$(Build.ArtifactStagingDirectory)/backend"
+            displayName: Preparar paquete inmutable
+
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: $(Build.ArtifactStagingDirectory)/backend
+              includeRootFolder: false
+              archiveType: zip
+              archiveFile: $(Build.ArtifactStagingDirectory)/backend-$(Build.BuildId).zip
+              replaceExistingArchive: true
+
+          - publish: $(Build.ArtifactStagingDirectory)
+            artifact: backend-package
+
+  - stage: DeployDev
+    dependsOn: BuildAndTest
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - deployment: DeployImmutablePackageDev
+        environment: dev-backend
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: backend-package
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: $(serviceConnectionDev)
+                    appType: webAppLinux
+                    appName: $(backendAppNameDev)
+                    package: $(Pipeline.Workspace)/backend-package/backend-$(Build.BuildId).zip
+                - bash: curl --fail --retry 6 --retry-delay 10 "$(backendHealthUrlDev)"
+                  displayName: Health check dev
+
+  - stage: DeployQa
+    dependsOn: DeployDev
+    jobs:
+      - deployment: DeployImmutablePackageQa
+        environment: qa-backend
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: backend-package
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: $(serviceConnectionQa)
+                    appType: webAppLinux
+                    appName: $(backendAppNameQa)
+                    package: $(Pipeline.Workspace)/backend-package/backend-$(Build.BuildId).zip
+                - bash: curl --fail --retry 6 --retry-delay 10 "$(backendHealthUrlQa)"
+                  displayName: Health check qa
+
+  - stage: DeployProd
+    dependsOn: DeployQa
+    jobs:
+      - deployment: DeployStagingAndSwapProd
+        environment: prod-backend
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: backend-package
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: $(serviceConnectionProd)
+                    appType: webAppLinux
+                    appName: $(backendAppNameProd)
+                    deployToSlotOrASE: true
+                    resourceGroupName: $(prodResourceGroup)
+                    slotName: staging
+                    package: $(Pipeline.Workspace)/backend-package/backend-$(Build.BuildId).zip
+                - bash: curl --fail --retry 6 --retry-delay 10 "$(backendHealthUrlProdStaging)"
+                  displayName: Health check staging
+                - task: AzureAppServiceManage@0
+                  name: SwapBackend
+                  inputs:
+                    azureSubscription: $(serviceConnectionProd)
+                    action: Swap Slots
+                    webAppName: $(backendAppNameProd)
+                    resourceGroupName: $(prodResourceGroup)
+                    sourceSlot: staging
+                - bash: echo "##vso[task.setvariable variable=BACKEND_SWAPPED]true"
+                  displayName: Registrar swap backend
+                - bash: curl --fail --retry 6 --retry-delay 10 "$(backendHealthUrlProd)"
+                  displayName: Health check posterior al swap
+                # __PROGRESSIVE_DELIVERY_ANALYSIS__
+                - task: AzureAppServiceManage@0
+                  displayName: Rollback backend
+                  condition: and(failed(), eq(variables['BACKEND_SWAPPED'], 'true'))
+                  inputs:
+                    azureSubscription: $(serviceConnectionProd)
+                    action: Swap Slots
+                    webAppName: $(backendAppNameProd)
+                    resourceGroupName: $(prodResourceGroup)
+                    sourceSlot: staging
+
+  # __NOTIFICATION_STAGE__

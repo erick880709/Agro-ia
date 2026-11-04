@@ -1,0 +1,8 @@
+{
+  "id": "gcp",
+  "kind": "cloud",
+  "status": "implemented",
+  "mcp_capability": "gcp_mcp",
+  "mode": "read_only_verification",
+  "reference": "references/gcp.md"
+}

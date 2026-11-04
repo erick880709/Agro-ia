@@ -1,0 +1,81 @@
+{
+  "contractVersion": "0.1.0",
+  "capabilityId": "qa-ranger-selenium",
+  "resultsRoot": "resources/qa/contracts",
+  "policy": "../../../contracts/output/validators/qa/qa-policy.json",
+  "preconditions": [
+    {
+      "id": "scope_defined",
+      "description": "Objetivo, alcance, tarea y fuentes identificados."
+    }
+  ],
+  "tasks": [
+    "design",
+    "implement",
+    "review",
+    "diagnose",
+    "execute",
+    "report"
+  ],
+  "requiredArtifacts": [
+    [
+      "test_cases",
+      "test_plan",
+      "test_code",
+      "diagnostic",
+      "report",
+      "test_results"
+    ]
+  ],
+  "taskArtifacts": {
+    "design": [
+      [
+        "test_cases",
+        "test_plan"
+      ]
+    ],
+    "implement": [
+      [
+        "test_code"
+      ],
+      [
+        "test_results"
+      ]
+    ],
+    "review": [
+      [
+        "report"
+      ]
+    ],
+    "diagnose": [
+      [
+        "diagnostic",
+        "report"
+      ]
+    ],
+    "execute": [
+      [
+        "test_results"
+      ],
+      [
+        "report"
+      ]
+    ],
+    "report": [
+      [
+        "test_results"
+      ],
+      [
+        "report"
+      ]
+    ]
+  },
+  "semanticPostconditions": [
+    "El diseño identifica requisitos, casos y exclusiones. No acredita ejecución.",
+    "La implementación requiere verificación satisfactoria y evidencia por caso para completed.",
+    "La ejecución requiere completar el alcance acordado y conservar la evidencia obligatoria. Fallos de pruebas no equivalen a trabajo inconcluso.",
+    "Una revisión o diagnóstico terminado puede encontrar defectos. Un reporte terminado puede recomendar NO-GO.",
+    "La política de evidencia recibida prevalece sobre los valores de las plantillas."
+  ],
+  "semanticValidation": "El agente o el usuario contrasta la entrega con sus fuentes y evidencia. Validar la estructura JSON no demuestra esa revisión."
+}

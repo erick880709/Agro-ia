@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Presentación de Arquitectura</title>
+  <style>
+    :root { --ink:#182033; --muted:#667085; --brand:#5624d0; --brand2:#0ea5e9; --paper:#fff; --wash:#f4f6fb; --line:#dfe3ec; --good:#067647; --warn:#b54708; --bad:#b42318; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; font:15px/1.55 Inter,Segoe UI,Arial,sans-serif; color:var(--ink); background:var(--wash); }
+    a { color:var(--brand); }
+    header { position:sticky; top:0; z-index:10; display:flex; gap:18px; align-items:center; justify-content:space-between; padding:12px 28px; background:rgba(255,255,255,.96); border-bottom:1px solid var(--line); }
+    .brand { font-weight:800; letter-spacing:.02em; }
+    .controls { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    button { border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:7px 12px; cursor:pointer; }
+    button.active { background:var(--brand); color:#fff; border-color:var(--brand); }
+    main { max-width:1280px; margin:auto; padding:28px; }
+    section { scroll-margin-top:80px; background:var(--paper); border:1px solid var(--line); border-radius:20px; margin:0 0 24px; padding:30px; box-shadow:0 10px 30px rgba(16,24,40,.045); }
+    .hero { min-height:440px; display:grid; grid-template-columns:1.35fr .65fr; gap:32px; align-items:center; color:#fff; background:linear-gradient(130deg,#17102d,#5624d0 58%,#0ea5e9); border:0; }
+    .hero h1 { font-size:clamp(34px,5vw,68px); line-height:1.02; margin:.15em 0; }
+    .hero > .eyebrow, .hero > h2 { grid-column:1 / -1; }
+    .eyebrow { text-transform:uppercase; letter-spacing:.16em; font-size:12px; font-weight:800; opacity:.8; }
+    .hero-meta { display:grid; gap:10px; padding:22px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.22); border-radius:18px; }
+    h2 { margin:0 0 18px; font-size:clamp(25px,3vw,40px); line-height:1.15; }
+    h3 { margin:0 0 8px; }
+    .lead { font-size:18px; color:var(--muted); max-width:900px; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:15px; }
+    .grid.two { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .card { border:1px solid var(--line); border-radius:15px; padding:17px; background:#fff; overflow-wrap:anywhere; }
+    .card p { margin:.45em 0; }
+    .label { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.08em; font-weight:800; }
+    .status { display:inline-block; border-radius:999px; padding:4px 9px; font-size:12px; font-weight:800; background:#eef2ff; color:var(--brand); }
+    .status.good { background:#ecfdf3; color:var(--good); }
+    .status.warn { background:#fff7ed; color:var(--warn); }
+    .status.bad { background:#fef3f2; color:var(--bad); }
+    .missing { border-left:4px solid var(--bad); padding:10px 14px; background:#fff6f5; color:var(--bad); }
+    .source { margin-top:9px; color:var(--muted); font-size:12px; }
+    .table-wrap { overflow:auto; border:1px solid var(--line); border-radius:14px; }
+    table { width:100%; border-collapse:collapse; background:#fff; }
+    th,td { padding:11px 13px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { font-size:12px; text-transform:uppercase; letter-spacing:.06em; background:#f8f9fc; }
+    .diagram { margin-top:18px; padding:12px; border:1px solid var(--line); border-radius:14px; background:#fff; text-align:center; }
+    .diagram img { max-width:100%; max-height:680px; object-fit:contain; }
+    nav { position:fixed; right:18px; top:88px; z-index:8; width:230px; max-height:calc(100vh - 110px); overflow:auto; padding:13px; background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 12px 35px rgba(16,24,40,.12); }
+    nav a { display:block; padding:6px 8px; text-decoration:none; color:var(--ink); border-radius:7px; font-size:13px; }
+    nav a:hover { background:var(--wash); }
+    .watermark { display:none; position:fixed; inset:auto 0 14px; z-index:20; margin:auto; width:max-content; max-width:90%; padding:8px 18px; border:2px solid var(--bad); color:var(--bad); background:#fff; border-radius:10px; font-weight:900; letter-spacing:.08em; }
+    body.draft .watermark { display:block; }
+    footer { max-width:1280px; margin:auto; padding:5px 28px 50px; color:var(--muted); }
+    @media (min-width:1051px) { main,footer { margin-right:250px; max-width:calc(100% - 250px); } }
+    @media (max-width:1050px) { nav { display:none; } .hero,.grid,.grid.two { grid-template-columns:1fr; } }
+    @media print { header,nav,.watermark { display:none!important; } body { background:#fff; } main { max-width:none; padding:0; } section { break-inside:avoid; box-shadow:none; border-radius:0; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">Arquitectura · Comité</div>
+    <div class="controls" aria-label="Cambiar audiencia">
+      <span class="label">Vista</span>
+      <button data-view="executive">Ejecutiva</button>
+      <button data-view="architecture">Arquitectura</button>
+      <button data-view="complete">Completa</button>
+    </div>
+  </header>
+  <nav id="navigation" aria-label="Contenido"></nav>
+  <main id="content"></main>
+  <div class="watermark">BORRADOR — NO APTO PARA APROBACIÓN</div>
+  <footer>Documento derivado. Consulte los artefactos fuente y sus hashes para la verdad canónica.</footer>
+  <script type="application/json" id="presentation-data">__PRESENTATION_DATA__</script>
+  <script>
+  (() => {
+    'use strict';
+    const data = JSON.parse(document.getElementById('presentation-data').textContent);
+    const content = document.getElementById('content');
+    const navigation = document.getElementById('navigation');
+    const views = new Set(['executive','architecture','complete']);
+    const missing = 'Missing evidence';
+    const txt = value => value === undefined || value === null || value === '' ? missing : String(value);
+    const esc = value => txt(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const sourceMap = new Map((data.sources || []).map(s => [s.id, s]));
+    const sourceHtml = ref => {
+      if (!ref || !ref.id) return '<div class="source">Fuente: Missing evidence</div>';
+      const source = sourceMap.get(ref.id) || {};
+      const path = txt(source.path);
+      const href = txt(source.href || source.path);
+      const section = ref.section || source.section || '';
+      const hash = source.sha256 ? ` · SHA-256 ${source.sha256.slice(0,12)}…` : '';
+      return `<div class="source">Fuente: <a href="${esc(href)}">${esc(path)}</a>${section ? ` · ${esc(section)}` : ''}${hash}</div>`;
+    };
+    const statusClass = status => /no cumple|bloque|abierto|missing/i.test(status || '') ? 'bad' : /observ|condici|pendiente|riesgo/i.test(status || '') ? 'warn' : 'good';
+    const card = item => `<article class="card"><span class="status ${statusClass(item.status)}">${esc(item.status)}</span><h3>${esc(item.id ? `${item.id} · ${item.title}` : item.title)}</h3><p>${esc(item.summary || item.evidence)}</p>${item.owner ? `<p><b>Owner:</b> ${esc(item.owner)}</p>` : ''}${sourceHtml(item.source)}</article>`;
+    const cards = items => !Array.isArray(items) || !items.length ? `<p class="missing">${missing}</p>` : `<div class="grid">${items.map(card).join('')}</div>`;
+    const table = (items, columns) => {
+      if (!Array.isArray(items) || !items.length) return `<p class="missing">${missing}</p>`;
+      return `<div class="table-wrap"><table><thead><tr>${columns.map(c => `<th>${esc(c.label)}</th>`).join('')}</tr></thead><tbody>${items.map(item => `<tr>${columns.map(c => `<td>${esc(typeof c.value === 'function' ? c.value(item) : item[c.value])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    };
+    const assetHref = path => (data.assetHrefs || {})[path] || path;
+    const diagrams = section => (section && Array.isArray(section.diagrams) ? section.diagrams : []).map(path => `<figure class="diagram"><a href="${esc(assetHref(path))}"><img src="${esc(assetHref(path))}" alt="Diagrama de arquitectura: ${esc(path)}"></a><figcaption>${esc(path)}</figcaption></figure>`).join('');
+    const add = (id, title, audiences, body, lead='') => {
+      const section = document.createElement('section');
+      section.id = id; section.dataset.audience = audiences.join(' ');
+      section.innerHTML = `<div class="eyebrow">${esc(audiences.join(' · '))}</div><h2>${esc(title)}</h2>${lead ? `<p class="lead">${esc(lead)}</p>` : ''}${body}`;
+      content.appendChild(section);
+    };
+    const p = data.project || {};
+    const review = data.review || {};
+    document.title = `${txt(p.name)} · Arquitectura`;
+    document.body.classList.toggle('draft', !review.approvalEligible);
+    add('inicio', txt(p.name), ['executive','architecture','complete'], `<div><div class="eyebrow">${esc(data.scenario)} · ${esc(p.version)} · ${esc(p.date)}</div><h1>${esc((data.executiveSummary || {}).recommendation)}</h1><p class="lead" style="color:#fff">${esc((data.decisionRequest || {}).question)}</p></div><div class="hero-meta"><b>Estado de revisión</b><span>${esc(review.status)}</span><b>Autores</b><span>${esc((p.authors || []).join(', '))}</span><b>Apta para aprobación</b><span>${review.approvalEligible ? 'Sí' : 'No'}</span></div>`);
+    document.getElementById('inicio').classList.add('hero');
+    const es = data.executiveSummary || {};
+    add('resumen', 'Resumen ejecutivo', ['executive','architecture','complete'], `<div class="grid"><div class="card"><div class="label">Problema</div><p>${esc(es.problem)}</p></div><div class="card"><div class="label">Valor</div><p>${esc(es.value)}</p></div><div class="card"><div class="label">Costo</div><p>${esc(es.cost)}</p></div><div class="card"><div class="label">Plazo</div><p>${esc(es.timeline)}</p></div><div class="card"><div class="label">Recomendación</div><p>${esc(es.recommendation)}</p></div></div>`);
+    const dr = data.decisionRequest || {};
+    add('decision-solicitada', 'Decisión solicitada', ['executive','architecture','complete'], `<div class="grid two"><div class="card"><div class="label">Pregunta</div><p>${esc(dr.question)}</p><p><b>Autoridad:</b> ${esc(dr.authority)}</p></div><div class="card"><div class="label">Opciones</div><ol>${(dr.options || []).map(x => `<li>${esc(x)}</li>`).join('') || `<li>${missing}</li>`}</ol></div></div>${cards(dr.conditions)}`);
+    add('trabajo', 'Trabajo realizado y gates', ['architecture','complete'], table(data.workPerformed, [{label:'Artefacto / gate',value:i => i.id ? `${i.id} · ${i.title}` : i.title},{label:'Estado',value:'status'},{label:'Evidencia',value:i=>i.evidence||i.summary},{label:'Owner',value:'owner'}]), 'La presentación debe demostrar el proceso ejecutado, no solo el resultado final.');
+    add('drivers', 'Drivers, QAW y restricciones', ['architecture','complete'], cards(data.drivers));
+    add('alternativas', 'Alternativas y trade-offs', ['executive','architecture','complete'], cards(data.alternatives));
+    const sel = data.selection || {};
+    add('seleccion', 'Selección y arquetipo', ['executive','architecture','complete'], `<div class="grid two"><div class="card"><span class="status ${statusClass(sel.status)}">${esc(sel.status)}</span><p>${esc(sel.summary)}</p>${sourceHtml(sel.source)}</div><div class="card"><h3>Arquetipo y baseline</h3><p>${esc((data.archetype || {}).summary)}</p>${sourceHtml((data.archetype || {}).source)}</div></div>${cards(sel.items)}`);
+    add('incertidumbre', 'Incertidumbres y pruebas de concepto', ['architecture','complete'], `${cards(data.uncertainties)}${cards(data.pocs)}`);
+    const ar = data.architecture || {};
+    add('arquitectura', 'Arquitectura diseñada', ['architecture','complete'], `<p class="lead">${esc(ar.summary)}</p>${cards(ar.items)}${diagrams(ar)}${sourceHtml(ar.source)}`);
+    add('flujos', 'Flujos críticos', ['architecture','complete'], cards(data.criticalFlows));
+    const dat = data.data || {};
+    add('datos', 'Datos y ownership', ['architecture','complete'], `<p class="lead">${esc(dat.summary)}</p>${cards(dat.items)}${diagrams(dat)}${sourceHtml(dat.source)}`);
+    const dep = data.deployment || {};
+    add('despliegue', 'Cloud, despliegue y operación', ['executive','architecture','complete'], `<p class="lead">${esc(dep.summary)}</p>${cards(dep.items)}${diagrams(dep)}${sourceHtml(dep.source)}`);
+    add('tacticas', 'Tácticas, patrones y calidad interna', ['architecture','complete'], cards(data.tactics));
+    const sec = data.security || {};
+    add('seguridad', 'Seguridad arquitectónica', ['executive','architecture','complete'], `<p class="lead">${esc(sec.summary)}</p>${cards(sec.items)}${diagrams(sec)}${sourceHtml(sec.source)}`);
+    add('decisiones', 'Decisiones arquitectónicas', ['architecture','complete'], cards(data.decisions));
+    const val = data.validation || {};
+    add('validacion', 'Validación y ATAM', ['architecture','complete'], `<p class="lead">${esc(val.summary)}</p>${cards(val.items)}${sourceHtml(val.source)}`);
+    add('riesgos', 'Riesgos, deuda y condiciones', ['executive','architecture','complete'], cards(data.risks));
+    const eco = data.economics || {};
+    add('economia', 'Economía y roadmap', ['executive','architecture','complete'], `<p class="lead">${esc(eco.summary)}</p>${cards(eco.items)}${cards(data.roadmap)}${sourceHtml(eco.source)}`);
+    add('conflictos', 'Conflictos y evidencia faltante', ['architecture','complete'], cards(data.conflicts));
+    add('cierre', 'Cierre', ['executive','architecture','complete'], `<div class="card"><h3>${esc(dr.question)}</h3><p><b>Autoridad:</b> ${esc(dr.authority)}</p><p>${review.approvalEligible ? 'La revisión técnica permite llevar la decisión a aprobación humana.' : 'Existen bloqueos; esta versión es únicamente un borrador de trabajo.'}</p></div>`);
+    const setView = requested => {
+      const view = views.has(requested) ? requested : 'architecture';
+      document.querySelectorAll('section').forEach(s => s.hidden = !s.dataset.audience.split(' ').includes(view));
+      document.querySelectorAll('button[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+      navigation.innerHTML = [...document.querySelectorAll('section:not([hidden])')].map(s => `<a href="#${s.id}">${s.querySelector('h2,h1').textContent}</a>`).join('');
+      const url = new URL(location.href); url.searchParams.set('view', view); history.replaceState(null,'',url);
+    };
+    document.querySelectorAll('button[data-view]').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+    setView(new URLSearchParams(location.search).get('view') || 'architecture');
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+schema_version: 1
+namespace: example-org
+owner: platform-engineering
+trust: official
+archetypes:
+  - id: ps-api-python-fastapi-modular-1.0.0
+    family: ps-api-python-fastapi-modular
+    version: 1.0.0
+    status: supported
+    workload: api
+    owner: backend-platform
+    source: https://example.invalid/example-org/solution-archetypes.git
+    digest: sha256:replace-with-resolved-digest
+    license: Internal
+    generator:
+      id: copier
+      version: 9.4.1
+      version_scheme: semver
+      contract: 1.0.0
+    compatibility:
+      language: python
+      version_scheme: pep440
+      runtime: ">=3.12 <3.13"
+      framework: fastapi
+      architecture_styles:
+        - modular
+        - hexagonal
+    capabilities:
+      supported:
+        - typed-openapi
+      required: []
+      incompatible: []
+    permissions:
+      network: false
+      hooks: false
+      writes_outside_target: false
+    exclusions:
+      - cicd
+      - iac
+      - containers
+      - cloud-provisioning
+      - deployment
+    migrations: []

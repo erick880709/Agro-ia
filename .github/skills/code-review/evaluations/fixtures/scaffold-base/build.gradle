@@ -1,0 +1,4 @@
+plugins {
+    id 'co.com.bancolombia.cleanArchitecture' version '4.6.3'
+}
+apply from: './main.gradle'

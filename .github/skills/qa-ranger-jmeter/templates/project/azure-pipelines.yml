@@ -1,0 +1,28 @@
+# Pruebas de rendimiento JMeter — ejecución manual o programada
+trigger: none
+parameters:
+  - name: ambiente
+    type: string
+    default: qa
+    values: [qa, stg]
+  - name: usuarios
+    type: string
+    default: '20'
+pool:
+  name: generadores-carga               # agentes self-hosted con JMeter 5.6.3 y Java 17, en la red del ambiente
+variables:
+  - group: rendimiento-${{ parameters.ambiente }}   # CLAVE_PRUEBAS (secreta)
+steps:
+  - script: ./ejecutar.sh ${{ parameters.ambiente }} -Jusuarios=${{ parameters.usuarios }}
+    displayName: JMeter + gate SLA
+    env:
+      CLAVE_PRUEBAS: $(CLAVE_PRUEBAS)   # las variables secretas se mapean explícitamente
+  - task: PublishTestResults@2
+    condition: always()
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: resultados/**/junit-sla.xml
+      testRunTitle: SLA rendimiento ${{ parameters.ambiente }}
+  - publish: resultados
+    artifact: resultados-rendimiento
+    condition: always()

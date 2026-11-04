@@ -1,0 +1,19 @@
+terraform_drift:
+  extends: .terraform_base
+  stage: drift
+  parallel:
+    matrix:
+      - DEPLOY_ENVIRONMENT: [dev, qa, prod]
+  script:
+    - cd "infra/environments/$DEPLOY_ENVIRONMENT"
+    - terraform init -input=false
+    - terraform plan -detailed-exitcode -input=false -no-color > drift-report.txt || code=$?
+    - test "${code:-0}" -ne 1
+    - test "${code:-0}" -ne 2
+  artifacts:
+    name: "drift-report-$DEPLOY_ENVIRONMENT"
+    when: always
+    paths: ["infra/environments/$DEPLOY_ENVIRONMENT/drift-report.txt"]
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $DRIFT_CRON == "__DRIFT_CRON__"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'

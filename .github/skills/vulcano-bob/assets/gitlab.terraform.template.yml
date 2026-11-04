@@ -1,0 +1,49 @@
+.terraform_base:
+  image:
+    name: hashicorp/terraform:__TERRAFORM_VERSION__
+    entrypoint: [""]
+  id_tokens:
+    VULCANO_OIDC_TOKEN:
+      aud: $CLOUD_OIDC_AUDIENCE
+  before_script:
+    - |
+      if [ "__CLOUD__" = "aws" ]; then
+        printf '%s' "$VULCANO_OIDC_TOKEN" > "$CI_PROJECT_DIR/.oidc-token"
+        export AWS_WEB_IDENTITY_TOKEN_FILE="$CI_PROJECT_DIR/.oidc-token"
+      else
+        export ARM_USE_OIDC=true
+        export ARM_OIDC_TOKEN="$VULCANO_OIDC_TOKEN"
+      fi
+
+.terraform_plan:
+  extends: .terraform_base
+  stage: plan
+  script:
+    - cd "infra/environments/$DEPLOY_ENVIRONMENT"
+    - terraform fmt -check -recursive
+    - terraform init -input=false
+    - terraform validate
+    - terraform test
+    - terraform plan -input=false -out=tfplan
+    # __POLICY_AS_CODE__
+  artifacts:
+    name: "tfplan-$DEPLOY_ENVIRONMENT"
+    paths: ["infra/environments/$DEPLOY_ENVIRONMENT/tfplan"]
+    expire_in: 7 days
+
+.terraform_apply:
+  extends: .terraform_base
+  stage: apply
+  script:
+    - cd "infra/environments/$DEPLOY_ENVIRONMENT"
+    - terraform init -input=false
+    - terraform apply -input=false -auto-approve tfplan
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+plan_dev: { extends: .terraform_plan, variables: { DEPLOY_ENVIRONMENT: dev } }
+plan_qa: { extends: .terraform_plan, variables: { DEPLOY_ENVIRONMENT: qa } }
+plan_prod: { extends: .terraform_plan, variables: { DEPLOY_ENVIRONMENT: prod } }
+apply_dev: { extends: .terraform_apply, environment: dev, needs: [plan_dev], variables: { DEPLOY_ENVIRONMENT: dev } }
+apply_qa: { extends: .terraform_apply, environment: qa, needs: [plan_qa], variables: { DEPLOY_ENVIRONMENT: qa } }
+apply_prod: { extends: .terraform_apply, environment: prod, needs: [plan_prod], variables: { DEPLOY_ENVIRONMENT: prod } }

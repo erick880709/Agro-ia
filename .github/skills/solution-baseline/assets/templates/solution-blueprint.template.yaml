@@ -1,0 +1,78 @@
+schema_version: 1
+solution:
+  id: example-solution
+  name: Example Solution
+  description: Replace this example with the approved architecture context.
+sources:
+  - path: resources/architecture
+    kind: architecture
+    status: pending
+catalogs: []
+components:
+  - id: example-api
+    requirement: ARQ-001
+    workload: api
+    repository:
+      id: example-api
+      path: apps/example-api
+    strategy: create
+    stack:
+      language: python
+      runtime:
+        intent: stable
+        scheme: pep440
+      architecture_style: modular
+    capabilities: []
+    depends_on: []
+    contracts: []
+    security_requirements: []
+    quality_gates:
+      - build
+      - unit-tests
+  # Ejemplo comentado: componente web que consume un sistema de diseño congelado.
+  # Los valores de marca viven en los artefactos del proyecto referenciados aquí,
+  # nunca en el blueprint. Agrega la fuente con `kind: design-system` en `sources`.
+  # - id: example-web
+  #   requirement: ARQ-002
+  #   workload: web
+  #   repository:
+  #     id: example-web
+  #     path: apps/example-web
+  #   strategy: create
+  #   stack:
+  #     language: typescript
+  #     runtime:
+  #       intent: stable
+  #       scheme: semver
+  #     framework: react
+  #   capabilities:
+  #     - design-system
+  #   design_system:
+  #     source: resources/design/ux/example/03-design-system
+  #     status: confirmed
+  #     tokens:
+  #       - path: resources/design/ux/example/03-design-system/tokens/brand.tokens.json
+  #         sha256: <sha256 del archivo congelado>
+  #     components_catalog:
+  #       path: resources/design/ux/example/03-design-system/components.md
+  #       sha256: <sha256 del archivo congelado>
+  #     brand_assets:
+  #       path: resources/design/ux/example/03-design-system/brand/assets.md
+  #       sha256: <sha256 del archivo congelado>
+  #     style_zones:
+  #       - src/shared/design-system/*
+  #     literal_exemptions:
+  #       - "*.test.tsx"
+  #     max_literal_violations: 0
+  #   quality_gates:
+  #     - build
+  #     - unit-tests
+  #     - design-conformance
+contracts: []
+decisions: []
+exclusions:
+  - cicd
+  - iac
+  - containers
+  - cloud-provisioning
+  - deployment

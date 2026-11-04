@@ -1,0 +1,29 @@
+schedules:
+  - cron: "__DORA_CRON__"
+    displayName: Weekly DORA metrics
+    branches:
+      include: [main]
+    always: true
+
+trigger: none
+pr: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: vulcano-application-deploy
+
+steps:
+  - checkout: self
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '20.x'
+  - bash: node scripts/dora-collect.mjs
+    displayName: Collect DORA metrics
+    env:
+      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+      # __DORA_ENVIRONMENT_VARS__
+      DORA_OUTPUT_PATH: dora-metrics.json
+  - publish: dora-metrics.json
+    artifact: dora-metrics-dataset

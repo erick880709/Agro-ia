@@ -1,0 +1,8 @@
+{
+  "id": "aws",
+  "kind": "cloud",
+  "status": "implemented",
+  "mcp_capability": "aws_mcp",
+  "mode": "read_only_verification",
+  "reference": "references/aws.md"
+}

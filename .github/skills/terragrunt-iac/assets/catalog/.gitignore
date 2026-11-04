@@ -1,0 +1,11 @@
+.terragrunt-cache/
+.terragrunt-stack/
+.terraform/
+*.tfstate
+*.tfstate.*
+terragrunt-debug.tfvars.json
+error-signals.json
+report.json
+report.csv
+plan.txt
+# .terraform.lock.hcl SÍ se versiona

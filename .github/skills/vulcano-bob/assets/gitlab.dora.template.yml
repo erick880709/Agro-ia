@@ -1,0 +1,13 @@
+stages: [dora]
+
+dora_metrics:
+  stage: dora
+  image: node:20-alpine
+  script:
+    - node scripts/dora-collect.mjs
+  variables:
+    # __DORA_ENVIRONMENT_VARS__
+    DORA_OUTPUT_PATH: dora-metrics.json
+  artifacts:
+    name: dora-metrics-dataset
+    paths: [dora-metrics.json]

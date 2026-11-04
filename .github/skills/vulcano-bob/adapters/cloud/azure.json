@@ -1,0 +1,7 @@
+{
+  "id": "azure",
+  "kind": "cloud",
+  "status": "implemented",
+  "required_provider_any": ["azurerm", "azapi"],
+  "reference": "references/plantillas-codigo.md"
+}

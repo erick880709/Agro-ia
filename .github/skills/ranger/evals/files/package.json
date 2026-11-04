@@ -1,0 +1,1 @@
+{"name": "fixture-cypress", "private": true, "devDependencies": {"cypress": "13.0.0"}, "scripts": {"e2e": "cypress run"}}

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Solution Baseline"
+  short_description: "Materializa arquitecturas en baselines reutilizables"
+  default_prompt: "Usa $solution-baseline para descubrir la arquitectura, resolver arquetipos y crear, reconciliar, validar o actualizar las líneas base de aplicación sin generar DevOps ni IaC."
+

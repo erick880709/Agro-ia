@@ -1,0 +1,73 @@
+{
+  "contractVersion": "0.1.0",
+  "capabilityId": "ranger",
+  "status": "completed",
+  "summary": "Reporte terminado con recomendación NO-GO: TC-01 pasó y el caso crítico TC-02 no aparece en el CTRF de la corrida.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "Evaluar la corrida ficticia contra los dos casos previstos en chromium."
+    },
+    {
+      "id": "results_available",
+      "passed": true,
+      "evidence": "Fixture ilustrativa con un caso pasado y otro no ejecutado."
+    },
+    {
+      "id": "criteria_reviewed",
+      "passed": true,
+      "evidence": "El plan exige completar los casos críticos."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "ctrf",
+      "kind": "test_results",
+      "path": "resources/qa/reports/run-ranger/ctrf.json",
+      "mediaType": "application/json"
+    },
+    {
+      "id": "report",
+      "kind": "report",
+      "content": "Ejemplo ficticio: el reporte está terminado, pero falta ejecutar TC-02 crítico. La recomendación es NO-GO."
+    }
+  ],
+  "pending": [
+    {
+      "description": "Ejecutar TC-02 y actualizar la evaluación de la corrida.",
+      "owner": "QA"
+    }
+  ],
+  "data": {
+    "task": "report",
+    "expected": [
+      {
+        "id": "TC-01",
+        "project": "chromium",
+        "priority": "critical"
+      },
+      {
+        "id": "TC-02",
+        "project": "chromium",
+        "priority": "critical"
+      }
+    ],
+    "exitCriteria": [
+      {
+        "id": "critical-cases",
+        "status": "failed",
+        "evidence": "TC-02 no fue ejecutado."
+      }
+    ],
+    "evidencePolicy": {
+      "level": "browser",
+      "required": [
+        "video",
+        "trace",
+        "screenshot"
+      ],
+      "override": null
+    }
+  }
+}

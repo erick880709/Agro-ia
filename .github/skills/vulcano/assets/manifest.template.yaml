@@ -1,0 +1,149 @@
+schema_version: 1
+project: ""
+updated_at: "YYYY-MM-DD"
+resources_root: "resources"
+baseline:
+  sources: []
+  cloud_providers: []
+  services: []
+  environments: []
+constraints:
+  compliance: []
+  corporate_tools: []
+  budget: null
+decisions:
+  cloud_provider: null
+  devops_platform: null
+  iac: null
+  terraform:
+    required_version: null
+    provider_constraints: {}
+    module_standard: null
+    execution_backend: null
+    test_strategy: null
+    registry_source: null
+    registry_mcp: null
+    adoption_mode: null
+  observability: null
+  artifact_registry: null
+  workload_identity: null
+  deployment_strategy: null
+  deployment_model: null
+  pipeline_topology: null
+  feature_flags: null
+  dora_collection_method: null
+  notification_channel: null
+  policy_engine: null
+  secrets_manager: null
+files:
+  devops-overview:
+    path: devops-strategy/01-devops-overview.md
+    status: pending
+    mode: null
+  repository-management:
+    path: devops-strategy/02-repository-management.md
+    status: pending
+    mode: null
+  task-management:
+    path: devops-strategy/03-task-management.md
+    status: pending
+    mode: null
+  branching-strategy:
+    path: devops-strategy/04-branching-strategy.md
+    status: pending
+    mode: null
+  devops-environments:
+    path: devops-strategy/05-environments.md
+    status: pending
+    mode: null
+  iac-architecture:
+    path: infrastructure-as-code/01-architecture.md
+    status: pending
+    mode: null
+  iac-environments:
+    path: infrastructure-as-code/02-environments.md
+    status: pending
+    mode: null
+  naming-conventions:
+    path: infrastructure-as-code/03-naming-conventions.md
+    status: pending
+    mode: null
+  iac-structure:
+    path: infrastructure-as-code/04-terraform-structure.md
+    status: pending
+    mode: null
+  state-management:
+    path: infrastructure-as-code/05-state-management.md
+    status: pending
+    mode: null
+  modules:
+    path: infrastructure-as-code/06-modules.md
+    status: pending
+    mode: null
+  networking:
+    path: infrastructure-as-code/07-networking.md
+    status: pending
+    mode: null
+  secrets-management:
+    path: infrastructure-as-code/08-secrets-management.md
+    status: pending
+    mode: null
+  ci-cd:
+    path: devops-strategy/06-ci-cd.md
+    status: pending
+    mode: null
+  continuous-testing:
+    path: devops-strategy/07-continuous-testing.md
+    status: pending
+    mode: null
+  security:
+    path: devops-strategy/08-security.md
+    status: pending
+    mode: null
+  release-management:
+    path: devops-strategy/09-release-management.md
+    status: pending
+    mode: null
+  incident-management:
+    path: devops-strategy/10-incident-management.md
+    status: pending
+    mode: null
+  disaster-recovery:
+    path: devops-strategy/11-disaster-recovery.md
+    status: pending
+    mode: null
+  monitoring:
+    path: observability/01-monitoring.md
+    status: pending
+    mode: null
+  logging:
+    path: observability/02-logging.md
+    status: pending
+    mode: null
+  tracing:
+    path: observability/03-tracing.md
+    status: pending
+    mode: null
+  slis-slos:
+    path: observability/04-slis-slos.md
+    status: pending
+    mode: null
+  dashboards:
+    path: observability/05-dashboards.md
+    status: pending
+    mode: null
+  alerting:
+    path: observability/06-alerting.md
+    status: pending
+    mode: null
+  runbooks:
+    path: observability/07-runbooks.md
+    status: pending
+    mode: null
+assumptions: []
+pending_decisions: []
+intentional_omissions: []
+validation:
+  last_run: null
+  errors: 0
+  warnings: 0

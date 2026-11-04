@@ -1,0 +1,15 @@
+schema_version: 1
+assignments:
+  - agent_id: mapper-web
+    role: architecture-mapper
+    access: read
+    scope: repository
+    resource: apps/web
+    status: running
+  - agent_id: worker-api
+    role: repository-baseline-worker
+    access: write
+    scope: repository
+    resource: apps/api
+    workspace: ../worktrees/apps-api
+    status: scheduled

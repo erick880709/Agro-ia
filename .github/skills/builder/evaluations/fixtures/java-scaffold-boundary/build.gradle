@@ -1,0 +1,6 @@
+plugins {
+    id 'co.com.bancolombia.cleanArchitecture' version '3.25.0'
+    id 'org.springframework.boot' version '3.5.6' apply false
+}
+
+apply from: './main.gradle'

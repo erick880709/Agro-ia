@@ -1,0 +1,2 @@
+robotframework==__RF__
+robotframework-requests==0.9.7

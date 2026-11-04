@@ -1,0 +1,67 @@
+{
+  "contractVersion": "1.0.0",
+  "capabilityId": "qa-ranger-unitarias",
+  "status": "completed",
+  "summary": "Ejemplo ficticio: diagnóstico terminado. Líneas (77,59%) y ramas (60%) están por debajo de la meta del 95%.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "Ejemplo ficticio: módulo de descuentos; se excluyen los archivos de prueba de la medición."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "coverage",
+      "kind": "coverage_report",
+      "content": "Fixture ilustrativa: LCOV con líneas 45/58, ramas 12/20 y funciones 7/7."
+    },
+    {
+      "id": "diagnostic",
+      "kind": "diagnostic",
+      "content": "Fixture: faltan validaciones de entrada, el tramo de 50 y 100 unidades, el cliente plata y desconocido, y el cupón."
+    },
+    {
+      "id": "plan",
+      "kind": "coverage_plan",
+      "content": "Fixture: priorizar rechazos y cupón vencido; después tramos de volumen y tope del 30%."
+    }
+  ],
+  "pending": [
+    {
+      "description": "Implementar los casos del plan de mejora y volver a medir.",
+      "owner": "QA"
+    }
+  ],
+  "data": {
+    "task": "diagnose",
+    "targetOverride": null,
+    "coverage": {
+      "level": "unit",
+      "scope": "descuentos.mjs",
+      "command": "node --test --experimental-test-coverage --test-coverage-exclude=*.test.mjs --test-reporter=lcov",
+      "revision": "fixture",
+      "sourceArtifact": "coverage",
+      "supportedMetrics": [
+        "lines",
+        "branches",
+        "functions"
+      ],
+      "metrics": {
+        "lines": {
+          "covered": 45,
+          "total": 58
+        },
+        "branches": {
+          "covered": 12,
+          "total": 20
+        },
+        "functions": {
+          "covered": 7,
+          "total": 7
+        },
+        "statements": null
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "contractVersion": "0.1.0",
+  "capabilityId": "qa-ranger-playwright",
+  "status": "completed",
+  "summary": "Ejemplo ficticio del contrato QA.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "Objetivo y alcance ficticios definidos."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "cases",
+      "kind": "test_cases",
+      "content": "Fixture: TC-01 verifica CA-01; TC-02 verifica CA-02."
+    }
+  ],
+  "pending": [],
+  "data": {
+    "task": "design",
+    "design": {
+      "requirements": [
+        "CA-01",
+        "CA-02"
+      ],
+      "cases": [
+        {
+          "id": "TC-01",
+          "requirements": [
+            "CA-01"
+          ],
+          "expectedResult": "Comportamiento verificable ficticio."
+        },
+        {
+          "id": "TC-02",
+          "requirements": [
+            "CA-02"
+          ],
+          "expectedResult": "Comportamiento verificable ficticio."
+        }
+      ],
+      "exclusions": []
+    }
+  }
+}

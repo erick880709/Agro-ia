@@ -1,0 +1,15 @@
+allprojects {
+    repositories { mavenCentral() }
+}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    dependencies {
+        implementation 'io.projectreactor:reactor-core'
+        testImplementation 'io.projectreactor:reactor-test'
+        testImplementation 'org.junit.jupiter:junit-jupiter'
+        testImplementation 'org.mockito:mockito-junit-jupiter'
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+    }
+}

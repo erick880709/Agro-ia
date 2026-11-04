@@ -1,0 +1,4 @@
+# Expresiones aplicadas a todos los comandos de Terragrunt en este repo (una por línea).
+# Descomenta si tienes un catálogo o sandboxes dentro del mismo repo.
+# !./catalog/**
+# !./sandbox/**

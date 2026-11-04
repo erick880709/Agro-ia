@@ -1,0 +1,19 @@
+{
+  "id": "github_actions",
+  "kind": "platform",
+  "status": "implemented",
+  "mcp_capability": "github_mcp",
+  "required_target_fields": ["organization", "repository", "branch"],
+  "allowed_actions": {
+    "create_environment": "configure",
+    "update_actions_variable": "configure",
+    "configure_repository_ruleset": "configure",
+    "dispatch_workflow": "execute",
+    "cancel_workflow_run": "execute",
+    "approve_deployment": "execute",
+    "promote_release": "execute",
+    "rollback_deployment": "execute",
+    "tag_release": "configure"
+  },
+  "reference": "references/github-actions.md"
+}

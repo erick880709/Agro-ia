@@ -1,0 +1,26 @@
+{
+  "reportFormat": "CTRF",
+  "specVersion": "0.1.0",
+  "generatedBy": "playwright-ctrf-json-reporter (fixture ficticia)",
+  "results": {
+    "tool": { "name": "playwright" },
+    "summary": { "tests": 1, "passed": 1, "failed": 0, "pending": 0, "skipped": 0, "other": 0, "start": 1791317717856, "stop": 1791317719570 },
+    "tests": [
+      {
+        "name": "TC-01 [critical] [HU-1][CA-1] muestra la página de login",
+        "status": "passed",
+        "duration": 1031,
+        "tags": ["@critical"],
+        "retries": 0,
+        "flaky": false,
+        "suite": ["chromium", "login.spec.ts"],
+        "attachments": [
+          { "name": "screenshot", "contentType": "image/png", "path": "resources/qa/test-results/run-ejemplo/login-TC-01-chromium/test-finished-1.png" },
+          { "name": "video", "contentType": "video/webm", "path": "resources/qa/test-results/run-ejemplo/login-TC-01-chromium/video.webm" },
+          { "name": "trace", "contentType": "application/zip", "path": "resources/qa/test-results/run-ejemplo/login-TC-01-chromium/trace.zip" }
+        ],
+        "extra": { "annotations": [{ "type": "req", "description": "HU-1/CA-1" }] }
+      }
+    ]
+  }
+}

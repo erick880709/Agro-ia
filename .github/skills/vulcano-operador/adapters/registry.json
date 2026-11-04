@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "aliases": {
+    "platform": {
+      "azure_devops": "azure_devops",
+      "azuredevops": "azure_devops",
+      "github": "github_actions",
+      "github_actions": "github_actions",
+      "gitlab": "gitlab"
+    },
+    "cloud": {
+      "azure": "azure",
+      "aws": "aws"
+    }
+  },
+  "adapters": {
+    "platform": {
+      "azure_devops": "platforms/azure-devops.json",
+      "github_actions": "platforms/github-actions.json",
+      "gitlab": "platforms/gitlab.json"
+    },
+    "cloud": {
+      "azure": "cloud/azure.json",
+      "aws": "cloud/aws.json",
+      "gcp": "cloud/gcp.json"
+    },
+    "gitops": {
+      "argocd": "gitops/argocd.json"
+    },
+    "chatops": {
+      "slack": "chatops/slack.json"
+    }
+  }
+}

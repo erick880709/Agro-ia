@@ -1,0 +1,8 @@
+apply plugin: 'org.springframework.boot'
+dependencies {
+    implementation project(':model')
+    implementation project(':usecase')
+    implementation project(':reactive-web')
+    implementation project(':r2dbc-postgresql')
+    implementation 'org.springframework.boot:spring-boot-starter'
+}

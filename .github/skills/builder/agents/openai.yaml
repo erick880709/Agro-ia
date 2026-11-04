@@ -1,0 +1,7 @@
+interface:
+  display_name: "Builder"
+  short_description: "Implementa cambios de aplicación con evidencia"
+  default_prompt: "Usa $builder para implementar y verificar este cambio en la aplicación existente."
+
+policy:
+  allow_implicit_invocation: true

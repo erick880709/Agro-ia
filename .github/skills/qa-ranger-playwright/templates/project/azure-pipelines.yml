@@ -1,0 +1,55 @@
+# Ejecuta las pruebas E2E Playwright por ambiente, de forma manual o programada.
+trigger: none
+
+parameters:
+  - name: ambiente
+    type: string
+    default: qa
+    values: [dev, qa, stg]
+  - name: grep
+    type: string
+    default: '@smoke'
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  # Configura un grupo de variables por ambiente. Marca E2E_USER y E2E_PASSWORD como secretos.
+  - group: e2e-secrets-${{ parameters.ambiente }}
+  - name: CI
+    value: 'true'
+
+jobs:
+  - job: e2e
+    displayName: Playwright ${{ parameters.ambiente }}
+    timeoutInMinutes: 45
+    strategy:
+      parallel: 2
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '22.x'
+      - script: npm ci
+        displayName: Instalar dependencias
+      - script: npx playwright install --with-deps {{BROWSER_INSTALL}}
+        displayName: Instalar navegadores
+      - script: npx playwright test --grep "${{ parameters.grep }}" --shard=$(System.JobPositionInPhase)/$(System.TotalJobsInPhase)
+        displayName: Ejecutar pruebas
+        env:
+          TEST_ENV: ${{ parameters.ambiente }}
+          QA_RUN_ID: azure-$(Build.BuildId)-$(System.JobPositionInPhase)-$(System.JobAttempt)
+          # Asigna las variables secretas de Azure DevOps al entorno de este paso.
+          E2E_USER: $(E2E_USER)
+          E2E_PASSWORD: $(E2E_PASSWORD)
+      - task: PublishTestResults@2
+        condition: always()
+        inputs:
+          testResultsFormat: JUnit
+          testResultsFiles: resources/qa/reports/**/junit.xml
+          testRunTitle: Playwright ${{ parameters.ambiente }} ($(System.JobPositionInPhase))
+      - publish: blob-report
+        artifact: blob-report-$(System.JobPositionInPhase)
+        condition: always()
+      - publish: resources/qa
+        artifact: qa-evidence-$(System.JobPositionInPhase)
+        condition: always()

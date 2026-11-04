@@ -1,0 +1,83 @@
+{
+  "skill_name": "qa-ranger-robotframework",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Implementa las pruebas de aceptación de base de datos de la HU-310 (requisitos-cartera.md) con Robot Framework para correr en el stage Acceptance Test del release. Para validarlas localmente crea la base SQLite con cartera.sql. Son de solo lectura.",
+      "expected_output": "Proyecto generado con scaffold.py (perfil db con motor sqlite para la validación local; explica que en el release se usa el perfil db-release con el motor real y variables DB/HOST/PORT/USER/PASSWORD en mayúscula); casos TC-xx [prioridad] [HU-310][CA-n] con tag de ID; Table Must Exist para CA-1; Check Row Count == 0 con dominio NOT IN para CA-2; huérfanos por LEFT JOIN para CA-3 (detecta que el movimiento 3 referencia la cuenta 9999 y el caso FALLA: es un defecto del dato, no del test); Check Query Result con parameters= para CA-4; sin SQL destructivo ni concatenado; lint sin bloqueantes; dry run limpio; ejecución real con CTRF (4 casos, 1 fallido) y RTM; estado completed con recomendación NO-GO si CA-3 es crítico.",
+      "files": [
+        "evals/files/requisitos-cartera.md",
+        "evals/files/cartera.sql"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-robotframework",
+        "task": "implement",
+        "status": [
+          "completed",
+          "partial",
+          "failed",
+          "input_required"
+        ],
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Revisa esta suite Robot Framework heredada (transferencias.robot y comun.resource) y dime qué está mal y cómo corregirla.",
+      "expected_output": "Ejecuta lint_robot.py (~7 bloqueantes, ~24 mayores, ~8 menores) y entrega reporte priorizado con código corregido: secretos literales (R4) y Log de la clave (R28), tests sin verificación (R6), DELETE sin WHERE (R12), SQL interpolado (R11), Sleep (R1), sintaxis heredada (*** Setting ***, Force Tags, Run Keyword If, [Return]) (R2), implicit_wait=10 (R8), Browser y SeleniumLibrary juntas (R26), XPath absoluto (R24), clic por JavaScript (R9), Run Keyword And Ignore Error (R14), estado compartido entre tests (R19), nombre duplicado (R25), sin IDs/prioridad (R7), Create Session sin verify (R17), conexión sin cierre (R13), %{USER}/%{HOST} del sistema (R21); además la aserción inútil sobre el retorno de Connect To Database. No modifica las fuentes.",
+      "files": [
+        "evals/files/suite-mala/transferencias.robot",
+        "evals/files/suite-mala/comun.resource"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-robotframework",
+        "task": "review",
+        "status": "completed",
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "El stage Acceptance Test del release falla con este log y este resource. Las credenciales en la librería de variables están bien. ¿Qué pasa y cómo lo arreglo?",
+      "expected_output": "Diagnostica desde el log, sin adivinar: el usuario 'vsts' es el usuario del agente, no el de la BD; USER y PASSWORD son secretos no mapeados al entorno de la tarea, y %{USER} resolvió la variable del sistema sin fallar. Detecta además que la tarea corre la versión 1.4.0 (no 2.*), Robot 6.1.1 (sin VAR), y que %{keyPath} debe ser %{KEYPATH} en Linux. Corrige: usar la tarea versión 2.* (o mapear secretos), keyword de guarda Verificar Variables De Entorno, eliminar la aserción inútil y [Return], conectar en Suite Setup y desconectar en teardown, sintaxis compatible con RF 6. No modifica las fuentes; entrega el resource corregido como propuesta.",
+      "files": [
+        "evals/files/release-acceptance-test.log",
+        "evals/files/connection_database.resource"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-robotframework",
+        "task": "diagnose",
+        "status": "completed",
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 4,
+      "prompt": "Diseña casos Robot Framework para RF-01: una cuenta bloqueada no aparece en la vista de cuentas operables; RF-02: el parámetro TOPE_DIARIO existe y es numérico. Entrega diseño trazable, sin código ni ejecución, sin inventar tablas ni columnas.",
+      "files": [],
+      "oracle": {
+        "capabilityId": "qa-ranger-robotframework",
+        "task": "design",
+        "status": "completed",
+        "requirements": [
+          "RF-01",
+          "RF-02"
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "prompt": "Ejecuta la suite Robot Framework de aceptación de base de datos. No hay base de datos, credenciales, variables de pipeline ni acceso al ambiente. Conserva el bloqueo sin inventar evidencia o una ejecución.",
+      "files": [],
+      "oracle": {
+        "capabilityId": "qa-ranger-robotframework",
+        "task": "execute",
+        "status": [
+          "input_required",
+          "failed"
+        ],
+        "noSource": true
+      }
+    }
+  ]
+}

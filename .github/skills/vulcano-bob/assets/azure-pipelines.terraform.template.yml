@@ -1,0 +1,201 @@
+trigger:
+  branches:
+    include: [main]
+  paths:
+    include: [infra/**]
+
+pr:
+  branches:
+    include: [main]
+  paths:
+    include: [infra/**]
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: vulcano-terraform-operations
+
+# deployQa/deployProd controlan si las stages de qa/prod se COMPILAN, no solo si se ejecutan.
+# Azure DevOps valida la plantilla completa (incluidas las service connections referenciadas)
+# antes de aplicar stagesToSkip en runtime; con estos parámetros en false al encolar
+# (templateParameters), las stages qa/prod ni siquiera entran al YAML compilado, así que
+# serviceConnectionQa/serviceConnectionProd no necesitan existir todavía para desplegar solo dev.
+parameters:
+  - name: deployQa
+    type: boolean
+    default: true
+  - name: deployProd
+    type: boolean
+    default: true
+
+stages:
+  - stage: Validate
+    jobs:
+      - job: TerraformQuality
+        steps:
+          # __INSTALL_TERRAFORM_VALIDATE__
+          - bash: terraform fmt -check -recursive infra
+            displayName: Terraform format
+          - bash: |
+              set -euo pipefail
+              for environment in dev qa prod; do
+                terraform -chdir="infra/environments/$environment" init -backend=false -input=false
+                terraform -chdir="infra/environments/$environment" validate
+                tflint --chdir="infra/environments/$environment"
+              done
+              if [ -d infra/modules ]; then
+                while IFS= read -r -d '' module; do
+                  if find "$module/tests" -type f -name '*.tftest.hcl' -print -quit 2>/dev/null | grep -q .; then
+                    terraform -chdir="$module" init -backend=false -input=false
+                    terraform -chdir="$module" test -no-color
+                  fi
+                done < <(find infra/modules -mindepth 1 -maxdepth 1 -type d -print0)
+              fi
+              trivy config infra
+            displayName: Validate, test, lint and security
+
+  - stage: PlanDev
+    dependsOn: Validate
+    jobs:
+      - job: CreatePlanDev
+        steps:
+          # __INSTALL_TERRAFORM_PLAN_DEV__
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: $(serviceConnectionDev)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                set -euo pipefail
+                terraform -chdir=infra/environments/dev init -input=false
+                terraform -chdir=infra/environments/dev plan -input=false -out=tfplan
+            env:
+              TF_VAR_location: $(location)
+              TF_VAR_action_group_email: $(actionGroupEmail)
+          # __POLICY_AS_CODE_DEV__
+          - publish: infra/environments/dev/tfplan
+            artifact: tfplan-dev
+
+  - stage: ApplyDev
+    dependsOn: PlanDev
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - deployment: ApplySavedPlanDev
+        environment: dev
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                # __INSTALL_TERRAFORM_APPLY_DEV__
+                - download: current
+                  artifact: tfplan-dev
+                - task: AzureCLI@2
+                  inputs:
+                    azureSubscription: $(serviceConnectionDev)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      set -euo pipefail
+                      terraform -chdir=infra/environments/dev init -input=false
+                      terraform -chdir=infra/environments/dev apply -input=false "$(Pipeline.Workspace)/tfplan-dev/tfplan"
+
+  - ${{ if eq(parameters.deployQa, true) }}:
+    - stage: PlanQa
+      dependsOn: Validate
+      jobs:
+        - job: CreatePlanQa
+          steps:
+            # __INSTALL_TERRAFORM_PLAN_QA__
+            - task: AzureCLI@2
+              inputs:
+                azureSubscription: $(serviceConnectionQa)
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  set -euo pipefail
+                  terraform -chdir=infra/environments/qa init -input=false
+                  terraform -chdir=infra/environments/qa plan -input=false -out=tfplan
+              env:
+                TF_VAR_location: $(location)
+                TF_VAR_action_group_email: $(actionGroupEmail)
+            # __POLICY_AS_CODE_QA__
+            - publish: infra/environments/qa/tfplan
+              artifact: tfplan-qa
+
+    - stage: ApplyQa
+      dependsOn: [PlanQa, ApplyDev]
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+      jobs:
+        - deployment: ApplySavedPlanQa
+          environment: qa
+          strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - checkout: self
+                  # __INSTALL_TERRAFORM_APPLY_QA__
+                  - download: current
+                    artifact: tfplan-qa
+                  - task: AzureCLI@2
+                    inputs:
+                      azureSubscription: $(serviceConnectionQa)
+                      scriptType: bash
+                      scriptLocation: inlineScript
+                      inlineScript: |
+                        set -euo pipefail
+                        terraform -chdir=infra/environments/qa init -input=false
+                        terraform -chdir=infra/environments/qa apply -input=false "$(Pipeline.Workspace)/tfplan-qa/tfplan"
+
+  - ${{ if eq(parameters.deployProd, true) }}:
+    - stage: PlanProd
+      dependsOn: Validate
+      jobs:
+        - job: CreatePlanProd
+          steps:
+            # __INSTALL_TERRAFORM_PLAN_PROD__
+            - task: AzureCLI@2
+              inputs:
+                azureSubscription: $(serviceConnectionProd)
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  set -euo pipefail
+                  terraform -chdir=infra/environments/prod init -input=false
+                  terraform -chdir=infra/environments/prod plan -input=false -out=tfplan
+              env:
+                TF_VAR_location: $(location)
+                TF_VAR_action_group_email: $(actionGroupEmail)
+            # __POLICY_AS_CODE_PROD__
+            - publish: infra/environments/prod/tfplan
+              artifact: tfplan-prod
+
+    - stage: ApplyProd
+      dependsOn:
+        - PlanProd
+        - ${{ if eq(parameters.deployQa, true) }}:
+          - ApplyQa
+        - ${{ if ne(parameters.deployQa, true) }}:
+          - ApplyDev
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+      jobs:
+        - deployment: ApplySavedPlanProd
+          environment: prod
+          strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - checkout: self
+                  # __INSTALL_TERRAFORM_APPLY_PROD__
+                  - download: current
+                    artifact: tfplan-prod
+                  - task: AzureCLI@2
+                    inputs:
+                      azureSubscription: $(serviceConnectionProd)
+                      scriptType: bash
+                      scriptLocation: inlineScript
+                      inlineScript: |
+                        set -euo pipefail
+                        terraform -chdir=infra/environments/prod init -input=false
+                        terraform -chdir=infra/environments/prod apply -input=false "$(Pipeline.Workspace)/tfplan-prod/tfplan"

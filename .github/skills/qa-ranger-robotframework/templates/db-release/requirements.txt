@@ -1,0 +1,4 @@
+# Solo para ejecución LOCAL: en el release, la tarea RobotFramework-DBLibrary trae su propio runtime.
+robotframework==__RF__
+robotframework-databaselibrary==2.5.0
+__DRIVER_PKG__

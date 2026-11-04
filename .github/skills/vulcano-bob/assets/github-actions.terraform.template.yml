@@ -1,0 +1,69 @@
+name: Terraform delivery
+
+on:
+  pull_request:
+    paths: ['infra/**']
+  push:
+    branches: [main]
+    paths: ['infra/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  plan:
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [dev, qa, prod]
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.environment }}-plan
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with: { terraform_version: '__TERRAFORM_VERSION__' }
+      # __CLOUD_AUTH__
+      - name: Validate and plan
+        working-directory: infra/environments/${{ matrix.environment }}
+        run: |
+          terraform fmt -check -recursive
+          terraform init -input=false
+          terraform validate
+          terraform test
+          terraform plan -input=false -out=tfplan
+      # __POLICY_AS_CODE__
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tfplan-${{ matrix.environment }}
+          path: infra/environments/${{ matrix.environment }}/tfplan
+          if-no-files-found: error
+          retention-days: 7
+
+  apply:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: plan
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: [dev, qa, prod]
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.environment }}
+    concurrency:
+      group: terraform-${{ matrix.environment }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with: { terraform_version: '__TERRAFORM_VERSION__' }
+      # __CLOUD_AUTH__
+      - uses: actions/download-artifact@v4
+        with:
+          name: tfplan-${{ matrix.environment }}
+          path: infra/environments/${{ matrix.environment }}
+      - name: Apply reviewed plan
+        working-directory: infra/environments/${{ matrix.environment }}
+        run: |
+          terraform init -input=false
+          terraform apply -input=false -auto-approve tfplan

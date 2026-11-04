@@ -1,0 +1,12 @@
+# Instala las versiones pineadas en mise.toml (Terragrunt + OpenTofu).
+steps:
+  - script: |
+      curl -fsSL https://mise.run | sh
+      echo "##vso[task.prependpath]$HOME/.local/bin"
+      echo "##vso[task.prependpath]$HOME/.local/share/mise/shims"
+    displayName: Instalar mise
+  - script: |
+      mise trust --yes
+      mise install
+      terragrunt --version && tofu version
+    displayName: Instalar Terragrunt y OpenTofu

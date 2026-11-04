@@ -1,0 +1,11 @@
+{
+  "id": "slack",
+  "kind": "chatops",
+  "status": "planned",
+  "mcp_capability": "slack_mcp",
+  "required_target_fields": ["organization", "channel"],
+  "allowed_actions": {
+    "post_notification": "configure"
+  },
+  "reference": "references/adapter-contract.md"
+}

@@ -1,0 +1,33 @@
+schema_version: 1
+score_alignment: "score.dev/v1b1 (subset)"
+component_id: example-api
+workload: api
+metadata:
+  name: example-api
+containers:
+  app:
+    variables:
+      DATABASE_URL: "${resources.db.host}"
+      LOG_LEVEL: "info"
+    livenessProbe:
+      httpGet:
+        path: /health/live
+        port: 8080
+    readinessProbe:
+      httpGet:
+        path: /health/ready
+        port: 8080
+service:
+  ports:
+    http:
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+resources:
+  db:
+    type: postgres
+    required: true
+    params:
+      version: "16"
+restrictions:
+  - "Requiere conectividad saliente hacia el recurso db en el mismo namespace lógico."

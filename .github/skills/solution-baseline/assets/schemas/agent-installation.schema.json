@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.invalid/solution-baseline/agent-installation.schema.json",
+  "title": "Solution Baseline Agent Installation",
+  "type": "object",
+  "required": ["schema_version", "skill", "installed_at", "files", "runtime"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "skill": { "const": "solution-baseline" },
+    "installed_at": { "type": "string", "format": "date-time" },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["platform", "name", "path", "sha256", "state"],
+        "properties": {
+          "platform": { "enum": ["claude", "codex"] },
+          "name": { "type": "string", "minLength": 1 },
+          "path": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "state": { "enum": ["installed", "unchanged"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "runtime": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["valid", "path", "desired", "actual", "issue", "status"],
+          "properties": {
+            "valid": { "type": "boolean" },
+            "path": { "type": "string", "minLength": 1 },
+            "desired": { "type": "integer", "minimum": 1 },
+            "actual": { "type": ["integer", "null"], "minimum": 1 },
+            "issue": { "type": ["string", "null"] },
+            "status": { "enum": ["configured", "unchanged"] }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

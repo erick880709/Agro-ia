@@ -1,0 +1,67 @@
+{
+  "skill_name": "qa-ranger-unitarias",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Mide la cobertura unitaria actual de descuentos.mjs con sus pruebas existentes y diagnostica qué falta para la meta. No escribas pruebas nuevas ni modifiques el módulo.",
+      "expected_output": "Detecta el runner nativo de Node; ejecuta con cobertura excluyendo el archivo de prueba; convierte el LCOV con unit_report.py (líneas 45/58, ramas 12/20, funciones 7/7, sentencias no soportadas); diagnóstico completed con la meta no alcanzada; lista huecos (validaciones, tramos 50/100, cliente plata/desconocido, cupón, tope) sin escribir pruebas ni declarar la meta.",
+      "files": [
+        "evals/files/descuentos.mjs",
+        "evals/files/descuentos.test.mjs"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-unitarias",
+        "task": "diagnose",
+        "status": "completed",
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Implementa las pruebas unitarias de descuentos.mjs según los requisitos adjuntos y alcanza la meta de cobertura. Usa el runner nativo de Node.js y no modifiques el módulo.",
+      "expected_output": "Pruebas UT-n con prioridad y RF de la fuente; límites 9/10/49/50/99/100, rechazos con mensaje, cupón vigente y vencido, tope del 30% y redondeo; reloj inyectado por el cupón, sin estado compartido; JUnit y LCOV en resources/qa/unit/<runId>/; verification y coverage generados con unit_report.py; coverageTargetRequired true y meta acreditada por el validador en líneas, ramas y funciones.",
+      "files": [
+        "evals/files/requisitos-descuentos.md",
+        "evals/files/descuentos.mjs"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-unitarias",
+        "task": "implement",
+        "status": "completed",
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "Implementa unitarias para estos requisitos. Si no hay implementación del servicio ni runner, no inventes ejecución: identifica el bloqueo y el trabajo pendiente.",
+      "expected_output": "Conserva la tarea implement y registra qué falta para verificar las unitarias. Entrega partial o failed. No inventa implementación del servicio, runner, ejecución ni cobertura.",
+      "files": [
+        "../ranger/evals/files/requisitos-transferencias.md"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-unitarias",
+        "task": "implement",
+        "status": [
+          "partial",
+          "failed"
+        ],
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 4,
+      "prompt": "Revisa estas pruebas unitarias de mi equipo y dime qué está mal y cómo corregirlo. No las reescribas.",
+      "expected_output": "Reporte priorizado con corrección por hallazgo: prueba sin aserción (U1), try/catch que oculta el fallo (U2), dependencia de orden y estado compartido (U3), setTimeout fijo (U4), fecha real (U5), aserciones débiles (U6), skip sin motivo (U7), nombres sin ID (U10). Ejecuta la suite si puede; no reescribe archivos ni afirma cobertura.",
+      "files": [
+        "evals/files/descuentos.mjs",
+        "evals/files/descuentos-revision.test.mjs"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-unitarias",
+        "task": "review",
+        "status": "completed",
+        "protectFixtures": true
+      }
+    }
+  ]
+}

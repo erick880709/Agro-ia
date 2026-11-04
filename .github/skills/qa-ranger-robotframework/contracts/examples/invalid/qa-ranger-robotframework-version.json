@@ -1,0 +1,85 @@
+{
+  "contractVersion": "1.0.0",
+  "capabilityId": "qa-ranger-robotframework",
+  "status": "completed",
+  "summary": "Ejemplo ficticio completo de ejecución Robot Framework sobre base de datos.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "Objetivo y alcance ficticios definidos."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "raw",
+      "kind": "raw_results",
+      "content": "Fixture: TC-01 pasó."
+    },
+    {
+      "id": "report",
+      "kind": "report",
+      "content": "Fixture: ejecución completa de un caso."
+    },
+    {
+      "id": "video",
+      "kind": "video",
+      "uri": "https://example.invalid/fixtures/TC-01/video"
+    },
+    {
+      "id": "trace",
+      "kind": "trace",
+      "uri": "https://example.invalid/fixtures/TC-01/trace"
+    },
+    {
+      "id": "screenshot",
+      "kind": "screenshot",
+      "uri": "https://example.invalid/fixtures/TC-01/screenshot"
+    }
+  ],
+  "pending": [],
+  "data": {
+    "task": "execute",
+    "execution": {
+      "expected": [
+        {
+          "id": "TC-01",
+          "project": "chromium",
+          "priority": "critical"
+        }
+      ],
+      "cases": [
+        {
+          "id": "TC-01",
+          "project": "chromium",
+          "priority": "critical",
+          "status": "passed",
+          "retries": 0,
+          "evidence": [
+            "video",
+            "trace",
+            "screenshot"
+          ]
+        }
+      ],
+      "runErrors": [],
+      "exitCriteria": [
+        {
+          "id": "critical",
+          "status": "met",
+          "evidence": "Fixture: TC-01 pasó."
+        }
+      ],
+      "sourceArtifact": "raw",
+      "evidencePolicy": {
+        "level": "browser",
+        "required": [
+          "video",
+          "trace",
+          "screenshot"
+        ],
+        "override": null
+      }
+    }
+  }
+}

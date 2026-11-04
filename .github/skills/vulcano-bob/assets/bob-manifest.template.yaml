@@ -1,0 +1,120 @@
+schema_version: 4
+project: "__PROJECT__"
+updated_at: "1970-01-01"
+resources_root: "resources"
+source_manifest: "resources/.vulcano/manifest.yaml"
+source_snapshot:
+  manifest_updated_at: ""
+  cloud_provider: "azure"
+  iac: "terraform"
+  devops_platform: "azure_devops"
+adapter_selection:
+  cloud: azure
+  iac: terraform
+  pipeline: azure_devops
+  remote_operator: vulcano-operador
+  status: implemented
+terraform_profile:
+  required_version: "__FROM_VULCANO__"
+  provider_constraints: { __FROM_VULCANO__: "__FROM_VULCANO__" }
+  module_standard: internal
+  execution_backend: azure_devops
+  test_strategy: plan_mock
+  registry_source: public
+  registry_mcp: read_only
+  adoption_mode: none
+preflight:
+  status: pending
+  checked_at: null
+  conflicts: []
+  capabilities:
+    terraform_registry_mcp: unknown
+    terraform_style_guide: unknown
+    terraform_test: unknown
+    azure_verified_modules: not_required
+    refactor_module: not_required
+    terraform_search_import: disabled
+target_repo:
+  iac_root: "infra"
+  pipeline_files:
+    - "infra/pipelines/iac.yml"
+    - "infra/pipelines/drift.yml"
+    - "azure-pipelines.yml"
+closure_index: "resources/03-iac-pipelines-index.md"
+artifacts:
+  bootstrap-backend:
+    path: "infra/bootstrap/create-backend.sh"
+    status: pending
+    depends_on: []
+    contract:
+      inputs: ["AZURE_LOCATION", "TFSTATE_RESOURCE_GROUP", "TFSTATE_STORAGE_ACCOUNT"]
+      outputs: ["state_resource_group", "state_storage_account", "state_containers"]
+    source_docs: ["infrastructure-as-code/05-state-management.md"]
+    source_hashes: {}
+    validated: { format: null, validate: null, test: null, lint: null, security: null, syntax: null, last_run: null }
+  env-dev:
+    path: "infra/environments/dev"
+    status: pending
+    depends_on: []
+    contract:
+      inputs: ["environment", "service_configuration"]
+      outputs: ["backend_url", "frontend_url"]
+    source_docs: ["infrastructure-as-code/02-environments.md", "infrastructure-as-code/04-terraform-structure.md", "infrastructure-as-code/05-state-management.md"]
+    source_hashes: {}
+    validated: { format: null, validate: null, test: null, lint: null, security: null, syntax: null, last_run: null }
+  env-qa:
+    path: "infra/environments/qa"
+    status: pending
+    depends_on: []
+    contract:
+      inputs: ["environment", "service_configuration"]
+      outputs: ["backend_url", "frontend_url"]
+    source_docs: ["infrastructure-as-code/02-environments.md", "infrastructure-as-code/04-terraform-structure.md", "infrastructure-as-code/05-state-management.md"]
+    source_hashes: {}
+    validated: { format: null, validate: null, test: null, lint: null, security: null, syntax: null, last_run: null }
+  env-prod:
+    path: "infra/environments/prod"
+    status: pending
+    depends_on: []
+    contract:
+      inputs: ["environment", "service_configuration"]
+      outputs: ["backend_url", "frontend_url"]
+    source_docs: ["infrastructure-as-code/02-environments.md", "infrastructure-as-code/04-terraform-structure.md", "infrastructure-as-code/05-state-management.md"]
+    source_hashes: {}
+    validated: { format: null, validate: null, test: null, lint: null, security: null, syntax: null, last_run: null }
+  pipeline-iac:
+    path: "infra/pipelines/iac.yml"
+    status: pending
+    depends_on: ["env-dev", "env-qa", "env-prod"]
+    contract:
+      inputs: ["serviceConnectionDev", "serviceConnectionQa", "serviceConnectionProd"]
+      outputs: ["tfplan-dev", "tfplan-qa", "tfplan-prod"]
+    source_docs: ["infrastructure-as-code/05-state-management.md", "devops-strategy/05-environments.md", "devops-strategy/06-ci-cd.md", "devops-strategy/08-security.md"]
+    source_hashes: {}
+    validated: { format: null, validate: null, test: null, lint: null, security: null, syntax: null, last_run: null }
+  pipeline-app:
+    path: "azure-pipelines.yml"
+    status: pending
+    depends_on: ["env-dev", "env-qa", "env-prod"]
+    contract:
+      inputs: ["serviceConnectionDev", "serviceConnectionQa", "serviceConnectionProd", "backendAppName", "frontendAppName"]
+      outputs: ["app-package", "test-results", "security-results"]
+    source_docs: ["devops-strategy/05-environments.md", "devops-strategy/06-ci-cd.md", "devops-strategy/07-continuous-testing.md", "devops-strategy/08-security.md"]
+    source_hashes: {}
+    validated: { format: null, validate: null, test: null, lint: null, security: null, syntax: null, last_run: null }
+  pipeline-drift:
+    path: "infra/pipelines/drift.yml"
+    status: pending
+    depends_on: ["env-dev", "env-qa", "env-prod"]
+    contract:
+      inputs: ["serviceConnectionDev", "serviceConnectionQa", "serviceConnectionProd"]
+      outputs: ["drift-report-dev", "drift-report-qa", "drift-report-prod"]
+    source_docs: ["infrastructure-as-code/05-state-management.md", "observability/06-alerting.md"]
+    source_hashes: {}
+    validated: { format: null, validate: null, test: null, lint: null, security: null, syntax: null, last_run: null }
+operational_pending: []
+manual_steps_done: []
+validation:
+  last_run: null
+  errors: null
+  warnings: null

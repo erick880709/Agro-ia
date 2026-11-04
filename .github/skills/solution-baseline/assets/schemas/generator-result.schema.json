@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.invalid/solution-baseline/generator-result.schema.json",
+  "title": "Solution Baseline Generator Result",
+  "type": "object",
+  "required": ["operation", "status", "repository_id", "idempotency_key", "artifacts", "decisions", "warnings", "evidence", "next_steps", "agent_context"],
+  "properties": {
+    "operation": { "enum": ["metadata", "inspect", "plan", "render", "diff", "validate", "apply", "upgrade", "archetype-create", "publish"] },
+    "status": { "enum": ["succeeded", "failed", "blocked", "partial", "skipped"] },
+    "repository_id": { "type": "string", "minLength": 1 },
+    "idempotency_key": { "type": "string", "minLength": 1 },
+    "input_hash": { "$ref": "#/$defs/sha256" },
+    "output_hash": { "$ref": "#/$defs/sha256" },
+    "started_at": { "type": "string", "format": "date-time" },
+    "completed_at": { "type": "string", "format": "date-time" },
+    "artifacts": { "type": "array", "items": { "$ref": "#/$defs/artifact" } },
+    "decisions": { "type": "array", "items": { "$ref": "#/$defs/decision" } },
+    "warnings": { "type": "array", "items": { "$ref": "#/$defs/warning" } },
+    "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" } },
+    "next_steps": { "type": "array", "items": { "type": "string" } },
+    "agent_context": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": { "enum": ["discover", "status", "plan", "dry-run", "create", "reconcile", "upgrade", "archetype-create", "orchestrate", "resume", "validate"] },
+        "strategy": { "type": "string" },
+        "adapter": { "type": "string" },
+        "verdict": { "enum": ["GO", "GO with risks", "NO-GO"] },
+        "contracts": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "dependencies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "conflicts": { "type": "array", "items": { "type": "string" } },
+        "candidate_adapters": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "architecture_gaps": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "hashes": { "type": "object", "additionalProperties": { "$ref": "#/$defs/sha256" } },
+        "resume_token": { "type": "string" },
+        "details": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "compensation": {
+      "type": "object",
+      "required": ["supported"],
+      "properties": {
+        "supported": { "type": "boolean" },
+        "procedure": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" },
+    "artifact": {
+      "type": "object",
+      "required": ["path", "action"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "action": { "enum": ["created", "modified", "removed-candidate", "unchanged", "generated", "validated"] },
+        "ownership": { "enum": ["managed", "extendable", "project_owned", "generated_once", "ignored"] },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "summary": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "required": ["id", "status", "summary"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["confirmed", "inferred", "pending", "accepted", "rejected"] },
+        "summary": { "type": "string", "minLength": 1 },
+        "value": {},
+        "source": { "type": "string" },
+        "owner": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "warning": {
+      "type": "object",
+      "required": ["code", "message", "severity"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 },
+        "severity": { "enum": ["info", "low", "medium", "high", "critical"] },
+        "path": { "type": "string" },
+        "owner": { "type": "string" },
+        "criterion": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["kind", "path"],
+      "properties": {
+        "kind": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "summary": { "type": "string" },
+        "observed_at": { "type": "string", "format": "date-time" },
+        "command": { "type": "string" },
+        "status": { "enum": ["passed", "failed", "skipped", "observed"] },
+        "duration_ms": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

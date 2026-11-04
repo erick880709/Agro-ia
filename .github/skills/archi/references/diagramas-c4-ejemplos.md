@@ -8,22 +8,23 @@ Muestra el sistema como una caja negra y sus actores/sistemas externos. Responde
 
 ```mermaid
 C4Context
-    title Diagrama de Contexto del Sistema - [Nombre del Sistema]
+    title Contexto del Sistema - [Nombre del Sistema]
+    UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
 
     Person(cliente, "Cliente", "Usuario final que realiza compras")
     Person(admin, "Administrador", "Gestiona catálogo y pedidos")
 
-    System(sistema, "[Nombre del Sistema]", "Permite gestionar el ciclo completo de pedidos online")
+    System(sistema, "[Nombre del Sistema]", "Gestiona el ciclo completo de pedidos online")
 
-    System_Ext(pasarelaPago, "Pasarela de Pago", "Procesa transacciones (ej. Stripe)")
-    System_Ext(sistemaEnvios, "Proveedor de Envíos", "Genera guías y rastrea entregas")
-    System_Ext(email, "Servicio de Email", "Envía notificaciones transaccionales")
+    System_Ext(pasarelaPago, "EXT-01 Pasarela de Pago", "Procesa transacciones")
+    System_Ext(sistemaEnvios, "EXT-02 Proveedor de Envíos", "Genera guías y rastrea entregas")
+    System_Ext(email, "EXT-03 Servicio de Email", "Envía notificaciones transaccionales")
 
-    Rel(cliente, sistema, "Realiza pedidos, consulta estado")
-    Rel(admin, sistema, "Administra catálogo y pedidos")
-    Rel(sistema, pasarelaPago, "Procesa pagos", "HTTPS/API")
-    Rel(sistema, sistemaEnvios, "Solicita guías de envío", "HTTPS/API")
-    Rel(sistema, email, "Envía notificaciones", "SMTP/API")
+    Rel(cliente, sistema, "Realiza y consulta pedidos", "HTTPS")
+    Rel(admin, sistema, "Administra catálogo y pedidos", "HTTPS")
+    Rel(sistema, pasarelaPago, "Autoriza pagos", "REST/HTTPS")
+    Rel(sistema, sistemaEnvios, "Solicita guías de envío", "REST/HTTPS")
+    Rel(sistema, email, "Envía notificaciones", "SMTP")
 ```
 
 ## Nivel 2 — Diagrama de Contenedores
@@ -32,57 +33,61 @@ Abre la caja negra del sistema en las aplicaciones/servicios/bases de datos que 
 
 ```mermaid
 C4Container
-    title Diagrama de Contenedores - [Nombre del Sistema]
+    title Contenedores - [Nombre del Sistema]
+    UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
 
     Person(cliente, "Cliente")
 
     System_Boundary(sistema, "[Nombre del Sistema]") {
-        Container(webApp, "Aplicación Web", "React/Next.js", "Interfaz de usuario para clientes")
-        Container(api, "API de Pedidos", "Node.js/Express", "Expone la lógica de negocio vía REST")
-        Container(workerNotif, "Worker de Notificaciones", "Node.js", "Procesa cola de eventos y envía notificaciones")
-        ContainerDb(db, "Base de Datos", "PostgreSQL", "Almacena pedidos, clientes y catálogo")
-        ContainerDb(cache, "Cache", "Redis", "Cachea catálogo y sesiones")
-        Container(cola, "Cola de Mensajes", "RabbitMQ", "Desacopla eventos de pedido")
+        Container(webApp, "CT-01 Aplicación Web", "React / Next.js", "Interfaz de usuario para clientes")
+        Container(api, "CT-02 API de Pedidos", "Java 21 / Spring Boot", "Expone la lógica de negocio vía REST")
+        Container(workerNotif, "CT-03 Worker de Notificaciones", "Java 21", "Consume eventos y envía notificaciones")
+        ContainerQueue(cola, "Broker de eventos", "RabbitMQ", "Desacopla eventos de pedido")
+        ContainerDb(db, "Base de datos", "PostgreSQL", "DATA-001 Pedidos, clientes y catálogo")
+        ContainerDb(cache, "Caché", "Redis", "Catálogo y sesiones")
     }
 
-    System_Ext(pasarelaPago, "Pasarela de Pago")
+    System_Ext(pasarelaPago, "EXT-01 Pasarela de Pago")
 
     Rel(cliente, webApp, "Usa", "HTTPS")
-    Rel(webApp, api, "Consume", "JSON/HTTPS")
-    Rel(api, db, "Lee/escribe", "SQL")
-    Rel(api, cache, "Lee/escribe", "Redis Protocol")
-    Rel(api, cola, "Publica eventos de pedido")
-    Rel(cola, workerNotif, "Consume eventos")
-    Rel(api, pasarelaPago, "Procesa pagos", "HTTPS/API")
+    Rel(webApp, api, "Consume", "REST/JSON")
+    Rel(api, db, "Lee y escribe", "SQL/TLS")
+    Rel(api, cache, "Lee y escribe", "RESP/TLS")
+    Rel(api, cola, "Publica PedidoCreado", "AMQP")
+    Rel(cola, workerNotif, "Entrega eventos", "AMQP")
+    Rel(api, pasarelaPago, "Autoriza pagos", "REST/HTTPS")
+    UpdateRelStyle(api, cola, $offsetY="-20")
 ```
 
 ## Nivel 3 — Diagrama de Componentes
 
-Abre UN contenedor específico (normalmente el más complejo o crítico) en sus módulos/componentes internos y cómo colaboran. Genera uno por cada contenedor no trivial — no fuerces este nivel para contenedores simples como una base de datos administrada.
+Abre UN contenedor específico en sus módulos/componentes internos y cómo colaboran. Genera un `14.xx-Diseno-Detallado_CT-xx_<Contenedor>.md` por cada contenedor clasificado como significativo siguiendo `references/guia-diseno-detallado-contenedores.md`; no fuerces este nivel para contenedores simples o no significativos.
 
 ```mermaid
 C4Component
-    title Diagrama de Componentes - API de Pedidos
+    title Componentes - CT-02 API de Pedidos
+    UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
 
-    Container(webApp, "Aplicación Web")
-    ContainerDb(db, "Base de Datos")
-    Container(cola, "Cola de Mensajes")
+    Container(webApp, "CT-01 Aplicación Web", "React / Next.js")
 
-    Container_Boundary(api, "API de Pedidos") {
-        Component(controller, "PedidosController", "Express Router", "Recibe y valida peticiones HTTP")
-        Component(servicio, "PedidosService", "Clase de dominio", "Orquesta la lógica de negocio de pedidos")
-        Component(repo, "PedidosRepository", "Patrón Repository", "Abstrae el acceso a datos de pedidos")
-        Component(validador, "ValidadorPedido", "Módulo de dominio", "Aplica reglas de negocio de validación")
-        Component(publicador, "EventPublisher", "Adaptador", "Publica eventos de dominio en la cola")
+    Container_Boundary(api, "CT-02 API de Pedidos") {
+        Component(controller, "PedidosController", "Spring Web", "Recibe y valida peticiones HTTP")
+        Component(servicio, "PedidosService", "Caso de uso", "Orquesta la lógica de pedidos")
+        Component(validador, "ValidadorPedido", "Dominio", "Aplica reglas de negocio")
+        Component(repo, "PedidosRepository", "Puerto + adaptador JPA", "Persiste pedidos")
+        Component(outbox, "OutboxPublisher", "Adaptador", "Publica eventos desde la tabla outbox")
     }
 
-    Rel(webApp, controller, "Envía petición", "JSON/HTTPS")
-    Rel(controller, servicio, "Invoca")
-    Rel(servicio, validador, "Valida reglas de negocio")
-    Rel(servicio, repo, "Persiste/consulta")
-    Rel(repo, db, "SQL")
-    Rel(servicio, publicador, "Notifica evento de dominio")
-    Rel(publicador, cola, "Publica mensaje")
+    ContainerDb(db, "Base de datos", "PostgreSQL")
+    ContainerQueue(cola, "Broker de eventos", "RabbitMQ")
+
+    Rel(webApp, controller, "Crea pedido", "REST/JSON")
+    Rel(controller, servicio, "Invoca", "llamada en proceso")
+    Rel(servicio, validador, "Valida reglas", "llamada en proceso")
+    Rel(servicio, repo, "Guarda pedido + evento", "llamada en proceso")
+    Rel(repo, db, "Escribe en una transacción", "SQL/TLS")
+    Rel(outbox, db, "Lee eventos pendientes", "SQL/TLS")
+    Rel(outbox, cola, "Publica PedidoCreado", "AMQP")
 ```
 
 ## Nivel 4 — Diagrama de Código (opcional)
@@ -111,6 +116,12 @@ classDiagram
 
 ## Reglas prácticas
 
+- Aplica `references/guia-calidad-visual-diagramas.md` (§6, C4 en Mermaid): `UpdateLayoutConfig`, orden de declaración, `Rel` con descripción y tecnología, `UpdateRelStyle` cuando dos etiquetas se pisen. Valida con `scripts/validate_mermaid.py`.
+- Usa `ContainerQueue` para brokers y colas y `ContainerDb` para almacenamiento: la forma comunica el tipo de contenedor sin leer la etiqueta.
+
 - Usa nombres reales del dominio/proyecto en los diagramas, nunca los genéricos de estos ejemplos.
+- Asigna primero IDs estables `CT-xx` en `14-Vistas-C4.md`, muéstralos en el nombre visible del contenedor (por ejemplo, `[CT-01] API de Pedidos`) y usa el mismo ID/sufijo en cada C4 Nivel 3 y modelo `16.xx`. Los sistemas externos usan `EXT-xx` y no reciben diseño `14.xx`.
+- Para Microfrontends sigue `references/guia-microfrontends.md`: dibuja shell/remotes como contenedores únicamente si son unidades construibles, versionables y desplegables independientemente; los módulos publicados con el portal viven como componentes dentro de su C4 Nivel 3. Etiqueta el modo de composición y evita un `CT-xx` por pantalla o microservicio.
 - En Caso B (AS-IS), cada relación (`Rel`) del diagrama debe poder señalarse a una línea de código o configuración real — si no puedes verificarla, no la incluyas o márcala como supuesto.
 - Mantén cada diagrama enfocado: un Nivel 2 con más de ~10 contenedores probablemente necesita agruparse (ej. por dominio/bounded context) en vez de mostrar todo de una vez.
+- Junto a cada diagrama de Nivel 2/3, agrega la ficha mínima por bloque no trivial. Cada `14.xx` incluye además componentes, contratos, tácticas, seguridad, resiliencia, observabilidad, datos/estado y riesgos conforme a la guía de diseño detallado.

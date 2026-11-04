@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.invalid/solution-baseline/skill-evaluation.schema.json",
+  "title": "Solution Baseline Skill Routing Evaluation",
+  "type": "object",
+  "required": ["schema_version", "skill", "cases"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "skill": { "const": "solution-baseline" },
+    "cases": {
+      "type": "array",
+      "minItems": 6,
+      "items": {
+        "type": "object",
+        "required": ["id", "prompt", "should_route", "reason"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+          "prompt": { "type": "string", "minLength": 10 },
+          "should_route": { "type": "boolean" },
+          "expected_modes": {
+            "type": "array",
+            "items": { "enum": ["discover", "status", "plan", "dry-run", "create", "reconcile", "upgrade", "archetype-create", "orchestrate", "resume", "validate"] },
+            "uniqueItems": true
+          },
+          "reason": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

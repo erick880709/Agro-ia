@@ -1,0 +1,154 @@
+{
+  "schemaVersion": "1.0",
+  "project": {
+    "name": "<Proyecto>",
+    "version": "<versión>",
+    "date": "<YYYY-MM-DD>",
+    "authors": ["<autor o equipo>"]
+  },
+  "scenario": "A",
+  "review": {
+    "status": "No cumple",
+    "auditVerdict": "No apto",
+    "coherenceValidator": {
+      "status": "No ejecutado",
+      "command": "python .claude/skills/archi/scripts/validate_architecture_coherence.py <directorio> --scenario A --strict",
+      "errors": 0,
+      "warnings": 0
+    },
+    "blockingFindings": [
+      {
+        "id": "H-001",
+        "title": "Reemplazar por hallazgos reales o dejar la lista vacía",
+        "summary": "Missing evidence",
+        "status": "Abierto",
+        "owner": "<responsable>",
+        "source": { "id": "SRC-25", "section": "Hallazgos" }
+      }
+    ],
+    "approvalEligible": false
+  },
+  "decisionRequest": {
+    "question": "¿Qué decisión concreta debe tomar el comité?",
+    "authority": "<autoridad definida en 01>",
+    "options": ["Aprobar", "Aprobar con condiciones", "Solicitar ajustes"],
+    "conditions": []
+  },
+  "executiveSummary": {
+    "problem": "<problema u oportunidad desde 02>",
+    "recommendation": "<alternativa seleccionada en 10>",
+    "value": "<beneficio medible o Missing evidence>",
+    "cost": "<rango/supuesto desde 17.4 o Missing evidence>",
+    "timeline": "<rango desde 24 o Missing evidence>"
+  },
+  "workPerformed": [
+    {
+      "id": "25",
+      "title": "Revisión técnica",
+      "summary": "<resultado y cobertura>",
+      "status": "No cumple",
+      "owner": "<responsable>",
+      "evidence": "<resultado verificable>",
+      "source": { "id": "SRC-25", "section": "Matriz de criterios de cierre" }
+    }
+  ],
+  "drivers": [
+    {
+      "id": "QA-01",
+      "title": "<atributo priorizado>",
+      "summary": "<escenario y medida>",
+      "status": "Priorizado",
+      "source": { "id": "SRC-05", "section": "QA-01" }
+    }
+  ],
+  "alternatives": [
+    {
+      "id": "ALT-01",
+      "title": "<alternativa>",
+      "summary": "<scope, puntuación y trade-offs>",
+      "status": "Evaluada",
+      "source": { "id": "SRC-09", "section": "ALT-01" }
+    }
+  ],
+  "selection": {
+    "summary": "<selección confirmada y mapa de scope>",
+    "status": "Propuesta",
+    "source": { "id": "SRC-10", "section": "Selección" },
+    "items": []
+  },
+  "archetype": {
+    "summary": "<ARQ-xxx y baseline tecnológico>",
+    "status": "Propuesto",
+    "source": { "id": "SRC-10-1", "section": "Ficha técnica" },
+    "items": []
+  },
+  "uncertainties": [],
+  "pocs": [],
+  "architecture": {
+    "summary": "<configuración materializada y contenedores significativos>",
+    "status": "Missing evidence",
+    "source": { "id": "SRC-14", "section": "C4 Nivel 2" },
+    "items": [],
+    "diagrams": []
+  },
+  "criticalFlows": [],
+  "data": {
+    "summary": "<ownership y modelos por contenedor o No aplica — motivo>",
+    "status": "Missing evidence",
+    "source": { "id": "SRC-16", "section": "Mapa global" },
+    "items": [],
+    "diagrams": []
+  },
+  "deployment": {
+    "summary": "<cloud, identidad, red, HA/DR, observabilidad e IaC>",
+    "status": "Missing evidence",
+    "source": { "id": "SRC-17", "section": "Topología" },
+    "items": [],
+    "diagrams": []
+  },
+  "tactics": [],
+  "security": {
+    "summary": "<activos, trust boundaries, amenazas THR-xxx, requisitos SEC-xxx, riesgo residual y handoff a Vulcano; o No aplica — motivo>",
+    "status": "Missing evidence",
+    "source": { "id": "SRC-19", "section": "Seguridad" },
+    "items": [],
+    "diagrams": []
+  },
+  "decisions": [],
+  "validation": {
+    "summary": "<ATAM, PoC, Well-Architected, cobertura prometido→diseñado, trazabilidad inversa, contradicciones y dictamen de 25>",
+    "status": "No cumple",
+    "source": { "id": "SRC-25", "section": "Análisis ATAM por escenario" },
+    "items": []
+  },
+  "risks": [
+    {
+      "id": "R-001",
+      "title": "<riesgo principal>",
+      "summary": "<impacto, mitigación y residual>",
+      "status": "Abierto",
+      "owner": "<responsable>",
+      "source": { "id": "SRC-21", "section": "R-001" }
+    }
+  ],
+  "economics": {
+    "summary": "<costo/rango, moneda, fecha y supuestos o Missing evidence>",
+    "status": "Missing evidence",
+    "source": { "id": "SRC-17", "section": "Costos" },
+    "items": []
+  },
+  "roadmap": [],
+  "sources": [
+    { "id": "SRC-05", "path": "resources/architecture/05-Atributos-de-Calidad.md", "section": "Escenarios" },
+    { "id": "SRC-09", "path": "resources/architecture/09-Alternativas-de-Solucion.md", "section": "Alternativas" },
+    { "id": "SRC-10", "path": "resources/architecture/10-Seleccion-de-Arquitectura.md", "section": "Selección" },
+    { "id": "SRC-10-1", "path": "resources/architecture/10.1-Arquetipo-de-Solucion_<Proyecto>.md", "section": "Ficha técnica" },
+    { "id": "SRC-14", "path": "resources/architecture/14-Vistas-C4.md", "section": "C4 Nivel 2" },
+    { "id": "SRC-16", "path": "resources/architecture/16-Modelo-de-Datos.md", "section": "Mapa global" },
+    { "id": "SRC-17", "path": "resources/architecture/17-Vista-de-Despliegue.md", "section": "Topología" },
+    { "id": "SRC-19", "path": "resources/architecture/19-Dimensiones-Arquitectonicas.md", "section": "Seguridad" },
+    { "id": "SRC-21", "path": "resources/architecture/21-Riesgos-y-Deuda-Tecnica.md", "section": "Riesgos" },
+    { "id": "SRC-25", "path": "resources/architecture/25-Revision-Tecnica-Arquitectura.md", "section": "Resultado" }
+  ],
+  "conflicts": []
+}

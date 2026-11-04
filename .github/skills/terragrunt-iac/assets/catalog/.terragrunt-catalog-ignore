@@ -1,0 +1,5 @@
+# Units que leen `values` solo sirven dentro de stacks: no ofrecerlos en `terragrunt catalog`/`scaffold`.
+units
+units/**
+examples
+examples/**

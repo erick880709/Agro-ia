@@ -1,0 +1,26 @@
+{
+  "name": "{{NOMBRE}}",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pruebas E2E con Playwright",
+  "scripts": {
+    "test": "playwright test",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "report": "playwright show-report",
+    "lint": "eslint . && tsc --noEmit",
+    "codegen": "playwright codegen"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.0",
+    "@playwright/test": "{{PLAYWRIGHT_VERSION}}",
+    "@types/node": "^22.0.0",
+    "dotenv": "^16.4.0",
+    "eslint": "^10.0.0",
+    "eslint-plugin-playwright": "^2.12.0",
+    "playwright-ctrf-json-reporter": "^0.1.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.71.0"
+  }
+}

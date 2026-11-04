@@ -2,7 +2,7 @@
 
 Se activa dentro del Caso A (proyecto nuevo) cuando, tras leer el `.md` de especificaciones, no hay un proveedor de nube determinado para el despliegue.
 
-> Todos los nombres de archivo de esta guía (los tres `.drawio`, `Pricing_<Proyecto>.md`, `Arquitectura_Costos_<Proyecto>.html`) se guardan dentro de `resources/architecture/` — créala si no existe. Antes de generar los diagramas, valida/configura el MCP de diagramación siguiendo `references/guia-mcp-diagramacion.md` (usa `drawio-remoto` si está disponible).
+> Todos los nombres de archivo de esta guía (los tres `.drawio`, `17.4-Pricing_<Proyecto>.md`, `17.5-Arquitectura_Costos_<Proyecto>.html`) se guardan dentro de `resources/architecture/`. Antes de generar los diagramas, valida/configura el MCP de diagramación siguiendo `references/guia-mcp-diagramacion.md`.
 
 ## Cómo decidir si el proveedor está definido
 
@@ -17,19 +17,19 @@ Si es ambiguo (ej. el proyecto podría ir on-premise o en la nube y no se aclara
 
 ## Qué produce este modo
 
-En vez de una única sección 12 (Vista de Despliegue) en el documento de arquitectura, produce:
+En vez de un único diagrama en `17-Vista-de-Despliegue.md`, produce:
 
-1. **Tres diagramas de despliegue**, uno por proveedor, en formato `.drawio` con iconografía oficial (ver `references/drawio-iconos-nube.md`):
-   - `Despliegue_AWS_<Proyecto>.drawio`
-   - `Despliegue_Azure_<Proyecto>.drawio`
-   - `Despliegue_GCP_<Proyecto>.drawio`
-2. **Un archivo de pricing comparativo**: `Pricing_<Proyecto>.md` (ver `references/guia-pricing-cloud.md`).
-3. **Un reporte HTML** que contextualiza cada arquitectura y compara costos: `Arquitectura_Costos_<Proyecto>.html` (ver `references/plantilla-reporte-costos.md`).
-4. La sección 12 del documento principal (`Documento_Arquitectura_<Proyecto>.md`) no describe una sola infraestructura: resume que se evaluaron las tres nubes, enlaza a los tres `.drawio` y al reporte HTML, y remite la comparación de costo a `Pricing_<Proyecto>.md`.
+1. **Tres diagramas de despliegue**, uno por proveedor, en formato `.drawio` con iconografía oficial (ver `references/drawio-iconos-nube.md`) — la sub-numeración es fija por proveedor (ver "Convención de numeración de archivos" en `SKILL.md`), no por orden de generación:
+   - `17.1-Despliegue_AWS_<Proyecto>.drawio`
+   - `17.2-Despliegue_Azure_<Proyecto>.drawio`
+   - `17.3-Despliegue_GCP_<Proyecto>.drawio`
+2. **Un archivo de pricing comparativo**: `17.4-Pricing_<Proyecto>.md`.
+3. **Un reporte HTML**: `17.5-Arquitectura_Costos_<Proyecto>.html`.
+4. `17-Vista-de-Despliegue.md` enlaza los tres `.drawio`, el pricing y el reporte.
 
 ## Paso 1 — Traducir la arquitectura lógica a cada proveedor
 
-Parte de la Vista de Contenedores (C4 Nivel 2) ya definida — es la misma para las tres nubes, lo que cambia es qué **servicio administrado concreto** implementa cada contenedor. Usa esta tabla de equivalencias como punto de partida (ajústala si el proyecto tiene necesidades específicas que descarten una opción):
+Parte de la Vista de Contenedores (C4 Nivel 2) ya definida — es la misma para las tres nubes, lo que cambia es qué **servicio administrado concreto** implementa cada contenedor. Antes de mapear servicios revisa los patrones cloud seleccionados con `references/guia-catalogo-patrones.md`; conserva el mismo propósito y las mismas condiciones de validación en cada proveedor. Usa esta tabla de equivalencias como punto de partida (ajústala si el proyecto tiene necesidades específicas que descarten una opción):
 
 | Necesidad del contenedor | AWS | Azure | GCP |
 |---|---|---|---|
@@ -47,7 +47,7 @@ Parte de la Vista de Contenedores (C4 Nivel 2) ya definida — es la misma para 
 | Identidad de usuarios finales | Cognito | Azure AD B2C / Entra External ID | Identity Platform |
 | Observabilidad | CloudWatch | Azure Monitor | Cloud Monitoring |
 
-Elige siempre el equivalente más directo (mismo nivel de gestión: si el contenedor pide "sin servidor", no propongas VMs en ninguna nube). No optimices de más: el objetivo es una comparación justa, no la mejor arquitectura posible en cada nube por separado.
+Elige siempre el equivalente más directo (mismo nivel de gestión: si el contenedor pide "sin servidor", no propongas VMs en ninguna nube). No optimices de más: el objetivo es una comparación justa, no la mejor arquitectura posible en cada nube por separado. En `17-Vista-de-Despliegue.md`, registra por cada `TP-xxx` cloud su alcance, mapeo por proveedor, failure domains, seguridad, observabilidad, costo, lock-in y evidencia/criterio de validación; no asumas que dos servicios equivalentes tienen idéntica semántica operativa.
 
 ## Paso 2 — Generar los tres diagramas
 
@@ -57,14 +57,16 @@ Para cada proveedor, sigue `references/drawio-iconos-nube.md` con los nombres re
 
 Sigue `references/guia-pricing-cloud.md` íntegro. Los servicios a cotizar en cada proveedor salen directamente de los nodos de cada diagrama del Paso 2.
 
+Completa también `references/contrato-costos.md`: el inventario de `17` debe cubrir todos los ambientes por proveedor y los cargos compartidos, no solo la topología de producción. Crea `17.4.1-Costos_<Proyecto>.json` y genera los bloques de `17.4`/`17.5` desde sus partidas; no sumar alternativas de proveedor como gasto simultáneo.
+
 ## Paso 4 — Reporte HTML
 
-Sigue `references/plantilla-reporte-costos.md`. Reutiliza el mismo XML de cada `.drawio` y las mismas cifras de `Pricing_<Proyecto>.md` — no generes números nuevos en el HTML.
+Sigue `references/plantilla-reporte-costos.md`. Reutiliza el XML y las cifras de `17.4-Pricing_<Proyecto>.md`.
 
 ## Paso 5 — Enlazar todo desde el documento principal
 
-En la sección 12 (Vista de Despliegue) de `Documento_Arquitectura_<Proyecto>.md`, agrega una nota como:
+En `17-Vista-de-Despliegue.md`, agrega una nota como:
 
-> No se definió un proveedor de nube en las especificaciones. Se evaluaron AWS, Azure y GCP con arquitecturas equivalentes — ver diagramas `Despliegue_AWS_<Proyecto>.drawio`, `Despliegue_Azure_<Proyecto>.drawio`, `Despliegue_GCP_<Proyecto>.drawio`, el comparativo de costos en `Pricing_<Proyecto>.md`, y el reporte consolidado en `Arquitectura_Costos_<Proyecto>.html`.
+> No se definió un proveedor de nube. Se evaluaron AWS, Azure y GCP — ver `17.1`, `17.2`, `17.3`, el comparativo `17.4-Pricing_<Proyecto>.md` y el reporte `17.5-Arquitectura_Costos_<Proyecto>.html`.
 
 Y añade una recomendación explícita (no dejes la decisión abierta sin opinión): cuál de las tres conviene dado el contexto del proyecto (costo, requerimientos no funcionales, restricciones del equipo), y qué tendría que cambiar para que la recomendación cambiara.

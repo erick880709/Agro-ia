@@ -1,0 +1,67 @@
+{
+  "skill_name": "qa-ranger-plan-pruebas",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Entrega únicamente el plan de pruebas unitarias de estos requisitos. No generes runbook ni código.",
+      "expected_output": "Entrega únicamente el documento de plan unitario y declara test_plan. Vincula los casos con los seis IDs de la fuente. No produce runbook, código ni evidencia de ejecución.",
+      "files": [
+        "../ranger/evals/files/requisitos-transferencias.md"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-plan-pruebas",
+        "task": "design",
+        "status": "completed",
+        "deliverables": [
+          "test_plan"
+        ],
+        "requirements": [
+          "RF-01",
+          "CA-01",
+          "RF-02",
+          "CA-02",
+          "RF-03",
+          "CA-03"
+        ],
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Necesito planear las pruebas de transferencias, pero todavía no están definidos los requisitos ni los resultados esperados.",
+      "expected_output": "Solicita requisitos y resultados esperados con input_required, data null y artifacts vacío. Registra preguntas y responsables en pending. No crea plan ni runbook.",
+      "files": [],
+      "oracle": {
+        "capabilityId": "qa-ranger-plan-pruebas",
+        "task": "design",
+        "status": "input_required",
+        "noSource": true
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "Entrega únicamente el runbook unitario basado en los requisitos adjuntos. No solicito un documento de plan separado ni ejecución.",
+      "expected_output": "Entrega únicamente el runbook unitario y declara test_runbook. Vincula los casos con los seis IDs de la fuente. No produce un documento de plan ni afirma ejecución.",
+      "files": [
+        "../ranger/evals/files/requisitos-transferencias.md"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-plan-pruebas",
+        "task": "design",
+        "status": "completed",
+        "deliverables": [
+          "test_runbook"
+        ],
+        "requirements": [
+          "RF-01",
+          "CA-01",
+          "RF-02",
+          "CA-02",
+          "RF-03",
+          "CA-03"
+        ],
+        "protectFixtures": true
+      }
+    }
+  ]
+}

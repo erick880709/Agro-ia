@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vulcano Bob"
+  short_description: "Genera IaC y pipelines mediante adaptadores"
+  default_prompt: "Usa $vulcano-bob para resolver los adaptadores de nube, IaC y CI/CD y generar localmente los artefactos definidos por Vulcano."

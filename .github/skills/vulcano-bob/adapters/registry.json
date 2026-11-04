@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "aliases": {
+    "pipeline": {
+      "azure_devops": "azure_devops",
+      "github": "github_actions",
+      "github_actions": "github_actions",
+      "gitlab": "gitlab",
+      "gitlab_ci": "gitlab"
+    }
+  },
+  "adapters": {
+    "cloud": {
+      "azure": "cloud/azure.json",
+      "aws": "cloud/aws.json",
+      "gcp": "cloud/gcp.json"
+    },
+    "iac": {
+      "terraform": "iac/terraform.json"
+    },
+    "pipeline": {
+      "azure_devops": "pipelines/azure-devops.json",
+      "github_actions": "pipelines/github-actions.json",
+      "gitlab": "pipelines/gitlab.json"
+    },
+    "gitops": {
+      "argocd": "gitops/argocd.json"
+    },
+    "chatops": {
+      "slack": "chatops/slack.json"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+schema_version: 1
+skill: solution-baseline
+cases:
+  - id: greenfield-multi-repo
+    prompt: Crea las líneas base de web, API y worker desde esta arquitectura en repositorios separados.
+    should_route: true
+    expected_modes: [create, orchestrate]
+    reason: Materialización greenfield de arquitectura en varios repositorios.
+  - id: reconcile-existing-web
+    prompt: Ajusta el frontend existente a la arquitectura sin perder el portal ya implementado.
+    should_route: true
+    expected_modes: [reconcile]
+    reason: Reconciliación brownfield con preservación funcional.
+  - id: create-reusable-archetype
+    prompt: No existe un patrón compatible; crea un arquetipo reusable y luego instancia dos soluciones.
+    should_route: true
+    expected_modes: [archetype-create, orchestrate]
+    reason: Brecha reusable seguida de instanciación gobernada.
+  - id: upgrade-baseline
+    prompt: Actualiza esta solución desde la versión anterior del arquetipo y conserva los cambios del equipo.
+    should_route: true
+    expected_modes: [upgrade]
+    reason: Migración con receipt, drift y comparación de tres vías.
+  - id: diagnose-only
+    prompt: Inspecciona estos repositorios y reporta si están alineados con la arquitectura, sin modificar nada.
+    should_route: true
+    expected_modes: [discover, status]
+    reason: Diagnóstico de baseline de solo lectura.
+  - id: devops-only
+    prompt: Crea el pipeline, Terraform, imágenes Docker y despliega la solución en Azure.
+    should_route: false
+    expected_modes: []
+    reason: DevOps, IaC, contenedores operacionales y despliegue pertenecen a Vulcano.
+  - id: feature-backlog
+    prompt: Implementa la historia de usuario para aprobar vacaciones y agrega sus reglas de negocio.
+    should_route: false
+    expected_modes: []
+    reason: El backlog funcional pertenece al desarrollo posterior, no a la baseline.
+  - id: architecture-definition
+    prompt: Decide desde cero la topología, los límites de componentes y el modelo de seguridad corporativo.
+    should_route: false
+    expected_modes: []
+    reason: La definición de decisiones arquitectónicas pertenece a archi.

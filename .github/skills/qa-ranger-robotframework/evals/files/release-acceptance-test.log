@@ -1,0 +1,19 @@
+2026-10-20T14:02:11.410Z ##[section]Starting: RobotFramework-DBlibrary
+2026-10-20T14:02:11.420Z Task         : RobotFramework-DBlibrary
+2026-10-20T14:02:11.421Z Version      : 1.4.0
+2026-10-20T14:02:12.880Z Robot Framework 6.1.1 (Python 3.10.12 on linux)
+2026-10-20T14:02:13.104Z ==============================================================================
+2026-10-20T14:02:13.104Z Test Cases
+2026-10-20T14:02:13.105Z ==============================================================================
+2026-10-20T14:02:13.106Z Test Cases.Aceptacion
+2026-10-20T14:02:13.106Z ==============================================================================
+2026-10-20T14:02:14.512Z TC-01 [critical] La tabla de transferencias existe                  | FAIL |
+2026-10-20T14:02:14.512Z Parent suite setup failed:
+2026-10-20T14:02:14.513Z OperationalError: connection to server at "10.20.30.40", port 5432 failed: FATAL:  password authentication failed for user "vsts"
+2026-10-20T14:02:14.520Z TC-02 [high] El tope diario está parametrizado                     | FAIL |
+2026-10-20T14:02:14.520Z Parent suite setup failed:
+2026-10-20T14:02:14.521Z OperationalError: connection to server at "10.20.30.40", port 5432 failed: FATAL:  password authentication failed for user "vsts"
+2026-10-20T14:02:14.600Z 2 tests, 0 passed, 2 failed
+2026-10-20T14:02:14.700Z ##[warning]Variable(s) marked as secret were not mapped to the task environment: USER, PASSWORD
+2026-10-20T14:02:14.710Z Pipeline variables: DB=***, HOST=***, PORT=5432, USER=***, PASSWORD=***, keyPath=/opt/keys, ma_db_user=***
+2026-10-20T14:02:14.800Z ##[error]Robot Framework finished with 2 failed tests

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.invalid/solution-baseline/archetype-requirement.schema.json",
+  "title": "Archetype Requirement",
+  "type": "object",
+  "required": ["workload", "language", "allowed_namespaces", "allowed_sources"],
+  "properties": {
+    "workload": { "enum": ["web", "api", "worker", "agent", "integrations", "library"] },
+    "language": { "type": "string", "minLength": 1 },
+    "runtime": { "type": "string" },
+    "framework": { "type": "string" },
+    "framework_version": { "type": "string" },
+    "version_scheme": { "enum": ["semver", "pep440", "maven", "nuget", "generic"] },
+    "architecture_style": { "type": "string" },
+    "capabilities": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "allowed_namespaces": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true, "minItems": 1 },
+    "allowed_sources": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true, "minItems": 1 },
+    "allowed_trust": { "type": "array", "items": { "enum": ["official", "approved", "experimental"] }, "uniqueItems": true },
+    "allowed_licenses": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "allowed_permissions": { "type": "array", "items": { "enum": ["network", "hooks", "writes_outside_target"] }, "uniqueItems": true },
+    "required_exclusions": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "allow_deprecated": { "type": "boolean", "default": false },
+    "allow_experimental": { "type": "boolean", "default": false }
+  },
+  "additionalProperties": false
+}

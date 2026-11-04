@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "azure-devops": {
+      "command": "npx",
+      "args": ["-y", "@azure-devops/mcp", "personalsoftsas", "-d", "core", "work", "work-items", "test-plans", "--authentication", "pat"],
+      "env": { "PERSONAL_ACCESS_TOKEN": "${PERSONAL_ACCESS_TOKEN}" }
+    },
+    "jira": {
+      "command": "uvx",
+      "args": ["mcp-atlassian"],
+      "env": {
+        "JIRA_URL": "${JIRA_URL}",
+        "JIRA_USERNAME": "${JIRA_USERNAME}",
+        "JIRA_API_TOKEN": "${JIRA_API_TOKEN}"
+      }
+    }
+  }
+}

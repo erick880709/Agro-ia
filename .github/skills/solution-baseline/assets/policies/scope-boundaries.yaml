@@ -1,0 +1,41 @@
+schema_version: 1
+owner: vulcano
+forbidden_directories:
+  - .circleci
+  - .devcontainer
+  - deploy
+  - deployment
+  - helm
+  - infra
+  - k8s
+  - kubernetes
+  - terraform
+forbidden_files:
+  - .gitlab-ci.yml
+  - .gitlab-ci.yaml
+  - appspec.yml
+  - appspec.yaml
+  - bitbucket-pipelines.yml
+  - bitbucket-pipelines.yaml
+  - cdk.json
+  - cloudbuild.yaml
+  - cloudbuild.yml
+  - jenkinsfile
+  - pulumi.yaml
+  - pulumi.yml
+  - samconfig.toml
+  - serverless.yml
+  - serverless.yaml
+forbidden_suffixes:
+  - .bicep
+  - .tf
+  - .tfvars
+forbidden_file_globs:
+  - azure-pipelines*.yml
+  - azure-pipelines*.yaml
+  - dockerfile*
+  - containerfile*
+  - docker-compose*.yml
+  - docker-compose*.yaml
+forbidden_path_sequences:
+  - [.github, workflows]

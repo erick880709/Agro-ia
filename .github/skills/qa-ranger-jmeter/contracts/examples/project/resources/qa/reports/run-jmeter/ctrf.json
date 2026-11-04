@@ -1,0 +1,30 @@
+{
+  "reportFormat": "CTRF",
+  "specVersion": "0.1.0",
+  "generatedBy": "jmeter (fixture ficticia)",
+  "results": {
+    "tool": {
+      "name": "jmeter"
+    },
+    "summary": {
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "pending": 0,
+      "skipped": 0,
+      "other": 0,
+      "start": 1791317717856,
+      "stop": 1791317719570
+    },
+    "tests": [
+      {
+        "name": "PERF-01 [critical] p95 de GET /saldo menor a 250 ms",
+        "status": "passed",
+        "duration": 0,
+        "suite": [
+          "SLA rendimiento"
+        ]
+      }
+    ]
+  }
+}

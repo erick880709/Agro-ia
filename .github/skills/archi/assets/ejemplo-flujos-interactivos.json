@@ -1,0 +1,212 @@
+{
+  "title": "¿Cómo se consulta y se transfiere en banca móvil?",
+  "subtitle": "15 · flujos críticos",
+  "description": "Consulta de saldo y transferencia con eventos.",
+  "modes": [
+    "AS-IS",
+    "TO-BE"
+  ],
+  "defaultMode": "TO-BE",
+  "zones": [
+    {
+      "id": "TB-01",
+      "label": "Borde público",
+      "kind": "trust",
+      "nodes": [
+        "CT-01",
+        "CT-02"
+      ]
+    },
+    {
+      "id": "TB-02",
+      "label": "Zona privada",
+      "kind": "trust",
+      "nodes": [
+        "CT-03",
+        "CT-04",
+        "DATA-001",
+        "DATA-002"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "CANAL",
+      "label": "App móvil",
+      "role": "canal",
+      "detail": "Cliente"
+    },
+    {
+      "id": "CT-01",
+      "label": "WAF / API Gateway",
+      "role": "borde",
+      "tech": "API Management",
+      "detail": "Expone y protege"
+    },
+    {
+      "id": "CT-02",
+      "label": "Identidad",
+      "role": "seguridad",
+      "tech": "Entra External ID",
+      "detail": "Emite tokens",
+      "row": 1,
+      "col": 1
+    },
+    {
+      "id": "CT-03",
+      "label": "API de Cuentas",
+      "role": "foco",
+      "tech": "Java 21 · WebFlux",
+      "detail": "Consulta saldos",
+      "status": {
+        "TO-BE": "modificado"
+      },
+      "modes": {
+        "AS-IS": {
+          "label": "Core de cuentas (monolito)",
+          "tech": "Java 8 · WebLogic"
+        }
+      }
+    },
+    {
+      "id": "CT-04",
+      "label": "API de Transferencias",
+      "role": "servicio",
+      "tech": "Go 1.23",
+      "detail": "Transfiere",
+      "status": {
+        "TO-BE": "nuevo",
+        "AS-IS": "retirado"
+      },
+      "row": 1,
+      "col": 2
+    },
+    {
+      "id": "Q-01",
+      "label": "Eventos de transferencia",
+      "role": "mensajeria",
+      "tech": "Kafka",
+      "detail": "Publica eventos"
+    },
+    {
+      "id": "DATA-001",
+      "label": "Cuentas",
+      "role": "datos",
+      "tech": "Aurora PostgreSQL",
+      "detail": "Saldos"
+    },
+    {
+      "id": "DATA-002",
+      "label": "Transferencias",
+      "role": "datos",
+      "tech": "DynamoDB",
+      "detail": "Registro",
+      "row": 1,
+      "col": 4
+    },
+    {
+      "id": "EXT-01",
+      "label": "ACH",
+      "role": "externo",
+      "detail": "Compensación"
+    }
+  ],
+  "flows": [
+    {
+      "id": "saldo",
+      "title": "Consulta de saldo",
+      "source": "15 §1",
+      "steps": [
+        {
+          "from": "CANAL",
+          "to": "CT-01",
+          "label": "HTTPS · GET /saldos",
+          "desc": "HTTPS · GET /saldos: describa qué viaja y por qué en este paso."
+        },
+        {
+          "from": "CT-01",
+          "to": "CT-02",
+          "label": "valida token",
+          "desc": "valida token: describa qué viaja y por qué en este paso."
+        },
+        {
+          "from": "CT-01",
+          "to": "CT-03",
+          "label": "mTLS · GET",
+          "desc": "mTLS · GET: describa qué viaja y por qué en este paso."
+        },
+        {
+          "from": "CT-03",
+          "to": "DATA-001",
+          "label": "SQL · lee",
+          "desc": "SQL · lee: describa qué viaja y por qué en este paso."
+        },
+        {
+          "from": "CT-03",
+          "to": "CANAL",
+          "kind": "return",
+          "label": "200 saldo",
+          "desc": "200 saldo: describa qué viaja y por qué en este paso."
+        }
+      ]
+    },
+    {
+      "id": "transf",
+      "title": "Transferencia",
+      "source": "15 §2",
+      "onlyMode": "TO-BE",
+      "critical": true,
+      "steps": [
+        {
+          "from": "CANAL",
+          "to": "CT-01",
+          "label": "POST /transferencias",
+          "desc": "POST /transferencias: describa qué viaja y por qué en este paso.",
+          "payload": "{\"origen\": \"001-123\", \"destino\": \"001-456\", \"monto\": 250000.00, \"moneda\": \"COP\"}",
+          "chips": [
+            "SEC-004",
+            "p95 < 400 ms"
+          ]
+        },
+        {
+          "from": "CT-01",
+          "to": "CT-04",
+          "label": "mTLS",
+          "desc": "mTLS: describa qué viaja y por qué en este paso."
+        },
+        {
+          "from": "CT-04",
+          "to": "DATA-002",
+          "label": "PutItem condicional",
+          "desc": "PutItem condicional: describa qué viaja y por qué en este paso.",
+          "refs": [
+            "DATA-002",
+            "DA-012"
+          ]
+        },
+        {
+          "from": "CT-04",
+          "to": "Q-01",
+          "kind": "async",
+          "label": "TransferenciaCreada",
+          "desc": "TransferenciaCreada: describa qué viaja y por qué en este paso."
+        },
+        {
+          "from": "CT-04",
+          "to": "EXT-01",
+          "label": "ISO 20022",
+          "desc": "ISO 20022: describa qué viaja y por qué en este paso."
+        },
+        {
+          "from": "EXT-01",
+          "to": "CT-04",
+          "kind": "return",
+          "label": "rechazo",
+          "desc": "rechazo: describa qué viaja y por qué en este paso.",
+          "error": true
+        }
+      ]
+    }
+  ],
+  "footer": "Ejemplo de archi · reemplace con nodos y flujos de 14/15 del proyecto."
+}

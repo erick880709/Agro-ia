@@ -1,0 +1,50 @@
+{
+  "id": "github_actions",
+  "kind": "pipeline",
+  "status": "implemented",
+  "supported_execution_backends": ["github_actions"],
+  "supports_progressive_delivery": true,
+  "supports_gitops": true,
+  "supports_policy_as_code": true,
+  "supports_notifications": true,
+  "renderer": "scripts/renderers/render-github-actions.mjs",
+  "remote_operator": "vulcano-operador",
+  "pipeline_files": [
+    ".github/workflows/iac.yml",
+    ".github/workflows/drift.yml",
+    ".github/workflows/application.yml"
+  ],
+  "dora_pipeline": {
+    "template": "github-actions.dora.template.yml",
+    "path": ".github/workflows/dora.yml",
+    "cron_placeholder": "__DORA_CRON__"
+  },
+  "dora_collector_script": {
+    "template": "dora-collect.template.mjs",
+    "path": "scripts/dora-collect.mjs"
+  },
+  "artifact_overrides": {
+    "pipeline-iac": {
+      "path": ".github/workflows/iac.yml",
+      "contract": {
+        "inputs": ["CLOUD_OIDC_IDENTITY", "TF_STATE_CONFIGURATION"],
+        "outputs": ["tfplan-dev", "tfplan-qa", "tfplan-prod"]
+      }
+    },
+    "pipeline-drift": {
+      "path": ".github/workflows/drift.yml",
+      "contract": {
+        "inputs": ["CLOUD_OIDC_IDENTITY", "TF_STATE_CONFIGURATION"],
+        "outputs": ["drift-report-dev", "drift-report-qa", "drift-report-prod"]
+      }
+    },
+    "pipeline-app": {
+      "path": ".github/workflows/application.yml",
+      "contract": {
+        "inputs": ["CLOUD_OIDC_IDENTITY", "DEPLOYMENT_CONFIGURATION"],
+        "outputs": ["app-package", "test-results", "security-results"]
+      }
+    }
+  },
+  "reference": "references/github-actions.md"
+}

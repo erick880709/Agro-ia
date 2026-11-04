@@ -1,0 +1,13 @@
+target/
+build/
+.gradle/
+.idea/
+*.iml
+.vscode/
+.karate/karate.lic
+*.p12
+*.jks
+.env
+
+resources/qa/test-results/
+resources/qa/reports/

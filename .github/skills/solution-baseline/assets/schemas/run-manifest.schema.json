@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.invalid/solution-baseline/run-manifest.schema.json",
+  "title": "Solution Baseline Run Manifest",
+  "type": "object",
+  "required": ["schema_version", "run_id", "solution_id", "status", "blueprint", "dag", "steps"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "solution_id": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["discovered", "planned", "rendered", "reviewed", "applying", "validating", "partial", "blocked", "completed"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "blueprint": {
+      "type": "object",
+      "required": ["path"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "dag": { "$ref": "#/$defs/dag" },
+    "catalog_resolutions": { "type": "array", "items": { "$ref": "#/$defs/catalogResolution" } },
+    "archetype_builds": { "type": "array", "items": { "$ref": "#/$defs/archetypeBuild" } },
+    "instances": { "type": "array", "items": { "$ref": "#/$defs/instance" } },
+    "leases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["resource", "owner", "expires_at"],
+        "properties": {
+          "resource": { "type": "string", "minLength": 1 },
+          "owner": { "type": "string", "minLength": 1 },
+          "expires_at": { "type": "string", "format": "date-time" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "steps": {
+      "type": "array",
+      "items": { "$ref": "generator-result.schema.json" }
+    },
+    "decisions": { "type": "array", "items": { "$ref": "#/$defs/decision" } },
+    "blockers": { "type": "array", "items": { "$ref": "#/$defs/blocker" } },
+    "architecture_gaps": { "type": "array", "items": { "$ref": "architecture-gap.schema.json" } },
+    "handoff": {
+      "type": "object",
+      "properties": {
+        "builder": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "ranger": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "vulcano": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "archi": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" },
+    "dag": {
+      "type": "object",
+      "required": ["nodes", "barriers"],
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "kind", "status", "depends_on"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$" },
+              "kind": { "enum": ["architecture", "contract-freeze", "catalog-resolve", "archetype-build", "render", "apply", "validate", "handoff"] },
+              "repository_id": { "type": "string" },
+              "component_id": { "type": "string" },
+              "status": { "enum": ["pending", "ready", "running", "completed", "partial", "skipped", "blocked", "failed"] },
+              "depends_on": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+              "input_hash": { "$ref": "#/$defs/sha256" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "barriers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "kind", "status", "release_nodes"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$" },
+              "kind": { "enum": ["architecture-approved", "contracts-frozen", "archetype-published", "review-approved"] },
+              "status": { "enum": ["pending", "satisfied", "blocked"] },
+              "contract_hashes": { "type": "object", "additionalProperties": { "$ref": "#/$defs/sha256" } },
+              "release_nodes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "catalogResolution": {
+      "type": "object",
+      "required": ["requirement_id", "status"],
+      "properties": {
+        "requirement_id": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["selected", "no-match", "blocked"] },
+        "catalog": { "type": "string" },
+        "family": { "type": "string" },
+        "version": { "type": "string" },
+        "digest": { "type": "string" },
+        "strategy": { "enum": ["reuse", "compose", "archetype-create", "project-specific", "no-match"] }
+      },
+      "additionalProperties": false
+    },
+    "archetypeBuild": {
+      "type": "object",
+      "required": ["family", "status", "workspace"],
+      "properties": {
+        "family": { "type": "string", "minLength": 1 },
+        "version": { "type": "string" },
+        "status": { "enum": ["planned", "building", "validated", "blocked", "published", "failed"] },
+        "workspace": { "type": "string", "minLength": 1 },
+        "digest": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "instance": {
+      "type": "object",
+      "required": ["repository_id", "path", "mode", "status"],
+      "properties": {
+        "repository_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "mode": { "enum": ["create", "reconcile", "upgrade"] },
+        "status": { "enum": ["pending", "planned", "rendered", "applied", "validated", "partial", "blocked", "failed"] },
+        "archetype_digest": { "type": "string" },
+        "receipt": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "required": ["id", "status", "summary"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["confirmed", "inferred", "pending", "accepted", "rejected"] },
+        "summary": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string" },
+        "source": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "blocker": {
+      "type": "object",
+      "required": ["code", "message", "scope"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 },
+        "scope": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string" },
+        "next_action": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

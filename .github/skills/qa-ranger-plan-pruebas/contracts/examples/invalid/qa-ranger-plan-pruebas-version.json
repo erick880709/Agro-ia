@@ -1,0 +1,57 @@
+{
+  "contractVersion": "1.0.0",
+  "capabilityId": "qa-ranger-plan-pruebas",
+  "status": "completed",
+  "summary": "Plan y runbook de login preparados: AC-01 tiene un caso; AC-02 queda excluido con justificación.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "Ejemplo ficticio: diseño de pruebas para login."
+    },
+    {
+      "id": "requirements_available",
+      "passed": true,
+      "evidence": "AC-01: acceder con datos válidos. AC-02: recuperar contraseña."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "plan",
+      "kind": "test_plan",
+      "content": "Ejemplo ficticio: probar acceso. Recuperación de contraseña fuera del alcance de esta entrega, pendiente de plan propio."
+    },
+    {
+      "id": "runbook",
+      "kind": "test_runbook",
+      "content": "Ejemplo ficticio TC-01: cuenta de prueba existente; ingresar datos válidos; comprobar sesión iniciada y acceso al dashboard."
+    }
+  ],
+  "pending": [
+    {
+      "description": "Planificar la recuperación de contraseña en una entrega posterior.",
+      "owner": "QA"
+    }
+  ],
+  "data": {
+    "requirements": [
+      "AC-01",
+      "AC-02"
+    ],
+    "cases": [
+      {
+        "id": "TC-01",
+        "requirements": [
+          "AC-01"
+        ],
+        "expectedResult": "Sesión iniciada y dashboard accesible."
+      }
+    ],
+    "exclusions": [
+      {
+        "requirement": "AC-02",
+        "reason": "Fuera del alcance de esta entrega; se registra como pendiente de otro plan."
+      }
+    ]
+  }
+}

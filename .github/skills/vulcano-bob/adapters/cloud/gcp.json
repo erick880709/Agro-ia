@@ -1,0 +1,18 @@
+{
+  "id": "gcp",
+  "kind": "cloud",
+  "status": "implemented",
+  "required_provider_any": ["google", "google-beta"],
+  "backend": "gcs",
+  "state_locking": "gcs_native",
+  "bootstrap_template": "assets/gcp-backend.bootstrap.template.sh",
+  "artifact_overrides": {
+    "bootstrap-backend": {
+      "contract": {
+        "inputs": ["GCP_PROJECT_ID", "GCP_REGION", "TFSTATE_BUCKET", "TFSTATE_KMS_KEY"],
+        "outputs": ["state_bucket", "state_prefix", "state_locking"]
+      }
+    }
+  },
+  "reference": "references/gcp-terraform.md"
+}

@@ -1,0 +1,1944 @@
+{
+  "schemaVersion": "1.0",
+  "catalogVersion": "1.2.0",
+  "generatedAt": "2026-10-30",
+  "source": {
+    "repository": "https://github.com/jgraph/drawio",
+    "ref": "3b4210678207f3880888969ee53c9fe4580104ab",
+    "drawioVersion": "31.1.5",
+    "sourceFiles": [
+      "src/main/webapp/js/diagramly/sidebar/Sidebar-AWS4.js",
+      "src/main/webapp/js/diagramly/sidebar/Sidebar-Azure2.js",
+      "src/main/webapp/js/diagramly/sidebar/Sidebar-GCP3.js",
+      "src/main/webapp/img/lib/azure2"
+    ],
+    "terms": [
+      "https://github.com/jgraph/drawio/blob/3b4210678207f3880888969ee53c9fe4580104ab/LICENSE",
+      "https://learn.microsoft.com/en-us/azure/architecture/icons/"
+    ]
+  },
+  "providers": {
+    "azure": {
+      "library": "azure2",
+      "mechanism": "image",
+      "fallback": "azure.generic-service",
+      "icons": [
+        {
+          "id": "azure.generic-service",
+          "displayName": "Azure Resource",
+          "category": "general",
+          "aliases": [
+            "azure resource",
+            "servicio azure",
+            "recurso azure"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/general/All_Resources.svg;",
+          "sourcePath": "general/All_Resources.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "fallback",
+            "generic"
+          ]
+        },
+        {
+          "id": "azure.front-door",
+          "displayName": "Azure Front Door",
+          "category": "networking",
+          "aliases": [
+            "front door",
+            "azure frontdoor",
+            "edge",
+            "global ingress"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/networking/Front_Doors.svg;",
+          "sourcePath": "networking/Front_Doors.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "edge",
+            "cdn",
+            "waf",
+            "routing"
+          ]
+        },
+        {
+          "id": "azure.application-gateway",
+          "displayName": "Azure Application Gateway",
+          "category": "networking",
+          "aliases": [
+            "application gateway",
+            "app gateway",
+            "agw"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/networking/Application_Gateways.svg;",
+          "sourcePath": "networking/Application_Gateways.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "ingress",
+            "load-balancer",
+            "waf"
+          ]
+        },
+        {
+          "id": "azure.api-management",
+          "displayName": "Azure API Management",
+          "category": "integration",
+          "aliases": [
+            "api management",
+            "apim",
+            "api gateway azure"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/integration/API_Management_Services.svg;",
+          "sourcePath": "integration/API_Management_Services.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "api",
+            "gateway",
+            "integration"
+          ]
+        },
+        {
+          "id": "azure.app-service",
+          "displayName": "Azure App Service",
+          "category": "compute",
+          "aliases": [
+            "app service",
+            "web app",
+            "azure webapp"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/compute/App_Services.svg;",
+          "sourcePath": "compute/App_Services.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "compute",
+            "paas",
+            "web"
+          ]
+        },
+        {
+          "id": "azure.functions",
+          "displayName": "Azure Functions",
+          "category": "compute",
+          "aliases": [
+            "function app",
+            "functions",
+            "azure function",
+            "serverless"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/compute/Function_Apps.svg;",
+          "sourcePath": "compute/Function_Apps.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "compute",
+            "serverless",
+            "event-driven"
+          ]
+        },
+        {
+          "id": "azure.aks",
+          "displayName": "Azure Kubernetes Service",
+          "category": "containers",
+          "aliases": [
+            "aks",
+            "azure kubernetes",
+            "kubernetes services"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/containers/Kubernetes_Services.svg;",
+          "sourcePath": "containers/Kubernetes_Services.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "containers",
+            "kubernetes",
+            "compute"
+          ]
+        },
+        {
+          "id": "azure.container-registry",
+          "displayName": "Azure Container Registry",
+          "category": "containers",
+          "aliases": [
+            "acr",
+            "container registry",
+            "azure registry"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/containers/Container_Registries.svg;",
+          "sourcePath": "containers/Container_Registries.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "containers",
+            "registry",
+            "supply-chain"
+          ]
+        },
+        {
+          "id": "azure.postgresql",
+          "displayName": "Azure Database for PostgreSQL",
+          "category": "databases",
+          "aliases": [
+            "postgres",
+            "postgresql",
+            "azure postgres",
+            "flexible server"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/databases/Azure_Database_PostgreSQL_Server.svg;",
+          "sourcePath": "databases/Azure_Database_PostgreSQL_Server.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "database",
+            "relational",
+            "postgresql"
+          ]
+        },
+        {
+          "id": "azure.managed-redis",
+          "displayName": "Azure Managed Redis",
+          "category": "databases",
+          "aliases": [
+            "managed redis",
+            "azure redis",
+            "redis cache",
+            "cache"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/databases/Azure_Managed_Redis.svg;",
+          "sourcePath": "databases/Azure_Managed_Redis.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "database",
+            "cache",
+            "redis"
+          ]
+        },
+        {
+          "id": "azure.service-bus",
+          "displayName": "Azure Service Bus",
+          "category": "integration",
+          "aliases": [
+            "service bus",
+            "azure bus",
+            "queue",
+            "topic"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/integration/Service_Bus.svg;",
+          "sourcePath": "integration/Service_Bus.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "messaging",
+            "queue",
+            "topic",
+            "integration"
+          ]
+        },
+        {
+          "id": "azure.storage-account",
+          "displayName": "Azure Storage Account",
+          "category": "storage",
+          "aliases": [
+            "storage account",
+            "blob storage",
+            "azure storage"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/storage/Storage_Accounts.svg;",
+          "sourcePath": "storage/Storage_Accounts.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "storage",
+            "blob",
+            "object"
+          ]
+        },
+        {
+          "id": "azure.key-vault",
+          "displayName": "Azure Key Vault",
+          "category": "security",
+          "aliases": [
+            "key vault",
+            "vault",
+            "secrets",
+            "keys"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/security/Key_Vaults.svg;",
+          "sourcePath": "security/Key_Vaults.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "security",
+            "secrets",
+            "keys",
+            "certificates"
+          ]
+        },
+        {
+          "id": "azure.entra-id",
+          "displayName": "Microsoft Entra ID",
+          "category": "identity",
+          "aliases": [
+            "entra id",
+            "azure ad",
+            "aad",
+            "active directory"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/identity/Azure_Active_Directory.svg;",
+          "sourcePath": "identity/Azure_Active_Directory.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "identity",
+            "oidc",
+            "authentication",
+            "authorization"
+          ]
+        },
+        {
+          "id": "azure.managed-identity",
+          "displayName": "Microsoft Entra Managed Identities",
+          "category": "identity",
+          "aliases": [
+            "managed identity",
+            "workload identity",
+            "entra managed identity"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/identity/Entra_Managed_Identities.svg;",
+          "sourcePath": "identity/Entra_Managed_Identities.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "identity",
+            "workload",
+            "passwordless"
+          ]
+        },
+        {
+          "id": "azure.virtual-network",
+          "displayName": "Azure Virtual Network",
+          "category": "networking",
+          "aliases": [
+            "vnet",
+            "virtual network",
+            "azure network"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/networking/Virtual_Networks.svg;",
+          "sourcePath": "networking/Virtual_Networks.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "network",
+            "vnet",
+            "boundary"
+          ]
+        },
+        {
+          "id": "azure.private-endpoint",
+          "displayName": "Azure Private Endpoint",
+          "category": "networking",
+          "aliases": [
+            "private endpoint",
+            "private link endpoint",
+            "pe"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/networking/Private_Endpoint.svg;",
+          "sourcePath": "networking/Private_Endpoint.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "network",
+            "private-link",
+            "paas"
+          ]
+        },
+        {
+          "id": "azure.application-insights",
+          "displayName": "Azure Application Insights",
+          "category": "observability",
+          "aliases": [
+            "application insights",
+            "app insights",
+            "apm"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/devops/Application_Insights.svg;",
+          "sourcePath": "devops/Application_Insights.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "observability",
+            "apm",
+            "telemetry"
+          ]
+        },
+        {
+          "id": "azure.monitor",
+          "displayName": "Azure Monitor",
+          "category": "observability",
+          "aliases": [
+            "azure monitor",
+            "monitoring",
+            "metrics",
+            "logs"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/management_governance/Monitor.svg;",
+          "sourcePath": "management_governance/Monitor.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "observability",
+            "metrics",
+            "logs",
+            "alerts"
+          ]
+        },
+        {
+          "id": "azure.ai-foundry",
+          "displayName": "Microsoft Foundry",
+          "category": "ai-machine-learning",
+          "aliases": [
+            "microsoft foundry",
+            "azure ai foundry",
+            "ai foundry",
+            "foundry"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/ai_machine_learning/AI_Foundry.svg;",
+          "sourcePath": "ai_machine_learning/AI_Foundry.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "ai",
+            "foundry",
+            "models",
+            "agents"
+          ]
+        },
+        {
+          "id": "azure.ai-gateway",
+          "displayName": "Azure AI Gateway",
+          "category": "integration",
+          "aliases": [
+            "ai gateway",
+            "azure ai gateway",
+            "llm gateway"
+          ],
+          "mechanism": "image",
+          "style": "shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;html=1;image=img/lib/azure2/integration/AI_Gateway.svg;",
+          "sourcePath": "integration/AI_Gateway.svg",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "ai",
+            "gateway",
+            "llm",
+            "governance"
+          ]
+        }
+      ]
+    },
+    "aws": {
+      "library": "aws4",
+      "mechanism": "stencil",
+      "fallback": "aws.generic-service",
+      "icons": [
+        {
+          "id": "aws.generic-service",
+          "displayName": "AWS Resource",
+          "category": "general",
+          "aliases": [
+            "aws resource",
+            "servicio aws",
+            "recurso aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.generic;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.generic",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "fallback",
+            "generic"
+          ]
+        },
+        {
+          "id": "aws.api-gateway",
+          "displayName": "Amazon API Gateway",
+          "category": "application-integration",
+          "aliases": [
+            "api gateway",
+            "amazon api gateway"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.api_gateway",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "api",
+            "gateway",
+            "serverless"
+          ]
+        },
+        {
+          "id": "aws.lambda",
+          "displayName": "AWS Lambda",
+          "category": "compute",
+          "aliases": [
+            "lambda",
+            "aws function",
+            "serverless function"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#ED7100;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.lambda",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "compute",
+            "serverless",
+            "event-driven"
+          ]
+        },
+        {
+          "id": "aws.ec2",
+          "displayName": "Amazon EC2",
+          "category": "compute",
+          "aliases": [
+            "ec2",
+            "elastic compute cloud",
+            "virtual machine aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#ED7100;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.ec2",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "compute",
+            "vm"
+          ]
+        },
+        {
+          "id": "aws.ecs",
+          "displayName": "Amazon ECS",
+          "category": "containers",
+          "aliases": [
+            "ecs",
+            "elastic container service"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#ED7100;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ecs;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.ecs",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "compute",
+            "containers"
+          ]
+        },
+        {
+          "id": "aws.fargate",
+          "displayName": "AWS Fargate",
+          "category": "containers",
+          "aliases": [
+            "fargate",
+            "serverless containers"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#ED7100;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.fargate",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "compute",
+            "containers",
+            "serverless"
+          ]
+        },
+        {
+          "id": "aws.rds",
+          "displayName": "Amazon RDS",
+          "category": "database",
+          "aliases": [
+            "rds",
+            "relational database service"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#527FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.rds;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.rds",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "database",
+            "relational"
+          ]
+        },
+        {
+          "id": "aws.dynamodb",
+          "displayName": "Amazon DynamoDB",
+          "category": "database",
+          "aliases": [
+            "dynamodb",
+            "dynamo db"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#527FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.dynamodb;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.dynamodb",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "database",
+            "nosql"
+          ]
+        },
+        {
+          "id": "aws.elasticache",
+          "displayName": "Amazon ElastiCache",
+          "category": "database",
+          "aliases": [
+            "elasticache",
+            "redis aws",
+            "cache aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#527FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elasticache;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.elasticache",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "database",
+            "cache",
+            "redis"
+          ]
+        },
+        {
+          "id": "aws.s3",
+          "displayName": "Amazon S3",
+          "category": "storage",
+          "aliases": [
+            "s3",
+            "simple storage service",
+            "object storage aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#7AA116;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.s3",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "storage",
+            "object"
+          ]
+        },
+        {
+          "id": "aws.sqs",
+          "displayName": "Amazon SQS",
+          "category": "application-integration",
+          "aliases": [
+            "sqs",
+            "simple queue service",
+            "queue aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sqs;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.sqs",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "messaging",
+            "queue"
+          ]
+        },
+        {
+          "id": "aws.sns",
+          "displayName": "Amazon SNS",
+          "category": "application-integration",
+          "aliases": [
+            "sns",
+            "simple notification service",
+            "topic aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sns;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.sns",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "messaging",
+            "topic",
+            "notifications"
+          ]
+        },
+        {
+          "id": "aws.eventbridge",
+          "displayName": "Amazon EventBridge",
+          "category": "application-integration",
+          "aliases": [
+            "eventbridge",
+            "event bus aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.eventbridge;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.eventbridge",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "messaging",
+            "events",
+            "event-bus"
+          ]
+        },
+        {
+          "id": "aws.cloudfront",
+          "displayName": "Amazon CloudFront",
+          "category": "networking",
+          "aliases": [
+            "cloudfront",
+            "cdn aws",
+            "edge aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudfront;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.cloudfront",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "network",
+            "cdn",
+            "edge"
+          ]
+        },
+        {
+          "id": "aws.application-load-balancer",
+          "displayName": "Application Load Balancer",
+          "category": "networking",
+          "aliases": [
+            "alb",
+            "application load balancer",
+            "load balancer aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.application_load_balancer;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.application_load_balancer",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "network",
+            "load-balancer",
+            "ingress"
+          ]
+        },
+        {
+          "id": "aws.cognito",
+          "displayName": "Amazon Cognito",
+          "category": "security-identity-compliance",
+          "aliases": [
+            "cognito",
+            "identity aws",
+            "user pool"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cognito;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.cognito",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "identity",
+            "authentication",
+            "authorization"
+          ]
+        },
+        {
+          "id": "aws.secrets-manager",
+          "displayName": "AWS Secrets Manager",
+          "category": "security-identity-compliance",
+          "aliases": [
+            "secrets manager",
+            "aws secrets",
+            "vault aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.secrets_manager;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.secrets_manager",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "security",
+            "secrets",
+            "credentials"
+          ]
+        },
+        {
+          "id": "aws.cloudwatch",
+          "displayName": "Amazon CloudWatch",
+          "category": "management-governance",
+          "aliases": [
+            "cloudwatch",
+            "monitoring aws",
+            "logs aws",
+            "metrics aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch_2;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "resIcon": "mxgraph.aws4.cloudwatch_2",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "observability",
+            "logs",
+            "metrics",
+            "alerts"
+          ]
+        },
+        {
+          "id": "aws.group-cloud",
+          "displayName": "AWS Cloud (límite)",
+          "category": "boundary",
+          "aliases": [
+            "aws cloud",
+            "nube aws"
+          ],
+          "mechanism": "stencil",
+          "style": "outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;",
+          "shape": "mxgraph.aws4.group",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "boundary",
+            "container",
+            "group"
+          ]
+        },
+        {
+          "id": "aws.group-account",
+          "displayName": "AWS Account (límite)",
+          "category": "boundary",
+          "aliases": [
+            "aws account",
+            "cuenta aws"
+          ],
+          "mechanism": "stencil",
+          "style": "outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_account;strokeColor=#CD2264;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#CD2264;dashed=0;",
+          "shape": "mxgraph.aws4.group",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "boundary",
+            "container",
+            "group"
+          ]
+        },
+        {
+          "id": "aws.group-region",
+          "displayName": "AWS Region (límite)",
+          "category": "boundary",
+          "aliases": [
+            "aws region",
+            "region aws"
+          ],
+          "mechanism": "stencil",
+          "style": "outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_region;strokeColor=#00A4A6;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA;dashed=1;",
+          "shape": "mxgraph.aws4.group",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "boundary",
+            "container",
+            "group"
+          ]
+        },
+        {
+          "id": "aws.group-vpc",
+          "displayName": "Amazon VPC (límite)",
+          "category": "boundary",
+          "aliases": [
+            "vpc",
+            "amazon vpc"
+          ],
+          "mechanism": "stencil",
+          "style": "outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc2;strokeColor=#8C4FFF;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#AAB7B8;dashed=0;",
+          "shape": "mxgraph.aws4.group",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "boundary",
+            "container",
+            "group"
+          ]
+        },
+        {
+          "id": "aws.group-subnet-private",
+          "displayName": "Subred privada (límite)",
+          "category": "boundary",
+          "aliases": [
+            "private subnet",
+            "subred privada"
+          ],
+          "mechanism": "stencil",
+          "style": "outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;grStroke=0;strokeColor=#00A4A6;fillColor=#E6F6F7;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA;dashed=0;",
+          "shape": "mxgraph.aws4.group",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "boundary",
+            "container",
+            "group"
+          ]
+        },
+        {
+          "id": "aws.group-subnet-public",
+          "displayName": "Subred pública (límite)",
+          "category": "boundary",
+          "aliases": [
+            "public subnet",
+            "subred publica"
+          ],
+          "mechanism": "stencil",
+          "style": "outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;grStroke=0;strokeColor=#7AA116;fillColor=#F2F6E8;verticalAlign=top;align=left;spacingLeft=30;fontColor=#248814;dashed=0;",
+          "shape": "mxgraph.aws4.group",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "boundary",
+            "container",
+            "group"
+          ]
+        },
+        {
+          "id": "aws.group-corporate-dc",
+          "displayName": "Centro de datos corporativo (límite)",
+          "category": "boundary",
+          "aliases": [
+            "corporate data center",
+            "datacenter corporativo",
+            "on-premise"
+          ],
+          "mechanism": "stencil",
+          "style": "outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_corporate_data_center;strokeColor=#7D8998;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#5A6C86;dashed=0;",
+          "shape": "mxgraph.aws4.group",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "boundary",
+            "container",
+            "group"
+          ]
+        },
+        {
+          "id": "aws.transit-gateway",
+          "displayName": "AWS Transit Gateway",
+          "category": "networking",
+          "aliases": [
+            "transit gateway",
+            "tgw"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.transit_gateway;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "hub"
+          ],
+          "resIcon": "mxgraph.aws4.transit_gateway"
+        },
+        {
+          "id": "aws.cloud-wan",
+          "displayName": "AWS Cloud WAN",
+          "category": "networking",
+          "aliases": [
+            "cloud wan",
+            "core network"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloud_wan;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "global"
+          ],
+          "resIcon": "mxgraph.aws4.cloud_wan"
+        },
+        {
+          "id": "aws.direct-connect",
+          "displayName": "AWS Direct Connect",
+          "category": "networking",
+          "aliases": [
+            "direct connect",
+            "dx"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.direct_connect;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "hybrid"
+          ],
+          "resIcon": "mxgraph.aws4.direct_connect"
+        },
+        {
+          "id": "aws.site-to-site-vpn",
+          "displayName": "AWS Site-to-Site VPN",
+          "category": "networking",
+          "aliases": [
+            "site to site vpn",
+            "vpn s2s",
+            "ipsec vpn aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.site_to_site_vpn;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "hybrid"
+          ],
+          "resIcon": "mxgraph.aws4.site_to_site_vpn"
+        },
+        {
+          "id": "aws.client-vpn",
+          "displayName": "AWS Client VPN",
+          "category": "networking",
+          "aliases": [
+            "client vpn"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.client_vpn;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "remote-access"
+          ],
+          "resIcon": "mxgraph.aws4.client_vpn"
+        },
+        {
+          "id": "aws.privatelink",
+          "displayName": "AWS PrivateLink",
+          "category": "networking",
+          "aliases": [
+            "privatelink",
+            "private link"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.vpc_privatelink;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "private"
+          ],
+          "resIcon": "mxgraph.aws4.vpc_privatelink"
+        },
+        {
+          "id": "aws.vpc-lattice",
+          "displayName": "Amazon VPC Lattice",
+          "category": "networking",
+          "aliases": [
+            "vpc lattice",
+            "lattice"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.vpc_lattice;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "service-network"
+          ],
+          "resIcon": "mxgraph.aws4.vpc_lattice"
+        },
+        {
+          "id": "aws.route-53",
+          "displayName": "Amazon Route 53",
+          "category": "networking",
+          "aliases": [
+            "route 53",
+            "route53",
+            "dns aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.route_53;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "dns"
+          ],
+          "resIcon": "mxgraph.aws4.route_53"
+        },
+        {
+          "id": "aws.global-accelerator",
+          "displayName": "AWS Global Accelerator",
+          "category": "networking",
+          "aliases": [
+            "global accelerator"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.global_accelerator;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "edge"
+          ],
+          "resIcon": "mxgraph.aws4.global_accelerator"
+        },
+        {
+          "id": "aws.elastic-load-balancing",
+          "displayName": "Elastic Load Balancing",
+          "category": "networking",
+          "aliases": [
+            "elastic load balancing",
+            "elb"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "load-balancer"
+          ],
+          "resIcon": "mxgraph.aws4.elastic_load_balancing"
+        },
+        {
+          "id": "aws.network-load-balancer",
+          "displayName": "Network Load Balancer",
+          "category": "networking",
+          "aliases": [
+            "network load balancer",
+            "nlb"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.network_load_balancer;",
+          "shape": "mxgraph.aws4.network_load_balancer",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "load-balancer"
+          ]
+        },
+        {
+          "id": "aws.nat-gateway",
+          "displayName": "NAT Gateway",
+          "category": "networking",
+          "aliases": [
+            "nat gateway",
+            "nat gw"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.nat_gateway;",
+          "shape": "mxgraph.aws4.nat_gateway",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "egress"
+          ]
+        },
+        {
+          "id": "aws.internet-gateway",
+          "displayName": "Internet Gateway",
+          "category": "networking",
+          "aliases": [
+            "internet gateway",
+            "igw"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.internet_gateway;",
+          "shape": "mxgraph.aws4.internet_gateway",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "ingress"
+          ]
+        },
+        {
+          "id": "aws.vpc-endpoints",
+          "displayName": "VPC Endpoints",
+          "category": "networking",
+          "aliases": [
+            "vpc endpoint",
+            "vpc endpoints",
+            "interface endpoint",
+            "gateway endpoint"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.endpoints;",
+          "shape": "mxgraph.aws4.endpoints",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "private"
+          ]
+        },
+        {
+          "id": "aws.transit-gateway-attachment",
+          "displayName": "Transit Gateway Attachment",
+          "category": "networking",
+          "aliases": [
+            "tgw attachment",
+            "transit gateway attachment"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.transit_gateway_attachment;",
+          "shape": "mxgraph.aws4.transit_gateway_attachment",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "networking",
+            "hub"
+          ]
+        },
+        {
+          "id": "aws.network-firewall",
+          "displayName": "AWS Network Firewall",
+          "category": "security",
+          "aliases": [
+            "network firewall",
+            "aws network firewall"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.network_firewall;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "security",
+            "inspection"
+          ],
+          "resIcon": "mxgraph.aws4.network_firewall"
+        },
+        {
+          "id": "aws.network-firewall-endpoints",
+          "displayName": "Network Firewall Endpoints",
+          "category": "security",
+          "aliases": [
+            "network firewall endpoint",
+            "firewall endpoint"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#DD344C;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.network_firewall_endpoints;",
+          "shape": "mxgraph.aws4.network_firewall_endpoints",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "security",
+            "inspection"
+          ]
+        },
+        {
+          "id": "aws.waf",
+          "displayName": "AWS WAF",
+          "category": "security",
+          "aliases": [
+            "waf",
+            "web application firewall aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.waf;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "security",
+            "edge"
+          ],
+          "resIcon": "mxgraph.aws4.waf"
+        },
+        {
+          "id": "aws.shield",
+          "displayName": "AWS Shield",
+          "category": "security",
+          "aliases": [
+            "shield",
+            "ddos aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.shield;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "security",
+            "edge"
+          ],
+          "resIcon": "mxgraph.aws4.shield"
+        },
+        {
+          "id": "aws.kms",
+          "displayName": "AWS KMS",
+          "category": "security",
+          "aliases": [
+            "kms",
+            "key management service"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.key_management_service;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "security",
+            "encryption"
+          ],
+          "resIcon": "mxgraph.aws4.key_management_service"
+        },
+        {
+          "id": "aws.iam",
+          "displayName": "AWS IAM",
+          "category": "security",
+          "aliases": [
+            "iam",
+            "identity and access management",
+            "iam role"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.identity_and_access_management;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "security",
+            "identity"
+          ],
+          "resIcon": "mxgraph.aws4.identity_and_access_management"
+        },
+        {
+          "id": "aws.identity-center",
+          "displayName": "IAM Identity Center",
+          "category": "security",
+          "aliases": [
+            "identity center",
+            "aws sso",
+            "iam identity center"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.single_sign_on;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "security",
+            "identity"
+          ],
+          "resIcon": "mxgraph.aws4.single_sign_on"
+        },
+        {
+          "id": "aws.organizations",
+          "displayName": "AWS Organizations",
+          "category": "management-governance",
+          "aliases": [
+            "organizations",
+            "aws organizations"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.organizations;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "governance",
+            "multi-account"
+          ],
+          "resIcon": "mxgraph.aws4.organizations"
+        },
+        {
+          "id": "aws.control-tower",
+          "displayName": "AWS Control Tower",
+          "category": "management-governance",
+          "aliases": [
+            "control tower",
+            "landing zone aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.control_tower;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "governance",
+            "multi-account"
+          ],
+          "resIcon": "mxgraph.aws4.control_tower"
+        },
+        {
+          "id": "aws.resource-access-manager",
+          "displayName": "AWS Resource Access Manager",
+          "category": "management-governance",
+          "aliases": [
+            "ram",
+            "resource access manager"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.resource_access_manager;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "governance",
+            "sharing"
+          ],
+          "resIcon": "mxgraph.aws4.resource_access_manager"
+        },
+        {
+          "id": "aws.guardduty",
+          "displayName": "Amazon GuardDuty",
+          "category": "security",
+          "aliases": [
+            "guardduty"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.guardduty;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "security",
+            "detection"
+          ],
+          "resIcon": "mxgraph.aws4.guardduty"
+        },
+        {
+          "id": "aws.security-hub",
+          "displayName": "AWS Security Hub",
+          "category": "security",
+          "aliases": [
+            "security hub"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.security_hub;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "security",
+            "posture"
+          ],
+          "resIcon": "mxgraph.aws4.security_hub"
+        },
+        {
+          "id": "aws.cloudtrail",
+          "displayName": "AWS CloudTrail",
+          "category": "observability",
+          "aliases": [
+            "cloudtrail"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudtrail;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "audit",
+            "observability"
+          ],
+          "resIcon": "mxgraph.aws4.cloudtrail"
+        },
+        {
+          "id": "aws.config",
+          "displayName": "AWS Config",
+          "category": "management-governance",
+          "aliases": [
+            "aws config",
+            "config rules"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.config;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "governance",
+            "compliance"
+          ],
+          "resIcon": "mxgraph.aws4.config"
+        },
+        {
+          "id": "aws.systems-manager",
+          "displayName": "AWS Systems Manager",
+          "category": "management-governance",
+          "aliases": [
+            "systems manager",
+            "ssm"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.systems_manager;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "operations"
+          ],
+          "resIcon": "mxgraph.aws4.systems_manager"
+        },
+        {
+          "id": "aws.backup",
+          "displayName": "AWS Backup",
+          "category": "storage",
+          "aliases": [
+            "aws backup",
+            "backup aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#7AA116;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.backup;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "backup",
+            "resilience"
+          ],
+          "resIcon": "mxgraph.aws4.backup"
+        },
+        {
+          "id": "aws.ecr",
+          "displayName": "Amazon ECR",
+          "category": "compute",
+          "aliases": [
+            "ecr",
+            "elastic container registry"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#ED7100;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ecr;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "containers",
+            "registry"
+          ],
+          "resIcon": "mxgraph.aws4.ecr"
+        },
+        {
+          "id": "aws.eks",
+          "displayName": "Amazon EKS",
+          "category": "compute",
+          "aliases": [
+            "eks",
+            "elastic kubernetes service"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#ED7100;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.eks;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "containers",
+            "kubernetes"
+          ],
+          "resIcon": "mxgraph.aws4.eks"
+        },
+        {
+          "id": "aws.aurora",
+          "displayName": "Amazon Aurora",
+          "category": "database",
+          "aliases": [
+            "aurora"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#C925D1;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.aurora;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "database",
+            "relational"
+          ],
+          "resIcon": "mxgraph.aws4.aurora"
+        },
+        {
+          "id": "aws.step-functions",
+          "displayName": "AWS Step Functions",
+          "category": "application-integration",
+          "aliases": [
+            "step functions",
+            "state machine aws"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#E7157B;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.step_functions;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "integration",
+            "orchestration"
+          ],
+          "resIcon": "mxgraph.aws4.step_functions"
+        },
+        {
+          "id": "aws.kinesis-data-streams",
+          "displayName": "Amazon Kinesis Data Streams",
+          "category": "analytics",
+          "aliases": [
+            "kinesis data streams",
+            "kinesis"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.kinesis_data_streams;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "streaming"
+          ],
+          "resIcon": "mxgraph.aws4.kinesis_data_streams"
+        },
+        {
+          "id": "aws.bedrock",
+          "displayName": "Amazon Bedrock",
+          "category": "ai-machine-learning",
+          "aliases": [
+            "bedrock",
+            "amazon bedrock"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#01A88D;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.bedrock;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "ai",
+            "llm"
+          ],
+          "resIcon": "mxgraph.aws4.bedrock"
+        },
+        {
+          "id": "aws.codebuild",
+          "displayName": "AWS CodeBuild",
+          "category": "devops",
+          "aliases": [
+            "codebuild",
+            "codebuild runner"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#C925D1;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.codebuild;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "ci-cd",
+            "runner"
+          ],
+          "resIcon": "mxgraph.aws4.codebuild"
+        },
+        {
+          "id": "aws.codepipeline",
+          "displayName": "AWS CodePipeline",
+          "category": "devops",
+          "aliases": [
+            "codepipeline"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#C925D1;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.codepipeline;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "ci-cd"
+          ],
+          "resIcon": "mxgraph.aws4.codepipeline"
+        },
+        {
+          "id": "aws.codedeploy",
+          "displayName": "AWS CodeDeploy",
+          "category": "devops",
+          "aliases": [
+            "codedeploy"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;outlineConnect=0;gradientColor=none;fillColor=#C925D1;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.codedeploy;",
+          "shape": "mxgraph.aws4.resourceIcon",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "ci-cd",
+            "deploy"
+          ],
+          "resIcon": "mxgraph.aws4.codedeploy"
+        }
+      ]
+    },
+    "gcp": {
+      "library": "gcp3",
+      "mechanism": "stencil",
+      "fallback": "gcp.generic-service",
+      "icons": [
+        {
+          "id": "gcp.generic-service",
+          "displayName": "Google Cloud Resource",
+          "category": "general",
+          "aliases": [
+            "gcp resource",
+            "google cloud resource",
+            "servicio gcp"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.compute;",
+          "shape": "mxgraph.gcp3.compute",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "fallback",
+            "generic"
+          ]
+        },
+        {
+          "id": "gcp.compute-engine",
+          "displayName": "Google Compute Engine",
+          "category": "compute",
+          "aliases": [
+            "compute engine",
+            "gce",
+            "vm gcp"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.computeengine;",
+          "shape": "mxgraph.gcp3.computeengine",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "compute",
+            "vm"
+          ]
+        },
+        {
+          "id": "gcp.cloud-run",
+          "displayName": "Google Cloud Run",
+          "category": "serverless-computing",
+          "aliases": [
+            "cloud run",
+            "serverless containers gcp"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.cloudrun;",
+          "shape": "mxgraph.gcp3.cloudrun",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "compute",
+            "serverless",
+            "containers"
+          ]
+        },
+        {
+          "id": "gcp.gke",
+          "displayName": "Google Kubernetes Engine",
+          "category": "containers",
+          "aliases": [
+            "gke",
+            "google kubernetes engine",
+            "kubernetes gcp"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.gke;",
+          "shape": "mxgraph.gcp3.gke",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "compute",
+            "containers",
+            "kubernetes"
+          ]
+        },
+        {
+          "id": "gcp.cloud-sql",
+          "displayName": "Google Cloud SQL",
+          "category": "databases",
+          "aliases": [
+            "cloud sql",
+            "sql gcp",
+            "managed relational gcp"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.cloudsql;",
+          "shape": "mxgraph.gcp3.cloudsql",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "database",
+            "relational"
+          ]
+        },
+        {
+          "id": "gcp.alloydb",
+          "displayName": "AlloyDB for PostgreSQL",
+          "category": "databases",
+          "aliases": [
+            "alloydb",
+            "alloy db",
+            "postgres gcp"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.alloydb;",
+          "shape": "mxgraph.gcp3.alloydb",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "database",
+            "postgresql",
+            "relational"
+          ]
+        },
+        {
+          "id": "gcp.cloud-storage",
+          "displayName": "Google Cloud Storage",
+          "category": "storage",
+          "aliases": [
+            "cloud storage",
+            "gcs",
+            "object storage gcp"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.cloud_storage;",
+          "shape": "mxgraph.gcp3.cloud_storage",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "storage",
+            "object"
+          ]
+        },
+        {
+          "id": "gcp.apigee",
+          "displayName": "Apigee API Management",
+          "category": "integration-services",
+          "aliases": [
+            "apigee",
+            "api management gcp",
+            "api gateway gcp"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.apigee;",
+          "shape": "mxgraph.gcp3.apigee",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "api",
+            "gateway",
+            "integration"
+          ]
+        },
+        {
+          "id": "gcp.vertex-ai",
+          "displayName": "Vertex AI",
+          "category": "ai-machine-learning",
+          "aliases": [
+            "vertex ai",
+            "vertexai",
+            "ai gcp"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.vertexai;",
+          "shape": "mxgraph.gcp3.vertexai",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "ai",
+            "ml",
+            "models"
+          ]
+        },
+        {
+          "id": "gcp.observability",
+          "displayName": "Google Cloud Observability",
+          "category": "observability",
+          "aliases": [
+            "cloud observability",
+            "monitoring gcp",
+            "logging gcp"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.observability;",
+          "shape": "mxgraph.gcp3.observability",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "observability",
+            "logs",
+            "metrics",
+            "traces"
+          ]
+        },
+        {
+          "id": "gcp.security-command-center",
+          "displayName": "Security Command Center",
+          "category": "security-identity",
+          "aliases": [
+            "security command center",
+            "scc gcp",
+            "security gcp"
+          ],
+          "mechanism": "stencil",
+          "style": "sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.securitycommandcenter;",
+          "shape": "mxgraph.gcp3.securitycommandcenter",
+          "status": "active",
+          "recommended": true,
+          "tags": [
+            "security",
+            "posture",
+            "findings"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,2 @@
+robotframework==__RF__
+robotframework-browser[bb]==20.6.0

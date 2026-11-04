@@ -1,0 +1,63 @@
+{
+  "skill_name": "qa-ranger-playwright",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Tengo esta app de banca (server.js adjunto, se levanta con node server.js 3100; usuario usuario.qa / Clave-Prueba-1). Genérame la suite Playwright del flujo de transferencias: camino feliz, validaciones, errores del backend, historial y la API.",
+      "expected_output": "Proyecto generado con scaffold.py; exploración real de la UI (snapshots) antes de escribir locators; POM + fixtures; auth con proyecto setup + storageState; sesión aislada por test para no compartir saldo; validaciones data-driven; pruebas frontend aisladas del 503 con page.route, separadas de E2E real; híbrido API+UI en historial; specs de API; tsc, ESLint y lint_specs.py limpios; pasa con --repeat-each=5 --workers=4; RTM generada desde el reporte JSON.",
+      "files": [
+        "evals/files/banca-demo/server.js"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-playwright",
+        "task": "implement",
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Revisa este spec de mi equipo y dime qué está mal y cómo corregirlo.",
+      "expected_output": "Ejecutar lint_specs.py y contrastar manualmente hallazgos y fuentes. Entregar revisión priorizada y propuestas concretas; declarar ESLint, compilación y navegador como no ejecutados si no existe el proyecto/dependencias necesarios.",
+      "files": [
+        "evals/files/pagos-malo.spec.ts"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-playwright",
+        "task": "review",
+        "protectFixtures": true,
+        "status": "completed"
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "Prepara el trace de la reproducción adjunta con evals/prepare_trace.py y diagnostica el fallo a partir de ese trace. El script recibe un proyecto con Playwright instalado y genera trace.zip en la corrida. Si falta acceso a navegador o runner, identifica ese pendiente sin inventar un diagnóstico observado.",
+      "expected_output": "Generar un trace real con prepare_trace.py; inspeccionarlo antes de atribuir una causa observada. Distinguir hipótesis desde el código de observaciones del trace. Proponer sincronización web-first y declarar qué se verificó.",
+      "files": [
+        "evals/files/banca-demo/server.js",
+        "evals/files/transferencia-flaky.spec.ts"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-playwright",
+        "task": "diagnose",
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 4,
+      "prompt": "Implementa una prueba de API de transferencia desde el contrato adjunto. No hay servicio desplegado ni credenciales; conserva los artefactos que puedas producir y entrega los pendientes sin afirmar ejecución.",
+      "expected_output": "Conservar el encargo, producir artefactos reales y registrar las limitaciones; el harness comprueba contrato y efectos observables.",
+      "files": [
+        "../ranger/evals/files/requisitos-transferencias.md"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-playwright",
+        "task": "implement",
+        "status": [
+          "partial",
+          "failed"
+        ],
+        "protectFixtures": true
+      }
+    }
+  ]
+}

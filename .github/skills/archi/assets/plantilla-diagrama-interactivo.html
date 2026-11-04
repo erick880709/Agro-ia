@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagrama interactivo</title>
+<!-- Plantilla de archi: guia-diagramas-interactivos.md. No editar a mano: la genera
+     scripts/build_interactive_diagram.py insertando la especificación JSON. -->
+<style>
+:root{--bg:#F7F8F9;--panel:#FFFFFF;--ink:#172B4D;--muted:#626F86;--rule:#DCDFE4;--soft:#F1F2F4;
+--neutro:#42526E;--foco:#C25100;--foco-bg:#FFF4E5;--datos:#0C66E4;--datos-bg:#E9F2FF;--ext:#6B778C;
+--nuevo:#1F845A;--nuevo-bg:#DCFFF1;--retirado:#AE2E24;--retirado-bg:#FFECEB;--mod:#946F00;--mod-bg:#FFF7D6;
+--seg:#6E5DC6;--seg-bg:#F3F0FF;--async:#6B778C;--active:#C25100;--packet:#C25100;--code-bg:#1E293B;--code:#E2E8F0}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161A1D;--panel:#1D2125;--ink:#DEE4EA;--muted:#9FADBC;
+--rule:#384148;--soft:#22272B;--neutro:#9FADBC;--foco:#F38A3F;--foco-bg:#3A2410;--datos:#579DFF;--datos-bg:#092957;
+--ext:#8C9BAB;--nuevo:#4BCE97;--nuevo-bg:#164B35;--retirado:#F87168;--retirado-bg:#5D1F1A;--mod:#E2B203;--mod-bg:#533F04;
+--seg:#9F8FEF;--seg-bg:#2B273F;--async:#8C9BAB;--active:#F38A3F;--packet:#F38A3F}}
+:root[data-theme=dark]{--bg:#161A1D;--panel:#1D2125;--ink:#DEE4EA;--muted:#9FADBC;--rule:#384148;--soft:#22272B;
+--neutro:#9FADBC;--foco:#F38A3F;--foco-bg:#3A2410;--datos:#579DFF;--datos-bg:#092957;--ext:#8C9BAB;--nuevo:#4BCE97;
+--nuevo-bg:#164B35;--retirado:#F87168;--retirado-bg:#5D1F1A;--mod:#E2B203;--mod-bg:#533F04;--seg:#9F8FEF;--seg-bg:#2B273F;
+--async:#8C9BAB;--active:#F38A3F;--packet:#F38A3F}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);
+font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;padding:16px 20px 8px}
+h1{font-size:20px;margin:0}.sub{color:var(--muted);margin:2px 0 0}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button,select,input{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:5px 10px}
+button{cursor:pointer}button[aria-pressed=true],button.on{border-color:var(--active);color:var(--active);font-weight:600}
+button:focus-visible,input:focus-visible,.node:focus-visible{outline:2px solid var(--active);outline-offset:2px}
+nav.flows{display:flex;flex-wrap:wrap;gap:6px;padding:0 20px 8px}
+main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:12px;padding:0 20px 12px}
+@media (max-width:980px){main{grid-template-columns:1fr}}
+.canvas{background:var(--panel);border:1px solid var(--rule);border-radius:8px;overflow:auto;position:relative}
+svg.diagram{display:block}
+aside{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;align-self:start;position:sticky;top:8px}
+aside h2{font-size:15px;margin:0 0 4px}aside .step-route{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:var(--muted)}
+pre.payload{background:var(--code-bg);color:var(--code);padding:10px;border-radius:6px;overflow:auto;font-size:12px;max-height:240px;white-space:pre-wrap}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}.chip{border:1px solid var(--rule);border-radius:4px;padding:1px 6px;font-size:12px;font-family:ui-monospace,Consolas,monospace}
+.chip.sec{border-color:var(--seg);color:var(--seg)}.chip.err{border-color:var(--retirado);color:var(--retirado)}
+.progress{height:4px;background:var(--soft);border-radius:2px;margin:8px 0}.progress>div{height:100%;background:var(--active);border-radius:2px;width:0}
+.player{display:flex;gap:6px;flex-wrap:wrap}
+footer{padding:0 20px 20px;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;align-items:center;padding:10px 20px;border-top:1px solid var(--rule)}
+.legend span{display:inline-flex;align-items:center;gap:6px}.sw{display:inline-block;width:18px;height:12px;border:2px solid;border-radius:3px}
+.ln{display:inline-block;width:26px;border-top:2px solid var(--neutro)}.ln.dash{border-top-style:dashed}
+details.all{margin-top:10px}details.all ol{padding-left:18px}details.all li{margin:4px 0}
+.node rect.box{fill:var(--panel);stroke:var(--neutro);stroke-width:1.5}
+.node.role-datos rect.box{fill:var(--datos-bg);stroke:var(--datos)}.node.role-externo rect.box{stroke:var(--ext);stroke-dasharray:5 4}
+.node.role-foco rect.box{fill:var(--foco-bg);stroke:var(--foco);stroke-width:2.5}.node.role-seguridad rect.box{fill:var(--seg-bg);stroke:var(--seg)}
+.node.role-mensajeria rect.box{stroke:var(--neutro);stroke-dasharray:2 3}
+.node.st-nuevo rect.box{fill:var(--nuevo-bg);stroke:var(--nuevo);stroke-width:2.5}
+.node.st-retirado rect.box{fill:var(--retirado-bg);stroke:var(--retirado);stroke-dasharray:4 3}.node.st-retirado text{text-decoration:line-through}
+.node.st-modificado rect.box{fill:var(--mod-bg);stroke:var(--mod);stroke-width:2.5}
+.node text.name{font-weight:600;font-size:13px;fill:var(--ink)}.node text.tech{font-size:11px;fill:var(--muted);font-family:ui-monospace,Consolas,monospace}
+.node text.id{font-size:10px;fill:var(--muted);font-family:ui-monospace,Consolas,monospace}
+.node{cursor:pointer}.node.dim,.wire.dim,.wlabel.dim{opacity:.18}.node.hit rect.box{stroke:var(--active);stroke-width:3}
+.zone rect{fill:none;stroke:var(--ext);stroke-dasharray:6 5;stroke-width:1.2}.zone text{fill:var(--muted);font-size:12px;font-weight:600}
+.zone.kind-trust rect{stroke:var(--seg)}.zone.kind-trust text{fill:var(--seg)}
+.wire{fill:none;stroke:var(--neutro);stroke-width:1.6}.wire.async,.wire.return{stroke-dasharray:6 4;stroke:var(--async)}
+.wire.active{stroke:var(--active);stroke-width:3}.wire.ghost{opacity:.25}
+.wlabel rect{fill:var(--panel);stroke:var(--active)}.wlabel text{font-size:11px;fill:var(--muted);font-family:ui-monospace,Consolas,monospace}
+.wlabel circle{fill:var(--panel);stroke:var(--neutro);stroke-width:1.2}.wlabel.active circle{fill:var(--active);stroke:var(--active)}
+.wlabel.active circle+text{fill:var(--panel)}
+.wlabel.active text{fill:var(--active);font-weight:700}
+circle.packet{fill:var(--packet)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (prefers-reduced-motion:reduce){circle.packet{display:none}}
+@media print{header .toolbar,nav.flows,.player,aside .progress{display:none}main{grid-template-columns:1fr}details.all{display:block}details.all[open] summary{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1 id="title">Diagrama interactivo</h1><p class="sub" id="subtitle"></p></div>
+  <div class="toolbar">
+    <span id="modes" role="group" aria-label="Modo"></span>
+    <input id="search" type="search" placeholder="Buscar nodo (CT-01, Pagos…)" aria-label="Buscar nodo">
+    <button id="theme" type="button" title="Tema (T)">◐ Tema</button>
+  </div>
+</header>
+<nav class="flows" id="flows" aria-label="Flujos"></nav>
+<main>
+  <div class="canvas" id="canvas"></div>
+  <aside aria-live="polite">
+    <div class="player">
+      <button id="prev" type="button" title="Anterior (←)">◀</button>
+      <button id="play" type="button" title="Reproducir/Pausa (Espacio)">▶ Reproducir</button>
+      <button id="next" type="button" title="Siguiente (→)">▶▶</button>
+      <button id="reset" type="button" title="Reiniciar (Inicio)">⟲</button>
+    </div>
+    <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+    <div id="panel"><p>Elige un flujo y avanza paso a paso, o haz clic en un nodo.</p></div>
+    <details class="all" id="allsteps"><summary>Todos los pasos del flujo</summary><ol id="steplist"></ol></details>
+  </aside>
+</main>
+<div class="legend" id="legend" aria-label="Leyenda"></div>
+<footer id="foot"></footer>
+<p class="sr" id="announce" aria-live="assertive"></p>
+<script>
+const ARCH = /*__ARCH_SPEC__*/null;
+(function () {
+  "use strict";
+  const NS = "http://www.w3.org/2000/svg";
+  const W = 172, H = 78, CW = 228, RH = 132, PADX = 36, PADY = 56;
+  const ROLE_COL = {canal: 0, borde: 1, seguridad: 1, servicio: 2, foco: 2, mensajeria: 3, datos: 4, externo: 5, observabilidad: 5};
+  const ROLE_NAME = {canal: "Canal / actor", borde: "Borde (gateway, WAF)", servicio: "Servicio / contenedor", foco: "Foco",
+    mensajeria: "Mensajería / eventos", datos: "Datos", externo: "Sistema externo", seguridad: "Seguridad / identidad",
+    observabilidad: "Observabilidad"};
+  const STATUS_NAME = {nuevo: "Nuevo", retirado: "Retirado", modificado: "Modificado"};
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, attrs, parent) => { const n = document.createElementNS(NS, tag);
+    for (const k in attrs || {}) n.setAttribute(k, attrs[k]); if (parent) parent.appendChild(n); return n; };
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+  const issues = [];
+  if (!ARCH || !Array.isArray(ARCH.nodes)) { document.body.insertAdjacentHTML("afterbegin", "<p role=alert>Especificación ausente.</p>"); return; }
+
+  const modes = ARCH.modes || [];
+  const state = {mode: ARCH.defaultMode || modes[0] || null, flow: null, step: -1, playing: false, timer: null, focus: null};
+
+  // ---------- layout ----------
+  const nodes = ARCH.nodes.map((n) => Object.assign({}, n));
+  const byId = {};
+  nodes.forEach((n) => { if (byId[n.id]) issues.push("nodo duplicado " + n.id); byId[n.id] = n; });
+  const taken = {};
+  nodes.forEach((n) => {
+    const c = Number.isInteger(n.col) ? n.col : (ROLE_COL[n.role] != null ? ROLE_COL[n.role] : 2);
+    n._c = c; taken[c] = taken[c] || new Set();
+    if (Number.isInteger(n.row)) { if (taken[c].has(n.row)) issues.push(`${n.id}: col/row ocupada`); n._r = n.row; taken[c].add(n.row); }
+  });
+  nodes.forEach((n) => { if (n._r == null) { let r = 0; while (taken[n._c].has(r)) r++; n._r = r; taken[n._c].add(r); } });
+  const usedCols = [...new Set(nodes.map((n) => n._c))].sort((a, b) => a - b);
+  const colIndex = {}; usedCols.forEach((c, i) => { colIndex[c] = i; });
+  nodes.forEach((n) => { n._x = PADX + colIndex[n._c] * CW; n._y = PADY + n._r * RH; });
+  const maxRow = Math.max(...nodes.map((n) => n._r));
+  const SW = PADX * 2 + (usedCols.length - 1) * CW + W, SH = PADY + maxRow * RH + H + 64;
+
+  function view(n) {
+    const o = Object.assign({}, n);
+    const m = state.mode && n.modes && n.modes[state.mode];
+    if (m) Object.assign(o, m);
+    o.status = (n.status && state.mode && n.status[state.mode]) || null;
+    return o;
+  }
+
+  // ---------- svg ----------
+  const svg = el("svg", {class: "diagram", role: "img", "aria-labelledby": "dg-title dg-desc",
+    viewBox: `0 0 ${SW} ${SH}`, width: SW, height: SH});
+  el("title", {id: "dg-title"}, svg).textContent = ARCH.title || "Diagrama";
+  el("desc", {id: "dg-desc"}, svg).textContent = ARCH.description || "Diagrama interactivo de arquitectura";
+  const defs = el("defs", {}, svg);
+  ["neutro", "active", "async"].forEach((k) => {
+    const mk = el("marker", {id: "arr-" + k, viewBox: "0 0 10 10", refX: 9, refY: 5, markerWidth: 9, markerHeight: 9, markerUnits: "userSpaceOnUse", orient: "auto-start-reverse"}, defs);
+    el("path", {d: "M0,0 L10,5 L0,10 z", style: `fill:var(--${k === "neutro" ? "neutro" : k})`}, mk);
+  });
+  const gZones = el("g", {}, svg), gWires = el("g", {}, svg), gNodes = el("g", {}, svg), gLabels = el("g", {}, svg), gActive = el("g", {}, svg);
+  const packet = el("circle", {class: "packet", r: 6, cx: -20, cy: -20}, svg);
+  $("canvas").appendChild(svg);
+
+  const zoneLabels = [];
+  (ARCH.zones || []).forEach((z) => {
+    const members = (z.nodes || []).map((id) => byId[id]).filter(Boolean);
+    (z.nodes || []).forEach((id) => { if (!byId[id]) issues.push(`zona ${z.id}: nodo ${id} inexistente`); });
+    if (!members.length) return;
+    const x1 = Math.min(...members.map((n) => n._x)) - 14, y1 = Math.min(...members.map((n) => n._y)) - 14;
+    const x2 = Math.max(...members.map((n) => n._x + W)) + 14, y2 = Math.max(...members.map((n) => n._y + H)) + 34;
+    const g = el("g", {class: "zone kind-" + (z.kind || "system")}, gZones);
+    el("rect", {x: x1, y: y1, width: x2 - x1, height: y2 - y1, rx: 8}, g);
+    const zt = (z.id ? z.id + " · " : "") + (z.label || "");
+    el("text", {x: x1 + 10, y: y2 - 10}, g).textContent = zt;
+    zoneLabels.push([x1 + 4, y2 - 26, x1 + 16 + zt.length * 7.2, y2 - 2, 60]);
+  });
+
+  const nodeEls = {};
+  function drawNodes() {
+    gNodes.textContent = "";
+    nodes.forEach((n) => {
+      const v = view(n);
+      if (v.hidden) return;
+      const g = el("g", {class: `node role-${v.role || "servicio"}${v.status ? " st-" + v.status : ""}`, tabindex: 0,
+        role: "button", "aria-label": `${n.id} ${v.label}${v.tech ? ", " + v.tech : ""}${v.status ? ", " + STATUS_NAME[v.status] : ""}`,
+        transform: `translate(${n._x},${n._y})`, "data-id": n.id}, gNodes);
+      el("rect", {class: "box", width: W, height: H, rx: 6}, g);
+      el("text", {class: "id", x: 10, y: 16}, g).textContent = n.id + (v.status ? " · " + STATUS_NAME[v.status] : "");
+      const name = el("text", {class: "name", x: 10, y: 36}, g);
+      wrapText(name, v.label || n.id, 22, 2);
+      if (v.tech) el("text", {class: "tech", x: 10, y: H - 10}, g).textContent = clip(v.tech, 26);
+      g.addEventListener("click", () => showNode(n.id));
+      g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showNode(n.id); } });
+      nodeEls[n.id] = g;
+    });
+  }
+  function clip(s, n) { s = String(s); return s.length > n ? s.slice(0, n - 1) + "…" : s; }
+  function wrapText(t, s, max, lines) {
+    const words = String(s).split(/\s+/); let line = "", out = [];
+    words.forEach((w) => { if ((line + " " + w).trim().length > max && line) { out.push(line); line = w; } else line = (line + " " + w).trim(); });
+    out.push(line); out = out.slice(0, lines); if (words.join(" ").length > out.join(" ").length) out[out.length - 1] = clip(out[out.length - 1] + "…", max);
+    out.forEach((l, i) => { const ts = el("tspan", {x: t.getAttribute("x"), dy: i ? 15 : 0}, t); ts.textContent = l; });
+  }
+
+  // ---------- routing (ortogonal, rodea nodos ajenos) ----------
+  const pairUse = {};
+  const GAP_Y = (RH - H) / 2;
+  function boxesExcept(a, b) { return nodes.filter((n) => n !== a && n !== b && !view(n).hidden).map((n) => [n._x - 4, n._y - 4, n._x + W + 4, n._y + H + 4]).concat(zoneLabels); }
+  function segHits(p, q, bx) { const x1 = Math.min(p[0], q[0]), x2 = Math.max(p[0], q[0]), y1 = Math.min(p[1], q[1]), y2 = Math.max(p[1], q[1]);
+    return !(x2 < bx[0] || x1 > bx[2] || y2 < bx[1] || y1 > bx[3]); }
+  function hits(pts, obs) { let c = 0; for (let i = 1; i < pts.length; i++) obs.forEach((bx) => { if (segHits(pts[i - 1], pts[i], bx)) c += bx[4] || 1000; }); return c; }
+  function route(a, b, kind, sOff) {
+    sOff = sOff || 0;
+    if (a === b) {
+      const x = a._x + W - 30, y = a._y;
+      return [[x, y], [x, y - 22], [x + 40, y - 22], [x + 40, y + 18], [a._x + W, y + 18]];
+    }
+    const key = [a.id, b.id].sort().join("|");
+    const k = pairUse[key] = (pairUse[key] || 0) + 1;
+    const off = (k - 1) * 12 * (kind === "return" ? -1 : 1);
+    const obs = boxesExcept(a, b);
+    const cands = [];
+    if (a._c === b._c) {
+      const down = b._y > a._y, x = a._x + W / 2 + off;
+      cands.push([[x, down ? a._y + H : a._y], [x, down ? b._y : b._y + H]]);
+      const gx = a._x + W + (CW - W) / 2 + off;
+      cands.push([[a._x + W, a._y + H / 2 + off], [gx, a._y + H / 2 + off], [gx, b._y + H / 2 + off], [b._x + W, b._y + H / 2 + off]]);
+    } else {
+      const right = b._x > a._x;
+      const sx = right ? a._x + W : a._x, tx = right ? b._x : b._x + W;
+      const sy = a._y + H / 2 + off + sOff, ty = b._y + H / 2 + off;
+      if (Math.abs(sy - ty) < 1) cands.push([[sx, sy], [tx, ty]]);
+      [sx + (right ? 1 : -1) * (CW - W) / 2, tx - (right ? 1 : -1) * (CW - W) / 2].forEach((mx) => {
+        mx += off; cands.push([[sx, sy], [mx, sy], [mx, ty], [tx, ty]]); });
+      [[-1, 0], [1, 0], [-1, 30], [1, 34]].forEach(([dir, extra]) => {
+        const top = dir < 0;
+        const y = top ? Math.min(a._y, b._y) - GAP_Y - extra + off : Math.max(a._y, b._y) + H + GAP_Y + extra + off;
+        if (y < 4 || y > SH - 4) return;
+        const ax = (top ? a._x + W / 2 : a._x + W - 28) + off + sOff, bx = (top ? b._x + W / 2 : b._x + W - 28) + off;
+        cands.push([[ax, top ? a._y : a._y + H], [ax, y], [bx, y], [bx, top ? b._y : b._y + H]]);
+      });
+    }
+    let best = cands[0], bh = Infinity;
+    cands.forEach((c, i) => { const h = hits(c, obs) + c.length + i * 0.01; if (h < bh) { bh = h; best = c; } });
+    if (bh >= 1000) issues.push(`conector ${a.id}→${b.id} no encuentra ruta libre (reubica nodos con col/row)`);
+    return best;
+  }
+  const pathD = (pts) => "M" + pts.map((p) => p.join(",")).join(" L");
+
+  // ---------- flows ----------
+  const flows = ARCH.flows || [];
+  const flowById = {};
+  flows.forEach((f) => {
+    if (flowById[f.id]) issues.push("flujo duplicado " + f.id);
+    flowById[f.id] = f;
+    if (f.onlyMode && modes.indexOf(f.onlyMode) < 0) issues.push(`flujo ${f.id}: onlyMode ${f.onlyMode} no es un modo`);
+    (f.steps || []).forEach((s, i) => ["from", "to"].forEach((p) => { if (!byId[s[p]]) issues.push(`flujo ${f.id} paso ${i + 1}: ${p} ${s[p]} no es un nodo`); }));
+  });
+  function visibleFlows() { return flows.filter((f) => !f.onlyMode || f.onlyMode === state.mode); }
+
+  let wireEls = [];
+  function drawWires() {
+    gWires.textContent = ""; gLabels.textContent = ""; gActive.textContent = ""; wireEls = [];
+    const placed = [], srcUse = {};
+    Object.keys(pairUse).forEach((k) => delete pairUse[k]);
+    const f = state.flow && flowById[state.flow];
+    const steps = f ? f.steps : [];
+    steps.forEach((s, i) => {
+      const a = byId[s.from], b = byId[s.to];
+      if (!a || !b || view(a).hidden || view(b).hidden) { wireEls.push(null); return; }
+      const sideKey = s.from + (b._x > a._x ? ">" : b._x < a._x ? "<" : "|");
+      const n = srcUse[sideKey] = (srcUse[sideKey] || 0) + 1;
+      const pts = route(a, b, s.kind, n === 1 ? 0 : (n % 2 ? -1 : 1) * Math.ceil((n - 1) / 2) * 14);
+      const kind = s.kind || "sync";
+      const p = el("path", {class: `wire ${kind}`, d: pathD(pts), "marker-end": `url(#arr-${kind === "sync" ? "neutro" : "async"})`}, gWires);
+      const pos = badgeSpot(pts, placed);
+      placed.push(pos);
+      const g = el("g", {class: "wlabel"}, gLabels);
+      el("circle", {cx: pos[0], cy: pos[1], r: 10}, g);
+      el("text", {x: pos[0], y: pos[1] + 4, "text-anchor": "middle"}, g).textContent = String(i + 1);
+      wireEls.push({path: p, label: g, pts: pts, pos: pos, text: s.label || s.title || ""});
+    });
+  }
+  function badgeSpot(pts, placed) {
+    const all = nodes.filter((n) => !view(n).hidden).map((n) => [n._x - 2, n._y - 2, n._x + W + 2, n._y + H + 2]);
+    let total = 0; const seg = [];
+    for (let i = 1; i < pts.length; i++) { const l = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seg.push(l); total += l; }
+    const at = (d) => { let i = 0; while (i < seg.length - 1 && d > seg[i]) { d -= seg[i]; i++; }
+      const r = seg[i] ? d / seg[i] : 0, a = pts[i], b = pts[i + 1] || a; return [a[0] + (b[0] - a[0]) * r, a[1] + (b[1] - a[1]) * r]; };
+    const free = (p) => !all.some((bx) => p[0] + 11 > bx[0] && p[0] - 11 < bx[2] && p[1] + 11 > bx[1] && p[1] - 11 < bx[3])
+      && !placed.some((q) => Math.abs(q[0] - p[0]) < 24 && Math.abs(q[1] - p[1]) < 24);
+    for (let f = 0.5, s = 0; s < 40; s++) { const d = total * Math.min(0.95, Math.max(0.05, f)); const p = at(d); if (free(p)) return p;
+      f = 0.5 + (s % 2 ? -1 : 1) * Math.ceil((s + 1) / 2) * 0.025; }
+    return at(total / 2);
+  }
+  function activeLabel(w) {
+    gActive.textContent = ""; if (!w || !w.text) return;
+    const txt = w.text.length > 44 ? w.text.slice(0, 43) + "…" : w.text, tw = txt.length * 6.7 + 12;
+    let x = Math.min(Math.max(4, w.pos[0] - tw / 2), SW - tw - 4), y = w.pos[1] - 34;
+    if (y < 2) y = w.pos[1] + 14;
+    const g = el("g", {class: "wlabel active"}, gActive);
+    el("rect", {x: x, y: y, width: tw, height: 20, rx: 4}, g);
+    el("text", {x: x + 6, y: y + 14}, g).textContent = txt;
+  }
+  // ---------- UI ----------
+  function buildModes() {
+    const box = $("modes"); box.textContent = "";
+    modes.forEach((m) => { const b = document.createElement("button"); b.type = "button"; b.textContent = m;
+      b.setAttribute("aria-pressed", String(m === state.mode)); b.addEventListener("click", () => setMode(m)); box.appendChild(b); });
+  }
+  function buildFlows() {
+    const nav = $("flows"); nav.textContent = "";
+    visibleFlows().forEach((f, i) => { const b = document.createElement("button"); b.type = "button";
+      b.textContent = `${i + 1}. ${f.title}`; b.setAttribute("aria-pressed", String(f.id === state.flow));
+      b.addEventListener("click", () => setFlow(f.id)); nav.appendChild(b); });
+  }
+  function setMode(m) { state.mode = m; stop(); buildModes();
+    if (state.flow && !visibleFlows().some((f) => f.id === state.flow)) state.flow = null;
+    if (!state.flow && visibleFlows()[0]) state.flow = visibleFlows()[0].id;
+    state.step = -1; render(); announce(`Modo ${m}`); }
+  function setFlow(id) { stop(); state.flow = id; state.step = -1; render(); announce(`Flujo ${flowById[id].title}`); }
+  function render() { drawNodes(); drawWires(); buildFlows(); buildSteplist(); applyStep(); syncHash(); legend(); }
+  function buildSteplist() {
+    const ol = $("steplist"); ol.textContent = "";
+    const f = flowById[state.flow]; if (!f) return;
+    f.steps.forEach((s, i) => { const li = document.createElement("li");
+      li.innerHTML = `<strong>${esc(s.title || s.label || "")}</strong> <span class="step-route">${esc(s.from)} → ${esc(s.to)}</span>${s.desc ? "<br>" + esc(s.desc) : ""}`;
+      li.addEventListener("click", () => { stop(); state.step = i; applyStep(); }); ol.appendChild(li); });
+  }
+  function applyStep() {
+    const f = flowById[state.flow];
+    const n = f ? f.steps.length : 0;
+    $("bar").style.width = n ? `${((state.step + 1) / n) * 100}%` : "0";
+    wireEls.forEach((w, i) => { if (!w) return;
+      w.path.classList.toggle("active", i === state.step); w.label.classList.toggle("active", i === state.step);
+      w.path.classList.toggle("ghost", state.step >= 0 && i > state.step);
+      w.path.setAttribute("marker-end", `url(#arr-${i === state.step ? "active" : ((f.steps[i].kind || "sync") === "sync" ? "neutro" : "async")})`); });
+    Object.values(nodeEls).forEach((g) => g.classList.remove("hit"));
+    gActive.textContent = "";
+    if (!f || state.step < 0) { $("panel").innerHTML = f ? `<h2>${esc(f.title)}</h2>${f.desc ? `<p>${esc(f.desc)}</p>` : ""}<p>${n} pasos. Pulsa ▶ o →.</p>${f.source ? `<p class="step-route">Fuente: ${esc(f.source)}</p>` : ""}` : "<p>Sin flujos.</p>"; packet.setAttribute("cx", -20); syncHash(); return; }
+    const s = f.steps[state.step];
+    [s.from, s.to].forEach((id) => nodeEls[id] && nodeEls[id].classList.add("hit"));
+    const chips = (s.chips || []).map((c) => `<span class="chip${/^(SEC|THR)-/.test(c) ? " sec" : ""}">${esc(c)}</span>`).join("")
+      + (s.error ? '<span class="chip err">ruta de error</span>' : "");
+    const refs = (s.refs || []).map((r) => `<span class="chip">${esc(r)}</span>`).join("");
+    $("panel").innerHTML = `<h2>${state.step + 1}/${n} · ${esc(s.title || s.label || "")}</h2>
+      <div class="step-route">${esc(s.from)} → ${esc(s.to)}${s.label ? " · " + esc(s.label) : ""}${s.kind && s.kind !== "sync" ? " · " + esc(s.kind) : ""}</div>
+      ${s.desc ? `<p>${esc(s.desc)}</p>` : ""}${chips || refs ? `<div class="chips">${chips}${refs}</div>` : ""}
+      ${s.payload ? `<pre class="payload">${esc(s.payload)}</pre>` : ""}`;
+    animatePacket(wireEls[state.step]);
+    activeLabel(wireEls[state.step]);
+    announce(`Paso ${state.step + 1} de ${n}: ${s.title || s.label || ""}`);
+    syncHash();
+  }
+  let anim = null;
+  function animatePacket(w) {
+    if (anim) cancelAnimationFrame(anim);
+    if (!w || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) { packet.setAttribute("cx", -20); return; }
+    const pts = w.pts, segs = []; let total = 0;
+    for (let i = 1; i < pts.length; i++) { const l = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); segs.push(l); total += l; }
+    const t0 = performance.now(), dur = 900;
+    const tick = (t) => { let d = Math.min(1, (t - t0) / dur) * total, i = 0;
+      while (i < segs.length - 1 && d > segs[i]) { d -= segs[i]; i++; }
+      const r = segs[i] ? d / segs[i] : 0, a = pts[i], b = pts[i + 1] || a;
+      packet.setAttribute("cx", a[0] + (b[0] - a[0]) * r); packet.setAttribute("cy", a[1] + (b[1] - a[1]) * r);
+      if (t - t0 < dur) anim = requestAnimationFrame(tick); };
+    anim = requestAnimationFrame(tick);
+  }
+  function step(d) { const f = flowById[state.flow]; if (!f) return; state.step = Math.max(-1, Math.min(f.steps.length - 1, state.step + d)); applyStep(); }
+  function play() { const f = flowById[state.flow]; if (!f) return; if (state.playing) return stop();
+    state.playing = true; $("play").textContent = "⏸ Pausa"; $("play").classList.add("on");
+    if (state.step >= f.steps.length - 1) state.step = -1;
+    const go = () => { if (state.step >= f.steps.length - 1) return stop(); step(1); state.timer = setTimeout(go, ARCH.stepMs || 2200); }; go(); }
+  function stop() { state.playing = false; clearTimeout(state.timer); const b = $("play"); if (b) { b.textContent = "▶ Reproducir"; b.classList.remove("on"); } }
+  function showNode(id) {
+    const n = byId[id]; if (!n) return; const v = view(n);
+    const f = flowById[state.flow];
+    const inSteps = f ? f.steps.map((s, i) => [s, i]).filter(([s]) => s.from === id || s.to === id) : [];
+    $("panel").innerHTML = `<h2>${esc(n.id)} · ${esc(v.label)}</h2>${v.tech ? `<div class="step-route">${esc(v.tech)}</div>` : ""}
+      ${v.status ? `<div class="chips"><span class="chip">${esc(STATUS_NAME[v.status])} en ${esc(state.mode)}</span></div>` : ""}
+      ${v.detail ? `<p>${esc(v.detail)}</p>` : ""}${(n.refs || []).length ? `<div class="chips">${n.refs.map((r) => `<span class="chip">${esc(r)}</span>`).join("")}</div>` : ""}
+      ${inSteps.length ? `<p>Participa en los pasos: ${inSteps.map(([s, i]) => i + 1).join(", ")} de «${esc(f.title)}».</p>` : ""}`;
+    focusNode(id);
+  }
+  function focusNode(id) {
+    state.focus = id;
+    const f = flowById[state.flow];
+    const related = new Set([id]);
+    if (f) f.steps.forEach((s) => { if (s.from === id) related.add(s.to); if (s.to === id) related.add(s.from); });
+    Object.entries(nodeEls).forEach(([k, g]) => g.classList.toggle("dim", !!id && !related.has(k)));
+    wireEls.forEach((w, i) => { if (!w) return; const s = f.steps[i]; const on = !id || s.from === id || s.to === id;
+      w.path.classList.toggle("dim", !on); w.label.classList.toggle("dim", !on); });
+  }
+  function legend() {
+    const used = new Set(nodes.map((n) => view(n).role || "servicio"));
+    const st = new Set(nodes.map((n) => view(n).status).filter(Boolean));
+    const color = {canal: "--neutro", borde: "--neutro", servicio: "--neutro", foco: "--foco", mensajeria: "--neutro",
+      datos: "--datos", externo: "--ext", seguridad: "--seg", observabilidad: "--neutro"};
+    let h = "<strong>Leyenda:</strong>";
+    used.forEach((r) => { h += `<span><i class="sw" style="border-color:var(${color[r] || "--neutro"})${r === "externo" ? ";border-style:dashed" : r === "mensajeria" ? ";border-style:dotted" : ""}"></i>${esc(ROLE_NAME[r] || r)}</span>`; });
+    st.forEach((s) => { h += `<span><i class="sw" style="border-color:var(--${s === "modificado" ? "mod" : s})${s === "retirado" ? ";border-style:dashed" : ""}"></i>${esc(STATUS_NAME[s])}</span>`; });
+    h += '<span><i class="ln"></i>Síncrono</span><span><i class="ln dash"></i>Asíncrono / respuesta</span>';
+    (ARCH.zones || []).some((z) => z.kind === "trust") && (h += '<span><i class="sw" style="border-color:var(--seg);border-style:dashed"></i>Frontera de confianza</span>');
+    $("legend").innerHTML = h;
+  }
+  function announce(t) { $("announce").textContent = t; }
+  function syncHash() { const p = new URLSearchParams(); if (state.mode) p.set("modo", state.mode); if (state.flow) p.set("flujo", state.flow);
+    if (state.step >= 0) p.set("paso", state.step + 1); const h = "#" + p.toString(); if (location.hash !== h) history.replaceState(null, "", h); }
+  function readHash() { const p = new URLSearchParams(location.hash.slice(1));
+    if (p.get("modo") && modes.indexOf(p.get("modo")) >= 0) state.mode = p.get("modo");
+    if (p.get("flujo") && flowById[p.get("flujo")]) state.flow = p.get("flujo");
+    const s = parseInt(p.get("paso"), 10); if (s > 0) state.step = s - 1; }
+
+  $("prev").addEventListener("click", () => { stop(); step(-1); });
+  $("next").addEventListener("click", () => { stop(); step(1); });
+  $("reset").addEventListener("click", () => { stop(); state.step = -1; applyStep(); });
+  $("play").addEventListener("click", play);
+  $("theme").addEventListener("click", () => { const r = document.documentElement;
+    const dark = r.dataset.theme ? r.dataset.theme === "dark" : (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+    r.dataset.theme = dark ? "light" : "dark"; });
+  $("search").addEventListener("input", (e) => { const q = e.target.value.trim().toLowerCase();
+    if (!q) return focusNode(null);
+    const n = nodes.find((x) => x.id.toLowerCase().includes(q) || String(view(x).label || "").toLowerCase().includes(q));
+    if (n) showNode(n.id); });
+  document.addEventListener("keydown", (e) => {
+    if (e.target && /input|textarea/i.test(e.target.tagName)) return;
+    if (e.key === "ArrowRight") { stop(); step(1); } else if (e.key === "ArrowLeft") { stop(); step(-1); }
+    else if (e.key === " ") { e.preventDefault(); play(); } else if (e.key === "Home") { stop(); state.step = -1; applyStep(); }
+    else if (e.key === "Escape") { focusNode(null); applyStep(); }
+    else if (e.key.toLowerCase() === "t") $("theme").click();
+    else if (e.key.toLowerCase() === "m" && modes.length) setMode(modes[(modes.indexOf(state.mode) + 1) % modes.length]);
+    else if (/^[1-9]$/.test(e.key)) { const f = visibleFlows()[+e.key - 1]; if (f) setFlow(f.id); }
+  });
+
+  document.title = ARCH.title || document.title;
+  $("title").textContent = ARCH.title || "Diagrama interactivo";
+  $("subtitle").textContent = ARCH.subtitle || "";
+  $("foot").textContent = ARCH.footer || "";
+  readHash();
+  if (!state.flow && visibleFlows()[0]) state.flow = visibleFlows()[0].id;
+  buildModes();
+  render();
+  window.archValidate = () => issues.slice();
+  if (issues.length && window.console) console.warn("archValidate:", issues);
+})();
+</script>
+</body>
+</html>

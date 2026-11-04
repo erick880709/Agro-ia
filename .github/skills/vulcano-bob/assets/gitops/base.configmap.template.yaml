@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: __APP_NAME__-config
+data: {}
+# Agregar aquí la configuración no sensible del proyecto (ver
+# infrastructure-as-code/08-secrets-management.md, tabla "Configuración no sensible").
+# Los secretos NUNCA van en este ConfigMap ni en el repositorio de manifiestos: se inyectan
+# en runtime desde decisions.secrets_manager (Key Vault / AWS Secrets Manager / Vault) mediante
+# un CSI driver o External Secrets Operator — fuera del alcance de lo que Bob genera aquí.

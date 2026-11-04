@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OrderPayload",
+  "type": "object",
+  "required": ["order_id", "account_id", "total"],
+  "properties": {
+    "order_id": {"type": "string"},
+    "account_id": {"type": "string"},
+    "total": {"type": "string", "pattern": "^-?\\d+\\.\\d{2}$"}
+  }
+}

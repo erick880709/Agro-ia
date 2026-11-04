@@ -1,0 +1,38 @@
+{
+  "reportFormat": "CTRF",
+  "specVersion": "0.1.0",
+  "generatedBy": "node-test (fixture ficticia)",
+  "results": {
+    "tool": {
+      "name": "node-test"
+    },
+    "summary": {
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "pending": 0,
+      "skipped": 0,
+      "other": 0,
+      "start": 1791317717856,
+      "stop": 1791317719570
+    },
+    "tests": [
+      {
+        "name": "UT-01 [critical] aplica el descuento por volumen",
+        "status": "passed",
+        "duration": 3,
+        "suite": [
+          "descuentos"
+        ]
+      },
+      {
+        "name": "UT-02 [high] redondea el total a dos decimales",
+        "status": "passed",
+        "duration": 2,
+        "suite": [
+          "descuentos"
+        ]
+      }
+    ]
+  }
+}

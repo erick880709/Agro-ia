@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+}
+
+group = '{{GROUP_ID}}'
+version = '1.0.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    karateVersion = '{{KARATE_VERSION}}'
+}
+
+dependencies {
+    testImplementation "io.karatelabs:karate-junit5:${karateVersion}"
+}
+
+sourceSets {
+    test {
+        resources {
+            // Incluye los archivos .feature, .json y .js guardados junto a las clases de prueba.
+            srcDir file('src/test/java')
+            exclude '**/*.java'
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+    // En integración continua ejecuta solo SuiteTest. Usa los ejecutores por dominio desde el IDE.
+    filter {
+        includeTestsMatching '*SuiteTest'
+    }
+    systemProperty 'karate.options', System.properties.getProperty('karate.options')
+    systemProperty 'karate.env', System.properties.getProperty('karate.env')
+    systemProperty 'file.encoding', 'UTF-8'
+    outputs.upToDateWhen { false }
+}

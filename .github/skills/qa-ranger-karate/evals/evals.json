@@ -1,0 +1,90 @@
+{
+  "skill_name": "qa-ranger-karate",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Tengo este OpenAPI del microservicio de transferencias (adjunto). Genérame la suite de pruebas Karate completa: camino feliz, validaciones, seguridad y lo que haga falta. El proyecto está en Java 21 con Maven.",
+      "expected_output": "Proyecto v2 (karate-junit6 + junit-jupiter) generado con scaffold; esquema traducido del OpenAPI con marcadores (#uuid, #regex enum, ##string para opcionales); escenarios 201 mínimo/completo; outlines de valores inválidos (límites de monto, pattern de cuentas, maxLength) y de campos obligatorios; 422, 404, 401; helper @ignore para crear datos; supuestos de datos declarados; linter sin hallazgos.",
+      "files": [
+        "evals/files/transferencias-openapi.yaml"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-karate",
+        "task": "implement",
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Revisa esta feature de mi equipo y dime qué está mal y cómo corregirlo. El proyecto ya migró a Karate 2.",
+      "expected_output": "Ejecuta lint_features.py; reporte priorizado Bloqueante/Mayor/Menor con código corregido; detecta secretos en texto plano, SQL concatenado, escenario sin status ni match, @parallel=false ignorado en v2, URL hardcodeada, login por escenario, { id: pagoId } sin #(), Thread.sleep, print response, nombre genérico; y en revisión manual la dependencia entre escenarios (pagoId del escenario 1 usado en el 2).",
+      "files": [
+        "evals/files/pagos-mala.feature"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-karate",
+        "task": "review",
+        "protectFixtures": true,
+        "status": "completed"
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "Necesito migrar nuestra suite de Karate 1.5.2 a la versión 2. Tenemos un runner con com.intuit.karate.Runner, varias features con @parallel=false, una simulación Gatling y un script de Jenkins que lee karate-summary.json. ¿Qué cambio y en qué orden? Requisitos del plan: MIG-01 preservar escenarios; MIG-02 preservar exclusiones y serialización; MIG-03 preservar métricas del scraper; MIG-04 conservar rollback. Entrega un plan, no código implementado ni ejecución.",
+      "expected_output": "Plan por fases del recurso 11: inventario con greps; dependencias (karate-junit6 + junit-jupiter, Java 21, surefire 3.2.5+, --add-opens en Gatling); @parallel=false -> @lock (advertir que se ignora en silencio); reportes opt-in y migración del scraper a karate-events.jsonl con jq; variables Gatling con prefijo __gatling/__karate; runner nativo con SuiteResult/getScenarioFailedCount; validación comparativa y rollback.",
+      "files": [],
+      "oracle": {
+        "capabilityId": "qa-ranger-karate",
+        "task": "design",
+        "protectFixtures": true,
+        "status": "completed",
+        "requirements": [
+          "MIG-01",
+          "MIG-02",
+          "MIG-03",
+          "MIG-04"
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "prompt": "Implementa una prueba de API de transferencia desde el contrato adjunto. No hay servicio desplegado ni credenciales; conserva los artefactos que puedas producir y entrega los pendientes sin afirmar ejecución.",
+      "expected_output": "Conservar el encargo, producir artefactos reales y registrar las limitaciones; el harness comprueba contrato y efectos observables.",
+      "files": [
+        "../ranger/evals/files/requisitos-transferencias.md"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-karate",
+        "task": "implement",
+        "status": [
+          "partial",
+          "failed"
+        ],
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 5,
+      "prompt": "Ejecuté UI con Karate y solo dispongo del screenshot y un reporte HTML. El encargo exige video, trace y screenshot por caso, sin excepciones. Identifica qué falta para cerrar la ejecución; no inventes archivos ni una excepción.",
+      "expected_output": "Conservar el encargo, producir artefactos reales y registrar las limitaciones; el harness comprueba contrato y efectos observables.",
+      "files": [],
+      "oracle": {
+        "capabilityId": "qa-ranger-karate",
+        "task": "execute",
+        "status": [
+          "partial",
+          "failed"
+        ],
+        "evidencePolicy": {
+          "level": "browser",
+          "required": [
+            "video",
+            "trace",
+            "screenshot"
+          ],
+          "override": null
+        }
+      }
+    }
+  ]
+}

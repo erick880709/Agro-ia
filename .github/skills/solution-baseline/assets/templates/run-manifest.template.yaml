@@ -1,0 +1,20 @@
+schema_version: 1
+run_id: sb-example-001
+solution_id: example-solution
+status: discovered
+created_at: "2026-01-01T00:00:00Z"
+updated_at: "2026-01-01T00:00:00Z"
+blueprint:
+  path: resources/.solution-baseline/solution-blueprint.yaml
+dag:
+  nodes: []
+  barriers: []
+catalog_resolutions: []
+archetype_builds: []
+instances: []
+leases: []
+steps: []
+decisions: []
+blockers: []
+architecture_gaps: []
+handoff: {}

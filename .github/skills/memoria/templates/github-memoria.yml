@@ -1,0 +1,36 @@
+# Memoria del proyecto: valida el grafo de conocimiento y regenera el índice.
+# Instalado por `memoria init` en el repositorio destino. Valida la integridad de
+# .memoria/graph.json en cada push y PR, y confirma que el índice humano esté al día.
+name: Memoria
+
+on:
+  push:
+    branches: ["main", "master", "develop"]
+    paths:
+      - ".memoria/**"
+  pull_request:
+    paths:
+      - ".memoria/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-memory:
+    name: Validar grafo de memoria
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validar graph.json
+        run: node .claude/skills/memoria/scripts/memoria.mjs validate
+
+      - name: Verificar índice al día
+        run: node .claude/skills/memoria/scripts/memoria.mjs report

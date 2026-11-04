@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.invalid/solution-baseline/concurrency-policy.schema.json",
+  "title": "Solution Baseline Concurrency Policy",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "max_parallel_agents",
+    "max_parallel_readers",
+    "max_parallel_writers",
+    "max_writers_per_repository",
+    "max_catalog_writers"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "max_parallel_agents": { "type": "integer", "minimum": 1 },
+    "max_parallel_readers": { "type": "integer", "minimum": 1 },
+    "max_parallel_writers": { "type": "integer", "minimum": 1 },
+    "max_writers_per_repository": { "type": "integer", "minimum": 1 },
+    "max_catalog_writers": { "type": "integer", "minimum": 1 }
+  },
+  "additionalProperties": false
+}

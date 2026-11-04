@@ -1,0 +1,49 @@
+{
+  "reportFormat": "CTRF",
+  "specVersion": "0.1.0",
+  "generatedBy": "playwright (fixture ficticia)",
+  "results": {
+    "tool": {
+      "name": "playwright"
+    },
+    "summary": {
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "pending": 0,
+      "skipped": 0,
+      "other": 0,
+      "start": 1791317717856,
+      "stop": 1791317719570
+    },
+    "tests": [
+      {
+        "name": "TC-01 [critical] login",
+        "status": "passed",
+        "duration": 900,
+        "retries": 0,
+        "suite": [
+          "chromium",
+          "login.spec.ts"
+        ],
+        "attachments": [
+          {
+            "name": "video",
+            "contentType": "video/webm",
+            "path": "resources/qa/test-results/run-ranger/login-TC-01-chromium/video.webm"
+          },
+          {
+            "name": "trace",
+            "contentType": "application/zip",
+            "path": "resources/qa/test-results/run-ranger/login-TC-01-chromium/trace.zip"
+          },
+          {
+            "name": "screenshot",
+            "contentType": "image/png",
+            "path": "resources/qa/test-results/run-ranger/login-TC-01-chromium/screenshot.png"
+          }
+        ]
+      }
+    ]
+  }
+}

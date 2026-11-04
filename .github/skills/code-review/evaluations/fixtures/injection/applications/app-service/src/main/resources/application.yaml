@@ -1,0 +1,9 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: accounts-ms
+  r2dbc:
+    url: r2dbc:postgresql://accounts-db.prod.internal:5432/accounts
+    username: accounts_app
+    password: "Bc0l-Pr0d-2026!xQ"

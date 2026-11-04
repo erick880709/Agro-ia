@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vulcano DevSecOps Strategist"
+  short_description: "Diseña DevSecOps, calidad, IaC y observabilidad"
+  default_prompt: "Usa $vulcano para diseñar y documentar DevSecOps, inspección y deuda técnica, IaC y observabilidad de este proyecto."

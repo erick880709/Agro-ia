@@ -1,0 +1,26 @@
+workload: api
+language: python
+version_scheme: pep440
+runtime: 3.12.10
+framework: fastapi
+architecture_style: modular
+capabilities:
+  - typed-openapi
+allowed_namespaces:
+  - example-org
+allowed_sources:
+  - https://example.invalid/example-org/solution-archetypes.git
+allowed_trust:
+  - official
+  - approved
+allowed_licenses:
+  - Internal
+allowed_permissions: []
+required_exclusions:
+  - cicd
+  - iac
+  - containers
+  - cloud-provisioning
+  - deployment
+allow_deprecated: false
+allow_experimental: false

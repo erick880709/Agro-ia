@@ -1,0 +1,68 @@
+{
+  "skill_name": "effort-estimator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Tengo 4 HU con 12, 7, 9 y 10 puntos de función. Las ejecuta un senior, jornada de 8,4 h, sprints de 2 semanas, 2 desarrolladores. Dame horas y sprints.",
+      "expected_output": "Usa Modo PF, ejecuta el script, reporta horas por rol, rango con P80 y 2 sprints; declara PDR de benchmark (10 h/PF) como supuesto.",
+      "assertions": [
+        "Usa scripts/calcular_estimacion.py con modo pf",
+        "Horas efectivas por día = 6,3 (8,4 x 0,75)",
+        "Presenta P80 como cifra comprometida",
+        "Declara que la PDR es de benchmark y debe calibrarse"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Convierte este backlog de 40 story points a horas.",
+      "expected_output": "No aplica una tabla fija; pide horas/SP calibradas o propone contar PF.",
+      "assertions": [
+        "No convierte SP a horas sin horas_por_sp calibradas",
+        "Pregunta por datos históricos del equipo o propone Modo PF"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Estima esta necesidad: el banco quiere un portal para que el cliente consulte y descargue su historial de transacciones de 12 meses integrando con el core.",
+      "expected_output": "Pregunta Paso 0; marca que no pasó por epicureo; fase concepto; Modo Épica talla M; advertencia de ROM.",
+      "assertions": [
+        "Pregunta metodología, iteración, capacidad y perfil en un solo turno",
+        "Marca en supuestos que la necesidad no pasó por epicureo",
+        "Usa fase_definicion concepto (buffer P80 aprox. 43%)"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "¿Cuánto ahorramos con IA en una HU de lógica regulatoria de 30 horas de desarrollo?",
+      "expected_output": "Ahorro bajo (~2% bruto, con decaimiento 80% => ~1,6%), aplicado solo a desarrollo, con advertencia de no presentar la IA como gratis.",
+      "assertions": [
+        "Aplica el factor SDD solo a horas de desarrollo",
+        "Reporta ahorro cercano a 1,6-2%",
+        "No afirma ahorros de 60-70%"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Genera la propuesta en PPTX para el cliente.",
+      "expected_output": "PPTX desde la plantilla oficial con paleta del manual y Reddit Sans, cifras idénticas al JSON.",
+      "assertions": [
+        "Usa assets/branding/Plantilla_PPT_Corporativa_PersonalSoft.pptx",
+        "Usa colores 0072BC/0E337C/132436/FFFFFF",
+        "Pasa validate.py --original",
+        "Las cifras coinciden con el JSON del motor"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Adjunto la Taxonomía de Costos de Bancolombia, diligénciala con la estimación.",
+      "expected_output": "Usa diligenciar_taxonomia_bancolombia.py, solo pestaña Esfuerzo & Condiciones, bloques por fase, total igual al motor.",
+      "assertions": [
+        "No usa openpyxl para guardar el formato",
+        "Conserva las 12 listas desplegables y el logo",
+        "E11 del formato = horas más probables del motor",
+        "Reporta margen P80 para Costos Adicionales & Riesgos",
+        "Pide datos de ficha técnica que no conoce en lugar de inventarlos"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "aws",
+  "kind": "cloud",
+  "status": "implemented",
+  "required_provider_any": ["aws"],
+  "backend": "s3",
+  "state_locking": "s3_lockfile",
+  "bootstrap_template": "assets/aws-backend.bootstrap.template.sh",
+  "artifact_overrides": {
+    "bootstrap-backend": {
+      "contract": {
+        "inputs": ["AWS_REGION", "TFSTATE_BUCKET", "TFSTATE_KMS_KEY_ID"],
+        "outputs": ["state_bucket", "state_key_prefix", "state_lockfile"]
+      }
+    }
+  },
+  "reference": "references/aws-terraform.md"
+}

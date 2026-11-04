@@ -1,6 +1,6 @@
 {
   "schema": "memoria/v1",
-  "updatedAt": "2026-11-04T13:25:31.642Z",
+  "updatedAt": "2026-11-04T13:49:19.648Z",
   "nodes": [
     {
       "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
@@ -166,6 +166,21 @@
       "source": "manual",
       "createdAt": "2026-11-04T13:25:31.628Z",
       "updatedAt": "2026-11-04T13:25:31.633Z"
+    },
+    {
+      "id": "mem-20261104134919-6aa278-builder-actualizacion-documentacion-funcional-y-tecnica-rfp",
+      "type": "avance",
+      "status": "completado",
+      "skill": "builder",
+      "title": "Actualizacion documentacion funcional y tecnica (RFP-003) y HTML",
+      "summary": "Actualizada DOCUMENTACION-PLATAFORMA.md (secciones 5-10: motor de calidad 10 estados, calibracion, grados de evidencia, seccion de evidencia en reportes, endpoints /iot y role checks) y generado DOCUMENTACION-PLATAFORMA.html autocontenido. Commit 9bc9180.",
+      "files": [
+        "DOCUMENTACION-PLATAFORMA.md"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T13:49:19.640Z",
+      "updatedAt": "2026-11-04T13:49:19.644Z"
     }
   ],
   "edges": []

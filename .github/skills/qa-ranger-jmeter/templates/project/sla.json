@@ -1,0 +1,11 @@
+{
+  "_comentario": "Criterios de aceptación por transacción (Transaction Controllers). Ajustar a los acordados con negocio; ver resources/02 §6 y 05 §3.",
+  "global": { "error_pct_max": 1.0 },
+  "transacciones": {
+    "01_Login":                  { "p95_ms": 800,  "p99_ms": 1500, "error_pct_max": 0.5 },
+    "02_ConsultarSaldo":         { "p95_ms": 500,  "p99_ms": 1000, "error_pct_max": 0.5 },
+    "03_Transferir":             { "p95_ms": 1200, "p99_ms": 2500, "error_pct_max": 0.1 },
+    "04_ConsultarTransferencia": { "p95_ms": 500,  "p99_ms": 1000, "error_pct_max": 0.5 }
+  },
+  "regresion": { "p95_tolerancia_pct": 10, "p95_min_diferencia_ms": 50 }
+}

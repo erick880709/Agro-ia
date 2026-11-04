@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://personalsoft.example/schemas/presentacion-arquitectura-1.0.json",
+  "title": "Manifiesto de presentación para Comité de Arquitectura",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schemaVersion",
+    "project",
+    "scenario",
+    "review",
+    "decisionRequest",
+    "executiveSummary",
+    "workPerformed",
+    "drivers",
+    "alternatives",
+    "selection",
+    "architecture",
+    "security",
+    "validation",
+    "risks",
+    "sources",
+    "conflicts"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "project": {
+      "type": "object",
+      "required": ["name", "version", "date", "authors"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "date": { "type": "string", "format": "date" },
+        "authors": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "scenario": { "enum": ["A", "B", "C"] },
+    "review": {
+      "type": "object",
+      "required": ["status", "blockingFindings", "approvalEligible"],
+      "properties": {
+        "status": { "enum": ["Cumple", "Cumple con observaciones", "No cumple"] },
+        "auditVerdict": { "enum": ["Apto", "Apto con observaciones", "No apto"] },
+        "coherenceValidator": {
+          "type": "object",
+          "required": ["status", "command", "errors", "warnings"],
+          "properties": {
+            "status": { "enum": ["Correcto", "Con advertencias", "Fallido", "No ejecutado"] },
+            "command": { "type": "string", "minLength": 1 },
+            "errors": { "type": "integer", "minimum": 0 },
+            "warnings": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "blockingFindings": { "type": "array", "items": { "$ref": "#/$defs/item" } },
+        "approvalEligible": { "type": "boolean" }
+      }
+    },
+    "decisionRequest": {
+      "type": "object",
+      "required": ["question", "authority", "options"],
+      "properties": {
+        "question": { "type": "string", "minLength": 1 },
+        "authority": { "type": "string", "minLength": 1 },
+        "options": { "type": "array", "minItems": 2, "items": { "type": "string", "minLength": 1 } },
+        "conditions": { "type": "array", "items": { "$ref": "#/$defs/item" } }
+      }
+    },
+    "executiveSummary": {
+      "type": "object",
+      "required": ["problem", "recommendation", "value", "cost", "timeline"],
+      "properties": {
+        "problem": { "type": "string", "minLength": 1 },
+        "recommendation": { "type": "string", "minLength": 1 },
+        "value": { "type": "string", "minLength": 1 },
+        "cost": { "type": "string", "minLength": 1 },
+        "timeline": { "type": "string", "minLength": 1 }
+      }
+    },
+    "workPerformed": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/item" } },
+    "drivers": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/item" } },
+    "alternatives": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/item" } },
+    "selection": { "$ref": "#/$defs/section" },
+    "archetype": { "$ref": "#/$defs/section" },
+    "uncertainties": { "type": "array", "items": { "$ref": "#/$defs/item" } },
+    "pocs": { "type": "array", "items": { "$ref": "#/$defs/item" } },
+    "architecture": { "$ref": "#/$defs/section" },
+    "criticalFlows": { "type": "array", "items": { "$ref": "#/$defs/item" } },
+    "data": { "$ref": "#/$defs/section" },
+    "deployment": { "$ref": "#/$defs/section" },
+    "tactics": { "type": "array", "items": { "$ref": "#/$defs/item" } },
+    "security": { "$ref": "#/$defs/section" },
+    "decisions": { "type": "array", "items": { "$ref": "#/$defs/item" } },
+    "validation": { "$ref": "#/$defs/section" },
+    "risks": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/item" } },
+    "economics": { "$ref": "#/$defs/section" },
+    "roadmap": { "type": "array", "items": { "$ref": "#/$defs/item" } },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "path"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "path": { "type": "string", "minLength": 1 },
+          "section": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" }
+        }
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          { "$ref": "#/$defs/item" },
+          {
+            "type": "object",
+            "required": ["severity", "status"],
+            "properties": {
+              "severity": { "enum": ["Bloqueante", "Alta", "Media", "Baja"] },
+              "status": { "enum": ["Abierto", "Resuelto", "Aceptado"] }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "section": { "type": "string" }
+      }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["title", "status", "source"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string" },
+        "status": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string" },
+        "evidence": { "type": "string" },
+        "source": { "$ref": "#/$defs/sourceRef" },
+        "diagram": { "type": "string" }
+      }
+    },
+    "section": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["summary", "status", "source"],
+      "properties": {
+        "summary": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "minLength": 1 },
+        "source": { "$ref": "#/$defs/sourceRef" },
+        "items": { "type": "array", "items": { "$ref": "#/$defs/item" } },
+        "diagrams": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+# Pipeline YAML genérico. Para el stage "Acceptance Test" de un release clásico con las tareas
+# corporativas (RobotFramework-DBLibrary, AutomationUse, Publish Report) ver resources/08.
+trigger: none
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  QA_RUN_ID: run-$(Build.BuildId)-$(System.JobAttempt)
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: "3.12"
+  - script: python -m pip install -r requirements.txt
+    displayName: Instalar dependencias
+__AZ_EXTRA_STEP__
+  - script: ./ejecutar.sh __ENV__
+    displayName: Ejecutar Robot Framework
+    # Los secretos NO llegan solos al proceso: se mapean explícitamente.
+    env:
+__AZ_SECRETS__
+  - task: PublishTestResults@2
+    condition: always()
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: resources/qa/test-results/**/xunit.xml
+      testRunTitle: Robot Framework $(QA_RUN_ID)
+  - task: PublishPipelineArtifact@1
+    condition: always()
+    inputs:
+      targetPath: resources/qa
+      artifact: robot-$(QA_RUN_ID)

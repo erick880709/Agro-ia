@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "adapters": [
+    {
+      "id": "react-vite",
+      "workloads": ["web", "library"],
+      "owner": "frontend-platform",
+      "detect": {
+        "files_any": ["vite.config.ts", "vite.config.js", "vite.config.mts", "vite.config.mjs"],
+        "dependencies_any": ["react", "vite"]
+      },
+      "native_engines": ["nx", "npm-create-vite", "copier"],
+      "validations": [
+        { "id": "lint", "command": ["npm", "run", "lint"], "when_script_exists": "lint" },
+        { "id": "test", "command": ["npm", "run", "test"], "when_script_exists": "test" },
+        { "id": "build", "command": ["npm", "run", "build"], "when_script_exists": "build" },
+        { "id": "design-conformance", "command": ["npm", "run", "lint:design"], "when_script_exists": "lint:design", "optional": true },
+        { "id": "a11y", "command": ["npm", "run", "test:a11y"], "when_script_exists": "test:a11y", "optional": true }
+      ]
+    },
+    {
+      "id": "nextjs",
+      "workloads": ["web"],
+      "owner": "frontend-platform",
+      "detect": {
+        "files_any": ["next.config.js", "next.config.mjs", "next.config.ts"],
+        "dependencies_any": ["next"]
+      },
+      "native_engines": ["create-next-app", "nx", "copier"],
+      "validations": [
+        { "id": "lint", "command": ["npm", "run", "lint"], "when_script_exists": "lint" },
+        { "id": "test", "command": ["npm", "run", "test"], "when_script_exists": "test", "optional": true },
+        { "id": "build", "command": ["npm", "run", "build"], "when_script_exists": "build" },
+        { "id": "design-conformance", "command": ["npm", "run", "lint:design"], "when_script_exists": "lint:design", "optional": true },
+        { "id": "a11y", "command": ["npm", "run", "test:a11y"], "when_script_exists": "test:a11y", "optional": true }
+      ]
+    },
+    {
+      "id": "nestjs",
+      "workloads": ["api", "worker", "integrations"],
+      "owner": "backend-platform",
+      "detect": {
+        "files_any": ["nest-cli.json"],
+        "dependencies_any": ["@nestjs/core"]
+      },
+      "native_engines": ["nest-cli", "nx", "copier"],
+      "validations": [
+        { "id": "lint", "command": ["npm", "run", "lint"], "when_script_exists": "lint" },
+        { "id": "test", "command": ["npm", "run", "test"], "when_script_exists": "test" },
+        { "id": "build", "command": ["npm", "run", "build"], "when_script_exists": "build" }
+      ]
+    },
+    {
+      "id": "fastapi",
+      "workloads": ["api", "integrations"],
+      "owner": "backend-platform",
+      "detect": {
+        "files_any": ["pyproject.toml", "requirements.txt"],
+        "dependencies_any": ["fastapi"],
+        "content_any": ["FastAPI("]
+      },
+      "native_engines": ["copier", "cookiecutter"],
+      "validations": [
+        { "id": "tests", "command": ["python", "-m", "pytest"] },
+        { "id": "lint", "command": ["python", "-m", "ruff", "check", "."], "optional": true },
+        { "id": "types", "command": ["python", "-m", "mypy", "."], "optional": true }
+      ]
+    },
+    {
+      "id": "python-worker",
+      "workloads": ["worker"],
+      "owner": "backend-platform",
+      "detect": {
+        "files_any": ["pyproject.toml", "requirements.txt"],
+        "dependencies_any": ["celery", "dramatiq", "rq"]
+      },
+      "native_engines": ["copier", "cookiecutter"],
+      "validations": [
+        { "id": "tests", "command": ["python", "-m", "pytest"] },
+        { "id": "lint", "command": ["python", "-m", "ruff", "check", "."], "optional": true }
+      ]
+    },
+    {
+      "id": "python-agent-service",
+      "workloads": ["agent"],
+      "owner": "ai-platform",
+      "detect": {
+        "files_any": ["pyproject.toml", "requirements.txt"],
+        "dependencies_any": ["openai", "semantic-kernel", "langgraph"]
+      },
+      "native_engines": ["copier", "cookiecutter"],
+      "validations": [
+        { "id": "tests", "command": ["python", "-m", "pytest"] },
+        { "id": "evals", "command": ["python", "-m", "pytest", "tests/evals"], "optional": true }
+      ]
+    },
+    {
+      "id": "dotnet-api",
+      "workloads": ["api", "worker", "integrations"],
+      "owner": "backend-platform",
+      "detect": {
+        "files_any": ["*.sln", "*.slnx", "*.csproj"],
+        "dependencies_any": ["Microsoft.AspNetCore.App"]
+      },
+      "native_engines": ["dotnet-new"],
+      "validations": [
+        { "id": "restore", "command": ["dotnet", "restore"] },
+        { "id": "build", "command": ["dotnet", "build", "--no-restore"] },
+        { "id": "test", "command": ["dotnet", "test", "--no-build"] }
+      ]
+    },
+    {
+      "id": "spring-boot",
+      "workloads": ["api", "worker", "integrations"],
+      "owner": "backend-platform",
+      "detect": {
+        "files_any": ["pom.xml", "build.gradle", "build.gradle.kts"],
+        "dependencies_any": ["spring-boot"]
+      },
+      "native_engines": ["spring-initializr", "maven-archetype", "gradle-init", "copier"],
+      "validations": [
+        { "id": "maven-test", "command": ["mvn", "test"], "optional": true },
+        { "id": "gradle-test", "command": ["gradle", "test"], "optional": true }
+      ]
+    }
+  ]
+}

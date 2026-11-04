@@ -1,0 +1,47 @@
+openapi: 3.0.3
+info: { title: Transferencias API, version: 1.0.0 }
+security: [{ oauth2: [transferencias.write] }]
+paths:
+  /v1/transferencias:
+    post:
+      operationId: crearTransferencia
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TransferenciaRequest' }
+      responses:
+        '201': { content: { application/json: { schema: { $ref: '#/components/schemas/Transferencia' } } } }
+        '400': { content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '401': {}
+        '422': { description: saldo insuficiente }
+  /v1/transferencias/{id}:
+    get:
+      operationId: consultarTransferencia
+      parameters: [{ name: id, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { content: { application/json: { schema: { $ref: '#/components/schemas/Transferencia' } } } }
+        '404': { content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+components:
+  schemas:
+    TransferenciaRequest:
+      type: object
+      required: [cuentaOrigen, cuentaDestino, monto]
+      properties:
+        cuentaOrigen: { type: string, pattern: '^[0-9]{11}$' }
+        cuentaDestino: { type: string, pattern: '^[0-9]{11}$' }
+        monto: { type: number, minimum: 1, maximum: 10000000 }
+        descripcion: { type: string, maxLength: 40 }
+    Transferencia:
+      type: object
+      required: [id, estado, monto, fechaCreacion]
+      properties:
+        id: { type: string, format: uuid }
+        estado: { type: string, enum: [PENDIENTE, APLICADA, RECHAZADA] }
+        monto: { type: number }
+        descripcion: { type: string }
+        fechaCreacion: { type: string, format: date-time }
+    Error:
+      type: object
+      required: [codigo, mensaje]
+      properties: { codigo: { type: string }, mensaje: { type: string } }

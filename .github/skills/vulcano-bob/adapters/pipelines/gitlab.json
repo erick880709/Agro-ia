@@ -1,0 +1,50 @@
+{
+  "id": "gitlab",
+  "kind": "pipeline",
+  "status": "implemented",
+  "supported_execution_backends": ["gitlab_ci"],
+  "supports_progressive_delivery": true,
+  "supports_gitops": true,
+  "supports_policy_as_code": true,
+  "supports_notifications": true,
+  "renderer": "scripts/renderers/render-gitlab.mjs",
+  "remote_operator": "vulcano-operador",
+  "pipeline_files": [
+    ".gitlab/ci/iac.yml",
+    ".gitlab/ci/drift.yml",
+    ".gitlab-ci.yml"
+  ],
+  "dora_pipeline": {
+    "template": "gitlab.dora.template.yml",
+    "path": ".gitlab/ci/dora.yml",
+    "cron_placeholder": null
+  },
+  "dora_collector_script": {
+    "template": "dora-collect.template.mjs",
+    "path": "scripts/dora-collect.mjs"
+  },
+  "artifact_overrides": {
+    "pipeline-iac": {
+      "path": ".gitlab/ci/iac.yml",
+      "contract": {
+        "inputs": ["CLOUD_OIDC_IDENTITY", "TF_STATE_CONFIGURATION"],
+        "outputs": ["tfplan-dev", "tfplan-qa", "tfplan-prod"]
+      }
+    },
+    "pipeline-drift": {
+      "path": ".gitlab/ci/drift.yml",
+      "contract": {
+        "inputs": ["CLOUD_OIDC_IDENTITY", "TF_STATE_CONFIGURATION"],
+        "outputs": ["drift-report-dev", "drift-report-qa", "drift-report-prod"]
+      }
+    },
+    "pipeline-app": {
+      "path": ".gitlab-ci.yml",
+      "contract": {
+        "inputs": ["CLOUD_OIDC_IDENTITY", "CI_BUILD_IMAGE", "DEPLOY_IMAGE", "DEPLOYMENT_CONFIGURATION"],
+        "outputs": ["app-package", "test-results", "security-results"]
+      }
+    }
+  },
+  "reference": "references/gitlab-ci.md"
+}

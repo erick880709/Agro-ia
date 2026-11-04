@@ -1,0 +1,16 @@
+schema_version: 1
+gap_id: gap-example-001
+solution_id: example-solution
+component_ids:
+  - example-api
+status: open
+category: component-boundary
+question: ¿Qué componente es propietario de la capacidad compartida?
+impact: La baseline del API queda bloqueada porque cambiaría ownership y contratos.
+requested_decision: Definir el componente propietario y actualizar la fuente arquitectónica aprobada.
+architecture_sources:
+  - resources/architecture/example.md
+evidence:
+  - path: resources/architecture/example.md
+    section: Componentes
+    summary: La responsabilidad aparece en dos componentes sin decisión de ownership.

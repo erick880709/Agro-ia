@@ -1,0 +1,7 @@
+interface:
+  display_name: "Code Review"
+  short_description: "Revisa cambios con evidencia, severidad y veredicto"
+  default_prompt: "Usa $code-review para revisar este cambio contra su spec antes de merge."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.invalid/solution-baseline/agent-assignment.schema.json",
+  "title": "Solution Baseline Agent Assignment Wave",
+  "type": "object",
+  "required": ["schema_version", "assignments"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "assignments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["agent_id", "role", "access", "scope", "resource", "status"],
+        "properties": {
+          "agent_id": { "type": "string", "minLength": 1 },
+          "role": {
+            "enum": [
+              "architecture-mapper",
+              "archetype-curator",
+              "repository-baseline-worker",
+              "baseline-validator",
+              "solution-baseline-orchestrator"
+            ]
+          },
+          "access": { "enum": ["read", "write"] },
+          "scope": { "enum": ["global", "repository", "catalog"] },
+          "resource": { "type": "string", "minLength": 1 },
+          "workspace": { "type": "string", "minLength": 1 },
+          "status": { "enum": ["planned", "scheduled", "running", "completed", "blocked", "failed"] }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "access": { "const": "write" } } },
+            "then": { "required": ["workspace"] }
+          }
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

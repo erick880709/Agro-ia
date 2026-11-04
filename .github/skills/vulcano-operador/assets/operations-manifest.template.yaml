@@ -1,0 +1,33 @@
+schema_version: 2
+project: "__PROJECT__"
+updated_at: "1970-01-01"
+source:
+  bob_manifest: "resources/.vulcano/bob-manifest.yaml"
+  bob_sha256: "0000000000000000000000000000000000000000000000000000000000000000"
+  git_commit: null
+operator_selection:
+  platform: azure_devops
+  cloud: azure
+  status: implemented
+gate:
+  status: pending
+  checked_at: null
+  blockers: []
+mode: reconcile
+target:
+  organization: null
+  project: null
+  repository: null
+  branch: null
+capabilities:
+  platform_mcp: unknown
+  cloud_mcp: unknown
+reconciliation:
+  observed_at: null
+  tool: null
+  snapshot_sha256: null
+actions: {}
+validation:
+  last_run: null
+  errors: null
+  warnings: null

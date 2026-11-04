@@ -1,0 +1,99 @@
+{
+  "skill_name": "ranger",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Este proyecto usa Cypress. Revisa su estrategia QA y recomienda mejoras. No migres herramientas ni escribas tests. Entrega un diagnóstico.",
+      "expected_output": "Entrega un diagnóstico de la estrategia QA del proyecto Cypress. Conserva la herramienta y las fuentes. No modifica código ni afirma pruebas ejecutadas.",
+      "files": [
+        "evals/files/cypress.config.js",
+        "evals/files/package.json"
+      ],
+      "oracle": {
+        "capabilityId": "ranger",
+        "task": "diagnose",
+        "status": "completed",
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Aplica Ranger para coordinar únicamente un plan unitario basado en los requisitos adjuntos. Usa la skill especializada y conserva su identidad. No solicito runbook, tests ni ejecución.",
+      "expected_output": "Entrega solo el plan unitario aplicando qa-ranger-plan-pruebas, con su capabilityId. Vincula casos con los seis IDs de requisitos y criterios de la fuente. No produce runbook ni afirma ejecución.",
+      "files": [
+        "evals/files/requisitos-transferencias.md"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-plan-pruebas",
+        "task": "design",
+        "status": "completed",
+        "deliverables": [
+          "test_plan"
+        ],
+        "requirements": [
+          "RF-01",
+          "CA-01",
+          "RF-02",
+          "CA-02",
+          "RF-03",
+          "CA-03"
+        ],
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "Implementa unitarias para estos requisitos. Si no hay implementación del servicio ni runner, no inventes ejecución: identifica el bloqueo y el trabajo pendiente.",
+      "expected_output": "Conserva la tarea implement y registra qué falta para verificar las unitarias. Entrega partial o failed. No inventa implementación del servicio, runner, ejecución ni cobertura.",
+      "files": [
+        "evals/files/requisitos-transferencias.md"
+      ],
+      "oracle": {
+        "capabilityId": "ranger",
+        "task": "implement",
+        "status": [
+          "partial",
+          "failed"
+        ],
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 4,
+      "prompt": "Coordina el plan de pruebas de una transferencia. Todavía no tenemos criterios de aceptación ni reglas de negocio confirmadas.",
+      "expected_output": "Aplica qa-ranger-plan-pruebas y conserva su identidad. Solicita requisitos con input_required, data null y artifacts vacío. No entrega un plan basado en supuestos.",
+      "files": [],
+      "oracle": {
+        "capabilityId": "qa-ranger-plan-pruebas",
+        "task": "design",
+        "status": "input_required",
+        "noSource": true
+      }
+    },
+    {
+      "id": 5,
+      "prompt": "No tengo tablero en Jira ni en Azure DevOps. Aplica Ranger para coordinar únicamente un plan unitario basado en los requisitos adjuntos.",
+      "expected_output": "Acepta la respuesta sin insistir ni bloquear: no pide credenciales ni configura MCP, no crea .mcp.json y registra 'Tablero: ninguno' si escribe project-context.md. Entrega el plan unitario aplicando qa-ranger-plan-pruebas con trazabilidad a los requisitos de la fuente. No intenta actualizar ningún tablero.",
+      "files": [
+        "evals/files/requisitos-transferencias.md"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-plan-pruebas",
+        "task": "design",
+        "status": "completed",
+        "deliverables": [
+          "test_plan"
+        ],
+        "requirements": [
+          "RF-01",
+          "CA-01",
+          "RF-02",
+          "CA-02",
+          "RF-03",
+          "CA-03"
+        ],
+        "protectFixtures": true
+      }
+    }
+  ]
+}

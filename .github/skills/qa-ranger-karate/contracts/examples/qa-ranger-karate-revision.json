@@ -1,0 +1,24 @@
+{
+  "contractVersion": "0.1.0",
+  "capabilityId": "qa-ranger-karate",
+  "status": "completed",
+  "summary": "Ejemplo ficticio del contrato QA.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "Objetivo y alcance ficticios definidos."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "report",
+      "kind": "report",
+      "content": "Fixture: revisión completa; detecta escenarios dependientes y cobertura negativa faltante."
+    }
+  ],
+  "pending": [],
+  "data": {
+    "task": "review"
+  }
+}

@@ -1,0 +1,69 @@
+name: e2e
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      ambiente:
+        type: choice
+        options: [dev, qa, stg]
+        default: qa
+      grep:
+        type: string
+        default: '@smoke'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1/2, 2/2]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npx playwright install --with-deps {{BROWSER_INSTALL}}
+      - run: npx playwright test --grep "${{ inputs.grep || '@smoke' }}" --shard=${{ matrix.shard }}
+        env:
+          CI: 'true'
+          QA_RUN_ID: github-${{ github.run_id }}-${{ github.run_attempt }}-${{ strategy.job-index }}
+          TEST_ENV: ${{ inputs.ambiente || 'qa' }}
+          E2E_USER: ${{ secrets.E2E_USER }}
+          E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: blob-report-${{ strategy.job-index }}
+          path: blob-report
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: qa-evidence-${{ strategy.job-index }}
+          path: resources/qa
+          retention-days: 14
+
+  report:
+    if: ${{ !cancelled() }}
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with: { path: all-blob-reports, pattern: blob-report-*, merge-multiple: true }
+      # Une los shards en un solo HTML y un solo CTRF para el veredicto de la corrida.
+      - run: npx playwright merge-reports --config reporters/merge.config.ts ./all-blob-reports
+        env:
+          QA_RUN_ID: github-${{ github.run_id }}-${{ github.run_attempt }}-merged
+      # Freno de la corrida: falla el job si el veredicto agregado es NO-GO. Requiere el kit en .claude/;
+      # agrega --expected <casos.json> para que el alcance acordado cuente en el veredicto.
+      - run: node .claude/contracts/output/generate-execution-report.mjs --ctrf resources/qa/reports/github-${{ github.run_id }}-${{ github.run_attempt }}-merged/ctrf.json --out resources/qa/reports/github-${{ github.run_id }}-${{ github.run_attempt }}-merged/execution-report.md --fail-on-no-go
+      # El artefacto omite el prefijo resources/qa/: descomprímelo ahí para que resuelvan los enlaces del CTRF.
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with: { name: qa-report-merged, path: resources/qa, retention-days: 14, if-no-files-found: error }

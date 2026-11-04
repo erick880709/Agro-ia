@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.invalid/solution-baseline/routing-observations.schema.json",
+  "title": "Solution Baseline Routing Observations",
+  "type": "object",
+  "required": ["schema_version", "skill", "observations"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "skill": { "const": "solution-baseline" },
+    "observations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "routed", "modes"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+          "routed": { "type": "boolean" },
+          "modes": {
+            "type": "array",
+            "items": { "enum": ["discover", "status", "plan", "dry-run", "create", "reconcile", "upgrade", "archetype-create", "orchestrate", "resume", "validate"] },
+            "uniqueItems": true
+          },
+          "agent": { "type": "string", "minLength": 1 },
+          "evidence": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

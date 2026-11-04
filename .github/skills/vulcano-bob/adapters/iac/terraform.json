@@ -1,0 +1,7 @@
+{
+  "id": "terraform",
+  "kind": "iac",
+  "status": "implemented",
+  "profile_key": "terraform",
+  "reference": "references/hashicorp-terraform-integrations.md"
+}

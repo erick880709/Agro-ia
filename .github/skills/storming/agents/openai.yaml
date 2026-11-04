@@ -1,0 +1,4 @@
+interface:
+  display_name: "Event Storming"
+  short_description: "Descubre y modela procesos de dominio"
+  default_prompt: "Usa $storming, elige el formato adecuado y modela eventos, comportamiento, hotspots y escenarios de aceptación."

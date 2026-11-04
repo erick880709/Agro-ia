@@ -1,0 +1,12 @@
+{
+  "id": "argocd",
+  "kind": "gitops",
+  "status": "planned",
+  "mcp_capability": "argocd_mcp",
+  "required_target_fields": ["organization", "repository", "application"],
+  "allowed_actions": {
+    "reconcile_gitops_app": "configure",
+    "sync_gitops_app": "execute"
+  },
+  "reference": "references/gitops-argocd.md"
+}

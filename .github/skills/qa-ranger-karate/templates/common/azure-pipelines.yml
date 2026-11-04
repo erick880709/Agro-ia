@@ -1,0 +1,44 @@
+# Ejecuta las pruebas Karate por ambiente, de forma manual o programada.
+trigger: none
+
+parameters:
+  - name: ambiente
+    type: string
+    default: qa
+    values: [dev, qa, stg]
+  - name: tags
+    type: string
+    default: '@smoke'
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  # Configura un grupo de variables por ambiente. Marca CLIENT_ID y CLIENT_SECRET como secretos.
+  - group: karate-secrets-${{ parameters.ambiente }}
+
+steps:
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: '{{JAVA_VERSION}}'
+      jdkArchitectureOption: x64
+      jdkSourceOption: PreInstalled
+
+  - task: Maven@4
+    displayName: Karate ${{ parameters.ambiente }} ${{ parameters.tags }}
+    inputs:
+      mavenPomFile: pom.xml
+      goals: test
+      options: '-Dkarate.env=${{ parameters.ambiente }} "-Dkarate.options=--tags ${{ parameters.tags }}"'
+      publishJUnitResults: true
+      testResultsFiles: 'resources/qa/reports/**/karate-reports/**/*.xml'
+      testRunTitle: Karate ${{ parameters.ambiente }}
+    env:
+      # Asigna las variables secretas de Azure DevOps al entorno de este paso.
+      QA_RUN_ID: azure-$(Build.BuildId)-$(System.JobAttempt)
+      CLIENT_ID: $(CLIENT_ID)
+      CLIENT_SECRET: $(CLIENT_SECRET)
+
+  - publish: resources/qa
+    artifact: karate-reports-${{ parameters.ambiente }}
+    condition: always()

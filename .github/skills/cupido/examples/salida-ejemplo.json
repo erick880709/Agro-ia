@@ -1,0 +1,145 @@
+{
+  "proyecto": "Portal de consulta de exposición de identidad (ejemplo)",
+  "parametros_efectivos": {
+    "jornada_horas": 8.4,
+    "factor_productivo": 0.75,
+    "horas_efectivas_dia": 6.3,
+    "personas_desarrollo": 2,
+    "dias_iteracion": 10,
+    "fase_definicion": "diseno",
+    "pdr_ciclo_completo": 10.0
+  },
+  "items": [
+    {
+      "id": "HU-01",
+      "titulo": "Registrar alerta de exposición",
+      "modo": "pf",
+      "prioridad": "Alta",
+      "roles_horas": {
+        "desarrollo": 57.9,
+        "qa": 33.4,
+        "arquitecto": 12.0,
+        "ux_ui": 20.0
+      },
+      "horas_equipo_tradicional": 123.4,
+      "tipo_sdd": "logica_media",
+      "ahorro_sdd_pct_dev": 10.4,
+      "horas_dev_con_ia": 51.9,
+      "horas_equipo_con_ia": 117.3,
+      "calculo": "12 PF x 10.0 h/PF x (1-0.12) x factores 1.265"
+    },
+    {
+      "id": "HU-02",
+      "titulo": "Consultar historial de alertas con filtros",
+      "modo": "pf",
+      "prioridad": "Alta",
+      "roles_horas": {
+        "desarrollo": 26.7,
+        "qa": 15.4,
+        "arquitecto": 5.5,
+        "ux_ui": 9.2
+      },
+      "horas_equipo_tradicional": 56.9,
+      "tipo_sdd": "crud",
+      "ahorro_sdd_pct_dev": 26.2,
+      "horas_dev_con_ia": 19.7,
+      "horas_equipo_con_ia": 49.9,
+      "calculo": "7 PF x 10.0 h/PF x (1-0.12) x factores 1.000"
+    },
+    {
+      "id": "HU-03",
+      "titulo": "Exportar reporte regulatorio",
+      "modo": "pf",
+      "prioridad": "Media",
+      "roles_horas": {
+        "desarrollo": 37.8,
+        "qa": 21.8,
+        "arquitecto": 7.8,
+        "ux_ui": 13.1
+      },
+      "horas_equipo_tradicional": 80.5,
+      "tipo_sdd": "critica",
+      "ahorro_sdd_pct_dev": 1.6,
+      "horas_dev_con_ia": 37.2,
+      "horas_equipo_con_ia": 79.9,
+      "calculo": "9 PF x 10.0 h/PF x (1-0.12) x factores 1.100"
+    },
+    {
+      "id": "HU-04",
+      "titulo": "Integración con motor de scoring",
+      "modo": "pf",
+      "prioridad": "Alta",
+      "roles_horas": {
+        "desarrollo": 45.8,
+        "qa": 26.4,
+        "arquitecto": 9.5,
+        "ux_ui": 15.8
+      },
+      "horas_equipo_tradicional": 97.5,
+      "tipo_sdd": "integracion",
+      "ahorro_sdd_pct_dev": 2.7,
+      "horas_dev_con_ia": 44.5,
+      "horas_equipo_con_ia": 96.3,
+      "calculo": "10 PF x 10.0 h/PF x (1-0.12) x factores 1.200"
+    }
+  ],
+  "tradicional": {
+    "horas_equipo_sin_pm": 358.3,
+    "pm_pct": 0.1,
+    "horas_pm": 35.8,
+    "horas_totales": 394.1,
+    "dias_hombre": 62.6,
+    "dias_habiles_desarrollo": 13.3,
+    "semanas_calendario": 2.7,
+    "iteraciones": 2,
+    "rango": {
+      "optimista_p5": 315.3,
+      "mas_probable": 394.1,
+      "pesimista_p95": 492.7,
+      "p50": 394.1,
+      "esperado_media": 397.8,
+      "comprometido_p80": 441.8,
+      "buffer_implicito_p80_pct": 12.1
+    }
+  },
+  "con_ia": {
+    "horas_equipo_sin_pm": 343.4,
+    "pm_pct": 0.1,
+    "horas_pm": 34.3,
+    "horas_totales": 377.7,
+    "dias_hombre": 60.0,
+    "dias_habiles_desarrollo": 12.2,
+    "semanas_calendario": 2.4,
+    "iteraciones": 2,
+    "rango": {
+      "optimista_p5": 302.2,
+      "mas_probable": 377.7,
+      "pesimista_p95": 472.2,
+      "p50": 377.7,
+      "esperado_media": 381.2,
+      "comprometido_p80": 423.4,
+      "buffer_implicito_p80_pct": 12.1
+    }
+  },
+  "ahorro_ia_pct_total": 4.2,
+  "distribucion_por_rol_horas": {
+    "arquitecto": 34.8,
+    "desarrollo": 168.2,
+    "qa": 97.0,
+    "ux_ui": 58.1,
+    "project_manager": 35.8
+  },
+  "distribucion_por_rol_pct": {
+    "arquitecto": 8.8,
+    "desarrollo": 42.7,
+    "qa": 24.6,
+    "ux_ui": 14.7,
+    "project_manager": 9.1
+  },
+  "costo": {
+    "moneda": "USD",
+    "tradicional_p80": 13254,
+    "con_ia_p80": 12702
+  },
+  "advertencias": []
+}

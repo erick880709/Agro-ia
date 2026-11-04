@@ -1,0 +1,49 @@
+{
+  "contractVersion": "0.1.0",
+  "capabilityId": "ranger",
+  "status": "completed",
+  "summary": "Diagnóstico y plan de mejora terminados. La cobertura unitaria de líneas (94%) y ramas (90%) está por debajo de la meta del 95%.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "Ejemplo ficticio: funciones del módulo de precios, sin mezclar integración."
+    },
+    {
+      "id": "code_available",
+      "passed": true,
+      "evidence": "Se usa una fixture local para demostrar el formato."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "diagnostic",
+      "kind": "diagnostic",
+      "content": "Ejemplo ficticio: faltan ramas de descuento y errores de redondeo."
+    },
+    {
+      "id": "plan",
+      "kind": "coverage_plan",
+      "content": "Ejemplo ficticio: priorizar ramas de descuento y límites, después volver a medir unitarias."
+    },
+    {
+      "id": "coverage",
+      "kind": "coverage_report",
+      "path": "resources/qa/coverage/coverage-summary.json",
+      "mediaType": "application/json"
+    }
+  ],
+  "pending": [
+    {
+      "description": "Implementar los casos de descuento y redondeo del plan de mejora y volver a medir la cobertura unitaria.",
+      "owner": "QA"
+    }
+  ],
+  "data": {
+    "task": "diagnose",
+    "coverage": {
+      "scope": "src/pricing"
+    },
+    "targetOverride": null
+  }
+}

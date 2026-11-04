@@ -1,0 +1,72 @@
+{
+  "contractVersion": "0.1.0",
+  "capabilityId": "qa-ranger-unitarias",
+  "status": "completed",
+  "summary": "Ejemplo ficticio: dos casos unitarios implementados, verificados y con la meta del 95% acreditada.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "Ejemplo ficticio: funciones del módulo de precios, sin integración."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "tests",
+      "kind": "test_code",
+      "content": "Fixture ficticia de código de pruebas unitarias."
+    },
+    {
+      "id": "ctrf",
+      "kind": "test_results",
+      "path": "resources/qa/reports/run-unitarias/ctrf.json",
+      "mediaType": "application/json"
+    },
+    {
+      "id": "coverage",
+      "kind": "coverage_report",
+      "path": "resources/qa/coverage/run-unitarias/coverage-summary.json",
+      "mediaType": "application/json"
+    },
+    {
+      "id": "report",
+      "kind": "report",
+      "content": "Fixture: implementación verificada y cobertura medida sobre el módulo."
+    }
+  ],
+  "pending": [],
+  "data": {
+    "task": "implement",
+    "coverageTargetRequired": true,
+    "coverage": {
+      "scope": "src/pricing"
+    },
+    "targetOverride": null,
+    "expected": [
+      {
+        "id": "UT-01",
+        "project": "",
+        "priority": "critical"
+      },
+      {
+        "id": "UT-02",
+        "project": "",
+        "priority": "high"
+      }
+    ],
+    "exitCriteria": [
+      {
+        "id": "unitarias",
+        "status": "met",
+        "evidence": "Fixture: las dos pruebas unitarias pasaron."
+      }
+    ],
+    "evidencePolicy": {
+      "level": "unit",
+      "required": [
+        "raw_results"
+      ],
+      "override": null
+    }
+  }
+}

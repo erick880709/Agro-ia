@@ -1,0 +1,29 @@
+{
+  "contractVersion": "0.1.0",
+  "capabilityId": "qa-ranger-plan-pruebas",
+  "resultsRoot": "resources/qa/contracts",
+  "preconditions": [
+    {
+      "id": "scope_defined",
+      "description": "Alcance y nivel de pruebas solicitados identificados."
+    },
+    {
+      "id": "requirements_available",
+      "description": "Fuentes y criterios de aceptación identificables."
+    }
+  ],
+  "requiredArtifacts": [
+    [
+      "test_plan",
+      "test_runbook"
+    ]
+  ],
+  "semanticPostconditions": [
+    "Sin requisitos disponibles, se solicitan las definiciones en pending, con data null y artifacts vacío. No se entrega un plan basado en supuestos.",
+    "Los requisitos corresponden a fuentes identificables. Las preguntas y los temas por definir se registran en pending.",
+    "Cada requisito tiene al menos un caso o una exclusión justificada.",
+    "Cada caso tiene un resultado esperado verificable."
+  ],
+  "semanticValidation": "El agente o el usuario contrasta la entrega con sus fuentes y evidencia. Validar la estructura JSON no demuestra esa revisión.",
+  "policy": "../../../contracts/output/validators/qa/qa-policy.json"
+}

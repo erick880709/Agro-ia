@@ -1,0 +1,81 @@
+{
+  "contractVersion": "0.1.0",
+  "capabilityId": "ranger",
+  "resultsRoot": "resources/qa/contracts",
+  "preconditions": [
+    {
+      "id": "scope_defined",
+      "description": "Objetivo, alcance y nivel de pruebas solicitados identificados."
+    }
+  ],
+  "requiredArtifacts": [
+    [
+      "strategy",
+      "diagnostic",
+      "report",
+      "test_cases",
+      "test_code",
+      "test_results"
+    ]
+  ],
+  "semanticPostconditions": [
+    "El entregable responde al encargo y conserva las limitaciones y pendientes.",
+    "Las pruebas implementadas tienen verificación satisfactoria para declarar la entrega completa.",
+    "Un diagnóstico o reporte terminado puede describir cobertura insuficiente o recomendar NO-GO.",
+    "Las métricas conservan el alcance y la evidencia de origen. La cobertura unitaria no incluye otros niveles."
+  ],
+  "semanticValidation": "El agente o el usuario contrasta la entrega con sus fuentes y evidencia. Validar la estructura JSON no demuestra esa revisión.",
+  "policy": "../../../contracts/output/validators/qa/qa-policy.json",
+  "tasks": [
+    "design",
+    "implement",
+    "review",
+    "diagnose",
+    "execute",
+    "report"
+  ],
+  "taskArtifacts": {
+    "design": [
+      [
+        "strategy",
+        "test_cases",
+        "test_plan"
+      ]
+    ],
+    "implement": [
+      [
+        "test_code"
+      ],
+      [
+        "test_results"
+      ]
+    ],
+    "review": [
+      [
+        "report"
+      ]
+    ],
+    "diagnose": [
+      [
+        "diagnostic",
+        "report"
+      ]
+    ],
+    "execute": [
+      [
+        "test_results"
+      ],
+      [
+        "report"
+      ]
+    ],
+    "report": [
+      [
+        "test_results"
+      ],
+      [
+        "report"
+      ]
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "proyecto": "Portal de consulta de exposición de identidad (ejemplo)",
+  "parametros": {
+    "metodologia": "Scrum",
+    "dias_iteracion": 10,
+    "jornada_horas": 8.4,
+    "factor_productivo": 0.75,
+    "personas_desarrollo": 2,
+    "fase_definicion": "diseno",
+    "tarifa_hora": 30,
+    "moneda": "USD"
+  },
+  "items": [
+    {
+      "id": "HU-01",
+      "titulo": "Registrar alerta de exposición",
+      "modo": "pf",
+      "pf": 12,
+      "perfil": "senior",
+      "factores": {
+        "integracion_api_externa": 1.15,
+        "seguridad_banca": 1.1
+      },
+      "tipo_sdd": "logica_media",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "HU-02",
+      "titulo": "Consultar historial de alertas con filtros",
+      "modo": "pf",
+      "pf": 7,
+      "perfil": "senior",
+      "tipo_sdd": "crud",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "HU-03",
+      "titulo": "Exportar reporte regulatorio",
+      "modo": "pf",
+      "pf": 9,
+      "perfil": "senior",
+      "factores": {
+        "seguridad_banca": 1.1
+      },
+      "tipo_sdd": "critica",
+      "prioridad": "Media"
+    },
+    {
+      "id": "HU-04",
+      "titulo": "Integración con motor de scoring",
+      "modo": "pf",
+      "pf": 10,
+      "perfil": "senior",
+      "factores": {
+        "integracion_api_externa": 1.2
+      },
+      "tipo_sdd": "integracion",
+      "prioridad": "Alta"
+    }
+  ],
+  "taxonomia_bancolombia": {
+    "ficha_tecnica": {
+      "cliente": "Bancolombia",
+      "arquitecto_responsable": "Edwin Alfonso Hincapíe",
+      "nombre_proyecto": "Portal de consulta de exposición de identidad",
+      "url_sharepoint": "",
+      "id_jira": "MV-0000",
+      "modelo_negocio": "Delivery",
+      "modelo_adquisicion": "Agile Controlled",
+      "linea_servicio": "Soluciones empresariales",
+      "version_preventa": 1,
+      "fecha_preventa": "2026-09-24",
+      "poliza": "Ninguna"
+    },
+    "nombre_servicio": "Portal de exposición de identidad",
+    "cifra": "mas_probable",
+    "modo_horas": "esfuerzo",
+    "agrupar_por": "prioridad",
+    "base_operacion": "Colombia",
+    "nivel_ingles": "Nativo",
+    "disponibilidad": "Horario Oficina",
+    "roles": {}
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "_fuente": "Chaves C., B. y Jaramillo R., A. (Cenicafe). Regionalizacion de la temperatura del aire en Colombia. Avances en Recursos Hidraulicos, No. 6, sept. 1999 (Tablas 2 y 3; base: 1.002 estaciones, datos hasta 1993-98). Ecuaciones: Tm (C) = a - b * Altitud (m).",
+  "_advertencia": "Datos historicos; el clima ha cambiado y eventos El Nino/La Nina mueven la temperatura. Laderas expuestas a las grandes llanuras pueden ser ~1,5-2 C mas frias que laderas interiores a igual altitud (misma fuente).",
+  "regiones": {
+    "andina":    {"a": 29.42, "b": 0.0061, "alt_min": 100, "alt_max": 4482, "nombre": "Andina (valles interandinos y cordilleras)"},
+    "oriente":   {"a": 27.37, "b": 0.0057, "alt_min": 120, "alt_max": 4000, "nombre": "Oriente (Amazonia y Orinoquia)"},
+    "atlantica": {"a": 27.72, "b": 0.0055, "alt_min": 2,   "alt_max": 4000, "nombre": "Atlantica (Caribe)"},
+    "pacifica":  {"a": 27.05, "b": 0.0057, "alt_min": 2,   "alt_max": 1850, "nombre": "Pacifica"}
+  },
+  "refinamientos": {
+    "cuenca_cauca_2_5N": {"a": 29.40, "b": 0.0061, "alt_min": 915, "alt_max": 4200,
+      "aplica_a": "Norte del Cauca, Valle y Quindio (latitud 2-5 N)",
+      "contraste": "Estacion Paraguaicito (Quindio) 1.250 m: ecuacion 21,8 C vs 22,2 C reportado por Cenicafe (Rev. 69(1) 2018)."}
+  },
+  "gradientes_locales_c_por_100m": {
+    "colombia_media": 0.63,
+    "andina": 0.61,
+    "valle_cordillera_occidental": 0.57,
+    "meta_caqueta_casanare_piedemonte": 0.5,
+    "serranias": 0.7,
+    "sierra_nevada_santa_marta": "0,8-0,9",
+    "_fuente": "Chaves & Jaramillo 1999; Cenicafe Avances Tecnicos (broca, Valle, Magdalena, Meta-Caqueta-Casanare)"
+  },
+  "departamento_a_regiones": {
+    "antioquia": ["andina", "pacifica"],
+    "caldas": ["andina"], "risaralda": ["andina"], "quindio": ["andina"],
+    "tolima": ["andina"], "huila": ["andina"], "cundinamarca": ["andina"],
+    "boyaca": ["andina"], "bogota": ["andina"], "santander": ["andina"],
+    "norte de santander": ["andina", "atlantica"],
+    "valle del cauca": ["andina", "pacifica"], "cauca": ["andina", "pacifica"],
+    "narino": ["andina", "pacifica"], "choco": ["pacifica"],
+    "atlantico": ["atlantica"], "bolivar": ["atlantica"], "cordoba": ["atlantica"],
+    "sucre": ["atlantica"], "magdalena": ["atlantica"], "cesar": ["atlantica"],
+    "la guajira": ["atlantica"],
+    "archipielago de san andres, providencia y santa catalina": ["atlantica"],
+    "meta": ["oriente"], "casanare": ["oriente"], "arauca": ["oriente"],
+    "vichada": ["oriente"], "guaviare": ["oriente"], "guainia": ["oriente"],
+    "vaupes": ["oriente"], "caqueta": ["oriente"], "putumayo": ["oriente"],
+    "amazonas": ["oriente"]
+  },
+  "_nota_departamentos": "Departamentos con mas de una region (Antioquia, Valle, Cauca, Narino, N. Santander) se reportan como rango. Asignacion aproximada por departamento, no por poligono climatico."
+}

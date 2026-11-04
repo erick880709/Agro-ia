@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://personalsoft.example/schemas/catalogo-iconos-drawio-1.0.json",
+  "title": "Catálogo curado de iconos Draw.io para arquitectura cloud",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "catalogVersion", "generatedAt", "source", "providers"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "catalogVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "generatedAt": { "type": "string", "format": "date" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "ref", "drawioVersion", "sourceFiles", "terms"],
+      "properties": {
+        "repository": { "type": "string", "format": "uri" },
+        "ref": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "drawioVersion": { "type": "string", "minLength": 1 },
+        "sourceFiles": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "terms": { "type": "array", "minItems": 1, "items": { "type": "string", "format": "uri" } }
+      }
+    },
+    "providers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["azure", "aws", "gcp"],
+      "properties": {
+        "azure": { "$ref": "#/$defs/provider" },
+        "aws": { "$ref": "#/$defs/provider" },
+        "gcp": { "$ref": "#/$defs/provider" }
+      }
+    }
+  },
+  "$defs": {
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["library", "mechanism", "fallback", "icons"],
+      "properties": {
+        "library": { "type": "string", "minLength": 1 },
+        "mechanism": { "enum": ["image", "stencil"] },
+        "fallback": { "type": "string", "minLength": 1 },
+        "icons": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/icon" }
+        }
+      }
+    },
+    "icon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "displayName", "category", "aliases", "mechanism", "style", "status", "recommended", "tags"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^(azure|aws|gcp)\\.[a-z0-9-]+$" },
+        "displayName": { "type": "string", "minLength": 1 },
+        "category": { "type": "string", "minLength": 1 },
+        "aliases": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "mechanism": { "enum": ["image", "stencil"] },
+        "style": { "type": "string", "minLength": 1 },
+        "sourcePath": { "type": "string", "minLength": 1 },
+        "shape": { "type": "string", "minLength": 1 },
+        "resIcon": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["active", "preview", "deprecated"] },
+        "recommended": { "type": "boolean" },
+        "replacement": { "type": "string", "minLength": 1 },
+        "tags": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "mechanism": { "const": "image" } } },
+          "then": { "required": ["sourcePath"] }
+        },
+        {
+          "if": { "properties": { "mechanism": { "const": "stencil" } } },
+          "then": { "required": ["shape"] }
+        }
+      ]
+    }
+  }
+}

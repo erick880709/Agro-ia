@@ -8,34 +8,33 @@ Muestran el orden temporal de interacciones entre componentes/actores para UN ca
 
 ```mermaid
 sequenceDiagram
-    title Flujo: Creación de un Pedido
+    title Flujo crítico: creación de un pedido
+    autonumber
 
     actor Cliente
-    participant WebApp as Aplicación Web
-    participant API as API de Pedidos
-    participant Validador as ValidadorPedido
-    participant DB as Base de Datos
-    participant Pasarela as Pasarela de Pago
-    participant Cola as Cola de Mensajes
-    participant Worker as Worker de Notificaciones
+    participant Web as CT-01 Aplicación Web
+    participant API as CT-02 API de Pedidos
+    participant PSP as EXT-01 Pasarela de Pago
+    participant DB as Base de datos (DATA-001)
+    participant Broker as Broker de eventos
+    participant Worker as CT-03 Worker de Notificaciones
 
-    Cliente->>WebApp: Confirma pedido
-    WebApp->>API: POST /pedidos
-    API->>Validador: validar(datosPedido)
-    Validador-->>API: OK
-
-    API->>Pasarela: Procesar pago
-    Pasarela-->>API: Pago aprobado
-
-    API->>DB: INSERT pedido
-    DB-->>API: pedido creado (id)
-
-    API->>Cola: Publica evento "PedidoCreado"
-    API-->>WebApp: 201 Created (id pedido)
-    WebApp-->>Cliente: Confirmación visual
-
-    Cola->>Worker: Consume evento "PedidoCreado"
-    Worker->>Worker: Genera email de confirmación
+    Cliente->>Web: Confirma pedido
+    Web->>+API: POST /pedidos (Idempotency-Key)
+    API->>+PSP: Autorizar pago (timeout 3 s)
+    alt Pago aprobado
+        PSP-->>-API: Autorización aprobada
+        API->>DB: INSERT pedido + evento outbox (una transacción)
+        API-->>Web: 201 Created (id pedido)
+        Web-->>Cliente: Confirmación
+        Note over DB,Broker: El OutboxPublisher publica de forma asíncrona
+        DB-)Broker: PedidoCreado
+        Broker-)Worker: PedidoCreado
+    else Pago rechazado o timeout
+        PSP-->>API: Rechazo / sin respuesta
+        API-->>-Web: 402 Payment Required / 504
+        Web-->>Cliente: Pago no procesado, reintentar
+    end
 ```
 
 Buenas prácticas:
@@ -44,39 +43,47 @@ Buenas prácticas:
 
 ## Diagrama de despliegue
 
-> **Si el proveedor de nube es AWS, Azure o GCP, no uses Mermaid para este diagrama.** Genera un archivo `.drawio` con la iconografía oficial de cada proveedor — ver `references/drawio-iconos-nube.md` (y `references/guia-multi-cloud-deployment.md` / `references/guia-terraform-a-diagrama.md` según el caso). El `graph TB` de esta sección queda solo como **fallback** para infraestructura on-premise o proveedores sin librería de iconos disponible.
+> **Si el proveedor de nube es AWS, Azure o GCP, no uses Mermaid para este diagrama.** Genera un archivo `.drawio` con la iconografía oficial de cada proveedor — ver `references/drawio-iconos-nube.md` (y `references/guia-multi-cloud-deployment.md` / `references/guia-terraform-a-diagrama.md` según el caso). El `flowchart` de esta sección es el formato para infraestructura **on-premise** o proveedores sin librería de iconos; por eso el ejemplo usa componentes on-premise y no servicios AWS/Azure/GCP. Aplica la notación y las reglas de `references/guia-calidad-visual-diagramas.md`.
 
-Útil cuando la topología de infraestructura no es obvia: múltiples ambientes, regiones, redes, orquestación de contenedores. Se puede modelar como un grafo con `graph` o con la sintaxis `C4Deployment` si el visor la soporta; `graph TB` es más portable:
+Útil cuando la topología de infraestructura no es obvia: múltiples ambientes, regiones, redes, orquestación de contenedores. Modélalo como `flowchart LR` con `curve: step` (más portable que `C4Deployment`), una zona por `subgraph` y la leyenda debajo:
 
 ```mermaid
-graph TB
-    subgraph "Región: us-east-1"
-        subgraph "Cluster Kubernetes"
-            subgraph "Namespace: produccion"
-                pod1["Pod: API de Pedidos (x3 réplicas)"]
-                pod2["Pod: Worker de Notificaciones (x2 réplicas)"]
-            end
+---
+config:
+  flowchart:
+    curve: step
+---
+flowchart LR
+    U([Usuarios internos]) -->|"HTTPS"| LB[Balanceador F5]
+
+    subgraph DC["Centro de datos principal"]
+        direction LR
+        subgraph DMZ["Zona DMZ"]
+            LB
+            WAF[WAF]
         end
-        lb["Load Balancer"]
-        rds[("RDS PostgreSQL - Multi-AZ")]
-        redis[("ElastiCache Redis")]
+        subgraph APP["Zona de aplicación · Kubernetes on-premise"]
+            API[CT-02 API de Pedidos x3]
+            WRK[CT-03 Worker x2]
+        end
+        subgraph DATA["Zona de datos"]
+            DB[(PostgreSQL primario + réplica)]
+            MQ[[RabbitMQ en clúster]]
+        end
     end
 
-    cdn["CDN / CloudFront"]
-    s3[("S3 - Assets estáticos")]
-
-    Internet -->|HTTPS| cdn
-    cdn --> s3
-    Internet -->|HTTPS| lb
-    lb --> pod1
-    pod1 --> rds
-    pod1 --> redis
-    pod2 --> rds
+    LB -->|"HTTPS · balancea"| WAF
+    WAF -->|"HTTPS · filtra"| API
+    API -->|"SQL/TLS · lee y escribe"| DB
+    API -.->|"AMQP · publica eventos"| MQ
+    MQ -.->|"AMQP · entrega eventos"| WRK
 ```
 
-## Diagrama entidad-relación
+**Leyenda:** línea continua = llamada síncrona; línea punteada = mensaje asíncrono; cilindro = almacenamiento; doble borde = broker.
 
-Solo si el modelo de datos es relevante y no trivial (más de 2-3 entidades con relaciones no obvias).
+## Diagrama entidad-relación por contenedor
+
+Inclúyelo en el `16.xx` del contenedor significativo cuando su modelo sea relevante y no trivial. `16-Modelo-de-Datos.md` conserva únicamente el mapa global de ownership y los enlaces; no mezcles en un único ER las tablas privadas de varios microservicios como si compartieran base de datos. Sigue `references/guia-diseno-detallado-contenedores.md`.
 
 ```mermaid
 erDiagram
@@ -115,6 +122,53 @@ erDiagram
 ## Diagrama de componentes/clases (fuera del C4 Nivel 4)
 
 Si necesitas mostrar relaciones de herencia/composición más finas que el C4 Nivel 3, usa `classDiagram` (ver ejemplo completo en `diagramas-c4-ejemplos.md`, sección Nivel 4).
+
+## Diagrama de dominio (modelo conceptual DDD)
+
+Distinto del diagrama de clases de código y del modelo de datos de `16-Modelo-de-Datos.md`: aquí el objetivo es mostrar los **conceptos de negocio** y sus relaciones (agregados, entidades, value objects) en el lenguaje ubicuo del dominio, sin atributos técnicos ni claves foráneas. Útil cuando el proyecto usa Event Storming o DDD y el dominio tiene reglas de negocio no triviales que ni el C4 ni el modelo de datos comunican por sí solos.
+
+```mermaid
+classDiagram
+    class Pedido {
+        <<Aggregate Root>>
+        +confirmar()
+        +cancelar()
+    }
+    class ItemPedido {
+        <<Entity>>
+    }
+    class Dinero {
+        <<Value Object>>
+    }
+    Pedido "1" *-- "1..*" ItemPedido : contiene
+    ItemPedido --> Dinero : precio
+```
+
+Genera este diagrama solo si el modelo de dominio no es evidente desde el C4 Componentes y el modelo de datos — no lo dupliques si ambos ya cuentan la misma historia.
+
+## Diagrama de paquetes
+
+Muestra la organización de módulos/paquetes de código y sus dependencias — útil cuando el C4 Nivel 3 (Componentes) no alcanza a explicar cómo está physically organizado el código (ej. capas, módulos por bounded context) o cuando hay una regla de dependencia que el equipo debe respetar (ej. "dominio no depende de infraestructura").
+
+```mermaid
+---
+config:
+  flowchart:
+    curve: step
+---
+flowchart TB
+    subgraph MOD["com.empresa.pedidos"]
+        api[api · controllers]
+        dominio[dominio · entidades y reglas]
+        infraestructura[infraestructura · repositorios y adaptadores]
+    end
+
+    api -->|"usa casos de uso"| dominio
+    infraestructura -->|"implementa puertos"| dominio
+    api -.-x|"no debe depender"| infraestructura
+```
+
+En Caso B (AS-IS), solo incluye dependencias verificables en el código real; si el equipo declara una regla de dependencia que el código no respeta, documenta la violación como hallazgo en `21-Riesgos-y-Deuda-Tecnica.md`, no la "corrijas" en el diagrama.
 
 ## Regla general
 

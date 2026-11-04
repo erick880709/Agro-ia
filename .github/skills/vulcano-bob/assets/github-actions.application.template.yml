@@ -1,0 +1,49 @@
+name: Application delivery
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build, test and scan
+        run: ./scripts/ci-build.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-package
+          path: dist/
+          if-no-files-found: error
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: [dev, qa, prod]
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: app-package
+          path: dist/
+      # __CLOUD_AUTH__
+      - name: Deploy and verify health
+        env:
+          DEPLOY_ENVIRONMENT: ${{ matrix.environment }}
+        run: ./scripts/ci-deploy.sh
+      # __PROGRESSIVE_DELIVERY_ANALYSIS__
+      # __PROGRESSIVE_DELIVERY_ROLLBACK__
+
+  # __NOTIFICATION_JOB__

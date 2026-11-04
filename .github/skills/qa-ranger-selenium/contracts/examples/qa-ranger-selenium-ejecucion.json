@@ -1,0 +1,53 @@
+{
+  "contractVersion": "0.1.0",
+  "capabilityId": "qa-ranger-selenium",
+  "status": "completed",
+  "summary": "Ejemplo ficticio completo de ejecución Selenium.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "Objetivo y alcance ficticios definidos."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "ctrf",
+      "kind": "test_results",
+      "path": "resources/qa/reports/run-selenium/ctrf.json",
+      "mediaType": "application/json"
+    },
+    {
+      "id": "report",
+      "kind": "report",
+      "content": "Fixture: ejecución completa de un caso."
+    }
+  ],
+  "pending": [],
+  "data": {
+    "task": "execute",
+    "expected": [
+      {
+        "id": "TC-01",
+        "project": "chromium",
+        "priority": "critical"
+      }
+    ],
+    "exitCriteria": [
+      {
+        "id": "critical",
+        "status": "met",
+        "evidence": "Fixture: TC-01 pasó."
+      }
+    ],
+    "evidencePolicy": {
+      "level": "browser",
+      "required": [
+        "video",
+        "trace",
+        "screenshot"
+      ],
+      "override": null
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "skill_name": "qa-ranger-jmeter",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Necesito una prueba de carga en JMeter para la API de banca (evals/files/banca-demo-server.js): login, consulta de saldo, transferencia y consulta de la transferencia creada. En hora pico esperamos unas 15.000 transferencias por hora. Déjala lista para Azure DevOps.",
+      "expected_output": "Plan de prueba con modelo de trabajo y cálculo de Ley de Little mostrado (no hilos arbitrarios); SLA propuesto y marcado como supuesto si no se dio; proyecto con scaffold.py; plan.jmx parametrizado con ${__P()} (host, carga, timeouts), Transaction Controllers por paso, correlación del id con JSON Extractor + default + validación Groovy cacheada, aserciones de código y marcador, think time, sin listeners; clave por -J desde variable secreta; lint_jmx.py sin hallazgos; secuencia 1 usuario → humo → carga; pipeline Azure con gate analizar_jtl.py y JUnit; advertencia de autorización del ambiente.",
+      "files": [
+        "evals/files/banca-demo-server.js"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-jmeter",
+        "task": "implement",
+        "status": [
+          "completed",
+          "partial",
+          "failed",
+          "input_required"
+        ],
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Heredamos este plan de JMeter y los resultados no nos cuadran: nunca falla nada aunque sabemos que el servicio tiene errores. Revísalo.",
+      "expected_output": "Ejecuta lint_jmx.py: detecta como bloqueante que la aserción usa `Assertion.test_strings` (la real es `Asserion.test_strings`, errata histórica) y por eso nunca falla — explica la causa raíz del síntoma; además HTTPSampler.domian, clave literal, sampler sin aserción, extractor sin default, JSR223 sin caché con ${}, BeanShell, View Results Tree, timeouts ausentes, carga literal con rampa 0, loop infinito sin duración, CSV absoluto, host literal, plugin sin declarar; reporte priorizado con XML corregido.",
+      "files": [
+        "evals/files/plan-con-errores.jmx"
+      ],
+      "oracle": {
+        "capabilityId": "qa-ranger-jmeter",
+        "task": "review",
+        "status": "completed",
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "Te paso dos ejecuciones (base.jtl de la versión anterior y actual.jtl de la nueva). ¿La nueva versión empeoró? Ambas cumplen el SLA.",
+      "expected_output": "Usa analizar_jtl.py --base con exclusión de rampa y solo transacciones; identifica la regresión en 03_Transferir (~1 → ~250 ms) aunque el SLA absoluto se cumpla; señala la caída de throughput (modelo cerrado autorregulado) y que el resto no cambió; recomienda revisar el endpoint POST /api/transferencias con APM y no actualizar la base.",
+      "files": [],
+      "oracle": {
+        "capabilityId": "qa-ranger-jmeter",
+        "task": "diagnose",
+        "status": "completed",
+        "protectFixtures": true
+      }
+    },
+    {
+      "id": 4,
+      "prompt": "Diseña casos JMeter sin ejecutar carga: RF-01, GET /saldo con 10 usuarios autorizados durante 60 s debe tener p95 menor a 250 ms; RF-02, tasa de errores menor a 1%. Entrega diseño trazable y criterios SLA acordados. No inventes resultados, endpoints adicionales ni código.",
+      "files": [],
+      "oracle": {
+        "capabilityId": "qa-ranger-jmeter",
+        "task": "design",
+        "status": "completed",
+        "requirements": [
+          "RF-01",
+          "RF-02"
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "prompt": "Ejecuta una carga JMeter. No hay ambiente, servicio, autorización ni SLA. Conserva el bloqueo sin enviar tráfico ni inventar resultados.",
+      "files": [],
+      "oracle": {
+        "capabilityId": "qa-ranger-jmeter",
+        "task": "execute",
+        "status": [
+          "input_required",
+          "failed"
+        ],
+        "noSource": true
+      }
+    }
+  ]
+}

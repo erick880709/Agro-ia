@@ -1,0 +1,48 @@
+{
+  "reportFormat": "CTRF",
+  "specVersion": "0.1.0",
+  "generatedBy": "selenium (fixture ficticia)",
+  "results": {
+    "tool": {
+      "name": "selenium"
+    },
+    "summary": {
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "pending": 0,
+      "skipped": 0,
+      "other": 0,
+      "start": 1791317717856,
+      "stop": 1791317719570
+    },
+    "tests": [
+      {
+        "name": "TC-01 [critical] ingresa con credenciales válidas",
+        "status": "passed",
+        "duration": 1200,
+        "suite": [
+          "com.banca.tests.LoginTest"
+        ],
+        "browser": "chromium",
+        "attachments": [
+          {
+            "name": "video",
+            "contentType": "video/webm",
+            "path": "resources/qa/test-results/run-selenium/TC-01/video.webm"
+          },
+          {
+            "name": "trace",
+            "contentType": "application/zip",
+            "path": "resources/qa/test-results/run-selenium/TC-01/trace.zip"
+          },
+          {
+            "name": "screenshot",
+            "contentType": "image/png",
+            "path": "resources/qa/test-results/run-selenium/TC-01/screenshot.png"
+          }
+        ]
+      }
+    ]
+  }
+}

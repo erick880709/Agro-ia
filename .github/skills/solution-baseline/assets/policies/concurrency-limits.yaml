@@ -1,0 +1,6 @@
+schema_version: 1
+max_parallel_agents: 4
+max_parallel_readers: 4
+max_parallel_writers: 2
+max_writers_per_repository: 1
+max_catalog_writers: 1

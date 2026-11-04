@@ -1,0 +1,8 @@
+{
+  "id": "argocd",
+  "kind": "gitops",
+  "status": "implemented",
+  "renderer": "scripts/render-bob-gitops.mjs",
+  "scope": "Genera manifiestos Kustomize (base/overlays) y Application de ArgoCD; no incluye operación remota — ver vulcano-operador para reconcile/sync.",
+  "reference": "references/gitops.md"
+}

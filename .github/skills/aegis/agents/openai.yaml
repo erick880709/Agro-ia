@@ -1,0 +1,7 @@
+interface:
+  display_name: "Aegis"
+  short_description: "Seguridad del código, IaC, pipelines e IA con hallazgos verificados"
+  default_prompt: "Usa $aegis para revisar la seguridad de este cambio y entregar hallazgos verificados con severidad."
+
+policy:
+  allow_implicit_invocation: true

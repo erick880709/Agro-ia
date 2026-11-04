@@ -1,0 +1,105 @@
+# Pipeline Terragrunt para Azure DevOps (Azure Repos o GitHub)
+#   PR   → plan de lo afectado (service connection de PLAN)
+#   main → apply por ambiente con aprobación (Environments de Azure DevOps)
+# Requisitos: mise.toml; service connections con Workload Identity Federation:
+#   sc-terragrunt-plan (Reader + Storage Blob Data Contributor sobre estado)
+#   sc-terragrunt-apply (permisos de escritura; usada solo en stages de apply)
+trigger:
+  branches: { include: [main] }
+  paths: { include: [live/*, mise.toml] }
+
+pr:
+  branches: { include: [main] }
+  paths: { include: [live/*, mise.toml] }
+
+variables:
+  LIVE_DIR: live
+  TG_NON_INTERACTIVE: "true"
+  TF_IN_AUTOMATION: "1"
+  TG_LOG_FORMAT: bare
+
+stages:
+  - stage: plan
+    condition: eq(variables['Build.Reason'], 'PullRequest')
+    jobs:
+      - job: plan
+        pool: { vmImage: ubuntu-latest }
+        steps:
+          - checkout: self
+            fetchDepth: 0
+          - template: templates/instalar-terragrunt.yml
+          - script: |
+              TARGET="${SYSTEM_PULLREQUEST_TARGETBRANCH#refs/heads/}"
+              git fetch origin "$TARGET"
+              echo "##vso[task.setvariable variable=BASE_REF]origin/$TARGET"
+            displayName: Rama base
+          - task: AzureCLI@2
+            displayName: Plan afectado
+            inputs:
+              azureSubscription: sc-terragrunt-plan
+              scriptType: bash
+              scriptLocation: inlineScript
+              addSpnToEnvironment: true
+              inlineScript: |
+                set -euo pipefail
+                export ARM_CLIENT_ID="$servicePrincipalId" ARM_TENANT_ID="$tenantId" ARM_OIDC_TOKEN="$idToken" ARM_USE_OIDC=true
+                export ARM_SUBSCRIPTION_ID="$(az account show --query id -o tsv)"
+                terragrunt hcl fmt --check --working-dir "$LIVE_DIR"
+                terragrunt find --filter "(./$(LIVE_DIR))...[$(BASE_REF)...HEAD]" --dag
+                terragrunt run --all --filter "(./$(LIVE_DIR))...[$(BASE_REF)...HEAD]" \
+                  --report-file report.json --report-format json \
+                  --tf-forward-stdout -- plan -no-color -lock=false 2>&1 | tee plan.txt
+          - publish: plan.txt
+            artifact: plan
+            condition: always()
+
+  - stage: apply_nonprod
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['Build.Reason'], 'PullRequest'))
+    jobs:
+      - deployment: apply
+        environment: non-prod
+        pool: { vmImage: ubuntu-latest }
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                  fetchDepth: 2
+                - template: templates/instalar-terragrunt.yml
+                - task: AzureCLI@2
+                  inputs:
+                    azureSubscription: sc-terragrunt-apply
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    addSpnToEnvironment: true
+                    inlineScript: |
+                      set -euo pipefail
+                      export ARM_CLIENT_ID="$servicePrincipalId" ARM_TENANT_ID="$tenantId" ARM_OIDC_TOKEN="$idToken" ARM_USE_OIDC=true
+                      export ARM_SUBSCRIPTION_ID="$(az account show --query id -o tsv)"
+                      terragrunt run --all --filter "(./$(LIVE_DIR)/non-prod)...[HEAD^...HEAD]" --filter-allow-destroy -- apply
+
+  - stage: apply_prod
+    dependsOn: apply_nonprod
+    condition: succeeded()
+    jobs:
+      - deployment: apply
+        environment: prod # configurar Approvals and checks
+        pool: { vmImage: ubuntu-latest }
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                  fetchDepth: 2
+                - template: templates/instalar-terragrunt.yml
+                - task: AzureCLI@2
+                  inputs:
+                    azureSubscription: sc-terragrunt-apply
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    addSpnToEnvironment: true
+                    inlineScript: |
+                      set -euo pipefail
+                      export ARM_CLIENT_ID="$servicePrincipalId" ARM_TENANT_ID="$tenantId" ARM_OIDC_TOKEN="$idToken" ARM_USE_OIDC=true
+                      export ARM_SUBSCRIPTION_ID="$(az account show --query id -o tsv)"
+                      terragrunt run --all --filter "(./$(LIVE_DIR)/prod)...[HEAD^...HEAD]" --filter-allow-destroy -- apply

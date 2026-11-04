@@ -1,0 +1,66 @@
+{
+  "reportFormat": "CTRF",
+  "specVersion": "0.1.0",
+  "generatedBy": "qa-ranger-robotframework/ctrf_from_robot.py (fixture: corrida de la plantilla db-release contra PostgreSQL 16 local)",
+  "results": {
+    "tool": {
+      "name": "robotframework",
+      "version": "7.5"
+    },
+    "summary": {
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "pending": 0,
+      "skipped": 0,
+      "other": 0,
+      "start": 1793145787010,
+      "stop": 1793145787022
+    },
+    "tests": [
+      {
+        "name": "TC-01 [critical] La tabla principal existe en el esquema desplegado",
+        "status": "passed",
+        "duration": 5,
+        "suite": [
+          "Test Cases",
+          "Aceptacion"
+        ],
+        "tags": [
+          "acceptance",
+          "database",
+          "smoke",
+          "TC-01"
+        ]
+      },
+      {
+        "name": "TC-02 [high] Ningún registro queda sin el campo obligatorio",
+        "status": "passed",
+        "duration": 2,
+        "suite": [
+          "Test Cases",
+          "Aceptacion"
+        ],
+        "tags": [
+          "acceptance",
+          "database",
+          "TC-02"
+        ]
+      },
+      {
+        "name": "TC-03 [high] Un registro de referencia conserva su valor",
+        "status": "passed",
+        "duration": 3,
+        "suite": [
+          "Test Cases",
+          "Aceptacion"
+        ],
+        "tags": [
+          "acceptance",
+          "database",
+          "TC-03"
+        ]
+      }
+    ]
+  }
+}

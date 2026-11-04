@@ -1,0 +1,53 @@
+{
+  "contractVersion": "0.1.0",
+  "capabilityId": "qa-ranger-playwright",
+  "status": "completed",
+  "summary": "Ejemplo ficticio: ejecución completa del caso crítico TC-01 en chromium, leída del CTRF del reporter.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "Objetivo y alcance ficticios definidos: TC-01 en chromium."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "ctrf",
+      "kind": "test_results",
+      "path": "resources/qa/reports/run-ejemplo/ctrf.json",
+      "mediaType": "application/json"
+    },
+    {
+      "id": "report",
+      "kind": "report",
+      "content": "Fixture: ejecución completa de un caso."
+    }
+  ],
+  "pending": [],
+  "data": {
+    "task": "execute",
+    "expected": [
+      {
+        "id": "TC-01",
+        "project": "chromium",
+        "priority": "critical"
+      }
+    ],
+    "exitCriteria": [
+      {
+        "id": "critical",
+        "status": "met",
+        "evidence": "Fixture: TC-01 pasó."
+      }
+    ],
+    "evidencePolicy": {
+      "level": "browser",
+      "required": [
+        "video",
+        "trace",
+        "screenshot"
+      ],
+      "override": null
+    }
+  }
+}

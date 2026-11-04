@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.invalid/solution-baseline/source-verification.schema.json",
+  "title": "Archetype Source Verification",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "archetype_id",
+    "source",
+    "material_path",
+    "material_kind",
+    "expected_digest",
+    "actual_digest",
+    "status",
+    "verified_at"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "archetype_id": { "type": "string", "minLength": 1 },
+    "source": { "type": "string", "minLength": 1 },
+    "material_path": { "type": "string", "minLength": 1 },
+    "material_kind": { "enum": ["file", "tree", "git"] },
+    "expected_digest": {
+      "type": "string",
+      "pattern": "^(sha256:[a-fA-F0-9]{64}|git:[a-fA-F0-9]{40,64})$"
+    },
+    "actual_digest": {
+      "type": "string",
+      "pattern": "^(sha256:[a-fA-F0-9]{64}|git:[a-fA-F0-9]{40,64})$"
+    },
+    "status": { "const": "verified" },
+    "verified_at": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: __APP_NAME__
+  labels:
+    app: __APP_NAME__
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: __APP_NAME__
+  template:
+    metadata:
+      labels:
+        app: __APP_NAME__
+    spec:
+      containers:
+        - name: __APP_NAME__
+          image: __APP_NAME__:placeholder
+          ports:
+            - containerPort: __CONTAINER_PORT__
+          envFrom:
+            - configMapRef:
+                name: __APP_NAME__-config
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: __CONTAINER_PORT__
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: __CONTAINER_PORT__

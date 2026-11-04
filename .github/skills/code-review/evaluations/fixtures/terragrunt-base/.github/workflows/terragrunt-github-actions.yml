@@ -1,0 +1,142 @@
+# Pipeline Terragrunt para GitHub Actions
+#   PR      → checks + plan de lo afectado (rol de solo lectura) + comentario en el PR
+#   main    → apply de lo que entró con el merge, por ambiente, con aprobación en prod
+# Requisitos: mise.toml en la raíz; OIDC configurado (ver resources/07); environments "non-prod" y "prod" en GitHub.
+# Filtros: "(./<dir>)...[base...HEAD]" = frontera inline + diff Git (verificado en TG 1.2.1; evita parsear un catálogo en el mismo repo).
+# Ajusta LIVE_DIR y los bloques de autenticación (AWS por defecto; Azure comentado).
+name: terragrunt
+
+on:
+  pull_request:
+    branches: [main]
+    paths: ["mise.toml", ".github/workflows/terragrunt*.yml"]
+  push:
+    branches: [main]
+    paths: ["mise.toml"]
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  LIVE_DIR: .
+  TG_NON_INTERACTIVE: "true"
+  TF_IN_AUTOMATION: "1"
+  TG_LOG_FORMAT: bare
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gruntwork-io/terragrunt-action@v3 # instala Terragrunt + OpenTofu desde mise.toml (pinear por SHA en producción)
+      - name: Formato HCL
+        run: terragrunt hcl fmt --check --diff --working-dir "$LIVE_DIR"
+      - name: Validación HCL
+        run: terragrunt hcl validate --working-dir "$LIVE_DIR"
+
+  plan:
+    if: github.event_name == 'pull_request'
+    needs: checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    concurrency:
+      group: tg-plan-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # los filtros Git necesitan historia y la rama base
+      - uses: gruntwork-io/terragrunt-action@v3
+
+      # --- Autenticación (rol de PLAN, solo lectura) ---
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_PLAN_ROLE_ARN }}
+          aws-region: us-east-1
+      # - uses: azure/login@v2
+      #   with:
+      #     client-id: ${{ vars.AZURE_PLAN_CLIENT_ID }}
+      #     tenant-id: ${{ vars.AZURE_TENANT_ID }}
+      #     subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      # Para azurerm/azurerm-provider con OIDC añade: ARM_USE_OIDC=true, ARM_CLIENT_ID, ARM_TENANT_ID, ARM_SUBSCRIPTION_ID
+
+      - name: Unidades afectadas
+        id: find
+        run: |
+          terragrunt find --filter "[origin/${{ github.base_ref }}...HEAD]" --dag | tee afectados.txt
+          echo "count=$(grep -c . afectados.txt || true)" >> "$GITHUB_OUTPUT"
+
+      - name: Plan
+        if: steps.find.outputs.count != '0'
+        id: plan
+        run: |
+          set -o pipefail
+          terragrunt run --all \
+            --filter "[origin/${{ github.base_ref }}...HEAD]" \
+            --report-file report.json --report-format json \
+            --tf-forward-stdout -- plan -no-color -lock=false 2>&1 | tee plan.txt
+
+      - name: Comentar en el PR
+        if: always() && steps.find.outputs.count != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let plan = fs.existsSync('plan.txt') ? fs.readFileSync('plan.txt', 'utf8') : 'Sin salida';
+            const max = 60000;
+            if (plan.length > max) plan = '…(truncado)…\n' + plan.slice(-max);
+            const afectados = fs.readFileSync('afectados.txt', 'utf8');
+            const body = `### Terragrunt plan (${{ job.status }})\n**Afectados:**\n\`\`\`\n${afectados}\`\`\`\n<details><summary>Plan</summary>\n\n\`\`\`\n${plan}\n\`\`\`\n</details>`;
+            await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body });
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: plan-${{ github.event.pull_request.number }}
+          path: |
+            plan.txt
+            report.json
+
+  apply:
+    if: github.event_name == 'push'
+    needs: checks
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1 # non-prod antes que prod
+      matrix:
+        environment: [non-prod, prod]
+    environment: ${{ matrix.environment }} # prod con reviewers obligatorios
+    concurrency:
+      group: tg-apply-${{ matrix.environment }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # necesita HEAD^
+      - uses: gruntwork-io/terragrunt-action@v3
+
+      # --- Autenticación (rol de APPLY, confía solo en main / environment) ---
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_APPLY_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Apply
+        run: |
+          # --filter-allow-destroy permite destruir units/stacks eliminados en el merge;
+          # la protección es la aprobación del environment. Quítalo si prefieres destroys manuales.
+          terragrunt run --all \
+            --filter "(./${{ matrix.environment }})...[HEAD^...HEAD]" \
+            --filter-allow-destroy \
+            --report-file report.json --report-format json \
+            -- apply
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: apply-${{ matrix.environment }}-${{ github.sha }}
+          path: report.json

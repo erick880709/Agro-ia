@@ -1,0 +1,17 @@
+# Salidas de Robot Framework y evidencia local (se publican como artefactos del pipeline)
+results/
+output.xml
+log.html
+report.html
+xunit.xml
+resources/qa/test-results/
+resources/qa/reports/
+browser/
+playwright-log.txt
+# Entorno y secretos
+.venv/
+venv/
+__pycache__/
+.env
+.env.*
+!env.example

@@ -1,0 +1,48 @@
+# Detección de drift diaria (días hábiles). Usa el rol de PLAN.
+name: terragrunt-drift
+
+on:
+  schedule:
+    - cron: "0 11 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+  issues: write
+
+env:
+  TG_NON_INTERACTIVE: "true"
+  TF_IN_AUTOMATION: "1"
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gruntwork-io/terragrunt-action@v3
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_PLAN_ROLE_ARN }}
+          aws-region: us-east-1
+      - name: Plan de drift
+        id: drift
+        working-directory: live
+        run: |
+          set +e
+          terragrunt run --all --tf-forward-stdout -- plan -detailed-exitcode -lock=false -no-color > ../drift.txt 2>&1
+          code=$?
+          echo "exit=$code" >> "$GITHUB_OUTPUT"
+          # 0 = sin cambios, 2 = drift, otro = error
+          if [ "$code" != "0" ] && [ "$code" != "2" ]; then exit "$code"; fi
+      - name: Abrir issue si hay drift
+        if: steps.drift.outputs.exit == '2'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const out = fs.readFileSync('drift.txt', 'utf8').slice(-60000);
+            await github.rest.issues.create({ ...context.repo,
+              title: `Drift detectado ${new Date().toISOString().slice(0,10)}`,
+              labels: ['drift', 'infra'],
+              body: '```\n' + out + '\n```' });

@@ -1,0 +1,66 @@
+{
+  "contractVersion": "1.0.0",
+  "capabilityId": "qa-ranger-jmeter",
+  "status": "completed",
+  "summary": "Ejemplo ficticio completo de ejecución JMeter; no representa una prueba de carga real.",
+  "checks": [
+    {
+      "id": "scope_defined",
+      "passed": true,
+      "evidence": "Objetivo y alcance ficticios definidos."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "raw",
+      "kind": "raw_results",
+      "content": "Fixture: TC-01 pasó."
+    },
+    {
+      "id": "report",
+      "kind": "report",
+      "content": "Fixture: ejecución completa de un caso."
+    }
+  ],
+  "pending": [],
+  "data": {
+    "task": "execute",
+    "execution": {
+      "expected": [
+        {
+          "id": "TC-01",
+          "project": "carga-api",
+          "priority": "critical"
+        }
+      ],
+      "cases": [
+        {
+          "id": "TC-01",
+          "project": "carga-api",
+          "priority": "critical",
+          "status": "passed",
+          "retries": 0,
+          "evidence": [
+            "raw"
+          ]
+        }
+      ],
+      "runErrors": [],
+      "exitCriteria": [
+        {
+          "id": "sla-p95",
+          "status": "met",
+          "evidence": "Fixture: p95 180 ms < SLA acordado 250 ms; 0 errores."
+        }
+      ],
+      "sourceArtifact": "raw",
+      "evidencePolicy": {
+        "level": "api",
+        "required": [
+          "raw_results"
+        ],
+        "override": null
+      }
+    }
+  }
+}
