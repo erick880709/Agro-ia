@@ -874,7 +874,10 @@ class ParCalibracionRegistro(BaseModel):
 
 
 @router.post("/calibracion/pares", status_code=201)
-async def registrar_par_calibracion(body: ParCalibracionRegistro):
+async def registrar_par_calibracion(
+    body: ParCalibracionRegistro,
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+):
     """Registra un par sensor–laboratorio (HU-04) y recalcula la calibración."""
     import uuid as uuid_mod
     from datetime import date
@@ -884,7 +887,10 @@ async def registrar_par_calibracion(body: ParCalibracionRegistro):
 
     from agroia_backend.models.calibracion import CalibracionSensor, ParCalibracion
     from agroia_backend.models.dispositivo_iot import DispositivoIoT
+    from agroia_backend.services.acceso import exigir_no_cliente
     from agroia_backend.services.calibracion import regresion_lineal
+
+    exigir_no_cliente(x_user_role)
 
     try:
         fecha = date.fromisoformat(body.fecha)
@@ -1045,7 +1051,10 @@ class SesionMuestreoRegistro(BaseModel):
 
 
 @router.post("/muestreo/sesiones", status_code=201)
-async def registrar_sesion_muestreo(body: SesionMuestreoRegistro):
+async def registrar_sesion_muestreo(
+    body: SesionMuestreoRegistro,
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+):
     """Registra una sesión de muestreo con sus metadatos y contexto (HU-05)."""
     import uuid as uuid_mod
     from datetime import date
@@ -1053,6 +1062,9 @@ async def registrar_sesion_muestreo(body: SesionMuestreoRegistro):
     from agroia.database import async_session_factory
 
     from agroia_backend.models.sesion_muestreo import SesionMuestreo
+    from agroia_backend.services.acceso import exigir_no_cliente
+
+    exigir_no_cliente(x_user_role)
 
     def _a_fecha(texto: str | None) -> date | None:
         if not texto:
@@ -1265,13 +1277,23 @@ async def listar_parametros_calidad():
 
 
 @router.put("/parametros-calidad/{clave}")
-async def actualizar_parametro_calidad(clave: str, body: ParametroCalidadUpdate):
+async def actualizar_parametro_calidad(
+    clave: str,
+    body: ParametroCalidadUpdate,
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+):
     """Actualiza un parámetro de calidad con versionado y auditoría (HU-13)."""
     from agroia.database import async_session_factory
     from sqlalchemy import select
 
     from agroia_backend.models.parametro_calidad import ParametroCalidadSensor
     from agroia_backend.services.parametros_calidad import CLAVES_ADMINISTRABLES
+
+    if (x_user_role or "").strip().lower() != "admin":
+        raise HTTPException(status_code=403, detail={
+            "code": "FORBIDDEN_ROLE",
+            "message": "Solo el rol Administrador puede modificar los parámetros de calidad.",
+        })
 
     if clave not in CLAVES_ADMINISTRABLES:
         raise HTTPException(status_code=422, detail={
@@ -1323,7 +1345,11 @@ class MantenimientoRegistro(BaseModel):
 
 
 @router.post("/dispositivos/{device_id}/mantenimiento", status_code=201)
-async def registrar_mantenimiento(device_id: str, body: MantenimientoRegistro):
+async def registrar_mantenimiento(
+    device_id: str,
+    body: MantenimientoRegistro,
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+):
     """Registra una acción de mantenimiento (HU-14) y actualiza el dispositivo."""
     import uuid as uuid_mod
     from datetime import date
@@ -1333,7 +1359,10 @@ async def registrar_mantenimiento(device_id: str, body: MantenimientoRegistro):
 
     from agroia_backend.models.dispositivo_iot import DispositivoIoT
     from agroia_backend.models.mantenimiento_sensor import MantenimientoSensor
+    from agroia_backend.services.acceso import exigir_no_cliente
     from agroia_backend.services.ciclo_vida_sensor import TIPOS_MANTENIMIENTO
+
+    exigir_no_cliente(x_user_role)
 
     if body.tipo not in TIPOS_MANTENIMIENTO:
         raise HTTPException(status_code=422, detail={

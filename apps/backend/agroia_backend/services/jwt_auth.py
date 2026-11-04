@@ -40,6 +40,7 @@ RUTAS_PUBLICAS = {
     # públicas antes del middleware JWT y deben seguir siéndolo.
     "/api/v1/iot/sensor",
     "/api/v1/iot/ingest",
+    "/api/v1/iot/sensor/raw",
 }
 PREFIJOS_PUBLICOS = ("/docs", "/openapi.json", "/redoc", "/media")
 

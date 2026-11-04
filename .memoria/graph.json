@@ -1,6 +1,6 @@
 {
   "schema": "memoria/v1",
-  "updatedAt": "2026-11-04T12:59:37.670Z",
+  "updatedAt": "2026-11-04T13:10:24.262Z",
   "nodes": [
     {
       "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
@@ -136,6 +136,21 @@
       "source": "manual",
       "createdAt": "2026-11-04T12:59:37.665Z",
       "updatedAt": "2026-11-04T12:59:37.666Z"
+    },
+    {
+      "id": "mem-20261104131024-6c1a07-code-review-revision-cr-001-epicas-e1-e9-rfp-003",
+      "type": "avance",
+      "status": "completado",
+      "skill": "code-review",
+      "title": "Revision CR-001 epicas E1-E9 RFP-003",
+      "summary": "Code-review del paquete completo de 9 epicas: veredicto aprobado-con-observaciones. Hallazgo mayor de autorizacion corregido (exigir_no_cliente en escritura /iot, admin en parametros-calidad, /iot/sensor/raw publico). 3 menores (orden sonda/saturacion, migracion 051 sin reclasificar historico, str vs UUID) y 1 nit. Gate verde: 135 tests + ruff + integracion 8/8.",
+      "files": [
+        "docs/reviews/CR-001-epicas-rfp003.md"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T13:10:24.256Z",
+      "updatedAt": "2026-11-04T13:10:24.258Z"
     }
   ],
   "edges": []

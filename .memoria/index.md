@@ -3,10 +3,12 @@
 > Grafo de conocimiento generado por la skill `memoria`. Fuente de verdad: `.memoria/graph.json`.
 > Este archivo se regenera; no lo edites a mano.
 
-**9 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T12:59:37.670Z
+**10 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T13:10:24.262Z
 
 ## Contexto activo
 
+- **Revision CR-001 epicas E1-E9 RFP-003** — `code-review` · completado · 2026-11-04
+  Code-review del paquete completo de 9 epicas: veredicto aprobado-con-observaciones. Hallazgo mayor de autorizacion corregido (exigir_no_cliente en escritura /iot, admin en parametros-calidad, /iot/sensor/raw publico). 3 menores (orden sonda/saturacion, migracion 051 sin reclasificar historico, str vs UUID) y 1 nit. Gate verde: 135 tests + ruff + integracion 8/8.
 - **Implementar epica E9 aprendizaje automatico (RFP-003)** — `builder` · completado · 2026-11-04
   TT-14 entrenamiento solo con etiquetas de laboratorio (ml_entrenamiento.py: validar_sin_circularidad, evaluacion R2/RMSE/sesgo con covariables), TT-15 reporte de rendimiento por variable y unidad de suelo (/calibracion/rendimiento, migracion 057 unidad_suelo en par_calibracion) con modo sombra hasta cumplir metas (RT-034). 10 tests, integracion 8/8. Cierra las 9 epicas de RFP-AGROIA-003.
 - **Implementar epica E8 ciclo de vida del sensor (RFP-003)** — `builder` · completado · 2026-11-04
@@ -27,6 +29,13 @@
   TT-01 decodificacion Modbus JXBS-3001 + CRC16 (15 tests), TT-02 firmware ESP32 (apps/iot/firmware), TT-03 verificacion de variante, HU-01 registro de dispositivos con configuracion (migracion 050).
 
 ## Avances
+
+### ✅ Revision CR-001 epicas E1-E9 RFP-003
+
+- **id:** `mem-20261104131024-6c1a07-code-review-revision-cr-001-epicas-e1-e9-rfp-003`
+- **skill:** `code-review` · **estado:** completado · **creado:** 2026-11-04
+- **resumen:** Code-review del paquete completo de 9 epicas: veredicto aprobado-con-observaciones. Hallazgo mayor de autorizacion corregido (exigir_no_cliente en escritura /iot, admin en parametros-calidad, /iot/sensor/raw publico). 3 menores (orden sonda/saturacion, migracion 051 sin reclasificar historico, str vs UUID) y 1 nit. Gate verde: 135 tests + ruff + integracion 8/8.
+- **archivos:** `docs/reviews/CR-001-epicas-rfp003.md`
 
 ### ✅ Implementar epica E9 aprendizaje automatico (RFP-003)
 
