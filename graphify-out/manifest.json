@@ -2510,8 +2510,8 @@
     "semantic_hash": ""
   },
   "resources/sumary/executive-summary.md": {
-    "mtime": 1785800753.1024604,
-    "ast_hash": "bdc1155b331b393bb8e027901fbf2b70",
+    "mtime": 1788236229.7164567,
+    "ast_hash": "4e716b26bce3aab6be381004f2a28df5",
     "semantic_hash": ""
   },
   ".github/skills/figma-prd-mockups/references/ui-ux-pro-max-skill-main/screenshots/website.png": {
@@ -3695,13 +3695,13 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/main.py": {
-    "mtime": 1788011557.2809,
-    "ast_hash": "7862e8d3a048d7d11224af578b9c2a6e",
+    "mtime": 1792461882.3303616,
+    "ast_hash": "e5360d52230549a6006ccd6fed9910e6",
     "semantic_hash": ""
   },
   "apps/backend/pyproject.toml": {
-    "mtime": 1787953971.053571,
-    "ast_hash": "c581c87a316dea7cd142c1c2df4e37fb",
+    "mtime": 1789761134.011608,
+    "ast_hash": "c44ebbb53f761dea07649f1b7ef4c84a",
     "semantic_hash": ""
   },
   "apps/backend/tests/test_health.py": {
@@ -3760,8 +3760,8 @@
     "semantic_hash": ""
   },
   "apps/shared/agroia/config.py": {
-    "mtime": 1787938364.338331,
-    "ast_hash": "15d62393ec7623d52eb9aa77057b1dff",
+    "mtime": 1792463795.3752806,
+    "ast_hash": "ff466fce335a22106b41e14278dfd0e9",
     "semantic_hash": ""
   },
   "apps/shared/agroia/database.py": {
@@ -3805,8 +3805,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1785882186.2064643,
-    "ast_hash": "5ff8d759130aeb25746a17ac18541468",
+    "mtime": 1792451971.3568032,
+    "ast_hash": "0600ae225bcbb371cae46a9310e2727f",
     "semantic_hash": ""
   },
   "docker-compose.yml": {
@@ -3815,28 +3815,28 @@
     "semantic_hash": ""
   },
   "resources/architecture/overview.md": {
-    "mtime": 1785882165.508229,
-    "ast_hash": "1c829b8a70877958bb184e6052918c90",
+    "mtime": 1792462041.888326,
+    "ast_hash": "4b70ad51c9845935eafb52bce27f03b5",
     "semantic_hash": ""
   },
   "resources/architecture/stack.md": {
-    "mtime": 1785882165.5144825,
-    "ast_hash": "28a7943218f68180288374276f8bd1c4",
+    "mtime": 1788236250.9899197,
+    "ast_hash": "c7efca003acd139c8a4516204d6ef9df",
     "semantic_hash": ""
   },
   "resources/design/api.md": {
-    "mtime": 1785882165.5204494,
-    "ast_hash": "3f651e2220d8ba1d605865009a3cab17",
+    "mtime": 1792464529.0160704,
+    "ast_hash": "4d8d5ade082e9de074a1180384ca01b5",
     "semantic_hash": ""
   },
   "resources/design/data-model.md": {
-    "mtime": 1785882165.5188718,
-    "ast_hash": "a103bd63757f814dafbad6042109449a",
+    "mtime": 1792462008.8138568,
+    "ast_hash": "954e32a8bb5dbdbe045ae2e43d5869e5",
     "semantic_hash": ""
   },
   "resources/design/openapi.yaml": {
-    "mtime": 1785885104.3662298,
-    "ast_hash": "3e99e9a2009087d0fc1b9693ef577451",
+    "mtime": 1792464513.574739,
+    "ast_hash": "6a19bee162bc62821bc896470f8ff057",
     "semantic_hash": ""
   },
   "resources/functional/hu/hu-01-analisis-aptitud-suelo.md": {
@@ -3970,8 +3970,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/data_adapters.py": {
-    "mtime": 1788230133.1445978,
-    "ast_hash": "718f547c24998a220db7f0245e1975b2",
+    "mtime": 1793755535.738027,
+    "ast_hash": "fcf8503c2c1996fca0c97e46cc2185be",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/justification.py": {
@@ -4075,13 +4075,13 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/external_apis.py": {
-    "mtime": 1787895966.5454366,
-    "ast_hash": "56ab3d402fcf7c4ad69a5026482aa8ad",
+    "mtime": 1789347679.5076258,
+    "ast_hash": "949c6ec56ad6938b873976ee1757789f",
     "semantic_hash": ""
   },
   "apps/iot/agroia_iot/consumer.py": {
-    "mtime": 1787893809.8138103,
-    "ast_hash": "1a31263ee70f2abb0dc8fedc7201c83d",
+    "mtime": 1793755519.9839091,
+    "ast_hash": "f303c5543ebc8ef90fddd6d51f6b5752",
     "semantic_hash": ""
   },
   "apps/auth/agroia_auth/api/__init__.py": {
@@ -4165,8 +4165,8 @@
     "semantic_hash": ""
   },
   "PROJECT_STATUS.md": {
-    "mtime": 1788028182.1547985,
-    "ast_hash": "f6fb93e938753bb50362f7a977753422",
+    "mtime": 1788236229.712942,
+    "ast_hash": "e1688f5a5dc7e5efa6047e5a2bc2eaf6",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/finca.py": {
@@ -4510,13 +4510,13 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/fincas.py": {
-    "mtime": 1788233793.6255062,
-    "ast_hash": "94229f3e8d9c8b4a0e2cddd6d18bcd77",
+    "mtime": 1793756725.8084962,
+    "ast_hash": "3d48cbed65b6581cf6524770bce5da0c",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/reportes.py": {
-    "mtime": 1788235733.2907474,
-    "ast_hash": "73b32467ffafb818d29178ae56bee607",
+    "mtime": 1793755557.210165,
+    "ast_hash": "d92e5d047613bb9808098f02787042b4",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/sensor_api.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1788235344.4177873,
-    "ast_hash": "ff6828565784ebe70d1c6e6f68df5a4c",
+    "mtime": 1793756889.0094545,
+    "ast_hash": "4b65ec771d42dd25368486c309854a29",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -4620,8 +4620,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/index.html": {
-    "mtime": 1788235325.2040226,
-    "ast_hash": "1154b1848e88e639830b8da2419beb3a",
+    "mtime": 1793756775.9088585,
+    "ast_hash": "28cdfabbff8cf7126da57dcd77c81daf",
     "semantic_hash": ""
   },
   "reports/reporte_esp32-npk-001.html": {
@@ -4650,8 +4650,8 @@
     "semantic_hash": ""
   },
   "render.yaml": {
-    "mtime": 1788011842.3114164,
-    "ast_hash": "eb82d4fef068d303eec27bdc38acabdf",
+    "mtime": 1792465119.2160122,
+    "ast_hash": "0350a1c6c4273f62f7ae785002653318",
     "semantic_hash": ""
   },
   "scripts/seed_cloud.py": {
@@ -4675,8 +4675,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/agronomo_chat.py": {
-    "mtime": 1787845913.0530953,
-    "ast_hash": "4cc494226b4b63d59d7550ff2d8fa00f",
+    "mtime": 1792458409.398306,
+    "ast_hash": "c23025bb122d7c05cb9e7e648fe33bd8",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/006_posiciones_muestreo.py": {
@@ -4780,18 +4780,18 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/ml.py": {
-    "mtime": 1787895662.8690794,
-    "ast_hash": "b8e328c0c8ab24fefc811bab8790aed1",
+    "mtime": 1788236627.2501853,
+    "ast_hash": "1a8a1bb74545dc4b67ce5aeeb2a1d617",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/ml_oracle.py": {
-    "mtime": 1787869780.2003112,
-    "ast_hash": "8cb13a81acf16f218f7669f6370bcba8",
+    "mtime": 1788236547.2746198,
+    "ast_hash": "ee4fac68d3bcf9e2a7fff2bc85b7bf3f",
     "semantic_hash": ""
   },
   "apps/ml/agroia_ml/train_colombia.py": {
-    "mtime": 1787870020.5338564,
-    "ast_hash": "c12697e2f0c60b1b3f64800df5d8e172",
+    "mtime": 1788236615.2726407,
+    "ast_hash": "eb17ed8b5b57baa330f93eeb343e2dc9",
     "semantic_hash": ""
   },
   "apps/ml/models/ml_meta.json": {
@@ -4825,18 +4825,18 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.html": {
-    "mtime": 1788015028.0426836,
-    "ast_hash": "d831bfe1837d9f3d493041e12c17c644",
+    "mtime": 1788236310.8268268,
+    "ast_hash": "fb2072836502a580881d7d02e70dc725",
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Funcional_Tecnico_AgroIA.md": {
-    "mtime": 1788015021.4686687,
-    "ast_hash": "29f499dd6442299c76f8b52563000777",
+    "mtime": 1788236302.715756,
+    "ast_hash": "8f1a62cc516b9ac3edda4655acd98984",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/lote.py": {
-    "mtime": 1787888542.789882,
-    "ast_hash": "8a4ce3f8cf81e393349c901cbc3bc30a",
+    "mtime": 1793756681.6536684,
+    "ast_hash": "a2c9a148033b77b73612a46ec22162a4",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/geografia.py": {
@@ -4955,8 +4955,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/alertas.py": {
-    "mtime": 1787931319.8583777,
-    "ast_hash": "d3960f5f485bf5a11ff838c6fc1e64af",
+    "mtime": 1789347679.517726,
+    "ast_hash": "4dc797da5791a47a58585696e44c7a0e",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/alerta_climatica.py": {
@@ -4965,8 +4965,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/clima_alertas.py": {
-    "mtime": 1788011721.0106719,
-    "ast_hash": "2a4003807e5551393243cda6403eac28",
+    "mtime": 1789347679.517726,
+    "ast_hash": "553063e599e56d2eb911b440cf994c50",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/019_alertas_climaticas.py": {
@@ -5385,13 +5385,13 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/lista_trabajos.py": {
-    "mtime": 1788230990.6366947,
-    "ast_hash": "e144a527f9e94434d7bcd249ab032d35",
+    "mtime": 1789761543.671631,
+    "ast_hash": "f7ae7022e7ea631f5c4b24c43d74bc95",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/comision.py": {
-    "mtime": 1788230985.8405876,
-    "ast_hash": "4286f7c4733bd3a18ec0230d57923c72",
+    "mtime": 1789761008.1628335,
+    "ast_hash": "6c6e1d1b4f02a5caacc36ad3c80da293",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/models/equipo_trabajo.py": {
@@ -5565,8 +5565,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/vision_fallback.py": {
-    "mtime": 1788227173.4444711,
-    "ast_hash": "fef771d3cf627e3a93f8ebcc09f0a2d8",
+    "mtime": 1788236559.462225,
+    "ast_hash": "eefde29e6b7ba5c61125eb7681b476fd",
     "semantic_hash": ""
   },
   "apps/backend/tests/test_vision_engine.py": {
@@ -5720,13 +5720,13 @@
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.html": {
-    "mtime": 1788028187.3528647,
-    "ast_hash": "7c641b5356363c888e32d7d5fdf18c05",
+    "mtime": 1788236321.1326017,
+    "ast_hash": "874355e37a09d0d89c6f94752d5234bb",
     "semantic_hash": ""
   },
   "resources/architecture/Documento_Datasets_Entrenamiento_AgroIA.md": {
-    "mtime": 1788028182.1547985,
-    "ast_hash": "147a2c3f8b2f564de9835beaa0346658",
+    "mtime": 1788236250.9899197,
+    "ast_hash": "36083af93231c327da193bac2386f3df",
     "semantic_hash": ""
   },
   "context/contextoVision/AgroIA_Especificacion_Tecnica_v6_Datasets.md": {
@@ -5780,13 +5780,923 @@
     "semantic_hash": ""
   },
   "apps/backend/tests/test_reportes_accesibilidad.py": {
-    "mtime": 1788235809.2729907,
-    "ast_hash": "e4c1294c9eff4c8b124e55910db9e3c1",
+    "mtime": 1789351299.8744195,
+    "ast_hash": "e9915a562e6d39bfacfaebe0e27755a3",
     "semantic_hash": ""
   },
   "context/AgroIA_Especificacion_Tecnica_v8_Accesibilidad.md": {
     "mtime": 1788234994.6163795,
     "ast_hash": "a05a4965fc23e0d5cdd0e05858d3a687",
+    "semantic_hash": ""
+  },
+  "apps/backend/tests/test_clima_alertas.py": {
+    "mtime": 1789347679.536282,
+    "ast_hash": "dc658bb15466ceee955e61bb287aa320",
+    "semantic_hash": ""
+  },
+  "context/contextoFuncional/explicacion-analisis-suelo-agroia.md": {
+    "mtime": 1788969267.194121,
+    "ast_hash": "79f62ba09d222cbf81002cbdcbd9e5c2",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/costeo.py": {
+    "mtime": 1789762654.9823365,
+    "ast_hash": "5d8dcf797b6051059ca4fe7c2aa20871",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/models/costeo.py": {
+    "mtime": 1789757974.8041768,
+    "ast_hash": "d19b28f6e5f3090f1272da60df9079d7",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/costeo_motor.py": {
+    "mtime": 1789762654.9813347,
+    "ast_hash": "9ecbdddac678ac9db440cbfef33acde4",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/costeo_seed.py": {
+    "mtime": 1789761583.532779,
+    "ast_hash": "77cf4df88ee672574793257e14b7079d",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/045_costeo_parametros.py": {
+    "mtime": 1789757942.9350932,
+    "ast_hash": "ae498bf2d837e4d06ebd5ac720c08673",
+    "semantic_hash": ""
+  },
+  "apps/backend/tests/test_costeo_api.py": {
+    "mtime": 1789758180.0833366,
+    "ast_hash": "3762bf8e67820facf23a34cfafa10aea",
+    "semantic_hash": ""
+  },
+  "apps/backend/tests/test_costeo_motor.py": {
+    "mtime": 1789758217.066275,
+    "ast_hash": "ffbea1a0873e70d65e646e4d846a5167",
+    "semantic_hash": ""
+  },
+  "scripts/seed_costeo.py": {
+    "mtime": 1789758147.1571684,
+    "ast_hash": "53e36a80f82a9c9b2d3ef45cb7dc7341",
+    "semantic_hash": ""
+  },
+  "context/RFP_AgroIA_Estimacion_Costos.md": {
+    "mtime": 1789757599.3549361,
+    "ast_hash": "c3d5445b93007687f1a0ae0b15c566e4",
+    "semantic_hash": ""
+  },
+  "context/contextoFuncional/factura.md": {
+    "mtime": 1789756240.4737573,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "resources/architecture/Documento_Menus_Pantallas_AgroIA.md": {
+    "mtime": 1792459306.8284743,
+    "ast_hash": "7adf8eff42bb37eefbe3511a7de0650d",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/rfp-agc-cost.md": {
+    "mtime": 1789762759.6368663,
+    "ast_hash": "031ef07102ce0e5bad1926280c39c62d",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/costeo_admin.py": {
+    "mtime": 1789763828.9296434,
+    "ast_hash": "5b3fd601edc375895d2baa10dce60f43",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/costeo_identidad.py": {
+    "mtime": 1789761727.68679,
+    "ast_hash": "3ccfa0426125bde281ba0555265ca39b",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/estimaciones.py": {
+    "mtime": 1789763603.122237,
+    "ast_hash": "fd8da6afb75beea888e65bae600a3d03",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/models/cobros.py": {
+    "mtime": 1789761000.6875002,
+    "ast_hash": "8d508b01c2ad03006db737e8bc593dd2",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/models/costeo_fases.py": {
+    "mtime": 1789761727.68679,
+    "ast_hash": "6ec07ad9f2e474c58c7aa17030e12efa",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/models/estimaciones.py": {
+    "mtime": 1789761418.8750305,
+    "ast_hash": "b0b0fc69ef7c45af6703b150ee44fbca",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/auth_contexto.py": {
+    "mtime": 1789761208.1424627,
+    "ast_hash": "c7d9c194cb38aae75f8ad5bae7c19bbc",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/cobros.py": {
+    "mtime": 1789761126.2868361,
+    "ast_hash": "a926443a66f73fbc1158709c3851cd87",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/costeo_validacion.py": {
+    "mtime": 1789762319.5591166,
+    "ast_hash": "f8f71cf2e2839349be73acb24380ce7a",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/documentos_costeo.py": {
+    "mtime": 1789763828.9194543,
+    "ast_hash": "2428009b3cb440ef285edef7ee92b0b8",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/estimaciones.py": {
+    "mtime": 1789764149.046461,
+    "ast_hash": "4a653087bca223ea05df8950b23ebc5b",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/046_costeo_estimaciones_cobros.py": {
+    "mtime": 1789761418.8734016,
+    "ast_hash": "b148513fd7876a3cd5822741e6e45711",
+    "semantic_hash": ""
+  },
+  "apps/backend/tests/test_costeo_fases_api.py": {
+    "mtime": 1789764248.4965098,
+    "ast_hash": "ccafe21a1bb2668d5e12402975e25b3a",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/costeo.js": {
+    "mtime": 1789772533.7978313,
+    "ast_hash": "7c27eda660a7d9363b72d15e3974523f",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/ayuda-costeo-admin.html": {
+    "mtime": 1789762767.6020086,
+    "ast_hash": "c3f85d82ef203a5563c70d9dc6217505",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/voz.py": {
+    "mtime": 1792456627.3449843,
+    "ast_hash": "2982c3e30c456e4509a94763567eb204",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/models/metrica_voz.py": {
+    "mtime": 1792456627.3034766,
+    "ast_hash": "a9dfbd71ee5aca00ab07e0463c0f5f31",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/models/parametro_voz.py": {
+    "mtime": 1792456627.2727587,
+    "ast_hash": "a83e4835d3554c2293c1f8dab2d30deb",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/transcripcion.py": {
+    "mtime": 1792456627.2345655,
+    "ast_hash": "09eb255fce35f3a00c834984d46d21ea",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/047_voz.py": {
+    "mtime": 1792456643.198512,
+    "ast_hash": "82b8a5d9e287691e1683cff2a4b8769c",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/voz.js": {
+    "mtime": 1792457395.5343862,
+    "ast_hash": "aa3186bf53ebcc5604f5f0a263f82da7",
+    "semantic_hash": ""
+  },
+  "context/RFP-AGROIA-001_Interaccion_por_voz_Asesor_agronomico.md": {
+    "mtime": 1792453542.3790002,
+    "ast_hash": "6b337cc811c8f7c7fbc7aea41a4921c4",
+    "semantic_hash": ""
+  },
+  "context/RFP-AGROIA-002_Lectura_de_respuestas_en_voz_alta.md": {
+    "mtime": 1792459616.5302525,
+    "ast_hash": "8f5185c20b900ffb363f5b1664046c81",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-011-usabilidad-de-interaccion-por-voz.md": {
+    "mtime": 1792454305.6450276,
+    "ast_hash": "9e23a0e8986926588663914eff069c52",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-012-accesibilidad-de-controles-y-estados.md": {
+    "mtime": 1792454305.737412,
+    "ast_hash": "fb5018804fae0f7d6269cd933b298fee",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-013-tiempo-de-transcripcion.md": {
+    "mtime": 1792454305.8364668,
+    "ast_hash": "e4e70c47d82b3a531f941f9ce41d39ea",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-014-aislamiento-de-fallos-del-servicio-de-voz.md": {
+    "mtime": 1792454305.932276,
+    "ast_hash": "7c06a21eda293608ffd99445e8df0ac9",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-015-compatibilidad-de-navegadores-y-dispositivos.md": {
+    "mtime": 1792454306.0279615,
+    "ast_hash": "80c57420d8aa916cc9a896658a13455f",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-016-conectividad-limitada-en-campo.md": {
+    "mtime": 1792454306.1204834,
+    "ast_hash": "021d6449396f192f49ae0cd15fa5c20a",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-017-control-de-costos-de-transcripcion.md": {
+    "mtime": 1792454306.211382,
+    "ast_hash": "8829d050c0957063665b8a099580f13c",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-018-mantenibilidad-de-la-funcion-de-voz.md": {
+    "mtime": 1792454306.2772107,
+    "ast_hash": "dfd7794394908a6cbf29417aa607fd85",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-019-no-almacenamiento-de-audio.md": {
+    "mtime": 1792454306.3698606,
+    "ast_hash": "48cd58f078bdabfa3ba79cb41dafc210",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-020-transparencia-y-proteccion-de-datos.md": {
+    "mtime": 1792454306.468598,
+    "ast_hash": "cfef505755523e4a01fa4e2f3b479a6c",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-021-transmision-cifrada-de-audio.md": {
+    "mtime": 1792454306.5656347,
+    "ast_hash": "e866785cac683b328943f6d9b5d03fef",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-022-minimizacion-de-registros-de-consultas.md": {
+    "mtime": 1792454306.65515,
+    "ast_hash": "1a1f2013af7206d60717650387926f6e",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-023-limites-contra-abuso.md": {
+    "mtime": 1792454306.753119,
+    "ast_hash": "a71f3af2b5b570fd3ee94ea389db138c",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-016-confirmacion-de-arquitectura-vigente.md": {
+    "mtime": 1792454306.8444276,
+    "ast_hash": "07584e11ce50d1113b6d46733615939e",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-017-seleccion-de-alternativa-de-transcripcion.md": {
+    "mtime": 1792454306.9390624,
+    "ast_hash": "08e765f0e58a6a78180122db65e99ba2",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-018-integracion-con-chat-y-transcripcion.md": {
+    "mtime": 1792454307.0351374,
+    "ast_hash": "c1f00bfd413e2d03556aaf7b9abcc623",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-019-parametros-administrables-de-voz.md": {
+    "mtime": 1792454307.1255815,
+    "ast_hash": "41e8be6400b98d98ad2ddd8cdc42b8c3",
+    "semantic_hash": ""
+  },
+  "resources/design/models/RD-008-interaccion-de-voz-en-el-chat.md": {
+    "mtime": 1792454307.2280464,
+    "ast_hash": "d5217a4ec8489955ee8eb40373d48e2d",
+    "semantic_hash": ""
+  },
+  "resources/functional/catalogo-funcional-agroia.md": {
+    "mtime": 1792459277.2201498,
+    "ast_hash": "c449556f7179aae8f485b40c55066a9b",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-01-boton-microfono-estados.md": {
+    "mtime": 1792456305.4307177,
+    "ast_hash": "16b8bf952b9e63f5b2bd877f2257faa0",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-02-captura-voz-permisos.md": {
+    "mtime": 1792456305.5670812,
+    "ast_hash": "7f37ca5e757bb310704357ba24a04ad0",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-03-transcripcion-voz-texto.md": {
+    "mtime": 1792456305.5413678,
+    "ast_hash": "60e460efa8595b8820c5ef2f5a749fad",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-04-envio-consulta-chat.md": {
+    "mtime": 1792456305.601525,
+    "ast_hash": "c00f05f16f2c46656732ee97e2d60394",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-05-comandos-control-voz.md": {
+    "mtime": 1792456305.5206494,
+    "ast_hash": "a4b998120594cdfcc64b8d592efe872f",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-06-degradacion-elegante.md": {
+    "mtime": 1792456305.630265,
+    "ast_hash": "9c32a0f4c49a77b99b276522bf82163b",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-07-activacion-administrativa.md": {
+    "mtime": 1792456305.848054,
+    "ast_hash": "7fcf568bc519d9ac7d4a4d72cdafb525",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-08-panel-metricas-voz.md": {
+    "mtime": 1792456305.766423,
+    "ast_hash": "b0b8c25d9e6a46b9749310105e26ae0c",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/tt-01-seleccion-servicio-transcripcion.md": {
+    "mtime": 1792456305.7335155,
+    "ast_hash": "28134a359166e9e4d0d1cc97a56f6426",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/tt-02-endpoint-transcripcion-servidor.md": {
+    "mtime": 1792456305.8956475,
+    "ast_hash": "47e4898c912310b7240c3625ba5f3710",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/tt-03-parametros-administrables-voz.md": {
+    "mtime": 1792456305.6658547,
+    "ast_hash": "ea98597ea8f912c11f30ea7dee38982f",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/tt-04-instrumentacion-metricas-voz.md": {
+    "mtime": 1792456305.8147898,
+    "ast_hash": "ecd7b8ed659d4ce312549d6a992c1b39",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/tt-05-matriz-pruebas-compatibilidad.md": {
+    "mtime": 1792456305.6961572,
+    "ast_hash": "8a4dd10b70c87f823476b6988b5b8b39",
+    "semantic_hash": ""
+  },
+  "resources/functional/reqs/010-interaccion-por-voz-asesor-agronomico.md": {
+    "mtime": 1792456127.0466716,
+    "ast_hash": "00acfa6f33b02dcd5710c4495657932e",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-023-boton-de-captura-de-voz.md": {
+    "mtime": 1792454304.061841,
+    "ast_hash": "156dcc7bc32ffa1c488396e8ee101e23",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-024-iniciar-y-detener-grabacion.md": {
+    "mtime": 1792454304.1490138,
+    "ast_hash": "6f6cd554164599f07944a648964e09ac",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-025-permiso-de-microfono.md": {
+    "mtime": 1792454304.4568498,
+    "ast_hash": "75d0ded012c7701b22ac3fa4e1333256",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-026-transcripcion-en-espanol.md": {
+    "mtime": 1792454304.5285268,
+    "ast_hash": "1fa578c1c1fd6bc1628a7e8242eb91ee",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-027-revision-de-transcripcion.md": {
+    "mtime": 1792454304.6163602,
+    "ast_hash": "080aa818ece625a783ab07c0e0f487cd",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-028-envio-al-chat-existente.md": {
+    "mtime": 1792454304.7156389,
+    "ast_hash": "9526471cac7412831546ac95b5df5e12",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-029-contexto-de-finca-y-reporte.md": {
+    "mtime": 1792454304.8130486,
+    "ast_hash": "df100cfee9f8f71e254c5c8d770488f9",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-030-comandos-de-control-por-voz.md": {
+    "mtime": 1792454304.908011,
+    "ast_hash": "93e26ebce6e7422dcdfd88251f0f8147",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-031-estados-de-voz-y-nivel-de-audio.md": {
+    "mtime": 1792454305.0006618,
+    "ast_hash": "6bb7f2541f72ba683927aff6096f96b6",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-032-continuidad-del-chat-escrito.md": {
+    "mtime": 1792454305.0909517,
+    "ast_hash": "a633699fa6cdacef6d7e44b74715b9de",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-033-degradacion-por-falta-de-soporte.md": {
+    "mtime": 1792454305.1874793,
+    "ast_hash": "d3b232ca0182fa8393f093ac07716de0",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-034-duracion-maxima-configurable.md": {
+    "mtime": 1792454305.2848403,
+    "ast_hash": "db899f484b4b15d908568a8294632565",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-035-vocabulario-agronomico.md": {
+    "mtime": 1792454305.377911,
+    "ast_hash": "f1d056a8e06d2d26536ec0688c47187b",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-036-metricas-de-uso-de-voz.md": {
+    "mtime": 1792454305.4643674,
+    "ast_hash": "22e9527fc9ae90bc4048db1dbd2b1022",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-037-activacion-administrativa-de-voz.md": {
+    "mtime": 1792454305.5543325,
+    "ast_hash": "917d5c785ce5d8ea965ebd5d9c5aa667",
+    "semantic_hash": ""
+  },
+  "resources/summary/executive-summary.md": {
+    "mtime": 1792454307.336696,
+    "ast_hash": "ec36019af40d797d4e62b77d4943ab12",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/api/lectura.py": {
+    "mtime": 1792464412.559059,
+    "ast_hash": "5c93b1f9c7bdfff2ce1bfd3147432518",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/models/metrica_lectura_voz.py": {
+    "mtime": 1792461820.2187526,
+    "ast_hash": "0ba93d3f0c142a1aecb54f035392693b",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/models/preferencia_lectura_voz.py": {
+    "mtime": 1792461820.2625551,
+    "ast_hash": "b7056a612a42a3bcad6ccd7ef9d6b945",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/models/voz_personalizada.py": {
+    "mtime": 1792461820.3883173,
+    "ast_hash": "662283973b7a9cd7bc59349f1e3f2d13",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/clonacion_voz.py": {
+    "mtime": 1792463810.5617228,
+    "ast_hash": "376cbb4135035cd2f2ab69799099c47e",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/sintesis_voz.py": {
+    "mtime": 1792463832.1669836,
+    "ast_hash": "16e1d2319e18036eb80741a061d2b4b3",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/048_lectura_voz.py": {
+    "mtime": 1792461873.4374135,
+    "ast_hash": "354e8c7e8900401db7e3de5a7adf58df",
+    "semantic_hash": ""
+  },
+  "apps/backend/tests/test_clonacion_voz.py": {
+    "mtime": 1792463998.9154196,
+    "ast_hash": "7156e34d965f9756c70d5bc6c5fe131c",
+    "semantic_hash": ""
+  },
+  "apps/frontend-web/lectura.js": {
+    "mtime": 1792463889.6924596,
+    "ast_hash": "901d99e5d035c7f2f588a2fc6e37a0e3",
+    "semantic_hash": ""
+  },
+  "apps/voice-clone/app.py": {
+    "mtime": 1792464441.5741053,
+    "ast_hash": "dec8bfbb2e18b371c063a7f4f2ea1542",
+    "semantic_hash": ""
+  },
+  "apps/voice-clone/README.md": {
+    "mtime": 1792464464.09121,
+    "ast_hash": "2343e6d289afbb577bbf8eeac1d9749b",
+    "semantic_hash": ""
+  },
+  "apps/voice-clone/requirements.txt": {
+    "mtime": 1792464447.316399,
+    "ast_hash": "d583d17a4ae64f6f90a11c37e179b399",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-024-usabilidad-lectura-respuestas.md": {
+    "mtime": 1792460430.1118584,
+    "ast_hash": "6336f577593aa8a0caca6e3db5359df9",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-025-accesibilidad-controles-lectura.md": {
+    "mtime": 1792460430.5057204,
+    "ast_hash": "7188db2dc11ab2dfe3690865170c188e",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-026-rendimiento-sintesis-reproduccion.md": {
+    "mtime": 1792460430.2112057,
+    "ast_hash": "9a14d958426a3b7855dd4041db6d2c0f",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-027-disponibilidad-aislamiento-lectura.md": {
+    "mtime": 1792460430.3268569,
+    "ast_hash": "a9397becceb2f23b3c7f513d9167c1dd",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-028-compatibilidad-lectura-navegadores.md": {
+    "mtime": 1792460430.548375,
+    "ast_hash": "4201cf87c19e97f97d006d0e6be818a3",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-029-conectividad-lectura-senal-limitada.md": {
+    "mtime": 1792460430.2535057,
+    "ast_hash": "79bbd8a98d5449a2a4f824748ad4a9c4",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-030-costos-capas-gratuitas-lectura.md": {
+    "mtime": 1792460430.3857815,
+    "ast_hash": "ff3cbf3ba12ca303aa82c6b8317d90d4",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-031-calidad-audio-voces-naturales.md": {
+    "mtime": 1792460430.4387956,
+    "ast_hash": "c5b1c956f276160ac452fbb6e1e7e6ca",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RNF-032-mantenibilidad-motores-intercambiables.md": {
+    "mtime": 1792460430.2913532,
+    "ast_hash": "103f799d0bd89e450a89ca33b4cf79b7",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-020-interfaz-comun-sintesis-voz.md": {
+    "mtime": 1792460464.4874542,
+    "ast_hash": "8e05905da1beefab1525dab36a34aec3",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-021-cadena-respaldo-motores-voz.md": {
+    "mtime": 1792461300.2395802,
+    "ast_hash": "ac1f9f292e8001bcdd2ad4dfb0bf92bd",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-022-control-cuota-sintesis.md": {
+    "mtime": 1792460464.52788,
+    "ast_hash": "a52468b0a00b2702b966bd17104ed7ed",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-023-preprocesamiento-texto-lectura.md": {
+    "mtime": 1792460464.5746064,
+    "ast_hash": "6171272975de5273685ea87dc387899b",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-024-endpoint-sintesis-servidor.md": {
+    "mtime": 1792460464.7735372,
+    "ast_hash": "ea7657f7d54cce579aabc778bdd6cb0f",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-025-persistencia-preferencias-voz.md": {
+    "mtime": 1792460464.6671982,
+    "ast_hash": "cb02ca4b92bff0a1979aad4c2cd2584e",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-026-voz-personalizada-procesamiento-cifrado.md": {
+    "mtime": 1792460464.3393912,
+    "ast_hash": "d998be9b059019e5c900accf2f4547f8",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-027-seleccion-verificacion-motores-licencias.md": {
+    "mtime": 1792461300.2133381,
+    "ast_hash": "12b03aabc1bc6230b9e06160d6fb67f4",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-028-infraestructura-gpu-voz-personalizada.md": {
+    "mtime": 1792461300.2693224,
+    "ast_hash": "ef568958664b53ca1389a9e73ea53ad6",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-029-privacidad-cumplimiento-voz.md": {
+    "mtime": 1792460464.433926,
+    "ast_hash": "166314b217cea9e143d2f252ef048291",
+    "semantic_hash": ""
+  },
+  "resources/architecture/definitions/RT-030-prevencion-suplantacion-voces.md": {
+    "mtime": 1792460464.7261672,
+    "ast_hash": "b6c9de85b04cd99d91dbe65e4d184675",
+    "semantic_hash": ""
+  },
+  "resources/architecture/poc-clonacion-voz-tt06.md": {
+    "mtime": 1792464476.1846433,
+    "ast_hash": "a24821f83a07090c32fd8390642c0ed7",
+    "semantic_hash": ""
+  },
+  "resources/design/models/RD-009-diseno-interaccion-lectura-voz.md": {
+    "mtime": 1792460504.1708555,
+    "ast_hash": "fd376b049c4c47d350e9bdceffe5ba12",
+    "semantic_hash": ""
+  },
+  "resources/design/models/RD-010-flujo-voz-personalizada.md": {
+    "mtime": 1792460504.140933,
+    "ast_hash": "6b83fe8d240fc4d2097f8e06f3ad156b",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-01-interruptor-lectura-persistente.md": {
+    "mtime": 1792461653.4413705,
+    "ast_hash": "f736a2b858f60c414a5166a038b3f32c",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-02-seleccion-prueba-voz.md": {
+    "mtime": 1792461653.408596,
+    "ast_hash": "cbb4c63fd6b0fef3837124e6a3df1a1b",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-03-lectura-automatica-manual.md": {
+    "mtime": 1792461653.256772,
+    "ast_hash": "3412c1c7eba0162a245c6a3c8af30f10",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-04-controles-reproduccion-velocidad.md": {
+    "mtime": 1792461653.504169,
+    "ast_hash": "1c032c3c402d364da151cf407fa43e7f",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-05-lectura-natural-texto.md": {
+    "mtime": 1792461653.3336256,
+    "ast_hash": "7f9177a8638445ebc702c909054ffbab",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-06-degradacion-conmutacion-motores.md": {
+    "mtime": 1792461653.5902426,
+    "ast_hash": "3871cd58d52c60fb1f942d062f55a57a",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-07-voz-personalizada.md": {
+    "mtime": 1792461653.5426958,
+    "ast_hash": "ac5c330998997e1818a926b72b65afc2",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/hu-08-administracion-metricas-lectura.md": {
+    "mtime": 1792461653.6604643,
+    "ast_hash": "74c346968509bc3bcdac87f217b33f97",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/tt-01-interfaz-comun-sintesis.md": {
+    "mtime": 1792461668.8982456,
+    "ast_hash": "6e3495149891ee3b51163ec815410f49",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/tt-02-cadena-respaldo-motores.md": {
+    "mtime": 1792461668.93899,
+    "ast_hash": "9ad6764676a7a694930b4e0ec94bb91d",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/tt-03-preprocesamiento-texto-pronunciacion.md": {
+    "mtime": 1792461668.995867,
+    "ast_hash": "1374f11f139567922677dc79488e79d5",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/tt-04-endpoint-sintesis-servidor.md": {
+    "mtime": 1792461668.970249,
+    "ast_hash": "93f8f10b88ddf62fcd9cd20fe0eab482",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/tt-05-persistencia-preferencias-lectura.md": {
+    "mtime": 1792461669.0206523,
+    "ast_hash": "cec6c222bad6a4cad8dcf187d645a462",
+    "semantic_hash": ""
+  },
+  "resources/functional/hu/tt-06-poc-clonacion-gpu-cloud.md": {
+    "mtime": 1792463987.12778,
+    "ast_hash": "1ff94e505406270330deb175d4fd3fd7",
+    "semantic_hash": ""
+  },
+  "resources/functional/reqs/011-lectura-voz-alta-respuestas-asesor.md": {
+    "mtime": 1792461533.7451873,
+    "ast_hash": "09c2b548612d4405fa31c55b09986c97",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-038-interruptor-lectura-persistente.md": {
+    "mtime": 1792460400.7486672,
+    "ast_hash": "e675261ec23ba7144c0e8ca469c7d316",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-039-selector-voz-femenina-masculina.md": {
+    "mtime": 1792460401.464056,
+    "ast_hash": "2820372bd3c04f970f507abe737e0c64",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-040-boton-escuchar-muestra.md": {
+    "mtime": 1792460400.7127688,
+    "ast_hash": "1b38ac1642f7378e92fa68c8e4bb1f68",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-041-lectura-automatica-respuestas.md": {
+    "mtime": 1792460401.0076556,
+    "ast_hash": "da414f2facb3278c87259d282a0eaab7",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-042-boton-altavoz-lectura-manual.md": {
+    "mtime": 1792460401.3833728,
+    "ast_hash": "72411b73e53a3d8c1f06bfe50cc81d25",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-043-controles-reproduccion-lectura.md": {
+    "mtime": 1792460401.513388,
+    "ast_hash": "46db5303c1b11e7c1b64dd6922014cfc",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-044-control-velocidad-lectura.md": {
+    "mtime": 1792460401.6076233,
+    "ast_hash": "856d2b7f229b712eeb0e45fc3614b5ca",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-045-detencion-automatica-lectura.md": {
+    "mtime": 1792460401.720368,
+    "ast_hash": "d55f8370f79e8fb360a4b29033f7ff36",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-046-limpieza-texto-lectura.md": {
+    "mtime": 1792460401.8224576,
+    "ast_hash": "2ea827c9671b2f3b2eadeb90e10f5744",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-047-chat-escrito-sin-cambios.md": {
+    "mtime": 1792460402.125526,
+    "ast_hash": "f577f1bb4a3cc69a7dba89d8b67e99bb",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-048-conmutacion-motor-respaldo.md": {
+    "mtime": 1792460401.943839,
+    "ast_hash": "36b793ca0dff440acd671904204afe6d",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-049-estado-lectura.md": {
+    "mtime": 1792460401.7813084,
+    "ast_hash": "319af6a1e3ea4892974f262584205360",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-050-preferencia-entre-dispositivos.md": {
+    "mtime": 1792460402.5283785,
+    "ast_hash": "4b36ee4c3a70c5015089083be8df0d79",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-051-flujo-grabacion-voz.md": {
+    "mtime": 1792460402.039132,
+    "ast_hash": "ee1762dd76b9c21a0ca6a1253ac66999",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-052-consentimiento-verificacion-voz.md": {
+    "mtime": 1792460402.3434544,
+    "ast_hash": "d511a40a70e09ee6cab575c868a1c9d0",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-053-gestion-voz-personalizada.md": {
+    "mtime": 1792460402.4518576,
+    "ast_hash": "106256b4061d1768e5bc4190a8a3f562",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-054-mi-voz-opcion-condicional.md": {
+    "mtime": 1792460402.6516588,
+    "ast_hash": "12cd02acaba4b3d64b783678c04073ab",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-055-activacion-administrativa-lectura.md": {
+    "mtime": 1792460402.6236246,
+    "ast_hash": "1dac1c13c45db251f177e228c74ca9bd",
+    "semantic_hash": ""
+  },
+  "resources/functional/requests/RF-056-metricas-uso-lectura.md": {
+    "mtime": 1792460401.8595867,
+    "ast_hash": "315715af5c91cf7ef9402ab9b69447ae",
+    "semantic_hash": ""
+  },
+  "resources/summary/executive-summary-rfp-agroia-002.md": {
+    "mtime": 1792461314.47258,
+    "ast_hash": "2320f3ad6d67dc0488c673463a7bd484",
+    "semantic_hash": ""
+  },
+  "apps/voice-clone/DEPLOY.md": {
+    "mtime": 1792465494.5680976,
+    "ast_hash": "36651f63b3bf867e22ca1732ecedf51a",
+    "semantic_hash": ""
+  },
+  ".github/skills/agro/agronomo-colombia/references/rangos.json": {
+    "mtime": 1793751669.3201313,
+    "ast_hash": "4f19b57d4e7e5ec01cfe16d81f4ebf07",
+    "semantic_hash": ""
+  },
+  ".github/skills/agro/agronomo-colombia/references/temperatura-altitud.json": {
+    "mtime": 1793769256.0,
+    "ast_hash": "64f3c60a019551a1ca253769c9e89a4b",
+    "semantic_hash": ""
+  },
+  ".github/skills/agro/agronomo-colombia/scripts/aptitud.py": {
+    "mtime": 1793769308.0,
+    "ast_hash": "d2c474784ff23f8e892d07e6179c1e62",
+    "semantic_hash": ""
+  },
+  ".github/skills/agro/agronomo-colombia/scripts/geo.py": {
+    "mtime": 1793769298.0,
+    "ast_hash": "e9019cf62ae4444cc87c7e0b98a40ba5",
+    "semantic_hash": ""
+  },
+  "apps/backend/agroia_backend/services/calidad_datos.py": {
+    "mtime": 1793755506.9092126,
+    "ast_hash": "4ce50179d1f1df959a3b3252693f8931",
+    "semantic_hash": ""
+  },
+  ".github/skills/agro/agronomo-colombia/SKILL.md": {
+    "mtime": 1793769356.0,
+    "ast_hash": "92e40d829846902527151aceb5fa4a48",
+    "semantic_hash": ""
+  },
+  ".github/skills/agro/agronomo-colombia/references/cafe.md": {
+    "mtime": 1793751675.7390072,
+    "ast_hash": "d4b437fe1f3a125d14f79ab0e01b1619",
+    "semantic_hash": ""
+  },
+  ".github/skills/agro/agronomo-colombia/references/citricos.md": {
+    "mtime": 1793768974.0,
+    "ast_hash": "2ce0a78eada493c18a7718fbed8b532c",
+    "semantic_hash": ""
+  },
+  ".github/skills/agro/agronomo-colombia/references/frijol.md": {
+    "mtime": 1793751682.0087948,
+    "ast_hash": "119d37ec5811a8a6fc537e3386c8e84d",
+    "semantic_hash": ""
+  },
+  ".github/skills/agro/agronomo-colombia/references/fuentes-oficiales.md": {
+    "mtime": 1793768974.0,
+    "ast_hash": "aae7fb3c8f0ea9b4d21d63f9fb43bf2e",
+    "semantic_hash": ""
+  },
+  ".github/skills/agro/agronomo-colombia/references/pisos-termicos.md": {
+    "mtime": 1793768974.0,
+    "ast_hash": "229a08396e0fa7c9b6ff821165e5e0a0",
+    "semantic_hash": ""
+  },
+  ".github/skills/agro/agronomo-colombia/references/platano.md": {
+    "mtime": 1793768974.0,
+    "ast_hash": "02f728551d89bd2dee638fa51236d1f3",
+    "semantic_hash": ""
+  },
+  ".github/skills/agro/agronomo-colombia/references/suelos-geografia.md": {
+    "mtime": 1793769256.0,
+    "ast_hash": "0e5f9c2451c464dc435bc483b845fb76",
+    "semantic_hash": ""
+  },
+  ".github/skills/agro/agronomo-colombia/sensor/JXBS-3001-RS485-Soil 7in1 Sensor.md": {
+    "mtime": 1793754545.240908,
+    "ast_hash": "db8d828b90724e26d4a0b12dae514155",
+    "semantic_hash": ""
+  },
+  "reports/informe-aptitud-lotes-carcel-penas-blancas.html": {
+    "mtime": 1793732569.1955616,
+    "ast_hash": "01c4c60676cd9886d442589f7b5224b4",
+    "semantic_hash": ""
+  },
+  "reports/informe-aptitud-lotes-carcel-penas-blancas.md": {
+    "mtime": 1793732272.702883,
+    "ast_hash": "660bf5dba209bc9bbc5730ef1a1209aa",
+    "semantic_hash": ""
+  },
+  "reports/informe-diagnostico-variables-disponibles.html": {
+    "mtime": 1793755215.7883263,
+    "ast_hash": "3a22063d3c4c2d6220b45a02fd14fd21",
+    "semantic_hash": ""
+  },
+  "reports/informe-diagnostico-variables-disponibles.md": {
+    "mtime": 1793755215.787325,
+    "ast_hash": "a7cfe768dbf81d6b6b7c69f937d63bbe",
+    "semantic_hash": ""
+  },
+  "reports/informe-mediciones-carcel-penas-blancas-depurado.html": {
+    "mtime": 1793755207.2767098,
+    "ast_hash": "5b00179f006075c02de7639d1b78c29f",
+    "semantic_hash": ""
+  },
+  "reports/mediciones-carcel-penas-blancas-depurado.md": {
+    "mtime": 1793755207.2726932,
+    "ast_hash": "ac89e38cc8b673cb19950223d2519d1a",
+    "semantic_hash": ""
+  },
+  "reports/mediciones-carcel-penas-blancas.md": {
+    "mtime": 1793731811.4300814,
+    "ast_hash": "be0139c5618f40e43ec7f0ccfbcbb102",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/049_lote_perimetro.py": {
+    "mtime": 1793756698.073243,
+    "ast_hash": "2e208869a63d2d73f2ab8898937b783f",
+    "semantic_hash": ""
+  },
+  "reports/informe-lote-cafe.html": {
+    "mtime": 1793755940.9610775,
+    "ast_hash": "5d49d37eee877a2e0c9c13528b71522d",
+    "semantic_hash": ""
+  },
+  "reports/informe-lote-frijol.html": {
+    "mtime": 1793755940.297685,
+    "ast_hash": "e1af26218a37c0a46c19784410a351bd",
+    "semantic_hash": ""
+  },
+  "DOCUMENTACION-PLATAFORMA.md": {
+    "mtime": 1793758228.2398565,
+    "ast_hash": "2e7dc361f88560ff9456b110f7c1d4ee",
     "semantic_hash": ""
   }
 }
