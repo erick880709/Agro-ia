@@ -1672,6 +1672,66 @@ def _seccion_bpa(bpa: dict | None) -> str:
   </section>"""
 
 
+def _seccion_evidencia(evidencia: dict | None) -> str:
+    """Sección de grados de evidencia, cobertura y leyenda (E6/E7)."""
+    if not evidencia:
+        return ""
+
+    resumen = evidencia.get("resumen") or {}
+    insignia_calidad = evidencia.get("insignia_calidad") or {}
+    insignias_grado = evidencia.get("insignias_grado") or {}
+    variables_no_medidas = evidencia.get("variables_no_medidas") or []
+    leyenda = evidencia.get("leyenda_metodologica") or ""
+
+    resumen_html = (
+        f'<span style="font-weight:600">{esc(resumen.get("icono", ""))} '
+        f'{esc(resumen.get("resumen", ""))}</span>'
+    )
+    cal_html = (
+        f'{esc(insignia_calidad.get("icono", ""))} '
+        f'{esc(insignia_calidad.get("etiqueta", ""))}'
+    ) if insignia_calidad else ""
+
+    grados_html = ""
+    if insignias_grado:
+        filas = "".join(
+            f'<tr><td>{esc(var)}</td>'
+            f'<td>{esc(i.get("icono", ""))} {esc(i.get("etiqueta", ""))}</td></tr>'
+            for var, i in sorted(insignias_grado.items())
+        )
+        grados_html = (
+            '<table style="width:100%;border-collapse:collapse;font-size:.82rem">'
+            f'<thead><tr><th style="text-align:left">Variable</th>'
+            f'<th style="text-align:left">Grado de evidencia</th></tr></thead>'
+            f'<tbody>{filas}</tbody></table>'
+        )
+
+    no_medidas_html = ""
+    if variables_no_medidas:
+        items = "".join(
+            f'<li><b>{esc(v.get("variable", ""))}</b> — {esc(v.get("descripcion", ""))} '
+            f'<span class="muted">(fuente: {esc(v.get("fuente", ""))})</span></li>'
+            for v in variables_no_medidas
+        )
+        no_medidas_html = f'<ul class="warnings">{items}</ul>'
+
+    leyenda_html = (
+        f'<p class="muted" style="font-size:.8rem">{esc(leyenda)}</p>' if leyenda else ""
+    )
+
+    return f"""
+  <section class="block">
+    <div class="block-head"><span class="block-num">E</span>
+      <div><div class="block-title">Evidencia y calidad del dato</div>
+      <div class="block-sub">Qué mide el sensor y con qué certeza</div></div>
+    </div>
+    <p>{resumen_html} &nbsp;·&nbsp; {cal_html}</p>
+    {grados_html}
+    {no_medidas_html}
+    {leyenda_html}
+  </section>"""
+
+
 def generar_reporte_html(
     *,
     finca: dict,
@@ -1700,6 +1760,7 @@ def generar_reporte_html(
     rotacion: dict | None = None,
     bpa_resumen: dict | None = None,
     lunar: dict | None = None,
+    evidencia: dict | None = None,
     audiencia: str = "tecnica",
 ) -> str:
     """Construye el documento HTML completo del reporte.
@@ -1825,6 +1886,9 @@ def generar_reporte_html(
     # v3.4: calendario lunar (Almanaque Bristol) — justo después del plano
     seccion_lunar = _seccion_lunar(lunar)
 
+    # E6/E7: evidencia, cobertura y leyenda metodológica
+    seccion_evidencia = _seccion_evidencia(evidencia)
+
     # Explicación en lenguaje campesino (siempre que haya análisis)
     explicacion_campo = generar_explicacion_campesina(uc1=uc1, uc2=uc2, lectura=lectura)
 
@@ -1925,6 +1989,7 @@ def generar_reporte_html(
             f"{explicacion_campo}"
             f"{seccion_pasos}"
             f"{seccion_telemetria}"
+            f"{seccion_evidencia}"
             f"{seccion_faltantes}"
             f"{secciones}"
             f"{seccion_mapa}"
@@ -1940,6 +2005,7 @@ def generar_reporte_html(
     else:
         cuerpo = (
             f"{seccion_telemetria}"
+            f"{seccion_evidencia}"
             f"{seccion_faltantes}"
             f"{secciones}"
             f"{seccion_mapa}"

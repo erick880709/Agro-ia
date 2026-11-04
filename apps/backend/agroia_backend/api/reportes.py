@@ -488,6 +488,43 @@ async def generar_reporte(
     except Exception as e:  # noqa: BLE001 — el reporte nunca falla por Bristol
         logger.warning("bristol_reporte_no_disponible", error=str(e))
 
+    # ── Evidencia y cobertura (E6/E7): grados A/B/C/D + variables no medidas ──
+    evidencia = None
+    if lectura is not None:
+        from agroia_backend.services.grados_evidencia import (
+            cobertura_variables,
+            grados_por_variable,
+        )
+        from agroia_backend.services.presentacion_reportes import (
+            LEYENDA_METODOLOGICA,
+            insignia_calidad,
+            insignia_grado,
+            resumen_una_linea,
+        )
+
+        soil_vars = {
+            var for var in (
+                "ph", "nitrogeno", "fosforo", "potasio",
+                "conductividad_electrica", "humedad", "temperatura_suelo",
+                "materia_organica", "cic", "calcio", "magnesio", "azufre",
+                "hierro", "manganeso", "zinc", "cobre", "boro",
+            ) if getattr(lectura, var, None) is not None
+        }
+        grados = grados_por_variable(
+            soil_vars=soil_vars,
+            npk_calibrado=bool(dispositivo and dispositivo.npk_calibrado),
+        )
+        cobertura = cobertura_variables(soil_vars=soil_vars)
+        evidencia = {
+            "resumen": resumen_una_linea(grados, [lectura.calidad] if lectura.calidad else []),
+            "insignia_calidad": insignia_calidad(lectura.calidad),
+            "insignias_grado": {
+                var: insignia_grado(info["grado"]) for var, info in grados.items()
+            },
+            "variables_no_medidas": cobertura["variables_no_medidas"],
+            "leyenda_metodologica": LEYENDA_METODOLOGICA,
+        }
+
     html = generar_reporte_html(
         finca={
             "nombre": finca.nombre,
@@ -552,6 +589,7 @@ async def generar_reporte(
         rotacion=rotacion,
         bpa_resumen=bpa_resumen,
         lunar=lunar,
+        evidencia=evidencia,
         audiencia=audiencia_efectiva,
     )
 
