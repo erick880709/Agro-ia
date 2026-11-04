@@ -160,7 +160,7 @@ class SueloAdapter:
 
         filtro_sensor = or_(
             SensorReading.calidad.is_(None),
-            SensorReading.calidad != "estimado_por_sig",
+            SensorReading.calidad.notin_(["estimado_por_sig", "invalidada"]),
         )
         sensor = (
             await self.db.execute(
@@ -253,7 +253,7 @@ class SueloAdapter:
         self, finca_id: str, days: int = 90
     ) -> list[SoilData]:
         """Obtiene el histórico de lecturas para una finca."""
-        from sqlalchemy import select
+        from sqlalchemy import or_, select
 
         cutoff = datetime.utcnow() - timedelta(days=days)
         stmt = (
@@ -261,6 +261,10 @@ class SueloAdapter:
             .where(
                 SensorReading.finca_id == finca_id,
                 SensorReading.ts >= cutoff,
+                or_(
+                    SensorReading.calidad.is_(None),
+                    SensorReading.calidad.notin_(["estimado_por_sig", "invalidada"]),
+                ),
             )
             .order_by(SensorReading.ts)
         )

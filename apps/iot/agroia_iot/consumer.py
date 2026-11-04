@@ -45,6 +45,7 @@ async def process_sensor_message(message: dict) -> bool:
     """
     from agroia_backend.models.dispositivo_iot import DispositivoIoT
     from agroia_backend.models.sensor_reading import SensorReading
+    from agroia_backend.services.calidad_datos import CALIDAD_INVALIDADA, es_lectura_objetivo
     from agroia_backend.services.normalizacion_iot import (
         aplicar_calibracion,
         normalizar_trama,
@@ -89,12 +90,27 @@ async def process_sensor_message(message: dict) -> bool:
             except (TypeError, ValueError):
                 return None
 
+        pos_x = _a_flotante(message.get("pos_x", message.get("latitude", raw.get("pos_x", raw.get("latitude")))))
+        pos_y = _a_flotante(message.get("pos_y", message.get("longitude", raw.get("pos_y", raw.get("longitude")))))
+
+        # ── Regla del sensor: marcar lecturas fuera del rango objetivo ──
+        if not es_lectura_objetivo(
+            ph=payload.get("ph"),
+            conductividad_electrica=payload.get("conductividad_electrica"),
+            nitrogeno=payload.get("nitrogeno"),
+            fosforo=payload.get("fosforo"),
+            potasio=payload.get("potasio"),
+            pos_x=pos_x,
+            pos_y=pos_y,
+        ):
+            calidad = CALIDAD_INVALIDADA
+
         reading = SensorReading(
             finca_id=finca_id,
             ts=ts,
             sensor_id=device_id,
-            pos_x=_a_flotante(message.get("pos_x", message.get("latitude", raw.get("pos_x", raw.get("latitude"))))),
-            pos_y=_a_flotante(message.get("pos_y", message.get("longitude", raw.get("pos_y", raw.get("longitude"))))),
+            pos_x=pos_x,
+            pos_y=pos_y,
             ph=payload.get("ph"),
             nitrogeno=payload.get("nitrogeno"),
             fosforo=payload.get("fosforo"),

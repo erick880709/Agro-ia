@@ -13,7 +13,7 @@ from agroia.database import get_db
 from agroia.logging import get_logger
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, Field
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from agroia_backend.models.cultivo import Cultivo, EstadoFicha, FichaTecnica
@@ -219,7 +219,13 @@ async def generar_reporte(
     lectura = (
         await db.execute(
             select(SensorReading)
-            .where(SensorReading.finca_id == finca_uuid)
+            .where(
+                SensorReading.finca_id == finca_uuid,
+                or_(
+                    SensorReading.calidad.is_(None),
+                    SensorReading.calidad.notin_(["estimado_por_sig", "invalidada"]),
+                ),
+            )
             .order_by(SensorReading.ts.desc())
             .limit(1)
         )
@@ -674,6 +680,10 @@ async def _muestras_geo(db: AsyncSession, finca_uuid) -> list[dict]:
                 SensorReading.finca_id == finca_uuid,
                 SensorReading.pos_x.isnot(None),
                 SensorReading.pos_y.isnot(None),
+                or_(
+                    SensorReading.calidad.is_(None),
+                    SensorReading.calidad.notin_(["estimado_por_sig", "invalidada"]),
+                ),
             )
             .order_by(SensorReading.ts.desc())
             .limit(400)
