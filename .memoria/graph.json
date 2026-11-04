@@ -1,6 +1,6 @@
 {
   "schema": "memoria/v1",
-  "updatedAt": "2026-11-04T12:37:08.305Z",
+  "updatedAt": "2026-11-04T12:46:58.045Z",
   "nodes": [
     {
       "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
@@ -76,6 +76,21 @@
       "source": "manual",
       "createdAt": "2026-11-04T12:37:08.300Z",
       "updatedAt": "2026-11-04T12:37:08.302Z"
+    },
+    {
+      "id": "mem-20261104124658-b33b30-builder-implementar-epica-e6-grados-de-evidencia-rfp-003",
+      "type": "avance",
+      "status": "completado",
+      "skill": "builder",
+      "title": "Implementar epica E6 grados de evidencia (RFP-003)",
+      "summary": "TT-11 grados de evidencia A/B/C/D (grados_evidencia.py: grado_laboratorio <90d, grado_sensor B/C, SIG D, puede_dosificar solo A/B), HU-08 cobertura explicita de variables no medidas con fuente, HU-09 recomendacion de muestreo. Integracion aditiva en orquestador (analyze adjunta grados_evidencia, variables_no_medidas, muestreo_recomendado). 16 tests, integracion 8/8.",
+      "files": [
+        "apps/backend/agroia_backend/services/grados_evidencia.py"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T12:46:58.036Z",
+      "updatedAt": "2026-11-04T12:46:58.040Z"
     }
   ],
   "edges": []

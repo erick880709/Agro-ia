@@ -3,10 +3,12 @@
 > Grafo de conocimiento generado por la skill `memoria`. Fuente de verdad: `.memoria/graph.json`.
 > Este archivo se regenera; no lo edites a mano.
 
-**5 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T12:37:08.305Z
+**6 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T12:46:58.045Z
 
 ## Contexto activo
 
+- **Implementar epica E6 grados de evidencia (RFP-003)** — `builder` · completado · 2026-11-04
+  TT-11 grados de evidencia A/B/C/D (grados_evidencia.py: grado_laboratorio <90d, grado_sensor B/C, SIG D, puede_dosificar solo A/B), HU-08 cobertura explicita de variables no medidas con fuente, HU-09 recomendacion de muestreo. Integracion aditiva en orquestador (analyze adjunta grados_evidencia, variables_no_medidas, muestreo_recomendado). 16 tests, integracion 8/8.
 - **Implementar epica E5 protocolo de muestreo y contexto (RFP-003)** — `builder` · completado · 2026-11-04
   HU-05 metadatos de muestreo (modelo SesionMuestreo + migracion 054 + campos profundidad/punto/replica/sesion en sensor_readings + endpoint /muestreo/sesiones), HU-06 contexto agronomico (contexto_agronomico.py, ventana post-fertilizacion/riego -> valida_con_advertencia, wire en consumer), HU-07 guia de campo (/muestreo/guia). 11 tests, integracion 8/8.
 - **Implementar epica E4 calibracion local (RFP-003)** — `builder` · completado · 2026-11-04
@@ -19,6 +21,13 @@
   TT-01 decodificacion Modbus JXBS-3001 + CRC16 (15 tests), TT-02 firmware ESP32 (apps/iot/firmware), TT-03 verificacion de variante, HU-01 registro de dispositivos con configuracion (migracion 050).
 
 ## Avances
+
+### ✅ Implementar epica E6 grados de evidencia (RFP-003)
+
+- **id:** `mem-20261104124658-b33b30-builder-implementar-epica-e6-grados-de-evidencia-rfp-003`
+- **skill:** `builder` · **estado:** completado · **creado:** 2026-11-04
+- **resumen:** TT-11 grados de evidencia A/B/C/D (grados_evidencia.py: grado_laboratorio <90d, grado_sensor B/C, SIG D, puede_dosificar solo A/B), HU-08 cobertura explicita de variables no medidas con fuente, HU-09 recomendacion de muestreo. Integracion aditiva en orquestador (analyze adjunta grados_evidencia, variables_no_medidas, muestreo_recomendado). 16 tests, integracion 8/8.
+- **archivos:** `apps/backend/agroia_backend/services/grados_evidencia.py`
 
 ### ✅ Implementar epica E5 protocolo de muestreo y contexto (RFP-003)
 

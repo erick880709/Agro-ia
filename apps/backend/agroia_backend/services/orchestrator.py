@@ -112,6 +112,10 @@ class RecommendationResult:
     desglose_confianza: dict = field(default_factory=dict)
     # ── Validador ML (variables promovidas por aprendizaje activo) ──
     validacion_ml: dict | None = None
+    # ── Grados de evidencia (Épica E6) ──
+    grados_evidencia: dict | None = None
+    variables_no_medidas: list[dict] = field(default_factory=list)
+    muestreo_recomendado: dict | None = None
 
 
 class RecommendationOrchestrator:
@@ -134,6 +138,41 @@ class RecommendationOrchestrator:
         self.aptitud = aptitud_service
 
     async def analyze(self, request: RecommendationRequest) -> RecommendationResult:
+        """Ejecuta el pipeline y adjunta los grados de evidencia (E6)."""
+        result = await self._analyze_inner(request)
+        try:
+            soil_data = await self.soil.get_latest(request.finca_id)
+            if soil_data is not None:
+                from agroia_backend.services.grados_evidencia import (
+                    cobertura_variables,
+                    grados_por_variable,
+                    recomendar_muestreo,
+                )
+
+                soil_dict = soil_data.to_dict()
+                lab_ctx = await self._aplicar_analisis_laboratorio(
+                    request.finca_id, soil_dict, {}
+                )
+                lab_vars = set(lab_ctx["variables"]) if lab_ctx else set()
+                grados = grados_por_variable(
+                    soil_vars=set(soil_dict.keys()),
+                    lab_variables=lab_vars,
+                    estimaciones_sig=soil_data.estimaciones_sig,
+                    npk_calibrado=(soil_data.calidad != "no_calibrada"),
+                )
+                cobertura = cobertura_variables(
+                    soil_vars=set(soil_dict.keys()),
+                    lab_variables=lab_vars,
+                    estimaciones_sig=soil_data.estimaciones_sig,
+                )
+                result.grados_evidencia = grados
+                result.variables_no_medidas = cobertura["variables_no_medidas"]
+                result.muestreo_recomendado = recomendar_muestreo(grados=grados)
+        except Exception as e:  # la evidencia es complementaria; no rompe el flujo
+            logger.warning("evidencia_e6_error", error=str(e))
+        return result
+
+    async def _analyze_inner(self, request: RecommendationRequest) -> RecommendationResult:
         """Ejecuta el pipeline completo de recomendación.
 
         Args:
