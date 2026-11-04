@@ -1,7 +1,7 @@
 # Graph Report - Agro-ia  (2026-11-04)
 
 ## Corpus Check
-- 2239 files · ~1,703,986 words
+- 2239 files · ~1,706,533 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4a8933af`
+- Built from commit: `9bc91802`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -1348,7 +1348,7 @@ Nodes (30): BM25, detect_domain(), _domain_keywords(), _get_bm25(), _load_csv(),
 
 ### Community 38 - "AgroIA — Documentación funcional y técnica (estado actual)"
 Cohesion: 0.09
-Nodes (22): 10. Estado de los RFP / épicas, 11. Principios de dominio (no negociables), 1. Resumen ejecutivo, 2. Arquitectura general, 3. Stack tecnológico, 4. Componentes (`apps/`), 5. Base de datos (esquema `agroia`, 41 migraciones → head `049`), 6.1 Gestión de fincas y lotes (+14 more)
+Nodes (22): 10. Estado de los RFP / épicas, 11. Principios de dominio (no negociables), 1. Resumen ejecutivo, 2. Arquitectura general, 3. Stack tecnológico, 4. Componentes (`apps/`), 5. Base de datos (esquema `agroia`, 57 migraciones → head `057`), 6.1 Gestión de fincas y lotes (+14 more)
 
 ### Community 39 - "search"
 Cohesion: 0.06
@@ -5323,18 +5323,16 @@ Cohesion: 0.50
 Nodes (3): puntos_muestreo_optimos(), Muestreo inteligente: ¿dónde tomar la muestra de laboratorio? Usa las…, Elige hasta `n` puntos de muestreo con Farthest Point Sampling. Args: muestras:…
 
 ## Knowledge Gaps
-- **5581 isolated node(s):** `Contexto activo`, `✅ Desplegar RFP-003 y reclasificar finca carcel penas blancas`, `✅ Revision CR-001 epicas E1-E9 RFP-003`, `✅ Implementar epica E9 aprendizaje automatico (RFP-003)`, `✅ Implementar epica E8 ciclo de vida del sensor (RFP-003)` (+5576 more)
+- **5581 isolated node(s):** `1. Resumen ejecutivo`, `2. Arquitectura general`, `3. Stack tecnológico`, `4. Componentes (`apps/`)`, `Entidades núcleo` (+5576 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **117 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `exactitud()` connect `test_epica_e3.py` to `.evaluar_con_banda`, `agroia_backend/api/chat.py`?**
-  _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **Why does `get_settings()` connect `database.py` to `Base`, `ClonacionVozProvider`, `SintesisError`, `agroia_rag/api/chat.py`, `logging.py`, `integration_test.py`, `voz.py`?**
-  _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **Why does `Base` connect `Base` to `agroia_backend/api/auth.py`, `bpa.py`, `logging.py`, `calendario.py`, `costeo_seed.py`, `FichaTecnica`, `PreferenciaNotificacion`, `vision.py`, `api/precios_cosecha.py`, `services/estimaciones.py`, `verificar_acceso_finca`, `agua_riego.py`, `CurvaExtraccion`, `catalogo.py`, `test_clima_alertas.py`, `plagas.py`, `costeo_admin.py`, `lectura.py`, `api/estimaciones.py`, `admin_precios.py`, `api/costeo.py`, `MetricaLecturaIn`, `agroia_backend/api/chat.py`, `laboratorio.py`, `database.py`, `registrar_auditoria`, `voz.py`?**
+  _High betweenness centrality (0.004) - this node is a cross-community bridge._
+- **Why does `RecommendationOrchestrator` connect `RecommendationOrchestrator` to `agroia_backend/api/chat.py`, `agronomo_chat.py`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **Are the 80 inferred relationships involving `Base` (e.g. with `AceptacionRecomendacion` and `AlertaClimatica`) actually correct?**
   _`Base` has 80 INFERRED edges - model-reasoned connections that need verification._
@@ -5342,5 +5340,7 @@ _Questions this graph is uniquely positioned to answer:_
   _`registrar_auditoria()` has 5 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 42 inferred relationships involving `Finca` (e.g. with `EvaluarRequest` and `ChecklistItem`) actually correct?**
   _`Finca` has 42 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Contexto activo`, `✅ Desplegar RFP-003 y reclasificar finca carcel penas blancas`, `✅ Revision CR-001 epicas E1-E9 RFP-003` to the rest of the system?**
+- **What connects `1. Resumen ejecutivo`, `2. Arquitectura general`, `3. Stack tecnológico` to the rest of the system?**
   _5581 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `init.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.06080246913580247 - nodes in this community are weakly interconnected._

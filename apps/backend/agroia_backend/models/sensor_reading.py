@@ -40,6 +40,13 @@ class SensorReading(Base):
         nullable=False,
         index=True,
     )
+    lote_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("agroia.lotes.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+        comment="Lote al que pertenece la medición (diferenciación multi-lote)",
+    )
     ts: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, index=True,
         comment="Marca de tiempo de la medición (fuente: sensor IoT)"

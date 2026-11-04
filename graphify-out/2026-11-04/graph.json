@@ -4,15 +4,268 @@
   "graph": {},
   "nodes": [
     {
+      "label": "DOCUMENTACION-PLATAFORMA.md",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "documentacion_plataforma",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "documentacion-plataforma.md"
+    },
+    {
+      "label": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "agroia \u2014 documentacion funcional y tecnica (estado actual)"
+    },
+    {
+      "label": "1. Resumen ejecutivo",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_1_resumen_ejecutivo",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "1. resumen ejecutivo"
+    },
+    {
+      "label": "2. Arquitectura general",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_2_arquitectura_general",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "2. arquitectura general"
+    },
+    {
+      "label": "3. Stack tecnol\u00f3gico",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L51",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_3_stack_tecnol\u00f3gico",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "3. stack tecnologico"
+    },
+    {
+      "label": "4. Componentes (`apps/`)",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L66",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_4_componentes_apps",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "4. componentes (`apps/`)"
+    },
+    {
+      "label": "5. Base de datos (esquema `agroia`, 57 migraciones \u2192 head `057`)",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L83",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_5_base_de_datos_esquema_agroia_57_migraciones_head_057",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "5. base de datos (esquema `agroia`, 57 migraciones \u2192 head `057`)"
+    },
+    {
+      "label": "Entidades n\u00facleo",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L85",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_entidades_n\u00facleo",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "entidades nucleo"
+    },
+    {
+      "label": "6. M\u00f3dulos funcionales (lo que hace hoy)",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L112",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "6. modulos funcionales (lo que hace hoy)"
+    },
+    {
+      "label": "6.1 Gesti\u00f3n de fincas y lotes",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L114",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_6_1_gesti\u00f3n_de_fincas_y_lotes",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "6.1 gestion de fincas y lotes"
+    },
+    {
+      "label": "6.2 Sensores IoT (ingesta, decodificaci\u00f3n y calidad del dato)",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L120",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_6_2_sensores_iot_ingesta_decodificaci\u00f3n_y_calidad_del_dato",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "6.2 sensores iot (ingesta, decodificacion y calidad del dato)"
+    },
+    {
+      "label": "6.3 Motor de recomendaci\u00f3n agron\u00f3mica",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L130",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_6_3_motor_de_recomendaci\u00f3n_agron\u00f3mica",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "6.3 motor de recomendacion agronomica"
+    },
+    {
+      "label": "6.4 Reportes",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L137",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_6_4_reportes",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "6.4 reportes"
+    },
+    {
+      "label": "6.5 Asesor conversacional + voz (RFP-001 y RFP-002)",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L142",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_6_5_asesor_conversacional_voz_rfp_001_y_rfp_002",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "6.5 asesor conversacional + voz (rfp-001 y rfp-002)"
+    },
+    {
+      "label": "6.6 AGC-COST (ciclo comercial)",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L148",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_6_6_agc_cost_ciclo_comercial",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "6.6 agc-cost (ciclo comercial)"
+    },
+    {
+      "label": "6.7 Trazabilidad BPA",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L152",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_6_7_trazabilidad_bpa",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "6.7 trazabilidad bpa"
+    },
+    {
+      "label": "6.8 Sanidad, clima y cat\u00e1logo",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L155",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_6_8_sanidad_clima_y_cat\u00e1logo",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "6.8 sanidad, clima y catalogo"
+    },
+    {
+      "label": "6.9 Administraci\u00f3n y operaci\u00f3n",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L161",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_6_9_administraci\u00f3n_y_operaci\u00f3n",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "6.9 administracion y operacion"
+    },
+    {
+      "label": "7. API (resumen por router)",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L167",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_7_api_resumen_por_router",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "7. api (resumen por router)"
+    },
+    {
+      "label": "8. Seguridad",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L192",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_8_seguridad",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "8. seguridad"
+    },
+    {
+      "label": "9. Despliegue y CI/CD",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L204",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_9_despliegue_y_ci_cd",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "9. despliegue y ci/cd"
+    },
+    {
+      "label": "10. Estado de los RFP / \u00e9picas",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L214",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_10_estado_de_los_rfp_\u00e9picas",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "10. estado de los rfp / epicas"
+    },
+    {
+      "label": "11. Principios de dominio (no negociables)",
+      "file_type": "document",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L226",
+      "_origin": "ast",
+      "id": "documentacion_plataforma_11_principios_de_dominio_no_negociables",
+      "community": 38,
+      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
+      "norm_label": "11. principios de dominio (no negociables)"
+    },
+    {
       "label": "reportes.py",
       "file_type": "code",
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "reportes.py"
+      "norm_label": "reportes.py",
+      "id": "apps_backend_agroia_backend_api_reportes"
     },
     {
       "label": "_dosis_fosforo_ciclo()",
@@ -20,10 +273,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L45",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_dosis_fosforo_ciclo",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "_dosis_fosforo_ciclo()"
+      "norm_label": "_dosis_fosforo_ciclo()",
+      "id": "apps_backend_agroia_backend_api_reportes_dosis_fosforo_ciclo"
     },
     {
       "label": "_historial_ciclos_reporte()",
@@ -31,10 +284,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L61",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_historial_ciclos_reporte",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "_historial_ciclos_reporte()"
+      "norm_label": "_historial_ciclos_reporte()",
+      "id": "apps_backend_agroia_backend_api_reportes_historial_ciclos_reporte"
     },
     {
       "label": "ReporteRequest",
@@ -42,10 +295,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L144",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_reporterequest",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "reporterequest"
+      "norm_label": "reporterequest",
+      "id": "apps_backend_agroia_backend_api_reportes_reporterequest"
     },
     {
       "label": "BaseModel",
@@ -53,10 +306,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "basemodel",
       "community": 998,
       "community_name": "BaseModel",
-      "norm_label": "basemodel"
+      "norm_label": "basemodel",
+      "id": "basemodel"
     },
     {
       "label": "SimularRequest",
@@ -64,10 +317,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L172",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_simularrequest",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "simularrequest"
+      "norm_label": "simularrequest",
+      "id": "apps_backend_agroia_backend_api_reportes_simularrequest"
     },
     {
       "label": "post",
@@ -75,10 +328,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "post",
       "community": 998,
       "community_name": "BaseModel",
-      "norm_label": "post"
+      "norm_label": "post",
+      "id": "post"
     },
     {
       "label": "generar_reporte()",
@@ -86,10 +339,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L178",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_generar_reporte",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "generar_reporte()"
+      "norm_label": "generar_reporte()",
+      "id": "apps_backend_agroia_backend_api_reportes_generar_reporte"
     },
     {
       "label": "AsyncSession",
@@ -97,10 +350,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "asyncsession",
       "community": 968,
       "community_name": "iot.py",
-      "norm_label": "asyncsession"
+      "norm_label": "asyncsession",
+      "id": "asyncsession"
     },
     {
       "label": "simular_enmienda()",
@@ -108,10 +361,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L636",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_simular_enmienda",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "simular_enmienda()"
+      "norm_label": "simular_enmienda()",
+      "id": "apps_backend_agroia_backend_api_reportes_simular_enmienda"
     },
     {
       "label": "_muestras_geo()",
@@ -119,10 +372,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L713",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_muestras_geo",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "_muestras_geo()"
+      "norm_label": "_muestras_geo()",
+      "id": "apps_backend_agroia_backend_api_reportes_muestras_geo"
     },
     {
       "label": "_umbrales_de_analisis()",
@@ -130,10 +383,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L757",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_umbrales_de_analisis",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "_umbrales_de_analisis()"
+      "norm_label": "_umbrales_de_analisis()",
+      "id": "apps_backend_agroia_backend_api_reportes_umbrales_de_analisis"
     },
     {
       "label": "Generaci\u00f3n de reportes de an\u00e1lisis de suelo (HTML + PDF v\u00eda navegador). Tipos:\u2026",
@@ -141,10 +394,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_rationale_1",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "generacion de reportes de analisis de suelo (html + pdf via navegador). tipos:..."
+      "norm_label": "generacion de reportes de analisis de suelo (html + pdf via navegador). tipos:...",
+      "id": "apps_backend_agroia_backend_api_reportes_rationale_1"
     },
     {
       "label": "M\u00e1xima dosis (kg/ha) de productos fosforados en las aplicaciones del ciclo.",
@@ -152,10 +405,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L46",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_rationale_46",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "maxima dosis (kg/ha) de productos fosforados en las aplicaciones del ciclo."
+      "norm_label": "maxima dosis (kg/ha) de productos fosforados en las aplicaciones del ciclo.",
+      "id": "apps_backend_agroia_backend_api_reportes_rationale_46"
     },
     {
       "label": "\u00daltimos 3 ciclos de la finca + predicci\u00f3n de rendimiento + alerta de P.",
@@ -163,10 +416,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L62",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_rationale_62",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "ultimos 3 ciclos de la finca + prediccion de rendimiento + alerta de p."
+      "norm_label": "ultimos 3 ciclos de la finca + prediccion de rendimiento + alerta de p.",
+      "id": "apps_backend_agroia_backend_api_reportes_rationale_62"
     },
     {
       "label": "Genera el HTML del reporte seg\u00fan el tipo solicitado.",
@@ -174,10 +427,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L185",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_rationale_185",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "genera el html del reporte segun el tipo solicitado."
+      "norm_label": "genera el html del reporte segun el tipo solicitado.",
+      "id": "apps_backend_agroia_backend_api_reportes_rationale_185"
     },
     {
       "label": "Modo simulaci\u00f3n (what-if): re-ejecuta el motor con valores modificados. NO toca\u2026",
@@ -185,10 +438,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L642",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_rationale_642",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "modo simulacion (what-if): re-ejecuta el motor con valores modificados. no toca..."
+      "norm_label": "modo simulacion (what-if): re-ejecuta el motor con valores modificados. no toca...",
+      "id": "apps_backend_agroia_backend_api_reportes_rationale_642"
     },
     {
       "label": "Lecturas recientes con posici\u00f3n (x, y) para pintar el mapa de calor.",
@@ -196,10 +449,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L714",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_rationale_714",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "lecturas recientes con posicion (x, y) para pintar el mapa de calor."
+      "norm_label": "lecturas recientes con posicion (x, y) para pintar el mapa de calor.",
+      "id": "apps_backend_agroia_backend_api_reportes_rationale_714"
     },
     {
       "label": "Rangos ideales por variable (s\u00edmbolo \u2192 (min, max)) para el mapa de calor.\u2026",
@@ -207,10 +460,10 @@
       "source_file": "apps/backend/agroia_backend/api/reportes.py",
       "source_location": "L758",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_api_reportes_rationale_758",
       "community": 1012,
       "community_name": "reportes.py",
-      "norm_label": "rangos ideales por variable (simbolo \u2192 (min, max)) para el mapa de calor...."
+      "norm_label": "rangos ideales por variable (simbolo \u2192 (min, max)) para el mapa de calor....",
+      "id": "apps_backend_agroia_backend_api_reportes_rationale_758"
     },
     {
       "label": "reportes_html.py",
@@ -218,10 +471,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "reportes_html.py"
+      "norm_label": "reportes_html.py",
+      "id": "apps_backend_agroia_backend_services_reportes_html"
     },
     {
       "label": "_respaldo_html()",
@@ -229,10 +482,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L24",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_respaldo_html",
       "community": 874,
       "community_name": "test_prompt_v2_badges.py",
-      "norm_label": "_respaldo_html()"
+      "norm_label": "_respaldo_html()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_respaldo_html"
     },
     {
       "label": "_badge_confianza_reducida()",
@@ -240,10 +493,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_badge_confianza_reducida",
       "community": 874,
       "community_name": "test_prompt_v2_badges.py",
-      "norm_label": "_badge_confianza_reducida()"
+      "norm_label": "_badge_confianza_reducida()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_badge_confianza_reducida"
     },
     {
       "label": "_num()",
@@ -251,10 +504,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L250",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_num",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_num()"
+      "norm_label": "_num()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "label": "_badge()",
@@ -262,10 +515,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L260",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_badge",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_badge()"
+      "norm_label": "_badge()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_badge"
     },
     {
       "label": "_badge_clasificacion()",
@@ -273,10 +526,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L271",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_badge_clasificacion",
       "community": 874,
       "community_name": "test_prompt_v2_badges.py",
-      "norm_label": "_badge_clasificacion()"
+      "norm_label": "_badge_clasificacion()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_badge_clasificacion"
     },
     {
       "label": "_badge_validacion()",
@@ -284,10 +537,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L280",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_badge_validacion",
       "community": 874,
       "community_name": "test_prompt_v2_badges.py",
-      "norm_label": "_badge_validacion()"
+      "norm_label": "_badge_validacion()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_badge_validacion"
     },
     {
       "label": "_nivel_calibracion()",
@@ -295,10 +548,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L294",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_nivel_calibracion",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_nivel_calibracion()"
+      "norm_label": "_nivel_calibracion()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_nivel_calibracion"
     },
     {
       "label": "_badge_estado_final()",
@@ -306,10 +559,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L303",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_badge_estado_final",
       "community": 874,
       "community_name": "test_prompt_v2_badges.py",
-      "norm_label": "_badge_estado_final()"
+      "norm_label": "_badge_estado_final()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_badge_estado_final"
     },
     {
       "label": "_telemetria()",
@@ -317,10 +570,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L314",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_telemetria",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_telemetria()"
+      "norm_label": "_telemetria()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_telemetria"
     },
     {
       "label": "_fecha()",
@@ -328,10 +581,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L353",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_fecha",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_fecha()"
+      "norm_label": "_fecha()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_fecha"
     },
     {
       "label": "_ph_scale()",
@@ -339,10 +592,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L362",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_ph_scale",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_ph_scale()"
+      "norm_label": "_ph_scale()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_ph_scale"
     },
     {
       "label": "_seccion_uc2()",
@@ -350,10 +603,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L378",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_uc2",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_seccion_uc2()"
+      "norm_label": "_seccion_uc2()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_uc2"
     },
     {
       "label": "_fmt_cop()",
@@ -361,10 +614,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L453",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_fmt_cop",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_fmt_cop()"
+      "norm_label": "_fmt_cop()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_fmt_cop"
     },
     {
       "label": "_confianza_txt()",
@@ -372,10 +625,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L460",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_confianza_txt",
       "community": 874,
       "community_name": "test_prompt_v2_badges.py",
-      "norm_label": "_confianza_txt()"
+      "norm_label": "_confianza_txt()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_confianza_txt"
     },
     {
       "label": "_desglose_confianza_html()",
@@ -383,10 +636,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L469",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_desglose_confianza_html",
       "community": 874,
       "community_name": "test_prompt_v2_badges.py",
-      "norm_label": "_desglose_confianza_html()"
+      "norm_label": "_desglose_confianza_html()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_desglose_confianza_html"
     },
     {
       "label": "_seccion_plan_economico()",
@@ -394,10 +647,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L508",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_plan_economico",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_seccion_plan_economico()"
+      "norm_label": "_seccion_plan_economico()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_plan_economico"
     },
     {
       "label": "_ingreso_bruto_ha()",
@@ -405,10 +658,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L555",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_ingreso_bruto_ha",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_ingreso_bruto_ha()"
+      "norm_label": "_ingreso_bruto_ha()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_ingreso_bruto_ha"
     },
     {
       "label": "_seccion_analisis_economico()",
@@ -416,10 +669,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L584",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_analisis_economico",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_seccion_analisis_economico()"
+      "norm_label": "_seccion_analisis_economico()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_analisis_economico"
     },
     {
       "label": "_seccion_uc1()",
@@ -427,10 +680,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L706",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_uc1",
       "community": 874,
       "community_name": "test_prompt_v2_badges.py",
-      "norm_label": "_seccion_uc1()"
+      "norm_label": "_seccion_uc1()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_uc1"
     },
     {
       "label": "_hex_a_rgb()",
@@ -438,10 +691,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L804",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_hex_a_rgb",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_hex_a_rgb()"
+      "norm_label": "_hex_a_rgb()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_hex_a_rgb"
     },
     {
       "label": "_mezclar()",
@@ -449,10 +702,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L809",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_mezclar",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_mezclar()"
+      "norm_label": "_mezclar()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_mezclar"
     },
     {
       "label": "_seccion_mapa_calor()",
@@ -460,10 +713,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L815",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_mapa_calor",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_seccion_mapa_calor()"
+      "norm_label": "_seccion_mapa_calor()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_mapa_calor"
     },
     {
       "label": "_paso_nice()",
@@ -471,10 +724,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1017",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_paso_nice",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_paso_nice()"
+      "norm_label": "_paso_nice()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_paso_nice"
     },
     {
       "label": "_hull()",
@@ -482,10 +735,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1024",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_hull",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_hull()"
+      "norm_label": "_hull()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_hull"
     },
     {
       "label": "_area_poligono()",
@@ -493,10 +746,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1046",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_area_poligono",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_area_poligono()"
+      "norm_label": "_area_poligono()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_area_poligono"
     },
     {
       "label": "_perimetro_poligono()",
@@ -504,10 +757,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1058",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_perimetro_poligono",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_perimetro_poligono()"
+      "norm_label": "_perimetro_poligono()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_perimetro_poligono"
     },
     {
       "label": "_seccion_plano_lote()",
@@ -515,10 +768,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1070",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_plano_lote",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_seccion_plano_lote()"
+      "norm_label": "_seccion_plano_lote()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_plano_lote"
     },
     {
       "label": "_bloque_clima_muestra()",
@@ -526,10 +779,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1422",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_bloque_clima_muestra",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_bloque_clima_muestra()"
+      "norm_label": "_bloque_clima_muestra()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_bloque_clima_muestra"
     },
     {
       "label": "_seccion_lunar()",
@@ -537,10 +790,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1533",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_lunar",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_seccion_lunar()"
+      "norm_label": "_seccion_lunar()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_lunar"
     },
     {
       "label": "_seccion_labores()",
@@ -548,10 +801,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1571",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_labores",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_seccion_labores()"
+      "norm_label": "_seccion_labores()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_labores"
     },
     {
       "label": "_seccion_riego()",
@@ -559,10 +812,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1609",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_riego",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_seccion_riego()"
+      "norm_label": "_seccion_riego()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_riego"
     },
     {
       "label": "_seccion_rotacion()",
@@ -570,10 +823,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1634",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_rotacion",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_seccion_rotacion()"
+      "norm_label": "_seccion_rotacion()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_rotacion"
     },
     {
       "label": "_seccion_bpa()",
@@ -581,10 +834,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1652",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_bpa",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_seccion_bpa()"
+      "norm_label": "_seccion_bpa()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_bpa"
     },
     {
       "label": "_seccion_evidencia()",
@@ -592,10 +845,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1675",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_evidencia",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "_seccion_evidencia()"
+      "norm_label": "_seccion_evidencia()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_seccion_evidencia"
     },
     {
       "label": "generar_reporte_html()",
@@ -603,10 +856,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1735",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "generar_reporte_html()"
+      "norm_label": "generar_reporte_html()",
+      "id": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html"
     },
     {
       "label": "Generador de reportes HTML de AgroIA (estilo informe de laboratorio). Tipos de\u2026",
@@ -614,10 +867,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "generador de reportes html de agroia (estilo informe de laboratorio). tipos de..."
+      "norm_label": "generador de reportes html de agroia (estilo informe de laboratorio). tipos de...",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1"
     },
     {
       "label": "RQ-15: lenguaje neutro bajo el umbral; \u2705 solo con consenso suficiente.",
@@ -625,10 +878,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L25",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_25",
       "community": 874,
       "community_name": "test_prompt_v2_badges.py",
-      "norm_label": "rq-15: lenguaje neutro bajo el umbral; \u2705 solo con consenso suficiente."
+      "norm_label": "rq-15: lenguaje neutro bajo el umbral; \u2705 solo con consenso suficiente.",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_25"
     },
     {
       "label": "RQ-14: badge compacto en rankings cuando la confianza queda bajo umbral.",
@@ -636,10 +889,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L43",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_43",
       "community": 874,
       "community_name": "test_prompt_v2_badges.py",
-      "norm_label": "rq-14: badge compacto en rankings cuando la confianza queda bajo umbral."
+      "norm_label": "rq-14: badge compacto en rankings cuando la confianza queda bajo umbral.",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_43"
     },
     {
       "label": "Badge del estado de validaci\u00f3n del reporte (#4/#12).",
@@ -647,10 +900,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L281",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_281",
       "community": 874,
       "community_name": "test_prompt_v2_badges.py",
-      "norm_label": "badge del estado de validacion del reporte (#4/#12)."
+      "norm_label": "badge del estado de validacion del reporte (#4/#12).",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_281"
     },
     {
       "label": "Calidad de datos de 3 niveles (#1): nunca 'Calibrado' a secas.",
@@ -658,10 +911,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L295",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_295",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "calidad de datos de 3 niveles (#1): nunca 'calibrado' a secas."
+      "norm_label": "calidad de datos de 3 niveles (#1): nunca 'calibrado' a secas.",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_295"
     },
     {
       "label": "Badge de clasificaci\u00f3n que respeta el umbral duro de confianza (#12).",
@@ -669,10 +922,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L304",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_304",
       "community": 874,
       "community_name": "test_prompt_v2_badges.py",
-      "norm_label": "badge de clasificacion que respeta el umbral duro de confianza (#12)."
+      "norm_label": "badge de clasificacion que respeta el umbral duro de confianza (#12).",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_304"
     },
     {
       "label": "H5: si base y real coinciden se muestra un solo n\u00famero.",
@@ -680,10 +933,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L461",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_461",
       "community": 874,
       "community_name": "test_prompt_v2_badges.py",
-      "norm_label": "h5: si base y real coinciden se muestra un solo numero."
+      "norm_label": "h5: si base y real coinciden se muestra un solo numero.",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_461"
     },
     {
       "label": "Sem\u00e1foro de 4 barras: por qu\u00e9 la confianza es la que es. H1 (accesibilidad):\u2026",
@@ -691,10 +944,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L470",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_470",
       "community": 874,
       "community_name": "test_prompt_v2_badges.py",
-      "norm_label": "semaforo de 4 barras: por que la confianza es la que es. h1 (accesibilidad):..."
+      "norm_label": "semaforo de 4 barras: por que la confianza es la que es. h1 (accesibilidad):...",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_470"
     },
     {
       "label": "Bloque del plan econ\u00f3mico de fertilizaci\u00f3n (brecha econ\u00f3mica).",
@@ -702,10 +955,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L509",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_509",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "bloque del plan economico de fertilizacion (brecha economica)."
+      "norm_label": "bloque del plan economico de fertilizacion (brecha economica).",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_509"
     },
     {
       "label": "Ingreso bruto estimado (COP/ha) y precio por tonelada desde la ficha. Usa\u2026",
@@ -713,10 +966,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L556",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_556",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "ingreso bruto estimado (cop/ha) y precio por tonelada desde la ficha. usa..."
+      "norm_label": "ingreso bruto estimado (cop/ha) y precio por tonelada desde la ficha. usa...",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_556"
     },
     {
       "label": "An\u00e1lisis econ\u00f3mico proyectado: ganancia esperada y ROI del plan.\u2026",
@@ -724,10 +977,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L590",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_590",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "analisis economico proyectado: ganancia esperada y roi del plan...."
+      "norm_label": "analisis economico proyectado: ganancia esperada y roi del plan....",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_590"
     },
     {
       "label": "Mapa de calor del lote: un solo mapa con selector de par\u00e1metro. - \u00abResumen\u00bb\u2026",
@@ -735,10 +988,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L816",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_816",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "mapa de calor del lote: un solo mapa con selector de parametro. - \u00abresumen\u00bb..."
+      "norm_label": "mapa de calor del lote: un solo mapa con selector de parametro. - \u00abresumen\u00bb...",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_816"
     },
     {
       "label": "Cierre convexo (monotone chain).",
@@ -746,10 +999,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1025",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1025",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "cierre convexo (monotone chain)."
+      "norm_label": "cierre convexo (monotone chain).",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1025"
     },
     {
       "label": "Plano del lote: dibujo de los puntos de muestreo (pos_x, pos_y). - Los puntos\u2026",
@@ -757,10 +1010,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1080",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1080",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "plano del lote: dibujo de los puntos de muestreo (pos_x, pos_y). - los puntos..."
+      "norm_label": "plano del lote: dibujo de los puntos de muestreo (pos_x, pos_y). - los puntos...",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1080"
     },
     {
       "label": "Bloque de clima del d\u00eda de la muestra (IDEAM) + notas para recomendaciones.",
@@ -768,10 +1021,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1426",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1426",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "bloque de clima del dia de la muestra (ideam) + notas para recomendaciones."
+      "norm_label": "bloque de clima del dia de la muestra (ideam) + notas para recomendaciones.",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1426"
     },
     {
       "label": "Secci\u00f3n de calendario lunar (Almanaque Bristol) \u2014 despu\u00e9s del plano del lote.",
@@ -779,10 +1032,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1534",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1534",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "seccion de calendario lunar (almanaque bristol) \u2014 despues del plano del lote."
+      "norm_label": "seccion de calendario lunar (almanaque bristol) \u2014 despues del plano del lote.",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1534"
     },
     {
       "label": "Secci\u00f3n Q \u2014 \u00f3rdenes de trabajo / labores de la finca.",
@@ -790,10 +1043,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1572",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1572",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "seccion q \u2014 ordenes de trabajo / labores de la finca."
+      "norm_label": "seccion q \u2014 ordenes de trabajo / labores de la finca.",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1572"
     },
     {
       "label": "Secci\u00f3n R \u2014 necesidad de riego (balance h\u00eddrico ETo/Kc).",
@@ -801,10 +1054,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1610",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1610",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "seccion r \u2014 necesidad de riego (balance hidrico eto/kc)."
+      "norm_label": "seccion r \u2014 necesidad de riego (balance hidrico eto/kc).",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1610"
     },
     {
       "label": "Secci\u00f3n S \u2014 rotaci\u00f3n de cultivos sugerida.",
@@ -812,10 +1065,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1635",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1635",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "seccion s \u2014 rotacion de cultivos sugerida."
+      "norm_label": "seccion s \u2014 rotacion de cultivos sugerida.",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1635"
     },
     {
       "label": "Secci\u00f3n B \u2014 trazabilidad BPA (avance del checklist).",
@@ -823,10 +1076,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1653",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1653",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "seccion b \u2014 trazabilidad bpa (avance del checklist)."
+      "norm_label": "seccion b \u2014 trazabilidad bpa (avance del checklist).",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1653"
     },
     {
       "label": "Secci\u00f3n de grados de evidencia, cobertura y leyenda (E6/E7).",
@@ -834,10 +1087,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1676",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1676",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "seccion de grados de evidencia, cobertura y leyenda (e6/e7)."
+      "norm_label": "seccion de grados de evidencia, cobertura y leyenda (e6/e7).",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1676"
     },
     {
       "label": "Construye el documento HTML completo del reporte. `audiencia` (v8\u2026",
@@ -845,10 +1098,10 @@
       "source_file": "apps/backend/agroia_backend/services/reportes_html.py",
       "source_location": "L1766",
       "_origin": "ast",
-      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1766",
       "community": 132,
       "community_name": "reportes_html.py",
-      "norm_label": "construye el documento html completo del reporte. `audiencia` (v8..."
+      "norm_label": "construye el documento html completo del reporte. `audiencia` (v8...",
+      "id": "apps_backend_agroia_backend_services_reportes_html_rationale_1766"
     },
     {
       "label": "index.md",
@@ -117111,259 +117364,6 @@
       "id": "github_skills_xlsx_skill_code_style_guidelines"
     },
     {
-      "label": "DOCUMENTACION-PLATAFORMA.md",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "documentacion-plataforma.md",
-      "id": "documentacion_plataforma"
-    },
-    {
-      "label": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "agroia \u2014 documentacion funcional y tecnica (estado actual)",
-      "id": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual"
-    },
-    {
-      "label": "1. Resumen ejecutivo",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L8",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "1. resumen ejecutivo",
-      "id": "documentacion_plataforma_1_resumen_ejecutivo"
-    },
-    {
-      "label": "2. Arquitectura general",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L22",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "2. arquitectura general",
-      "id": "documentacion_plataforma_2_arquitectura_general"
-    },
-    {
-      "label": "3. Stack tecnol\u00f3gico",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L51",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "3. stack tecnologico",
-      "id": "documentacion_plataforma_3_stack_tecnol\u00f3gico"
-    },
-    {
-      "label": "4. Componentes (`apps/`)",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L66",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "4. componentes (`apps/`)",
-      "id": "documentacion_plataforma_4_componentes_apps"
-    },
-    {
-      "label": "5. Base de datos (esquema `agroia`, 41 migraciones \u2192 head `049`)",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L83",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "5. base de datos (esquema `agroia`, 41 migraciones \u2192 head `049`)",
-      "id": "documentacion_plataforma_5_base_de_datos_esquema_agroia_41_migraciones_head_049"
-    },
-    {
-      "label": "Entidades n\u00facleo",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L85",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "entidades nucleo",
-      "id": "documentacion_plataforma_entidades_n\u00facleo"
-    },
-    {
-      "label": "6. M\u00f3dulos funcionales (lo que hace hoy)",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L107",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "6. modulos funcionales (lo que hace hoy)",
-      "id": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy"
-    },
-    {
-      "label": "6.1 Gesti\u00f3n de fincas y lotes",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L109",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "6.1 gestion de fincas y lotes",
-      "id": "documentacion_plataforma_6_1_gesti\u00f3n_de_fincas_y_lotes"
-    },
-    {
-      "label": "6.2 Sensores IoT (ingesta y calidad del dato)",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L115",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "6.2 sensores iot (ingesta y calidad del dato)",
-      "id": "documentacion_plataforma_6_2_sensores_iot_ingesta_y_calidad_del_dato"
-    },
-    {
-      "label": "6.3 Motor de recomendaci\u00f3n agron\u00f3mica",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L122",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "6.3 motor de recomendacion agronomica",
-      "id": "documentacion_plataforma_6_3_motor_de_recomendaci\u00f3n_agron\u00f3mica"
-    },
-    {
-      "label": "6.4 Reportes",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L128",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "6.4 reportes",
-      "id": "documentacion_plataforma_6_4_reportes"
-    },
-    {
-      "label": "6.5 Asesor conversacional + voz (RFP-001 y RFP-002)",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L133",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "6.5 asesor conversacional + voz (rfp-001 y rfp-002)",
-      "id": "documentacion_plataforma_6_5_asesor_conversacional_voz_rfp_001_y_rfp_002"
-    },
-    {
-      "label": "6.6 AGC-COST (ciclo comercial)",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L139",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "6.6 agc-cost (ciclo comercial)",
-      "id": "documentacion_plataforma_6_6_agc_cost_ciclo_comercial"
-    },
-    {
-      "label": "6.7 Trazabilidad BPA",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L143",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "6.7 trazabilidad bpa",
-      "id": "documentacion_plataforma_6_7_trazabilidad_bpa"
-    },
-    {
-      "label": "6.8 Sanidad, clima y cat\u00e1logo",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L146",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "6.8 sanidad, clima y catalogo",
-      "id": "documentacion_plataforma_6_8_sanidad_clima_y_cat\u00e1logo"
-    },
-    {
-      "label": "6.9 Administraci\u00f3n y operaci\u00f3n",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L152",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "6.9 administracion y operacion",
-      "id": "documentacion_plataforma_6_9_administraci\u00f3n_y_operaci\u00f3n"
-    },
-    {
-      "label": "7. API (resumen por router)",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L158",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "7. api (resumen por router)",
-      "id": "documentacion_plataforma_7_api_resumen_por_router"
-    },
-    {
-      "label": "8. Seguridad",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L183",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "8. seguridad",
-      "id": "documentacion_plataforma_8_seguridad"
-    },
-    {
-      "label": "9. Despliegue y CI/CD",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L194",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "9. despliegue y ci/cd",
-      "id": "documentacion_plataforma_9_despliegue_y_ci_cd"
-    },
-    {
-      "label": "10. Estado de los RFP / \u00e9picas",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L204",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "10. estado de los rfp / epicas",
-      "id": "documentacion_plataforma_10_estado_de_los_rfp_\u00e9picas"
-    },
-    {
-      "label": "11. Principios de dominio (no negociables)",
-      "file_type": "document",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L216",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "AgroIA \u2014 Documentaci\u00f3n funcional y t\u00e9cnica (estado actual)",
-      "norm_label": "11. principios de dominio (no negociables)",
-      "id": "documentacion_plataforma_11_principios_de_dominio_no_negociables"
-    },
-    {
       "label": "PROJECT_STATUS.md",
       "file_type": "document",
       "source_file": "PROJECT_STATUS.md",
@@ -151345,27 +151345,245 @@
   ],
   "links": [
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/reportes.py",
-      "source_location": "L12",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_reportes",
-      "target": "apps_shared_agroia_database",
+      "source": "documentacion_plataforma",
+      "target": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
       "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "apps/backend/agroia_backend/api/reportes.py",
-      "source_location": "L13",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L214",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "apps_backend_agroia_backend_api_reportes",
-      "target": "apps_shared_agroia_logging",
+      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
+      "target": "documentacion_plataforma_10_estado_de_los_rfp_\u00e9picas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L226",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
+      "target": "documentacion_plataforma_11_principios_de_dominio_no_negociables",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
+      "target": "documentacion_plataforma_1_resumen_ejecutivo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
+      "target": "documentacion_plataforma_2_arquitectura_general",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
+      "target": "documentacion_plataforma_3_stack_tecnol\u00f3gico",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L66",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
+      "target": "documentacion_plataforma_4_componentes_apps",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L83",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
+      "target": "documentacion_plataforma_5_base_de_datos_esquema_agroia_57_migraciones_head_057",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L112",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
+      "target": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L167",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
+      "target": "documentacion_plataforma_7_api_resumen_por_router",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L192",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
+      "target": "documentacion_plataforma_8_seguridad",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L204",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
+      "target": "documentacion_plataforma_9_despliegue_y_ci_cd",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_5_base_de_datos_esquema_agroia_57_migraciones_head_057",
+      "target": "documentacion_plataforma_entidades_n\u00facleo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L114",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
+      "target": "documentacion_plataforma_6_1_gesti\u00f3n_de_fincas_y_lotes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L120",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
+      "target": "documentacion_plataforma_6_2_sensores_iot_ingesta_decodificaci\u00f3n_y_calidad_del_dato",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L130",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
+      "target": "documentacion_plataforma_6_3_motor_de_recomendaci\u00f3n_agron\u00f3mica",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L137",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
+      "target": "documentacion_plataforma_6_4_reportes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L142",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
+      "target": "documentacion_plataforma_6_5_asesor_conversacional_voz_rfp_001_y_rfp_002",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L148",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
+      "target": "documentacion_plataforma_6_6_agc_cost_ciclo_comercial",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L152",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
+      "target": "documentacion_plataforma_6_7_trazabilidad_bpa",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L155",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
+      "target": "documentacion_plataforma_6_8_sanidad_clima_y_cat\u00e1logo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DOCUMENTACION-PLATAFORMA.md",
+      "source_location": "L161",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
+      "target": "documentacion_plataforma_6_9_administraci\u00f3n_y_operaci\u00f3n",
       "confidence_score": 1.0
     },
     {
@@ -151375,9 +151593,9 @@
       "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes",
-      "target": "apps_backend_agroia_backend_api_reportes_dosis_fosforo_ciclo",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_dosis_fosforo_ciclo"
     },
     {
       "relation": "contains",
@@ -151386,9 +151604,9 @@
       "source_location": "L178",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes",
-      "target": "apps_backend_agroia_backend_api_reportes_generar_reporte",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_generar_reporte"
     },
     {
       "relation": "contains",
@@ -151397,9 +151615,9 @@
       "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes",
-      "target": "apps_backend_agroia_backend_api_reportes_historial_ciclos_reporte",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_historial_ciclos_reporte"
     },
     {
       "relation": "contains",
@@ -151408,9 +151626,9 @@
       "source_location": "L713",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes",
-      "target": "apps_backend_agroia_backend_api_reportes_muestras_geo",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_muestras_geo"
     },
     {
       "relation": "contains",
@@ -151419,9 +151637,9 @@
       "source_location": "L144",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes",
-      "target": "apps_backend_agroia_backend_api_reportes_reporterequest",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_reporterequest"
     },
     {
       "relation": "contains",
@@ -151430,9 +151648,9 @@
       "source_location": "L636",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes",
-      "target": "apps_backend_agroia_backend_api_reportes_simular_enmienda",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_simular_enmienda"
     },
     {
       "relation": "contains",
@@ -151441,9 +151659,9 @@
       "source_location": "L172",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes",
-      "target": "apps_backend_agroia_backend_api_reportes_simularrequest",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_simularrequest"
     },
     {
       "relation": "contains",
@@ -151452,9 +151670,9 @@
       "source_location": "L757",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes",
-      "target": "apps_backend_agroia_backend_api_reportes_umbrales_de_analisis",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_umbrales_de_analisis"
     },
     {
       "relation": "imports_from",
@@ -151464,9 +151682,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes",
-      "target": "apps_backend_agroia_backend_services_reportes_html",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html"
     },
     {
       "relation": "imports",
@@ -151476,9 +151694,33 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes",
-      "target": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/reportes.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_reportes",
+      "target": "apps_shared_agroia_database"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "apps/backend/agroia_backend/api/reportes.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "apps_backend_agroia_backend_api_reportes",
+      "target": "apps_shared_agroia_logging"
     },
     {
       "relation": "rationale_for",
@@ -151487,9 +151729,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_rationale_1",
-      "target": "apps_backend_agroia_backend_api_reportes",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes"
     },
     {
       "relation": "imports_from",
@@ -151511,9 +151753,9 @@
       "source_location": "L126",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_historial_ciclos_reporte",
-      "target": "apps_backend_agroia_backend_api_reportes_dosis_fosforo_ciclo",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_dosis_fosforo_ciclo"
     },
     {
       "relation": "rationale_for",
@@ -151522,9 +151764,9 @@
       "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_rationale_46",
-      "target": "apps_backend_agroia_backend_api_reportes_dosis_fosforo_ciclo",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_dosis_fosforo_ciclo"
     },
     {
       "relation": "calls",
@@ -151534,9 +151776,9 @@
       "source_location": "L368",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_generar_reporte",
-      "target": "apps_backend_agroia_backend_api_reportes_historial_ciclos_reporte",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_historial_ciclos_reporte"
     },
     {
       "relation": "rationale_for",
@@ -151545,9 +151787,9 @@
       "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_rationale_62",
-      "target": "apps_backend_agroia_backend_api_reportes_historial_ciclos_reporte",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_historial_ciclos_reporte"
     },
     {
       "relation": "references",
@@ -151557,9 +151799,9 @@
       "source_location": "L178",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_generar_reporte",
-      "target": "apps_backend_agroia_backend_api_reportes_reporterequest",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_reporterequest"
     },
     {
       "relation": "inherits",
@@ -151568,9 +151810,9 @@
       "source_location": "L144",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_reporterequest",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "inherits",
@@ -151689,9 +151931,9 @@
       "source_location": "L172",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_simularrequest",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "references",
@@ -151701,9 +151943,9 @@
       "source_location": "L636",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_simular_enmienda",
-      "target": "apps_backend_agroia_backend_api_reportes_simularrequest",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_simularrequest"
     },
     {
       "relation": "references",
@@ -151821,9 +152063,9 @@
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_generar_reporte",
-      "target": "post",
-      "confidence_score": 1.0
+      "target": "post"
     },
     {
       "relation": "references",
@@ -151833,9 +152075,9 @@
       "weight": 1.0,
       "context": "decorator",
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_simular_enmienda",
-      "target": "post",
-      "confidence_score": 1.0
+      "target": "post"
     },
     {
       "relation": "calls",
@@ -151845,9 +152087,9 @@
       "source_location": "L334",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_generar_reporte",
-      "target": "apps_backend_agroia_backend_api_reportes_muestras_geo",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_muestras_geo"
     },
     {
       "relation": "calls",
@@ -151857,9 +152099,9 @@
       "source_location": "L573",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_generar_reporte",
-      "target": "apps_backend_agroia_backend_api_reportes_umbrales_de_analisis",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_umbrales_de_analisis"
     },
     {
       "relation": "calls",
@@ -151881,9 +152123,9 @@
       "source_location": "L178",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_generar_reporte",
-      "target": "asyncsession",
-      "confidence_score": 1.0
+      "target": "asyncsession"
     },
     {
       "relation": "rationale_for",
@@ -151892,9 +152134,9 @@
       "source_location": "L185",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_rationale_185",
-      "target": "apps_backend_agroia_backend_api_reportes_generar_reporte",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_generar_reporte"
     },
     {
       "relation": "references",
@@ -151964,9 +152206,9 @@
       "source_location": "L713",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_muestras_geo",
-      "target": "asyncsession",
-      "confidence_score": 1.0
+      "target": "asyncsession"
     },
     {
       "relation": "references",
@@ -151976,9 +152218,9 @@
       "source_location": "L636",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_simular_enmienda",
-      "target": "asyncsession",
-      "confidence_score": 1.0
+      "target": "asyncsession"
     },
     {
       "relation": "rationale_for",
@@ -151987,9 +152229,9 @@
       "source_location": "L642",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_rationale_642",
-      "target": "apps_backend_agroia_backend_api_reportes_simular_enmienda",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_simular_enmienda"
     },
     {
       "relation": "rationale_for",
@@ -151998,9 +152240,9 @@
       "source_location": "L714",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_rationale_714",
-      "target": "apps_backend_agroia_backend_api_reportes_muestras_geo",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_muestras_geo"
     },
     {
       "relation": "rationale_for",
@@ -152009,9 +152251,9 @@
       "source_location": "L758",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_api_reportes_rationale_758",
-      "target": "apps_backend_agroia_backend_api_reportes_umbrales_de_analisis",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_api_reportes_umbrales_de_analisis"
     },
     {
       "relation": "contains",
@@ -152020,9 +152262,9 @@
       "source_location": "L1046",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_area_poligono",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_area_poligono"
     },
     {
       "relation": "contains",
@@ -152031,9 +152273,9 @@
       "source_location": "L260",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge"
     },
     {
       "relation": "contains",
@@ -152042,9 +152284,9 @@
       "source_location": "L271",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge_clasificacion",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge_clasificacion"
     },
     {
       "relation": "contains",
@@ -152053,9 +152295,9 @@
       "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge_confianza_reducida",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge_confianza_reducida"
     },
     {
       "relation": "contains",
@@ -152064,9 +152306,9 @@
       "source_location": "L303",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge_estado_final",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge_estado_final"
     },
     {
       "relation": "contains",
@@ -152075,9 +152317,9 @@
       "source_location": "L280",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge_validacion",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge_validacion"
     },
     {
       "relation": "contains",
@@ -152086,9 +152328,9 @@
       "source_location": "L1422",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_bloque_clima_muestra",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_bloque_clima_muestra"
     },
     {
       "relation": "contains",
@@ -152097,9 +152339,9 @@
       "source_location": "L460",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_confianza_txt",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_confianza_txt"
     },
     {
       "relation": "contains",
@@ -152108,9 +152350,9 @@
       "source_location": "L469",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_desglose_confianza_html",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_desglose_confianza_html"
     },
     {
       "relation": "contains",
@@ -152119,9 +152361,9 @@
       "source_location": "L353",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_fecha",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_fecha"
     },
     {
       "relation": "contains",
@@ -152130,9 +152372,9 @@
       "source_location": "L453",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_fmt_cop",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_fmt_cop"
     },
     {
       "relation": "contains",
@@ -152141,9 +152383,9 @@
       "source_location": "L1735",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html"
     },
     {
       "relation": "contains",
@@ -152152,9 +152394,9 @@
       "source_location": "L804",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_hex_a_rgb",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_hex_a_rgb"
     },
     {
       "relation": "contains",
@@ -152163,9 +152405,9 @@
       "source_location": "L1024",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_hull",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_hull"
     },
     {
       "relation": "contains",
@@ -152174,9 +152416,9 @@
       "source_location": "L555",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_ingreso_bruto_ha",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_ingreso_bruto_ha"
     },
     {
       "relation": "contains",
@@ -152185,9 +152427,9 @@
       "source_location": "L809",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_mezclar",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_mezclar"
     },
     {
       "relation": "contains",
@@ -152196,9 +152438,9 @@
       "source_location": "L294",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_nivel_calibracion",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_nivel_calibracion"
     },
     {
       "relation": "contains",
@@ -152207,9 +152449,9 @@
       "source_location": "L250",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_num",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "relation": "contains",
@@ -152218,9 +152460,9 @@
       "source_location": "L1017",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_paso_nice",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_paso_nice"
     },
     {
       "relation": "contains",
@@ -152229,9 +152471,9 @@
       "source_location": "L1058",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_perimetro_poligono",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_perimetro_poligono"
     },
     {
       "relation": "contains",
@@ -152240,9 +152482,9 @@
       "source_location": "L362",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_ph_scale",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_ph_scale"
     },
     {
       "relation": "contains",
@@ -152251,9 +152493,9 @@
       "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_respaldo_html",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_respaldo_html"
     },
     {
       "relation": "contains",
@@ -152262,9 +152504,9 @@
       "source_location": "L584",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_analisis_economico",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_analisis_economico"
     },
     {
       "relation": "contains",
@@ -152273,9 +152515,9 @@
       "source_location": "L1652",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_bpa",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_bpa"
     },
     {
       "relation": "contains",
@@ -152284,9 +152526,9 @@
       "source_location": "L1675",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_evidencia",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_evidencia"
     },
     {
       "relation": "contains",
@@ -152295,9 +152537,9 @@
       "source_location": "L1571",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_labores",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_labores"
     },
     {
       "relation": "contains",
@@ -152306,9 +152548,9 @@
       "source_location": "L1533",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_lunar",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_lunar"
     },
     {
       "relation": "contains",
@@ -152317,9 +152559,9 @@
       "source_location": "L815",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_mapa_calor",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_mapa_calor"
     },
     {
       "relation": "contains",
@@ -152328,9 +152570,9 @@
       "source_location": "L508",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_plan_economico",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_plan_economico"
     },
     {
       "relation": "contains",
@@ -152339,9 +152581,9 @@
       "source_location": "L1070",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_plano_lote",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_plano_lote"
     },
     {
       "relation": "contains",
@@ -152350,9 +152592,9 @@
       "source_location": "L1609",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_riego",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_riego"
     },
     {
       "relation": "contains",
@@ -152361,9 +152603,9 @@
       "source_location": "L1634",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_rotacion",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_rotacion"
     },
     {
       "relation": "contains",
@@ -152372,9 +152614,9 @@
       "source_location": "L706",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_uc1",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_uc1"
     },
     {
       "relation": "contains",
@@ -152383,9 +152625,9 @@
       "source_location": "L378",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_uc2",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_uc2"
     },
     {
       "relation": "contains",
@@ -152394,9 +152636,9 @@
       "source_location": "L314",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_telemetria",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_telemetria"
     },
     {
       "relation": "imports_from",
@@ -152406,9 +152648,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html",
-      "target": "datetime",
-      "confidence_score": 1.0
+      "target": "datetime"
     },
     {
       "relation": "rationale_for",
@@ -152417,9 +152659,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_1",
-      "target": "apps_backend_agroia_backend_services_reportes_html",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html"
     },
     {
       "relation": "imports_from",
@@ -152440,9 +152682,9 @@
       "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_25",
-      "target": "apps_backend_agroia_backend_services_reportes_html_respaldo_html",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_respaldo_html"
     },
     {
       "relation": "calls",
@@ -152452,9 +152694,9 @@
       "source_location": "L724",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_uc1",
-      "target": "apps_backend_agroia_backend_services_reportes_html_respaldo_html",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_respaldo_html"
     },
     {
       "relation": "calls",
@@ -152464,9 +152706,9 @@
       "source_location": "L418",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_uc2",
-      "target": "apps_backend_agroia_backend_services_reportes_html_respaldo_html",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_respaldo_html"
     },
     {
       "relation": "imports",
@@ -152523,9 +152765,9 @@
       "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_43",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge_confianza_reducida",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge_confianza_reducida"
     },
     {
       "relation": "calls",
@@ -152535,9 +152777,9 @@
       "source_location": "L714",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_uc1",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge_confianza_reducida",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge_confianza_reducida"
     },
     {
       "relation": "imports",
@@ -152571,9 +152813,9 @@
       "source_location": "L1490",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_bloque_clima_muestra",
-      "target": "apps_backend_agroia_backend_services_reportes_html_num",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "relation": "calls",
@@ -152583,9 +152825,9 @@
       "source_location": "L455",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_fmt_cop",
-      "target": "apps_backend_agroia_backend_services_reportes_html_num",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "relation": "calls",
@@ -152595,9 +152837,9 @@
       "source_location": "L1832",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_num",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "relation": "calls",
@@ -152607,9 +152849,9 @@
       "source_location": "L371",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_ph_scale",
-      "target": "apps_backend_agroia_backend_services_reportes_html_num",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "relation": "calls",
@@ -152619,9 +152861,9 @@
       "source_location": "L632",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_analisis_economico",
-      "target": "apps_backend_agroia_backend_services_reportes_html_num",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "relation": "calls",
@@ -152631,9 +152873,9 @@
       "source_location": "L1588",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_labores",
-      "target": "apps_backend_agroia_backend_services_reportes_html_num",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "relation": "calls",
@@ -152643,9 +152885,9 @@
       "source_location": "L949",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_mapa_calor",
-      "target": "apps_backend_agroia_backend_services_reportes_html_num",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "relation": "calls",
@@ -152655,9 +152897,9 @@
       "source_location": "L530",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_plan_economico",
-      "target": "apps_backend_agroia_backend_services_reportes_html_num",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "relation": "calls",
@@ -152667,9 +152909,9 @@
       "source_location": "L1134",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_plano_lote",
-      "target": "apps_backend_agroia_backend_services_reportes_html_num",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "relation": "calls",
@@ -152679,9 +152921,9 @@
       "source_location": "L1614",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_riego",
-      "target": "apps_backend_agroia_backend_services_reportes_html_num",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "relation": "calls",
@@ -152691,9 +152933,9 @@
       "source_location": "L716",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_uc1",
-      "target": "apps_backend_agroia_backend_services_reportes_html_num",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "relation": "calls",
@@ -152703,9 +152945,9 @@
       "source_location": "L406",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_uc2",
-      "target": "apps_backend_agroia_backend_services_reportes_html_num",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "relation": "calls",
@@ -152715,9 +152957,9 @@
       "source_location": "L323",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_telemetria",
-      "target": "apps_backend_agroia_backend_services_reportes_html_num",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_num"
     },
     {
       "relation": "calls",
@@ -152727,9 +152969,9 @@
       "source_location": "L405",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_uc2",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge"
     },
     {
       "relation": "calls",
@@ -152739,9 +152981,9 @@
       "source_location": "L308",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_badge_estado_final",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge_clasificacion",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge_clasificacion"
     },
     {
       "relation": "calls",
@@ -152751,9 +152993,9 @@
       "source_location": "L714",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_uc1",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge_clasificacion",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge_clasificacion"
     },
     {
       "relation": "calls",
@@ -152763,9 +153005,9 @@
       "source_location": "L307",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_badge_estado_final",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge_validacion",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge_validacion"
     },
     {
       "relation": "rationale_for",
@@ -152774,9 +153016,9 @@
       "source_location": "L281",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_281",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge_validacion",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge_validacion"
     },
     {
       "relation": "rationale_for",
@@ -152785,9 +153027,9 @@
       "source_location": "L295",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_295",
-      "target": "apps_backend_agroia_backend_services_reportes_html_nivel_calibracion",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_nivel_calibracion"
     },
     {
       "relation": "calls",
@@ -152797,9 +153039,9 @@
       "source_location": "L315",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_telemetria",
-      "target": "apps_backend_agroia_backend_services_reportes_html_nivel_calibracion",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_nivel_calibracion"
     },
     {
       "relation": "rationale_for",
@@ -152808,9 +153050,9 @@
       "source_location": "L304",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_304",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge_estado_final",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge_estado_final"
     },
     {
       "relation": "calls",
@@ -152820,9 +153062,9 @@
       "source_location": "L740",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_uc1",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge_estado_final",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge_estado_final"
     },
     {
       "relation": "calls",
@@ -152832,9 +153074,9 @@
       "source_location": "L441",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_uc2",
-      "target": "apps_backend_agroia_backend_services_reportes_html_badge_estado_final",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_badge_estado_final"
     },
     {
       "relation": "imports",
@@ -152868,9 +153110,9 @@
       "source_location": "L1982",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_telemetria",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_telemetria"
     },
     {
       "relation": "calls",
@@ -152880,9 +153122,9 @@
       "source_location": "L320",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_telemetria",
-      "target": "apps_backend_agroia_backend_services_reportes_html_fecha",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_fecha"
     },
     {
       "relation": "calls",
@@ -152892,9 +153134,9 @@
       "source_location": "L2048",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_ph_scale",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_ph_scale"
     },
     {
       "relation": "calls",
@@ -152904,9 +153146,9 @@
       "source_location": "L1782",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_uc2",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_uc2"
     },
     {
       "relation": "calls",
@@ -152916,9 +153158,9 @@
       "source_location": "L441",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_uc2",
-      "target": "apps_backend_agroia_backend_services_reportes_html_confianza_txt",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_confianza_txt"
     },
     {
       "relation": "calls",
@@ -152928,9 +153170,9 @@
       "source_location": "L434",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_uc2",
-      "target": "apps_backend_agroia_backend_services_reportes_html_desglose_confianza_html",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_desglose_confianza_html"
     },
     {
       "relation": "calls",
@@ -152940,9 +153182,9 @@
       "source_location": "L433",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_uc2",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_plan_economico",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_plan_economico"
     },
     {
       "relation": "calls",
@@ -152952,9 +153194,9 @@
       "source_location": "L629",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_analisis_economico",
-      "target": "apps_backend_agroia_backend_services_reportes_html_fmt_cop",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_fmt_cop"
     },
     {
       "relation": "calls",
@@ -152964,9 +153206,9 @@
       "source_location": "L512",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_plan_economico",
-      "target": "apps_backend_agroia_backend_services_reportes_html_fmt_cop",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_fmt_cop"
     },
     {
       "relation": "rationale_for",
@@ -152975,9 +153217,9 @@
       "source_location": "L461",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_461",
-      "target": "apps_backend_agroia_backend_services_reportes_html_confianza_txt",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_confianza_txt"
     },
     {
       "relation": "calls",
@@ -152987,9 +153229,9 @@
       "source_location": "L740",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_uc1",
-      "target": "apps_backend_agroia_backend_services_reportes_html_confianza_txt",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_confianza_txt"
     },
     {
       "relation": "rationale_for",
@@ -152998,9 +153240,9 @@
       "source_location": "L470",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_470",
-      "target": "apps_backend_agroia_backend_services_reportes_html_desglose_confianza_html",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_desglose_confianza_html"
     },
     {
       "relation": "calls",
@@ -153010,9 +153252,9 @@
       "source_location": "L733",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_uc1",
-      "target": "apps_backend_agroia_backend_services_reportes_html_desglose_confianza_html",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_desglose_confianza_html"
     },
     {
       "relation": "rationale_for",
@@ -153021,9 +153263,9 @@
       "source_location": "L509",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_509",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_plan_economico",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_plan_economico"
     },
     {
       "relation": "rationale_for",
@@ -153032,9 +153274,9 @@
       "source_location": "L556",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_556",
-      "target": "apps_backend_agroia_backend_services_reportes_html_ingreso_bruto_ha",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_ingreso_bruto_ha"
     },
     {
       "relation": "calls",
@@ -153044,9 +153286,9 @@
       "source_location": "L608",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_analisis_economico",
-      "target": "apps_backend_agroia_backend_services_reportes_html_ingreso_bruto_ha",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_ingreso_bruto_ha"
     },
     {
       "relation": "calls",
@@ -153056,9 +153298,9 @@
       "source_location": "L1874",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_analisis_economico",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_analisis_economico"
     },
     {
       "relation": "rationale_for",
@@ -153067,9 +153309,9 @@
       "source_location": "L590",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_590",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_analisis_economico",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_analisis_economico"
     },
     {
       "relation": "calls",
@@ -153079,9 +153321,9 @@
       "source_location": "L1784",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_uc1",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_uc1"
     },
     {
       "relation": "calls",
@@ -153091,9 +153333,9 @@
       "source_location": "L810",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_mezclar",
-      "target": "apps_backend_agroia_backend_services_reportes_html_hex_a_rgb",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_hex_a_rgb"
     },
     {
       "relation": "calls",
@@ -153103,9 +153345,9 @@
       "source_location": "L893",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_mapa_calor",
-      "target": "apps_backend_agroia_backend_services_reportes_html_mezclar",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_mezclar"
     },
     {
       "relation": "calls",
@@ -153115,9 +153357,9 @@
       "source_location": "L1787",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_mapa_calor",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_mapa_calor"
     },
     {
       "relation": "rationale_for",
@@ -153126,9 +153368,9 @@
       "source_location": "L816",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_816",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_mapa_calor",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_mapa_calor"
     },
     {
       "relation": "calls",
@@ -153138,9 +153380,9 @@
       "source_location": "L1195",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_plano_lote",
-      "target": "apps_backend_agroia_backend_services_reportes_html_paso_nice",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_paso_nice"
     },
     {
       "relation": "rationale_for",
@@ -153149,9 +153391,9 @@
       "source_location": "L1025",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_1025",
-      "target": "apps_backend_agroia_backend_services_reportes_html_hull",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_hull"
     },
     {
       "relation": "calls",
@@ -153161,9 +153403,9 @@
       "source_location": "L1101",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_plano_lote",
-      "target": "apps_backend_agroia_backend_services_reportes_html_hull",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_hull"
     },
     {
       "relation": "calls",
@@ -153173,9 +153415,9 @@
       "source_location": "L1103",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_plano_lote",
-      "target": "apps_backend_agroia_backend_services_reportes_html_area_poligono",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_area_poligono"
     },
     {
       "relation": "calls",
@@ -153185,9 +153427,9 @@
       "source_location": "L1102",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_plano_lote",
-      "target": "apps_backend_agroia_backend_services_reportes_html_perimetro_poligono",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_perimetro_poligono"
     },
     {
       "relation": "calls",
@@ -153197,9 +153439,9 @@
       "source_location": "L1793",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_plano_lote",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_plano_lote"
     },
     {
       "relation": "rationale_for",
@@ -153208,9 +153450,9 @@
       "source_location": "L1080",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_1080",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_plano_lote",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_plano_lote"
     },
     {
       "relation": "calls",
@@ -153220,9 +153462,9 @@
       "source_location": "L1274",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_seccion_plano_lote",
-      "target": "apps_backend_agroia_backend_services_reportes_html_bloque_clima_muestra",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_bloque_clima_muestra"
     },
     {
       "relation": "rationale_for",
@@ -153231,9 +153473,9 @@
       "source_location": "L1426",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_1426",
-      "target": "apps_backend_agroia_backend_services_reportes_html_bloque_clima_muestra",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_bloque_clima_muestra"
     },
     {
       "relation": "calls",
@@ -153243,9 +153485,9 @@
       "source_location": "L1887",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_lunar",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_lunar"
     },
     {
       "relation": "rationale_for",
@@ -153254,9 +153496,9 @@
       "source_location": "L1534",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_1534",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_lunar",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_lunar"
     },
     {
       "relation": "calls",
@@ -153266,9 +153508,9 @@
       "source_location": "L1879",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_labores",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_labores"
     },
     {
       "relation": "rationale_for",
@@ -153277,9 +153519,9 @@
       "source_location": "L1572",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_1572",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_labores",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_labores"
     },
     {
       "relation": "calls",
@@ -153289,9 +153531,9 @@
       "source_location": "L1882",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_riego",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_riego"
     },
     {
       "relation": "rationale_for",
@@ -153300,9 +153542,9 @@
       "source_location": "L1610",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_1610",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_riego",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_riego"
     },
     {
       "relation": "calls",
@@ -153312,9 +153554,9 @@
       "source_location": "L1883",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_rotacion",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_rotacion"
     },
     {
       "relation": "rationale_for",
@@ -153323,9 +153565,9 @@
       "source_location": "L1635",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_1635",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_rotacion",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_rotacion"
     },
     {
       "relation": "calls",
@@ -153335,9 +153577,9 @@
       "source_location": "L1884",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_bpa",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_bpa"
     },
     {
       "relation": "rationale_for",
@@ -153346,9 +153588,9 @@
       "source_location": "L1653",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_1653",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_bpa",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_bpa"
     },
     {
       "relation": "calls",
@@ -153358,9 +153600,9 @@
       "source_location": "L1890",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_evidencia",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_evidencia"
     },
     {
       "relation": "rationale_for",
@@ -153369,9 +153611,9 @@
       "source_location": "L1676",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_1676",
-      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_evidencia",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_seccion_evidencia"
     },
     {
       "relation": "rationale_for",
@@ -153380,9 +153622,9 @@
       "source_location": "L1766",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "apps_backend_agroia_backend_services_reportes_html_rationale_1766",
-      "target": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html",
-      "confidence_score": 1.0
+      "target": "apps_backend_agroia_backend_services_reportes_html_generar_reporte_html"
     },
     {
       "relation": "contains",
@@ -339091,248 +339333,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma",
-      "target": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L204",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
-      "target": "documentacion_plataforma_10_estado_de_los_rfp_\u00e9picas"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L216",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
-      "target": "documentacion_plataforma_11_principios_de_dominio_no_negociables"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
-      "target": "documentacion_plataforma_1_resumen_ejecutivo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L22",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
-      "target": "documentacion_plataforma_2_arquitectura_general"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L51",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
-      "target": "documentacion_plataforma_3_stack_tecnol\u00f3gico"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L66",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
-      "target": "documentacion_plataforma_4_componentes_apps"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L83",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
-      "target": "documentacion_plataforma_5_base_de_datos_esquema_agroia_41_migraciones_head_049"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L107",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
-      "target": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L158",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
-      "target": "documentacion_plataforma_7_api_resumen_por_router"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L183",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
-      "target": "documentacion_plataforma_8_seguridad"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L194",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_agroia_documentaci\u00f3n_funcional_y_t\u00e9cnica_estado_actual",
-      "target": "documentacion_plataforma_9_despliegue_y_ci_cd"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L85",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_5_base_de_datos_esquema_agroia_41_migraciones_head_049",
-      "target": "documentacion_plataforma_entidades_n\u00facleo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L109",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
-      "target": "documentacion_plataforma_6_1_gesti\u00f3n_de_fincas_y_lotes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L115",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
-      "target": "documentacion_plataforma_6_2_sensores_iot_ingesta_y_calidad_del_dato"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L122",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
-      "target": "documentacion_plataforma_6_3_motor_de_recomendaci\u00f3n_agron\u00f3mica"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L128",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
-      "target": "documentacion_plataforma_6_4_reportes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L133",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
-      "target": "documentacion_plataforma_6_5_asesor_conversacional_voz_rfp_001_y_rfp_002"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L139",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
-      "target": "documentacion_plataforma_6_6_agc_cost_ciclo_comercial"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L143",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
-      "target": "documentacion_plataforma_6_7_trazabilidad_bpa"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L146",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
-      "target": "documentacion_plataforma_6_8_sanidad_clima_y_cat\u00e1logo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DOCUMENTACION-PLATAFORMA.md",
-      "source_location": "L152",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "documentacion_plataforma_6_m\u00f3dulos_funcionales_lo_que_hace_hoy",
-      "target": "documentacion_plataforma_6_9_administraci\u00f3n_y_operaci\u00f3n"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "PROJECT_STATUS.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -369241,5 +369241,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "4a8933af2dd344117d1a45033cd763c5bd0ae179"
+  "built_at_commit": "9bc918029a4f1478708d98a2a2342bd5617bd867"
 }

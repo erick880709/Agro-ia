@@ -76,6 +76,16 @@ async def process_sensor_message(message: dict) -> bool:
                 return False
             finca_id = str(dispositivo.finca_id)
 
+        # ── Lote de la medición (diferenciación multi-lote) ──
+        # Prioridad: lote_id explícito en la trama; si no viene, se hereda
+        # el lote registrado del dispositivo.
+        lote_id = message.get("lote_id")
+        if not lote_id and device_id:
+            if dispositivo is None:
+                dispositivo = await get_dispositivo(device_id)
+            if dispositivo is not None and dispositivo.lote_id is not None:
+                lote_id = str(dispositivo.lote_id)
+
         # ── Normalizar trama al formato canónico (brecha G2) ──
         payload, advertencias = normalizar_trama(raw)
 
@@ -120,6 +130,7 @@ async def process_sensor_message(message: dict) -> bool:
 
         reading = SensorReading(
             finca_id=finca_id,
+            lote_id=lote_id,
             ts=ts,
             sensor_id=device_id,
             pos_x=pos_x,

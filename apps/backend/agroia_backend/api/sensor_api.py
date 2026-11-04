@@ -7,6 +7,7 @@ exacto del firmware (ver log del dispositivo):
     {
       "device_id": "esp32-npk-001",
       "finca_id": "8c2ea84f-b5fa-4291-a1e5-8b42fa5a9936",
+      "lote": "<uuid-del-lote>",
       "latitude": 4.578333,
       "longitude": -75.666944,
       "humidity": 94.0,
@@ -38,6 +39,7 @@ from sqlalchemy import select
 
 from agroia_backend.models.dispositivo_iot import DispositivoIoT
 from agroia_backend.models.finca import Finca
+from agroia_backend.services.resolucion_lotes import resolver_lote_id
 
 logger = get_logger(__name__)
 router = APIRouter(prefix="/api", tags=["sensor-api"])
@@ -54,6 +56,9 @@ class SensorFrame(BaseModel, extra="allow"):
             "dispositivo ya está registrado se usa su finca, y si se envía, "
             "se asocia a esta)."
         ),
+    )
+    lote: str | None = Field(
+        None, description="ID (UUID) o nombre del lote al que pertenece la medición"
     )
     humidity: float | None = Field(None, description="% HR ambiente (DHT22)")
     temperature: float | None = Field(None, description="°C ambiente")
@@ -184,9 +189,18 @@ async def ingesta_sensor(frame: SensorFrame):
             else:
                 advertencias.append("gps_sin_centroide_finca")
 
+        # Lote de la medición: si la trama no lo envía, se hereda el lote
+        # registrado del dispositivo.
+        lote_id = None
+        if frame.lote:
+            lote_id = await resolver_lote_id(str(dispositivo.finca_id), frame.lote)
+        elif dispositivo.lote_id is not None:
+            lote_id = str(dispositivo.lote_id)
+
         mensaje = {
             "device_id": frame.device_id,
             "finca_id": str(dispositivo.finca_id),
+            "lote_id": lote_id,
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "rssi": _a_entero(frame.rssi),
             "uptime_s": _a_entero(frame.uptime_s),
@@ -210,6 +224,7 @@ async def ingesta_sensor(frame: SensorFrame):
         "status": "accepted",
         "device_id": frame.device_id,
         "finca_id": str(dispositivo.finca_id),
+        "lote_id": lote_id,
         "auto_registrado": auto_registrado,
         "variables_recibidas": sorted(payload.keys()),
         "advertencias": advertencias,

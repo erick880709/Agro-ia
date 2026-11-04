@@ -99,13 +99,13 @@ Clientes (navegador, PWA)
 <tr><td><code>models/</code></td><td>Artefactos de modelo serializados (<code>.pkl</code>).</td></tr>
 </tbody></table>
 <hr>
-<h2>5. Base de datos (esquema <code>agroia</code>, 57 migraciones → head <code>057</code>)</h2>
+<h2>5. Base de datos (esquema <code>agroia</code>, 58 migraciones → head <code>058</code>)</h2>
 <h3>Entidades núcleo</h3>
 <table><thead><tr><th>Tabla (modelo)</th><th>Descripción</th></tr></thead><tbody>
 <tr><td><code>fincas</code></td><td>Predio georreferenciado: GPS, altitud, geometría GeoJSON, área/perímetro calculados, tipo de área, multi-lote, riego, fenología.</td></tr>
 <tr><td><code>lotes</code></td><td>Unidad productiva dentro de una finca: geometría, <code>area_ha</code>, <code>perimetro_m</code>, profundidad, pedregosidad, siembra/variedad.</td></tr>
 <tr><td><code>usuarios</code></td><td>Cuentas por rol (Admin/Agrónomo/Cliente/Extensionista) con bcrypt.</td></tr>
-<tr><td><code>sensor_readings</code></td><td>Series temporales del sensor (18 variables de suelo + ambiente), <code>pos_x/pos_y</code> (m), <code>calidad</code> (10 estados), <code>motivos_calidad</code>, <code>version_regla</code>, <code>incertidumbre</code>, <code>valor_crudo</code>, metadatos de muestreo (<code>profundidad_cm</code>, <code>punto_id</code>, <code>replica_n</code>, <code>sesion_muestreo_id</code>).</td></tr>
+<tr><td><code>sensor_readings</code></td><td>Series temporales del sensor (18 variables de suelo + ambiente), <code>pos_x/pos_y</code> (m), <code>lote_id</code> (diferenciación multi-lote), <code>calidad</code> (10 estados), <code>motivos_calidad</code>, <code>version_regla</code>, <code>incertidumbre</code>, <code>valor_crudo</code>, metadatos de muestreo (<code>profundidad_cm</code>, <code>punto_id</code>, <code>replica_n</code>, <code>sesion_muestreo_id</code>).</td></tr>
 <tr><td><code>dispositivos_iot</code></td><td>Registro de dispositivos (device_id → finca), configuración (modelo, variante, dirección Modbus, baudios, bus, lote, instalación), calibración NPK, telemetría (voltaje, errores CRC).</td></tr>
 <tr><td><code>calibracion_sensor</code></td><td>Regresión lineal (pendiente/intercepto) por dispositivo, variable y unidad de suelo, con n, R², RMSE, sesgo, vigencia.</td></tr>
 <tr><td><code>par_calibracion</code></td><td>Pares sensor–laboratorio (misma muestra, día y profundidad) con método, laboratorio y unidad de suelo.</td></tr>
@@ -134,7 +134,7 @@ Clientes (navegador, PWA)
 </ul>
 <h3>6.2 Sensores IoT (ingesta, decodificación y calidad del dato)</h3>
 <ul>
-<li>Ingesta por <code>POST /api/v1/iot/sensor</code> (trama normalizada), <code>/api/v1/iot/sensor/raw</code> (registros Modbus crudos) y <code>/api/v1/iot/ingest</code>, y por el <strong>consumidor</strong> (<code>apps/iot</code>) desde RabbitMQ.</li>
+<li>Ingesta por <code>POST /api/v1/iot/sensor</code> (trama normalizada), <code>/api/v1/iot/sensor/raw</code> (registros Modbus crudos), <code>POST /api/sensor</code> (trama del firmware) y <code>/api/v1/iot/ingest</code>, y por el <strong>consumidor</strong> (<code>apps/iot</code>) desde RabbitMQ. La trama acepta el campo <code>lote</code> (ID o nombre del lote) que se resuelve al <code>lote_id</code> de la finca y se persiste en <code>sensor_readings</code> para <strong>separar las mediciones por lote</strong>; si la trama no lo envía, se hereda el lote registrado del dispositivo.</li>
 <li><strong>Decodificación fiel Modbus</strong> (<code>decodificacion_modbus.py</code>): registros 0x0006/0x0012/0x0013/0x0015/0x001E–0x0020 con sus escalas, temperatura en complemento a dos, CRC-16 Modbus, conservación del <code>valor_crudo</code>. Firmware de referencia en <code>apps/iot/firmware/</code>.</li>
 <li>Normalización de tramas, resolución de dispositivo→finca, conversión <strong>GPS→metros relativos</strong> al centroide.</li>
 <li><strong>Motor de calidad de 10 estados</strong> (<code>motor_calidad.py</code>): <code>valida</code>, <code>valida_con_advertencia</code>, <code>bajo_limite_deteccion</code> (0 en CE/NPK se conserva), <code>saturada</code>, <code>fuera_de_rango</code>, <code>sonda_fuera_de_suelo</code>, <code>humedad_insuficiente</code>, <code>no_calibrada</code>, <code>estimado_sig</code>, <code>invalidada</code>. Cada lectura guarda <code>motivos_calidad</code> y <code>version_regla</code>; los umbrales son <strong>administrables</strong> (tabla <code>parametro_calidad_sensor</code>).</li>
@@ -224,7 +224,7 @@ Clientes (navegador, PWA)
 <li><strong>Render Blueprint</strong> (<code>render.yaml</code>): servicio <code>agroia-backend</code> (Docker), health check <code>/api/v1/health</code>, variables de entorno (DATABASE_URL, ENVIRONMENT, JWT_SECRET, CLONACION_VOZ_URL/TOKEN…).</li>
 <li><strong>Neon Postgres</strong>: esquema <code>agroia</code>; la URL usa <code>postgresql+asyncpg://</code> con <code>ssl=require</code>.</li>
 <li><strong>GitHub Actions</strong> (<code>.github/workflows/ci.yml</code>): lint (ruff) → tests (pytest con Postgres) → build Docker (backend/auth/ml/rag/iot).</li>
-<li><strong>Migraciones</strong>: <code>alembic upgrade head</code> se ejecuta al arrancar el contenedor (head actual: <code>057_par_calibracion_unidad_suelo</code>).</li>
+<li><strong>Migraciones</strong>: <code>alembic upgrade head</code> se ejecuta al arrancar el contenedor (head actual: <code>058_sensor_reading_lote</code>).</li>
 <li><strong>Voz clonada</strong>: wrapper en <code>apps/voice-clone</code> desplegable en RunPod/HF Spaces; se conecta vía <code>CLONACION_VOZ_URL</code>/<code>CLONACION_VOZ_TOKEN</code>.</li>
 </ul>
 <hr>

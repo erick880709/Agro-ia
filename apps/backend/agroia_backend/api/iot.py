@@ -3,6 +3,7 @@
 
 from agroia.database import get_db
 from agroia.logging import get_logger
+from agroia_backend.services.resolucion_lotes import resolver_lote_id
 from fastapi import (
     APIRouter,
     Depends,
@@ -41,6 +42,9 @@ class SensorStatus(BaseModel):
 class Esp32SensorMessage(BaseModel, extra="allow"):
     """Trama cruda del firmware ESP32 (variables en la raíz, sin finca_id)."""
     device_id: str = Field(..., description="ID del dispositivo (ej. esp32-npk-001)")
+    lote: str | None = Field(
+        None, description="ID (UUID) o nombre del lote al que pertenece la medición"
+    )
     ph: float | None = None
     nitrogen: float | None = None
     phosphorus: float | None = None
@@ -81,6 +85,9 @@ class DispositivoRegistro(BaseModel):
 class SensorRawRegistros(BaseModel, extra="allow"):
     """Trama cruda en registros Modbus (función 0x03) del JXBS-3001-NPK-RS."""
     device_id: str = Field(..., description="ID del dispositivo (ej. esp32-npk-001)")
+    lote: str | None = Field(
+        None, description="ID (UUID) o nombre del lote al que pertenece la medición"
+    )
     registros: dict[str, int] = Field(
         ..., description="Mapa registro (hex o decimal) → valor entero crudo de 16 bits"
     )
@@ -167,10 +174,19 @@ async def ingest_esp32_sensor(body: Esp32SensorMessage):
 
     from agroia_backend.services.puente_iot import process_sensor_message
 
+    # Lote de la medición: si la trama no lo envía, se hereda el lote
+    # registrado del dispositivo.
+    lote_id = None
+    if body.lote:
+        lote_id = await resolver_lote_id(str(dispositivo.finca_id), body.lote)
+    elif dispositivo.lote_id is not None:
+        lote_id = str(dispositivo.lote_id)
+
     payload, advertencias = normalizar_trama(body.model_dump())
     success = await process_sensor_message({
         "device_id": body.device_id,
         "finca_id": str(dispositivo.finca_id),
+        "lote_id": lote_id,
         "timestamp": None,
         "rssi": body.rssi,
         "uptime_s": body.uptime_s,
@@ -187,6 +203,7 @@ async def ingest_esp32_sensor(body: Esp32SensorMessage):
         "status": "accepted",
         "device_id": body.device_id,
         "finca_id": str(dispositivo.finca_id),
+        "lote_id": lote_id,
         "variables_recibidas": sorted(payload.keys()),
         "advertencias": advertencias,
     }
@@ -234,9 +251,16 @@ async def ingest_esp32_registros(body: SensorRawRegistros):
             "message": "Ningún registro coincide con los del JXBS-3001-NPK-RS.",
         })
 
+    lote_id = None
+    if body.lote:
+        lote_id = await resolver_lote_id(str(dispositivo.finca_id), body.lote)
+    elif dispositivo.lote_id is not None:
+        lote_id = str(dispositivo.lote_id)
+
     success = await process_sensor_message({
         "device_id": body.device_id,
         "finca_id": str(dispositivo.finca_id),
+        "lote_id": lote_id,
         "timestamp": body.timestamp,
         "payload": payload,
         "valor_crudo": payload.get("valor_crudo"),
@@ -252,6 +276,7 @@ async def ingest_esp32_registros(body: SensorRawRegistros):
         "status": "accepted",
         "device_id": body.device_id,
         "finca_id": str(dispositivo.finca_id),
+        "lote_id": lote_id,
         "variables_recibidas": sorted(payload.keys()),
     }
 
@@ -740,6 +765,7 @@ async def ultimas_lecturas(
             {
                 "id": str(r.id),
                 "finca_id": str(r.finca_id),
+                "lote_id": str(r.lote_id) if r.lote_id else None,
                 "sensor_id": r.sensor_id,
                 "ts": r.ts.isoformat() if r.ts else None,
                 "pos_x": r.pos_x,

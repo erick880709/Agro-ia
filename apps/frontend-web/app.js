@@ -531,11 +531,12 @@ async function arrancarAplicacion() {
   renderChat();
   document.getElementById('sim-enviar').addEventListener('click', enviarTramaSimulada);
   // Trama de ejemplo con el formato REAL del firmware (POST /api/sensor),
-  // incluyendo finca_id y posición geográfica del punto de toma
-  // (latitude/longitude en grados decimales WGS84).
+  // incluyendo finca_id, el lote (id o nombre) y la posición geográfica
+  // del punto de toma (latitude/longitude en grados decimales WGS84).
   document.getElementById('sim-trama').value = JSON.stringify({
     device_id: 'esp32-npk-001',
     finca_id: 'a0562767-13a8-4a49-bd98-e8097d5b2674',
+    lote: '1',
     latitude: 4.578333,
     longitude: -75.666944,
     humidity: 94.0,
@@ -862,6 +863,8 @@ function renderLotes(fincaId, lotes) {
     <div class="lote-row">
       <div class="lote-info">
         <b>🗂️ ${esc(l.nombre)}</b>
+        <span class="mono-id" title="ID del lote (envíelo en la trama del sensor como lote)">ID: <code>${esc(l.id)}</code></span>
+        <button type="button" class="btn btn-ghost btn-copiar-lote" data-copiar="${esc(l.id)}">📋 Copiar</button>
         <span class="muted">${l.area_ha != null ? l.area_ha + ' ha' : 'área sin dato'}</span>
         ${l.profundidad_suelo_cm != null ? `<span class="muted">prof. ${l.profundidad_suelo_cm} cm</span>` : ''}
         ${l.pedregosidad ? `<span class="muted">pedregosidad: ${esc(l.pedregosidad)}</span>` : ''}
@@ -915,6 +918,9 @@ function renderLotes(fincaId, lotes) {
   });
   panel.querySelectorAll('[data-lote-eliminar]').forEach(b => {
     b.addEventListener('click', () => eliminarLote(fincaId, b.dataset.loteEliminar, b.dataset.nombre || ''));
+  });
+  panel.querySelectorAll('.btn-copiar-lote').forEach(b => {
+    b.addEventListener('click', () => copiarTexto(b.dataset.copiar || '', b));
   });
   document.getElementById('ln-guardar').addEventListener('click', () => crearLote(fincaId));
 }

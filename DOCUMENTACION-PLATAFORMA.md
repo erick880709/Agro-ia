@@ -80,7 +80,7 @@ Clientes (navegador, PWA)
 
 ---
 
-## 5. Base de datos (esquema `agroia`, 57 migraciones → head `057`)
+## 5. Base de datos (esquema `agroia`, 58 migraciones → head `058`)
 
 ### Entidades núcleo
 
@@ -89,7 +89,7 @@ Clientes (navegador, PWA)
 | `fincas` | Predio georreferenciado: GPS, altitud, geometría GeoJSON, área/perímetro calculados, tipo de área, multi-lote, riego, fenología. |
 | `lotes` | Unidad productiva dentro de una finca: geometría, `area_ha`, `perimetro_m`, profundidad, pedregosidad, siembra/variedad. |
 | `usuarios` | Cuentas por rol (Admin/Agrónomo/Cliente/Extensionista) con bcrypt. |
-| `sensor_readings` | Series temporales del sensor (18 variables de suelo + ambiente), `pos_x/pos_y` (m), `calidad` (10 estados), `motivos_calidad`, `version_regla`, `incertidumbre`, `valor_crudo`, metadatos de muestreo (`profundidad_cm`, `punto_id`, `replica_n`, `sesion_muestreo_id`). |
+| `sensor_readings` | Series temporales del sensor (18 variables de suelo + ambiente), `pos_x/pos_y` (m), `lote_id` (diferenciación multi-lote), `calidad` (10 estados), `motivos_calidad`, `version_regla`, `incertidumbre`, `valor_crudo`, metadatos de muestreo (`profundidad_cm`, `punto_id`, `replica_n`, `sesion_muestreo_id`). |
 | `dispositivos_iot` | Registro de dispositivos (device_id → finca), configuración (modelo, variante, dirección Modbus, baudios, bus, lote, instalación), calibración NPK, telemetría (voltaje, errores CRC). |
 | `calibracion_sensor` | Regresión lineal (pendiente/intercepto) por dispositivo, variable y unidad de suelo, con n, R², RMSE, sesgo, vigencia. |
 | `par_calibracion` | Pares sensor–laboratorio (misma muestra, día y profundidad) con método, laboratorio y unidad de suelo. |
@@ -118,7 +118,7 @@ Clientes (navegador, PWA)
 - Enriquecimiento **SIG** (IGAC/UPRA): precarga textura/MO/CIC oficiales con `calidad = estimado_sig` (el sensor gana si mide).
 
 ### 6.2 Sensores IoT (ingesta, decodificación y calidad del dato)
-- Ingesta por `POST /api/v1/iot/sensor` (trama normalizada), `/api/v1/iot/sensor/raw` (registros Modbus crudos) y `/api/v1/iot/ingest`, y por el **consumidor** (`apps/iot`) desde RabbitMQ.
+- Ingesta por `POST /api/v1/iot/sensor` (trama normalizada), `/api/v1/iot/sensor/raw` (registros Modbus crudos), `POST /api/sensor` (trama del firmware) y `/api/v1/iot/ingest`, y por el **consumidor** (`apps/iot`) desde RabbitMQ. La trama acepta el campo `lote` (ID o nombre del lote) que se resuelve al `lote_id` de la finca y se persiste en `sensor_readings` para **separar las mediciones por lote**; si la trama no lo envía, se hereda el lote registrado del dispositivo.
 - **Decodificación fiel Modbus** (`decodificacion_modbus.py`): registros 0x0006/0x0012/0x0013/0x0015/0x001E–0x0020 con sus escalas, temperatura en complemento a dos, CRC-16 Modbus, conservación del `valor_crudo`. Firmware de referencia en `apps/iot/firmware/`.
 - Normalización de tramas, resolución de dispositivo→finca, conversión **GPS→metros relativos** al centroide.
 - **Motor de calidad de 10 estados** (`motor_calidad.py`): `valida`, `valida_con_advertencia`, `bajo_limite_deteccion` (0 en CE/NPK se conserva), `saturada`, `fuera_de_rango`, `sonda_fuera_de_suelo`, `humedad_insuficiente`, `no_calibrada`, `estimado_sig`, `invalidada`. Cada lectura guarda `motivos_calidad` y `version_regla`; los umbrales son **administrables** (tabla `parametro_calidad_sensor`).
@@ -206,7 +206,7 @@ Clientes (navegador, PWA)
 - **Render Blueprint** (`render.yaml`): servicio `agroia-backend` (Docker), health check `/api/v1/health`, variables de entorno (DATABASE_URL, ENVIRONMENT, JWT_SECRET, CLONACION_VOZ_URL/TOKEN…).
 - **Neon Postgres**: esquema `agroia`; la URL usa `postgresql+asyncpg://` con `ssl=require`.
 - **GitHub Actions** (`.github/workflows/ci.yml`): lint (ruff) → tests (pytest con Postgres) → build Docker (backend/auth/ml/rag/iot).
-- **Migraciones**: `alembic upgrade head` se ejecuta al arrancar el contenedor (head actual: `057_par_calibracion_unidad_suelo`).
+- **Migraciones**: `alembic upgrade head` se ejecuta al arrancar el contenedor (head actual: `058_sensor_reading_lote`).
 - **Voz clonada**: wrapper en `apps/voice-clone` desplegable en RunPod/HF Spaces; se conecta vía `CLONACION_VOZ_URL`/`CLONACION_VOZ_TOKEN`.
 
 ---

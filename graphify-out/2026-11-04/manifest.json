@@ -6695,8 +6695,8 @@
     "semantic_hash": ""
   },
   "DOCUMENTACION-PLATAFORMA.md": {
-    "mtime": 1793799915.886664,
-    "ast_hash": "191d6a90e4bc0ffddabf923f626a7805",
+    "mtime": 1793800109.341802,
+    "ast_hash": "9b96838fe032ac78768d1447641b2e1c",
     "semantic_hash": ""
   },
   "context/RFP-AGROIA-003 \u2014 Plataforma confiable de medici\u00f3n de suelo con el sensor JXBS-30.md": {
@@ -12085,8 +12085,8 @@
     "semantic_hash": ""
   },
   ".memoria/graph.json": {
-    "mtime": 1793798731.7055748,
-    "ast_hash": "545edfa1221e57cd1ff3f475ee62fd50",
+    "mtime": 1793800159.650215,
+    "ast_hash": "9a9006075cd2f37efd49df2ad254c3ad",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/decodificacion_modbus.py": {
@@ -12105,8 +12105,8 @@
     "semantic_hash": ""
   },
   ".memoria/index.md": {
-    "mtime": 1793798731.7595623,
-    "ast_hash": "c835ebc63c29a4956540f60e9cb5971c",
+    "mtime": 1793800159.6727207,
+    "ast_hash": "5feac2156bf6eeb2ed0f91e33f6d012a",
     "semantic_hash": ""
   },
   "apps/iot/firmware/README.md": {
@@ -12277,6 +12277,11 @@
   "reports/informe-produccion-carcel-penas-blancas-reclasificado.html": {
     "mtime": 1793799043.2746894,
     "ast_hash": "2ca3ce2b4537152872fd6ca0c02f05c6",
+    "semantic_hash": ""
+  },
+  "DOCUMENTACION-PLATAFORMA.html": {
+    "mtime": 1793800114.329103,
+    "ast_hash": "e7f4f9519f0189d4218c7d4fe6ed19ab",
     "semantic_hash": ""
   }
 }

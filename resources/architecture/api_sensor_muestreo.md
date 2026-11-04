@@ -29,6 +29,7 @@ calor por parámetro** en el reporte.
 {
   "device_id": "esp32-npk-001",
   "finca_id": "a0562767-13a8-4a49-bd98-e8097d5b2674",
+  "lote": "<id-del-lote>",
   "latitude": 4.578333,
   "longitude": -75.666944,
   "humidity": 94.0,
@@ -47,6 +48,9 @@ calor por parámetro** en el reporte.
 > producción, así que puede pegar el body tal cual y recibirá `202 Accepted`.
 > Para probar con **su** finca, reemplace `finca_id` por el ID que muestra la
 > plataforma (pestaña Fincas → botón «📋 Copiar» en la tarjeta de la finca).
+> El campo `lote` es **opcional**: envíe el ID del lote (o su nombre) para que
+> la medición quede separada por lote (pestaña Fincas → «🗂️ Lotes» → botón
+> «📋 Copiar» junto a cada lote).
 
 **Prueba rápida — bash (macOS / Linux):**
 
@@ -92,6 +96,7 @@ Invoke-RestMethod -Uri "https://agroia-backend.onrender.com/api/sensor" -Method 
 {
   "device_id": "esp32-npk-001",
   "finca_id": "a0562767-13a8-4a49-bd98-e8097d5b2674",
+  "lote": "<id-del-lote>",
   "latitude": 4.578333,
   "longitude": -75.666944,
   "humidity": 94.0,
@@ -123,6 +128,12 @@ El orden de resolución es el siguiente:
 > (pestaña Fincas → formulario), el sistema muestra el **ID de la finca** con
 > botón «Copiar». También aparece en la tarjeta de cada finca. Use ese ID como
 > `finca_id` en la trama.
+>
+> **¿De dónde saco el ID del lote?** En la tarjeta de la finca, pulse
+> «🗂️ Lotes»: cada lote muestra su **ID** con botón «📋 Copiar». Envíe ese
+> valor como `lote` (también puede usar el nombre del lote, sin distinguir
+> mayúsculas). Si la trama no trae `lote`, la lectura se asigna al lote
+> registrado del dispositivo.
 
 ### Campos
 
@@ -130,6 +141,7 @@ El orden de resolución es el siguiente:
 |---|---|---|---|---|
 | `device_id` | string | ✅ | — | ID único del sensor (ej. `esp32-npk-001`) |
 | `finca_id` | string | ❌ (recomendado) | — | UUID de la finca a la que corresponde la medición (se obtiene al crear la finca en la plataforma) |
+| `lote` | string | ❌ | — | ID (UUID) o nombre del lote al que corresponde la medición. Se resuelve al `lote_id` de la finca y la lectura queda separada por lote. Si no se envía, se hereda el lote registrado del dispositivo |
 | `latitude` | float | ❌ (necesario para el mapa de calor) | grados decimales (WGS84) | Latitud geográfica del punto de toma (ej. `4.578333`). El servidor la **convierte automáticamente** a metros relativos al centroide de la finca antes de guardarla en `pos_x`/`pos_y` |
 | `longitude` | float | ❌ (necesario para el mapa de calor) | grados decimales (WGS84) | Longitud geográfica del punto de toma (ej. `-75.666944`). Se convierte igual que `latitude` a metros relativos |
 | `ph` | float | ❌ | 0–14 | pH del suelo |
@@ -293,6 +305,9 @@ coordenadas GPS reales, ej. lat 4.5783, lng -75.6669):
 | HTTP | `code` | Significado |
 |---|---|---|
 | `422` | `FINCA_NOT_FOUND` | El `finca_id` de la trama no corresponde a una finca registrada |
+| `422` | `LOTE_NOT_FOUND` | El `lote` de la trama no coincide con ningún lote activo de la finca |
+| `422` | `LOTE_NO_PERTENECE` | El `lote` (UUID) existe pero no pertenece a la finca indicada |
+| `422` | `LOTE_AMBIGUO` | Varios lotes comparten el mismo nombre; use el ID del lote |
 | `422` | `NO_FINCAS` | No hay fincas registradas y el dispositivo es desconocido (no se pudo auto-registrar) |
 | `422` | `INGEST_ERROR` | Error interno al persistir la trama |
 | `422` | (validación) | `device_id` ausente o campos con tipo incorrecto |
