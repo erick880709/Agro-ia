@@ -36,6 +36,9 @@ class Lote(Base):
     )
     nombre: Mapped[str] = mapped_column(String(100), nullable=False)
     area_ha: Mapped[float | None] = mapped_column(Float, nullable=True)
+    perimetro_m: Mapped[float | None] = mapped_column(
+        Float, nullable=True, comment="Perímetro calculado de la geometría (m)"
+    )
     geometria: Mapped[dict | None] = mapped_column(
         JSONB, nullable=True, comment="Geometría GeoJSON del lote"
     )

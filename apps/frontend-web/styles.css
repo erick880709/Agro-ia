@@ -382,6 +382,9 @@ td.ajustes-desc { min-width: 280px; font-size: 0.82rem; }
 .ur-item b { display: block; color: var(--muted); font-size: .7rem; text-transform: uppercase; letter-spacing: .04em; }
 .area-calc { font-size: 1.05rem; padding: 8px 12px; border: 1px dashed #9fc3a6; border-radius: 8px; background: #f4f8f3; }
 .area-calc small { color: var(--muted); font-size: .75rem; }
+.area-calc .area-total { margin-bottom: 6px; }
+.area-calc .area-lote { padding: 3px 6px; margin: 2px 0; font-size: .9rem; background: #fff; border-radius: 6px; }
+.lote-dibujo { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 6px 0; }
 .radio-row { display: flex; gap: 18px; margin-top: 4px; }
 .radio-row label { display: flex; gap: 6px; align-items: center; font-size: .9rem; }
 details.field summary { cursor: pointer; color: var(--muted); font-size: .88rem; }

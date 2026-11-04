@@ -507,6 +507,7 @@ async def lotes_de_finca(
                 "id": str(lote.id),
                 "nombre": lote.nombre,
                 "area_ha": lote.area_ha,
+                "perimetro_m": lote.perimetro_m,
                 "geometria": lote.geometria,
                 "profundidad_suelo_cm": lote.profundidad_suelo_cm,
                 "pedregosidad": lote.pedregosidad.value if lote.pedregosidad else None,
@@ -697,6 +698,7 @@ def _lote_a_dict(lote) -> dict:
         "finca_id": str(lote.finca_id),
         "nombre": lote.nombre,
         "area_ha": lote.area_ha,
+        "perimetro_m": lote.perimetro_m,
         "geometria": lote.geometria,
         "profundidad_suelo_cm": lote.profundidad_suelo_cm,
         "pedregosidad": lote.pedregosidad.value if lote.pedregosidad else None,
@@ -735,10 +737,16 @@ async def crear_lote(
     if body.pedregosidad and body.pedregosidad.lower() in PEDREGOSIDADES:
         pedregosidad = Pedregosidad[body.pedregosidad.strip().upper()]
 
+    # Área y perímetro calculados desde la geometría del lote (si hay polígono)
+    from agroia_backend.services.geografia import calcular_geometria_geojson
+
+    area_lote, perimetro_lote = calcular_geometria_geojson(body.geometria)
+
     lote = Lote(
         finca_id=finca.id,
         nombre=body.nombre,
-        area_ha=body.area_ha,
+        area_ha=area_lote or body.area_ha,
+        perimetro_m=perimetro_lote,
         geometria=body.geometria,
         profundidad_suelo_cm=body.profundidad_suelo_cm,
         pedregosidad=pedregosidad,
@@ -820,6 +828,15 @@ async def editar_lote(
             Pedregosidad[pedregosidad.strip().upper()]
             if pedregosidad.strip().lower() in PEDREGOSIDADES else None
         )
+    # Recalcular área/perímetro cuando cambia la geometría del lote
+    if "geometria" in cambios:
+        from agroia_backend.services.geografia import calcular_geometria_geojson
+
+        area_lote, perimetro_lote = calcular_geometria_geojson(cambios.get("geometria"))
+        if area_lote is not None:
+            cambios["area_ha"] = area_lote
+        if perimetro_lote is not None:
+            cambios["perimetro_m"] = perimetro_lote
     for campo, valor in cambios.items():
         setattr(lote, campo, valor)
 

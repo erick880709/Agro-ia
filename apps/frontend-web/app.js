@@ -459,6 +459,8 @@ async function arrancarAplicacion() {
     if (_el('f-enlace-aplicar')) _el('f-enlace-aplicar').addEventListener('click', aplicarEnlace);
     if (_el('f-mapa-cerrar')) _el('f-mapa-cerrar').addEventListener('click', cerrarPoligono);
     if (_el('f-mapa-limpiar')) _el('f-mapa-limpiar').addEventListener('click', limpiarMapa);
+    if (_el('f-mapa-nuevo-lote')) _el('f-mapa-nuevo-lote').addEventListener('click', () => nuevoLote());
+    if (_el('f-mapa-quitar-lote')) _el('f-mapa-quitar-lote').addEventListener('click', quitarUltimoLote);
   }
   document.getElementById('form-usuario').addEventListener('submit', enviarUsuario);
   // ── Modal de edición (fincas/lotes/usuarios) y controles de auditoría ──
@@ -2239,7 +2241,14 @@ const fincaWiz = {
   lat: null, lng: null, altitud: null, precision: null,
   fuente: null, geometria: null, areaCalc: null, perimetro: null,
   puntos: [], mapa: null, poligono: null, marcadores: [],
+  lotes: [],
 };
+const LOTE_COLORES = ['#2e7d32', '#7c3aed', '#b45309', '#2563eb', '#db2777', '#0891b2'];
+
+function loteActual() {
+  return fincaWiz.lotes.length ? fincaWiz.lotes[fincaWiz.lotes.length - 1] : null;
+}
+function colorLote(i) { return LOTE_COLORES[i % LOTE_COLORES.length]; }
 
 function irWStep(n) {
   if (n === 2 && !validarPaso1()) return;
@@ -2294,6 +2303,7 @@ function aplicarCoordenadas(lat, lng, extra = {}) {
   fincaWiz.altitud = extra.altitud ?? null;
   fincaWiz.geometria = null; fincaWiz.puntos = [];
   fincaWiz.areaCalc = null; fincaWiz.perimetro = null;
+  fincaWiz.lotes = [];
   actualizarAreaCalc();
   actualizarResumenUbicacion();
   if (fincaWiz.altitud == null) cargarElevacion(lat, lng);
@@ -2399,56 +2409,99 @@ function abrirMapa() {
   msg.innerHTML = '';
   document.getElementById('f-mapa-wrap').style.display = '';
   document.getElementById('f-enlace-wrap').style.display = 'none';
+  document.getElementById('lote-dibujo-controles').style.display = '';
   cargarLeaflet(() => {
-    if (fincaWiz.mapa) { fincaWiz.mapa.invalidateSize(); return; }
+    if (fincaWiz.mapa) { fincaWiz.mapa.invalidateSize(); actualizarControlesLotes(); return; }
     const centro = fincaWiz.lat != null ? [fincaWiz.lat, fincaWiz.lng] : [4.57, -75.64];
     fincaWiz.mapa = L.map('f-mapa').setView(centro, 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19, attribution: '© OpenStreetMap',
     }).addTo(fincaWiz.mapa);
     fincaWiz.mapa.on('click', e => {
-      fincaWiz.puntos.push({ lat: e.latlng.lat, lng: e.latlng.lng });
-      fincaWiz.marcadores.push(L.marker(e.latlng).addTo(fincaWiz.mapa));
-      if (fincaWiz.poligono) { fincaWiz.mapa.removeLayer(fincaWiz.poligono); fincaWiz.poligono = null; }
+      if (!fincaWiz.lotes.length) nuevoLote();
+      const l = loteActual();
+      l.puntos.push({ lat: e.latlng.lat, lng: e.latlng.lng });
+      l.marcadores.push(L.marker(e.latlng).addTo(fincaWiz.mapa));
+      if (l.poligono) { fincaWiz.mapa.removeLayer(l.poligono); l.poligono = null; }
     });
+    actualizarControlesLotes();
   });
+}
+
+function nuevoLote(nombre) {
+  const i = fincaWiz.lotes.length;
+  fincaWiz.lotes.push({
+    nombre: nombre || `Lote ${i + 1}`,
+    puntos: [], area: null, perimetro: null, geometria: null,
+    color: colorLote(i), poligono: null, marcadores: [],
+  });
+  actualizarControlesLotes();
+}
+
+function quitarUltimoLote() {
+  const l = fincaWiz.lotes.pop();
+  if (!l) return;
+  l.marcadores.forEach(m => { if (fincaWiz.mapa) fincaWiz.mapa.removeLayer(m); });
+  if (l.poligono && fincaWiz.mapa) fincaWiz.mapa.removeLayer(l.poligono);
+  actualizarAreaCalc();
+  actualizarControlesLotes();
+}
+
+function actualizarControlesLotes() {
+  const el = document.getElementById('lote-dibujo-actual');
+  if (el) {
+    el.textContent = fincaWiz.lotes.length
+      ? `Dibujando: ${loteActual().nombre} (${loteActual().color})`
+      : 'Sin lotes: haga clic en el mapa para empezar';
+  }
 }
 
 function cerrarPoligono() {
   const msg = document.getElementById('finca-msg');
-  if (fincaWiz.puntos.length < 3) {
-    msg.innerHTML = errorBanner('Marque al menos 3 vértices del lindero.');
+  const l = loteActual();
+  if (!l) {
+    msg.innerHTML = errorBanner('Marque los vértices de un lote antes de cerrarlo.');
     return;
   }
-  const latlngs = fincaWiz.puntos.map(p => [p.lat, p.lng]);
-  if (fincaWiz.poligono) fincaWiz.mapa.removeLayer(fincaWiz.poligono);
-  fincaWiz.poligono = L.polygon(latlngs, { color: '#2e7d32', weight: 2 }).addTo(fincaWiz.mapa);
-  fincaWiz.mapa.fitBounds(fincaWiz.poligono.getBounds(), { padding: [20, 20] });
-  // Cálculo local del área (el backend lo recalcula con autoridad)
-  fincaWiz.areaCalc = calcularAreaHa(fincaWiz.puntos);
-  fincaWiz.perimetro = calcularPerimetroM(fincaWiz.puntos);
-  // Geometría GeoJSON ([lng, lat], anillo cerrado)
-  const anillo = fincaWiz.puntos.map(p => [p.lng, p.lat]);
-  anillo.push([fincaWiz.puntos[0].lng, fincaWiz.puntos[0].lat]);
-  fincaWiz.geometria = { type: 'Polygon', coordinates: [anillo] };
-  // Centroide como punto de referencia de la finca
-  const lat0 = fincaWiz.puntos.reduce((s, p) => s + p.lat, 0) / fincaWiz.puntos.length;
-  const lng0 = fincaWiz.puntos.reduce((s, p) => s + p.lng, 0) / fincaWiz.puntos.length;
-  fincaWiz.lat = lat0; fincaWiz.lng = lng0;
-  fincaWiz.fuente = 'mapa';
+  if (l.puntos.length < 3) {
+    msg.innerHTML = errorBanner('Marque al menos 3 vértices del lote.');
+    return;
+  }
+  const latlngs = l.puntos.map(p => [p.lat, p.lng]);
+  if (l.poligono) fincaWiz.mapa.removeLayer(l.poligono);
+  l.poligono = L.polygon(latlngs, { color: l.color, weight: 2 }).addTo(fincaWiz.mapa);
+  // Cálculo local del área/perímetro (el backend lo recalcula con autoridad)
+  l.area = calcularAreaHa(l.puntos);
+  l.perimetro = calcularPerimetroM(l.puntos);
+  const anillo = l.puntos.map(p => [p.lng, p.lat]);
+  anillo.push([l.puntos[0].lng, l.puntos[0].lat]);
+  l.geometria = { type: 'Polygon', coordinates: [anillo] };
+  // Centroide del primer lote como punto de referencia de la finca
+  if (fincaWiz.lotes.length === 1) {
+    const lat0 = l.puntos.reduce((s, p) => s + p.lat, 0) / l.puntos.length;
+    const lng0 = l.puntos.reduce((s, p) => s + p.lng, 0) / l.puntos.length;
+    fincaWiz.lat = lat0; fincaWiz.lng = lng0;
+    fincaWiz.fuente = 'mapa';
+    actualizarResumenUbicacion();
+    if (fincaWiz.altitud == null) cargarElevacion(lat0, lng0);
+  }
   actualizarAreaCalc();
-  actualizarResumenUbicacion();
-  if (fincaWiz.altitud == null) cargarElevacion(lat0, lng0);
-  msg.innerHTML = okBanner(`Polígono cerrado: ${fincaWiz.areaCalc.toFixed(2)} ha calculadas.`);
+  msg.innerHTML = okBanner(
+    `${l.nombre} cerrado: ${l.area.toFixed(2)} ha · ${Math.round(l.perimetro).toLocaleString('es-CO')} m de perímetro.`
+  );
 }
 
 function limpiarMapa() {
-  fincaWiz.marcadores.forEach(m => { if (fincaWiz.mapa) fincaWiz.mapa.removeLayer(m); });
-  if (fincaWiz.poligono && fincaWiz.mapa) fincaWiz.mapa.removeLayer(fincaWiz.poligono);
+  fincaWiz.lotes.forEach(l => {
+    l.marcadores.forEach(m => { if (fincaWiz.mapa) fincaWiz.mapa.removeLayer(m); });
+    if (l.poligono && fincaWiz.mapa) fincaWiz.mapa.removeLayer(l.poligono);
+  });
+  fincaWiz.lotes = [];
   fincaWiz.marcadores = []; fincaWiz.puntos = [];
   fincaWiz.poligono = null; fincaWiz.geometria = null;
   fincaWiz.areaCalc = null; fincaWiz.perimetro = null;
   actualizarAreaCalc();
+  actualizarControlesLotes();
   document.getElementById('finca-msg').innerHTML = '';
 }
 
@@ -2483,12 +2536,22 @@ function calcularPerimetroM(puntos) {
 function actualizarAreaCalc() {
   const el = document.getElementById('f-area-calc');
   if (!el) return;
-  if (fincaWiz.areaCalc != null) {
-    el.innerHTML = `<b>${fincaWiz.areaCalc.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ha</b>
-      <small>(calculada del polígono · perímetro ${Math.round(fincaWiz.perimetro || 0).toLocaleString('es-CO')} m)</small>`;
-  } else {
+  const lotesCerrados = fincaWiz.lotes.filter(l => l.area != null);
+  if (!lotesCerrados.length) {
     el.innerHTML = '— <small>(calculada automáticamente del polígono)</small>';
+    return;
   }
+  const totalArea = lotesCerrados.reduce((s, l) => s + l.area, 0);
+  const totalPer = lotesCerrados.reduce((s, l) => s + (l.perimetro || 0), 0);
+  const filas = lotesCerrados.map(l =>
+    `<div class="area-lote" style="border-left:4px solid ${l.color}">
+      <b>${esc(l.nombre)}</b>: ${l.area.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ha
+      <small>· perímetro ${Math.round(l.perimetro || 0).toLocaleString('es-CO')} m</small>
+    </div>`).join('');
+  el.innerHTML = `
+    <div class="area-total"><b>${totalArea.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ha</b>
+      <small>(suma de ${lotesCerrados.length} lote(s) · perímetro total ${Math.round(totalPer).toLocaleString('es-CO')} m)</small></div>
+    ${filas}`;
 }
 
 function renderValidaciones(pasos) {
@@ -2564,6 +2627,10 @@ async function enviarFinca(e) {
     return;
   }
 
+  const lotesCerrados = fincaWiz.lotes.filter(l => l.area != null && l.geometria);
+  const unLote = lotesCerrados.length === 1 ? lotesCerrados[0] : null;
+  const multiLotes = lotesCerrados.length > 1;
+
   const body = {
     nombre: document.getElementById('f-nombre').value.trim(),
     departamento: document.getElementById('f-departamento').value,
@@ -2577,12 +2644,14 @@ async function enviarFinca(e) {
     altitud_msnm: fincaWiz.altitud,
     precision_gps: fincaWiz.precision,
     fuente_geolocalizacion: fincaWiz.fuente,
-    geometria: fincaWiz.geometria,
+    // La finca conserva el lindero solo si hay un único lote dibujado;
+    // con varios lotes la geometría global es la unión y cada lote lleva la suya.
+    geometria: unLote ? unLote.geometria : null,
     coordenadas_google: enlace || `${fincaWiz.lat}, ${fincaWiz.lng}`,
     area_declarada_ha: area,
     area_hectareas: area,
     tipo_area: document.getElementById('f-tipo-area').value,
-    tiene_multiples_lotes: multi ? multi.value === 'si' : false,
+    tiene_multiples_lotes: multiLotes || (multi ? multi.value === 'si' : false),
     tipo_riego: document.getElementById('f-tipo-riego').value || null,
     profundidad_suelo_cm: profundidad,
     pedregosidad: pedregosidad,
@@ -2597,6 +2666,28 @@ async function enviarFinca(e) {
     const finca = r.finca || {};
     const fid = finca.id || '';
     renderValidaciones(r.validaciones);
+
+    // ── Lotes dibujados por separado: el backend crea "Lote principal"; si
+    //    hay varios, el primero toma su identidad y el resto se crea aparte. ──
+    let resumenLotes = '';
+    if (fid && multiLotes) {
+      const principalId = (r.lote_principal && r.lote_principal.id) || '';
+      for (let i = 0; i < lotesCerrados.length; i++) {
+        const l = lotesCerrados[i];
+        const loteBody = { nombre: l.nombre, geometria: l.geometria, area_ha: l.area };
+        try {
+          if (i === 0 && principalId) {
+            await api(`/fincas/${fid}/lotes/${principalId}`, { method: 'PATCH', headers: headers(), body: JSON.stringify(loteBody) });
+          } else {
+            await api(`/fincas/${fid}/lotes`, { method: 'POST', headers: headers(), body: JSON.stringify(loteBody) });
+          }
+          resumenLotes += `<div class="muted">🌱 <b>${esc(l.nombre)}</b>: ${l.area.toFixed(2)} ha · ${Math.round(l.perimetro || 0).toLocaleString('es-CO')} m</div>`;
+        } catch (err) {
+          resumenLotes += `<div class="muted">⚠️ No se guardó «${esc(l.nombre)}»: ${esc(err.message)}</div>`;
+        }
+      }
+    }
+
     msg.innerHTML = okBanner(
       `Finca <b>${esc(finca.nombre)}</b> creada y validada con éxito.`
     ) + `
@@ -2608,7 +2699,7 @@ async function enviarFinca(e) {
       </div>
       <p class="muted">Envíe este ID en cada trama del sensor como <code>finca_id</code>, o úselo para registrar el dispositivo en <code>POST /api/v1/iot/dispositivos</code>.</p>
     </div>
-    ${r.lote_principal ? `<p class="muted">🌱 Lote productivo creado: <b>${esc(r.lote_principal.nombre)}</b>${r.lote_principal.area_ha != null ? ` (${esc(String(r.lote_principal.area_ha))} ha)` : ''}.</p>` : ''}`
+    ${resumenLotes || (r.lote_principal ? `<p class="muted">🌱 Lote productivo creado: <b>${esc(r.lote_principal.nombre)}</b>${r.lote_principal.area_ha != null ? ` (${esc(String(r.lote_principal.area_ha))} ha)` : ''}.</p>` : '')}`
     + renderSigEnriquecimiento(r.enriquecimiento_sig);
     const btnCopia = msg.querySelector('[data-copiar]');
     if (btnCopia) btnCopia.addEventListener('click', () => copiarTexto(btnCopia.dataset.copiar || '', btnCopia));
@@ -2616,6 +2707,7 @@ async function enviarFinca(e) {
     fincaWiz.lat = null; fincaWiz.lng = null; fincaWiz.altitud = null;
     fincaWiz.precision = null; fincaWiz.geometria = null;
     fincaWiz.areaCalc = null; fincaWiz.perimetro = null; fincaWiz.puntos = [];
+    fincaWiz.lotes = [];
     document.getElementById('f-ubicacion-resumen').style.display = 'none';
     document.getElementById('f-mapa-wrap').style.display = 'none';
     document.getElementById('f-enlace-wrap').style.display = 'none';

@@ -556,10 +556,16 @@
               </label>
               <div id="f-mapa-wrap" style="display:none">
                 <div id="f-mapa" class="mapa-picker"></div>
-                <p class="muted">Haga clic sobre el mapa para marcar los vértices del lindero; luego pulse
-                «Cerrar polígono» para calcular el área georreferenciada.</p>
+                <p class="muted">Haga clic sobre el mapa para marcar los vértices de cada lote; pulse
+                «Cerrar lote» para calcular su área georreferenciada. Use «Nuevo lote» para delimitar
+                cada lote por separado (cada uno se pinta de un color y calcula su propio perímetro y área).</p>
+                <div class="lote-dibujo" id="lote-dibujo-controles" style="display:none">
+                  <span class="muted" id="lote-dibujo-actual">Lote 1</span>
+                  <button type="button" class="btn btn-ghost" id="f-mapa-nuevo-lote">➕ Nuevo lote</button>
+                  <button type="button" class="btn btn-ghost" id="f-mapa-quitar-lote">🗑️ Quitar último</button>
+                </div>
                 <div class="ubicacion-acciones">
-                  <button type="button" id="f-mapa-cerrar">🟩 Cerrar polígono</button>
+                  <button type="button" id="f-mapa-cerrar">🟩 Cerrar lote</button>
                   <button type="button" id="f-mapa-limpiar">🗑️ Limpiar</button>
                 </div>
               </div>
