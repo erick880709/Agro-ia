@@ -4070,8 +4070,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/iot.py": {
-    "mtime": 1793803850.7027497,
-    "ast_hash": "bbd12a1bc3fc2dfac641f7a2cef81cf8",
+    "mtime": 1793811679.2855878,
+    "ast_hash": "f5a08893bc70605c52b27376cf653ca8",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/external_apis.py": {
@@ -4515,8 +4515,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/reportes.py": {
-    "mtime": 1793799821.5180516,
-    "ast_hash": "76d9273768b731b66f71bb2a2ad25710",
+    "mtime": 1793811750.6795003,
+    "ast_hash": "e78d5199938a154d4ac95392846f9dc8",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/api/sensor_api.py": {
@@ -4570,8 +4570,8 @@
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/reportes_html.py": {
-    "mtime": 1793799801.1810794,
-    "ast_hash": "10d639a50fe530d9a5ffb08ce673d9c4",
+    "mtime": 1793811816.4015286,
+    "ast_hash": "d6284dd23561120d89bc500a81313d99",
     "semantic_hash": ""
   },
   "apps/backend/alembic/versions/003_dispositivos_iot.py": {
@@ -4580,8 +4580,8 @@
     "semantic_hash": ""
   },
   "apps/frontend-web/app.js": {
-    "mtime": 1793804024.5513325,
-    "ast_hash": "67a9adca05db3419019278b2cd460dbe",
+    "mtime": 1793810770.2409105,
+    "ast_hash": "1fe05183d475c0d501ef5745bf9fd5d4",
     "semantic_hash": ""
   },
   "apps/frontend-web/departamentos.js": {
@@ -6695,8 +6695,8 @@
     "semantic_hash": ""
   },
   "DOCUMENTACION-PLATAFORMA.md": {
-    "mtime": 1793807740.0154686,
-    "ast_hash": "4b93457f33110a0a97506d38e9c7bbef",
+    "mtime": 1793812351.4773653,
+    "ast_hash": "14a382ecec29b8eb5cb11e472ba0dffd",
     "semantic_hash": ""
   },
   "context/RFP-AGROIA-003 \u2014 Plataforma confiable de medici\u00f3n de suelo con el sensor JXBS-30.md": {
@@ -12085,8 +12085,8 @@
     "semantic_hash": ""
   },
   ".memoria/graph.json": {
-    "mtime": 1793805198.930357,
-    "ast_hash": "5572bfe81c49b7bc00ddd8695b149261",
+    "mtime": 1793808110.3716772,
+    "ast_hash": "85237f7c58f47641c54dff5044e4468b",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/decodificacion_modbus.py": {
@@ -12105,8 +12105,8 @@
     "semantic_hash": ""
   },
   ".memoria/index.md": {
-    "mtime": 1793805199.0020244,
-    "ast_hash": "21d0eb8289bba590a41eaac053b460b6",
+    "mtime": 1793808110.4005268,
+    "ast_hash": "a19d7ce1ec6a1ae68d0a91f38e9f9c9f",
     "semantic_hash": ""
   },
   "apps/iot/firmware/README.md": {
@@ -12280,8 +12280,8 @@
     "semantic_hash": ""
   },
   "DOCUMENTACION-PLATAFORMA.html": {
-    "mtime": 1793807761.548318,
-    "ast_hash": "01052aff2c3eeacba671740700ff45d4",
+    "mtime": 1793812393.308127,
+    "ast_hash": "f8df54807049e72bec7841028673964a",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/resolucion_lotes.py": {

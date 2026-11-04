@@ -829,11 +829,11 @@ def _seccion_mapa_calor(
     identificador único para que varios mapas (uno por lote) no se pisen las
     pestañas.
     """
-    if not muestras or len(muestras) < 2:
+    if not muestras:
         return ""
     xs = sorted({m["pos_x"] for m in muestras if m.get("pos_x") is not None})
     ys = sorted({m["pos_y"] for m in muestras if m.get("pos_y") is not None})
-    if len(xs) < 2 and len(ys) < 2:
+    if not xs or not ys:
         return ""
     # Mapa (x, y) → muestra (la más reciente si hay varias en el mismo punto)
     celdas: dict[tuple[float, float], dict] = {}
@@ -845,7 +845,7 @@ def _seccion_mapa_calor(
     variables = []
     for attr, simbolo, unidad in _VAR_HEAT:
         valores = [m[attr] for m in celdas.values() if m.get(attr) is not None]
-        if len(valores) >= 2:
+        if len(valores) >= 1:
             variables.append((attr, simbolo, unidad))
 
     if not variables:

@@ -3,10 +3,12 @@
 > Grafo de conocimiento generado por la skill `memoria`. Fuente de verdad: `.memoria/graph.json`.
 > Este archivo se regenera; no lo edites a mano.
 
-**14 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T16:01:50.370Z
+**15 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T17:26:15.337Z
 
 ## Contexto activo
 
+- **Analisis y reporte por lote (multi-lote)** — `builder` · completado · 2026-11-04
+  Lecturas muestran lote_id+lote_nombre. Reporte genera seccion 'Analisis por lote' (rango/prom por lote), plano por lote y mapa de calor por lote (cuando hay >=2 posiciones por lote). _muestras_geo incluye lote. Deploy e96697b live; verificado en produccion: analisis frijol (106) y cafe (89) + 2 planos por lote.
 - **Backfill lote_id finca Carcel Penas blancas en produccion** — `builder` · completado · 2026-11-04
   Migracion 059 asigna lote_id a lecturas productivas: frijol (148.71,-613.37)->ea2c82e7 (110) y cafe (87.18,-458.92)->b53e55e3 (89). 2 lecturas GPS defectuoso y 1 SIG quedan sin lote. Deploy cf5d537 live, verificado: total 202 lecturas. Sin borrar datos.
 - **Diferenciar mediciones por lote en la trama del sensor** — `builder` · completado · 2026-11-04
@@ -25,10 +27,15 @@
   HU-10 insignias de calidad/evidencia y leyenda metodologica (presentacion_reportes.py + endpoint /calidad/insignias), HU-11 series con banda de incertidumbre y puntos excluidos, HU-12 salud de sensores (salud_sensores.py + /sensores/{finca}/salud), HU-13 parametros administrables de calidad (modelo + migracion 055 + endpoints /parametros-calidad). 15 tests, integracion 8/8.
 - **Implementar epica E6 grados de evidencia (RFP-003)** — `builder` · completado · 2026-11-04
   TT-11 grados de evidencia A/B/C/D (grados_evidencia.py: grado_laboratorio <90d, grado_sensor B/C, SIG D, puede_dosificar solo A/B), HU-08 cobertura explicita de variables no medidas con fuente, HU-09 recomendacion de muestreo. Integracion aditiva en orquestador (analyze adjunta grados_evidencia, variables_no_medidas, muestreo_recomendado). 16 tests, integracion 8/8.
-- **Implementar epica E5 protocolo de muestreo y contexto (RFP-003)** — `builder` · completado · 2026-11-04
-  HU-05 metadatos de muestreo (modelo SesionMuestreo + migracion 054 + campos profundidad/punto/replica/sesion en sensor_readings + endpoint /muestreo/sesiones), HU-06 contexto agronomico (contexto_agronomico.py, ventana post-fertilizacion/riego -> valida_con_advertencia, wire en consumer), HU-07 guia de campo (/muestreo/guia). 11 tests, integracion 8/8.
 
 ## Avances
+
+### ✅ Analisis y reporte por lote (multi-lote)
+
+- **id:** `mem-20261104172615-5ebb3c-builder-analisis-y-reporte-por-lote-multi-lote`
+- **skill:** `builder` · **estado:** completado · **creado:** 2026-11-04
+- **resumen:** Lecturas muestran lote_id+lote_nombre. Reporte genera seccion 'Analisis por lote' (rango/prom por lote), plano por lote y mapa de calor por lote (cuando hay >=2 posiciones por lote). _muestras_geo incluye lote. Deploy e96697b live; verificado en produccion: analisis frijol (106) y cafe (89) + 2 planos por lote.
+- **archivos:** `apps/backend/agroia_backend/services/reportes_html.py`
 
 ### ✅ Backfill lote_id finca Carcel Penas blancas en produccion
 

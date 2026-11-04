@@ -1,6 +1,6 @@
 {
   "schema": "memoria/v1",
-  "updatedAt": "2026-11-04T16:01:50.370Z",
+  "updatedAt": "2026-11-04T17:26:15.337Z",
   "nodes": [
     {
       "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
@@ -211,6 +211,21 @@
       "source": "manual",
       "createdAt": "2026-11-04T16:01:50.339Z",
       "updatedAt": "2026-11-04T16:01:50.342Z"
+    },
+    {
+      "id": "mem-20261104172615-5ebb3c-builder-analisis-y-reporte-por-lote-multi-lote",
+      "type": "avance",
+      "status": "completado",
+      "skill": "builder",
+      "title": "Analisis y reporte por lote (multi-lote)",
+      "summary": "Lecturas muestran lote_id+lote_nombre. Reporte genera seccion 'Analisis por lote' (rango/prom por lote), plano por lote y mapa de calor por lote (cuando hay >=2 posiciones por lote). _muestras_geo incluye lote. Deploy e96697b live; verificado en produccion: analisis frijol (106) y cafe (89) + 2 planos por lote.",
+      "files": [
+        "apps/backend/agroia_backend/services/reportes_html.py"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T17:26:15.329Z",
+      "updatedAt": "2026-11-04T17:26:15.333Z"
     }
   ],
   "edges": []
