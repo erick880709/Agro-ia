@@ -758,6 +758,7 @@ async def ultimas_lecturas(
                 "calidad": r.calidad,
                 "motivos_calidad": r.motivos_calidad,
                 "version_regla": r.version_regla,
+                "incertidumbre": r.incertidumbre,
             }
             for r in lecturas
         ],

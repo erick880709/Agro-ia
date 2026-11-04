@@ -111,6 +111,10 @@ class SensorReading(Base):
         String(50), nullable=True,
         comment="Versión de la regla de calidad aplicada",
     )
+    incertidumbre: Mapped[dict | None] = mapped_column(
+        JSONB, nullable=True,
+        comment="Mapa variable → incertidumbre estándar (exactitud/√3)",
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )

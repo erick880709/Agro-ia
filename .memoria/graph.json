@@ -1,6 +1,6 @@
 {
   "schema": "memoria/v1",
-  "updatedAt": "2026-11-04T03:35:44.389Z",
+  "updatedAt": "2026-11-04T12:07:40.961Z",
   "nodes": [
     {
       "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
@@ -31,6 +31,21 @@
       "source": "manual",
       "createdAt": "2026-11-04T03:35:44.385Z",
       "updatedAt": "2026-11-04T03:35:44.387Z"
+    },
+    {
+      "id": "mem-20261104120740-2fb521-builder-implementar-epica-e3-incertidumbre-y-clasificacion-r",
+      "type": "avance",
+      "status": "completado",
+      "skill": "builder",
+      "title": "Implementar epica E3 incertidumbre y clasificacion (RFP-003)",
+      "summary": "TT-06 incertidumbre por variable (incertidumbre.py, exactitud/raiz3, migracion 052, consumer guarda mapa de incertidumbres), TT-07 banda de frontera (banda_frontera.py + RulesEngine.evaluar_con_banda) y agregacion robusta (agregacion_robusta.py, mediana/IQR/minimo puntos), HU-03 presentacion con incertidumbre (formatear_valor). 26 tests, integracion 8/8.",
+      "files": [
+        "apps/backend/agroia_backend/services/incertidumbre.py"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T12:07:40.948Z",
+      "updatedAt": "2026-11-04T12:07:40.952Z"
     }
   ],
   "edges": []

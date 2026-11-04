@@ -185,6 +185,56 @@ class RulesEngine:
             total_rules=len(rules),
         )
 
+    async def evaluar_con_banda(
+        self, soil_data: dict, cultivo_id: str | None = None
+    ) -> list[dict]:
+        """Evalúa reglas con banda de frontera (RF-012, Épica E3).
+
+        Cada regla se clasifica como 'cumple' / 'no_cumple' /
+        'indeterminada (frontera)' según la exactitud de la variable. No
+        altera `evaluate()`; el orquestador puede consumir esta salida para
+        incorporar la incertidumbre medida en la confianza.
+        """
+        from agroia_backend.services.banda_frontera import (
+            clasificar_frente_a_umbral,
+            combinar_umbrales,
+        )
+        from agroia_backend.services.incertidumbre import exactitud
+
+        rules = await self.load_rules(cultivo_id)
+        resultados: list[dict] = []
+        for rule in rules:
+            key = VARIABLE_KEY_MAP.get(rule["variable"], rule["variable"])
+            value = soil_data.get(key)
+            if value is None:
+                continue
+
+            ex = exactitud(key)
+            por_umbral = []
+            if rule["umbral_min"] is not None:
+                por_umbral.append(clasificar_frente_a_umbral(
+                    value, rule["umbral_min"], exactitud_var=ex, direccion="min",
+                ))
+            if rule["umbral_max"] is not None:
+                por_umbral.append(clasificar_frente_a_umbral(
+                    value, rule["umbral_max"], exactitud_var=ex, direccion="max",
+                ))
+            combinada = combinar_umbrales(por_umbral)
+            resultados.append({
+                "regla_id": rule["id"],
+                "variable": rule["variable"],
+                "key": key,
+                "valor": value,
+                "umbral_min": rule["umbral_min"],
+                "umbral_max": rule["umbral_max"],
+                "exactitud": ex,
+                "clase": combinada["clase"],
+                "probabilidad_cumple": combinada["probabilidad_cumple"],
+                "prioridad": rule["prioridad"],
+                "fuente": rule["fuente"],
+            })
+        return resultados
+
     async def _estado_variable(
         self, soil_dict: dict, var_enum: str
     ) -> tuple[float | None, str | None]:

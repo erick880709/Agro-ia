@@ -45,6 +45,7 @@ async def process_sensor_message(message: dict) -> bool:
     """
     from agroia_backend.models.dispositivo_iot import DispositivoIoT
     from agroia_backend.models.sensor_reading import SensorReading
+    from agroia_backend.services.incertidumbre import incertidumbres_lectura
     from agroia_backend.services.motor_calidad import (
         VERSION_REGLA_CALIDAD,
         clasificar_lectura,
@@ -137,6 +138,7 @@ async def process_sensor_message(message: dict) -> bool:
             valor_crudo=message.get("valor_crudo") or payload.get("valor_crudo"),
             motivos_calidad=motivos_calidad,
             version_regla=VERSION_REGLA_CALIDAD,
+            incertidumbre=incertidumbres_lectura(payload),
         )
 
         async with async_session_factory() as session:
