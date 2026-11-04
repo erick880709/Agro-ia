@@ -1,33 +1,22 @@
-"""Regla de calidad del sensor de suelo (JXBS-3001-NPK-RS, 7 en 1).
+"""Compatibilidad con la antigua regla binaria de calidad (pre-E2).
 
-Define el **rango objetivo** de cada variable y decide si una lectura es válida
-para análisis y reportes. Una lectura fuera de este rango (o con la coordenada
-por defecto del firmware) se marca con `calidad = 'invalidada'` y se excluye del
-motor de recomendación y de los reportes.
-
-Rangos del fabricante:
-    - pH: 3–9 (exactitud ±0,3). El límite superior 9,0 satura el sensor.
-    - CE: 0–10.000 µS/cm → en dS/m: 0,01–10 (resolución 10 µS/cm).
-    - N/P/K: 0–1.999 mg/kg (resolución 1 mg/kg; 0 = sin captura).
-
-La coordenada (pos_x=-1698.64, pos_y=6614.3) es el valor por defecto del
-firmware (GPS 4.578333, -75.666944), fuera del predio.
+El motor real vive en `motor_calidad.py` (10 estados). Este módulo conserva la
+API anterior (`es_lectura_objetivo`, `lectura_a_invalidar`, `CALIDAD_INVALIDADA`)
+para no romper importadores externos; internamente delega en el motor nuevo.
 """
 
-COORD_DEFECTO = (-1698.64, 6614.3)
+from agroia_backend.services.motor_calidad import (  # noqa: F401
+    CALIDADES_EXCLUIDAS_ANALISIS,
+    CALIDAD_INVALIDADA,
+    COORD_DEFECTO,
+    clasificar_lectura,
+    es_lectura_valida_para_analisis,
+)
 
-RANGO_PH = (3.0, 9.0)      # [3, 9): excluye la saturación en 9,0
-RANGO_CE = (0.01, 10.0)    # dS/m (0–10.000 µS/cm)
-RANGO_NPK = (1.0, 1999.0)  # mg/kg; 0 = sin captura
-
-CALIDAD_INVALIDADA = "invalidada"
-
-
-def _a_flotante(v):
-    try:
-        return float(v) if v not in (None, "") else None
-    except (TypeError, ValueError):
-        return None
+# Rangos históricos (se conservan por compatibilidad de la API antigua).
+RANGO_PH = (3.0, 9.0)
+RANGO_CE = (0.01, 10.0)
+RANGO_NPK = (1.0, 1999.0)
 
 
 def es_lectura_objetivo(
@@ -40,27 +29,17 @@ def es_lectura_objetivo(
     pos_x=None,
     pos_y=None,
 ) -> bool:
-    """True si la lectura está dentro del rango objetivo del sensor."""
-    px = _a_flotante(pos_x)
-    py = _a_flotante(pos_y)
-    if px is not None and py is not None:
-        if round(px, 2) == COORD_DEFECTO[0] and round(py, 2) == COORD_DEFECTO[1]:
-            return False
-
-    ph = _a_flotante(ph)
-    ce = _a_flotante(conductividad_electrica)
-    n = _a_flotante(nitrogeno)
-    p = _a_flotante(fosforo)
-    k = _a_flotante(potasio)
-
-    if ph is not None and not (RANGO_PH[0] <= ph < RANGO_PH[1]):
-        return False
-    if ce is not None and not (RANGO_CE[0] <= ce <= RANGO_CE[1]):
-        return False
-    for v in (n, p, k):
-        if v is not None and not (RANGO_NPK[0] <= v <= RANGO_NPK[1]):
-            return False
-    return True
+    """True si la lectura alimenta análisis/reportes (equivalente histórico)."""
+    estado, _ = clasificar_lectura(
+        ph=ph,
+        conductividad_electrica=conductividad_electrica,
+        nitrogeno=nitrogeno,
+        fosforo=fosforo,
+        potasio=potasio,
+        pos_x=pos_x,
+        pos_y=pos_y,
+    )
+    return es_lectura_valida_para_analisis(estado)
 
 
 def lectura_a_invalidar(reading) -> bool:

@@ -183,7 +183,7 @@ class RecommendationOrchestrator:
                 f"datos capturados con el sensor real (no se descartan). "
                 f"Considere tomar una nueva muestra para mayor certeza."
             )
-        if soil_data.calidad == "npk_no_calibrado":
+        if soil_data.calidad == "no_calibrada":
             advertencias_datos.append(
                 "⚠️ Lecturas NPK sin calibrar: valide con análisis de laboratorio "
                 "antes de aplicar fertilizantes."
@@ -210,7 +210,7 @@ class RecommendationOrchestrator:
         advertencia_datos = " ".join(advertencias_datos) or None
 
         # ── Paso 2: Ramificación por caso de uso ──
-        npk_no_calibrado = soil_data.calidad == "npk_no_calibrado"
+        npk_no_calibrado = soil_data.calidad == "no_calibrada"
         # Si el laboratorio validó N/P/K, se elimina la penalización del sensor
         if lab_ctx and {"nitrogeno", "fosforo", "potasio"} <= set(lab_ctx["variables"]):
             npk_no_calibrado = False

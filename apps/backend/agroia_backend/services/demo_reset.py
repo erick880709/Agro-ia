@@ -75,7 +75,7 @@ _LECTURA_AGUACATE = dict(
 
 _LECTURA_PARCIAL = dict(
     ph=5.8, nitrogeno=35.0, fosforo=22.0, potasio=280.0,
-    humedad=28.0, temperatura_suelo=20.0, calidad="OK",
+    humedad=28.0, temperatura_suelo=20.0, calidad="valida",
 )
 
 _CUADRICULA_3X3 = [

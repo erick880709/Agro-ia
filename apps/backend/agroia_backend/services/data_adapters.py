@@ -10,6 +10,10 @@ from datetime import datetime, timedelta, timezone
 from agroia.logging import get_logger
 
 from agroia_backend.models.sensor_reading import SensorReading
+from agroia_backend.services.motor_calidad import (
+    CALIDAD_ESTIMADO_SIG,
+    CALIDADES_EXCLUIDAS_ANALISIS,
+)
 
 logger = get_logger(__name__)
 
@@ -51,7 +55,7 @@ class SoilData:
     humedad: float | None = None
     temperatura_suelo: float | None = None
     conductividad_electrica: float | None = None
-    calidad: str | None = "OK"
+    calidad: str | None = "valida"
     # Variables completadas por la capa SIG oficial (IGAC/UPRA), no por sensor
     estimaciones_sig: list[str] = field(default_factory=list)
     missing_blocking: list[str] = field(default_factory=list)
@@ -139,7 +143,7 @@ class SueloAdapter:
 
         Precedencia: el sensor manda SIEMPRE; las variables que no mida se
         rellenan con la última estimación SIG oficial (calidad
-        `estimado_por_sig`, fuente IGAC/UPRA), quedando marcadas en
+        `estimado_sig`, fuente IGAC/UPRA), quedando marcadas en
         `estimaciones_sig`.
 
         Si no hay lecturas dentro de `max_age_hours`, se usa la toma más
@@ -160,7 +164,7 @@ class SueloAdapter:
 
         filtro_sensor = or_(
             SensorReading.calidad.is_(None),
-            SensorReading.calidad.notin_(["estimado_por_sig", "invalidada"]),
+            SensorReading.calidad.notin_(CALIDADES_EXCLUIDAS_ANALISIS),
         )
         sensor = (
             await self.db.execute(
@@ -190,7 +194,7 @@ class SueloAdapter:
                 select(SensorReading)
                 .where(
                     SensorReading.finca_id == finca_id,
-                    SensorReading.calidad == "estimado_por_sig",
+                    SensorReading.calidad == CALIDAD_ESTIMADO_SIG,
                 )
                 .order_by(desc(SensorReading.ts))
                 .limit(1)
@@ -263,7 +267,7 @@ class SueloAdapter:
                 SensorReading.ts >= cutoff,
                 or_(
                     SensorReading.calidad.is_(None),
-                    SensorReading.calidad.notin_(["estimado_por_sig", "invalidada"]),
+                    SensorReading.calidad.notin_(CALIDADES_EXCLUIDAS_ANALISIS),
                 ),
             )
             .order_by(SensorReading.ts)

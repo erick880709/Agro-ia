@@ -756,11 +756,59 @@ async def ultimas_lecturas(
                 "humedad": r.humedad,
                 "temperatura_suelo": r.temperatura_suelo,
                 "calidad": r.calidad,
+                "motivos_calidad": r.motivos_calidad,
+                "version_regla": r.version_regla,
             }
             for r in lecturas
         ],
         "total": len(lecturas),
     }
+
+
+@router.get("/lecturas/{finca_id}/calidad-resumen")
+async def resumen_calidad_lecturas(
+    finca_id: str,
+    dias: int = Query(30, ge=1, le=365),
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+):
+    """Transparencia de calidad (HU-02): 'N de M lecturas válidas' por motivo."""
+    import uuid as uuid_mod
+    from datetime import datetime, timedelta, timezone
+
+    from agroia.database import async_session_factory
+    from sqlalchemy import select
+
+    from agroia_backend.models.sensor_reading import SensorReading
+    from agroia_backend.services.acceso import verificar_acceso_finca
+    from agroia_backend.services.motor_calidad import resumir_calidad
+
+    await verificar_acceso_finca(db, x_user_role, x_user_email, finca_id)
+
+    try:
+        finca_uuid = uuid_mod.UUID(finca_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FINCA_INVALIDA",
+            "message": "finca_id no es un UUID válido.",
+        })
+
+    desde = datetime.now(timezone.utc) - timedelta(days=dias)
+    async with async_session_factory() as session:
+        lecturas = (
+            await session.execute(
+                select(SensorReading)
+                .where(SensorReading.finca_id == finca_uuid, SensorReading.ts >= desde)
+                .order_by(SensorReading.ts.desc())
+                .limit(1000)
+            )
+        ).scalars().all()
+
+    resumen = resumir_calidad(lecturas)
+    resumen["finca_id"] = finca_id
+    resumen["dias"] = dias
+    return resumen
 
 
 @router.get("/sensores/{finca_id}/status")

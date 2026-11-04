@@ -57,7 +57,7 @@ async def enriquecer_sig(
 
     El polígono GeoJSON se intersecta (centroide) con las zonas de
     referencia del Estudio General de Suelos; la estimación se guarda en
-    `sensor_readings` con `calidad = estimado_por_sig`. Si el sensor envía
+    `sensor_readings` con `calidad = estimado_sig`. Si el sensor envía
     datos reales de esas variables, sobreescriben la estimación.
     """
     _exigir_rol(x_user_role)

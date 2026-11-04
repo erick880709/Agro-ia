@@ -245,7 +245,7 @@ def generar_explicacion_campesina(*, uc1: dict | None, uc2: dict | None, lectura
 
     # ── Nota de honestidad ──
     notas = []
-    if lectura and lectura.get("calidad") == "npk_no_calibrado":
+    if lectura and lectura.get("calidad") == "no_calibrada":
         notas.append(
             "Los números de N, P y K vienen de un aparato que <b>no está calibrado</b> con un laboratorio: "
             "no los tome al pie de la letra. El pH y las sales sí son confiables."

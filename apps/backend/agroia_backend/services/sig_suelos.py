@@ -5,7 +5,7 @@ CIC: al registrar la finca se consulta la zona de referencia oficial
 (Estudio General de Suelos del IGAC y zonificaciones UPRA) mediante
 intersección espacial simplificada (centroide del polígono GeoJSON vs.
 regiones de referencia), y se precargan esos valores en `sensor_readings`
-con `calidad = 'estimado_por_sig'`.
+con `calidad = 'estimado_sig'`.
 
 Precedencia de datos:
   1. Lectura del sensor (si la variable llega medida) → gana SIEMPRE.
@@ -24,7 +24,7 @@ from sqlalchemy import text
 
 logger = get_logger(__name__)
 
-CALIDAD_SIG = "estimado_por_sig"
+CALIDAD_SIG = "estimado_sig"
 SENSOR_ID_SIG = "sig-igac-upra"
 VENTANA_REUSO_DIAS = 180  # no duplicar filas SIG en este período
 
@@ -329,7 +329,7 @@ async def enriquecer_finca_sig(db, finca, forzar: bool = False) -> dict:
         text("SET LOCAL search_path TO public, agroia")
     )
 
-    # 1) Lectura con calidad estimado_por_sig (el sensor gana si mide)
+    # 1) Lectura con calidad estimado_sig (el sensor gana si mide)
     lectura = SensorReading(
         finca_id=finca.id,
         ts=datetime.now(timezone.utc),

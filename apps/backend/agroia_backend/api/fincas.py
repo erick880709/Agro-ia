@@ -376,7 +376,7 @@ async def registrar_finca(
     # ── Enriquecimiento SIG (IGAC/UPRA): precarga textura/MO/CIC oficiales ──
     # Si la finca tiene coordenadas, se intersecta el polígono con las zonas
     # de referencia del Estudio General de Suelos y se guarda una lectura con
-    # calidad 'estimado_por_sig'. El sensor gana si llega a medir.
+    # calidad 'estimado_sig'. El sensor gana si llega a medir.
     enriquecimiento = None
     if lat is not None and lng is not None:
         try:

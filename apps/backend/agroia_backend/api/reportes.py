@@ -27,6 +27,7 @@ from agroia_backend.services.acceso import verificar_acceso_finca
 from agroia_backend.services.aptitud import AptitudService
 from agroia_backend.services.ml_oracle import MLOracleService
 from agroia_backend.services.data_adapters import SueloAdapter
+from agroia_backend.services.motor_calidad import CALIDADES_EXCLUIDAS_ANALISIS
 from agroia_backend.services.economia import calcular_plan_economico
 from agroia_backend.services.orchestrator import (
     RecommendationOrchestrator,
@@ -223,7 +224,7 @@ async def generar_reporte(
                 SensorReading.finca_id == finca_uuid,
                 or_(
                     SensorReading.calidad.is_(None),
-                    SensorReading.calidad.notin_(["estimado_por_sig", "invalidada"]),
+                    SensorReading.calidad.notin_(CALIDADES_EXCLUIDAS_ANALISIS),
                 ),
             )
             .order_by(SensorReading.ts.desc())
@@ -682,7 +683,7 @@ async def _muestras_geo(db: AsyncSession, finca_uuid) -> list[dict]:
                 SensorReading.pos_y.isnot(None),
                 or_(
                     SensorReading.calidad.is_(None),
-                    SensorReading.calidad.notin_(["estimado_por_sig", "invalidada"]),
+                    SensorReading.calidad.notin_(CALIDADES_EXCLUIDAS_ANALISIS),
                 ),
             )
             .order_by(SensorReading.ts.desc())

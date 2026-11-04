@@ -1,6 +1,6 @@
 {
   "schema": "memoria/v1",
-  "updatedAt": "2026-11-04T03:19:19.370Z",
+  "updatedAt": "2026-11-04T03:35:44.389Z",
   "nodes": [
     {
       "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
@@ -16,6 +16,21 @@
       "source": "manual",
       "createdAt": "2026-11-04T03:19:19.365Z",
       "updatedAt": "2026-11-04T03:19:19.367Z"
+    },
+    {
+      "id": "mem-20261104033544-bf2ebe-builder-implementar-epica-e2-motor-de-calidad-del-dato-rfp-0",
+      "type": "avance",
+      "status": "completado",
+      "skill": "builder",
+      "title": "Implementar epica E2 motor de calidad del dato (RFP-003)",
+      "summary": "TT-04 motor de 10 estados (motor_calidad.py, migracion 051 con renombrado de estados legados), TT-05 reglas de validez parametrizables (saturacion simetrica, bajo limite, humedad minima, sonda fuera, plausibilidad), HU-02 endpoint de transparencia calidad-resumen. 20 tests. Contrato del sensor validado sin cambios (integracion 8/8).",
+      "files": [
+        "apps/backend/agroia_backend/services/motor_calidad.py"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T03:35:44.385Z",
+      "updatedAt": "2026-11-04T03:35:44.387Z"
     }
   ],
   "edges": []

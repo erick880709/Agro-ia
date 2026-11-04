@@ -103,6 +103,14 @@ class SensorReading(Base):
         JSONB, nullable=True,
         comment="Enteros crudos de los registros Modbus (clave hex → valor)",
     )
+    motivos_calidad: Mapped[list | None] = mapped_column(
+        JSONB, nullable=True,
+        comment="Lista de motivos de la clasificación de calidad",
+    )
+    version_regla: Mapped[str | None] = mapped_column(
+        String(50), nullable=True,
+        comment="Versión de la regla de calidad aplicada",
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
