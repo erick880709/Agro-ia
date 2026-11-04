@@ -1116,6 +1116,203 @@ async def obtener_guia_campo(cultivo: str | None = None):
     return guia_campo(cultivo)
 
 
+@router.get("/calidad/insignias")
+async def insignias_calidad(
+    finca_id: str,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+):
+    """Insignias de calidad y evidencia para el reporte (HU-10)."""
+    import uuid as uuid_mod
+
+    from sqlalchemy import select
+
+    from agroia_backend.models.sensor_reading import SensorReading
+    from agroia_backend.services.acceso import verificar_acceso_finca
+    from agroia_backend.services.presentacion_reportes import (
+        LEYENDA_METODOLOGICA,
+        insignia_calidad,
+        insignia_grado,
+        resumen_una_linea,
+    )
+
+    await verificar_acceso_finca(db, x_user_role, x_user_email, finca_id)
+    try:
+        finca_uuid = uuid_mod.UUID(finca_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FINCA_INVALIDA", "message": "finca_id no es un UUID válido.",
+        })
+
+    lectura = (
+        await db.execute(
+            select(SensorReading)
+            .where(SensorReading.finca_id == finca_uuid)
+            .order_by(SensorReading.ts.desc())
+            .limit(1)
+        )
+    ).scalar_one_or_none()
+
+    estado = lectura.calidad if lectura else None
+    grados = {}
+    if lectura:
+        # Grado por variable presente: sensor sin calibrar → C (indicativo).
+        from agroia_backend.services.grados_evidencia import VARIABLES_SENSOR, GRADO_C
+        for var in VARIABLES_SENSOR:
+            if getattr(lectura, var, None) is not None:
+                grados[var] = {"grado": GRADO_C, "fuente": "sensor"}
+
+    return {
+        "finca_id": finca_id,
+        "resumen": resumen_una_linea(grados, [estado] if estado else []),
+        "insignia_calidad": insignia_calidad(estado),
+        "insignias_grado": {v: insignia_grado(i["grado"]) for v, i in grados.items()},
+        "leyenda_metodologica": LEYENDA_METODOLOGICA,
+    }
+
+
+@router.get("/sensores/{finca_id}/salud")
+async def salud_sensores(
+    finca_id: str,
+    db: AsyncSession = Depends(get_db),
+    x_user_role: str | None = Header(None, alias="X-User-Role"),
+    x_user_email: str | None = Header(None, alias="X-User-Email"),
+):
+    """Pantalla de salud de sensores por dispositivo (HU-12)."""
+    from sqlalchemy import func, select
+
+    from agroia_backend.models.dispositivo_iot import DispositivoIoT
+    from agroia_backend.models.sensor_reading import SensorReading
+    from agroia_backend.services.acceso import verificar_acceso_finca
+    from agroia_backend.services.salud_sensores import calcular_salud
+
+    await verificar_acceso_finca(db, x_user_role, x_user_email, finca_id)
+
+    dispositivos = (
+        await db.execute(
+            select(DispositivoIoT).where(DispositivoIoT.finca_id == finca_id)
+        )
+    ).scalars().all()
+
+    salidas = []
+    for d in dispositivos:
+        total = (
+            await db.execute(
+                select(func.count(SensorReading.id)).where(
+                    SensorReading.sensor_id == d.device_id
+                )
+            )
+        ).scalar_one()
+        validas = (
+            await db.execute(
+                select(func.count(SensorReading.id)).where(
+                    SensorReading.sensor_id == d.device_id,
+                    SensorReading.calidad.notin_(
+                        ("saturada", "fuera_de_rango", "sonda_fuera_de_suelo",
+                         "humedad_insuficiente", "invalidada")
+                    ),
+                )
+            )
+        ).scalar_one()
+        salidas.append({
+            "device_id": d.device_id,
+            "salud": calcular_salud(
+                ultima_lectura=(
+                    d.ultima_transmision.isoformat() if d.ultima_transmision else None
+                ),
+                total_lecturas=total,
+                lecturas_validas=validas,
+                ultimo_mantenimiento=d.ultimo_mantenimiento,
+            ),
+        })
+
+    return {"finca_id": finca_id, "dispositivos": salidas, "total": len(salidas)}
+
+
+class ParametroCalidadUpdate(BaseModel):
+    valor: float
+    actor: str | None = None
+
+
+@router.get("/parametros-calidad")
+async def listar_parametros_calidad():
+    """Lista los parámetros de calidad administrables con sus valores (HU-13)."""
+    from agroia.database import async_session_factory
+    from sqlalchemy import select
+
+    from agroia_backend.models.parametro_calidad import ParametroCalidadSensor
+    from agroia_backend.services.parametros_calidad import parametros_por_defecto
+
+    async with async_session_factory() as session:
+        filas = (await session.execute(select(ParametroCalidadSensor))).scalars().all()
+
+    por_defecto = parametros_por_defecto()
+    sobrescritos = {f.clave: f for f in filas}
+    data = []
+    for clave, base in por_defecto.items():
+        f = sobrescritos.get(clave)
+        data.append({
+            "clave": clave,
+            "valor": f.valor if f is not None else base["valor"],
+            "descripcion": f.descripcion if f is not None else base["descripcion"],
+            "version": f.version if f is not None else base["version"],
+            "fuente": "personalizado" if f is not None else "por_defecto",
+        })
+    return {"data": data, "total": len(data)}
+
+
+@router.put("/parametros-calidad/{clave}")
+async def actualizar_parametro_calidad(clave: str, body: ParametroCalidadUpdate):
+    """Actualiza un parámetro de calidad con versionado y auditoría (HU-13)."""
+    from agroia.database import async_session_factory
+    from sqlalchemy import select
+
+    from agroia_backend.models.parametro_calidad import ParametroCalidadSensor
+    from agroia_backend.services.parametros_calidad import CLAVES_ADMINISTRABLES
+
+    if clave not in CLAVES_ADMINISTRABLES:
+        raise HTTPException(status_code=422, detail={
+            "code": "PARAMETRO_DESCONOCIDO",
+            "message": f"Parámetro '{clave}' no administrable. Claves: {sorted(CLAVES_ADMINISTRABLES)}",
+        })
+
+    import uuid as uuid_mod
+
+    async with async_session_factory() as session:
+        fila = (
+            await session.execute(
+                select(ParametroCalidadSensor).where(
+                    ParametroCalidadSensor.clave == clave
+                )
+            )
+        ).scalar_one_or_none()
+        if fila is None:
+            fila = ParametroCalidadSensor(
+                id=uuid_mod.uuid4(),
+                clave=clave,
+                valor=body.valor,
+                descripcion=CLAVES_ADMINISTRABLES[clave],
+                version=1,
+                actor=body.actor,
+            )
+            session.add(fila)
+        else:
+            fila.valor = body.valor
+            fila.version += 1
+            fila.actor = body.actor
+        await session.commit()
+        version = fila.version
+
+    return {
+        "status": "updated",
+        "clave": clave,
+        "valor": body.valor,
+        "version": version,
+        "actor": body.actor,
+    }
+
+
 @router.get("/externas/enrich")
 async def enrich_location(
     lat: float = Query(..., ge=-90, le=90),

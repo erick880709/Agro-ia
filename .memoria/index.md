@@ -3,10 +3,12 @@
 > Grafo de conocimiento generado por la skill `memoria`. Fuente de verdad: `.memoria/graph.json`.
 > Este archivo se regenera; no lo edites a mano.
 
-**6 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T12:46:58.045Z
+**7 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T12:50:57.404Z
 
 ## Contexto activo
 
+- **Implementar epica E7 reportes y pantallas (RFP-003)** — `builder` · completado · 2026-11-04
+  HU-10 insignias de calidad/evidencia y leyenda metodologica (presentacion_reportes.py + endpoint /calidad/insignias), HU-11 series con banda de incertidumbre y puntos excluidos, HU-12 salud de sensores (salud_sensores.py + /sensores/{finca}/salud), HU-13 parametros administrables de calidad (modelo + migracion 055 + endpoints /parametros-calidad). 15 tests, integracion 8/8.
 - **Implementar epica E6 grados de evidencia (RFP-003)** — `builder` · completado · 2026-11-04
   TT-11 grados de evidencia A/B/C/D (grados_evidencia.py: grado_laboratorio <90d, grado_sensor B/C, SIG D, puede_dosificar solo A/B), HU-08 cobertura explicita de variables no medidas con fuente, HU-09 recomendacion de muestreo. Integracion aditiva en orquestador (analyze adjunta grados_evidencia, variables_no_medidas, muestreo_recomendado). 16 tests, integracion 8/8.
 - **Implementar epica E5 protocolo de muestreo y contexto (RFP-003)** — `builder` · completado · 2026-11-04
@@ -21,6 +23,13 @@
   TT-01 decodificacion Modbus JXBS-3001 + CRC16 (15 tests), TT-02 firmware ESP32 (apps/iot/firmware), TT-03 verificacion de variante, HU-01 registro de dispositivos con configuracion (migracion 050).
 
 ## Avances
+
+### ✅ Implementar epica E7 reportes y pantallas (RFP-003)
+
+- **id:** `mem-20261104125057-109ed8-builder-implementar-epica-e7-reportes-y-pantallas-rfp-003`
+- **skill:** `builder` · **estado:** completado · **creado:** 2026-11-04
+- **resumen:** HU-10 insignias de calidad/evidencia y leyenda metodologica (presentacion_reportes.py + endpoint /calidad/insignias), HU-11 series con banda de incertidumbre y puntos excluidos, HU-12 salud de sensores (salud_sensores.py + /sensores/{finca}/salud), HU-13 parametros administrables de calidad (modelo + migracion 055 + endpoints /parametros-calidad). 15 tests, integracion 8/8.
+- **archivos:** `apps/backend/agroia_backend/services/presentacion_reportes.py`
 
 ### ✅ Implementar epica E6 grados de evidencia (RFP-003)
 

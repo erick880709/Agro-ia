@@ -1,6 +1,6 @@
 {
   "schema": "memoria/v1",
-  "updatedAt": "2026-11-04T12:46:58.045Z",
+  "updatedAt": "2026-11-04T12:50:57.404Z",
   "nodes": [
     {
       "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
@@ -91,6 +91,21 @@
       "source": "manual",
       "createdAt": "2026-11-04T12:46:58.036Z",
       "updatedAt": "2026-11-04T12:46:58.040Z"
+    },
+    {
+      "id": "mem-20261104125057-109ed8-builder-implementar-epica-e7-reportes-y-pantallas-rfp-003",
+      "type": "avance",
+      "status": "completado",
+      "skill": "builder",
+      "title": "Implementar epica E7 reportes y pantallas (RFP-003)",
+      "summary": "HU-10 insignias de calidad/evidencia y leyenda metodologica (presentacion_reportes.py + endpoint /calidad/insignias), HU-11 series con banda de incertidumbre y puntos excluidos, HU-12 salud de sensores (salud_sensores.py + /sensores/{finca}/salud), HU-13 parametros administrables de calidad (modelo + migracion 055 + endpoints /parametros-calidad). 15 tests, integracion 8/8.",
+      "files": [
+        "apps/backend/agroia_backend/services/presentacion_reportes.py"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T12:50:57.399Z",
+      "updatedAt": "2026-11-04T12:50:57.401Z"
     }
   ],
   "edges": []
