@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroIA — Documentación funcional y técnica</title>
+<style>
+:root { --bg:#0f141a; --surface:#171e27; --line:#2a3542; --text:#e7edf3;
+        --muted:#94a3b3; --accent:#4da6ff; --moss:#8bc34a; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif; line-height:1.6; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 48px 24px 80px; }
+h1 { font-size: 1.9rem; margin: 0 0 8px; }
+h2 { font-size: 1.4rem; margin: 36px 0 12px; border-bottom:1px solid var(--line); padding-bottom:6px; color:var(--accent); }
+h3 { font-size: 1.15rem; margin: 24px 0 8px; }
+p { margin: 10px 0; }
+code { background:#0b0f14; padding:2px 6px; border-radius:4px; font-family: Consolas, monospace; font-size:.9em; }
+pre { background:#0b0f14; padding:14px; border:1px solid var(--line); border-radius:8px; overflow-x:auto; }
+pre code { background:none; padding:0; }
+table { border-collapse:collapse; width:100%; margin:14px 0; font-size:.92rem; }
+th, td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+th { background:var(--surface); }
+blockquote { margin:12px 0; padding:8px 16px; border-left:3px solid var(--accent);
+  background:var(--surface); color:var(--muted); }
+hr { border:none; border-top:1px solid var(--line); margin:24px 0; }
+a { color:var(--moss); text-decoration:none; }
+ul, ol { margin:10px 0 10px 22px; padding:0; }
+li { margin:4px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>AgroIA — Documentación funcional y técnica (estado actual)</h1>
+<blockquote>Documento de referencia de <strong>lo que la plataforma hace hoy</strong>. Última actualización: 2026-11-04.</blockquote>
+<blockquote>Complementa (no reemplaza) los documentos de diseño de <code>resources/</code> y el catálogo funcional.</blockquote>
+<hr>
+<h2>1. Resumen ejecutivo</h2>
+<p><strong>AgroIA (AgroInteligente Colombia)</strong> es una plataforma de <strong>diagnóstico agronómico inteligente</strong> basada en IA, IoT y datos geoespaciales, orientada a la agricultura de precisión colombiana. El sistema:</p>
+<ol>
+<li><strong>Registra fincas</strong> georreferenciadas (polígonos, perímetro, área) y sus <strong>lotes</strong> productivos.</li>
+<li><strong>Ingiere datos de sensores IoT de suelo</strong> (ESP32 NPK 7-en-1, JXBS-3001-NPK-RS), los decodifica y valida con un <strong>motor de calidad de 10 estados</strong>, les asigna <strong>incertidumbre explícita</strong>, los calibra localmente contra laboratorio y les atribuye <strong>grados de evidencia A/B/C/D</strong>.</li>
+<li>Ejecuta un <strong>motor de recomendación agronómica</strong> (sistema experto de reglas UPRA/Cenicafé/AGROSAVIA + ML en modo sombra) para clasificar aptitud de cultivos y emitir recomendaciones de fertilización/riego/sanidad <strong>sin recetar dosis sin análisis de suelo</strong>.</li>
+<li>Ofrece un <strong>asesor agronómico conversacional</strong> con <strong>entrada por voz</strong> (RFP-001) y <strong>lectura de respuestas en voz alta</strong> con <strong>voz personalizada clonable</strong> (RFP-002).</li>
+<li>Cubre el ciclo comercial <strong>AGC-COST</strong>: cotización → estimación de costos → comisión → recomendación → reporte, con <strong>trazabilidad BPA</strong> (Res. ICA 30021/2017).</li>
+</ol>
+<p><strong>Producción:</strong> backend en <strong>Render</strong> (https://agroia-backend.onrender.com), base de datos <strong>Neon PostgreSQL</strong>, CI/CD con GitHub Actions.</p>
+<hr>
+<h2>2. Arquitectura general</h2>
+<pre><code>
+Clientes (navegador, PWA)
+        │
+        ▼
+┌─────────────────────────────────────────────────┐
+│  apps/frontend-web  — SPA vanilla JS (productiva) │  ← index.html + app.js/voz.js/lectura.js/costeo.js/offline.js
+│  apps/frontend     — Angular 21 (prototipo)       │
+└───────────────────┬─────────────────────────────┘
+                    │ HTTPS /api/v1 (JWT Bearer)
+                    ▼
+┌─────────────────────────────────────────────────┐
+│  apps/backend — FastAPI (agroia_backend)         │
+│  42 routers · 50+ modelos · 60+ servicios        │
+└──────┬──────────┬──────────┬──────────┬─────────┘
+       │          │          │          │
+       ▼          ▼          ▼          ▼
+  PostgreSQL    auth       ml         rag         iot
+  (Neon,       (JWT,      (MLflow,   (RAG chat   (consumer
+  esquema      RLS)       modelos     vectorial)  RabbitMQ)
+  &quot;agroia&quot;)               .joblib)
+</code></pre>
+<ul>
+<li><strong>Monolito modular</strong>: el backend agrupa API + dominio + reglas en una sola app FastAPI; los servicios de infraestructura (auth, ML, RAG, IoT) están separados como contenedores con sus propios Dockerfiles.</li>
+<li><strong>Base de datos única</strong> con esquema <code>agroia</code> y <code>search_path</code> explícito (crítico en Neon por los casts de enums de SQLAlchemy).</li>
+</ul>
+<hr>
+<h2>3. Stack tecnológico</h2>
+<table><thead><tr><th>Capa</th><th>Tecnología</th></tr></thead><tbody>
+<tr><td>Backend</td><td>Python 3.11, FastAPI 0.115, SQLAlchemy 2.0 (async), Alembic, Pydantic v2</td></tr>
+<tr><td>Base de datos</td><td>PostgreSQL 15+ (Neon), extensión pgvector, TimescaleDB (hipertabla para sensores), PostGIS</td></tr>
+<tr><td>Frontend productivo</td><td>Vanilla JS (SPA sin framework), Leaflet (mapas), Service Worker (PWA/offline), Web Speech API (voz)</td></tr>
+<tr><td>Frontend prototipo</td><td>Angular 21 (apps/frontend)</td></tr>
+<tr><td>Servicios satélite</td><td>auth (JWT RS256/HS256), ml (scikit-learn + MLflow), rag (chat con recuperación), iot (consumidor)</td></tr>
+<tr><td>Voz</td><td>Web Speech API (motor por defecto), OpenAI TTS (respaldo), Chatterbox Multilingual V3 (clonación, MIT)</td></tr>
+<tr><td>CI/CD</td><td>GitHub Actions (lint ruff + tests pytest + build Docker) · Render auto-deploy desde <code>master</code></td></tr>
+<tr><td>Infra</td><td>Render (web free) + Neon (Postgres) + RabbitMQ (cola IoT) + Redis (caché)</td></tr>
+</tbody></table>
+<hr>
+<h2>4. Componentes (<code>apps/</code>)</h2>
+<table><thead><tr><th>Directorio</th><th>Rol</th></tr></thead><tbody>
+<tr><td><code>backend/</code></td><td>Aplicación principal FastAPI (<code>agroia_backend</code>): API, modelos, servicios, migraciones.</td></tr>
+<tr><td><code>frontend-web/</code></td><td>SPA productiva en vanilla JS.</td></tr>
+<tr><td><code>frontend/</code></td><td>Prototipo Angular 21 (no productivo).</td></tr>
+<tr><td><code>auth/</code></td><td>Servicio de autenticación JWT + políticas RLS (<code>rls_policies.sql</code>).</td></tr>
+<tr><td><code>ml/</code></td><td>Entrenamiento e inferencia ML (scikit-learn, MLflow, modelos <code>.joblib</code>).</td></tr>
+<tr><td><code>rag/</code></td><td>Servicio RAG para el chat (recuperación vectorial).</td></tr>
+<tr><td><code>iot/</code></td><td>Consumidor de mensajes del sensor (<code>consumer.py</code>), normalización y persistencia.</td></tr>
+<tr><td><code>voice-clone/</code></td><td>Wrapper Docker de clonación de voz (Chatterbox Multilingual V3, contrato HTTP).</td></tr>
+<tr><td><code>shared/</code></td><td>Paquete <code>agroia</code> compartido: config (pydantic-settings), database, logging, health, tenant.</td></tr>
+<tr><td><code>models/</code></td><td>Artefactos de modelo serializados (<code>.pkl</code>).</td></tr>
+</tbody></table>
+<hr>
+<h2>5. Base de datos (esquema <code>agroia</code>, 57 migraciones → head <code>057</code>)</h2>
+<h3>Entidades núcleo</h3>
+<table><thead><tr><th>Tabla (modelo)</th><th>Descripción</th></tr></thead><tbody>
+<tr><td><code>fincas</code></td><td>Predio georreferenciado: GPS, altitud, geometría GeoJSON, área/perímetro calculados, tipo de área, multi-lote, riego, fenología.</td></tr>
+<tr><td><code>lotes</code></td><td>Unidad productiva dentro de una finca: geometría, <code>area_ha</code>, <code>perimetro_m</code>, profundidad, pedregosidad, siembra/variedad.</td></tr>
+<tr><td><code>usuarios</code></td><td>Cuentas por rol (Admin/Agrónomo/Cliente/Extensionista) con bcrypt.</td></tr>
+<tr><td><code>sensor_readings</code></td><td>Series temporales del sensor (18 variables de suelo + ambiente), <code>pos_x/pos_y</code> (m), <code>calidad</code> (10 estados), <code>motivos_calidad</code>, <code>version_regla</code>, <code>incertidumbre</code>, <code>valor_crudo</code>, metadatos de muestreo (<code>profundidad_cm</code>, <code>punto_id</code>, <code>replica_n</code>, <code>sesion_muestreo_id</code>).</td></tr>
+<tr><td><code>dispositivos_iot</code></td><td>Registro de dispositivos (device_id → finca), configuración (modelo, variante, dirección Modbus, baudios, bus, lote, instalación), calibración NPK, telemetría (voltaje, errores CRC).</td></tr>
+<tr><td><code>calibracion_sensor</code></td><td>Regresión lineal (pendiente/intercepto) por dispositivo, variable y unidad de suelo, con n, R², RMSE, sesgo, vigencia.</td></tr>
+<tr><td><code>par_calibracion</code></td><td>Pares sensor–laboratorio (misma muestra, día y profundidad) con método, laboratorio y unidad de suelo.</td></tr>
+<tr><td><code>sesion_muestreo</code></td><td>Sesión de muestreo: punto, réplicas, profundidad, pedregosidad, contexto de fertilización/riego/lluvia.</td></tr>
+<tr><td><code>parametro_calidad_sensor</code></td><td>Parámetros administrables del motor de calidad (clave, valor, versión, actor).</td></tr>
+<tr><td><code>mantenimiento_sensor</code></td><td>Registro de mantenimiento por dispositivo (limpieza/revisión/reemplazo).</td></tr>
+<tr><td><code>cultivos</code> / <code>variedad_cultivo</code></td><td>Catálogo agronómico (45 cultivos).</td></tr>
+<tr><td><code>reglas_agronomicas</code></td><td>Reglas del sistema experto por cultivo (variable, umbrales, acción, prioridad, fuente).</td></tr>
+<tr><td><code>comision</code> / <code>estimaciones</code> / <code>cobros</code></td><td>Ciclo comercial AGC-COST.</td></tr>
+<tr><td><code>recomendacion</code> / <code>aceptacion_recomendacion</code></td><td>Recomendaciones emitidas y aceptación humana.</td></tr>
+<tr><td><code>checklist_bpa</code> / <code>checklist_bpa_visitas</code></td><td>Trazabilidad BPA (Res. ICA 30021/2017).</td></tr>
+<tr><td><code>metrica_voz</code> / <code>parametro_voz</code></td><td>Métricas y parámetros de la entrada por voz (RFP-001).</td></tr>
+<tr><td><code>preferencia_lectura_voz</code> / <code>metrica_lectura_voz</code> / <code>voz_personalizada</code></td><td>Lectura en voz alta y voz clonada (RFP-002).</td></tr>
+<tr><td><code>analisis_laboratorio</code> / <code>analisis_agua_riego</code></td><td>Resultados de laboratorio (prioridad sobre el sensor).</td></tr>
+<tr><td><code>alerta_climatica</code>, <code>monitoreo_plaga</code>, <code>labor</code>, <code>ciclo_lote</code>, <code>equipo_trabajo</code>, <code>novedad_equipo</code></td><td>Soporte de clima, sanidad, labores y equipo.</td></tr>
+<tr><td><code>auditoria</code>, <code>token_auth</code>, <code>sync_registro</code></td><td>Auditoría, refresh tokens, idempotencia offline.</td></tr>
+</tbody></table>
+<hr>
+<h2>6. Módulos funcionales (lo que hace hoy)</h2>
+<h3>6.1 Gestión de fincas y lotes</h3>
+<ul>
+<li>Registro asistido (wizard 3 pasos): datos → <strong>ubicación (GPS / mapa Leaflet / enlace Google Maps)</strong> → características del suelo.</li>
+<li><strong>Georreferenciación</strong>: dibujo del lindero con cálculo de <strong>área y perímetro</strong> (Gauss/Haversine). Desde 2026-11-03: <strong>múltiples lotes</strong>, cada uno dibujado por separado con su color, su propio <strong>perímetro y área</strong>, y persistido con geometría.</li>
+<li>Validación en cadena (departamento, municipio, coordenadas, área, precisión).</li>
+<li>Enriquecimiento <strong>SIG</strong> (IGAC/UPRA): precarga textura/MO/CIC oficiales con <code>calidad = estimado_sig</code> (el sensor gana si mide).</li>
+</ul>
+<h3>6.2 Sensores IoT (ingesta, decodificación y calidad del dato)</h3>
+<ul>
+<li>Ingesta por <code>POST /api/v1/iot/sensor</code> (trama normalizada), <code>/api/v1/iot/sensor/raw</code> (registros Modbus crudos) y <code>/api/v1/iot/ingest</code>, y por el <strong>consumidor</strong> (<code>apps/iot</code>) desde RabbitMQ.</li>
+<li><strong>Decodificación fiel Modbus</strong> (<code>decodificacion_modbus.py</code>): registros 0x0006/0x0012/0x0013/0x0015/0x001E–0x0020 con sus escalas, temperatura en complemento a dos, CRC-16 Modbus, conservación del <code>valor_crudo</code>. Firmware de referencia en <code>apps/iot/firmware/</code>.</li>
+<li>Normalización de tramas, resolución de dispositivo→finca, conversión <strong>GPS→metros relativos</strong> al centroide.</li>
+<li><strong>Motor de calidad de 10 estados</strong> (<code>motor_calidad.py</code>): <code>valida</code>, <code>valida_con_advertencia</code>, <code>bajo_limite_deteccion</code> (0 en CE/NPK se conserva), <code>saturada</code>, <code>fuera_de_rango</code>, <code>sonda_fuera_de_suelo</code>, <code>humedad_insuficiente</code>, <code>no_calibrada</code>, <code>estimado_sig</code>, <code>invalidada</code>. Cada lectura guarda <code>motivos_calidad</code> y <code>version_regla</code>; los umbrales son <strong>administrables</strong> (tabla <code>parametro_calidad_sensor</code>).</li>
+<li><strong>Incertidumbre por variable</strong> (<code>incertidumbre.py</code>): exactitud/√3 (rectangular), humedad por tramo, NPK ±40 mg/kg; se persiste con la lectura.</li>
+<li><strong>Calibración local</strong> (<code>calibracion.py</code>): regresión lineal por dispositivo/variable/unidad de suelo y capa de equivalencia sensor↔laboratorio (grado B si está calibrada, C si no).</li>
+<li><strong>Contexto agronómico</strong> (<code>contexto_agronomico.py</code>): ventana post-fertilización/riego degrada la lectura a <code>valida_con_advertencia</code>; guía de campo por cultivo.</li>
+<li>Reparación de coordenadas históricas en grados (<code>reparacion_geo</code>).</li>
+</ul>
+<h3>6.3 Motor de recomendación agronómica</h3>
+<table><thead><tr><th>- <strong>Sistema experto</strong> (<code>rules_engine.py</code>): evalúa el suelo contra <strong>reglas con fuente</strong> (UPRA/Cenicafé/AGROSAVIA) por cultivo. Clasifica <code>Apta / Moderadamente apta / No apta</code>, con <strong>banda de frontera</strong> (<code>banda_frontera.py</code>): si</th><th>valor−umbral</th><th>≤ exactitud, la clase es &quot;indeterminada (frontera)&quot; con probabilidad.</th></tr></thead><tbody>
+</tbody></table>
+<ul>
+<li><strong>Orquestador</strong> (<code>orchestrator.py</code>): pipeline completo — lectura de suelo, contexto de finca, laboratorio reciente (&lt;90 días), advertencias de calidad, ML modo sombra, antagonismos, GDD (IDEAM), confianza con cobertura de datos y validación humana; adjunta <code>grados_evidencia</code>, <code>variables_no_medidas</code> y <code>muestreo_recomendado</code>.</li>
+<li><strong>Grados de evidencia</strong> (<code>grados_evidencia.py</code>): A (laboratorio &lt;90 días), B (sensor calibrado que cumple metas), C (sensor indicativo), D (SIG/modelo). La dosis solo procede con A/B.</li>
+<li><strong>ML</strong> (<code>ml_oracle.py</code>): modelos scikit-learn en <strong>modo sombra</strong>; el entrenamiento (<code>ml_entrenamiento.py</code>) solo usa etiquetas de laboratorio (sin circularidad con reglas) y reporta rendimiento por variable y unidad de suelo hasta cumplir las metas.</li>
+<li><code>aptitud.py</code> (preselección climática/altitudinal) y <code>justification.py</code> (explicabilidad).</li>
+</ul>
+<h3>6.4 Reportes</h3>
+<ul>
+<li><code>POST /reportes/generar</code>: reporte HTML completo (suelo, mapa de calor, plano del lote con puntos de muestreo, recomendaciones, plan económico) con <strong>sección de evidencia</strong> — resumen de una línea, insignia de calidad, grados A/B/C/D por variable, variables no medidas con fuente y leyenda metodológica.</li>
+<li>Simulación de enmienda (<code>/reportes/simular</code>).</li>
+<li>Los reportes usan <strong>solo lecturas válidas para análisis</strong> (excluyen <code>estimado_sig</code>, <code>saturada</code>, <code>fuera_de_rango</code>, <code>sonda_fuera_de_suelo</code>, <code>humedad_insuficiente</code> e <code>invalidada</code>; conservan <code>no_calibrada</code> y <code>bajo_limite_deteccion</code>).</li>
+</ul>
+<h3>6.5 Asesor conversacional + voz (RFP-001 y RFP-002)</h3>
+<ul>
+<li><strong>Chat</strong> (<code>agronomo_chat.py</code>): responde con el sistema experto (manejo de fechas, clima &quot;llover&quot;, consultas conceptuales, ubicación), evita respuestas sin finca seleccionada y sin datos.</li>
+<li><strong>Entrada por voz</strong> (<code>voz.js</code> + <code>/voz/*</code>): Web Speech API + transcripción en servidor (OpenAI), medidor de nivel, parámetros y métricas.</li>
+<li><strong>Lectura en voz alta</strong> (<code>lectura.js</code> + <code>/lectura/*</code>): speechSynthesis por defecto, respaldo en servidor, preferencias por usuario, velocidad, métricas.</li>
+<li><strong>Voz personalizada</strong> (&quot;Mi voz&quot;): grabación de muestra, consentimiento (Ley 1581/2012), clonación con <strong>Chatterbox Multilingual V3</strong> (adaptador <code>clonacion_voz.py</code> + wrapper <code>voice-clone</code>), estado <code>procesando→activa</code>.</li>
+</ul>
+<h3>6.6 AGC-COST (ciclo comercial)</h3>
+<ul>
+<li>Cotización → <strong>estimación de costos</strong> (F2–F7) → emisión/aceptación → <strong>comisión</strong> → trabajo de campo → <strong>recomendación</strong> → <strong>reporte</strong>.</li>
+<li>Parámetros de costeo administrables, precios de insumos/cosecha, documentos de cobro.</li>
+</ul>
+<h3>6.7 Trazabilidad BPA</h3>
+<ul>
+<li>Checklist de 11 ítems (Res. ICA 30021/2017) por finca, visitas de verificación con línea de tiempo, reporte de trazabilidad, períodos de carencia.</li>
+</ul>
+<h3>6.8 Sanidad, clima y catálogo</h3>
+<ul>
+<li><strong>Visión de plagas</strong> (<code>vision_engine.py</code>): diagnóstico por imagen con fallback.</li>
+<li><strong>Clima y alertas</strong>: fases lunares, alertas climáticas (IDEAM), balance hídrico.</li>
+<li><strong>Catálogo</strong>: 45 cultivos, variedades, curvas de extracción, compatibilidad de rotación.</li>
+<li><strong>Labores y ciclos</strong>: registro de labores, ciclos del lote, monitoreo de plagas.</li>
+</ul>
+<h3>6.9 Administración y operación</h3>
+<ul>
+<li>Usuarios y roles, auditoría completa, precios, equipo de trabajo, comisiones, lista de trabajos, reentrenamiento ML, parámetros/métricas de voz y lectura.</li>
+<li><strong>Offline/PWA</strong>: manifest + service worker + sincronización (<code>/sync/*</code>, idempotencia).</li>
+</ul>
+<hr>
+<h2>7. API (resumen por router)</h2>
+<table><thead><tr><th>Router (prefijo)</th><th>Propósito</th></tr></thead><tbody>
+<tr><td><code>/auth</code></td><td>Login (JWT), refresh, logout.</td></tr>
+<tr><td><code>/fincas</code> (+ <code>/lotes</code>)</td><td>CRUD de fincas y lotes, georreferenciación.</td></tr>
+<tr><td><code>/iot</code> + <code>/sensor</code></td><td>Ingesta (<code>/sensor</code>, <code>/sensor/raw</code>, <code>/ingest</code>), lectura de dispositivos con configuración, verificación de variante, calibración (<code>/calibracion/pares</code>, <code>/calibracion/{device_id}</code>, <code>/calibracion/rendimiento</code>), muestreo (<code>/muestreo/sesiones</code>, <code>/muestreo/guia</code>), calidad (<code>/calidad/insignias</code>, <code>/lecturas/{finca}/calidad-resumen</code>), salud de sensores (<code>/sensores/{finca}/salud</code>, <code>/dispositivos/{id}/telemetria</code>, <code>/dispositivos/{id}/mantenimiento</code>) y parámetros administrables (<code>/parametros-calidad</code>).</td></tr>
+<tr><td><code>/reportes</code></td><td>Generar reporte HTML, simular enmienda.</td></tr>
+<tr><td><code>/recomendaciones</code></td><td>Recomendaciones y aceptación.</td></tr>
+<tr><td><code>/comisiones</code>, <code>/estimaciones</code>, <code>/cobros</code>, <code>/costeo*</code></td><td>Ciclo comercial AGC-COST.</td></tr>
+<tr><td><code>/voz</code>, <code>/lectura</code></td><td>Entrada por voz y lectura en voz alta.</td></tr>
+<tr><td><code>/bpa</code></td><td>Checklist, visitas, trazabilidad.</td></tr>
+<tr><td><code>/catalogo</code>, <code>/variedades</code>, <code>/curvas</code>, <code>/rotacion</code></td><td>Catálogo agronómico.</td></tr>
+<tr><td><code>/plagas</code>, <code>/vision</code></td><td>Sanidad y visión de plagas.</td></tr>
+<tr><td><code>/laboratorio</code>, <code>/agua_riego</code></td><td>Análisis de laboratorio.</td></tr>
+<tr><td><code>/clima</code> (vía alertas/balance_hidrico), <code>/calendario</code></td><td>Clima, fases lunares.</td></tr>
+<tr><td><code>/usuarios</code>, <code>/auditoria</code>, <code>/equipo</code>, <code>/lista_trabajos</code>, <code>/dashboard</code></td><td>Administración.</td></tr>
+<tr><td><code>/sync</code></td><td>Sincronización offline.</td></tr>
+<tr><td><code>/location</code>, <code>/sig</code></td><td>Geocodificación, enriquecimiento SIG.</td></tr>
+<tr><td><code>/ml</code>, <code>/demo</code>, <code>/mantenimiento</code></td><td>ML, demo reset, mantenimiento.</td></tr>
+</tbody></table>
+<blockquote>Contrato formal en <code>resources/design/openapi.yaml</code> (v0.6.0) y <code>resources/design/api.md</code>.</blockquote>
+<hr>
+<h2>8. Seguridad</h2>
+<ul>
+<li><strong>JWT</strong> (HS256 o RS256 si hay claves PEM), access token 8 h + refresh token 30 días (hash persistido).</li>
+<li><strong>Roles</strong>: Admin / Agrónomo / Extensionista / Cliente, con control de acceso por finca (<code>services/acceso.py</code>).</li>
+<li><strong>Escrituras IoT protegidas por rol</strong>: los endpoints administrativos de calibración, muestreo, mantenimiento y parámetros de calidad exigen rol no-cliente (<code>exigir_no_cliente</code>); <code>PUT /parametros-calidad</code> es solo Admin; <code>/iot/sensor/raw</code> está en <code>RUTAS_PUBLICAS</code> (verificación de firma/device_id en el handler).</li>
+<li><strong>RLS</strong> en PostgreSQL (políticas en <code>auth/sql/rls_policies.sql</code>).</li>
+<li>Auditoría de acciones sensibles con IP y user-agent.</li>
+<li>Encabezados legacy (<code>X-User-Role</code>/<code>X-User-Email</code>) solo fuera de producción.</li>
+<li><code>search_path</code> fijado a <code>public, agroia</code> en cada conexión (evita casts de enum rotos en Neon).</li>
+</ul>
+<hr>
+<h2>9. Despliegue y CI/CD</h2>
+<ul>
+<li><strong>Render Blueprint</strong> (<code>render.yaml</code>): servicio <code>agroia-backend</code> (Docker), health check <code>/api/v1/health</code>, variables de entorno (DATABASE_URL, ENVIRONMENT, JWT_SECRET, CLONACION_VOZ_URL/TOKEN…).</li>
+<li><strong>Neon Postgres</strong>: esquema <code>agroia</code>; la URL usa <code>postgresql+asyncpg://</code> con <code>ssl=require</code>.</li>
+<li><strong>GitHub Actions</strong> (<code>.github/workflows/ci.yml</code>): lint (ruff) → tests (pytest con Postgres) → build Docker (backend/auth/ml/rag/iot).</li>
+<li><strong>Migraciones</strong>: <code>alembic upgrade head</code> se ejecuta al arrancar el contenedor (head actual: <code>057_par_calibracion_unidad_suelo</code>).</li>
+<li><strong>Voz clonada</strong>: wrapper en <code>apps/voice-clone</code> desplegable en RunPod/HF Spaces; se conecta vía <code>CLONACION_VOZ_URL</code>/<code>CLONACION_VOZ_TOKEN</code>.</li>
+</ul>
+<hr>
+<h2>10. Estado de los RFP / épicas</h2>
+<table><thead><tr><th>Épica</th><th>Alcance</th><th>Estado</th></tr></thead><tbody>
+<tr><td><strong>RFP-AGROIA-001</strong> (interacción por voz)</td><td>Transcripción, parámetros, métricas de voz.</td><td>✅ Desplegado en producción.</td></tr>
+<tr><td><strong>RFP-AGROIA-002</strong> (lectura en voz alta)</td><td>Preferencias, síntesis, métricas, voz personalizada clonable (TT-06: adaptador + wrapper Chatterbox).</td><td>✅ Desplegado (clonación real pendiente de cuenta GPU).</td></tr>
+<tr><td><strong>AGC-COST</strong></td><td>Cotización → reporte (F1–F7).</td><td>✅ Productivo.</td></tr>
+<tr><td><strong>RFP-AGROIA-003</strong> (medición confiable de suelo)</td><td>9 épicas: integridad de ingesta (E1), motor de calidad de 10 estados (E2), incertidumbre y clasificación (E3), calibración local (E4), muestreo y contexto (E5), grados de evidencia (E6), reportes/salud/parámetros (E7), ciclo de vida (E8), ML con etiquetas de laboratorio (E9).</td><td>✅ Desplegado en producción (migraciones 050–057).</td></tr>
+<tr><td><strong>Lotes por separado</strong></td><td>Dibujo multi-lote con perímetro/área por lote.</td><td>✅ Productivo.</td></tr>
+</tbody></table>
+<hr>
+<h2>11. Principios de dominio (no negociables)</h2>
+<ol>
+<li><strong>Sin análisis de suelo no hay dosis de fertilizante</strong> (solo criterios y rangos orientativos).</li>
+<li><strong>No recetar plaguicidas</strong> (manejo integrado + remisión al registro ICA y a ingeniero agrónomo).</li>
+<li><strong>Enfermedades de control oficial</strong> (Fusarium R4T, Moko, HLB): notificar al ICA, no diagnosticar con certeza.</li>
+<li><strong>Citar la fuente</strong> de cada umbral (Cenicafé/AGROSAVIA/UPRA).</li>
+<li><strong>La ubicación da hipótesis, no nutrientes</strong> (solo pH/MO/N/textura modelados; pedir análisis de suelo).</li>
+<li><strong>Separar lo general de lo local</strong> (un rango de la zona cafetera no aplica a Nariño).</li>
+</ol>
+<hr>
+<p>*Documento generado para referencia del equipo. Los detalles de contrato y diseño viven en <code>resources/design/</code> y <code>resources/architecture/</code>.*</p>
+</div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 # AgroIA — Documentación funcional y técnica (estado actual)
 
-> Documento de referencia de **lo que la plataforma hace hoy**. Última actualización: 2026-11-03.
+> Documento de referencia de **lo que la plataforma hace hoy**. Última actualización: 2026-11-04.
 > Complementa (no reemplaza) los documentos de diseño de `resources/` y el catálogo funcional.
 
 ---
@@ -10,7 +10,7 @@
 **AgroIA (AgroInteligente Colombia)** es una plataforma de **diagnóstico agronómico inteligente** basada en IA, IoT y datos geoespaciales, orientada a la agricultura de precisión colombiana. El sistema:
 
 1. **Registra fincas** georreferenciadas (polígonos, perímetro, área) y sus **lotes** productivos.
-2. **Ingiere datos de sensores IoT de suelo** (ESP32 NPK 7-en-1), los valida con la **regla del sensor**, los enriquece con capas oficiales (SIG IGAC/UPRA) y los convierte en series temporales.
+2. **Ingiere datos de sensores IoT de suelo** (ESP32 NPK 7-en-1, JXBS-3001-NPK-RS), los decodifica y valida con un **motor de calidad de 10 estados**, les asigna **incertidumbre explícita**, los calibra localmente contra laboratorio y les atribuye **grados de evidencia A/B/C/D**.
 3. Ejecuta un **motor de recomendación agronómica** (sistema experto de reglas UPRA/Cenicafé/AGROSAVIA + ML en modo sombra) para clasificar aptitud de cultivos y emitir recomendaciones de fertilización/riego/sanidad **sin recetar dosis sin análisis de suelo**.
 4. Ofrece un **asesor agronómico conversacional** con **entrada por voz** (RFP-001) y **lectura de respuestas en voz alta** con **voz personalizada clonable** (RFP-002).
 5. Cubre el ciclo comercial **AGC-COST**: cotización → estimación de costos → comisión → recomendación → reporte, con **trazabilidad BPA** (Res. ICA 30021/2017).
@@ -80,7 +80,7 @@ Clientes (navegador, PWA)
 
 ---
 
-## 5. Base de datos (esquema `agroia`, 41 migraciones → head `049`)
+## 5. Base de datos (esquema `agroia`, 57 migraciones → head `057`)
 
 ### Entidades núcleo
 
@@ -89,8 +89,13 @@ Clientes (navegador, PWA)
 | `fincas` | Predio georreferenciado: GPS, altitud, geometría GeoJSON, área/perímetro calculados, tipo de área, multi-lote, riego, fenología. |
 | `lotes` | Unidad productiva dentro de una finca: geometría, `area_ha`, `perimetro_m`, profundidad, pedregosidad, siembra/variedad. |
 | `usuarios` | Cuentas por rol (Admin/Agrónomo/Cliente/Extensionista) con bcrypt. |
-| `sensor_readings` | Series temporales del sensor (18 variables de suelo + ambiente), `pos_x/pos_y` (m), `calidad`, `sensor_id`. |
-| `dispositivos_iot` | Registro de dispositivos (device_id → finca), calibración NPK, telemetría. |
+| `sensor_readings` | Series temporales del sensor (18 variables de suelo + ambiente), `pos_x/pos_y` (m), `calidad` (10 estados), `motivos_calidad`, `version_regla`, `incertidumbre`, `valor_crudo`, metadatos de muestreo (`profundidad_cm`, `punto_id`, `replica_n`, `sesion_muestreo_id`). |
+| `dispositivos_iot` | Registro de dispositivos (device_id → finca), configuración (modelo, variante, dirección Modbus, baudios, bus, lote, instalación), calibración NPK, telemetría (voltaje, errores CRC). |
+| `calibracion_sensor` | Regresión lineal (pendiente/intercepto) por dispositivo, variable y unidad de suelo, con n, R², RMSE, sesgo, vigencia. |
+| `par_calibracion` | Pares sensor–laboratorio (misma muestra, día y profundidad) con método, laboratorio y unidad de suelo. |
+| `sesion_muestreo` | Sesión de muestreo: punto, réplicas, profundidad, pedregosidad, contexto de fertilización/riego/lluvia. |
+| `parametro_calidad_sensor` | Parámetros administrables del motor de calidad (clave, valor, versión, actor). |
+| `mantenimiento_sensor` | Registro de mantenimiento por dispositivo (limpieza/revisión/reemplazo). |
 | `cultivos` / `variedad_cultivo` | Catálogo agronómico (45 cultivos). |
 | `reglas_agronomicas` | Reglas del sistema experto por cultivo (variable, umbrales, acción, prioridad, fuente). |
 | `comision` / `estimaciones` / `cobros` | Ciclo comercial AGC-COST. |
@@ -110,25 +115,29 @@ Clientes (navegador, PWA)
 - Registro asistido (wizard 3 pasos): datos → **ubicación (GPS / mapa Leaflet / enlace Google Maps)** → características del suelo.
 - **Georreferenciación**: dibujo del lindero con cálculo de **área y perímetro** (Gauss/Haversine). Desde 2026-11-03: **múltiples lotes**, cada uno dibujado por separado con su color, su propio **perímetro y área**, y persistido con geometría.
 - Validación en cadena (departamento, municipio, coordenadas, área, precisión).
-- Enriquecimiento **SIG** (IGAC/UPRA): precarga textura/MO/CIC oficiales con `calidad = estimado_por_sig` (el sensor gana si mide).
+- Enriquecimiento **SIG** (IGAC/UPRA): precarga textura/MO/CIC oficiales con `calidad = estimado_sig` (el sensor gana si mide).
 
-### 6.2 Sensores IoT (ingesta y calidad del dato)
-- Ingesta por `POST /api/v1/sensor` y `/api/v1/iot/ingest`, y por el **consumidor** (`apps/iot`) desde RabbitMQ.
+### 6.2 Sensores IoT (ingesta, decodificación y calidad del dato)
+- Ingesta por `POST /api/v1/iot/sensor` (trama normalizada), `/api/v1/iot/sensor/raw` (registros Modbus crudos) y `/api/v1/iot/ingest`, y por el **consumidor** (`apps/iot`) desde RabbitMQ.
+- **Decodificación fiel Modbus** (`decodificacion_modbus.py`): registros 0x0006/0x0012/0x0013/0x0015/0x001E–0x0020 con sus escalas, temperatura en complemento a dos, CRC-16 Modbus, conservación del `valor_crudo`. Firmware de referencia en `apps/iot/firmware/`.
 - Normalización de tramas, resolución de dispositivo→finca, conversión **GPS→metros relativos** al centroide.
-- **Calibración NPK** (factores por dispositivo) y marcado `npk_no_calibrado`.
-- **Regla del sensor (JXBS-3001-NPK-RS, 7 en 1)**: solo son válidas las lecturas dentro del rango objetivo — pH 3–9 (excluye saturación 9,0), CE 0,01–10 dS/m, NPK 1–1.999 mg/kg — y fuera de la coordenada por defecto del firmware. Las inválidas se marcan `calidad = invalidada` y quedan **excluidas de análisis y reportes**.
+- **Motor de calidad de 10 estados** (`motor_calidad.py`): `valida`, `valida_con_advertencia`, `bajo_limite_deteccion` (0 en CE/NPK se conserva), `saturada`, `fuera_de_rango`, `sonda_fuera_de_suelo`, `humedad_insuficiente`, `no_calibrada`, `estimado_sig`, `invalidada`. Cada lectura guarda `motivos_calidad` y `version_regla`; los umbrales son **administrables** (tabla `parametro_calidad_sensor`).
+- **Incertidumbre por variable** (`incertidumbre.py`): exactitud/√3 (rectangular), humedad por tramo, NPK ±40 mg/kg; se persiste con la lectura.
+- **Calibración local** (`calibracion.py`): regresión lineal por dispositivo/variable/unidad de suelo y capa de equivalencia sensor↔laboratorio (grado B si está calibrada, C si no).
+- **Contexto agronómico** (`contexto_agronomico.py`): ventana post-fertilización/riego degrada la lectura a `valida_con_advertencia`; guía de campo por cultivo.
 - Reparación de coordenadas históricas en grados (`reparacion_geo`).
 
 ### 6.3 Motor de recomendación agronómica
-- **Sistema experto** (`rules_engine.py`): evalúa el suelo contra **reglas con fuente** (UPRA/Cenicafé/AGROSAVIA) por cultivo. Clasifica `Apta / Moderadamente apta / No apta`.
-- **Orquestador** (`orchestrator.py`): pipeline completo — lectura de suelo, contexto de finca, laboratorio reciente (<90 días), advertencias de calidad, ML modo sombra, antagonismos, GDD (IDEAM), confianza con cobertura de datos y validación humana.
-- **ML** (`ml_oracle.py`): modelos scikit-learn en **modo sombra**; variables con precisión real ≥ 0,85 **validan** las reglas (acuerdo/desacuerdo).
+- **Sistema experto** (`rules_engine.py`): evalúa el suelo contra **reglas con fuente** (UPRA/Cenicafé/AGROSAVIA) por cultivo. Clasifica `Apta / Moderadamente apta / No apta`, con **banda de frontera** (`banda_frontera.py`): si |valor−umbral| ≤ exactitud, la clase es "indeterminada (frontera)" con probabilidad.
+- **Orquestador** (`orchestrator.py`): pipeline completo — lectura de suelo, contexto de finca, laboratorio reciente (<90 días), advertencias de calidad, ML modo sombra, antagonismos, GDD (IDEAM), confianza con cobertura de datos y validación humana; adjunta `grados_evidencia`, `variables_no_medidas` y `muestreo_recomendado`.
+- **Grados de evidencia** (`grados_evidencia.py`): A (laboratorio <90 días), B (sensor calibrado que cumple metas), C (sensor indicativo), D (SIG/modelo). La dosis solo procede con A/B.
+- **ML** (`ml_oracle.py`): modelos scikit-learn en **modo sombra**; el entrenamiento (`ml_entrenamiento.py`) solo usa etiquetas de laboratorio (sin circularidad con reglas) y reporta rendimiento por variable y unidad de suelo hasta cumplir las metas.
 - `aptitud.py` (preselección climática/altitudinal) y `justification.py` (explicabilidad).
 
 ### 6.4 Reportes
-- `POST /reportes/generar`: reporte HTML completo (suelo, mapa de calor, plano del lote con puntos de muestreo, recomendaciones, plan económico).
+- `POST /reportes/generar`: reporte HTML completo (suelo, mapa de calor, plano del lote con puntos de muestreo, recomendaciones, plan económico) con **sección de evidencia** — resumen de una línea, insignia de calidad, grados A/B/C/D por variable, variables no medidas con fuente y leyenda metodológica.
 - Simulación de enmienda (`/reportes/simular`).
-- Los reportes usan **solo lecturas válidas** (excluyen `invalidada` y `estimado_por_sig`).
+- Los reportes usan **solo lecturas válidas para análisis** (excluyen `estimado_sig`, `saturada`, `fuera_de_rango`, `sonda_fuera_de_suelo`, `humedad_insuficiente` e `invalidada`; conservan `no_calibrada` y `bajo_limite_deteccion`).
 
 ### 6.5 Asesor conversacional + voz (RFP-001 y RFP-002)
 - **Chat** (`agronomo_chat.py`): responde con el sistema experto (manejo de fechas, clima "llover", consultas conceptuales, ubicación), evita respuestas sin finca seleccionada y sin datos.
@@ -161,7 +170,7 @@ Clientes (navegador, PWA)
 |---|---|
 | `/auth` | Login (JWT), refresh, logout. |
 | `/fincas` (+ `/lotes`) | CRUD de fincas y lotes, georreferenciación. |
-| `/iot` + `/sensor` | Ingesta, lecturas, dispositivos, estado de sensores. |
+| `/iot` + `/sensor` | Ingesta (`/sensor`, `/sensor/raw`, `/ingest`), lectura de dispositivos con configuración, verificación de variante, calibración (`/calibracion/pares`, `/calibracion/{device_id}`, `/calibracion/rendimiento`), muestreo (`/muestreo/sesiones`, `/muestreo/guia`), calidad (`/calidad/insignias`, `/lecturas/{finca}/calidad-resumen`), salud de sensores (`/sensores/{finca}/salud`, `/dispositivos/{id}/telemetria`, `/dispositivos/{id}/mantenimiento`) y parámetros administrables (`/parametros-calidad`). |
 | `/reportes` | Generar reporte HTML, simular enmienda. |
 | `/recomendaciones` | Recomendaciones y aceptación. |
 | `/comisiones`, `/estimaciones`, `/cobros`, `/costeo*` | Ciclo comercial AGC-COST. |
@@ -184,6 +193,7 @@ Clientes (navegador, PWA)
 
 - **JWT** (HS256 o RS256 si hay claves PEM), access token 8 h + refresh token 30 días (hash persistido).
 - **Roles**: Admin / Agrónomo / Extensionista / Cliente, con control de acceso por finca (`services/acceso.py`).
+- **Escrituras IoT protegidas por rol**: los endpoints administrativos de calibración, muestreo, mantenimiento y parámetros de calidad exigen rol no-cliente (`exigir_no_cliente`); `PUT /parametros-calidad` es solo Admin; `/iot/sensor/raw` está en `RUTAS_PUBLICAS` (verificación de firma/device_id en el handler).
 - **RLS** en PostgreSQL (políticas en `auth/sql/rls_policies.sql`).
 - Auditoría de acciones sensibles con IP y user-agent.
 - Encabezados legacy (`X-User-Role`/`X-User-Email`) solo fuera de producción.
@@ -196,7 +206,7 @@ Clientes (navegador, PWA)
 - **Render Blueprint** (`render.yaml`): servicio `agroia-backend` (Docker), health check `/api/v1/health`, variables de entorno (DATABASE_URL, ENVIRONMENT, JWT_SECRET, CLONACION_VOZ_URL/TOKEN…).
 - **Neon Postgres**: esquema `agroia`; la URL usa `postgresql+asyncpg://` con `ssl=require`.
 - **GitHub Actions** (`.github/workflows/ci.yml`): lint (ruff) → tests (pytest con Postgres) → build Docker (backend/auth/ml/rag/iot).
-- **Migraciones**: `alembic upgrade head` se ejecuta al arrancar el contenedor (head actual: `049_lote_perimetro`).
+- **Migraciones**: `alembic upgrade head` se ejecuta al arrancar el contenedor (head actual: `057_par_calibracion_unidad_suelo`).
 - **Voz clonada**: wrapper en `apps/voice-clone` desplegable en RunPod/HF Spaces; se conecta vía `CLONACION_VOZ_URL`/`CLONACION_VOZ_TOKEN`.
 
 ---
@@ -208,7 +218,7 @@ Clientes (navegador, PWA)
 | **RFP-AGROIA-001** (interacción por voz) | Transcripción, parámetros, métricas de voz. | ✅ Desplegado en producción. |
 | **RFP-AGROIA-002** (lectura en voz alta) | Preferencias, síntesis, métricas, voz personalizada clonable (TT-06: adaptador + wrapper Chatterbox). | ✅ Desplegado (clonación real pendiente de cuenta GPU). |
 | **AGC-COST** | Cotización → reporte (F1–F7). | ✅ Productivo. |
-| **Calidad del dato del sensor** | Regla de rango objetivo JXBS-3001 (marcado `invalidada`, exclusión en análisis/reportes). | ✅ Productivo. |
+| **RFP-AGROIA-003** (medición confiable de suelo) | 9 épicas: integridad de ingesta (E1), motor de calidad de 10 estados (E2), incertidumbre y clasificación (E3), calibración local (E4), muestreo y contexto (E5), grados de evidencia (E6), reportes/salud/parámetros (E7), ciclo de vida (E8), ML con etiquetas de laboratorio (E9). | ✅ Desplegado en producción (migraciones 050–057). |
 | **Lotes por separado** | Dibujo multi-lote con perímetro/área por lote. | ✅ Productivo. |
 
 ---
