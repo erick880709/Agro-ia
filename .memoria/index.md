@@ -3,10 +3,12 @@
 > Grafo de conocimiento generado por la skill `memoria`. Fuente de verdad: `.memoria/graph.json`.
 > Este archivo se regenera; no lo edites a mano.
 
-**10 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T13:10:24.262Z
+**11 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T13:25:31.642Z
 
 ## Contexto activo
 
+- **Desplegar RFP-003 y reclasificar finca carcel penas blancas** — `builder` · completado · 2026-11-04
+  Despliegue a produccion (Render dep-dbli live, commit d5e9c6d, migraciones 050-057 aplicadas). Reclasificacion TT-16 de la finca 042217d5... con motor de 10 estados sin borrar: 100 invalidada -> 94 bajo_limite_deteccion + 4 saturada + 2 invalidada; total 202 filas intactas. Ahora 195 lecturas alimentan analisis (antes 102).
 - **Revision CR-001 epicas E1-E9 RFP-003** — `code-review` · completado · 2026-11-04
   Code-review del paquete completo de 9 epicas: veredicto aprobado-con-observaciones. Hallazgo mayor de autorizacion corregido (exigir_no_cliente en escritura /iot, admin en parametros-calidad, /iot/sensor/raw publico). 3 menores (orden sonda/saturacion, migracion 051 sin reclasificar historico, str vs UUID) y 1 nit. Gate verde: 135 tests + ruff + integracion 8/8.
 - **Implementar epica E9 aprendizaje automatico (RFP-003)** — `builder` · completado · 2026-11-04
@@ -25,10 +27,15 @@
   TT-06 incertidumbre por variable (incertidumbre.py, exactitud/raiz3, migracion 052, consumer guarda mapa de incertidumbres), TT-07 banda de frontera (banda_frontera.py + RulesEngine.evaluar_con_banda) y agregacion robusta (agregacion_robusta.py, mediana/IQR/minimo puntos), HU-03 presentacion con incertidumbre (formatear_valor). 26 tests, integracion 8/8.
 - **Implementar epica E2 motor de calidad del dato (RFP-003)** — `builder` · completado · 2026-11-04
   TT-04 motor de 10 estados (motor_calidad.py, migracion 051 con renombrado de estados legados), TT-05 reglas de validez parametrizables (saturacion simetrica, bajo limite, humedad minima, sonda fuera, plausibilidad), HU-02 endpoint de transparencia calidad-resumen. 20 tests. Contrato del sensor validado sin cambios (integracion 8/8).
-- **Implementar epica E1 integridad de ingesta (RFP-003)** — `builder` · completado · 2026-11-04
-  TT-01 decodificacion Modbus JXBS-3001 + CRC16 (15 tests), TT-02 firmware ESP32 (apps/iot/firmware), TT-03 verificacion de variante, HU-01 registro de dispositivos con configuracion (migracion 050).
 
 ## Avances
+
+### ✅ Desplegar RFP-003 y reclasificar finca carcel penas blancas
+
+- **id:** `mem-20261104132531-cca2eb-builder-desplegar-rfp-003-y-reclasificar-finca-carcel-penas`
+- **skill:** `builder` · **estado:** completado · **creado:** 2026-11-04
+- **resumen:** Despliegue a produccion (Render dep-dbli live, commit d5e9c6d, migraciones 050-057 aplicadas). Reclasificacion TT-16 de la finca 042217d5... con motor de 10 estados sin borrar: 100 invalidada -> 94 bajo_limite_deteccion + 4 saturada + 2 invalidada; total 202 filas intactas. Ahora 195 lecturas alimentan analisis (antes 102).
+- **archivos:** `apps/backend/agroia_backend/services/motor_calidad.py`
 
 ### ✅ Revision CR-001 epicas E1-E9 RFP-003
 

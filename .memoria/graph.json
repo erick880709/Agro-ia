@@ -1,6 +1,6 @@
 {
   "schema": "memoria/v1",
-  "updatedAt": "2026-11-04T13:10:24.262Z",
+  "updatedAt": "2026-11-04T13:25:31.642Z",
   "nodes": [
     {
       "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
@@ -151,6 +151,21 @@
       "source": "manual",
       "createdAt": "2026-11-04T13:10:24.256Z",
       "updatedAt": "2026-11-04T13:10:24.258Z"
+    },
+    {
+      "id": "mem-20261104132531-cca2eb-builder-desplegar-rfp-003-y-reclasificar-finca-carcel-penas",
+      "type": "avance",
+      "status": "completado",
+      "skill": "builder",
+      "title": "Desplegar RFP-003 y reclasificar finca carcel penas blancas",
+      "summary": "Despliegue a produccion (Render dep-dbli live, commit d5e9c6d, migraciones 050-057 aplicadas). Reclasificacion TT-16 de la finca 042217d5... con motor de 10 estados sin borrar: 100 invalidada -> 94 bajo_limite_deteccion + 4 saturada + 2 invalidada; total 202 filas intactas. Ahora 195 lecturas alimentan analisis (antes 102).",
+      "files": [
+        "apps/backend/agroia_backend/services/motor_calidad.py"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T13:25:31.628Z",
+      "updatedAt": "2026-11-04T13:25:31.633Z"
     }
   ],
   "edges": []
