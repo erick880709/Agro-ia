@@ -1,6 +1,6 @@
 {
   "schema": "memoria/v1",
-  "updatedAt": "2026-11-04T15:13:18.928Z",
+  "updatedAt": "2026-11-04T16:01:50.370Z",
   "nodes": [
     {
       "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
@@ -196,6 +196,21 @@
       "source": "manual",
       "createdAt": "2026-11-04T15:13:18.898Z",
       "updatedAt": "2026-11-04T15:13:18.907Z"
+    },
+    {
+      "id": "mem-20261104160150-a71c1f-builder-backfill-lote-id-finca-carcel-penas-blancas-en-produ",
+      "type": "avance",
+      "status": "completado",
+      "skill": "builder",
+      "title": "Backfill lote_id finca Carcel Penas blancas en produccion",
+      "summary": "Migracion 059 asigna lote_id a lecturas productivas: frijol (148.71,-613.37)->ea2c82e7 (110) y cafe (87.18,-458.92)->b53e55e3 (89). 2 lecturas GPS defectuoso y 1 SIG quedan sin lote. Deploy cf5d537 live, verificado: total 202 lecturas. Sin borrar datos.",
+      "files": [
+        "apps/backend/alembic/versions/059_backfill_lote_carcel.py"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T16:01:50.339Z",
+      "updatedAt": "2026-11-04T16:01:50.342Z"
     }
   ],
   "edges": []

@@ -3648,6 +3648,12 @@ function celdaFinca(fid) {
   return `<td>${nombre ? esc(nombre) : '—'} <code class="mini-id" title="${esc(fid)}">${esc(corto)}…</code></td>`;
 }
 
+function celdaLote(loteId, loteNombre) {
+  if (!loteId) return '<td>—</td>';
+  const corto = String(loteId).slice(0, 8);
+  return `<td>${loteNombre ? esc(loteNombre) : ''} <code class="mini-id" title="${esc(loteId)}">${esc(corto)}…</code></td>`;
+}
+
 function renderTablaLecturas(data, container, limit) {
   if (!data.length) {
     container.innerHTML = '<p class="muted">Sin lecturas todavía. Envía una trama en vivo o carga un archivo.</p>';
@@ -3656,11 +3662,12 @@ function renderTablaLecturas(data, container, limit) {
   const columnas = ['ph', 'nitrogeno', 'fosforo', 'potasio', 'conductividad_electrica', 'humedad_ambiental', 'temperatura_ambiental', 'materia_organica', 'cic'];
   container.innerHTML = `
     <div class="table-wrap"><table>
-      <tr><th>Fecha</th><th>Finca</th><th>Sensor</th>${columnas.map(c => `<th>${ETIQUETAS[c][0]}</th>`).join('')}<th>Calidad</th></tr>
+      <tr><th>Fecha</th><th>Finca</th><th>Lote</th><th>Sensor</th>${columnas.map(c => `<th>${ETIQUETAS[c][0]}</th>`).join('')}<th>Calidad</th></tr>
       ${data.slice(0, limit).map(r => `
         <tr>
           <td>${r.ts ? new Date(r.ts).toLocaleString() : '—'}</td>
           ${celdaFinca(r.finca_id)}
+          ${celdaLote(r.lote_id, r.lote_nombre)}
           <td>${esc(r.sensor_id || '—')}</td>
           ${columnas.map(c => `<td>${fmtNum(r[c])}${r[c] != null && ETIQUETAS[c][1] ? ' ' + ETIQUETAS[c][1] : ''}</td>`).join('')}
           <td>${badge(CALIDAD_LECTURA[r.calidad] || (r.calidad || '—'), r.calidad === 'OK' ? 'ok' : r.calidad === 'estimado_por_sig' ? 'textura' : 'warning')}</td>

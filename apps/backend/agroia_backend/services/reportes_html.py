@@ -812,13 +812,22 @@ def _mezclar(c1: str, c2: str, t: float) -> str:
     return "#%02x%02x%02x" % tuple(round(a[i] + (b[i] - a[i]) * t) for i in range(3))
 
 
-def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> str:
+def _seccion_mapa_calor(
+    muestras: list[dict] | None,
+    umbrales: dict | None,
+    titulo: str | None = None,
+    scope: str = "heatmap",
+) -> str:
     """Mapa de calor del lote: un solo mapa con selector de parámetro.
 
     - «Resumen» (por defecto): todas las variables a la vez — cada punto se
       pinta según cuántas variables están fuera de su rango ideal.
     - Botones por parámetro: se observa cada variable de manera independiente.
     - «Ver todos»: despliega los mapas uno debajo del otro (útil para imprimir).
+
+    `titulo` añade una cabecera (p. ej. el nombre del lote) y `scope` da un
+    identificador único para que varios mapas (uno por lote) no se pisen las
+    pestañas.
     """
     if not muestras or len(muestras) < 2:
         return ""
@@ -981,27 +990,35 @@ def _seccion_mapa_calor(muestras: list[dict] | None, umbrales: dict | None) -> s
         "</div>"
     )
 
-    script = """
+    script = f"""
 <script>
-(function () {
-  var tabs = document.querySelectorAll('.heatmap .heat-tab');
-  var vars = document.querySelectorAll('.heatmap .heat-var');
-  function verMapa(v) {
-    tabs.forEach(function (b) { b.classList.toggle('active', b.dataset.var === v); });
-    vars.forEach(function (el) {
+(function () {{
+  var root = document.getElementById('{esc(scope)}');
+  if (!root) return;
+  var tabs = root.querySelectorAll('.heat-tab');
+  var vars = root.querySelectorAll('.heat-var');
+  function verMapa(v) {{
+    tabs.forEach(function (b) {{ b.classList.toggle('active', b.dataset.var === v); }});
+    vars.forEach(function (el) {{
       el.classList.toggle('hidden', v !== '__todos__' && el.dataset.var !== v);
-    });
-  }
-  tabs.forEach(function (b) { b.addEventListener('click', function () { verMapa(b.dataset.var); }); });
-})();
+    }});
+  }}
+  tabs.forEach(function (b) {{ b.addEventListener('click', function () {{ verMapa(b.dataset.var); }}); }});
+}})();
 </script>"""
 
+    cabecera_lote = (
+        f'<div class="heat-title" style="margin-bottom:6px">🗂️ {esc(titulo)}</div>'
+        if titulo else ""
+    )
+
     return f"""
-  <section class="block heatmap">
+  <section class="block heatmap" id="{esc(scope)}">
     <div class="block-head"><span class="block-num">M</span>
       <div><div class="block-title">Mapa de calor del lote</div>
       <div class="block-sub">Muestreo en cuadrícula · {len(xs)} × {len(ys)} tomas ({len(celdas)} puntos) · seleccione el parámetro a observar</div></div>
     </div>
+    {cabecera_lote}
     <p class="muted">Cada celda es una toma de muestra en la posición (x, y) del lote.
     La intensidad del color indica el valor del parámetro: más intenso = valor más alto,
     menos intenso = valor más bajo (cada parámetro usa su propia escala).
@@ -1076,6 +1093,7 @@ def _seccion_plano_lote(
     pronostico_extendido: list[dict] | None = None,
     pronostico_ecmwf: list[dict] | None = None,
     modelo_pronostico: str = "ambos",
+    titulo: str | None = None,
 ) -> str:
     """Plano del lote: dibujo de los puntos de muestreo (pos_x, pos_y).
 
@@ -1406,6 +1424,7 @@ def _seccion_plano_lote(
       <div><div class="block-title">Plano del lote — puntos de muestreo</div>
       <div class="block-sub">Forma estimada del lote a partir de las coordenadas (x, y) de cada toma</div></div>
     </div>
+    {f'<div class="heat-title" style="margin-bottom:6px">🗂️ {esc(titulo)}</div>' if titulo else ''}
     <p class="muted">Cada punto numerado es un sitio donde se tomó una muestra (pase el cursor para ver su fecha).
     La silueta verde es la forma del lote que encierran los puntos; de ella se estiman el perímetro y el área.</p>
     {stats}
@@ -1732,6 +1751,51 @@ def _seccion_evidencia(evidencia: dict | None) -> str:
   </section>"""
 
 
+def _seccion_analisis_lotes(analisis_lotes: list[dict] | None) -> str:
+    """Análisis por lote: estadísticas (mín–máx y promedio) por lote de la finca."""
+    if not analisis_lotes:
+        return ""
+    filas = []
+    for a in analisis_lotes:
+        n = a.get("n") or 0
+        if n == 0 and a.get("lote_id") is None:
+            continue
+        stats = a.get("stats") or {}
+        nombre = esc(a.get("nombre") or "—")
+        if a.get("lote_id") is None:
+            nombre = f'<span class="muted">{nombre}</span>'
+        celdas = ""
+        for attr in ("ph", "nitrogeno", "fosforo", "potasio", "conductividad_electrica"):
+            s = stats.get(attr)
+            if s:
+                unidad = esc(s.get("unidad") or "")
+                celdas += (
+                    f'<td class="num">{_num(s["min"], 1)}–{_num(s["max"], 1)}'
+                    f'<div class="muted" style="font-size:.78rem">prom {_num(s["prom"], 1)} {unidad}</div></td>'
+                )
+            else:
+                celdas += '<td class="num muted">—</td>'
+        filas.append(
+            f"<tr><td>{nombre}</td><td class='num'>{n}</td>{celdas}</tr>"
+        )
+    if not filas:
+        return ""
+    return f"""
+  <section class="block">
+    <div class="block-head"><span class="block-num">L</span>
+      <div><div class="block-title">Análisis por lote</div>
+      <div class="block-sub">Resumen de las lecturas de cada lote de la finca</div></div>
+    </div>
+    <p class="muted">Cada lote puede tener valores diferentes; por eso se analiza por
+    separado. Se muestra el rango (mínimo–máximo) y el promedio de las lecturas
+    válidas de cada lote.</p>
+    <div class="table-wrap"><table class="tabla-ciclos">
+      <tr><th>Lote</th><th>Lecturas</th><th>pH</th><th>N (ppm)</th><th>P (ppm)</th><th>K (ppm)</th><th>CE (dS/m)</th></tr>
+      {''.join(filas)}
+    </table></div>
+  </section>"""
+
+
 def generar_reporte_html(
     *,
     finca: dict,
@@ -1742,6 +1806,8 @@ def generar_reporte_html(
     uc2: dict | None,
     muestras: list | None = None,
     umbrales: dict | None = None,
+    lotes: list | None = None,
+    analisis_lotes: list | None = None,
     clima: dict | None = None,
     plan_economico: dict | None = None,
     ficha_economicos: dict | None = None,
@@ -1783,20 +1849,55 @@ def generar_reporte_html(
     if tipo in ("siembra", "completo"):
         secciones += _seccion_uc1(uc1)
 
-    # Mapa de calor del lote (muestreo en cuadrícula con posiciones x, y)
-    seccion_mapa = _seccion_mapa_calor(muestras, umbrales)
+    # Análisis por lote (estadísticas por lote de la finca)
+    seccion_analisis_lotes = _seccion_analisis_lotes(analisis_lotes)
 
-    # Plano del lote (puntos de muestreo + silueta + perímetro/área + clima)
+    # Mapa de calor y plano del lote (muestreo en cuadrícula con posiciones x, y).
+    # Si las muestras tienen lote asignado, se pinta un mapa y un plano por lote.
     cultivo_nombre = (
         (uc2 or {}).get("cultivo") or (uc1 or {}).get("cultivo")
     )
-    seccion_plano = _seccion_plano_lote(
-        muestras, finca, clima, cultivo_nombre,
-        historial_ciclos=historial_ciclos,
-        pronostico_extendido=pronostico_extendido,
-        pronostico_ecmwf=pronostico_ecmwf,
-        modelo_pronostico=modelo_pronostico,
-    )
+
+    grupos: dict[str | None, list[dict]] = {}
+    for m in muestras or []:
+        grupos.setdefault(m.get("lote_id"), []).append(m)
+
+    nombres_lote = {str(lote["id"]): lote["nombre"] for lote in (lotes or [])}
+    lotes_con_muestras = [
+        lid for lid in grupos
+        if lid is not None and len(grupos[lid]) >= 2
+    ]
+
+    def _plano_para(ms, nombre_lote=None):
+        return _seccion_plano_lote(
+            ms, finca, clima, cultivo_nombre,
+            historial_ciclos=historial_ciclos,
+            pronostico_extendido=pronostico_extendido,
+            pronostico_ecmwf=pronostico_ecmwf,
+            modelo_pronostico=modelo_pronostico,
+            titulo=nombre_lote,
+        )
+
+    if lotes_con_muestras:
+        seccion_mapa = ""
+        seccion_plano = ""
+        for idx, lid in enumerate(lotes_con_muestras):
+            nombre = nombres_lote.get(lid, f"Lote {idx + 1}")
+            ms = grupos[lid]
+            seccion_mapa += _seccion_mapa_calor(
+                ms, umbrales, titulo=nombre, scope=f"heat-lote-{idx}"
+            )
+            seccion_plano += _plano_para(ms, nombre)
+        # Lecturas sin lote asignado (si las hay con posición)
+        ms_sin = grupos.get(None, [])
+        if len(ms_sin) >= 2:
+            seccion_mapa += _seccion_mapa_calor(
+                ms_sin, umbrales, titulo="Sin lote asignado", scope="heat-lote-sin"
+            )
+            seccion_plano += _plano_para(ms_sin, "Sin lote asignado")
+    else:
+        seccion_mapa = _seccion_mapa_calor(muestras, umbrales, scope="heatmap")
+        seccion_plano = _plano_para(muestras)
 
     # Parámetros faltantes: aviso para un reporte con mayor detalle
     seccion_faltantes = ""
@@ -1992,6 +2093,7 @@ def generar_reporte_html(
             f"{seccion_evidencia}"
             f"{seccion_faltantes}"
             f"{secciones}"
+            f"{seccion_analisis_lotes}"
             f"{seccion_mapa}"
             f"{seccion_plano}"
             f"{seccion_lunar}"
@@ -2008,6 +2110,7 @@ def generar_reporte_html(
             f"{seccion_evidencia}"
             f"{seccion_faltantes}"
             f"{secciones}"
+            f"{seccion_analisis_lotes}"
             f"{seccion_mapa}"
             f"{seccion_plano}"
             f"{seccion_lunar}"

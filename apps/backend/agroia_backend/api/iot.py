@@ -750,6 +750,8 @@ async def ultimas_lecturas(
             "message": "finca_id no es un UUID válido.",
         })
 
+    from agroia_backend.models.lote import Lote
+
     async with async_session_factory() as session:
         lecturas = (
             await session.execute(
@@ -759,6 +761,10 @@ async def ultimas_lecturas(
                 .limit(limite)
             )
         ).scalars().all()
+        lotes = (
+            await session.execute(select(Lote).where(Lote.finca_id == finca_uuid))
+        ).scalars().all()
+    lote_nombres = {str(lote.id): lote.nombre for lote in lotes}
 
     return {
         "data": [
@@ -766,6 +772,7 @@ async def ultimas_lecturas(
                 "id": str(r.id),
                 "finca_id": str(r.finca_id),
                 "lote_id": str(r.lote_id) if r.lote_id else None,
+                "lote_nombre": lote_nombres.get(str(r.lote_id)) if r.lote_id else None,
                 "sensor_id": r.sensor_id,
                 "ts": r.ts.isoformat() if r.ts else None,
                 "pos_x": r.pos_x,

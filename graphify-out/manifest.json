@@ -6695,8 +6695,8 @@
     "semantic_hash": ""
   },
   "DOCUMENTACION-PLATAFORMA.md": {
-    "mtime": 1793804666.297162,
-    "ast_hash": "e291174748e429e14a9884dd4dcb641e",
+    "mtime": 1793807740.0154686,
+    "ast_hash": "4b93457f33110a0a97506d38e9c7bbef",
     "semantic_hash": ""
   },
   "context/RFP-AGROIA-003 \u2014 Plataforma confiable de medici\u00f3n de suelo con el sensor JXBS-30.md": {
@@ -12280,8 +12280,8 @@
     "semantic_hash": ""
   },
   "DOCUMENTACION-PLATAFORMA.html": {
-    "mtime": 1793804682.3286178,
-    "ast_hash": "43169eff77adef84e80c8a99827e2ddb",
+    "mtime": 1793807761.548318,
+    "ast_hash": "01052aff2c3eeacba671740700ff45d4",
     "semantic_hash": ""
   },
   "apps/backend/agroia_backend/services/resolucion_lotes.py": {
@@ -12297,6 +12297,11 @@
   "apps/backend/tests/test_trama_lote.py": {
     "mtime": 1793804509.113747,
     "ast_hash": "4ea6870d5e9f62182d99415c4c045538",
+    "semantic_hash": ""
+  },
+  "apps/backend/alembic/versions/059_backfill_lote_carcel.py": {
+    "mtime": 1793807665.2052648,
+    "ast_hash": "ab5db5be0abaae41ada433cc797690f5",
     "semantic_hash": ""
   }
 }

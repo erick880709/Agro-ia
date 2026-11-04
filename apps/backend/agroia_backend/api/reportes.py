@@ -333,6 +333,9 @@ async def generar_reporte(
 
     muestras_geo = await _muestras_geo(db, finca_uuid)
 
+    # ── Análisis por lote (multi-lote): estadísticas y cobertura por lote ──
+    lotes_info, analisis_lotes = await _analisis_por_lote(db, finca_uuid)
+
     # ── Órdenes de trabajo / labores de la finca (para la sección Q) ──
     filas_lotes = (
         await db.execute(select(Lote.id, Lote.nombre).where(Lote.finca_id == finca_uuid))
@@ -571,6 +574,8 @@ async def generar_reporte(
         uc2=asdict(uc2) if uc2 else None,
         muestras=muestras_geo,
         umbrales=await _umbrales_de_analisis(db, uc1, uc2),
+        lotes=lotes_info,
+        analisis_lotes=analisis_lotes,
         clima=clima,
         plan_economico=plan_economico,
         ficha_economicos=ficha_economicos,
@@ -728,17 +733,107 @@ async def _muestras_geo(db: AsyncSession, finca_uuid) -> list[dict]:
             .limit(400)
         )
     ).scalars().all()
+    lote_nombres = {
+        str(lote.id): lote.nombre
+        for lote in (
+            await db.execute(select(Lote).where(Lote.finca_id == finca_uuid))
+        ).scalars().all()
+    }
     muestras = []
     for r in lecturas:
         muestra = {"pos_x": r.pos_x, "pos_y": r.pos_y}
         if r.ts:
             muestra["ts"] = r.ts.isoformat()
+        if r.lote_id is not None:
+            muestra["lote_id"] = str(r.lote_id)
+            muestra["lote_nombre"] = lote_nombres.get(str(r.lote_id))
         for attr in _VAR_ATRIBUTOS:
             valor = getattr(r, attr, None)
             if valor is not None:
                 muestra[attr] = float(valor)
         muestras.append(muestra)
     return muestras
+
+
+_VAR_ANALISIS_LOTE = [
+    ("ph", "pH", ""),
+    ("nitrogeno", "N", "ppm"),
+    ("fosforo", "P", "ppm"),
+    ("potasio", "K", "ppm"),
+    ("conductividad_electrica", "CE", "dS/m"),
+    ("materia_organica", "MO", "%"),
+    ("cic", "CIC", "meq/100g"),
+    ("humedad_ambiental", "HR amb.", "%"),
+    ("temperatura_ambiental", "T amb.", "°C"),
+]
+
+
+async def _analisis_por_lote(db: AsyncSession, finca_uuid) -> tuple[list[dict], list[dict]]:
+    """Análisis por lote: estadísticas de las lecturas válidas de cada lote.
+
+    Devuelve (lotes_info, analisis):
+      - lotes_info: [{id, nombre, area_ha}] de los lotes de la finca.
+      - analisis: [{lote_id, nombre, n, sin_posicion, stats:{var:{min,max,prom,unidad}}}] .
+    """
+    lotes = (
+        await db.execute(
+            select(Lote).where(Lote.finca_id == finca_uuid).order_by(Lote.created_at)
+        )
+    ).scalars().all()
+    lotes_info = [
+        {"id": str(lote.id), "nombre": lote.nombre, "area_ha": lote.area_ha}
+        for lote in lotes
+    ]
+
+    lecturas = (
+        await db.execute(
+            select(SensorReading).where(
+                SensorReading.finca_id == finca_uuid,
+                or_(
+                    SensorReading.calidad.is_(None),
+                    SensorReading.calidad.notin_(CALIDADES_EXCLUIDAS_ANALISIS),
+                ),
+            )
+        )
+    ).scalars().all()
+
+    def _stats(rows):
+        stats = {}
+        for attr, simbolo, unidad in _VAR_ANALISIS_LOTE:
+            valores = [float(getattr(r, attr)) for r in rows if getattr(r, attr) is not None]
+            if valores:
+                stats[attr] = {
+                    "simbolo": simbolo,
+                    "unidad": unidad,
+                    "min": min(valores),
+                    "max": max(valores),
+                    "prom": round(sum(valores) / len(valores), 2),
+                }
+        return stats
+
+    analisis = []
+    for lote in lotes:
+        rows = [r for r in lecturas if r.lote_id == lote.id]
+        sin_posicion = sum(1 for r in rows if r.pos_x is None or r.pos_y is None)
+        analisis.append({
+            "lote_id": str(lote.id),
+            "nombre": lote.nombre,
+            "n": len(rows),
+            "sin_posicion": sin_posicion,
+            "stats": _stats(rows),
+        })
+
+    # Lecturas sin lote asignado (para informar, no se pierden)
+    rows_sin = [r for r in lecturas if r.lote_id is None]
+    analisis.append({
+        "lote_id": None,
+        "nombre": "Sin lote asignado",
+        "n": len(rows_sin),
+        "sin_posicion": sum(1 for r in rows_sin if r.pos_x is None or r.pos_y is None),
+        "stats": _stats(rows_sin),
+    })
+
+    return lotes_info, analisis
 
 
 _NORM_VAR = {

@@ -118,7 +118,7 @@ Clientes (navegador, PWA)
 - Enriquecimiento **SIG** (IGAC/UPRA): precarga textura/MO/CIC oficiales con `calidad = estimado_sig` (el sensor gana si mide).
 
 ### 6.2 Sensores IoT (ingesta, decodificación y calidad del dato)
-- Ingesta por `POST /api/v1/iot/sensor` (trama normalizada), `/api/v1/iot/sensor/raw` (registros Modbus crudos), `POST /api/sensor` (trama del firmware) y `/api/v1/iot/ingest`, y por el **consumidor** (`apps/iot`) desde RabbitMQ. La trama acepta el campo `lote` (ID o nombre del lote) que se resuelve al `lote_id` de la finca y se persiste en `sensor_readings` para **separar las mediciones por lote**; si la trama no lo envía, se hereda el lote registrado del dispositivo.
+- Ingesta por `POST /api/v1/iot/sensor` (trama normalizada), `/api/v1/iot/sensor/raw` (registros Modbus crudos), `POST /api/sensor` (trama del firmware) y `/api/v1/iot/ingest`, y por el **consumidor** (`apps/iot`) desde RabbitMQ. La trama acepta el campo `lote` (ID o nombre del lote) que se resuelve al `lote_id` de la finca y se persiste en `sensor_readings` para **separar las mediciones por lote**; si la trama no lo envía, se hereda el lote registrado del dispositivo. El historial y las últimas lecturas muestran el **ID y nombre del lote** de cada lectura.
 - **Decodificación fiel Modbus** (`decodificacion_modbus.py`): registros 0x0006/0x0012/0x0013/0x0015/0x001E–0x0020 con sus escalas, temperatura en complemento a dos, CRC-16 Modbus, conservación del `valor_crudo`. Firmware de referencia en `apps/iot/firmware/`.
 - Normalización de tramas, resolución de dispositivo→finca, conversión **GPS→metros relativos** al centroide.
 - **Motor de calidad de 10 estados** (`motor_calidad.py`): `valida`, `valida_con_advertencia`, `bajo_limite_deteccion` (0 en CE/NPK se conserva), `saturada`, `fuera_de_rango`, `sonda_fuera_de_suelo`, `humedad_insuficiente`, `no_calibrada`, `estimado_sig`, `invalidada`. Cada lectura guarda `motivos_calidad` y `version_regla`; los umbrales son **administrables** (tabla `parametro_calidad_sensor`).
@@ -135,7 +135,7 @@ Clientes (navegador, PWA)
 - `aptitud.py` (preselección climática/altitudinal) y `justification.py` (explicabilidad).
 
 ### 6.4 Reportes
-- `POST /reportes/generar`: reporte HTML completo (suelo, mapa de calor, plano del lote con puntos de muestreo, recomendaciones, plan económico) con **sección de evidencia** — resumen de una línea, insignia de calidad, grados A/B/C/D por variable, variables no medidas con fuente y leyenda metodológica.
+- `POST /reportes/generar`: reporte HTML completo (suelo, mapa de calor, plano del lote con puntos de muestreo, recomendaciones, plan económico) con **sección de evidencia** — resumen de una línea, insignia de calidad, grados A/B/C/D por variable, variables no medidas con fuente y leyenda metodológica. En fincas multi-lote incluye **análisis por lote** (rango y promedio de cada lote) y pinta el **mapa de calor y el plano de cada lote por separado**.
 - Simulación de enmienda (`/reportes/simular`).
 - Los reportes usan **solo lecturas válidas para análisis** (excluyen `estimado_sig`, `saturada`, `fuera_de_rango`, `sonda_fuera_de_suelo`, `humedad_insuficiente` e `invalidada`; conservan `no_calibrada` y `bajo_limite_deteccion`).
 
