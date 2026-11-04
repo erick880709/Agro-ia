@@ -1,6 +1,6 @@
 {
   "schema": "memoria/v1",
-  "updatedAt": "2026-11-04T12:07:40.961Z",
+  "updatedAt": "2026-11-04T12:14:47.076Z",
   "nodes": [
     {
       "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
@@ -46,6 +46,21 @@
       "source": "manual",
       "createdAt": "2026-11-04T12:07:40.948Z",
       "updatedAt": "2026-11-04T12:07:40.952Z"
+    },
+    {
+      "id": "mem-20261104121447-77dccf-builder-implementar-epica-e4-calibracion-local-rfp-003",
+      "type": "avance",
+      "status": "completado",
+      "skill": "builder",
+      "title": "Implementar epica E4 calibracion local (RFP-003)",
+      "summary": "TT-08 modelo de calibracion por regresion lineal (calibracion.py + modelos calibracion_sensor/par_calibracion + migracion 053), TT-09 capa de equivalencia sensor-laboratorio (grado B/C), TT-10 aplicabilidad de humedad por suelo (arenoso/salino no aplicable), HU-04 endpoints /calibracion/pares y /calibracion/{device_id}. 13 tests, integracion 8/8.",
+      "files": [
+        "apps/backend/agroia_backend/services/calibracion.py"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T12:14:47.069Z",
+      "updatedAt": "2026-11-04T12:14:47.071Z"
     }
   ],
   "edges": []

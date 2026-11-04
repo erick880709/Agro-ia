@@ -859,6 +859,173 @@ async def sensor_status(
     }
 
 
+class ParCalibracionRegistro(BaseModel):
+    """Par sensor–laboratorio (RF-017): misma muestra, mismo día y profundidad."""
+    device_id: str = Field(..., description="ID del dispositivo (ej. esp32-npk-001)")
+    variable: str = Field(..., description="ph | humedad | conductividad_electrica | nitrogeno | fosforo | potasio")
+    valor_sensor: float
+    valor_laboratorio: float
+    metodo: str | None = Field(None, description="Método de laboratorio (pH 1:1, Bray II…)")
+    laboratorio: str | None = Field(None, description="Laboratorio acreditado")
+    fecha: str = Field(..., description="Fecha del par (YYYY-MM-DD)")
+    profundidad_cm: int | None = Field(None, ge=0)
+    punto_id: str | None = None
+
+
+@router.post("/calibracion/pares", status_code=201)
+async def registrar_par_calibracion(body: ParCalibracionRegistro):
+    """Registra un par sensor–laboratorio (HU-04) y recalcula la calibración."""
+    import uuid as uuid_mod
+    from datetime import date
+
+    from agroia.database import async_session_factory
+    from sqlalchemy import select
+
+    from agroia_backend.models.calibracion import CalibracionSensor, ParCalibracion
+    from agroia_backend.models.dispositivo_iot import DispositivoIoT
+    from agroia_backend.services.calibracion import regresion_lineal
+
+    try:
+        fecha = date.fromisoformat(body.fecha)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FECHA_INVALIDA",
+            "message": "fecha debe ser YYYY-MM-DD.",
+        })
+
+    async with async_session_factory() as session:
+        dispositivo = (
+            await session.execute(
+                select(DispositivoIoT).where(DispositivoIoT.device_id == body.device_id)
+            )
+        ).scalar_one_or_none()
+        if dispositivo is None:
+            raise HTTPException(status_code=404, detail={
+                "code": "DEVICE_NOT_REGISTERED",
+                "message": f"Dispositivo '{body.device_id}' no registrado.",
+            })
+
+        par = ParCalibracion(
+            id=uuid_mod.uuid4(),
+            dispositivo_id=dispositivo.id,
+            variable=body.variable,
+            valor_sensor=body.valor_sensor,
+            valor_laboratorio=body.valor_laboratorio,
+            metodo=body.metodo,
+            laboratorio=body.laboratorio,
+            fecha=fecha,
+            profundidad_cm=body.profundidad_cm,
+            punto_id=body.punto_id,
+        )
+        session.add(par)
+        await session.flush()
+
+        # Recalcular la calibración de esta variable con todos los pares.
+        pares = (
+            await session.execute(
+                select(ParCalibracion).where(
+                    ParCalibracion.dispositivo_id == dispositivo.id,
+                    ParCalibracion.variable == body.variable,
+                )
+            )
+        ).scalars().all()
+        reg = regresion_lineal(
+            [p.valor_sensor for p in pares], [p.valor_laboratorio for p in pares]
+        )
+
+        calibracion = None
+        if reg is not None:
+            # La nueva calibración reemplaza a la anterior (la deja inactiva).
+            anteriores = (
+                await session.execute(
+                    select(CalibracionSensor).where(
+                        CalibracionSensor.dispositivo_id == dispositivo.id,
+                        CalibracionSensor.variable == body.variable,
+                        CalibracionSensor.activa.is_(True),
+                    )
+                )
+            ).scalars().all()
+            for c in anteriores:
+                c.activa = False
+            calibracion = CalibracionSensor(
+                id=uuid_mod.uuid4(),
+                dispositivo_id=dispositivo.id,
+                variable=body.variable,
+                pendiente=reg["pendiente"],
+                intercepto=reg["intercepto"],
+                n=reg["n"],
+                r2=reg["r2"],
+                rmse=reg["rmse"],
+                sesgo=reg["sesgo"],
+                responsable=body.laboratorio,
+            )
+            session.add(calibracion)
+            await session.flush()
+            par.calibracion_id = calibracion.id
+
+        await session.commit()
+
+    return {
+        "status": "registered",
+        "par_id": str(par.id),
+        "device_id": body.device_id,
+        "variable": body.variable,
+        "calibracion": reg,
+    }
+
+
+@router.get("/calibracion/{device_id}")
+async def listar_calibraciones(device_id: str):
+    """Lista las calibraciones (vigentes y métricas) de un dispositivo."""
+    from agroia.database import async_session_factory
+    from sqlalchemy import select
+
+    from agroia_backend.models.calibracion import CalibracionSensor
+    from agroia_backend.models.dispositivo_iot import DispositivoIoT
+
+    async with async_session_factory() as session:
+        dispositivo = (
+            await session.execute(
+                select(DispositivoIoT).where(DispositivoIoT.device_id == device_id)
+            )
+        ).scalar_one_or_none()
+        if dispositivo is None:
+            raise HTTPException(status_code=404, detail={
+                "code": "DEVICE_NOT_REGISTERED",
+                "message": f"Dispositivo '{device_id}' no registrado.",
+            })
+
+        calibraciones = (
+            await session.execute(
+                select(CalibracionSensor).where(
+                    CalibracionSensor.dispositivo_id == dispositivo.id
+                ).order_by(CalibracionSensor.created_at.desc())
+            )
+        ).scalars().all()
+
+    return {
+        "device_id": device_id,
+        "data": [
+            {
+                "id": str(c.id),
+                "variable": c.variable,
+                "unidad_suelo": c.unidad_suelo,
+                "pendiente": c.pendiente,
+                "intercepto": c.intercepto,
+                "n": c.n,
+                "r2": c.r2,
+                "rmse": c.rmse,
+                "sesgo": c.sesgo,
+                "vigencia": c.vigencia.isoformat() if c.vigencia else None,
+                "activa": c.activa,
+                "responsable": c.responsable,
+            }
+            for c in calibraciones
+        ],
+        "total": len(calibraciones),
+    }
+
+
 @router.get("/externas/enrich")
 async def enrich_location(
     lat: float = Query(..., ge=-90, le=90),

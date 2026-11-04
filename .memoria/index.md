@@ -3,10 +3,12 @@
 > Grafo de conocimiento generado por la skill `memoria`. Fuente de verdad: `.memoria/graph.json`.
 > Este archivo se regenera; no lo edites a mano.
 
-**3 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T12:07:40.961Z
+**4 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T12:14:47.076Z
 
 ## Contexto activo
 
+- **Implementar epica E4 calibracion local (RFP-003)** — `builder` · completado · 2026-11-04
+  TT-08 modelo de calibracion por regresion lineal (calibracion.py + modelos calibracion_sensor/par_calibracion + migracion 053), TT-09 capa de equivalencia sensor-laboratorio (grado B/C), TT-10 aplicabilidad de humedad por suelo (arenoso/salino no aplicable), HU-04 endpoints /calibracion/pares y /calibracion/{device_id}. 13 tests, integracion 8/8.
 - **Implementar epica E3 incertidumbre y clasificacion (RFP-003)** — `builder` · completado · 2026-11-04
   TT-06 incertidumbre por variable (incertidumbre.py, exactitud/raiz3, migracion 052, consumer guarda mapa de incertidumbres), TT-07 banda de frontera (banda_frontera.py + RulesEngine.evaluar_con_banda) y agregacion robusta (agregacion_robusta.py, mediana/IQR/minimo puntos), HU-03 presentacion con incertidumbre (formatear_valor). 26 tests, integracion 8/8.
 - **Implementar epica E2 motor de calidad del dato (RFP-003)** — `builder` · completado · 2026-11-04
@@ -15,6 +17,13 @@
   TT-01 decodificacion Modbus JXBS-3001 + CRC16 (15 tests), TT-02 firmware ESP32 (apps/iot/firmware), TT-03 verificacion de variante, HU-01 registro de dispositivos con configuracion (migracion 050).
 
 ## Avances
+
+### ✅ Implementar epica E4 calibracion local (RFP-003)
+
+- **id:** `mem-20261104121447-77dccf-builder-implementar-epica-e4-calibracion-local-rfp-003`
+- **skill:** `builder` · **estado:** completado · **creado:** 2026-11-04
+- **resumen:** TT-08 modelo de calibracion por regresion lineal (calibracion.py + modelos calibracion_sensor/par_calibracion + migracion 053), TT-09 capa de equivalencia sensor-laboratorio (grado B/C), TT-10 aplicabilidad de humedad por suelo (arenoso/salino no aplicable), HU-04 endpoints /calibracion/pares y /calibracion/{device_id}. 13 tests, integracion 8/8.
+- **archivos:** `apps/backend/agroia_backend/services/calibracion.py`
 
 ### ✅ Implementar epica E3 incertidumbre y clasificacion (RFP-003)
 
