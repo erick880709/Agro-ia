@@ -53,12 +53,44 @@ class Esp32SensorMessage(BaseModel, extra="allow"):
 
 
 class DispositivoRegistro(BaseModel):
-    """Registro de un dispositivo IoT asociado a una finca."""
+    """Registro de un dispositivo IoT asociado a una finca (E1, HU-01)."""
     device_id: str = Field(..., description="ID único del firmware")
     finca_id: str = Field(..., description="UUID de la finca asociada")
     nombre: str | None = None
     npk_calibrado: bool = Field(
         False, description="True si NPK fue calibrado contra laboratorio"
+    )
+    modelo: str | None = Field(None, description="Modelo (ej. JXBS-3001-NPK-RS)")
+    variante: str | None = Field(None, description="Variante (confirmar con etiqueta física)")
+    direccion_modbus: int | None = Field(
+        None, ge=0, le=247, description="Dirección Modbus RTU (única por bus)"
+    )
+    baudios: int | None = Field(None, description="Baudios del bus RS485 (9600 por defecto)")
+    bus_id: str | None = Field(None, description="Identificador del bus RS485")
+    firmware: str | None = Field(None, description="Versión de firmware")
+    fecha_instalacion: str | None = Field(None, description="Fecha de instalación (YYYY-MM-DD)")
+    profundidad_cm: int | None = Field(None, ge=0, description="Profundidad de lectura/instalación (cm)")
+    modo_instalacion: str | None = Field(
+        None, description="Modo de instalación: superficial | enterrado"
+    )
+    lote_id: str | None = Field(None, description="UUID del lote asociado")
+    ultimo_mantenimiento: str | None = Field(None, description="Fecha del último mantenimiento (YYYY-MM-DD)")
+    estado_salud: str | None = Field(None, description="Estado de salud agregado")
+
+
+class SensorRawRegistros(BaseModel, extra="allow"):
+    """Trama cruda en registros Modbus (función 0x03) del JXBS-3001-NPK-RS."""
+    device_id: str = Field(..., description="ID del dispositivo (ej. esp32-npk-001)")
+    registros: dict[str, int] = Field(
+        ..., description="Mapa registro (hex o decimal) → valor entero crudo de 16 bits"
+    )
+    timestamp: str | None = Field(None, description="ISO 8601 timestamp de la medición")
+
+
+class VerificacionVariante(BaseModel):
+    """Registros leídos del equipo para la prueba de aceptación de variante."""
+    registros: dict[str, int] = Field(
+        ..., description="Mapa registro (hex o decimal) → valor entero crudo de 16 bits"
     )
 
 
@@ -157,6 +189,102 @@ async def ingest_esp32_sensor(body: Esp32SensorMessage):
         "finca_id": str(dispositivo.finca_id),
         "variables_recibidas": sorted(payload.keys()),
         "advertencias": advertencias,
+    }
+
+
+@router.post("/sensor/raw", status_code=202)
+async def ingest_esp32_registros(body: SensorRawRegistros):
+    """Decodifica una trama Modbus cruda (TT-01) y la persiste.
+
+    Recibe los registros leídos por el firmware (mapa registro→entero de 16
+    bits) y los decodifica con las escalas y el signo correctos, conservando
+    el valor crudo.
+    """
+    from agroia.database import async_session_factory
+    from sqlalchemy import select
+
+    from agroia_backend.models.dispositivo_iot import DispositivoIoT
+    from agroia_backend.services.decodificacion_modbus import decodificar_para_sensor
+    from agroia_backend.services.puente_iot import process_sensor_message
+
+    async with async_session_factory() as session:
+        dispositivo = (
+            await session.execute(
+                select(DispositivoIoT).where(
+                    DispositivoIoT.device_id == body.device_id
+                )
+            )
+        ).scalar_one_or_none()
+
+    if dispositivo is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "DEVICE_NOT_REGISTERED",
+            "message": (
+                f"Dispositivo '{body.device_id}' no registrado. Regístrelo en "
+                "POST /api/v1/iot/dispositivos con su finca_id."
+            ),
+        })
+
+    payload = decodificar_para_sensor(body.registros)
+    if not any(k in payload for k in ("ph", "humedad", "conductividad_electrica",
+                                      "nitrogeno", "fosforo", "potasio",
+                                      "temperatura_suelo")):
+        raise HTTPException(status_code=422, detail={
+            "code": "REGISTROS_NO_RECONOCIDOS",
+            "message": "Ningún registro coincide con los del JXBS-3001-NPK-RS.",
+        })
+
+    success = await process_sensor_message({
+        "device_id": body.device_id,
+        "finca_id": str(dispositivo.finca_id),
+        "timestamp": body.timestamp,
+        "payload": payload,
+        "valor_crudo": payload.get("valor_crudo"),
+    })
+
+    if not success:
+        raise HTTPException(status_code=422, detail={
+            "code": "INGEST_ERROR",
+            "message": "Error al procesar la trama del sensor. Revise los logs.",
+        })
+
+    return {
+        "status": "accepted",
+        "device_id": body.device_id,
+        "finca_id": str(dispositivo.finca_id),
+        "variables_recibidas": sorted(payload.keys()),
+    }
+
+
+@router.post("/dispositivos/{device_id}/verificar-variante")
+async def verificar_variante_dispositivo(device_id: str, body: VerificacionVariante):
+    """Prueba de aceptación de variante (TT-03): confirma pH, CE, N, P y K."""
+    from agroia.database import async_session_factory
+    from sqlalchemy import select
+
+    from agroia_backend.models.dispositivo_iot import DispositivoIoT
+    from agroia_backend.services.decodificacion_modbus import verificar_variante
+
+    async with async_session_factory() as session:
+        dispositivo = (
+            await session.execute(
+                select(DispositivoIoT).where(DispositivoIoT.device_id == device_id)
+            )
+        ).scalar_one_or_none()
+
+    if dispositivo is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "DEVICE_NOT_REGISTERED",
+            "message": f"Dispositivo '{device_id}' no registrado.",
+        })
+
+    resultado = verificar_variante(body.registros)
+    return {
+        "device_id": device_id,
+        "aceptado": resultado["aceptado"],
+        "variables_presentes": resultado["variables_presentes"],
+        "variables_faltantes": resultado["variables_faltantes"],
+        "decodificadas": resultado["decodificadas"],
     }
 
 
@@ -409,13 +537,49 @@ async def cargar_archivo_sensor(
 
 @router.post("/dispositivos", status_code=201)
 async def registrar_dispositivo(body: DispositivoRegistro):
-    """Registra un dispositivo IoT y lo asocia a una finca (brecha G1)."""
+    """Registra un dispositivo IoT y lo asocia a una finca (brecha G1, HU-01)."""
     import uuid as uuid_mod
+    from datetime import date
 
     from agroia.database import async_session_factory
     from sqlalchemy import select
 
     from agroia_backend.models.dispositivo_iot import DispositivoIoT
+
+    def _a_fecha(texto: str | None) -> date | None:
+        if not texto:
+            return None
+        try:
+            return date.fromisoformat(texto)
+        except ValueError:
+            raise HTTPException(status_code=422, detail={
+                "code": "FECHA_INVALIDA",
+                "message": f"'{texto}' no es una fecha ISO válida (YYYY-MM-DD).",
+            })
+
+    try:
+        finca_uuid = uuid_mod.UUID(body.finca_id)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FINCA_INVALIDA",
+            "message": "finca_id no es un UUID válido.",
+        })
+
+    lote_uuid = None
+    if body.lote_id:
+        try:
+            lote_uuid = uuid_mod.UUID(body.lote_id)
+        except ValueError:
+            raise HTTPException(status_code=422, detail={
+                "code": "LOTE_INVALIDO",
+                "message": "lote_id no es un UUID válido.",
+            })
+
+    if body.modo_instalacion and body.modo_instalacion not in ("superficial", "enterrado"):
+        raise HTTPException(status_code=422, detail={
+            "code": "MODO_INSTALACION_INVALIDO",
+            "message": "modo_instalacion debe ser 'superficial' o 'enterrado'.",
+        })
 
     async with async_session_factory() as session:
         existente = (
@@ -431,13 +595,47 @@ async def registrar_dispositivo(body: DispositivoRegistro):
                 "message": f"Dispositivo '{body.device_id}' ya está registrado.",
             })
 
+        # Unicidad dirección ↔ bus: no puede haber dos sensores con la misma
+        # dirección Modbus en el mismo bus (CA2 de HU-01).
+        if body.direccion_modbus is not None:
+            clave_nueva = body.bus_id or f"finca:{body.finca_id}"
+            mismo_dir = (
+                await session.execute(
+                    select(DispositivoIoT).where(
+                        DispositivoIoT.direccion_modbus == body.direccion_modbus
+                    )
+                )
+            ).scalars().all()
+            for d in mismo_dir:
+                clave_existente = d.bus_id or f"finca:{d.finca_id}"
+                if clave_existente == clave_nueva:
+                    raise HTTPException(status_code=409, detail={
+                        "code": "DIRECCION_MODBUS_DUPLICADA",
+                        "message": (
+                            f"La dirección Modbus {body.direccion_modbus} ya está "
+                            f"asignada a otro sensor del bus '{clave_nueva}'."
+                        ),
+                    })
+
         dispositivo = DispositivoIoT(
             id=uuid_mod.uuid4(),
             device_id=body.device_id,
-            finca_id=uuid_mod.UUID(body.finca_id),
+            finca_id=finca_uuid,
             nombre=body.nombre,
             activo=True,
             npk_calibrado=body.npk_calibrado,
+            modelo=body.modelo,
+            variante=body.variante,
+            direccion_modbus=body.direccion_modbus,
+            baudios=body.baudios,
+            bus_id=body.bus_id,
+            firmware=body.firmware,
+            fecha_instalacion=_a_fecha(body.fecha_instalacion),
+            profundidad_cm=body.profundidad_cm,
+            modo_instalacion=body.modo_instalacion,
+            lote_id=lote_uuid,
+            ultimo_mantenimiento=_a_fecha(body.ultimo_mantenimiento),
+            estado_salud=body.estado_salud,
         )
         session.add(dispositivo)
         await session.commit()
@@ -447,6 +645,9 @@ async def registrar_dispositivo(body: DispositivoRegistro):
         "device_id": body.device_id,
         "finca_id": body.finca_id,
         "npk_calibrado": body.npk_calibrado,
+        "modelo": body.modelo,
+        "direccion_modbus": body.direccion_modbus,
+        "bus_id": body.bus_id,
     }
 
 
@@ -468,6 +669,22 @@ async def listar_dispositivos():
                 "finca_id": str(d.finca_id),
                 "nombre": d.nombre,
                 "npk_calibrado": d.npk_calibrado,
+                "modelo": d.modelo,
+                "variante": d.variante,
+                "direccion_modbus": d.direccion_modbus,
+                "baudios": d.baudios,
+                "bus_id": d.bus_id,
+                "firmware": d.firmware,
+                "fecha_instalacion": (
+                    d.fecha_instalacion.isoformat() if d.fecha_instalacion else None
+                ),
+                "profundidad_cm": d.profundidad_cm,
+                "modo_instalacion": d.modo_instalacion,
+                "lote_id": str(d.lote_id) if d.lote_id else None,
+                "ultimo_mantenimiento": (
+                    d.ultimo_mantenimiento.isoformat() if d.ultimo_mantenimiento else None
+                ),
+                "estado_salud": d.estado_salud,
                 "ultima_transmision": (
                     d.ultima_transmision.isoformat() if d.ultima_transmision else None
                 ),

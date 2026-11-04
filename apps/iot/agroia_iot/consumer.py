@@ -132,6 +132,7 @@ async def process_sensor_message(message: dict) -> bool:
             humedad_ambiental=payload.get("humedad_ambiental"),
             temperatura_ambiental=payload.get("temperatura_ambiental"),
             calidad=calidad,
+            valor_crudo=message.get("valor_crudo") or payload.get("valor_crudo"),
         )
 
         async with async_session_factory() as session:

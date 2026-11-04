@@ -10,7 +10,7 @@ from datetime import datetime
 
 from agroia.database import Base
 from sqlalchemy import DateTime, Float, ForeignKey, String, func
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 
@@ -98,6 +98,10 @@ class SensorReading(Base):
     calidad: Mapped[str | None] = mapped_column(
         String(50), nullable=True,
         comment="Indicador de calidad: OK, out_of_range, frozen, gap"
+    )
+    valor_crudo: Mapped[dict | None] = mapped_column(
+        JSONB, nullable=True,
+        comment="Enteros crudos de los registros Modbus (clave hex → valor)",
     )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False

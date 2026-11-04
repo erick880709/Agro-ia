@@ -1,0 +1,22 @@
+{
+  "schema": "memoria/v1",
+  "updatedAt": "2026-11-04T03:19:19.370Z",
+  "nodes": [
+    {
+      "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
+      "type": "avance",
+      "status": "completado",
+      "skill": "builder",
+      "title": "Implementar epica E1 integridad de ingesta (RFP-003)",
+      "summary": "TT-01 decodificacion Modbus JXBS-3001 + CRC16 (15 tests), TT-02 firmware ESP32 (apps/iot/firmware), TT-03 verificacion de variante, HU-01 registro de dispositivos con configuracion (migracion 050).",
+      "files": [
+        "apps/backend/agroia_backend/services/decodificacion_modbus.py"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T03:19:19.365Z",
+      "updatedAt": "2026-11-04T03:19:19.367Z"
+    }
+  ],
+  "edges": []
+}
