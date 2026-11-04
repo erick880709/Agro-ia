@@ -99,7 +99,7 @@ Clientes (navegador, PWA)
 <tr><td><code>models/</code></td><td>Artefactos de modelo serializados (<code>.pkl</code>).</td></tr>
 </tbody></table>
 <hr>
-<h2>5. Base de datos (esquema <code>agroia</code>, 58 migraciones → head <code>058</code>)</h2>
+<h2>5. Base de datos (esquema <code>agroia</code>, 59 migraciones → head <code>059</code>)</h2>
 <h3>Entidades núcleo</h3>
 <table><thead><tr><th>Tabla (modelo)</th><th>Descripción</th></tr></thead><tbody>
 <tr><td><code>fincas</code></td><td>Predio georreferenciado: GPS, altitud, geometría GeoJSON, área/perímetro calculados, tipo de área, multi-lote, riego, fenología.</td></tr>
@@ -224,7 +224,7 @@ Clientes (navegador, PWA)
 <li><strong>Render Blueprint</strong> (<code>render.yaml</code>): servicio <code>agroia-backend</code> (Docker), health check <code>/api/v1/health</code>, variables de entorno (DATABASE_URL, ENVIRONMENT, JWT_SECRET, CLONACION_VOZ_URL/TOKEN…).</li>
 <li><strong>Neon Postgres</strong>: esquema <code>agroia</code>; la URL usa <code>postgresql+asyncpg://</code> con <code>ssl=require</code>.</li>
 <li><strong>GitHub Actions</strong> (<code>.github/workflows/ci.yml</code>): lint (ruff) → tests (pytest con Postgres) → build Docker (backend/auth/ml/rag/iot).</li>
-<li><strong>Migraciones</strong>: <code>alembic upgrade head</code> se ejecuta al arrancar el contenedor (head actual: <code>058_sensor_reading_lote</code>).</li>
+<li><strong>Migraciones</strong>: <code>alembic upgrade head</code> se ejecuta al arrancar el contenedor (head actual: <code>059_backfill_lote_carcel</code>).</li>
 <li><strong>Voz clonada</strong>: wrapper en <code>apps/voice-clone</code> desplegable en RunPod/HF Spaces; se conecta vía <code>CLONACION_VOZ_URL</code>/<code>CLONACION_VOZ_TOKEN</code>.</li>
 </ul>
 <hr>

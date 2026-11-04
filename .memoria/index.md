@@ -3,10 +3,12 @@
 > Grafo de conocimiento generado por la skill `memoria`. Fuente de verdad: `.memoria/graph.json`.
 > Este archivo se regenera; no lo edites a mano.
 
-**12 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T13:49:19.648Z
+**13 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T15:13:18.928Z
 
 ## Contexto activo
 
+- **Diferenciar mediciones por lote en la trama del sensor** — `builder` · completado · 2026-11-04
+  Agregado sensor_readings.lote_id (migracion 058) y campo 'lote' (id o nombre) en las tramas POST /api/sensor, /api/v1/iot/sensor y /sensor/raw; se resuelve con resolucion_lotes.py y se hereda el lote del dispositivo si no viene. UI muestra el ID de cada lote con boton Copiar. Tests unitarios agregados. Commit 63d24da.
 - **Actualizacion documentacion funcional y tecnica (RFP-003) y HTML** — `builder` · completado · 2026-11-04
   Actualizada DOCUMENTACION-PLATAFORMA.md (secciones 5-10: motor de calidad 10 estados, calibracion, grados de evidencia, seccion de evidencia en reportes, endpoints /iot y role checks) y generado DOCUMENTACION-PLATAFORMA.html autocontenido. Commit 9bc9180.
 - **Desplegar RFP-003 y reclasificar finca carcel penas blancas** — `builder` · completado · 2026-11-04
@@ -25,10 +27,15 @@
   HU-05 metadatos de muestreo (modelo SesionMuestreo + migracion 054 + campos profundidad/punto/replica/sesion en sensor_readings + endpoint /muestreo/sesiones), HU-06 contexto agronomico (contexto_agronomico.py, ventana post-fertilizacion/riego -> valida_con_advertencia, wire en consumer), HU-07 guia de campo (/muestreo/guia). 11 tests, integracion 8/8.
 - **Implementar epica E4 calibracion local (RFP-003)** — `builder` · completado · 2026-11-04
   TT-08 modelo de calibracion por regresion lineal (calibracion.py + modelos calibracion_sensor/par_calibracion + migracion 053), TT-09 capa de equivalencia sensor-laboratorio (grado B/C), TT-10 aplicabilidad de humedad por suelo (arenoso/salino no aplicable), HU-04 endpoints /calibracion/pares y /calibracion/{device_id}. 13 tests, integracion 8/8.
-- **Implementar epica E3 incertidumbre y clasificacion (RFP-003)** — `builder` · completado · 2026-11-04
-  TT-06 incertidumbre por variable (incertidumbre.py, exactitud/raiz3, migracion 052, consumer guarda mapa de incertidumbres), TT-07 banda de frontera (banda_frontera.py + RulesEngine.evaluar_con_banda) y agregacion robusta (agregacion_robusta.py, mediana/IQR/minimo puntos), HU-03 presentacion con incertidumbre (formatear_valor). 26 tests, integracion 8/8.
 
 ## Avances
+
+### ✅ Diferenciar mediciones por lote en la trama del sensor
+
+- **id:** `mem-20261104151318-938d90-builder-diferenciar-mediciones-por-lote-en-la-trama-del-sens`
+- **skill:** `builder` · **estado:** completado · **creado:** 2026-11-04
+- **resumen:** Agregado sensor_readings.lote_id (migracion 058) y campo 'lote' (id o nombre) en las tramas POST /api/sensor, /api/v1/iot/sensor y /sensor/raw; se resuelve con resolucion_lotes.py y se hereda el lote del dispositivo si no viene. UI muestra el ID de cada lote con boton Copiar. Tests unitarios agregados. Commit 63d24da.
+- **archivos:** `apps/backend/agroia_backend/services/resolucion_lotes.py`
 
 ### ✅ Actualizacion documentacion funcional y tecnica (RFP-003) y HTML
 

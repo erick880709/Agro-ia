@@ -80,7 +80,7 @@ Clientes (navegador, PWA)
 
 ---
 
-## 5. Base de datos (esquema `agroia`, 58 migraciones → head `058`)
+## 5. Base de datos (esquema `agroia`, 59 migraciones → head `059`)
 
 ### Entidades núcleo
 
@@ -206,7 +206,7 @@ Clientes (navegador, PWA)
 - **Render Blueprint** (`render.yaml`): servicio `agroia-backend` (Docker), health check `/api/v1/health`, variables de entorno (DATABASE_URL, ENVIRONMENT, JWT_SECRET, CLONACION_VOZ_URL/TOKEN…).
 - **Neon Postgres**: esquema `agroia`; la URL usa `postgresql+asyncpg://` con `ssl=require`.
 - **GitHub Actions** (`.github/workflows/ci.yml`): lint (ruff) → tests (pytest con Postgres) → build Docker (backend/auth/ml/rag/iot).
-- **Migraciones**: `alembic upgrade head` se ejecuta al arrancar el contenedor (head actual: `058_sensor_reading_lote`).
+- **Migraciones**: `alembic upgrade head` se ejecuta al arrancar el contenedor (head actual: `059_backfill_lote_carcel`).
 - **Voz clonada**: wrapper en `apps/voice-clone` desplegable en RunPod/HF Spaces; se conecta vía `CLONACION_VOZ_URL`/`CLONACION_VOZ_TOKEN`.
 
 ---

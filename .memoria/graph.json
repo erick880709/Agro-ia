@@ -1,6 +1,6 @@
 {
   "schema": "memoria/v1",
-  "updatedAt": "2026-11-04T13:49:19.648Z",
+  "updatedAt": "2026-11-04T15:13:18.928Z",
   "nodes": [
     {
       "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
@@ -181,6 +181,21 @@
       "source": "manual",
       "createdAt": "2026-11-04T13:49:19.640Z",
       "updatedAt": "2026-11-04T13:49:19.644Z"
+    },
+    {
+      "id": "mem-20261104151318-938d90-builder-diferenciar-mediciones-por-lote-en-la-trama-del-sens",
+      "type": "avance",
+      "status": "completado",
+      "skill": "builder",
+      "title": "Diferenciar mediciones por lote en la trama del sensor",
+      "summary": "Agregado sensor_readings.lote_id (migracion 058) y campo 'lote' (id o nombre) en las tramas POST /api/sensor, /api/v1/iot/sensor y /sensor/raw; se resuelve con resolucion_lotes.py y se hereda el lote del dispositivo si no viene. UI muestra el ID de cada lote con boton Copiar. Tests unitarios agregados. Commit 63d24da.",
+      "files": [
+        "apps/backend/agroia_backend/services/resolucion_lotes.py"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T15:13:18.898Z",
+      "updatedAt": "2026-11-04T15:13:18.907Z"
     }
   ],
   "edges": []
