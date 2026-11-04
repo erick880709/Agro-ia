@@ -3,10 +3,12 @@
 > Grafo de conocimiento generado por la skill `memoria`. Fuente de verdad: `.memoria/graph.json`.
 > Este archivo se regenera; no lo edites a mano.
 
-**8 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T12:54:58.286Z
+**9 nodo(s)** · **0 enlace(s)** · actualizado 2026-11-04T12:59:37.670Z
 
 ## Contexto activo
 
+- **Implementar epica E9 aprendizaje automatico (RFP-003)** — `builder` · completado · 2026-11-04
+  TT-14 entrenamiento solo con etiquetas de laboratorio (ml_entrenamiento.py: validar_sin_circularidad, evaluacion R2/RMSE/sesgo con covariables), TT-15 reporte de rendimiento por variable y unidad de suelo (/calibracion/rendimiento, migracion 057 unidad_suelo en par_calibracion) con modo sombra hasta cumplir metas (RT-034). 10 tests, integracion 8/8. Cierra las 9 epicas de RFP-AGROIA-003.
 - **Implementar epica E8 ciclo de vida del sensor (RFP-003)** — `builder` · completado · 2026-11-04
   HU-14 plan de mantenimiento (modelo MantenimientoSensor + migracion 056 + endpoint POST /dispositivos/{id}/mantenimiento), TT-12 deteccion de deriva (detectar_deriva sesgo>meta), TT-13 telemetria de salud (voltaje y errores_crc en dispositivo + endpoint /telemetria, wire en consumer). 9 tests, integracion 8/8.
 - **Implementar epica E7 reportes y pantallas (RFP-003)** — `builder` · completado · 2026-11-04
@@ -25,6 +27,13 @@
   TT-01 decodificacion Modbus JXBS-3001 + CRC16 (15 tests), TT-02 firmware ESP32 (apps/iot/firmware), TT-03 verificacion de variante, HU-01 registro de dispositivos con configuracion (migracion 050).
 
 ## Avances
+
+### ✅ Implementar epica E9 aprendizaje automatico (RFP-003)
+
+- **id:** `mem-20261104125937-18adfb-builder-implementar-epica-e9-aprendizaje-automatico-rfp-003`
+- **skill:** `builder` · **estado:** completado · **creado:** 2026-11-04
+- **resumen:** TT-14 entrenamiento solo con etiquetas de laboratorio (ml_entrenamiento.py: validar_sin_circularidad, evaluacion R2/RMSE/sesgo con covariables), TT-15 reporte de rendimiento por variable y unidad de suelo (/calibracion/rendimiento, migracion 057 unidad_suelo en par_calibracion) con modo sombra hasta cumplir metas (RT-034). 10 tests, integracion 8/8. Cierra las 9 epicas de RFP-AGROIA-003.
+- **archivos:** `apps/backend/agroia_backend/services/ml_entrenamiento.py`
 
 ### ✅ Implementar epica E8 ciclo de vida del sensor (RFP-003)
 

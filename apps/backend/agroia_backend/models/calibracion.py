@@ -84,6 +84,10 @@ class ParCalibracion(Base):
         comment="Método de laboratorio (pH 1:1, Bray II, acetato de amonio, CE 1:5…)",
     )
     laboratorio: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    unidad_suelo: Mapped[str | None] = mapped_column(
+        String(100), nullable=True,
+        comment="Unidad de suelo del par (andisol, oxisol, aluvial…)",
+    )
     fecha: Mapped[date] = mapped_column(Date, nullable=False, index=True)
     profundidad_cm: Mapped[int | None] = mapped_column(Integer, nullable=True)
     punto_id: Mapped[str | None] = mapped_column(String(100), nullable=True)

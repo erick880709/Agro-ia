@@ -1,6 +1,6 @@
 {
   "schema": "memoria/v1",
-  "updatedAt": "2026-11-04T12:54:58.286Z",
+  "updatedAt": "2026-11-04T12:59:37.670Z",
   "nodes": [
     {
       "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
@@ -121,6 +121,21 @@
       "source": "manual",
       "createdAt": "2026-11-04T12:54:58.280Z",
       "updatedAt": "2026-11-04T12:54:58.282Z"
+    },
+    {
+      "id": "mem-20261104125937-18adfb-builder-implementar-epica-e9-aprendizaje-automatico-rfp-003",
+      "type": "avance",
+      "status": "completado",
+      "skill": "builder",
+      "title": "Implementar epica E9 aprendizaje automatico (RFP-003)",
+      "summary": "TT-14 entrenamiento solo con etiquetas de laboratorio (ml_entrenamiento.py: validar_sin_circularidad, evaluacion R2/RMSE/sesgo con covariables), TT-15 reporte de rendimiento por variable y unidad de suelo (/calibracion/rendimiento, migracion 057 unidad_suelo en par_calibracion) con modo sombra hasta cumplir metas (RT-034). 10 tests, integracion 8/8. Cierra las 9 epicas de RFP-AGROIA-003.",
+      "files": [
+        "apps/backend/agroia_backend/services/ml_entrenamiento.py"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T12:59:37.665Z",
+      "updatedAt": "2026-11-04T12:59:37.666Z"
     }
   ],
   "edges": []

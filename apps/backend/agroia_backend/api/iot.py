@@ -867,6 +867,7 @@ class ParCalibracionRegistro(BaseModel):
     valor_laboratorio: float
     metodo: str | None = Field(None, description="Método de laboratorio (pH 1:1, Bray II…)")
     laboratorio: str | None = Field(None, description="Laboratorio acreditado")
+    unidad_suelo: str | None = Field(None, description="Unidad de suelo del par (andisol, oxisol…)")
     fecha: str = Field(..., description="Fecha del par (YYYY-MM-DD)")
     profundidad_cm: int | None = Field(None, ge=0)
     punto_id: str | None = None
@@ -913,6 +914,7 @@ async def registrar_par_calibracion(body: ParCalibracionRegistro):
             valor_laboratorio=body.valor_laboratorio,
             metodo=body.metodo,
             laboratorio=body.laboratorio,
+            unidad_suelo=body.unidad_suelo,
             fecha=fecha,
             profundidad_cm=body.profundidad_cm,
             punto_id=body.punto_id,
@@ -1417,6 +1419,35 @@ async def telemetria_dispositivo(device_id: str):
         "uptime_s": dispositivo.uptime_s,
         "firmware": dispositivo.firmware,
     }
+
+
+@router.get("/calibracion/rendimiento")
+async def rendimiento_modelo():
+    """Reporte de rendimiento del modelo por variable y unidad de suelo (TT-15)."""
+    from agroia.database import async_session_factory
+    from sqlalchemy import select
+
+    from agroia_backend.models.calibracion import ParCalibracion
+    from agroia_backend.services.ml_entrenamiento import (
+        modo_sombra,
+        reporte_rendimiento,
+    )
+
+    async with async_session_factory() as session:
+        pares = (await session.execute(select(ParCalibracion))).scalars().all()
+
+    reporte = reporte_rendimiento([
+        {
+            "variable": p.variable,
+            "unidad_suelo": p.unidad_suelo,
+            "valor_sensor": p.valor_sensor,
+            "valor_laboratorio": p.valor_laboratorio,
+        }
+        for p in pares
+    ])
+    reporte["modo_sombra"] = modo_sombra(reporte)
+    reporte["total_pares"] = len(pares)
+    return reporte
 
 
 @router.get("/externas/enrich")
