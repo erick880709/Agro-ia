@@ -8,7 +8,7 @@ import uuid
 from datetime import date, datetime
 
 from agroia.database import Base
-from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Date, DateTime, Float, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -100,6 +100,13 @@ class DispositivoIoT(Base, TimestampMixin):
     )
     uptime_s: Mapped[int | None] = mapped_column(
         Integer, nullable=True, comment="Segundos desde el último reinicio"
+    )
+    voltaje_alimentacion: Mapped[float | None] = mapped_column(
+        Float, nullable=True, comment="Voltaje de alimentación (V) — telemetría de salud"
+    )
+    errores_crc: Mapped[int | None] = mapped_column(
+        Integer, nullable=True, default=0,
+        comment="Errores CRC acumulados — telemetría de salud",
     )
 
     def __repr__(self) -> str:

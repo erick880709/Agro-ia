@@ -178,6 +178,13 @@ async def process_sensor_message(message: dict) -> bool:
                     disp.ultima_transmision = datetime.now(timezone.utc)
                     disp.rssi = message.get("rssi")
                     disp.uptime_s = message.get("uptime_s")
+                    # Telemetría de salud (TT-13)
+                    if message.get("voltaje_alimentacion") is not None:
+                        disp.voltaje_alimentacion = message.get("voltaje_alimentacion")
+                    if message.get("errores_crc") is not None:
+                        disp.errores_crc = (disp.errores_crc or 0) + int(
+                            message.get("errores_crc")
+                        )
 
             await session.commit()
 

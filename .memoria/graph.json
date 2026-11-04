@@ -1,6 +1,6 @@
 {
   "schema": "memoria/v1",
-  "updatedAt": "2026-11-04T12:50:57.404Z",
+  "updatedAt": "2026-11-04T12:54:58.286Z",
   "nodes": [
     {
       "id": "mem-20261104031919-41c56e-builder-implementar-epica-e1-integridad-de-ingesta-rfp-003",
@@ -106,6 +106,21 @@
       "source": "manual",
       "createdAt": "2026-11-04T12:50:57.399Z",
       "updatedAt": "2026-11-04T12:50:57.401Z"
+    },
+    {
+      "id": "mem-20261104125458-b30e90-builder-implementar-epica-e8-ciclo-de-vida-del-sensor-rfp-00",
+      "type": "avance",
+      "status": "completado",
+      "skill": "builder",
+      "title": "Implementar epica E8 ciclo de vida del sensor (RFP-003)",
+      "summary": "HU-14 plan de mantenimiento (modelo MantenimientoSensor + migracion 056 + endpoint POST /dispositivos/{id}/mantenimiento), TT-12 deteccion de deriva (detectar_deriva sesgo>meta), TT-13 telemetria de salud (voltaje y errores_crc en dispositivo + endpoint /telemetria, wire en consumer). 9 tests, integracion 8/8.",
+      "files": [
+        "apps/backend/agroia_backend/services/ciclo_vida_sensor.py"
+      ],
+      "links": [],
+      "source": "manual",
+      "createdAt": "2026-11-04T12:54:58.280Z",
+      "updatedAt": "2026-11-04T12:54:58.282Z"
     }
   ],
   "edges": []

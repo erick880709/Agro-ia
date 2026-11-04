@@ -1313,6 +1313,112 @@ async def actualizar_parametro_calidad(clave: str, body: ParametroCalidadUpdate)
     }
 
 
+class MantenimientoRegistro(BaseModel):
+    tipo: str = Field(..., description="limpieza | revision | reemplazo")
+    fecha: str = Field(..., description="YYYY-MM-DD")
+    observaciones: str | None = None
+    responsable: str | None = None
+
+
+@router.post("/dispositivos/{device_id}/mantenimiento", status_code=201)
+async def registrar_mantenimiento(device_id: str, body: MantenimientoRegistro):
+    """Registra una acción de mantenimiento (HU-14) y actualiza el dispositivo."""
+    import uuid as uuid_mod
+    from datetime import date
+
+    from agroia.database import async_session_factory
+    from sqlalchemy import select
+
+    from agroia_backend.models.dispositivo_iot import DispositivoIoT
+    from agroia_backend.models.mantenimiento_sensor import MantenimientoSensor
+    from agroia_backend.services.ciclo_vida_sensor import TIPOS_MANTENIMIENTO
+
+    if body.tipo not in TIPOS_MANTENIMIENTO:
+        raise HTTPException(status_code=422, detail={
+            "code": "TIPO_MANTENIMIENTO_INVALIDO",
+            "message": f"tipo debe ser uno de {TIPOS_MANTENIMIENTO}",
+        })
+    try:
+        fecha = date.fromisoformat(body.fecha)
+    except ValueError:
+        raise HTTPException(status_code=422, detail={
+            "code": "FECHA_INVALIDA", "message": "fecha debe ser YYYY-MM-DD.",
+        })
+
+    async with async_session_factory() as session:
+        dispositivo = (
+            await session.execute(
+                select(DispositivoIoT).where(DispositivoIoT.device_id == device_id)
+            )
+        ).scalar_one_or_none()
+        if dispositivo is None:
+            raise HTTPException(status_code=404, detail={
+                "code": "DEVICE_NOT_REGISTERED",
+                "message": f"Dispositivo '{device_id}' no registrado.",
+            })
+
+        m = MantenimientoSensor(
+            id=uuid_mod.uuid4(),
+            dispositivo_id=dispositivo.id,
+            tipo=body.tipo,
+            fecha=fecha,
+            observaciones=body.observaciones,
+            responsable=body.responsable,
+        )
+        session.add(m)
+        dispositivo.ultimo_mantenimiento = fecha
+        await session.commit()
+
+    return {
+        "status": "registered",
+        "device_id": device_id,
+        "tipo": body.tipo,
+        "fecha": body.fecha,
+    }
+
+
+@router.get("/dispositivos/{device_id}/telemetria")
+async def telemetria_dispositivo(device_id: str):
+    """Telemetría de salud del dispositivo (TT-13)."""
+    from agroia.database import async_session_factory
+    from sqlalchemy import select
+
+    from agroia_backend.models.dispositivo_iot import DispositivoIoT
+    from agroia_backend.services.ciclo_vida_sensor import (
+        proximo_mantenimiento,
+        telemetria_salud,
+    )
+
+    async with async_session_factory() as session:
+        dispositivo = (
+            await session.execute(
+                select(DispositivoIoT).where(DispositivoIoT.device_id == device_id)
+            )
+        ).scalar_one_or_none()
+
+    if dispositivo is None:
+        raise HTTPException(status_code=404, detail={
+            "code": "DEVICE_NOT_REGISTERED",
+            "message": f"Dispositivo '{device_id}' no registrado.",
+        })
+
+    salud = telemetria_salud(
+        voltaje_alimentacion=dispositivo.voltaje_alimentacion,
+        errores_crc=dispositivo.errores_crc,
+        ultima_transmision=dispositivo.ultima_transmision,
+    )
+    mantenimiento = proximo_mantenimiento(dispositivo.ultimo_mantenimiento)
+
+    return {
+        "device_id": device_id,
+        "telemetria": salud,
+        "mantenimiento": mantenimiento,
+        "rssi": dispositivo.rssi,
+        "uptime_s": dispositivo.uptime_s,
+        "firmware": dispositivo.firmware,
+    }
+
+
 @router.get("/externas/enrich")
 async def enrich_location(
     lat: float = Query(..., ge=-90, le=90),
